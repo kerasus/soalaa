@@ -1,17 +1,33 @@
 <template>
   <div
     class="html-katex"
+    style="overflow: hidden"
     :dir="!isLtrString ? 'rtl' : 'ltr'"
-    v-html="localInput"
+    v-html="computedKatex"
   />
 </template>
 
 <script>
-import 'katex/dist/katex.min.css'
 import katex from 'katex'
+import 'katex/dist/katex.min.css'
+
+// import { createApp } from 'vue'
+// const app = createApp({})
+// import VueKatex from 'vue-katex'
+// import 'katex/dist/katex.min.css'
+// app.use(VueKatex, {
+//   globalOptions: {
+//     delimiters: [
+//       { left: '$$', right: '$$', display: true },
+//       { left: '\\[', right: '\\]', display: true },
+//       { left: '$', right: '$', display: false },
+//       { left: '\\(', right: '\\)', display: false }
+//     ]
+//   }
+// })
 
 export default {
-  name: "VueKatex",
+  name: 'VueKatex',
   props: {
     input: {
       type: String,
@@ -20,12 +36,11 @@ export default {
     ltr: {
       type: Boolean,
       default: null
-    },
+    }
   },
   data () {
     return {
-      rtl: true,
-      localInput: ''
+      rtl: true
     }
   },
   computed: {
@@ -33,7 +48,7 @@ export default {
       if (this.ltr !== null) {
         return this.ltr
       }
-      let string = this.localInput
+      const string = this.input
       if (!string) {
         return false
       }
@@ -42,10 +57,25 @@ export default {
       const persianRegex = /[\u0600-\u06FF]/
       return !string.match(persianRegex)
     },
-  },
-  watch: {
-    input (newVal) {
-      this.loadLocalInput(newVal)
+    computedKatex () {
+      let string = this.input
+      string = string.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&')
+      const regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms
+      string = string.replace(regex, (match) => {
+        let finalMatch
+        if (match.includes('$$')) {
+          finalMatch = match.slice(2, -2)
+        } else if (match.includes('$')) {
+          finalMatch = match.slice(1, -1)
+        } else {
+          finalMatch = match.slice(2, -2)
+        }
+        return katex.renderToString(finalMatch, {
+          throwOnError: false,
+          strict: 'warn'
+        })
+      })
+      return string
     }
   },
   mounted () {
@@ -56,67 +86,12 @@ export default {
     }, 1000)
   },
   created () {
-    if (this.input === null || typeof this.input === 'undefined') {
-      this.loadLocalInput('this.input')
-    } else {
-      this.loadLocalInput(this.input)
-    }
-  },
-  methods: {
-    loadLocalInput (newVal) {
-      this.localInput = newVal
-      this.prepareForKatex()
-    },
-    prepareForKatex () {
-      let regex = /(\${1}((?!\$).)+?\${1})|(\${2}((?!\$).)+?\${2})|(\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])/gms;
-      this.localInput = this.localInput.replace(regex, (match) => {
-        return ' ' + match + ' '
-      })
-      this.localInput = this.localInput.replaceAll('\\[ ', '\\[')
-      this.localInput = this.localInput.replaceAll(' \\]', ' \\]')
-      this.localInput = this.localInput.replaceAll(' $', '$')
-      this.localInput = this.localInput.replaceAll('$ ', '$')
-      this.localInput = this.localInput.replaceAll('\\colon ', ':')
-      this.localInput = this.localInput.replace(regex, (match) => {
-        let finalMatch
-        if (match.includes('$$')) {
-          finalMatch = match.slice(2, -2)
-        } else if (match.includes('$')) {
-          finalMatch = match.slice(1, -1)
-        } else {
-          finalMatch = match.slice(2, -2)
-        }
-        finalMatch = finalMatch.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&').replaceAll('&nbsp;', ' ')
-        return katex.renderToString(finalMatch, {
-          throwOnError: false,
-          safe: true,
-          trust: true
-        })
-      })
-    }
+    // this.rtl = !this.isLtrString(this.input)
   }
 }
 </script>
 
 <style lang="scss">
-.html-katex .accent {
-  background-color: unset !important;
-  border-color: unset !important;
-}
-
-.html-katex .overline {
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  letter-spacing: inherit !important;
-  line-height: inherit !important;
-  text-transform: unset !important;
-  font-family: inherit !important;
-}
-
-  .katex * {
-    font-family: KaTeX_Main;
-  }
-
   #mathfield .ML__cmr,
   .katex .mtight {
     font-family: IRANSans;
@@ -124,30 +99,17 @@ export default {
 
   .html-katex {
     width: 100%;
-    display: grid;
 
     .katex {
-      direction: ltr;
-      .katex-html {
-        .accent {
-          background-color: transparent !important;
-          border-color: transparent !important;
-        }
-        .overline {
-          font-size: inherit !important;
-          font-weight: inherit !important;
-          letter-spacing: inherit !important;
-          line-height: inherit !important;
-          text-transform: inherit !important;
-          font-family: inherit !important;
-        }
-      }
+      /*rtl:ignore*/
+      direction: ltr !important;
+      /*rtl:ignore*/
     }
 
     table {
       border-collapse: collapse;
       table-layout: fixed;
-      width: auto;
+      width: 100%;
       margin: 0;
       overflow: hidden;
 
@@ -264,6 +226,10 @@ export default {
 </style>
 
 <style>
+.html-katex > p {
+  direction: inherit;
+}
+
 .html-katex > p:first-child {
   display: inline-block;
 }

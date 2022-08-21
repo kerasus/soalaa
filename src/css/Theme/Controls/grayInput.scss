@@ -1,0 +1,16 @@
+.q-field--filled {
+  &.backGround-gray-input {
+    @include global-input;
+
+    .q-field__inner {
+      background-color: var(--3a-Neutral2);
+
+      .q-field__control {
+        background-color: var(--3a-Neutral2);
+
+      }
+    }
+  }
+}
+
+//      <q-input filled class="backGround-gray-input"/>

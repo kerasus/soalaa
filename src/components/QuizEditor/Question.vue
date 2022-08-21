@@ -1,179 +1,225 @@
 <template>
-  <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: isLtr }">
-    <v-row>
-      <v-col>
-        <div
-          v-if="source.confirmers.length"
-          class="d-inline"
-        >
-          تایید شده توسط:
-        </div>
-        <v-chip
+  <div>
+    <div class="admin-actions">
+      <div
+        v-if="source.confirmers.length"
+        class="avatar-section grid-item">
+        تایید شده توسط :
+        <q-chip
           v-for="(item, index) in source.confirmers"
           :key="index"
-          color="#C8E6C9"
-          class="ml-3"
-          pill
-        >
-          <v-avatar left>
-            <v-img :src="item.photo" />
-          </v-avatar>
+          color="green-11">
+          <q-avatar>
+            <q-img :src="item.photo" />
+          </q-avatar>
           {{ item.first_name + ' ' + item.last_name }}
-        </v-chip>
-      </v-col>
-    </v-row>
-
-    <div class="d-flex buttons-group">
-      <v-select
-        v-if="false"
-        :items="quizList.list"
-        item-text="title"
-        chips
-        multiple
-        attach
-        outlined
-        dense
-        full-width
-      />
-      <v-btn
-        icon
-        color="red"
-        @click="deleteQuestion()"
-      >
-        <v-icon :size="24">
-          mdi-close
-        </v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click="detachQuestion()"
-      >
-        <v-icon :size="24">
-          mdi-close
-        </v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        :to="{ name: 'question.edit', params: { question_id: source.id } }"
-      >
-        <v-icon :size="24">
-          mdi-pencil
-        </v-icon>
-      </v-btn>
-      <input
-        :id="'question-id' + source.id"
-        :ref="'question-id-' + source.id"
-        :value="source.id"
-        type="text"
-        class="not-visible"
-      >
-      <v-btn
-        icon
-        @click="copyIdToClipboard(source.id)"
-      >
-        <v-icon>mdi-content-copy</v-icon>
-      </v-btn>
-      <v-switch
-        v-model="source.confirmed"
-        color="success"
-        :loading="confirmLoading"
-        hide-details
-        @change="confirmQuestion"
-      />
-    </div>
-    <slot
-      name="chartDetail"
-    />
-    <!--ToDo: remove span-->
-    <span
-      v-if="source.statement"
-      :id="'question' + source.id"
-      v-intersect="{
-        handler: onIntersect,
-        options: {
-          threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
-        }
-      }"
-      class="question-body renderedPanel"
-      :class="{ ltr: isLtr }"
-    >
-      <vue-katex
-        :input="'(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement"
-      />
-    </span>
-    <v-row
-      v-if="source.statement_photo && !source.statement"
-    >
-      <v-col>
-        <p v-if="$route.name === 'onlineQuiz.exams.lessons.details'">
-          ({{ getSubCategoryName }}) (ترتیب: {{ source.order }})(شماره: {{ source.questNumber }})  -  صورت سوال :
-        </p>
-        <p v-else>
-          ({{ getSubCategoryName }}) ({{ source.order }}) -  صورت سوال :
-        </p>
-        <div v-for="statement_photo in source.statement_photo">
-          <v-img
-              :src="statement_photo"
+        </q-chip>
+      </div>
+      <div v-else/>
+      <div class="action-btn-box grid-item">
+        <div v-if="options.checkQuestion">
+          <q-btn
+            v-if="getChoiceStatus() !== 'o'"
+            text-color="blue"
+            icon="mdi-checkbox-blank-circle-outline"
+            flat
+            fab-mini
+            @click="changeStatus(source.id, 'o')"
+          />
+          <q-btn
+            v-else
+            icon="mdi-checkbox-blank-circle"
+            text-color="yellow"
+            flat
+            fab-mini
+            @click="changeStatus(source.id, 'o')"
           />
         </div>
-      </v-col>
-    </v-row>
-    <v-row
-      v-if="checkChoices()"
-      class="choices"
-    >
-      <v-col
-        v-for="(choice, index) in source.choices.list"
-        :key="choice.id"
-        :cols="choiceClass"
-        :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtr }"
-      >
-        <vue-katex
-          :input="(index + 1) + ') ' + choice.title"
-          :ltr="isLtrQuestion"
+        <div v-if="options.markQuestion">
+          <q-btn
+            v-if="getChoiceStatus() === 'x'"
+            text-color="red"
+            icon="mdi-close"
+            flat
+            fab-mini
+            @click="changeStatus(source.id ,'x')"
+          />
+          <q-btn
+            v-else
+            text-color="grey"
+            icon="mdi-close"
+            flat
+            fab-mini
+            @click="changeStatus(source.id ,'x')"
+          />
+        </div>
+        <div v-if="options.bookmark">
+          <q-btn
+            v-if="getChoiceBookmark()"
+            text-color="blue"
+            icon="mdi-bookmark"
+            flat
+            fab-mini
+            @click="changeBookmark(source.id)"
+          />
+          <q-btn
+            v-else
+            text-color="grey"
+            icon="mdi-bookmark-outline"
+            flat
+            fab-mini
+            @click="changeBookmark(source.id)"
+          />
+        </div>
+        <!----------------- admin actions ---------------->
+        <div v-if="options.deleteQuestionFromDb">
+          <q-icon
+            class="fi fi-rr-delete document icon-style"
+            @click="deleteQuestion()"
+          >
+            <q-tooltip>
+              حذف سوال از پایگاه داده
+            </q-tooltip>
+          </q-icon>
+        </div>
+        <div v-if="options.detachQuestion">
+          <q-icon
+            class="fi fi-rr-cross-small icon-style"
+            @click="detachQuestion()"
+          >
+            <q-tooltip>
+              حذف سوال از آزمون
+            </q-tooltip>
+          </q-icon>
+        </div>
+        <div v-if="options.editQuestion">
+          <q-icon
+            class="fi fi-rr-pencil icon-style"
+            @click="redirectToEditPage"
+          >
+            <q-tooltip>
+             ویرایش سوال
+            </q-tooltip>
+          </q-icon>
+        </div>
+        <div v-if="options.copy">
+          <q-icon
+            class="fi fi-rr-copy icon-style"
+            @click="copyIdToClipboard(source.id)"
+          >
+            <q-tooltip>
+             کپی شناسه سوال
+            </q-tooltip>
+          </q-icon>
+        </div>
+        <div v-if="options.switch">
+          <q-circular-progress
+            v-if="confirmLoading"
+            indeterminate
+            :thickness="0.3"
+            size="20px"
+            color="primary"
+          />
+        <q-toggle
+          v-else
+          v-model="source.confirmed"
+          @update:model-value="confirmQuestion"
+          color="primary"
+        >
+          <q-tooltip>
+            تایید سوال
+          </q-tooltip>
+        </q-toggle>
+
+        <slot
+          name="chartDetail"
         />
-      </v-col>
-    </v-row>
-    <v-row
-      v-if="source.answer_photos.length > 0 && !checkChoices()"
-    >
-      <v-col>
-        <div>
+        </div>
+      </div>
+    </div>
+    <div class="question-section">
+      <div class="question-statement">
+        <div class="text-section">
+          <vue-katex
+            v-if="source.statement"
+            :input="'(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement"
+          />
+        </div>
+        <div
+          v-if="source.statement_photo && !source.statement"
+          class="photo-section">
+          <p v-if="$route.name === 'exams.lessons.questions'">
+            ({{ getSubCategoryName }}) (ترتیب: {{ source.order }})(شماره: {{ source.questNumber }})  -  صورت سوال :
+          </p>
+          <p v-else>
+            ({{ getSubCategoryName }}) ({{ source.order }}) -  صورت سوال :
+          </p>
+          <div
+               v-for="(statement_photo , index) in source.statement_photo"
+               :key="index"
+          >
+            <q-img
+              :src="statement_photo"
+              alt="صورت سوال"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        v-if="checkChoices()"
+        class="question-choices">
+        <div class="row text-section">
+          <div
+            v-for="(choice , index) in source.choices.list"
+            :key="choice.id"
+            :class="{ choice, renderedPanel: true, ltr: isLtr , choiceClass, space:!choice.answer}"
+          >
+
+            <vue-katex
+              :input="(choiceNumber[index]) + choice.title"
+              :ltr="isLtrQuestion"
+            />
+            <q-icon
+              v-if="choice.answer"
+              class="fi fi-rr-check question-answer"></q-icon>
+          </div>
+        </div>
+        <div  v-if="source.answer_photos.length > 0 && !checkChoices()" class="photo-section">
           <p>
             پاسخ :
           </p>
           <div
-            v-for="src in source.answer_photos"
+            v-for="(src, index) in source.answer_photos"
+            :key="index"
           >
-            <v-img
+            <q-img
+              alt="صورت سوال"
               class="img-size"
               :src="src"
             />
           </div>
         </div>
-      </v-col>
-    </v-row>
-  </div>
+      </div>
+    </div>
+    </div>
 </template>
 
 <script>
-import {mixinQuiz, mixinWindowSize} from '@/mixin/Mixins'
-import $ from "jquery";
-import API_ADDRESS from "@/api/Addresses"
-import axios from 'axios'
-import {QuestSubcategoryList} from "@/models/QuestSubcategory";
-import VueKatex from '@/components/VueKatex'
-
-
+import 'src/assets/scss/markdownKatex.scss'
+import { mixinQuiz } from 'src/mixin/Mixins'
+import API_ADDRESS from 'src/api/Addresses'
+import VueKatex from 'src/components/VueKatex'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { copyToClipboard } from 'quasar'
 export default {
-  name: 'Item',
+  name: 'questionField',
   components: {
     VueKatex
   },
-  mixins: [mixinQuiz, mixinWindowSize],
+  mixins: [mixinQuiz],
   props: {
     subCategory: {
-      default() {
+      default () {
         return new QuestSubcategoryList()
       }
     },
@@ -181,88 +227,66 @@ export default {
       type: Number
     },
     examId: {
-      default() {
+      default () {
         return null
       }
     },
-    source: { // here is: {uid: 'unique_1', text: 'abc'}
-      default() {
+    sourcee: { // here is: {uid: 'unique_1', text: 'abc'}
+      default () {
         return {}
       }
     },
     quizList: {
       type: Array,
-      default() {
+      default () {
         return []
       }
+    },
+    questionListOptions: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
   },
-  data() {
+  data () {
     return {
-      confirmLoading: false,
+      options: {
+        checkQuestion: false,
+        markQuestion: false,
+        bookmark: false,
+        copy: true,
+        detachQuestion: true,
+        deleteQuestionFromDb: true,
+        editQuestion: true,
+        switch: true
+      },
       isLtr: false,
-      confirm: false,
+      confirmLoading: false,
+      observer: null,
       choiceNumber: {
-        0: ' 1) ',
-        1: ' 2) ',
-        2: ' 3) ',
-        3: ' 4) '
-      }
+        0: '1) ',
+        1: '2) ',
+        2: '3) ',
+        3: '4) '
+      },
+      source: {}
+
     }
   },
-
+  created () {
+    this.source = this.sourcee
+    Object.assign(this.options, this.questionListOptions)
+  },
   computed: {
-    isLtrQuestion() {
-      let string = this.source.statement
-      if (!string) {
-        return false
-      }
-      const persianRegex = /[\u0600-\u06FF]/
-      return !string.match(persianRegex)
-    },
-    choiceClass() {
-      // let QuestionWidthRatio = 0.4
-      // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
-      let largestChoice = this.getLargestChoice(this.source.choices)
-      let largestChoiceWidth = $('.questions').width() / largestChoice
-      // console.Log('order', this.source.order)
-      if (largestChoiceWidth > 48) {
-        // console.Log('col-3')
-        return 3
-      }
-      if (largestChoiceWidth > 24) {
-        // console.Log('col-6')
-        return 6
-      }
-      if (largestChoiceWidth > 12) {
-        // console.Log('col-12')
-        return 12
-      }
-      // console.Log('col-12')
-      return 12
-    },
-    // lesson() {
-    //     console.Log(this.source.sub_categories)
-    //     if (!this.source.sub_categories) {
-    //         return {title: 'صبر کنید'}
-    //     }
-    //     const subCategoryId = Assistant.getId(this.source.sub_category.id)
-    //     console.Log(this.quiz.sub_categories)
-    //     return this.quiz.sub_categories.list.find((item) => item.id === subCategoryId)
-    // }
-    getSubCategoryName() {
+    getSubCategoryName () {
       const target = this.subCategory.list.find(
-          (item) =>
-              // item.id === this.source.sub_category.id
-          {
-            if (item && item.id && this.source.sub_category) {
-              if (item.id === this.source.sub_category.id) {
-                return true
-              }
-              return false
-            }
-            return false
+        (item) => {
+          if (item && item.id && this.source.sub_category) {
+            return item.id === this.source.sub_category.id
           }
+          return false
+        }
       )
       if (target) {
         return target.title
@@ -270,58 +294,101 @@ export default {
         return ''
       }
     },
-  },
-  created() {
-    // this.isLtr = this.isLtrString(this.source.statement)
-    // setTimeout(() => {console.Log(this.quiz)}, 2000)
+    isLtrQuestion () {
+      const string = this.source.statement
+      if (!string) {
+        return false
+      }
+      const persianRegex = /[\u0600-\u06FF]/
+      return !string.match(persianRegex)
+    },
+    isRtlString () {
+      const source = this.source
+      const string = source.statement
+      if (!string) {
+        return false
+      }
+      const persianRegex = /[\u0600-\u06FF]/
+      return string.match(persianRegex)
+    },
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    },
+    choiceClass () {
+      const source = this.source
+      const largestChoice = this.getLargestChoice(source.choices)
+      const largestChoiceWidth = this.windowSize.x / largestChoice
+      if (largestChoiceWidth < 12) {
+        return 'col-md-12'
+      }
+      if (largestChoiceWidth < 24) {
+        return 'col-md-6'
+      }
+      if (largestChoiceWidth < 48) {
+        return 'col-md-3'
+      }
+      return 'col-md-3'
+    }
   },
   methods: {
-    checkChoices(){
-     const hasText = this.source.choices.list.find(item => item.title)
-    return !!hasText;
+    redirectToEditPage () {
+      this.$router.push({
+        name: 'Admin.Question.Edit',
+        params: {
+          question_id: this.source.id
+        }
+      })
     },
-
-    confirmQuestion() {
+    checkChoices () {
+      const hasText = this.source.choices.list.find(item => item.title)
+      return !!hasText
+    },
+    confirmQuestion () {
       this.confirmLoading = true
-      if (this.source.confirmed) {
-        axios.get(API_ADDRESS.question.confirm(this.source.id))
-            .then((response) => {
-              this.source.confirmed = response.data.data.confirmed
-              this.source.confirmers = response.data.data.confirmers
-              this.confirmLoading = false
-            })
-            .catch(() => {
-              this.source.confirmed = !this.source.confirmed
-              this.confirmLoading = false
-            })
-      } else {
-        axios.get(API_ADDRESS.question.unconfirm(this.source.id))
-            .then((response) => {
-              this.source.confirmed = response.data.data.confirmed
-              this.source.confirmers = response.data.data.confirmers
-              this.confirmLoading = false
-            })
-            .catch(() => {
-              this.source.confirmed = !this.source.confirmed
-              this.confirmLoading = false
-            })
+      this.source.confirmed ? this.confirmUser() : this.unConfirmUser()
+    },
+    async confirmUser () {
+      try {
+        const response = await this.sendConfirmReq()
+        this.source.confirmed = response.data.data.confirmed
+        this.source.confirmers = response.data.data.confirmers
+        this.confirmLoading = false
+      } catch (e) {
+        this.source.confirmed = !this.source.confirmed
+        this.confirmLoading = false
       }
     },
-    copyIdToClipboard(sourceId) {
-      this.$refs['question-id-' + sourceId].select()
-      document.execCommand('copy')
+    async unConfirmUser () {
+      try {
+        const response = await this.sendUnConfirmReq()
+        this.source.confirmed = response.data.data.confirmed
+        this.source.confirmers = response.data.data.confirmers
+        this.confirmLoading = false
+      } catch (e) {
+        this.source.confirmed = !this.source.confirmed
+        this.confirmLoading = false
+      }
     },
-    onIntersect(entries) {
+    sendConfirmReq () {
+      return this.$axios.get(API_ADDRESS.question.confirm(this.source.id))
+    },
+    sendUnConfirmReq () {
+      return this.$axios.get(API_ADDRESS.question.unconfirm(this.source.id))
+    },
+    copyIdToClipboard (sourceId) {
+      copyToClipboard(sourceId)
+    },
+
+    onIntersect (entries) {
       if (typeof this.source.onIntersect === 'function') {
         this.source.onIntersect(entries)
       }
     },
-    choiceClicked(questionId, choiceId) {
-      // console.Log('loadFirstActiveQuestionIfNeed->choiceClicked')
+    choiceClicked (questionId, choiceId) {
       this.changeQuestion(questionId)
-      this.answerClicked({questionId, choiceId})
+      this.answerClicked({ questionId, choiceId })
     },
-    removeErab(string) {
+    removeErab (string) {
       if (!string || string.length === 0) {
         return ''
       }
@@ -336,7 +403,7 @@ export default {
       temp = temp.split('ٍ').join('')
       return temp
     },
-    getLargestChoice(choices) {
+    getLargestChoice (choices) {
       let largestChoice = 0
       choices.list.forEach((source) => {
         if (source.title.length > largestChoice) {
@@ -345,149 +412,205 @@ export default {
       })
       return largestChoice
     },
-    detachQuestion() {
-      this.$store.commit('AppLayout/showConfirmDialog', {
+    detachQuestion () {
+      this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
         message: 'از حذف سوال از آزمون اطمینان دارید؟',
-        button: {
+        buttons: {
           no: 'خیر',
           yes: 'بله'
         },
-        callback: (confirm) => {
+        callback: async (confirm) => {
           if (!confirm) {
-            return
+            this.closeConfirmModal()
+          } else {
+            try {
+              this.closeConfirmModal()
+              await this.detachQuestionReq()
+              this.$emit('reloadPage')
+            } catch (e) {
+              this.closeConfirmModal()
+            }
           }
-          axios.post(API_ADDRESS.question.detach(this.source.id), {
-            exams: [this.examId]
-          })
-              .then(() => {
-                this.$emit('reloadPage')
-              })
         }
       })
     },
-    deleteQuestion() {
+    detachQuestionReq () {
+      return this.$axios.post(API_ADDRESS.question.detach(this.source.id), {
+        exams: [this.examId]
+      })
+    },
+    closeConfirmModal () {
       this.$store.commit('AppLayout/showConfirmDialog', {
-        message: 'از حذف کامل سوال از پایگاه داده و حذف از تمامی آزمون ها اطمینان دارید؟',
-        button: {
+        show: false
+      })
+    },
+    deleteQuestion () {
+      this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
+        message: 'از حذف کامل سوال از پایگاه داد و حذف از تمامی آزمون ها اطمینان دارید؟',
+        buttons: {
           no: 'خیر',
           yes: 'بله'
         },
         callback: (confirm) => {
           if (!confirm) {
+            this.closeConfirmModal()
             return
           }
-          axios.delete(API_ADDRESS.question.delete(this.source.id), {
+          this.$axios.delete(API_ADDRESS.question.delete(this.source.id), {
             exams: [this.examId]
           })
-              .then(() => {
-                this.$emit('reloadPage')
-              })
+            .then(() => {
+              this.closeConfirmModal()
+              this.$emit('reloadPage')
+            })
+            .catch((e) => {
+              this.closeConfirmModal()
+            })
         }
       })
     },
-    edit() {
+    edit () {
       // console.Log(questionId)
     }
   }
 }
 </script>
 
-<style scoped>
-.ltr.question {
-  padding: 10px 20px 10px 20px;
-}
-.ltr {
-  direction: ltr;
-}
-.img-size{
-  width: 100%;
-  margin-top: 10px;
-}
-.ltr .choice {
-  direction: ltr;
-  text-align: left;
+<style lang="scss" scoped>
+.admin-actions{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  .grid-item{
+
+  }
+  .action-btn-box{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    .icon-style{
+      cursor: pointer;
+      font-size: 22px;
+      color: rgba(0, 0, 0, 0.54);
+      margin: 0 5px
+    }
+  }
 }
 
-.ltr .buttons-group {
-  float: right;
+.question-section{
+  .question-choices{
+    .question-answer{
+      font-size: 20px;
+      color: #3bd03b;
+      margin: 0 5px
+    }
+    .space{
+      margin: 0 30px;
+    }
+  }
 }
-
-.not-visible {
-  max-width: 1px;
-  max-height: 1px;
-}
-
-.current-question {
-  background-color: #fffaee;
-}
-.choices {
-  display: flex;
-  flex-direction: row;
-}
-
-.choice {
-  cursor: pointer;
-  transition: all ease-in-out 0.3s;
-}
-
-.buttons-group {
-  float: left;
-  /*display: flex;*/
-  /*flex-direction: row;*/
-  /*justify-content: space-around;*/
-}
-
-.choice.active::before {
-  content: "\F012C";
-  display: inline-block;
-  font: normal normal normal 24px/1 "Material Design Icons";
-  text-rendering: auto;
-  line-height: inherit;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin-left: 10px;
-  color: #4caf50;
-  font-size: 20px;
-}
-
-.choice:hover {
-  background: #e1e1e1;
-}
-
-
-.question-body {
-  margin-bottom: 20px;
-  line-height: 40px;
-}
-
-.questions {
-  background: #fff;
-  overflow-y: auto;
-  position: relative;
-  /*padding-right: 25px;*/
-  padding: 0;
-}
-
-.question {
-  padding: 10px 30px 10px 10px;
+.question-field{
+  width: 100% !important;
+  .alert-sheet{
+    margin: 10px;
+    display: flex;
+    height: 200px;
+    .alert-sheet-text{
+      margin: auto;
+    }
+    &.red-sheet{
+      background-color: #F44336;
+    }
+    &.primary-sheet{
+      background-color: #9690e4;
+    }
+  }
+  .question-box {
+    padding: 10px 10px 10px 30px;
+    border: 1px solid red;
+    &.current-question {
+      background-color: #fffaee;
+    }
+    .question-head{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 0;
+      .icon-style{
+        font-size: 22px;
+        color: rgba(0, 0, 0, 0.54);
+      }
+      .question-body {
+        margin-bottom: 20px;
+        line-height: 40px;
+      }
+      .question-icons {
+        display: flex;
+        border: 1px solid #09c260;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+    }
+    .choices-box{
+      .choices {
+        display: flex;
+        flex-direction: row;
+        .choice{
+          display: flex;
+          flex-direction: row;
+          height: auto;
+          cursor: pointer;
+          transition: all ease-in-out 0.3s;
+          padding: 0;
+          .choice-inside{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+          }
+          &:hover {
+            background: #e1e1e1;
+          }
+          &.active{
+            .check-icon{
+              display: block;
+            }
+          }
+          .check-icon{
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  .ltr {
+    direction: rtl;
+    &.question-box{
+      padding: 10px 20px;
+    }
+    &.choice{
+      direction: rtl;
+      text-align: right;
+    }
+    &.question-icons{
+      float: left;
+    }
+  }
 }
 </style>
 
-<style>
-.quiz-editor .v-select__slot .v-select__selections input {
-  display: none;
-}
-
-.quiz-editor .v-text-field__details {
-  display: none;
-}
-
-.quiz-editor .v-select.v-select--chips.v-select--is-multi {
-  min-width: 200px;
-}
-
-.ltr .choice p {
-  margin-left: 5px;
-  margin-right: 0;
+<style lang="scss">
+.question-field{
+  .question-box{
+    .question-head{
+      .question-icons{
+        .q-btn--fab-mini {
+          padding: 0;
+          height: 36px;
+          width: 36px;
+        }
+      }
+    }
+  }
 }
 </style>

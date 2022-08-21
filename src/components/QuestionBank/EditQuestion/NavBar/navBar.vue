@@ -1,184 +1,206 @@
 <template>
-  <div>
-    <v-row justify="space-between">
-      <v-col cols="3">
+  <div class="full-width new-question-navbar">
+    <div class="fit row wrap justify-center">
+      <div class="col-3">
         <span v-if="question.id">
           سوال #
           {{ question.id }}
         </span>
-      </v-col>
-      <v-col cols="3">
+      </div>
+      <div class="col-3">
         <p v-if="question.id">
           <span> سازنده سوال :</span> <span> فیلان دبیر</span>
         </p>
-      </v-col>
-      <v-col
-        v-if="question.id === null"
-        cols="4"
+      </div>
+      <div class="col-4"
+           v-if="question.id === null"
       >
-        <v-row>
-          <v-col>
-            <v-row
-              justify="end"
-            >
-              <v-col>
-                <v-btn
-                  depressed
-                  rounded
-                  color="green"
-                  class="ml-2"
-                  dark
-                  width="100"
-                  @click="btn_clicked('create')"
-                >
-                  <span color="green">
-                    ذخیره
-                  </span>
-                </v-btn>
-              </v-col>
-              <v-col>
-                <v-btn
-                  depressed
-                  rounded
-                  color="white"
-                  width="130"
-                  @click="btn_clicked('saveDraft')"
-                >
-                  <v-icon color="#666666">
-                    mdi-square-edit-outline
-                  </v-icon>
-                  پیش نویس
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-col>
-      <!--    --------------------------------------------------------------  edit page-->
-      <v-col v-if="question.id && editStatus">
-        <v-row>
-          <v-col
-            cols="4"
-          >
+          <div class="row">
+            <div class="col">
+              <div class="row justify-end">
+                <div class="col">
+                  <q-btn
+                    rounded
+                    unelevated
+                    v-ripple
+                    color="green"
+                    class="save-btn-default"
+                    @click="btn_clicked('create')"
+                  >
+                    <span class="save-btn-text-default" >
+                      ذخیره
+                    </span>
+                  </q-btn>
+                </div>
+                <div class="col">
+                  <q-btn
+                    rounded
+                    unelevated
+                    v-ripple
+                    color="white"
+                    text-color="grey-10"
+                    class="draft-btn-default"
+                    @click="btn_clicked('create')"
+                  >
+                  <q-icon class="draft-icon" name="mdi-square-edit-outline" />
+                      پیش نویس
+                  </q-btn>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <!---------------------------------edit page-------------------------------->
+      <div class="col"
+           v-if="question.id && editStatus"
+      >
+        <div class="row">
+          <div class="col">
             <span> وضعیت : </span>
-            <v-chip
-              color="#44a3ff"
-              dark
+            <q-chip
+              color="chip-color"
+              text-color="white"
             >
               {{ question.status.display_title }}
-            </v-chip>
-          </v-col>
-          <v-col>
-            <v-row>
-              <v-col>
-                <v-btn
-                  depressed
+            </q-chip>
+          </div>
+          <div class="col">
+            <div class="row">
+              <div class="col">
+                <q-btn
                   rounded
+                  unelevated
                   color="green"
-                  dark
-                  width="100"
+                  padding="2px 25px"
+                  text-color="white"
                   @click="btn_clicked('save')"
+
                 >
-                  <span color="#666666">
-                    ذخیره
-                  </span>
-                </v-btn>
-              </v-col>
-              <v-col>
-                <v-btn
-                  depressed
+                <span>
+                  ذخیره
+                </span>
+                </q-btn>
+              </div>
+              <div class="col">
+                <q-btn
                   rounded
                   color="white"
-                  width="100"
+                  text-color="grey-10"
+                  padding="2px 30px"
+                  unelevated
                   @click="btn_clicked('cancel')"
                 >
                   لغو
-                </v-btn>
-              </v-col>
-              <v-col v-if="!isLogListVisible">
-                <v-btn
-                  depressed
-                  rounded
-                  color="#ffc107"
-                  dark
-                  width="80"
-                  @click="btn_clicked('logListOpened')"
-                >
-                  <span>
-                    سابقه
-                  </span>
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </v-col>
-      <!--    --------------------------------------------------------------  show page-->
-
-      <v-col
-        v-if="!editStatus"
-        data-text-align="left"
+                </q-btn>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-------------------------------show page--------------------------------->
+      <div class="col"
+           v-if="!editStatus"
       >
-        <v-row justify="end">
-          <v-col cols="3">
-            <v-btn
-              depressed
+        <div class="row justify-end">
+          <div class="col-3">
+            <q-btn
               rounded
+              unelevated
+              v-ripple
               color="white"
-              class="ml-2"
-              width="110"
+              text-color="grey-10"
+              class="edit-btn-default"
               @click="btn_clicked('edit')"
             >
-              <v-icon color="#666666">
-                mdi-square-edit-outline
-              </v-icon>
-              <span color="#666666">
-                ویرایش
-              </span>
-            </v-btn>
-          </v-col>
-          <v-col cols="3">
-            <v-btn
-              depressed
+              <q-icon class="edit-icon" name="mdi-square-edit-outline" />
+              ویرایش
+            </q-btn>
+          </div>
+          <div class="col-3">
+            <q-btn
               rounded
+              unelevated
+              v-ripple
               color="white"
-              width="100"
+              text-color="grey-10"
+              class="edit-btn-default"
               @click="btn_clicked('remove')"
             >
               حذف
-            </v-btn>
-          </v-col>
-          <v-col v-if="!isLogListVisible">
-            <v-btn
-              depressed
-              rounded
-              color="#ffc107"
-              dark
-              width="80"
-              @click="btn_clicked('logListOpened')"
-            >
-              <span>
-                سابقه
-              </span>
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-    <!--    --------------------------------------------------------------------;-->
+            </q-btn>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-
 <script>
-import {Question} from "@/models/Question";
+import { Question } from 'src/models/Question'
 export default {
-  name: "NavBar",
+  name: 'NavBar',
   props: {
     question: {
       type: Question,
       default: new Question()
     },
+    // for test
+    // question: {
+    //   type: Question,
+    //   default: new Question({
+    //     id: '5ffdd0d35590063ba07fad39',
+    //     statement: '<p>«إذا أرَدتَ أن تفوز في عملک فَقُم به وحیداً و لا تـتوکّل علی النّاس!»</p>\n',
+    //     choices: [
+    //       {
+    //         title: '<p>هرگاه خواستی که در کارَت موفق شوی به تنهایی به آن بپرداز و بر مردم تکیه نکن!</p>\n',
+    //         order: 1,
+    //         answer: true,
+    //         id: 1
+    //       },
+    //       {
+    //         title: '<p>اگر اراده‌ات بر موفق شدن در کارهایت است به تنهایی آنها را انجام بده و به مردم اعتماد نکن!</p>\n',
+    //         order: 2,
+    //         answer: false,
+    //         id: 2
+    //       },
+    //       {
+    //         title: '<p>چنانچه قصد داری که در کار خویش به نتیجه برسی به تنهایی به پاخیز و به مردم توکّل نکن!</p>\n',
+    //         order: 3,
+    //         answer: false,
+    //         id: 3
+    //       },
+    //       {
+    //         title: '<p>هر زمان که خواستی در کار خود موفق باشی باید به تنهایی انجامش دهی و به مردم تکیه نکنی!</p>\n',
+    //         order: 4,
+    //         answer: false,
+    //         id: 4
+    //       }
+    //     ],
+    //     exams: [],
+    //     level: 1,
+    //     photos: [
+    //       'https://nodes.alaatv.com/aaa/questionPhotos/Screenshot%20from%202021-06-24%2016-21-18-3532494.png'
+    //     ],
+    //     author: [],
+    //     confirmers: [],
+    //     confirmed: false,
+    //     descriptive_answer: null,
+    //     statement_photo: null,
+    //     answer_photos: [],
+    //     status: {
+    //       id: '60c7102418e65826bc7da378',
+    //       title: 'typed',
+    //       display_title: 'تایپ شده',
+    //       updated_at: '2021-06-14 12:45:32',
+    //       created_at: '2021-06-14 12:45:32'
+    //     },
+    //     type: {
+    //       value: 'konkur'
+    //     },
+    //     updated_at: '2021-11-17 11:17:36',
+    //     created_at: '2021-01-12 20:09:47'
+    //   })
+    // },
     editStatus: {
       type: Boolean,
       default: false
@@ -186,24 +208,47 @@ export default {
     pageName: {
       type: String,
       default: ''
-    },
-    isLogListVisible : {
-      type: Boolean,
-      default: true
-    }
-  },
-  data(){
-    return {
-      saveBtnCols : 4 ,
-      cancelBtnCols : 4
     }
   },
   methods: {
-    btn_clicked(name) {
-      this.$emit(name);
-    },
+    btn_clicked (name) {
+      this.$emit(name)
+    }
   }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
+.new-question-navbar {
+  .save-btn-default{
+    width: 100px;
+    height: 36px;
+  }
+  .btn-text-default{
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .draft-btn-default{
+    width: 130px;
+    height: 36px;
+  }
+  .edit-btn-default{
+    width: 100px;
+    height: 36px;
+  }
+  .draft-icon{
+    font-size: 24px;
+    padding-right: 7px;
+    color: #666666;
+  }
+  .draft-btn-text-default{
+    color: #2d2d2d;
+  }
+  .edit-icon{
+    font-size: 24px;
+    color: #666666;
+  }
+.bg-chip-color{
+  background : #44a3ff !important;
+}
+}
 </style>

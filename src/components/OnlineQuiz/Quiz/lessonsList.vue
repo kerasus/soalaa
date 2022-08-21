@@ -1,260 +1,223 @@
 <template>
-  <v-row>
-    <v-col cols="12 ">
+  <div class="row">
+    <div class="col-12">
       <div class="tableSize">
-        <span>{{ $route.params.quizTitle }}</span>
-        <v-btn
-          class="mx-2 backBtnPosition"
-          fab
-          x-small
-          color="white"
+        <span>{{  quizTitle }}</span>
+        <q-btn
+          class="q-mx-sm float-right"
+          round
+          dark-percentage
+          color="primary"
           @click="goBack"
-        >
-          <v-icon dark>
-            mdi-chevron-left
-          </v-icon>
-        </v-btn>
+          icon="isax:arrow-left-2"
+        />
       </div>
-    </v-col>
-    <v-col cols="12">
-      <v-expansion-panels class="tableSize">
-        <v-expansion-panel
-          v-for="(category, index) in categoriesList.list"
-          :key="index"
-        >
-          <v-expansion-panel-header>
-            {{ category.title }}
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-simple-table>
-              <template v-slot:default>
-                <thead>
-                  <tr>
-                    <th class="text-right">
-                      عنوان
-                    </th>
-                    <th class="text-right">
-                      عملیات
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="item in category.sub_categories.list"
-                    :key="item.id"
+    </div>
+    <div class="col-12">
+      <q-markup-table class="tableSize">
+        <template v-slot:default>
+          <thead>
+          <tr>
+            <th class="text-left">
+             عنوان دفترچه
+            </th>
+            <th class="text-left">
+              عنوان درس
+            </th>
+            <th class="text-center">
+              عملیات
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <template v-for="lesson in lessonsList.list">
+            <tr
+              v-for="subcategory in lesson.inputData.sub_categories"
+              :key="subcategory.id"
+            >
+              <td>{{ lesson.title }}</td>
+              <td>{{ subcategory.title }}</td>
+              <td class="actionsColumn">
+                <div>
+                  <q-input
+                    v-if="subcategory.permissions.view"
+                    v-model="lesson.order"
+                    type="number"
+                    :loading="lesson.loading"
+                    :disabled="lesson.loading"
+                    label="ترتیب درس"
+                    hide-details="auto"
+                    class="mb-2"
                   >
-                    <td>{{ item.title }}</td>
-                    <td class="actionsColumn">
-                      <div>
-                        <v-text-field
-                          v-if="item.permissions.view"
-                          v-model="item.order"
-                          type="number"
-                          :loading="item.loading"
-                          :disabled="item.loading"
-                          label="ترتیب درس"
-                          hide-details="auto"
-                          class="mb-2"
-                        >
-                          <v-icon
-                            slot="append"
-                            color="green"
-                            @click="updateOrder(item)"
-                          >
-                            mdi-pencil
-                          </v-icon>
-                        </v-text-field>
-                      </div>
-                      <div v-if="false">
-                        <v-text-field
-                          v-if="item.permissions.view"
-                          v-model="item.time"
-                          type="number"
-                          :loading="item.loading"
-                          :disabled="item.loading"
-                          label="زمان درس (دقیقه)"
-                          hide-details="auto"
-                          class="mb-2"
-                        >
-                          <v-icon
-                            slot="append"
-                            color="green"
-                            @click="updateTime(item)"
-                          >
-                            mdi-pencil
-                          </v-icon>
-                        </v-text-field>
-                      </div>
-                      <div class="text-center mb-2">
-                        <div class="row">
-                          <div class="col">
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-btn
-                                  v-if="item.permissions.view"
-                                  dark
-                                  x-small
-                                  block
-                                  color="green"
-                                  :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: $route.params.quizId, lessonId: item.id}}"
-                                  v-bind="attrs"
-                                  v-on="on"
-                                >
-                                  <v-icon
-                                    small
-                                  >
-                                    mdi-notebook-outline
-                                  </v-icon>
-                                </v-btn>
-                              </template>
-                              <span>مشاهده سوالات درس</span>
-                            </v-tooltip>
-                          </div>
-                          <div class="col">
-                            <v-tooltip top>
-                              <template v-slot:activator="{ on, attrs }">
-                                <v-btn
-                                  v-if="item.permissions.view"
-                                  block
-                                  dark
-                                  x-small
-                                  color="primary"
-                                  :to="{ name: 'video.set', params: { exam_id: $route.params.quizId, subcategory_id: item.id, exam_title: $route.params.quizTitle}}"
-                                  v-bind="attrs"
-                                  v-on="on"
-                                >
-                                  <v-icon
-                                    small
-                                  >
-                                    mdi-video
-                                  </v-icon>
-                                </v-btn>
-                              </template>
-                              <span>ثبت ویدئو تحلیل</span>
-                            </v-tooltip>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-    </v-col>
-  </v-row>
+                    <q-btn
+                      class="q-mx-sm float-right"
+                      size="1px"
+                      fab-mini
+                      dark-percentage
+                      color="primary"
+                      flat
+                      @click="updateOrder(lesson)"
+                    >
+                      <q-icon
+                        name="mdi-pencil"
+                        size="sm"
+                      />
+                    </q-btn>
+                  </q-input>
+                </div>
+                <div class="row q-pt-sm">
+                  <div class="col-6">
+                    <q-btn
+                      v-if="subcategory.permissions.view"
+                      :style="{ 'width':'90%' , 'height':'90%' }"
+                      class="q-mx-sm"
+                      size="12px"
+                      dark-percentage
+                      @click="redirectTo(subcategory)"
+                      color="green">
+                      <q-icon
+                        name="mdi-notebook-outline"
+                        size="sm"
+                      />
+                      <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                        <span class="smallFontSize">مشاهده سوالات دروس</span>
+                      </q-tooltip>
+                    </q-btn>
+                  </div>
+                  <div class="col-6">
+                    <q-btn
+                      v-if="subcategory.permissions.view"
+                      class="q-mx-sm"
+                      size="12px"
+                      :style="{ 'width':'90%' , 'height':'90%' }"
+                      dark-percentage
+                      color="blue"
+                      @click="goVideoSet(subcategory.id)"
+                    >
+                      <q-icon
+                        name="mdi-video"
+                        size="sm"
+                      />
+                      <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                        <span class="smallFontSize">ثبت ویدئو تحلیل</span>
+                      </q-tooltip>
+                    </q-btn>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </template>
+          </tbody>
+        </template>
+      </q-markup-table>
+    </div>
+  </div>
 </template>
 
 <script>
-import axios from "axios";
-import API_ADDRESS from "@/api/Addresses";
-import {QuestSubcategoryList} from "@/models/QuestSubcategory";
-import {QuestCategoryList} from "@/models/QuestCategory";
+import axios from 'axios'
+import API_ADDRESS from 'src/api/Addresses'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { mixinAuth, mixinGetQuizData, mixinQuiz } from 'src/mixin/Mixins'
 
 export default {
   name: 'LessonsList',
   data: () => ({
     lessonsList: new QuestSubcategoryList(),
-    categoriesList: new QuestCategoryList(),
+    quizTitle: ''
   }),
-  created() {
-    this.$store.commit('AppLayout/updateDrawer', true)
-  },
-  mounted() {
-    this.getLessons()
+  mixins: [mixinAuth, mixinQuiz, mixinGetQuizData],
+  created () {
+    this.getQuizTitle()
+    this.loadLessons()
   },
   methods: {
-    goBack() {
-      this.$router.push('/onlineQuiz/exams')
+    async getQuizTitle () {
+      const res = await this.getQuizData(this.$route.params.quizId)
+      if (res.data.data) {
+        this.quizTitle = res.data.data.title
+      }
     },
-    getLessons() {
-      this.categoriesList.loading = true
-      axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.quizId))
-          .then((response) => {
-            this.categoriesList.loading = false
-            this.categoriesList = new QuestCategoryList(response.data.data, {
-              meta: response.data.meta,
-              links: response.data.links
-            })
-          })
-          .catch(() => {
-            this.categoriesList.loading = false
-            this.categoriesList = new QuestCategoryList()
-          })
+    goBack () {
+      this.$router.push('/admin/exam')
     },
-    updateOrder(subcategory) {
+    async loadLessons () {
+      this.lessonsList.loading = true
+      try {
+        const response = await this.getLessons()
+        this.lessonsList.loading = false
+        this.lessonsList = new QuestSubcategoryList(response.data.data, {
+          meta: response.data.meta,
+          links: response.data.links
+        })
+      } catch (e) {
+        this.lessonsList.loading = false
+        this.lessonsList = new QuestSubcategoryList()
+      }
+    },
+    getLessons () {
+      return axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.quizId))
+    },
+    redirect (link) {
+      console.log(link)
+    },
+    goVideoSet (id) {
+      this.$router.push({
+        name: 'Admin.Exam.video.set',
+        params: {
+          subcategory_id: id,
+          examId: this.$route.params.quizId,
+          quizTitle: this.$route.params.quizTitle
+        }
+      })
+    },
+    redirectTo (link) {
+      const quizId = this.$route.params.quizId
+      this.$router.push('/admin/exam/' + quizId + '/' + link.id)
+    },
+    updateOrder (subcategory) {
       if (subcategory.order === null) {
         return
       }
       subcategory.loading = true
-      // setTimeout(() => {
-      //   subcategory.loading = false
-      //   console.log('subcategory', {
-      //     order: subcategory.order,
-      //     sub_category_id: subcategory.id,
-      //     exams: [{ exam_id: this.$route.params.quizId }]
-      //   })
-      // }, 2000)
-
-
       axios.post(API_ADDRESS.questionSubcategory.updateOrder, {
         sub_category_id: subcategory.id,
         order: subcategory.order,
         exam_id: this.$route.params.quizId
       })
-          .then(() => {
-            subcategory.loading = false
-          })
-          .catch(() => {
-            subcategory.loading = false
-            subcategory.order = null
-          })
-    },
-    updateTime(subcategory) {
-      if (subcategory.time === null || isNaN(subcategory.time)) {
-        return
-      }
-      subcategory.loading = true
-      setTimeout(() => {
-        subcategory.loading = false
-        console.log('subcategory', {
-          time: subcategory.time,
-          sub_category_id: subcategory.id,
-          exams: [{ exam_id: this.$route.params.quizId }]
+        .then((response) => {
+          subcategory.loading = false
         })
-      }, 2000)
-
-
-      // axios.post(API_ADDRESS.questionSubcategory.updateOrder, {
-      //   sub_category_id: subcategory.id,
-      //   time: subcategory.time,
-      //   exam_id: this.$route.params.quizId
-      // })
-      //     .then((response) => {
-      //       subcategory.loading = false
-      //     })
-      //     .catch(() => {
-      //       subcategory.loading = false
-      //       subcategory.order = null
-      //     })
+        .catch(() => {
+          subcategory.loading = false
+          subcategory.order = null
+        })
     }
   }
 }
+
 </script>
 
 <style scoped>
+
 .actionsColumn {
   width: 50%;
 }
 
 .tableSize {
-  width: 40%;
-  margin: auto
+  width: 60%;
+  margin: auto;
 }
 
-.backBtnPosition {
-  float: left
+.col-12 {
+  padding: 12px;
+}
+
+.smallFontSize {
+  font-size: 13px;
+}
+
+span {
+  font-size: 16px;
 }
 </style>

@@ -1,122 +1,142 @@
 <template>
-  <v-row>
-    <v-col cols="12 ">
+  <div class="row">
+    <div class="col-12">
       <div class="tableSize">
         <span>{{ $route.params.quizTitle }}</span>
-        <v-btn
-          class="mx-2 backBtnPosition"
-          fab
-          x-small
-          color="white"
-          @click="goBack"
-        >
-          <v-icon dark>
-            mdi-chevron-left
-          </v-icon>
-        </v-btn>
+        <q-btn
+          class="q-mx-sm float-right"
+          round
+          dark-percentage
+          color="primary"
+          @click= this.$router.go(-1)
+          icon="isax:arrow-left-2"
+        />
       </div>
-    </v-col>
-    <v-col cols="12">
-      <v-simple-table class="tableSize">
+    </div>
+    <div class="col-12">
+      <q-markup-table class="tableSize">
         <template v-slot:default>
           <thead>
-            <tr>
-              <th class="text-right">
-                عنوان
-              </th>
-              <th class="text-right">
-                عملیات
-              </th>
-            </tr>
+          <tr>
+            <th class="text-left">
+              عنوان
+            </th>
+            <th class="text-left">
+              عملیات
+            </th>
+          </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="item in lessonsList.list"
-              :key="item.id"
-            >
-              <td>{{ item.title }}</td>
-              <td class="actionsColumn">
-                <v-tooltip top>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      v-if="item.permissions.view"
-                      class="mx-2"
-                      fab
-                      dark
-                      x-small
-                      color="green"
-                      :to="{ name: 'onlineQuiz.exams.lessons.Karnama', params: { quizId: $route.params.quizId, lessonId: item.id}}"
-                      v-bind="attrs"
-                      v-on="on"
-                    >
-                      <v-icon
-                        small
-                      >
-                        mdi-notebook-outline
-                      </v-icon>
-                    </v-btn>
-                  </template>
-                  <span>مشاهده سوالات درس</span>
-                </v-tooltip>
-              </td>
-            </tr>
+          <tr
+            v-for="item in lessonsList.list"
+            :key="item.id"
+          >
+            <td>{{ item.title }}</td>
+            <td class="actionsColumn">
+              <q-btn
+                v-if="item.permissions.view"
+                class="q-mx-sm"
+                size="12px"
+                round
+                dark-percentage
+                @click="redirect(item)"
+                color="green">
+                <q-icon
+                  name="mdi-notebook-outline"
+                  size="sm"
+                />
+                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                  <span class="smallFontSize">مشاهده سوالات دروس</span>
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                v-if="item.permissions.view"
+                class="q-mx-sm"
+                size="12px"
+                round
+                dark-percentage
+                color="blue"
+                @click="redirect(item)"
+              >
+                <q-icon
+                  name="mdi-video"
+                  size="sm"
+                />
+                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                  <span class="smallFontSize">ثبت ویدئو تحلیل</span>
+                </q-tooltip>
+              </q-btn>
+            </td>
+          </tr>
           </tbody>
         </template>
-      </v-simple-table>
-    </v-col>
-  </v-row>
+      </q-markup-table>
+    </div>
+  </div>
 </template>
 
 <script>
-import axios from "axios";
-import API_ADDRESS from "@/api/Addresses";
-import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+import axios from 'axios'
+import API_ADDRESS from 'src/api/Addresses'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 
 export default {
   name: 'LessonsChartList',
   data: () => ({
     lessonsList: new QuestSubcategoryList()
   }),
-  created() {
-    this.$store.commit('AppLayout/updateDrawer', true)
+  created () {
+    this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
   },
-  mounted() {
-    this.getLessons()
+  mounted () {
+    this.loadLessons()
   },
   methods: {
-    goBack() {
-      this.$router.push('/onlineQuiz/exams')
-    },
-    getLessons() {
+    async loadLessons () {
       this.lessonsList.loading = true
-      axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.quizId))
-          .then((response) => {
-            this.lessonsList.loading = false
-            this.lessonsList = new QuestSubcategoryList(response.data.data, {
-              meta: response.data.meta,
-              links: response.data.links
-            })
-          })
-          .catch(() => {
-            this.lessonsList.loading = false
-            this.lessonsList = new QuestSubcategoryList()
-          })
+      try {
+        const response = await this.getLessons()
+        this.lessonsList.loading = false
+        this.lessonsList = new QuestSubcategoryList(response.data.data, {
+          meta: response.data.meta,
+          links: response.data.links
+        })
+      } catch (e) {
+        this.lessonsList.loading = false
+        this.lessonsList = new QuestSubcategoryList()
+      }
+    },
+    getLessons () {
+      return axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.quizId))
+    },
+    redirect (link) {
+      console.log(link)
     }
   }
 }
+
 </script>
 
 <style scoped>
+
 .actionsColumn {
   width: 50%;
 }
 
 .tableSize {
-  width: 40%;
-  margin: auto
+  width: 60%;
+  margin: auto;
 }
 
-.backBtnPosition {
-  float: left
+.col-12 {
+  padding: 12px;
+}
+
+.smallFontSize {
+  font-size: 13px;
+}
+
+span {
+  font-size: 16px;
 }
 </style>

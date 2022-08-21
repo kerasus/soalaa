@@ -1,19 +1,24 @@
 <template>
-  <div class="SelectImageBox mb-5">
-    <p class="font-weight-medium mb-5 mt-5">
+  <div class="SelectImageBox">
+    <p class="box-titles q-mb-md q-mt-md">
       فایل های آپلود شده:
     </p>
-    <v-row>
-      <v-col md="4">
-        <v-card>
-          <v-card-title class="body-1">
+    <div class="row">
+      <div class="col-md-4">
+        <q-card class="question-box">
+          <q-card-section class="box-titles">
             صورت سوال
-          </v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col
+          </q-card-section>
+<!--          <v-card-title class="body-1">-->
+<!--            -->
+<!--          </v-card-title>-->
+          <q-card-actions vertical class="question-box-card-action">
+            <div class="row">
+              <div
                 v-if="editStatus"
-                class="test"
+                v-show="questionFile.length === 0"
+                class="col test"
+                style="padding-top: 16px;"
               >
                 <file-upload
                   ref="questionFile"
@@ -21,7 +26,7 @@
                   input-id="questionFile"
                   :extensions="extensions"
                   :accept="accept"
-                  :multiple="true"
+                  :multiple="false"
                   :directory="directory"
                   :create-directory="createDirectory"
                   :size="size || 0"
@@ -33,126 +38,124 @@
                   @input-filter="inputFilter"
                   @input-file="inputFile"
                 >
-                  <v-btn
-                    large
-                    text
+                  <q-btn
+                    flat
                     class="btnAddImage"
-                  >
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
+                    icon="mdi-plus"
+                  ></q-btn>
+<!--                  <v-btn-->
+<!--                    large-->
+<!--                    text-->
+<!--                    class="btnAddImage"-->
+<!--                  >-->
+<!--                    <v-icon>mdi-plus</v-icon>-->
+<!--                  </v-btn>-->
                 </file-upload>
-              </v-col>
-              <v-col
+              </div>
+              <div
                 v-for="(file, index) in questionFile"
                 :key="index"
-                class="test2"
+                class="col test2"
               >
-                <v-card>
-                  <v-img
-                    :src="(typeof file !== 'string') ? file.thumb : file"
-                    width="100%"
-                    height="60"
-                    class="mt-3"
-                    @click="showImgPanel(((typeof file !== 'string') ? file.thumb : file))"
+                <q-card>
+                  <q-img
+                    v-if="(editStatus && file.thumb) || (!editStatus && file)"
+                    :src="(editStatus) ? file.thumb : file"
+                    class="q-mt-3"
+                    @click="showImgPanel(((editStatus) ? file.thumb : file))"
+                    style="height: 60px; max-width: 100%"
                   />
-                  <v-card-title
-                    v-if="typeof file !== 'string'"
-                    class="caption"
-                    v-text="formatSize(file.size)"
-                  />
-                  <!-- delete img ----------------------------------------------------------->
-                  <v-btn
+                  <span v-else>No Images</span>
+                  <q-card-section
                     v-if="editStatus"
-                    fab
-                    dark
-                    x-small
-                    color="error"
+                    class="caption"
+                  >
+                    {{ formatSize(file.size) }}
+                  </q-card-section>
+                  <!-- delete img ----------------------------------------------------------->
+                  <q-btn
+                    v-if="editStatus"
+                    round
+                    color="red"
+                    size="12px"
                     class="btnRemoveFile"
-                    @click.prevent="deleteStatementPhoto(file)"
-                  >
-                    <v-icon dark>
-                      mdi-close
-                    </v-icon>
-                  </v-btn>
-                </v-card>
-              </v-col>
-              <v-col
+                    icon="mdi-close"
+                    @click.prevent="$refs.questionFile.remove(file)"
+                  ></q-btn>
+                </q-card>
+              </div>
+              <div
                 v-if="!editStatus && questionFile.length === 0"
+                class="col"
               >
-                <v-card>
-                  <v-img
-                    width="100%"
-                    height="60"
+                <q-card>
+                  <q-img
+                    style="height: 60px; max-width: 100%"
                   >
-                    <template v-slot:placeholder>
-                      <v-row
-                        no-gutters
-                        class="fill-height"
+                      <div
+                        class="row fit wrap justify-center items-center"
                       >
-                        <v-col class="d-flex justify-center align-center">
-                          <v-icon size="50px">
-                            mdi-image-off
-                          </v-icon>
-                        </v-col>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col md="8">
-        <v-card>
-          <v-card-title class="body-1">
+                        <div>
+                          <q-icon name="mdi-image-off" size="md" ></q-icon>
+                        </div>
+                      </div>
+                  </q-img>
+                </q-card>
+              </div>
+            </div>
+          </q-card-actions>
+        </q-card>
+      </div>
+      <div class="col-md-8">
+        <q-card class="upload-question-container">
+          <q-card-section class="box-titles">
             جواب سوال
-          </v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col
+          </q-card-section>
+          <!--          <v-card-title class="body-1">-->
+          <!--            -->
+          <!--          </v-card-title>-->
+          <q-card-section class="answer-box">
+            <div class="row">
+              <div
                 v-for="(file, index) in answerFiles"
                 :key="index"
-                cols="3"
+                class="col col-3"
+                style="padding-left: 16px;"
               >
-                <v-card>
-                  <v-img
-                    v-if="(editStatus && file.thumb) || (typeof file === 'string' && file)"
-                    :src="(typeof file !== 'string') ? file.thumb : file"
-                    width="100%"
-                    height="60"
-                    class="mt-3"
-                    @click="showImgPanel(((typeof file !== 'string') ? file.thumb : file))"
+                <q-card>
+                  <q-img
+                    v-if="(editStatus && file.thumb) || (!editStatus && file)"
+                    :src="(editStatus) ? file.thumb : file"
+                    style="height: 60px; max-width: 100%"
+                    class="q-mt-3"
+                    @click="showImgPanel(((editStatus) ? file.thumb : file))"
                   />
 
                   <span v-else>No Image</span>
-
-
-                  <v-card-title
-                    v-if="typeof file !== 'string'"
-                    class="caption"
-                    v-text="formatSize(file.size)"
-                  />
-
-                  <v-btn
+                  <q-card-section
                     v-if="editStatus"
-                    fab
-                    dark
-                    x-small
-                    color="error"
-                    class="btnRemoveFile"
-                    @click.prevent="deleteAnswerPhoto(file)"
+                    class="caption"
                   >
-                    <v-icon dark>
-                      mdi-close
-                    </v-icon>
-                  </v-btn>
-                </v-card>
-              </v-col>
-              <v-col
-                cols="3"
+                    {{ formatSize(file.size) }}
+                  </q-card-section>
+
+                  <q-btn
+                    v-if="editStatus"
+                    round
+                    color="red"
+                    size="12px"
+                    class="btnRemoveFile"
+                    icon="mdi-close"
+                    @click.prevent="$refs.answerImages.remove(file)"
+                  ></q-btn>
+                </q-card>
+              </div>
+              <div
+                v-if="editStatus"
+                class="col col-3"
+                style="padding-top: 16px;"
               >
-                <div v-if="editStatus">
+                <div>
                   <file-upload
                     ref="answerImages"
                     v-model="answerFiles"
@@ -171,57 +174,51 @@
                     @input-filter="inputFilter"
                     @input-file="inputFile"
                   >
-                    <v-btn
+                    <q-btn
                       large
                       text
                       class="btnAddImage"
-                    >
-                      <v-icon>mdi-plus</v-icon>
-                    </v-btn>
+                      icon="mdi-plus"
+                    ></q-btn>
                   </file-upload>
                 </div>
-              </v-col>
-              <v-col
+              </div>
+              <div
+                class="col"
                 v-if="!editStatus && answerFiles.length === 0"
               >
-                <v-card>
-                  <v-img
-                    width="100%"
-                    height="60"
+                <q-card>
+                  <q-img
+                    style="height: 60px; max-width: 100%"
                   >
-                    <template v-slot:placeholder>
-                      <v-row
-                        no-gutters
-                        class="fill-height"
-                      >
-                        <v-col class="d-flex justify-center align-center">
-                          <v-icon size="50px">
-                            mdi-image-off
-                          </v-icon>
-                        </v-col>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+                    <div
+                      class="row fit wrap justify-center items-center"
+                    >
+                      <div>
+                        <q-icon name="mdi-image-off" size="md" ></q-icon>
+                      </div>
+                    </div>
+                  </q-img>
+                </q-card>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 
 import Cropper from 'cropperjs'
 import ImageCompressor from '@xkeshi/image-compressor'
-import FileUpload from 'vue-upload-component'
-import {Question} from "@/models/Question";
+import VueUploadComponent from 'vue-upload-component'
+import { Question } from 'src/models/Question'
 
 export default {
-  name: "UploadImg",
+  name: 'UploadImg',
   components: {
-    FileUpload,
+    'file-upload': VueUploadComponent
   },
   props: {
     value: {
@@ -233,7 +230,7 @@ export default {
       default: false
     }
   },
-  data(){
+  data () {
     return {
       question: new Question(),
       files: [],
@@ -260,27 +257,27 @@ export default {
         show: false,
         name: '',
         type: '',
-        content: '',
+        content: ''
       },
       editFile: {
         show: false,
-        name: '',
-      },
+        name: ''
+      }
     }
   },
   watch: {
-    'editFile.show'(newValue, oldValue) {
+    'editFile.show' (newValue, oldValue) {
       // 关闭了 自动删除 error
       if (!newValue && oldValue) {
         this.$refs.answerImages.update(this.editFile.id, { error: this.editFile.error || '' })
       }
       if (newValue) {
-        this.$nextTick( () => {
+        this.$nextTick(() => {
           if (!this.$refs.editImage) {
             return
           }
-          let cropper = new Cropper(this.$refs.editImage, {
-            autoCrop: false,
+          const cropper = new Cropper(this.$refs.editImage, {
+            autoCrop: false
           })
           this.editFile = {
             ...this.editFile,
@@ -289,7 +286,7 @@ export default {
         })
       }
     },
-    'addData.show'(show) {
+    'addData.show' (show) {
       if (show) {
         this.addData.name = ''
         this.addData.type = ''
@@ -297,48 +294,37 @@ export default {
       }
     },
     value: {
-      handler: function(newValue) {
+      handler: function (newValue) {
         this.question = newValue
-        this.questionFile = this.question.statement_photo ? this.question.statement_photo : []
-        this.answerFiles = this.question.answer_photos ? this.question.answer_photos : []
+        if (!this.editStatus) {
+          this.questionFile = (this.question.statement_photo) ? [this.question.statement_photo] : []
+          this.answerFiles = this.question.answer_photos
+        }
       },
       deep: true
     }
   },
-  created() {
+  created () {
     this.question = this.value
-    this.questionFile = this.question.statement_photo ? this.question.statement_photo : []
-    this.answerFiles = this.question.answer_photos ? this.question.answer_photos : []
+    if (!this.editStatus) {
+      this.questionFile = (this.question.statement_photo) ? [this.question.statement_photo] : []
+      this.answerFiles = this.question.answer_photos
+    }
   },
-  methods :{
-    deleteStatementPhoto(file) {
-      console.log(file)
-      if (typeof file === 'string') {
-        this.$emit('deleteStatementPhoto', file)
-      } else {
-        this.$refs.questionFile.remove(file)
-      }
-    },
-    deleteAnswerPhoto(file) {
-      console.log(file)
-      if (typeof file === 'string') {
-        this.$emit('deleteAnswerPhoto', file)
-      } else {
-        this.$refs.answerImages.remove(file)
-      }
-    },
-    showImgPanel(src){
-      console.log("src -----------", src)
-      this.$emit("imgClicked", src);
+  methods: {
+    showImgPanel (src) {
+      console.log('src -----------', src)
+      this.$emit('imgClicked', src)
     },
     fileUpdated () {
       const files = {
         questionFile: this.questionFile,
         answerFiles: this.answerFiles
       }
-
-      this.question.statement_photo = this.questionFile.map( item => item.file ? item.file : item)
-      this.question.answer_photos = this.answerFiles.map( item => item.file ? item.file : item)
+      if (this.questionFile[0]) {
+        this.question.statement_photo = this.questionFile[0].file
+      }
+      this.question.answer_photos = this.answerFiles.map(item => item.file)
       console.log('files', files)
       console.log('this.question', this.question)
       this.$emit('input', this.question)
@@ -369,7 +355,7 @@ export default {
       }
       return size.toString() + ' B'
     },
-    inputFilter(newFile, oldFile, prevent) {
+    inputFilter (newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
         // Before adding a file
         // 添加文件前
@@ -385,27 +371,27 @@ export default {
         }
         // Automatic compression
         // 自动压缩
-        if (newFile.file && newFile.error === "" && newFile.type.substr(0, 6) === 'image/' && this.autoCompress > 0 && this.autoCompress < newFile.size) {
+        if (newFile.file && newFile.error === '' && newFile.type.substr(0, 6) === 'image/' && this.autoCompress > 0 && this.autoCompress < newFile.size) {
           newFile.error = 'compressing'
           const imageCompressor = new ImageCompressor(null, {
             convertSize: 1024 * 1024,
             maxWidth: 512,
-            maxHeight: 512,
+            maxHeight: 512
           })
           imageCompressor.compress(newFile.file)
-              .then((file) => {
-                this.$refs.answerImages.update(newFile, { error: '', file, size: file.size, type: file.type })
-              })
-              .catch((err) => {
-                this.$refs.answerImages.update(newFile, { error: err.message || 'compress' })
-              })
+            .then((file) => {
+              this.$refs.answerImages.update(newFile, { error: '', file, size: file.size, type: file.type })
+            })
+            .catch((err) => {
+              this.$refs.answerImages.update(newFile, { error: err.message || 'compress' })
+            })
         }
       }
-      if (newFile && newFile.error === "" && newFile.file && (!oldFile || newFile.file !== oldFile.file)) {
+      if (newFile && newFile.error === '' && newFile.file && (!oldFile || newFile.file !== oldFile.file)) {
         // Create a blob field
         // 创建 blob 字段
         newFile.blob = ''
-        let URL = (window.URL || window.webkitURL)
+        const URL = (window.URL || window.webkitURL)
         if (URL) {
           newFile.blob = URL.createObjectURL(newFile.file)
         }
@@ -418,21 +404,21 @@ export default {
       }
       // image size
       // image 尺寸
-      if (newFile && newFile.error === '' && newFile.type.substr(0, 6) === "image/" && newFile.blob && (!oldFile || newFile.blob !== oldFile.blob)) {
+      if (newFile && newFile.error === '' && newFile.type.substr(0, 6) === 'image/' && newFile.blob && (!oldFile || newFile.blob !== oldFile.blob)) {
         newFile.error = 'image parsing'
-        let img = new Image();
+        const img = new Image()
         img.onload = () => {
-          this.$refs.answerImages.update(newFile, {error: '', height: img.height, width: img.width})
+          this.$refs.answerImages.update(newFile, { error: '', height: img.height, width: img.width })
         }
         img.οnerrοr = (e) => {
           console.log('e', e)
-          this.$refs.answerImages.update(newFile, { error: 'parsing image size'})
+          this.$refs.answerImages.update(newFile, { error: 'parsing image size' })
         }
         img.src = newFile.blob
       }
     },
     // add, update, remove File Event
-    inputFile(newFile, oldFile) {
+    inputFile (newFile, oldFile) {
       this.fileUpdated()
 
       if (newFile && oldFile) {
@@ -472,26 +458,26 @@ export default {
         }
       }
     },
-    alert(message) {
+    alert (message) {
       alert(message)
     },
-    onEditFileShow(file) {
+    onEditFileShow (file) {
       this.editFile = { ...file, show: true }
       this.$refs.answerImages.update(file, { error: 'edit' })
     },
-    onEditorFile() {
+    onEditorFile () {
       if (!this.$refs.answerImages.features.html5) {
         this.alert('Your browser does not support')
         this.editFile.show = false
         return
       }
-      let data = {
+      const data = {
         name: this.editFile.name,
-        error: '',
+        error: ''
       }
       if (this.editFile.cropper) {
-        let binStr = atob(this.editFile.cropper.getCroppedCanvas().toDataURL(this.editFile.type).split(',')[1])
-        let arr = new Uint8Array(binStr.length)
+        const binStr = atob(this.editFile.cropper.getCroppedCanvas().toDataURL(this.editFile.type).split(',')[1])
+        const arr = new Uint8Array(binStr.length)
         for (let i = 0; i < binStr.length; i++) {
           arr[i] = binStr.charCodeAt(i)
         }
@@ -503,45 +489,48 @@ export default {
       this.editFile.show = false
     },
     // add folder
-    onAddFolder() {
+    onAddFolder () {
       if (!this.$refs.answerImages.features.directory) {
         this.alert('Your browser does not support')
         return
       }
-      let input = document.createElement('input')
-      input.style = "background: rgba(255, 255, 255, 0);overflow: hidden;position: fixed;width: 1px;height: 1px;z-index: -1;opacity: 0;"
+      const input = document.createElement('input')
+      input.style = 'background: rgba(255, 255, 255, 0);overflow: hidden;position: fixed;width: 1px;height: 1px;z-index: -1;opacity: 0;'
       input.type = 'file'
       input.setAttribute('allowdirs', true)
       input.setAttribute('directory', true)
       input.setAttribute('webkitdirectory', true)
       input.multiple = true
-      document.querySelector("body").appendChild(input)
+      document.querySelector('body').appendChild(input)
       input.click()
       input.onchange = (e) => {
         console.log('e', e)
-        this.$refs.answerImages.addInputFile(input).then(function() {
-          document.querySelector("body").removeChild(input)
+        this.$refs.answerImages.addInputFile(input).then(function () {
+          document.querySelector('body').removeChild(input)
         })
       }
     },
-    onAddData() {
+    onAddData () {
       this.addData.show = false
       if (!this.$refs.answerImages.features.html5) {
         this.alert('Your browser does not support')
         return
       }
-      let file = new window.File([this.addData.content], this.addData.name, {
-        type: this.addData.type,
+      const file = new window.File([this.addData.content], this.addData.name, {
+        type: this.addData.type
       })
       this.$refs.answerImages.add(file)
     }
-
 
   }
 }
 </script>
 
 <style>
+.SelectImageBox {
+  margin-right: 15px;
+  margin-left: 15px;
+}
 .SelectImageBox .file-uploads.file-uploads-html4 input, .file-uploads.file-uploads-html5 label:hover {
   opacity: 0.08;
   background-color: currentColor;
@@ -556,5 +545,21 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.SelectImageBox .upload-question-container {
+  margin-left: 15px;
+
+}
+.SelectImageBox .question-box-card-action {
+  padding-right: 16px;
+  padding-left: 16px;
+  padding-bottom: 16px;
+}
+.SelectImageBox .answer-box {
+  padding-bottom: 16px;
+  padding-top: 8px;
+}
+.SelectImageBox .box-titles {
+  font-size: 1rem ;
 }
 </style>
