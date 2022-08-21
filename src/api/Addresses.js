@@ -3,6 +3,8 @@ const lumenServer = process.env.AAA_API
 const authServer = process.env.AUTH_API
 const timeServer = process.env.GET_TIME_SERVER
 const socketServer = process.env.SOCKET_SERVER
+const apiV2Server = process.env.AUTH_API
+
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
   socket: socketServer,
@@ -241,6 +243,10 @@ const API_ADDRESS = {
     setTags (questionId) {
       return lumenServer + '/id/soalaQestion/' + questionId
     }
+  },
+  cart: {
+    orderproduct: apiV2Server + '/orderproduct',
+    review: apiV2Server + '/checkout/review'
   }
 }
 export default API_ADDRESS
