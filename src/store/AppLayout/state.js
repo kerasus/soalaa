@@ -10,6 +10,7 @@ export default function () {
       }
     },
     templateHeaderType: '',
+    templateSideBarType: '',
     windowSize: {
       x: 0,
       y: 0

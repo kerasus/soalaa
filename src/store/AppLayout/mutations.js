@@ -19,6 +19,10 @@ export function changeTemplateHeaderType (state, newInfo) {
   state.templateHeaderType = newInfo
 }
 
+export function changeTemplateSideBarType (state, newInfo) {
+  state.templateSideBarType = newInfo
+}
+
 export function showConfirmDialog (state, newInfo) {
   state.confirmDialog = newInfo
 }
