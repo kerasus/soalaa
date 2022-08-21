@@ -20,7 +20,7 @@ export default {
     features,
     NavBar
   },
-  mounted () {
+  created () {
     this.closeSidBarAndAppbar()
   },
   methods: {
