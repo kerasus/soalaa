@@ -203,15 +203,15 @@ export default {
     },
 
     totalFinalPrice () {
-      return this.cart.price?.final
+      return this.getPriceFormat(this.cart.price?.final)
     },
 
     totalBasePrice () {
-      return this.cart.price?.base
+      return this.getPriceFormat(this.cart.price?.base)
     },
 
     totalDiscount () {
-      return this.cart.price?.discount
+      return this.getPriceFormat(this.cart.price?.discount)
     },
 
     discountInPercent () {
@@ -226,11 +226,12 @@ export default {
       return this.$store.getters['AppLayout/windowSize']
     }
   },
+
   methods: {
     cartReview () {
       this.$store.dispatch('Cart/reviewCart')
         .then((response) => {
-          this.amountUsingWallet = response.data.data.pay_by_wallet
+          this.amountUsingWallet = this.getPriceFormat(response.data.data.pay_by_wallet)
           this.gatewayRedirectAddress = response.data.data.redirect_to_gateway
         })
     },
@@ -248,7 +249,16 @@ export default {
             this.cartReview()
           }
         })
+    },
+
+    getPriceFormat (price) {
+      if (!price && price !== 0) {
+        console.log(price)
+        return
+      }
+      return price.toLocaleString()
     }
+
   }
 }
 </script>
