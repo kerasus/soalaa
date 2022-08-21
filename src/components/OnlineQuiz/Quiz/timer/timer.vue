@@ -1,21 +1,21 @@
 <template>
-<div>
-  <mobile-timer
-    class="Mobiletimer"
-    v-if="windowSize.x < 1024"
-    :passed-time="passedTime"
-    :remaining-time="remainTime"
-    :current-cat="currentCat"
-  />
-  <pc-timer
-    class="Pctimer"
-    v-else
-    :passed-time="passedTime"
-    :remaining-time="remainTime"
-    :current-cat="currentCat"
-    @timerOpen="passEvent"
-  />
-</div>
+  <div>
+    <mobile-timer
+      class="Mobiletimer"
+      v-if="windowSize.x < 1024"
+      :passed-time="passedTime"
+      :remaining-time="remainTime"
+      :current-cat="currentCat"
+    />
+    <pc-timer
+      class="Pctimer"
+      v-else
+      :passed-time="passedTime"
+      :remaining-time="remainTime"
+      :current-cat="currentCat"
+      @timerOpen="passEvent"
+    />
+  </div>
 </template>
 
 <script>

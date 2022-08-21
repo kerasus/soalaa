@@ -5,11 +5,11 @@
       :loading="componentTabs.loading"
     />
     <div class="relative-position">
-<!--      <component-->
-<!--        v-if="question.type"-->
-<!--        :is="getComponent"-->
-<!--        v-bind="allProps"-->
-<!--      />-->
+      <!--      <component-->
+      <!--        v-if="question.type"-->
+      <!--        :is="getComponent"-->
+      <!--        v-bind="allProps"-->
+      <!--      />-->
       <q-inner-loading
         :showing="question.loading"
         color="primary"
@@ -23,13 +23,13 @@
         :lessons="subCategoriesList"
       />
       <div class="attach-btn row">
-        <question-identifier class="col-9"/>
+        <question-identifier class="col-9" />
         <btn-box
           class="col-3"
           @saveQuestion="setQuestionContents"
         />
       </div>
-      <comment-box/>
+      <comment-box />
       <q-inner-loading
         :showing="question.exams.loading"
         color="primary"

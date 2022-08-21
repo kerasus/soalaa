@@ -90,7 +90,7 @@
             type="a"
             :href="file_url"
             :disable="!file_url"
-             style="width: 150px"
+            style="width: 150px"
           >
             دانلود Excel
           </q-btn>
@@ -119,20 +119,20 @@
         <q-separator></q-separator>
         <q-tab-panels v-model="tabs">
           <q-tab-panel name="rank">
-              <q-markup-table
-                class="my-sticky-header-table tabs-content"
-                id="scroll-target-id"
-                dense
+            <q-markup-table
+              class="my-sticky-header-table tabs-content"
+              id="scroll-target-id"
+              dense
+            >
+              <q-infinite-scroll
+                @load="loadRankData"
+                :offset="250"
+                scroll-target="#scroll-target-id"
               >
-                <q-infinite-scroll
-                  @load="loadRankData"
-                  :offset="250"
-                  scroll-target="#scroll-target-id"
+                <thead
+                  v-if="results[0]"
+                  class="mitra"
                 >
-                  <thead
-                    v-if="results[0]"
-                    class="mitra"
-                  >
                   <tr>
                     <th colspan="5">
                     </th>
@@ -178,8 +178,8 @@
                       </th>
                     </template>
                   </tr>
-                  </thead>
-                  <tbody>
+                </thead>
+                <tbody>
                   <tr
                     v-for="item in results"
                     :key="item.name"
@@ -187,9 +187,9 @@
                   >
                     <td>{{ item.main.rank_country }}</td>
                     <td>
-                  <span v-if="item.user">
-                    {{ item.user.first_name }} {{ item.user.last_name }}
-                  </span>
+                      <span v-if="item.user">
+                        {{ item.user.first_name }} {{ item.user.last_name }}
+                      </span>
                       <span v-else> - </span>
                     </td>
                     <td>{{ item.location.province }}</td>
@@ -224,14 +224,14 @@
                       </td>
                     </template>
                   </tr>
-                  </tbody>
-                  <div v-if="noData"
-                  class="text-subtitle1 text-weight-medium text-center full-width"
-                  >
-                    no more data
-                  </div>
-                </q-infinite-scroll>
-              </q-markup-table>
+                </tbody>
+                <div v-if="noData"
+                     class="text-subtitle1 text-weight-medium text-center full-width"
+                >
+                  no more data
+                </div>
+              </q-infinite-scroll>
+            </q-markup-table>
           </q-tab-panel>
           <q-tab-panel name="lesson">
             <q-table
@@ -240,7 +240,7 @@
               row-key="value"
               class="lesson-table"
               hide-bottom
-             :rows-per-page-options="[0]"
+              :rows-per-page-options="[0]"
             >
             </q-table>
           </q-tab-panel>

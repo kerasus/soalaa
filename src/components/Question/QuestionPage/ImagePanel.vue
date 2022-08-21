@@ -31,34 +31,72 @@
       </q-card-section>
       <div>
         <q-card-section>
-          <img class="main-image" v-if="selectedImageSrc" :src="selectedImageSrc">
+          <img class="main-image"
+               v-if="selectedImageSrc"
+               :src="selectedImageSrc">
           <div class="all-images">
             صورت سوال
             <div class="statement-images">
-              <div v-for="(item, index) in question.statement_photo" :key="index" class="q-image">
-                <q-btn v-if="editable" class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteImage({ src: item, type: 'statement_photo' })" />
-                <img :src="item" @click="selectImage(item)" />
+              <div v-for="(item, index) in question.statement_photo"
+                   :key="index"
+                   class="q-image">
+                <q-btn v-if="editable"
+                       class="delete-btn"
+                       round
+                       color="red"
+                       icon="mdi-delete"
+                       size="xs"
+                       @click="deleteImage({ src: item, type: 'statement_photo' })" />
+                <img :src="item"
+                     @click="selectImage(item)" />
               </div>
-              <div v-for="(item, index) in question.added_statement_photos" :key="index" class="q-image">
-                <q-btn :loading="true" class="delete-btn" round color="red" icon="mdi-delete" size="xs" />
-                <img :src="getUrl(item)" @click="selectImage(getUrl(item))" />
+              <div v-for="(item, index) in question.added_statement_photos"
+                   :key="index"
+                   class="q-image">
+                <q-btn :loading="true"
+                       class="delete-btn"
+                       round
+                       color="red"
+                       icon="mdi-delete"
+                       size="xs" />
+                <img :src="getUrl(item)"
+                     @click="selectImage(getUrl(item))" />
               </div>
-              <div v-if="editable" style="margin-right: 50px">
+              <div v-if="editable"
+                   style="margin-right: 50px">
                 <div id="filepond-wrapper-statement" />
               </div>
               <p v-if="!editable && (!question.statement_photo || question.statement_photo.length === 0)">وجود ندارد</p>
             </div>
             پاسخ سوال
             <div class="answer-images">
-              <div v-for="(item, index) in question.answer_photos" :key="index" class="q-image">
-                <q-btn v-if="editable" class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteImage({ src: item, type: 'answer_photo' })" />
-                <img :src="item" @click="selectImage(item)" />
+              <div v-for="(item, index) in question.answer_photos"
+                   :key="index"
+                   class="q-image">
+                <q-btn v-if="editable"
+                       class="delete-btn"
+                       round
+                       color="red"
+                       icon="mdi-delete"
+                       size="xs"
+                       @click="deleteImage({ src: item, type: 'answer_photo' })" />
+                <img :src="item"
+                     @click="selectImage(item)" />
               </div>
-              <div v-for="(item, index) in question.added_answer_photos" :key="index" class="q-image">
-                <q-btn :loading="true" class="delete-btn" round color="red" icon="mdi-delete" size="xs" />
-                <img :src="getUrl(item)" @click="selectImage(getUrl(item))" />
+              <div v-for="(item, index) in question.added_answer_photos"
+                   :key="index"
+                   class="q-image">
+                <q-btn :loading="true"
+                       class="delete-btn"
+                       round
+                       color="red"
+                       icon="mdi-delete"
+                       size="xs" />
+                <img :src="getUrl(item)"
+                     @click="selectImage(getUrl(item))" />
               </div>
-              <div v-if="editable" style="margin-right: 50px">
+              <div v-if="editable"
+                   style="margin-right: 50px">
                 <div id="filepond-wrapper-answer" />
               </div>
               <p v-if="!editable && (!question.answer_photos || question.answer_photos.length === 0)">وجود ندارد</p>

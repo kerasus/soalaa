@@ -15,7 +15,8 @@
         class="menu-body"
       >
         <div v-if="categoryItem.is_active">
-          <q-item v-if="categoryItem.is_active" class="category-item">
+          <q-item v-if="categoryItem.is_active"
+                  class="category-item">
             <q-item-section class="category-item-section">
               <q-item-label class="category-item-label">
                 {{ categoryItem.title }}
@@ -68,7 +69,7 @@
       </div>
     </q-list>
     <div class="end-exam">
-      <SendAnswers/>
+      <SendAnswers />
     </div>
   </div>
 </template>

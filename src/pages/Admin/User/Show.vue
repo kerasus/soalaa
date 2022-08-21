@@ -13,29 +13,39 @@
       روزهای آزاد کاربر
     </template>
     <template #toolbar>
-      <q-btn color="primary" @click="setPotentialDates">
+      <q-btn color="primary"
+             @click="setPotentialDates">
         ذخیره روزهای آزاد
       </q-btn>
     </template>
     <template #content>
       <div class="row">
         <div class="col-md-4">
-          <q-date v-model="potentialDates" calendar="persian" :range="false" :multiple="true">
+          <q-date v-model="potentialDates"
+                  calendar="persian"
+                  :range="false"
+                  :multiple="true">
             <div class="row items-center justify-end">
-              <q-btn v-close-popup label="بستن" color="primary" flat />
+              <q-btn v-close-popup
+                     label="بستن"
+                     color="primary"
+                     flat />
             </div>
           </q-date>
         </div>
         <div class="col-md-8">
           <div class="row">
-            <div v-for="item in potentialDates" :key="item" class="col-md-2">
+            <div v-for="item in potentialDates"
+                 :key="item"
+                 class="col-md-2">
               <q-card class="text-center">{{ item }}</q-card>
             </div>
           </div>
         </div>
       </div>
       <q-inner-loading :showing="potentialDatesLoading">
-        <q-spinner-ball color="primary" size="50px" />
+        <q-spinner-ball color="primary"
+                        size="50px" />
       </q-inner-loading>
     </template>
   </portlet>

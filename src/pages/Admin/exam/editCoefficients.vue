@@ -37,18 +37,18 @@
       </p>
       <p class="exam-date-part">
         <span class="date-title">
-        شروع آزمون:
+          شروع آزمون:
         </span>
         <span class="exam-date">
-        {{startDate}}
+          {{startDate}}
         </span>
       </p>
       <p class="exam-date-part">
         <span class="date-title">
-        پایان آزمون:
+          پایان آزمون:
         </span>
         <span class="exam-date">
-        {{finishDate}}
+          {{finishDate}}
         </span>
       </p>
     </div>
@@ -66,7 +66,7 @@
       >
         <template v-slot:no-option>
           <p class="no-data">
-             متاسفانه گزینه ای برای انتخاب وجود ندارد!
+            متاسفانه گزینه ای برای انتخاب وجود ندارد!
           </p>
         </template>
       </q-select>
@@ -135,72 +135,76 @@
                 >
                   <template v-slot:default>
                     <thead class="text-left">
-                    <tr>
-                      <th>اسم درس</th>
-                      <th
-                        v-for="(subCategory,sIindex) in subGroup.sub_category"
-                        :key="sIindex"
-                      >
-                        <div class="th-inline-style">
-                          <div class="category-title-size">
-                            <q-tooltip
-                              anchor="top middle" self="top middle" :offset="[10, 35]"
+                      <tr>
+                        <th>اسم درس</th>
+                        <th
+                          v-for="(subCategory,sIindex) in subGroup.sub_category"
+                          :key="sIindex"
+                        >
+                          <div class="th-inline-style">
+                            <div class="category-title-size">
+                              <q-tooltip
+                                anchor="top middle"
+                                self="top middle"
+                                :offset="[10, 35]"
+                              >
+                                <span>{{ subCategory.category_title }}</span>
+                              </q-tooltip>
+                              <p class="small-fontsize">
+                                {{ subCategory.sub_category_title }}
+                              </p>
+                            </div>
+                            <q-btn
+                              size="12px"
+                              flat
+                              round
+                              icon="mdi-close"
+                              color="red"
+                              @click="deleteSubcategory(subGroup, subCategory.sub_category_title)"
                             >
-                              <span>{{ subCategory.category_title }}</span>
-                            </q-tooltip>
-                            <p class="small-fontsize">
-                              {{ subCategory.sub_category_title }}
-                            </p>
+                              <q-tooltip
+                                anchor="top middle"
+                                self="bottom middle"
+                                :offset="[10, 10]"
+                              >
+                                <span>حذف درس</span>
+                              </q-tooltip>
+                            </q-btn>
                           </div>
-                          <q-btn
-                            size="12px"
-                            flat
-                            round
-                            icon="mdi-close"
-                            color="red"
-                            @click="deleteSubcategory(subGroup, subCategory.sub_category_title)"
-                          >
-                            <q-tooltip
-                              anchor="top middle" self="bottom middle" :offset="[10, 10]"
-                            >
-                              <span>حذف درس</span>
-                            </q-tooltip>
-                          </q-btn>
-                        </div>
-                      </th>
-                    </tr>
+                        </th>
+                      </tr>
                     </thead>
                     <tbody class="text-left">
-                    <tr>
-                      <td width="130px">
-                        ضریب درس
-                      </td>
-                      <td
-                        v-for="(subCategory,sIindex) in subGroup.sub_category"
-                        :key="sIindex"
-                      >
-                        <q-input
-                          v-model="subCategory.sub_category_zarib"
-                          dense
-                          type="number"
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td width="130px">
-                        ضریب دفترچه
-                      </td>
-                      <td
-                        v-for="(subCategory,sIindex) in subGroup.sub_category"
-                        :key="sIindex"
-                      >
-                        <q-input
-                          v-model="subCategory.category_zarib"
-                          dense
-                          type="number"
-                        />
-                      </td>
-                    </tr>
+                      <tr>
+                        <td width="130px">
+                          ضریب درس
+                        </td>
+                        <td
+                          v-for="(subCategory,sIindex) in subGroup.sub_category"
+                          :key="sIindex"
+                        >
+                          <q-input
+                            v-model="subCategory.sub_category_zarib"
+                            dense
+                            type="number"
+                          />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td width="130px">
+                          ضریب دفترچه
+                        </td>
+                        <td
+                          v-for="(subCategory,sIindex) in subGroup.sub_category"
+                          :key="sIindex"
+                        >
+                          <q-input
+                            v-model="subCategory.category_zarib"
+                            dense
+                            type="number"
+                          />
+                        </td>
+                      </tr>
                     </tbody>
                   </template>
                 </q-markup-table>

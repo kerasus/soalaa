@@ -9,39 +9,39 @@
           class="char-info"
           :style="{ background: result.charBg }"
         >
-            <div class="container full-height">
-              <div class="row">
-                <p class="char-type-title-mobile">
-                 {{ mbtiGroup }}
-                  <span>{{ 'تیپ شخصیتی ' + result.type }}</span>
-                </p>
-              </div>
-              <div class="full-height row safari-flex">
-                <div class="col-lg-5 col-sm-6 col-12 text-box-order"
-                >
-                  <div class="char-info-text full-height">
-                    <p class="char-type-title">
-                        {{ mbtiGroup }}
-                      <span>{{ 'تیپ شخصیتی ' + result.type }}</span>
+          <div class="container full-height">
+            <div class="row">
+              <p class="char-type-title-mobile">
+                {{ mbtiGroup }}
+                <span>{{ 'تیپ شخصیتی ' + result.type }}</span>
+              </p>
+            </div>
+            <div class="full-height row safari-flex">
+              <div class="col-lg-5 col-sm-6 col-12 text-box-order"
+              >
+                <div class="char-info-text full-height">
+                  <p class="char-type-title">
+                    {{ mbtiGroup }}
+                    <span>{{ 'تیپ شخصیتی ' + result.type }}</span>
+                  </p>
+                  <div class="char-details">
+                    <p>
+                      <span>افراد {{ result.type }}</span>
                     </p>
-                    <div class="char-details">
-                      <p>
-                        <span>افراد {{ result.type }}</span>
-                      </p>
-                      <p v-html="mbtiBartleData.mbtiType[result.type].shortText"/>
-                    </div>
+                    <p v-html="mbtiBartleData.mbtiType[result.type].shortText" />
                   </div>
                 </div>
-                <div class="col-lg-7 col-sm-6 col-12 img-box-order" >
-                  <q-img :src="mbtiBartleData.mbtiType[result.type].image1"/>
-                </div>
+              </div>
+              <div class="col-lg-7 col-sm-6 col-12 img-box-order">
+                <q-img :src="mbtiBartleData.mbtiType[result.type].image1" />
               </div>
             </div>
+          </div>
 
         </div>
         <div class="container">
           <div class="row justify-center mbti-detail-box-parent"
-          dir="ltr"
+               dir="ltr"
           >
             <div
               class="col-md-6 col-12 mitra"
@@ -95,18 +95,18 @@
             </div>
           </div>
 
-        <div class="row type-explanation justify-center">
-          <p class="type-header">
-            ویژگی های شخصیت {{ result.type }}
-          </p>
-          <div class="banner">
-            <q-img :src="mbtiBartleData.mbtiType[result.type].image2"/>
+          <div class="row type-explanation justify-center">
+            <p class="type-header">
+              ویژگی های شخصیت {{ result.type }}
+            </p>
+            <div class="banner">
+              <q-img :src="mbtiBartleData.mbtiType[result.type].image2" />
+            </div>
+            <p
+              class="full"
+              v-html="mbtiBartleData.mbtiType[result.type].text"
+            />
           </div>
-          <p
-            class="full"
-            v-html="mbtiBartleData.mbtiType[result.type].text"
-          />
-        </div>
         </div>
         <p class="exam-title">
           نتیجه تست Bartle
@@ -115,66 +115,66 @@
           v-if="bartleResult[0]"
           class="char-results-bartle"
         >
-        <div class="container q-mb-lg">
-          <div class="row main-result justify-center">
-            <div class="column items-center">
-              <p class="your-type">
-                تیپ شخصیتی شما
-              </p>
-              <q-circular-progress
-                show-value
-                reverse
-                class="mt-4 bartle-item-circle"
-                :value="bartleResult[0].value"
-                color="red"
-                size="240px"
-                :thickness="0.1"
-                track-color="grey-4"
-              >
-                <div class="inside-bartle-result-circle  q-pa-lg">
-                  <q-img :src="bartleResult[0].image"/>
-                </div>
-              </q-circular-progress>
-              <p
-                class="your-type-bartle"
-              >
-                {{ bartleResult[0].text }} {{ bartleResult[0].value }}%
-              </p>
-            </div>
-          </div>
-          <div class="row other-result q-mt-lg ">
-            <div class="other-result-circular-progress-box">
-              <div
-                v-for="item in 3"
-                :key="item"
-                class="circular-progress-box"
-              >
+          <div class="container q-mb-lg">
+            <div class="row main-result justify-center">
+              <div class="column items-center">
+                <p class="your-type">
+                  تیپ شخصیتی شما
+                </p>
                 <q-circular-progress
                   show-value
                   reverse
-                  :value="bartleResult[item].value"
+                  class="mt-4 bartle-item-circle"
+                  :value="bartleResult[0].value"
                   color="red"
-                  size="125px"
+                  size="240px"
                   :thickness="0.1"
                   track-color="grey-4"
-                  @click="changeSelectedBartleItem(bartleResult[item])"
                 >
-                  <div class="inside-bartle-result-circle q-pa-md q-pa-xs-none">
-                    <q-img
-                      :src="bartleResult[item].image"
-                    />
+                  <div class="inside-bartle-result-circle  q-pa-lg">
+                    <q-img :src="bartleResult[0].image" />
                   </div>
                 </q-circular-progress>
-                <p class="other-type-bartle">
-               {{ bartleResult[item].text }} {{ bartleResult[item].value }}%
+                <p
+                  class="your-type-bartle"
+                >
+                  {{ bartleResult[0].text }} {{ bartleResult[0].value }}%
                 </p>
+              </div>
+            </div>
+            <div class="row other-result q-mt-lg ">
+              <div class="other-result-circular-progress-box">
+                <div
+                  v-for="item in 3"
+                  :key="item"
+                  class="circular-progress-box"
+                >
+                  <q-circular-progress
+                    show-value
+                    reverse
+                    :value="bartleResult[item].value"
+                    color="red"
+                    size="125px"
+                    :thickness="0.1"
+                    track-color="grey-4"
+                    @click="changeSelectedBartleItem(bartleResult[item])"
+                  >
+                    <div class="inside-bartle-result-circle q-pa-md q-pa-xs-none">
+                      <q-img
+                        :src="bartleResult[item].image"
+                      />
+                    </div>
+                  </q-circular-progress>
+                  <p class="other-type-bartle">
+                    {{ bartleResult[item].text }} {{ bartleResult[item].value }}%
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        </div>
         <div v-if="selectedBartleItem">
-          <div class="row type-explanation container" >
+          <div class="row type-explanation container">
             <p class="type-header">
               ویژگی های شخصیت {{ selectedBartleItem.text }}
             </p>

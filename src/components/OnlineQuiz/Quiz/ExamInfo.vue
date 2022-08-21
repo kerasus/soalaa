@@ -214,7 +214,7 @@
     </div>
     <br>
     <div v-if="!examInfo.id">
-      <q-separator inset/>
+      <q-separator inset />
       <br>
       <div class="row">
         <div class="col-6">
@@ -263,7 +263,7 @@
       <br>
       <br>
       <br>
-      <q-separator inset/>
+      <q-separator inset />
       <br>
       <div
         v-for="item in examInfo.categories.list"
@@ -306,7 +306,7 @@
             color="red"
             icon="close"
             :disable="show"
-            @click="deleteCategory(item.id)"/>
+            @click="deleteCategory(item.id)" />
         </div>
       </div>
     </div>

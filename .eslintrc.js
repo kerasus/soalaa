@@ -71,6 +71,14 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'prefer-promise-reject-errors': 'off',
 
+    "vue/max-attributes-per-line": 'error',
+    "vue/html-indent": 'error',
+    "vue/html-closing-bracket-spacing": 'error',
+    "no-console": [
+      "warn",
+      { "allow": ["clear", "info", "error", "dir", "trace", "groupEnd", "groupCollapsed"] }
+    ],
+
     'vue/multi-word-component-names': 'off',
 
     // allow debugger during development only

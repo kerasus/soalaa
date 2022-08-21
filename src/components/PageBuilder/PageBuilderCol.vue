@@ -1,6 +1,9 @@
 <template>
-  <div class="page-builder-col col" :class="className" :style="style">
-    <template v-for="(widget, widgetIndex) in widgets" :key="widgetIndex">
+  <div class="page-builder-col col"
+       :class="className"
+       :style="style">
+    <template v-for="(widget, widgetIndex) in widgets"
+              :key="widgetIndex">
       <q-intersection
         v-if="widget.options && widget.options.intersection"
         :transition="
