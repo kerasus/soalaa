@@ -114,7 +114,7 @@ export default {
   },
   methods: {
     onFilter (filterData) {
-      console.log('filterData', filterData)
+      // console.log('filterData', filterData)
     },
     addQuestionToExam (question) {
       this.exam.questions.list.push(question)
@@ -163,7 +163,7 @@ export default {
         // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         this.examConfirmedDialog = true
       }).catch(err => {
-        console.log('err', err)
+        console.error('err', err)
         // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
       })
     },

@@ -45,7 +45,7 @@ export default {
           that.inputs[1].options = that.categories
         })
         .catch(function (error) {
-          console.log(error)
+          console.error(error)
         })
     }
   }

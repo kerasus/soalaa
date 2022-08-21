@@ -214,7 +214,7 @@ export default {
           this.questions.loading = false
         })
         .catch(function (error) {
-          console.log(error)
+          console.error(error)
           this.loadingQuestion.loading = false
           this.questions.loading = false
         })
@@ -231,9 +231,6 @@ export default {
               this.filterQuestions.major_type.push(option)
             }
           })
-        })
-        .catch(function (error) {
-          console.log(error)
         })
     },
     selectAllQuestions () {

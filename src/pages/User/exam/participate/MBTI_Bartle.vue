@@ -202,7 +202,7 @@ export default {
           color: 'negative'
         })
         that.$router.push({ name: 'user.exam.list' })
-        console.log('error', error)
+        console.error('error', error)
       })
   },
   methods: {
@@ -350,7 +350,7 @@ export default {
         }
       })
         .catch((e) => {
-          console.log(e)
+          console.error(e)
           this.$store.dispatch('loading/overlayLoading', false)
         })
     },

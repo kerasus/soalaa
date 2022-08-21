@@ -43,10 +43,7 @@ export default {
   },
   data: () => ({
     source: new PlayerSourceList([{ src: 'https://nodes.alaatv.com/upload/vast/videos/HD_720p/1647426360_1245.mp4' }])
-  }),
-  mounted () {
-    console.log('this.source :', this.source)
-  }
+  })
 }
 </script>
 

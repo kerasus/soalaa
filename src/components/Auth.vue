@@ -146,7 +146,6 @@ export default {
           // this.getUserData().then(() => { this.redirectTo() })
         })
         .catch(err => {
-          console.log('in auth :', err)
           this.handleErr(err.response)
         })
     }

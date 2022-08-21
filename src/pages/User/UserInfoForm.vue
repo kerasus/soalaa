@@ -256,7 +256,6 @@ export default {
     }
   },
   mounted () {
-    console.log('in mounted this.user :', this.user)
     this.getUserInfo()
     this.checkVerify()
   },

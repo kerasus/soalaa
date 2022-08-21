@@ -238,11 +238,7 @@ export default {
   data () {
     return {
     }
-  },
-  computed () {
-    console.log(this.questionData)
-  },
-  methods: {}
+  }
 }
 </script>
 

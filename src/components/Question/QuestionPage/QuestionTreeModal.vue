@@ -229,9 +229,6 @@ export default {
           this.syncAllCheckedIds()
           this.selectWantedTree(this.lesson)
         })
-        .catch(err => {
-          console.log(err)
-        })
     },
     selectWantedTree (lesson) {
       if (this.chosenSubjects[lesson.id] && this.chosenSubjects[lesson.id].nodes) {

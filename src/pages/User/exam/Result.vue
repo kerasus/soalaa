@@ -228,7 +228,7 @@ export default {
         .catch((error) => {
           that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
           that.goToExamList()
-          console.log(error)
+          console.error(error)
           this.$q.notify({
             type: 'negative',
             message: 'مشکلی در دریافت اطلاعات کارنامه رخ داده است.',

@@ -163,7 +163,6 @@ export default {
       return axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.quizId))
     },
     redirect (link) {
-      console.log(link)
     },
     goVideoSet (id) {
       this.$router.push({

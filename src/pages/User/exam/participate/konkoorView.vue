@@ -272,7 +272,7 @@ export default {
           this.confirmationBubbleSheet = true
         })
         .catch(erroe => {
-          console.log('erroe : ', erroe)
+          console.error('erroe : ', erroe)
         })
     },
     sendAnswersAndFinishExam () {
@@ -409,7 +409,6 @@ export default {
     },
     updateOverlay (value) {
       this.$store.dispatch('loading/overlayLoading', { loading: value })
-      console.log(value)
     }
   }
 }

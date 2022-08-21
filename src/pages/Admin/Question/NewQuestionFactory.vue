@@ -212,7 +212,6 @@ export default {
       const statusesId = (!itemId) ? [] : [itemId]
       axios.get(API_ADDRESS.question.index(statusesId, page))
         .then(response => {
-          console.log('filter respob=nse :', response)
           that.questions = new QuestionList(response.data.data)
           that.page = response.data.meta.current_page
           that.pageCount = Math.ceil(response.data.meta.total / response.data.meta.per_page)

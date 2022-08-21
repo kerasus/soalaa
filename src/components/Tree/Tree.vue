@@ -274,8 +274,7 @@ export default {
           node.order = this.editedOrder
           this.editDialog = false
           this.loading = false
-        }).catch(err => {
-          console.log(err)
+        }).catch(() => {
           this.editDialog = false
           this.loading = false
         })
@@ -287,7 +286,6 @@ export default {
       const getNode = this.$refs.tree.getNodeByKey(id)
       this.addNewNode(id, this.newType, this.newTitle, this.newOrder)
         .then(response => {
-          console.log(response)
           getNode.children.unshift(new TreeNode({
             id: response.data.data.id,
             type: response.data.data.type,

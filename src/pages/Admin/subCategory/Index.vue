@@ -224,7 +224,7 @@ export default {
           that.categoryResponse = response.data.data
         })
         .catch(function (error) {
-          console.log(error)
+          console.error(error)
         })
     },
     setCategoryTitle (id) {

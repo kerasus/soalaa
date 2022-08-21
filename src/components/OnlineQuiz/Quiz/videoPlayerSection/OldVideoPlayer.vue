@@ -256,11 +256,11 @@ export default {
     toggleFavorite (id) {
       const that = this
       let count = -1
-      let currentTimepointIndex = null
-      this.timePoints.forEach(function (item, index) {
+      // let currentTimepointIndex = null
+      this.timePoints.forEach(function (item) {
         count++
         if (parseInt(item.id) === parseInt(id)) {
-          currentTimepointIndex = index
+          // currentTimepointIndex = index
           item.loading = true
           item.isFavored = !item.isFavored
           that.postIsFavored = {
@@ -273,7 +273,6 @@ export default {
       const requiredElement = document.querySelector('.video-js')
       requiredElement.focus()
       this.$emit('toggleBookmark', this.postIsFavored)
-      console.log('currentTimepointIndex', currentTimepointIndex)
       // setTimeout(function () {
       //   that.timePoints[currentTimepointIndex].loading = false
       // }, 200)

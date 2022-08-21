@@ -291,7 +291,7 @@ export default {
           this.$router.push({ name: 'onlineQuiz.exams' })
         }
       } catch (e) {
-        console.log('err ', e)
+        console.error('err ', e)
       }
     },
     getQuizDataAndSubCategories () {
@@ -317,16 +317,13 @@ export default {
         })
     },
     scrollTo (questionId, questionNumber) {
-      console.log('scrollTo')
-      let questionIndex
-      if (questionId) {
-        questionIndex = this.getQuestionIndexById(questionId)
-      } else {
-        // questionIndex = questionNumber - this.firstQuestionOrder
-        questionIndex = questionNumber
-      }
-      console.log(questionIndex)
-      console.log(this.$refs.scroller)
+      // let questionIndex
+      // if (questionId) {
+      //   questionIndex = this.getQuestionIndexById(questionId)
+      // } else {
+      //   // questionIndex = questionNumber - this.firstQuestionOrder
+      //   questionIndex = questionNumber
+      // }
       // this.$refs.scroller.scrollTo(questionIndex, 'start-force')
       // for (let i = 1; i < 4; i++) {
       //   setTimeout(() => {

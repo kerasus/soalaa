@@ -130,7 +130,6 @@ export default {
       try {
         const that = this
         const examData = new ExamData(this.$axios)
-        console.log('this.quiz :', this.quiz)
         await examData.getExamDataAndParticipate(this.quiz.id)
         await examData.getUserExamData(this.quiz.user_exam_id).run()
         if (examData.exam) {
@@ -149,9 +148,6 @@ export default {
         .then(response => {
           this.$router.push({ name: 'user.exam.list' })
           this.confirmationBubbleSheet = true
-        })
-        .catch(erroe => {
-          console.log('erroe : ', erroe)
         })
     },
     showSendAnswerPhotoDialog () {

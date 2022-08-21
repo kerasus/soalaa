@@ -168,9 +168,6 @@ export default {
     this.showTree('tree', this.getRootNode('test'))
       .then(() => {
       })
-      .catch(err => {
-        console.log(err)
-      })
   },
   methods: {
     getFilters () {

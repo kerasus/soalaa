@@ -51,7 +51,6 @@ export default {
       that.inputs.forEach(item => {
         if (item.name === 'category_id') {
           item.options = that.categories
-          console.log(item.options)
         }
       })
     }

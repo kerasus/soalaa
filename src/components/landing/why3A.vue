@@ -156,7 +156,6 @@ export default {
   },
   methods: {
     setImageWidth () {
-      console.log('hi')
       this.currentImagesWidthList = []
 
       if (this.windowSize.x > 768) {

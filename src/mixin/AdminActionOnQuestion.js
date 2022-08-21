@@ -57,7 +57,6 @@ const AdminActionOnQuestion = {
           this.$store.dispatch('loading/overlayLoading', false)
         })
         .catch(er => {
-          console.log(er.message)
           this.$store.dispatch('loading/overlayLoading', false)
         })
     },
@@ -90,8 +89,7 @@ const AdminActionOnQuestion = {
           that.setQuestionTypeBasedOnId(that.question, types)
           that.disableLoading()
         })
-        .catch(function (error) {
-          console.log(error)
+        .catch(() => {
           that.disableLoading()
         })
     },
@@ -260,9 +258,6 @@ const AdminActionOnQuestion = {
             that.allTypes = types
           }
         })
-        .catch(function (error) {
-          console.log(error)
-        })
     },
     getQuestionTypeForTypeId (question) {
       const that = this
@@ -277,9 +272,6 @@ const AdminActionOnQuestion = {
             })
           }
           that.getQuestionById(that.getCurrentQuestionId(), question, types)
-        })
-        .catch(function (error) {
-          console.log(error)
         })
     },
     readRouteFullPath () {
@@ -339,9 +331,6 @@ const AdminActionOnQuestion = {
         .then(function (response) {
           that.question.logs = new LogList(response.data.data)
         })
-        .catch(function (error) {
-          console.log(error)
-        })
     },
     getQuestionStatus () {
       const that = this
@@ -350,9 +339,6 @@ const AdminActionOnQuestion = {
       return this.$axios.get(API_ADDRESS.question.status.base)
         .then(function (response) {
           that.questionStatuses = new QuestionStatusList(response.data.data)
-        })
-        .catch(function (error) {
-          console.log(error)
         })
     },
     loadQuestionData () {
@@ -364,7 +350,7 @@ const AdminActionOnQuestion = {
           }
         })
         .catch((er) => {
-          console.log(er)
+          console.error(er)
         })
     },
     loadSubcategories () {
@@ -412,7 +398,7 @@ const AdminActionOnQuestion = {
           this.question.exams = new AttachedExamList(response.data.data.exams)
         })
         .catch((er) => {
-          console.log(er)
+          console.error(er)
         })
     },
     detachExam (data) {
@@ -421,9 +407,6 @@ const AdminActionOnQuestion = {
       })
         .then(response => {
           this.question.exams = new AttachedExamList(response.data.data.exams)
-        })
-        .catch((er) => {
-          console.log(er)
         })
     },
     openCloseImgPanel () {
@@ -470,11 +453,7 @@ const AdminActionOnQuestion = {
     },
     setTags (allTags) {
       this.$axios.put(API_ADDRESS.tags.setTags(this.question.id), allTags)
-        .then(response => {
-          console.log(response.data.data)
-        })
-        .catch((er) => {
-          console.log(er)
+        .then(() => {
         })
     },
     setTagsOnCreate (allTags) {
