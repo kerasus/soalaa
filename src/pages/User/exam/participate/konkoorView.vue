@@ -1,35 +1,35 @@
 <template>
   <div class="konkoor-view row">
     <div
-        id="questions"
-        ref="questionsColumn"
-        class="col-md-5 right-side"
+      id="questions"
+      ref="questionsColumn"
+      class="col-md-5 right-side"
+    >
+      <q-virtual-scroll
+        class="konkoor-view-scroll"
+        ref="scroller"
+        :items="questions"
+        :virtual-scroll-item-size="450"
+        :virtual-scroll-slice-size="5"
+        @virtual-scroll="onScroll"
       >
-        <q-virtual-scroll
-          class="konkoor-view-scroll"
-          ref="scroller"
-          :items="questions"
-          :virtual-scroll-item-size="450"
-          :virtual-scroll-slice-size="5"
-          @virtual-scroll="onScroll"
-        >
-          <template v-slot="{ item, index }">
-            <q-item
-              class="question-field"
-              :key="index"
-              dense
-            >
-              <q-item-section>
-                <Item
-                  :source="item"
-                  :questions-column="$refs.questionsColumn"
-                  @inView="isInView"
-                />
-              </q-item-section>
-            </q-item>
-          </template>
-        </q-virtual-scroll>
-      </div>
+        <template v-slot="{ item, index }">
+          <q-item
+            class="question-field"
+            :key="index"
+            dense
+          >
+            <q-item-section>
+              <Item
+                :source="item"
+                :questions-column="$refs.questionsColumn"
+                @inView="isInView"
+              />
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-virtual-scroll>
+    </div>
     <div class="left-side col-md-7">
       <div class="konkoor-view-navbar">
         <q-btn
@@ -47,7 +47,7 @@
           dropdown-icon="false"
           flat
         >
-          <top-menu/>
+          <top-menu />
         </q-btn-dropdown>
       </div>
       <div
@@ -98,7 +98,10 @@
             پاسخنامه کاربر
           </div>
           <q-space></q-space>
-          <q-btn dense flat icon="close" v-close-popup>
+          <q-btn dense
+                 flat
+                 icon="close"
+                 v-close-popup>
             <q-tooltip class="bg-white text-blue">بستن</q-tooltip>
           </q-btn>
         </q-bar>
@@ -109,7 +112,8 @@
             </q-card-section>
             <q-card-section>
               <q-btn
-                flat style="color: #585858"
+                flat
+                style="color: #585858"
                 @click="confirmationBubbleSheet = false"
               >
                 ادامه میدم

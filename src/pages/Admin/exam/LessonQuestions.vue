@@ -1,92 +1,93 @@
 <template>
-    <div class="main-container">
-      <q-card class="top-menu q-pa-lg">
-        <div class="row items-center">
-          <div class="col-8">
-            <q-btn-toggle
-              v-model="questionFilterMethod"
-              unelevated
-              no-caps
-              toggle-color="primary"
-              color="white"
-              text-color="black"
-              :options="[
-                  {label: 'نمایش همه', value:'not-filtered'},
-                  {label: ' کلا تایید نشده', value:'not-confirmed-at-all'},
-                  {label: 'من تایید نکردم', value:'not-confirmed-by-me'}
-                   ]"
-            />
-            <q-btn
-              round
-              color="primary"
-              unelevated
-              icon="isax:printer"
-              @click="printQuestions"
-            />
-          </div>
-          <div class="col-4 flex justify-between">
-            <div class="search-box">
-              <div>
-                <q-input
-                  v-model.number="questionSearchNumber"
-                  type="number"
-                  outlined
-                  dense
-                  label="شماره سوال"
-                >
-                  <template v-slot:append>
-                    <div @click="scrollToQuestion">
-                      <i class="fi fi-rr-search search-icon cursor-pointer"></i>
-                    </div>
-                  </template>
-                </q-input>
-              </div>
-              <i class="fi fi-rr-refresh refresh-icon cursor-pointer q-ml-md" @click="reload" ></i>
-            </div>
-            <q-btn
-              round
-              color="primary"
-              unelevated
-              @click="this.$router.go(-1)"
-            >
-              <i class="fi-rr-angle-left row" />
-            </q-btn>
-          </div>
+  <div class="main-container">
+    <q-card class="top-menu q-pa-lg">
+      <div class="row items-center">
+        <div class="col-8">
+          <q-btn-toggle
+            v-model="questionFilterMethod"
+            unelevated
+            no-caps
+            toggle-color="primary"
+            color="white"
+            text-color="black"
+            :options="[
+              {label: 'نمایش همه', value:'not-filtered'},
+              {label: ' کلا تایید نشده', value:'not-confirmed-at-all'},
+              {label: 'من تایید نکردم', value:'not-confirmed-by-me'}
+            ]"
+          />
+          <q-btn
+            round
+            color="primary"
+            unelevated
+            icon="isax:printer"
+            @click="printQuestions"
+          />
         </div>
-      </q-card>
-      <q-virtual-scroll
-        class="konkoor-view-scroll q-pa-md q-mt-md"
-        ref="scroller"
-        :items="filteredQuestions"
-        :key="questionListKey"
-        @virtual-scroll="onScroll"
-      >
-        <template v-slot="{ item, index }">
-          <q-item
-            class="question-field no-padding q-mb-md"
-            :key="index"
-            dense
+        <div class="col-4 flex justify-between">
+          <div class="search-box">
+            <div>
+              <q-input
+                v-model.number="questionSearchNumber"
+                type="number"
+                outlined
+                dense
+                label="شماره سوال"
+              >
+                <template v-slot:append>
+                  <div @click="scrollToQuestion">
+                    <i class="fi fi-rr-search search-icon cursor-pointer"></i>
+                  </div>
+                </template>
+              </q-input>
+            </div>
+            <i class="fi fi-rr-refresh refresh-icon cursor-pointer q-ml-md"
+               @click="reload"></i>
+          </div>
+          <q-btn
+            round
+            color="primary"
+            unelevated
+            @click="this.$router.go(-1)"
           >
-            <q-item-section>
-              <question-item
-                pageStrategy="lesson-detail"
-                :question="item"
-                :confirmLoading="confirmQLoading"
-                :questionListOptions="questionsOptions"
-                :consider-active-category="false"
-                :questions-column="$refs.questionsColumn"
-                :exam-id="$route.params.quizId"
-                :sub-category="quizData.sub_categories"
-                @detachQuestion="detachQuestion"
-                @deleteQuestion="deleteQuestion"
-                @copyIdToClipboard="copyIdToClipboard"
-                @confirmQuestion="confirmQuestion"
-              />
-            </q-item-section>
-          </q-item>
-        </template>
-      </q-virtual-scroll>
-    </div>
+            <i class="fi-rr-angle-left row" />
+          </q-btn>
+        </div>
+      </div>
+    </q-card>
+    <q-virtual-scroll
+      class="konkoor-view-scroll q-pa-md q-mt-md"
+      ref="scroller"
+      :items="filteredQuestions"
+      :key="questionListKey"
+      @virtual-scroll="onScroll"
+    >
+      <template v-slot="{ item, index }">
+        <q-item
+          class="question-field no-padding q-mb-md"
+          :key="index"
+          dense
+        >
+          <q-item-section>
+            <question-item
+              pageStrategy="lesson-detail"
+              :question="item"
+              :confirmLoading="confirmQLoading"
+              :questionListOptions="questionsOptions"
+              :consider-active-category="false"
+              :questions-column="$refs.questionsColumn"
+              :exam-id="$route.params.quizId"
+              :sub-category="quizData.sub_categories"
+              @detachQuestion="detachQuestion"
+              @deleteQuestion="deleteQuestion"
+              @copyIdToClipboard="copyIdToClipboard"
+              @confirmQuestion="confirmQuestion"
+            />
+          </q-item-section>
+        </q-item>
+      </template>
+    </q-virtual-scroll>
+  </div>
 </template>
 
 <script>

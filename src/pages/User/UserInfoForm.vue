@@ -1,5 +1,7 @@
 <template>
-  <div id="q-app" class="q-ma-lg row justify-center" style="min-height: 100vh">
+  <div id="q-app"
+       class="q-ma-lg row justify-center"
+       style="min-height: 100vh">
     <q-linear-progress
       v-if="percentageOfInformationCompletion"
       size="30px"
@@ -49,7 +51,7 @@
           map-options
           emit-value
           :rules="[
-                val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
+            val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
         />
       </div>
       <div class="q-pa-md">
@@ -140,13 +142,13 @@
           </div>
         </div>
       </div>
-<!--      verify ------------------------------------------------------------------------------------------------------------>
+      <!--      verify ------------------------------------------------------------------------------------------------------------>
       <verify
         v-if="needVerify"
         @verified="verified"
       />
       <div class="row justify-end q-mt-lg">
-<!--        submit form ---------------------------------------------------------------------------------->
+        <!--        submit form ---------------------------------------------------------------------------------->
         <q-btn
           :disabl="!this.user.mobile_verified_at"
           color="blue"

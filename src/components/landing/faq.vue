@@ -19,7 +19,7 @@
         >
           <template v-slot:header>
             <div class="flex items-center">
-              <div class="dot q-mr-sm"/>
+              <div class="dot q-mr-sm" />
               <span class="header-style"> {{ question.question }}</span>
             </div>
 
@@ -28,7 +28,7 @@
             {{ question.answer }}
           </div>
         </q-expansion-item>
-        <q-separator v-if="index < allQuestions.length - 1"/>
+        <q-separator v-if="index < allQuestions.length - 1" />
 
       </div>
 

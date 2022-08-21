@@ -27,44 +27,52 @@
     </template>
   </q-tree>
   <q-btn
-      v-if="editable && nodes && !nodes.length"
-      label="ساخت درخت"
-      @click="toggleMenu(true)"
-      icon="add"
-      color="green"
-      flat
-    />
-  <q-dialog v-model="editDialog " persistent>
+    v-if="editable && nodes && !nodes.length"
+    label="ساخت درخت"
+    @click="toggleMenu(true)"
+    icon="add"
+    color="green"
+    flat
+  />
+  <q-dialog v-model="editDialog "
+            persistent>
     <q-card class="q-pa-md ">
-      <q-btn flat icon="close " color="red " v-close-popup @click="toggleMenu(false)"/>
+      <q-btn flat
+             icon="close "
+             color="red "
+             v-close-popup
+             @click="toggleMenu(false)" />
       <q-tabs
         v-model="tab"
         narrow-indicator
         dense
       >
-       <q-tab
-         v-if="nodes && !nodes.length"
-         class="text-blue"
-         name="createTree"
-         icon="add" label="ساخت درخت"
-       />
-          <q-tab
-            v-if="nodes && nodes.length"
-            class="text-purple"
-            name="editNode"
-            icon="edit"
-            label="ویرایش "
-          />
-          <q-tab
-            v-if="nodes && nodes.length"
-            class="text-orange"
-            name="createNewNode"
-            icon="add"
-            label="اضافه کردن گره جدید "
-          />
+        <q-tab
+          v-if="nodes && !nodes.length"
+          class="text-blue"
+          name="createTree"
+          icon="add"
+          label="ساخت درخت"
+        />
+        <q-tab
+          v-if="nodes && nodes.length"
+          class="text-purple"
+          name="editNode"
+          icon="edit"
+          label="ویرایش "
+        />
+        <q-tab
+          v-if="nodes && nodes.length"
+          class="text-orange"
+          name="createNewNode"
+          icon="add"
+          label="اضافه کردن گره جدید "
+        />
       </q-tabs>
-      <q-tab-panels v-model="tab " animated>
-        <q-tab-panel v-if="editable && nodes && !nodes.length" name="createTree">
+      <q-tab-panels v-model="tab "
+                    animated>
+        <q-tab-panel v-if="editable && nodes && !nodes.length"
+                     name="createTree">
           <q-input
             class="q-ma-md"
             filled
@@ -88,10 +96,11 @@
             :loading="loading "
             @click="addNode()"
           >
-             ایجاد درخت
+            ایجاد درخت
           </q-btn>
         </q-tab-panel>
-        <q-tab-panel v-if="editable && nodes && nodes.length" name="editNode">
+        <q-tab-panel v-if="editable && nodes && nodes.length"
+                     name="editNode">
           <q-input
             class="q-ma-md"
             filled
@@ -112,7 +121,8 @@
             ثبت
           </q-btn>
         </q-tab-panel>
-        <q-tab-panel v-if="editable && nodes && nodes.length" name="createNewNode">
+        <q-tab-panel v-if="editable && nodes && nodes.length"
+                     name="createNewNode">
           <q-input
             class="q-ma-md"
             filled

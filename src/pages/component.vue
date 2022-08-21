@@ -37,7 +37,9 @@
       </q-btn>
     </div>
   </div>
-  <q-separator style="width: 60%; margin: 50px 20%" class="flex justify-center" color="primary"/>
+  <q-separator style="width: 60%; margin: 50px 20%"
+               class="flex justify-center"
+               color="primary" />
   <h5 class="q-ml-lg">نمونه استایل دکمه های آیکن دار:</h5>
   <div class="flex justify-center">
     <div
@@ -55,7 +57,9 @@
       ></q-btn>
     </div>
   </div>
-  <q-separator style="width: 60%; margin: 50px 20%" class="flex justify-center" color="primary"/>
+  <q-separator style="width: 60%; margin: 50px 20%"
+               class="flex justify-center"
+               color="primary" />
   <h5 class="q-ml-lg">نمونه استایل Radio Button:</h5>
   <div class="flex justify-center">
     <div class="radio">
@@ -64,10 +68,12 @@
         :key="item"
         v-model="person"
         :checked-icon="item.icon"
-        :val="item.val"/>
+        :val="item.val" />
     </div>
   </div>
-  <q-separator style="width: 60%; margin: 50px 20%" class="flex justify-center" color="primary"/>
+  <q-separator style="width: 60%; margin: 50px 20%"
+               class="flex justify-center"
+               color="primary" />
 </template>
 
 <script>

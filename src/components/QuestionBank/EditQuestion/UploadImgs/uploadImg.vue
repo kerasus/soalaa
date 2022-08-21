@@ -9,10 +9,11 @@
           <q-card-section class="box-titles">
             صورت سوال
           </q-card-section>
-<!--          <v-card-title class="body-1">-->
-<!--            -->
-<!--          </v-card-title>-->
-          <q-card-actions vertical class="question-box-card-action">
+          <!--          <v-card-title class="body-1">-->
+          <!--            -->
+          <!--          </v-card-title>-->
+          <q-card-actions vertical
+                          class="question-box-card-action">
             <div class="row">
               <div
                 v-if="editStatus"
@@ -43,13 +44,13 @@
                     class="btnAddImage"
                     icon="mdi-plus"
                   ></q-btn>
-<!--                  <v-btn-->
-<!--                    large-->
-<!--                    text-->
-<!--                    class="btnAddImage"-->
-<!--                  >-->
-<!--                    <v-icon>mdi-plus</v-icon>-->
-<!--                  </v-btn>-->
+                  <!--                  <v-btn-->
+                  <!--                    large-->
+                  <!--                    text-->
+                  <!--                    class="btnAddImage"-->
+                  <!--                  >-->
+                  <!--                    <v-icon>mdi-plus</v-icon>-->
+                  <!--                  </v-btn>-->
                 </file-upload>
               </div>
               <div
@@ -92,13 +93,14 @@
                   <q-img
                     style="height: 60px; max-width: 100%"
                   >
-                      <div
-                        class="row fit wrap justify-center items-center"
-                      >
-                        <div>
-                          <q-icon name="mdi-image-off" size="md" ></q-icon>
-                        </div>
+                    <div
+                      class="row fit wrap justify-center items-center"
+                    >
+                      <div>
+                        <q-icon name="mdi-image-off"
+                                size="md"></q-icon>
                       </div>
+                    </div>
                   </q-img>
                 </q-card>
               </div>
@@ -195,7 +197,8 @@
                       class="row fit wrap justify-center items-center"
                     >
                       <div>
-                        <q-icon name="mdi-image-off" size="md" ></q-icon>
+                        <q-icon name="mdi-image-off"
+                                size="md"></q-icon>
                       </div>
                     </div>
                   </q-img>

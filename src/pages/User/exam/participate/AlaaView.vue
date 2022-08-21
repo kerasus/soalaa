@@ -1,8 +1,10 @@
 <template>
   <div class="row quiz-page"
        :style="{ height: '100%'}">
-    <div class="col " :style="{ 'min-height': '100%' }">
-      <div class="row main-page" :style="{ 'min-width': '100%' }">
+    <div class="col "
+         :style="{ 'min-height': '100%' }">
+      <div class="row main-page"
+           :style="{ 'min-width': '100%' }">
         <div class="col btnpre col-md-1 justify-start sm-hide xs-hide">
           <q-btn
             v-if="getQuestionNumberFromId(currentQuestion.id) !== 1"
@@ -90,7 +92,7 @@
                 v-if="currentQuestion.in_active_category"
                 class="renderedPanel"
               >
-                <vue-katex :input="currentQuestion.statement"/>
+                <vue-katex :input="currentQuestion.statement" />
               </div>
               <q-card
                 v-if="!currentQuestion.in_active_category"
@@ -144,7 +146,7 @@
       </div>
     </div>
     <div class="timer-row col">
-      <Timer/>
+      <Timer />
     </div>
   </div>
 </template>

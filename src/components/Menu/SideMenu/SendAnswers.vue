@@ -36,7 +36,10 @@
             پاسخنامه کاربر
           </div>
           <q-space></q-space>
-          <q-btn dense flat icon="close" v-close-popup>
+          <q-btn dense
+                 flat
+                 icon="close"
+                 v-close-popup>
             <q-tooltip class="bg-white text-blue">بستن</q-tooltip>
           </q-btn>
         </q-bar>
@@ -47,7 +50,8 @@
             </q-card-section>
             <q-card-section>
               <q-btn
-                flat style="color: #585858"
+                flat
+                style="color: #585858"
                 @click="confirmationBubbleSheet = false"
               >
                 ادامه میدم

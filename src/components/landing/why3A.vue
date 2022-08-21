@@ -6,7 +6,9 @@
       <div class="choosing-3a-reason ">
         <div class="reason-header">
           <span class="badge">1</span>
-          <q-img class="reason-image" :src="reasons[0].src" :width="imageWidth[0]" />
+          <q-img class="reason-image"
+                 :src="reasons[0].src"
+                 :width="imageWidth[0]" />
         </div>
         <div class="reason-body">
           <div class="reason-title">{{ reasons[0].title }}</div>
@@ -19,7 +21,9 @@
       <div class="choosing-3a-reason ">
         <div class="reason-header">
           <span class="badge">2</span>
-          <q-img class="reason-image" :src="reasons[1].src" :width="imageWidth[1]"/>
+          <q-img class="reason-image"
+                 :src="reasons[1].src"
+                 :width="imageWidth[1]" />
         </div>
         <div class="reason-body">
           <div class="reason-title">{{ reasons[1].title }}</div>
@@ -32,7 +36,9 @@
       <div class="choosing-3a-reason ">
         <div class="reason-header">
           <span class="badge">3</span>
-          <q-img class="reason-image" :src="reasons[2].src" :width="imageWidth[2]"/>
+          <q-img class="reason-image"
+                 :src="reasons[2].src"
+                 :width="imageWidth[2]" />
         </div>
         <div class="reason-body">
           <div class="reason-title">{{ reasons[2].title }}</div>
@@ -45,7 +51,9 @@
       <div class="choosing-3a-reason ">
         <div class="reason-header">
           <span class="badge">4</span>
-          <q-img class="reason-image" :src="reasons[3].src" :width="imageWidth[3]"/>
+          <q-img class="reason-image"
+                 :src="reasons[3].src"
+                 :width="imageWidth[3]" />
         </div>
         <div class="reason-body">
           <div class="reason-title">{{ reasons[3].title }}</div>
@@ -58,7 +66,9 @@
       <div class="choosing-3a-reason ">
         <div class="reason-header">
           <span class="badge">5</span>
-          <q-img class="reason-image" :src="reasons[4].src" :width="imageWidth[4]"/>
+          <q-img class="reason-image"
+                 :src="reasons[4].src"
+                 :width="imageWidth[4]" />
         </div>
         <div class="reason-body">
           <div class="reason-title">{{ reasons[4].title }}</div>
@@ -71,7 +81,9 @@
       <div class="choosing-3a-reason ">
         <div class="reason-header">
           <span class="badge">6</span>
-          <q-img class="reason-image" :src="reasons[5].src" :width="imageWidth[5]" />
+          <q-img class="reason-image"
+                 :src="reasons[5].src"
+                 :width="imageWidth[5]" />
         </div>
         <div class="reason-body">
           <div class="reason-title">{{ reasons[5].title }}</div>

@@ -1,10 +1,14 @@
 <template>
   <div class="exam-create-page">
     <div class="exam-create-panel">
-      <steps v-model:currentComponent="currentTab" @currentStepChanged="changeTab"/>
-      <q-tab-panels v-model="currentTab" keep-alive animated style=" background: #f1f1f1;">
+      <steps v-model:currentComponent="currentTab"
+             @currentStepChanged="changeTab" />
+      <q-tab-panels v-model="currentTab"
+                    keep-alive
+                    animated
+                    style=" background: #f1f1f1;">
         <q-tab-panel name="createPage">
-          <create-exam-page ref="createExam"/>
+          <create-exam-page ref="createExam" />
         </q-tab-panel>
         <q-tab-panel name="chooseQuestion">
           <question-bank
@@ -46,11 +50,19 @@
         </q-btn>
       </div>
       <q-dialog v-model="examConfirmedDialog">
-        <q-card flat class="report-problem-dialog">
-          <q-btn flat v-close-popup round dense icon="close" class="close-btn"/>
+        <q-card flat
+                class="report-problem-dialog">
+          <q-btn flat
+                 v-close-popup
+                 round
+                 dense
+                 icon="close"
+                 class="close-btn" />
           <q-card-section class="problem-type no-padding">
-            <q-icon name="isax:tick-circle" size="110px"/>
-            <div class="title-style text-center" style="padding-bottom: 20px">
+            <q-icon name="isax:tick-circle"
+                    size="110px" />
+            <div class="title-style text-center"
+                 style="padding-bottom: 20px">
               آزمون شما با موفقیت ثبت شد
             </div>
             <q-btn

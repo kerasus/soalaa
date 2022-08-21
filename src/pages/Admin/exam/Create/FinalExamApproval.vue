@@ -2,99 +2,106 @@
   <div class="main-container">
     <div class="row">
       <div class="exam-detail-container col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
-        <q-skeleton v-if="questions.loading" width="330px" height="400px" class="q-ml-xs"/>
-          <div class="exam-detail-content" v-else>
-            <div class="exam-specifications flex justify-between">
-              <div class="header-title"> مشخصات آزمون </div>
-              <div class="exam-title"> آزمون ۱۲۳۴۵۶۷</div>
-            </div>
-            <div class="exam-details">
-              <p> <span class="field">نوع آزمون:</span> {{exam.type_id}}</p>
-              <p> <span class="field">عنوان آزمون:</span> {{ exam.title }}</p>
-              <p> <span class="field">رشته تحصیلی:</span> {{exam.major}}</p>
-              <p> <span class="field">پایه تحصیلی:</span> {{exam.grade}}</p>
-              <p> <span class="field">شروع آزمون:</span> <span >  {{ exam.start_at === null ? '' :     exam.shamsiDate('start_at').dateTime }} </span></p>
-              <p> <span class="field">پایان آزمون:</span> <span> {{  exam.finish_at === null ? '' :     exam.shamsiDate('finish_at').dateTime  }} </span></p>
-              <p> <span class="field">مدت زمان آزمون:</span> {{exam.exam_time}} </p>
-              <p> <span class="field">مدت تاخیر آزمون:</span> {{exam.delay_time}}</p>
-            </div>
-            <div class="selected-questions">
-                <div class="title"> سوالات انتخابی</div>
-                <div> highchart</div>
-            </div>
-            <div class="exam-btns">
-              <q-btn
-                unelevated
-                class="q-mr-xl btn-md"
-                :icon="'isax:arrow-right-3'"
-                style="width: 100%;background: #F4F5F6;margin-bottom: 12px"
-                @click="goToLastStep"
-              >
-                بازگشت
-              </q-btn>
-              <q-btn
-                unelevated
-                color="primary"
-                class="q-mr-xl btn-md"
-                style="width: 100%;"
-                @click="goToNextStep"
-              >
-               تایید نهایی
-              </q-btn>
-            </div>
+        <q-skeleton v-if="questions.loading"
+                    width="330px"
+                    height="400px"
+                    class="q-ml-xs" />
+        <div class="exam-detail-content"
+             v-else>
+          <div class="exam-specifications flex justify-between">
+            <div class="header-title"> مشخصات آزمون </div>
+            <div class="exam-title"> آزمون ۱۲۳۴۵۶۷</div>
           </div>
-          <div class="exam-categories">
-            <div class="title-show-categories">دفترچه های تعریف شده </div>
-            <div class="attached-exam-box">
-              <div class="flex row exam-result-box">
-                <div class="col-6 exam-result-title">
-                  دفترچه
-                </div>
-                <div class="col-3 exam-result-title">
-                  زمان
-                </div>
-                <div class="col-1 exam-result-title">
-                  ترتیب
-                </div>
+          <div class="exam-details">
+            <p> <span class="field">نوع آزمون:</span> {{exam.type_id}}</p>
+            <p> <span class="field">عنوان آزمون:</span> {{ exam.title }}</p>
+            <p> <span class="field">رشته تحصیلی:</span> {{exam.major}}</p>
+            <p> <span class="field">پایه تحصیلی:</span> {{exam.grade}}</p>
+            <p> <span class="field">شروع آزمون:</span> <span>  {{ exam.start_at === null ? '' :     exam.shamsiDate('start_at').dateTime }} </span></p>
+            <p> <span class="field">پایان آزمون:</span> <span> {{  exam.finish_at === null ? '' :     exam.shamsiDate('finish_at').dateTime  }} </span></p>
+            <p> <span class="field">مدت زمان آزمون:</span> {{exam.exam_time}} </p>
+            <p> <span class="field">مدت تاخیر آزمون:</span> {{exam.delay_time}}</p>
+          </div>
+          <div class="selected-questions">
+            <div class="title"> سوالات انتخابی</div>
+            <div> highchart</div>
+          </div>
+          <div class="exam-btns">
+            <q-btn
+              unelevated
+              class="q-mr-xl btn-md"
+              :icon="'isax:arrow-right-3'"
+              style="width: 100%;background: #F4F5F6;margin-bottom: 12px"
+              @click="goToLastStep"
+            >
+              بازگشت
+            </q-btn>
+            <q-btn
+              unelevated
+              color="primary"
+              class="q-mr-xl btn-md"
+              style="width: 100%;"
+              @click="goToNextStep"
+            >
+              تایید نهایی
+            </q-btn>
+          </div>
+        </div>
+        <div class="exam-categories">
+          <div class="title-show-categories">دفترچه های تعریف شده </div>
+          <div class="attached-exam-box">
+            <div class="flex row exam-result-box">
+              <div class="col-6 exam-result-title">
+                دفترچه
               </div>
-              <div>
-                <div v-for="(category, index) in exam.categories" :key="index" class="flex row attached-exam">
-                  <div class="detail-box exam-result attached-exam-title  detail-box-first col-6">
-                   {{category.title}}
-                  </div>
-                  <div class="detail-box exam-result detail-box-first col-3">
-                    {{category.time}}
-                  </div>
-                  <div class="detail-box exam-result order-exam-title detail-box-last col-1">
-                    {{category.order}}
-                  </div>
-                </div>
+              <div class="col-3 exam-result-title">
+                زمان
+              </div>
+              <div class="col-1 exam-result-title">
+                ترتیب
               </div>
             </div>
+            <div>
+              <div v-for="(category, index) in exam.categories"
+                   :key="index"
+                   class="flex row attached-exam">
+                <div class="detail-box exam-result attached-exam-title  detail-box-first col-6">
+                  {{category.title}}
+                </div>
+                <div class="detail-box exam-result detail-box-first col-3">
+                  {{category.time}}
+                </div>
+                <div class="detail-box exam-result order-exam-title detail-box-last col-1">
+                  {{category.order}}
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12 ">
         <div class="question-item-content">
-            <question-item v-if="questions.loading" :question="loadingQuestion" />
-            <template v-else-if="exam.questions.list.length > 0">
-              <q-virtual-scroll
-                ref="scroller"
-                :items="exam.questions.list"
-                :virtual-scroll-item-size="450"
-                :virtual-scroll-slice-size="5"
-              >
-                <template v-slot="{ item }">
-                  <question-item
-                    :key="item.id"
-                    :question="item"
-                    pageStrategy="question-bank"
-                    final-approval-mode
-                    @changeOrder="changeSelectedQuestionOrder"
-                    @checkSelect="onClickedCheckQuestionBtn"
-                  />
-                </template>
-              </q-virtual-scroll>
-            </template>
+          <question-item v-if="questions.loading"
+                         :question="loadingQuestion" />
+          <template v-else-if="exam.questions.list.length > 0">
+            <q-virtual-scroll
+              ref="scroller"
+              :items="exam.questions.list"
+              :virtual-scroll-item-size="450"
+              :virtual-scroll-slice-size="5"
+            >
+              <template v-slot="{ item }">
+                <question-item
+                  :key="item.id"
+                  :question="item"
+                  pageStrategy="question-bank"
+                  final-approval-mode
+                  @changeOrder="changeSelectedQuestionOrder"
+                  @checkSelect="onClickedCheckQuestionBtn"
+                />
+              </template>
+            </q-virtual-scroll>
+          </template>
         </div>
       </div>
     </div>

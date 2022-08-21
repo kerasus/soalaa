@@ -9,7 +9,7 @@
       :edit-route-name="editRouteName"
       :index-route-name="indexRouteName"
     >
-      <template #after-form-builder >
+      <template #after-form-builder>
         <div
           v-for="(category , index) in inputs[examCategoriesIndex].value"
           :key="index"

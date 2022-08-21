@@ -1,6 +1,9 @@
 <template>
-  <div class="vPlayer" id="videoPlayer">
-    <div id="videoPlayer-timeStamp" dir="rtl" style="font-family: 'serif', IRANSans;">
+  <div class="vPlayer"
+       id="videoPlayer">
+    <div id="videoPlayer-timeStamp"
+         dir="rtl"
+         style="font-family: 'serif', IRANSans;">
       <!--      <v-navigation-drawer-->
       <!--        right-->
       <!--        v-model="drawer"-->
@@ -73,7 +76,9 @@
         <!--        </v-btn>-->
       </transition>
     </div>
-    <video ref="videoPlayer" id="my-video" dir="ltr"
+    <video ref="videoPlayer"
+           id="my-video"
+           dir="ltr"
            class="video-js vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause">
 
     </video>

@@ -1,41 +1,41 @@
 <template>
   <div class="participate-mbti-bartle">
-      <div  class="row q-pt-lg q-mb-md">
-        <div class="col-5 q-mx-xl">
-          <a href="https://alaatv.com">
-            <q-img
-              src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-logo.png"
-              width="27px"
-              height="40ox"
-            />
-          </a>
-        </div>
-        <div class="col-6">
-          <a href="https://alaatv.com">
-            <q-img
-              src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-text.png"
-              width="134px"
-              height="40px"
-            />
-          </a>
-        </div>
+    <div  class="row q-pt-lg q-mb-md">
+      <div class="col-5 q-mx-xl">
+        <a href="https://alaatv.com">
+          <q-img
+            src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-logo.png"
+            width="27px"
+            height="40ox"
+          />
+        </a>
       </div>
-      <div class="row justify-between">
-        <div
-          class="q-mx-xl text-subtitle1 text-grey-10"
-          v-if="quiz"
-          v-text="quiz.title"
-        />
-        <div
-          class="q-mx-xl text-h6 text-grey-10"
-          v-text="counter.string"
-        />
+      <div class="col-6">
+        <a href="https://alaatv.com">
+          <q-img
+            src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-text.png"
+            width="134px"
+            height="40px"
+          />
+        </a>
       </div>
+    </div>
+    <div class="row justify-between">
+      <div
+        class="q-mx-xl text-subtitle1 text-grey-10"
+        v-if="quiz"
+        v-text="quiz.title"
+      />
+      <div
+        class="q-mx-xl text-h6 text-grey-10"
+        v-text="counter.string"
+      />
+    </div>
     <q-linear-progress
-       size="15px"
+      size="15px"
       :value="((counter.value)+1)/100"
-       color="warning"
-       track-color="grey-3"
+      color="warning"
+      track-color="grey-3"
       reverse
       class="q-mt-sm"
     />
@@ -70,19 +70,19 @@
               v-if="currentQuestion"
               class="choices"
               :class="{
-                  agree: stringMeanThumbUpOrDown(currentQuestion.choices.list[0].title) === 'ThumbUp',
-                  disagree: stringMeanThumbUpOrDown(currentQuestion.choices.list[0].title) === 'ThumbDown'
-                }"
+                agree: stringMeanThumbUpOrDown(currentQuestion.choices.list[0].title) === 'ThumbUp',
+                disagree: stringMeanThumbUpOrDown(currentQuestion.choices.list[0].title) === 'ThumbDown'
+              }"
             >
               <div
                 v-for="(choice, index) in currentQuestion.choices.list"
                 :key="index+choiceKey"
                 class="choice"
                 :class="{
-                    agree: stringMeanThumbUpOrDown(choice.title) === 'ThumbUp',
-                    disagree: stringMeanThumbUpOrDown(choice.title) === 'ThumbDown',
-                    active: choice.active
-                  }"
+                  agree: stringMeanThumbUpOrDown(choice.title) === 'ThumbUp',
+                  disagree: stringMeanThumbUpOrDown(choice.title) === 'ThumbDown',
+                  active: choice.active
+                }"
               >
                 <div
                   v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp' || stringMeanThumbUpOrDown(choice.title) === 'ThumbDown'"

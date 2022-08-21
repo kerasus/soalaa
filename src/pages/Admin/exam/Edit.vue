@@ -10,12 +10,12 @@
       :after-load-input-data="getOptions"
       :before-get-data="getCategories"
     >
-      <template #after-form-builder >
+      <template #after-form-builder>
         <q-card class="category-card">
           <q-card-section>
             <h6 class="category-header q-ma-md">لیست دفترچه ها</h6>
           </q-card-section>
-          <q-separator/>
+          <q-separator />
           <q-card-section class="flex">
             <div class="row bg-grey-3 add-category-box">
               <q-select

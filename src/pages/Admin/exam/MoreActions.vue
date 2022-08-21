@@ -18,31 +18,31 @@
     </div>
     <div class="q-pt-md">
       <portlet>
-        <template v-slot:title >
+        <template v-slot:title>
           ویرایش کارنامه آزمون
         </template>
-        <template v-slot:content >
-          <edit-exam-report/>
+        <template v-slot:content>
+          <edit-exam-report />
         </template>
       </portlet>
     </div>
     <div class="q-pt-md">
       <portlet>
-        <template v-slot:title >
+        <template v-slot:title>
           آپلود فایل سوالات و جواب ها
         </template>
-        <template v-slot:content >
-          <upload/>
+        <template v-slot:content>
+          <upload />
         </template>
       </portlet>
     </div>
     <div class="q-pt-md">
       <portlet>
-        <template v-slot:title >
+        <template v-slot:title>
           اصلاح ضرایب
         </template>
-        <template v-slot:content >
-          <edit-coefficients/>
+        <template v-slot:content>
+          <edit-coefficients />
         </template>
       </portlet>
     </div>

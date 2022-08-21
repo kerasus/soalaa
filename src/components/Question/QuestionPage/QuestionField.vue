@@ -1,11 +1,11 @@
 <template>
-    <div class="type-section">
-          <vue-tiptap-katex
-            ref="tiptap"
-            :loading="loading"
-            :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"
-          />
-        </div>
+  <div class="type-section">
+    <vue-tiptap-katex
+      ref="tiptap"
+      :loading="loading"
+      :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"
+    />
+  </div>
 </template>
 <script>
 

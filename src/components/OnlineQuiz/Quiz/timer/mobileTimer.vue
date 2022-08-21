@@ -16,7 +16,7 @@
                   class="sideBtnIcons"
                   @click="goToPrevQuestion('onlineQuiz.alaaView')"
                   icon="mdi-chevron-right"
-                  />
+                />
               </div>
               <div class="col-3  xs-hide flex justify-center align-center">
                 <svg
@@ -87,7 +87,7 @@
         >
           <q-icon
             size="40px"
-            name="mdi-close"/>
+            name="mdi-close" />
         </q-btn>
       </div>
     </div>

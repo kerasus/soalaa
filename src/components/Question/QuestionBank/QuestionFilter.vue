@@ -9,7 +9,10 @@
             </div>
           </q-card-section>
           <q-card-actions class="delete-all-container q-pa-none">
-            <q-btn flat rounded color="primary" @click="deleteAllFilters">
+            <q-btn flat
+                   rounded
+                   color="primary"
+                   @click="deleteAllFilters">
               حذف همه
             </q-btn>
           </q-card-actions>
