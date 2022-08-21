@@ -1,19 +1,19 @@
-<!--       -----------------------ToDO => change dashboard route name ------------------------ -->
+<!--       -----------------------ToDO => change last v-else-ifs ------------------------ -->
 
 <template>
   <quasar-template-builder v-model:value="properties"
                            @onResize="resize">
     <template #header>
-      <div v-if="templateHeaderType === 'onlineQuiz.alaaView'" class="header-inside row">
+      <div v-if="templateHeaderType === 'quiz'" class="header-inside row">
         <online-quiz-template-header/>
       </div>
-      <div v-else-if="templateHeaderType === 'A'" class="user-main-layout-header">
+      <div v-else-if="templateHeaderType === 'default'" class="user-main-layout-header">
         <div class="header-inside row">
           <user-template-header/>
         </div>
       </div>
-      <div v-else class="main-layout-header row">
-          <template-header/>
+      <div v-else-if="templateHeaderType === 'panel'" class="main-layout-header row">
+        <template-header/>
       </div>
       <q-resize-observer @resize="setHeaderDimension" />
     </template>
@@ -133,37 +133,22 @@ export default {
     linearLoading () {
       return this.$store.getters['AppLayout/linearLoading']
     },
-    getTemplateHeaderType () {
+    getTemplateTypes () {
       return () => {
-        // this.$store.dispatch('AppLayout/updateTemplateHeaderType', {
-        //   headerVisibility: false,
-        //   headerType: 'A',
-        //   sideBarVisibility: false,
-        //   sideBarType: 'A'
-        // })
-        // this.$store.commit('AppLayout/updateTemplateHeaderType', this.$route.name)
         this.templateHeaderType = this.$store.getters['AppLayout/templateHeaderType']
+        this.templateSideBarType = this.$store.getters['AppLayout/templateSideBarType']
       }
     }
   },
   watch: {
-    // 'properties.layoutHeaderCustomClass': function (newVal) {
-    //   console.log('ok')
-    //   this.setLayoutCustomClass()
-    // }
   },
   mounted () {
-    // this.getTemplateHeaderType()
-    // this.templateHeaderType = this.$store.getters['AppLayout/templateHeaderType']
-    // this.templateHeaderVisible = this.$store.getters['AppLayout/templateHeaderType']
-    // this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
+    this.getTemplateTypes()
   },
   created () {
     this.getTemplateHeaderType()
     this.setLayoutCustomClass()
     this.updateLayout()
-    this.getTemplateHeaderType()
-    this.setLayoutCustomClass()
   },
   methods: {
     updateLayout () {
@@ -293,7 +278,6 @@ export default {
   background-color: #f1f1f1;
   display: flex;
   flex-direction: row;
-  padding-bottom: 24px;
 
   .header-inside {
     width: 100%;
