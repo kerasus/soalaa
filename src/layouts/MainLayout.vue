@@ -1,4 +1,4 @@
-<!--       -----------------------ToDO => change last v-else-ifs ------------------------ -->
+<!--       -----------------------ToDO => change dashboard route name ------------------------ -->
 
 <template>
   <quasar-template-builder v-model:value="properties"
@@ -18,13 +18,11 @@
       <q-resize-observer @resize="setHeaderDimension" />
     </template>
     <template #left-drawer>
-      <div v-if="$route.name === 'onlineQuiz.alaaView'"
-           class="drawer-inside-of-MapOfQuestions">
-        <sideMenuMapOfQuestions />
+      <div class="drawer-inside-of-MapOfQuestions" v-if="templateSideBarType === 'quiz'">
+        <sideMenuMapOfQuestions/>
       </div>
-      <div v-else
-           class="drawer-inside">
-        <side-menu-dashboard />
+      <div class="drawer-inside" v-else-if="templateSideBarType === 'panel'">
+        <side-menu-dashboard/>
       </div>
     </template>
     <template #content>
@@ -91,6 +89,8 @@ export default {
   data () {
     return {
       keepAliveComponents: KeepAliveComponents,
+      templateHeaderType: '',
+      templateSideBarType: '',
       properties: {
         layoutView: 'lHh Lpr lFf',
         layoutHeader: true,
@@ -148,9 +148,9 @@ export default {
     this.getTemplateTypes()
   },
   created () {
-    this.getTemplateHeaderType()
-    this.setLayoutCustomClass()
     this.updateLayout()
+    // const localData = this.$store.getters['AppLayout/appLayout']
+    // Object.assign(this.properties, localData)
   },
   methods: {
     updateLayout () {
