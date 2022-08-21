@@ -27,7 +27,7 @@ export default {
       editRouteName: 'Admin.subCategory.Edit',
       indexRouteName: 'Admin.subCategory.Index',
       inputs: [
-        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' },
+        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6', placeholder: ' ', filled: true },
         { type: 'select', options: [], optionLabel: 'title', optionValue: 'id', name: 'category_id', responseKey: 'data.category_id', label: 'نوع دفترچه', col: 'col-md-6' }
       ],
       categories: []
@@ -51,7 +51,6 @@ export default {
       that.inputs.forEach(item => {
         if (item.name === 'category_id') {
           item.options = that.categories
-          console.log(item.options)
         }
       })
     }

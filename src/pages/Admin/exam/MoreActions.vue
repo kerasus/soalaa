@@ -18,31 +18,31 @@
     </div>
     <div class="q-pt-md">
       <portlet>
-        <template v-slot:title >
+        <template v-slot:title>
           ویرایش کارنامه آزمون
         </template>
-        <template v-slot:content >
-          <edit-exam-report/>
+        <template v-slot:content>
+          <edit-exam-report />
         </template>
       </portlet>
     </div>
     <div class="q-pt-md">
       <portlet>
-        <template v-slot:title >
+        <template v-slot:title>
           آپلود فایل سوالات و جواب ها
         </template>
-        <template v-slot:content >
-          <upload/>
+        <template v-slot:content>
+          <upload />
         </template>
       </portlet>
     </div>
     <div class="q-pt-md">
       <portlet>
-        <template v-slot:title >
+        <template v-slot:title>
           اصلاح ضرایب
         </template>
-        <template v-slot:content >
-          <edit-coefficients/>
+        <template v-slot:content>
+          <edit-coefficients />
         </template>
       </portlet>
     </div>
@@ -66,12 +66,13 @@ export default {
   },
   methods: {
     generateJsonFile (id, withAnswer) {
+      const that = this
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.post(API_ADDRESS.exam.generateExamFile(id, withAnswer))
         .then(() => {
-          this.$q.notify({
+          that.$q.notify({
             type: 'positive',
-            message: 'ساخت فایل ' + this.inputs[0].value + ' با موفقیت انجام شد',
+            message: 'ساخت فایل ' + id + ' با موفقیت انجام شد',
             position: 'top'
           })
           this.$store.dispatch('loading/linearLoading', false)

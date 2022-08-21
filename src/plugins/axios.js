@@ -6,7 +6,7 @@ import Time from 'src/plugins/time'
 
 const Axios = (function () {
   function notFound () {
-    console.log('The requested resource does not exist or has been deleted')
+    console.error('The requested resource does not exist or has been deleted')
   }
 
   function unauthorized () {
@@ -16,7 +16,7 @@ const Axios = (function () {
     }
 
     store.commit('Auth/updateAccessToken', '')
-    console.log('Please login to access this resource')
+    console.error('Please login to access this resource')
     router.push({ name: loginRouteName })
   }
 

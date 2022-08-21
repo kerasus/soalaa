@@ -1,5 +1,7 @@
 <template>
-  <div class="page-builder" :class="className" :style="style">
+  <div class="page-builder"
+       :class="className"
+       :style="style">
     <page-builder-section
       v-for="(section, sectionIndex) in sections"
       :key="sectionIndex"

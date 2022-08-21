@@ -13,7 +13,8 @@
         .q-field__prepend {
           padding: 10px;
           background: var(--3a-Primary);
-          border-radius: 50%;
+          border-radius: 12px;
+          color: #FFF;
 
         }
 
@@ -25,6 +26,8 @@
 
         .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
           border-radius: 10px;
+          padding-right: 10px;
+          padding-left: 10px;
 
         }
 
@@ -42,7 +45,10 @@
     .q-field__inner {
       .q-field__control {
         border-radius: 0 10px 10px 0;
-
+        .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
+          padding-right: 10px;
+          padding-left: 10px;
+        }
         .q-field__append {
           padding-right: 10px;
 

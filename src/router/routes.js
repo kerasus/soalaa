@@ -93,7 +93,7 @@ const routes = [
           {
             path: 'exam',
             component: () => import('layouts/bareLayout.vue'),
-            breadcrumbs: { title: 'آزمون', color: '', loading: false, route: { name: 'Admin.Exam.Index' } },
+            breadcrumbs: { title: 'آزمون', loading: false },
             meta: {
               middlewares: [
                 auth
@@ -139,7 +139,7 @@ const routes = [
                 name: 'Admin.Exam.MoreActions',
                 path: ':id/moreActions',
                 component: () => import('pages/Admin/exam/MoreActions'),
-                breadcrumbs: { title: 'عملیات دیگر' },
+                breadcrumbs: { title: 'عملیات دیگر', loading: false },
                 middlewares: [
                   Permissions.hasOneOfThese(['examquestionFile', 'examquestionBookletUpload', 'examquestionBooklet', 'examquestionZirgoroohCopyzirgorooh'])
                 ]
@@ -410,12 +410,16 @@ const routes = [
         }
       },
       {
-        path: '/myOrders',
-        name: 'orders',
-        component: () => import('pages/User/Orders/MyOrders')
-        // meta: {
-        //   middlewares: [auth]
-        // }
+        path: '/landing',
+        name: 'landing',
+        component: () => import('layouts/LandingLayout'),
+        children: [
+          {
+            path: '',
+            name: 'landing1',
+            component: () => import('pages/User/landing/landing')
+          }
+        ]
       }
     ]
   },

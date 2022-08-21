@@ -1,5 +1,6 @@
 <template>
-  <div :style="style" :class="className">Test-component-1</div>
+  <div :style="style"
+       :class="className">Test-component-1</div>
 </template>
 
 <script>

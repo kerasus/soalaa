@@ -1,8 +1,9 @@
 <template>
   <div class="main-container">
     <div class="row">
-      <div ref="header" class="col-12 question-bank-header">
-        <QuestionBankHeader/>
+      <div ref="header"
+           class="col-12 question-bank-header">
+        <QuestionBankHeader />
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
         <question-filter
@@ -24,7 +25,8 @@
           />
         </div>
         <div class="question-bank-content">
-          <question-item v-if="questions.loading" :question="loadingQuestion" />
+          <question-item v-if="questions.loading"
+                         :question="loadingQuestion" />
           <template v-else>
             <question-item
               v-for="question in questions.list"
@@ -212,7 +214,7 @@ export default {
           this.questions.loading = false
         })
         .catch(function (error) {
-          console.log(error)
+          console.error(error)
           this.loadingQuestion.loading = false
           this.questions.loading = false
         })
@@ -229,9 +231,6 @@ export default {
               this.filterQuestions.major_type.push(option)
             }
           })
-        })
-        .catch(function (error) {
-          console.log(error)
         })
     },
     selectAllQuestions () {

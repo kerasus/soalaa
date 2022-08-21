@@ -41,17 +41,17 @@ messaging.getToken({ vapidKey: 'BKJlaTO0dnXtHHFho3i53VF_mGMkyxSv0dnC7ldF1wTZ8sRg
   .then((currentToken) => {
     if (currentToken) {
       // console.log('Send the token to your server and update the UI if necessary')
-      console.log('client token', currentToken)
+      console.warn('client token', currentToken)
       // Send the token to your server and update the UI if necessary
       // ...
     } else {
       // Show permission request UI
-      console.log('No registration token available. Request permission to generate one.')
+      console.warn('No registration token available. Request permission to generate one.')
       // ...
     }
   })
   .catch((err) => {
-    console.log('An error occurred while retrieving token. ', err)
+    console.warn('An error occurred while retrieving token. ', err)
     // ...
   })
 

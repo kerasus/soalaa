@@ -15,7 +15,7 @@
           {{ item.first_name + ' ' + item.last_name }}
         </q-chip>
       </div>
-      <div v-else/>
+      <div v-else />
       <div class="action-btn-box grid-item">
         <div v-if="options.checkQuestion">
           <q-btn
@@ -98,7 +98,7 @@
             @click="redirectToEditPage"
           >
             <q-tooltip>
-             ویرایش سوال
+              ویرایش سوال
             </q-tooltip>
           </q-icon>
         </div>
@@ -108,7 +108,7 @@
             @click="copyIdToClipboard(source.id)"
           >
             <q-tooltip>
-             کپی شناسه سوال
+              کپی شناسه سوال
             </q-tooltip>
           </q-icon>
         </div>
@@ -120,20 +120,20 @@
             size="20px"
             color="primary"
           />
-        <q-toggle
-          v-else
-          v-model="source.confirmed"
-          @update:model-value="confirmQuestion"
-          color="primary"
-        >
-          <q-tooltip>
-            تایید سوال
-          </q-tooltip>
-        </q-toggle>
+          <q-toggle
+            v-else
+            v-model="source.confirmed"
+            @update:model-value="confirmQuestion"
+            color="primary"
+          >
+            <q-tooltip>
+              تایید سوال
+            </q-tooltip>
+          </q-toggle>
 
-        <slot
-          name="chartDetail"
-        />
+          <slot
+            name="chartDetail"
+          />
         </div>
       </div>
     </div>
@@ -155,8 +155,8 @@
             ({{ getSubCategoryName }}) ({{ source.order }}) -  صورت سوال :
           </p>
           <div
-               v-for="(statement_photo , index) in source.statement_photo"
-               :key="index"
+            v-for="(statement_photo , index) in source.statement_photo"
+            :key="index"
           >
             <q-img
               :src="statement_photo"
@@ -184,7 +184,8 @@
               class="fi fi-rr-check question-answer"></q-icon>
           </div>
         </div>
-        <div  v-if="source.answer_photos.length > 0 && !checkChoices()" class="photo-section">
+        <div  v-if="source.answer_photos.length > 0 && !checkChoices()"
+              class="photo-section">
           <p>
             پاسخ :
           </p>
@@ -201,7 +202,7 @@
         </div>
       </div>
     </div>
-    </div>
+  </div>
 </template>
 
 <script>

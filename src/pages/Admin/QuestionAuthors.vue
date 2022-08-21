@@ -10,7 +10,13 @@
     <template v-slot:entity-crud-table-cell="{inputData}">
       <q-td :props="inputData.props">
         <template v-if="inputData.props.col.name === 'actions'">
-          <q-btn round flat dense size="md" color="info" icon="info" :to="{name:'Admin.QuestionAuthors.Show', params: {id: inputData.props.row.id}}">
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="info"
+                 icon="info"
+                 :to="{name:'Admin.QuestionAuthors.Show', params: {id: inputData.props.row.id}}">
             <q-tooltip>
               مشاهده
             </q-tooltip>
@@ -116,15 +122,15 @@ export default {
         }
       },
       defaultInputs: [
-        { type: 'input', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-3' },
-        { type: 'input', name: 'type', label: 'نوع', responseKey: 'data.type', col: 'col-md-3' },
-        { type: 'dateTime', name: 'updated_at', label: 'تاریخ ایجاد', responseKey: 'data.updated_at', col: 'col-md-3' },
-        { type: 'dateTime', name: 'created_at', label: 'تاریخ ویرایش', responseKey: 'data.created_at', col: 'col-md-3' },
-        { type: 'input', name: 'value', label: 'مرجع', responseKey: 'data.value', col: 'col-md-12' }
+        { type: 'input', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'input', name: 'type', label: 'نوع', responseKey: 'data.type', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'dateTime', name: 'updated_at', label: '', responseKey: 'data.updated_at', col: 'col-md-3', placeholder: 'تاریخ ایجاد' },
+        { type: 'dateTime', name: 'created_at', label: '', responseKey: 'data.created_at', col: 'col-md-3', placeholder: 'تاریخ ویرایش' },
+        { type: 'input', name: 'value', label: 'مرجع', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true }
       ],
       createInputs: [
         { type: 'hidden', name: 'type', value: 'reference_type', label: '', col: 'col-12' },
-        { type: 'input', name: 'value', label: 'مرجع', col: 'col-md-3' }
+        { type: 'input', name: 'value', label: 'مرجع', col: 'col-md-3', placeholder: ' ', filled: true }
       ],
       editInputs: [],
       showInputs: [],

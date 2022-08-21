@@ -2,21 +2,22 @@
   <q-dialog
     v-model="modal"
   >
-  <q-card class="tree-card">
-    <div class="fit row wrap">
-      <div class="choose-tree-box question-details col-6">
+    <q-card class="tree-card">
+      <div class="fit row wrap">
+        <div class="choose-tree-box question-details col-6">
           <div class="details-container-2 default-details-container">
-            <div class="detail-box" style="padding-right:0;">
-<!--              <div class="detail-box-title" style="padding-bottom: 9px;" >گروه درس</div>-->
-<!--              <q-select-->
-<!--                filled-->
-<!--                dense-->
-<!--                dropdown-icon="isax:arrow-down-1"-->
-<!--                v-model="group"-->
-<!--                option-label="title"-->
-<!--                :options="groupsList"-->
-<!--                @update:model-value="groupSelected"-->
-<!--              />-->
+            <div class="detail-box"
+                 style="padding-right:0;">
+                 <!--              <div class="detail-box-title" style="padding-bottom: 9px;" >گروه درس</div>-->
+                 <!--              <q-select-->
+                 <!--                filled-->
+                 <!--                dense-->
+                 <!--                dropdown-icon="isax:arrow-down-1"-->
+                 <!--                v-model="group"-->
+                 <!--                option-label="title"-->
+                 <!--                :options="groupsList"-->
+                 <!--                @update:model-value="groupSelected"-->
+                 <!--              />-->
             </div>
             <div class="detail-box">
               <div class="detail-box-title">نام درس</div>
@@ -43,50 +44,51 @@
             </div>
           </div>
         </div>
-      <div class="tree-result-box question-details col-6 ">
-        <div class="details-container-2 default-details-container ">
-          <div class="detail-box" style="padding-right:0;">
-            <div class="box-btn-title flex justify-between">
-              <div class="detail-box-title">انتخاب ها</div>
-              <q-btn
-                class="delete-all-btn"
-                flat
-                label="حذف همه"
-                color="primary"
-                @click="deleteAllNodes"
-              />
-            </div>
-            <div
-              class="tree-chips-box"
-            >
+        <div class="tree-result-box question-details col-6 ">
+          <div class="details-container-2 default-details-container ">
+            <div class="detail-box"
+                 style="padding-right:0;">
+              <div class="box-btn-title flex justify-between">
+                <div class="detail-box-title">انتخاب ها</div>
+                <q-btn
+                  class="delete-all-btn"
+                  flat
+                  label="حذف همه"
+                  color="primary"
+                  @click="deleteAllNodes"
+                />
+              </div>
               <div
-                v-if="getAllSubjects[0]"
+                class="tree-chips-box"
               >
-              <q-chip
-                v-for="item in getAllSubjects"
-                :key="item"
-                class="tree-chips"
-                icon-remove="mdi-close"
-                removable
-                @remove="removeNode(item)"
-              >
-                {{ item.title }}
-              </q-chip>
+                <div
+                  v-if="getAllSubjects[0]"
+                >
+                  <q-chip
+                    v-for="item in getAllSubjects"
+                    :key="item"
+                    class="tree-chips"
+                    icon-remove="mdi-close"
+                    removable
+                    @remove="removeNode(item)"
+                  >
+                    {{ item.title }}
+                  </q-chip>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="close-btn-box text-right" >
-          <q-btn
-            class="close-btn"
-            label="بستن"
-            color="primary"
-            v-close-popup
-          />
+          <div class="close-btn-box text-right">
+            <q-btn
+              class="close-btn"
+              label="بستن"
+              color="primary"
+              v-close-popup
+            />
+          </div>
         </div>
       </div>
-    </div>
-  </q-card>
+    </q-card>
   </q-dialog>
 </template>
 <script>
@@ -226,9 +228,6 @@ export default {
         .then(() => {
           this.syncAllCheckedIds()
           this.selectWantedTree(this.lesson)
-        })
-        .catch(err => {
-          console.log(err)
         })
     },
     selectWantedTree (lesson) {

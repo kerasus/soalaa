@@ -26,8 +26,8 @@ export default {
       editRouteName: 'Admin.Category.Edit',
       indexRouteName: 'Admin.Category.Index',
       inputs: [
-        { type: 'input', name: 'id', responseKey: 'data.id', label: 'شناسه', col: 'col-md-6' },
-        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' }
+        { type: 'input', name: 'id', responseKey: 'data.id', label: 'شناسه', col: 'col-md-6', placeholder: ' ', filled: true },
+        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6', placeholder: ' ', filled: true }
       ]
     }
   },

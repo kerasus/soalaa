@@ -28,7 +28,10 @@
           flat
           class=" status-card"
         >
-          <q-input borderless v-model="text" dense model-value=""></q-input>
+          <q-input borderless
+                   v-model="text"
+                   dense
+                   model-value=""></q-input>
         </q-card>
       </div>
       <div class="col status-card-btn">

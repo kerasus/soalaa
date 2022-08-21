@@ -1,7 +1,7 @@
 <template>
-<div class="upload-file">
-  <upload-file :exam-id="id"/>
-</div>
+  <div class="upload-file">
+    <upload-file :exam-id="id" />
+  </div>
 </template>
 
 <script>
