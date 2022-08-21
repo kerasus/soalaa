@@ -294,9 +294,9 @@ const AdminActionOnQuestion = {
     getCurrentQuestionType () {
       // const currentRouteName = this.readRouteName()
       const currentRouteFullPath = this.readRouteFullPath()
-      let txtToRemove = '/question/create/text/'
+      let txtToRemove = '/admin/question/create/text/'
       if (this.getCurrentQuestionMode() === 'Image') {
-        txtToRemove = '/question/create/image/'
+        txtToRemove = '/admin/question/create/image/'
       }
       return currentRouteFullPath.replace(txtToRemove, '')
     },

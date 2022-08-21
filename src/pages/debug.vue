@@ -1,30 +1,67 @@
 <template>
-  <div>dd
-    <vue-tiptap-katex
-      ref="tiptap"
-      :loading="loading"
-      :access-token="'Auth/accessToken'"
-      :upload-url="'imageUrl'"
-      :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true }"
-    />
-  </div>
+  <page-builder
+    :sections="sections"
+    :options="options"
+    :containerFullHeight="calculateHeightStyle"
+  ></page-builder>
 </template>
 
 <script>
-import VueTiptapKatex from 'vue3-tiptap-katex'
+import pageBuilder from 'src/components/PageBuilder/PageBuilder'
+
 export default {
   name: 'debug',
-  components: { VueTiptapKatex },
-  data () {
+  components: { pageBuilder },
+  data() {
     return {
-      loading: false,
-      html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
-      innerHTML: 'hi'
+      sections: [
+        {
+          data: {
+            rows: [
+              {
+                cols: [
+                  {
+                    widgets: [
+                      {
+                        name: 'test-component1-widget'
+                      }
+                    ],
+                    options: {
+                      className: 'col-md-3 q-pr-md '
+                    }
+                  },
+                  {
+                    widgets: [
+                      {
+                        name: 'test-component2-widget'
+                      }
+                    ],
+                    options: {
+                      className: 'col-md-9 q-pl-md'
+                    }
+                  }
+                ],
+                options: {
+                  boxed: true,
+                  style: {
+                    marginTop: '30px'
+                  }
+                }
+              }
+            ]
+          },
+          options: {}
+        }
+      ],
+      options: []
+    }
+  },
+  computed: {
+    calculateHeightStyle() {
+      return this.$store.getters['AppLayout/calculateContainerFullHeight']
     }
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

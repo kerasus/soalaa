@@ -24,7 +24,6 @@
           />
         </div>
         <div class="question-bank-content">
-<!--          <question-item />-->
           <question-item v-if="questions.loading" :question="loadingQuestion" />
           <template v-else>
             <question-item
@@ -68,7 +67,21 @@ export default {
       filterQuestions: {
         major_type: [],
         reference_type: [],
-        year_type: []
+        year_type: [],
+        levels: [
+          {
+            id: '1',
+            value: 'آسان'
+          },
+          {
+            id: '2',
+            value: 'متوسط'
+          },
+          {
+            id: '3',
+            value: 'سخت'
+          }
+        ]
       },
       questionListKey: Date.now(),
       selectedQuestions: [],
@@ -178,11 +191,13 @@ export default {
     getFiltersForRequest (filterData) {
       return {
         tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
+        level: (filterData.level) ? filterData.level.map(item => item.id) : [],
         years: (filterData.years) ? filterData.years.map(item => item.id) : [],
         majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
         reference: (filterData.reference) ? filterData.reference.map(item => item.id) : []
       }
     },
+
     getQuestionData (page, filters) {
       if (!page) {
         page = 1
@@ -253,7 +268,7 @@ export default {
 
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 .q-checkbox__bg {
   border: 1px solid #65677F;
@@ -261,20 +276,26 @@ export default {
   border-radius: 5px;
 }
 
-.question-bank-header {
-  padding-bottom: 30px;
-}
+.main-container {
 
-.question-bank-filter {
-  padding-right: 24px;
-}
+  .question-bank-header {
+    padding-bottom: 30px;
+  }
 
-.question-bank-toolbar {
-  padding-bottom: 24px;
-}
+  .question-bank-filter {
+    padding-right: 24px;
+  }
 
-.question-bank-content {
-  margin-bottom: 16px;
+  .question-bank-toolbar {
+    padding-bottom: 24px;
+  }
+
+  .question-bank-content {
+    margin-bottom: 16px;
+    :deep(.question-card) {
+      margin-bottom: 16px;
+    }
+  }
 }
 @media only screen and (max-width: 1919px) {
   .main-container {
