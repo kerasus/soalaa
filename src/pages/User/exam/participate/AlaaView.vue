@@ -271,10 +271,15 @@ export default {
   height: 100%;
   padding: 0px 0px 0px 12px;
   .timer-row {
+    //max-width: calc(75% - 150px);
     width: calc(75% - 150px);
     position: absolute;
     bottom: 0;
+    min-width: 130px;
     right: 100px;
+    //@media screen and (max-width: 1024px) {
+    //  width: calc(84% - 150px);
+    //}
   }
   .main-page{
     display: flex;
@@ -286,6 +291,7 @@ export default {
     .middle-page{
       display: flex;
       flex-direction: column;
+      padding-bottom: 103px;
       .question-header {
         display: flex;
         color: var(--text-2);
