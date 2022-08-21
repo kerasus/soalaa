@@ -99,7 +99,8 @@ class Exam extends Model {
           make_report_for_remaining_only: false,
           temp_exams_in_exam_interval: false,
           consider_negative_point: false,
-          populate_school_ranking: false
+          populate_school_ranking: false,
+          right_answer_weight: false
         }
       },
 
@@ -167,7 +168,8 @@ class Exam extends Model {
       make_report_for_remaining_only: false,
       temp_exams_in_exam_interval: false,
       consider_negative_point: false,
-      populate_school_ranking: false
+      populate_school_ranking: false,
+      right_answer_weight: false
     }
     Object.assign(temp, this.report_config)
     this.report_config = temp
