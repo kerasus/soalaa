@@ -152,6 +152,8 @@ const API_ADDRESS = {
       }
 
       let queryParam = page
+      // const examQuesry = '&exam=0'
+      // queryParam += examQuesry
       Object.keys(filters).forEach(filterKey => {
         queryParam += filters[filterKey]
       })
