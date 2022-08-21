@@ -82,6 +82,12 @@ const routes = [
         name: 'dashboard',
         component: () => import('pages/User/exam/List'),
         breadcrumbs: { title: 'پیشخوان' },
+        layoutConfig: {
+          headerVisibility: false,
+          headerType: 'A',
+          sideBarVisibility: false,
+          sideBarType: 'A'
+        },
         meta: {
           middlewares: [auth]
         }
