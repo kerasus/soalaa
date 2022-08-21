@@ -77,10 +77,10 @@ const routes = [
         path: '',
         name: 'dashboard',
         component: () => import('pages/User/exam/List'),
-        breadcrumbs: { title: 'پیشخوان' },
-        meta: {
-          middlewares: [auth]
-        }
+        breadcrumbs: { title: 'پیشخوان' }
+        // meta: {
+        //   middlewares: [auth]
+        // }
       },
       {
         path: 'component',
@@ -440,14 +440,13 @@ const routes = [
         meta: {
           middlewares: [auth]
         }
-      },
-      {
-        path: '/cart',
-        name: 'cart',
-        component: () => import('pages/cart.vue'),
-        meta: {}
       }
     ]
+  },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: () => import('pages/Cart/Cart')
   },
   {
     path: '/admin/exam/:quizId/:lessonId/print',
