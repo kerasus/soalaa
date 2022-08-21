@@ -6,11 +6,13 @@
       <div v-if="templateHeaderType === 'onlineQuiz.alaaView'" class="header-inside row">
         <online-quiz-template-header/>
       </div>
-      <div v-else-if="templateHeaderType === 'dashboard'" class="header-inside row">
-        <user-template-header/>
+      <div v-else-if="templateHeaderType === 'A'" class="user-main-layout-header">
+        <div class="header-inside row">
+          <user-template-header/>
+        </div>
       </div>
-      <div v-else  class="header-inside row">
-        <template-header/>
+      <div v-else class="main-layout-header row">
+          <template-header/>
       </div>
       <q-linear-progress
         v-if="$store.getters['loading/loading']"
@@ -96,18 +98,30 @@ export default {
     },
     getTemplateHeaderType () {
       return () => {
-        this.$store.dispatch('AppLayout/updateTemplateHeaderType', this.$route.name)
+        // this.$store.dispatch('AppLayout/updateTemplateHeaderType', {
+        //   headerVisibility: false,
+        //   headerType: 'A',
+        //   sideBarVisibility: false,
+        //   sideBarType: 'A'
+        // })
         // this.$store.commit('AppLayout/updateTemplateHeaderType', this.$route.name)
         this.templateHeaderType = this.$store.getters['AppLayout/templateHeaderType']
       }
     }
   },
+  watch: {
+    // 'properties.layoutHeaderCustomClass': function (newVal) {
+    //   console.log('ok')
+    //   this.setLayoutCustomClass()
+    // }
+  },
   mounted () {
-    this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
+    // this.getTemplateHeaderType()
+    // this.templateHeaderType = this.$store.getters['AppLayout/templateHeaderType']
+    // this.templateHeaderVisible = this.$store.getters['AppLayout/templateHeaderType']
+    // this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
   },
   created () {
-    this.getTemplateHeaderType()
-    this.setLayoutCustomClass()
     const localData = this.$store.getters['AppLayout/appLayout']
     Object.assign(this.properties, localData)
   },
@@ -122,13 +136,6 @@ export default {
     },
     setHeaderDimension (value) {
       this.$refs.contentInside.style.height = 'calc(100vh +' + value.height + 'px'
-    },
-    setLayoutCustomClass () {
-      if (this.templateHeaderType === 'dashboard') {
-        this.properties.layoutHeaderCustomClass = 'user-main-layout-header row'
-        return
-      }
-      this.properties.layoutHeaderCustomClass = 'main-layout-header row'
     },
     resize (val) {
       this.$store.commit('AppLayout/updateWindowSize', val)
@@ -149,41 +156,10 @@ export default {
 
 <style lang="scss" scoped>
 .main-layout-header {
-  .header-inside{
+
     width: 100%;
-  }
 
 }
-
-:deep(.user-main-layout-header) {
-  background-color: #f1f1f1;
-  display: flex;
-  flex-direction: row;
-  padding-bottom: 24px;
-
-  .header-inside {
-    width: 100%;
-    background: #fff;
-    display: flex;
-    justify-content: center;
-    color: #65677F;
-  }
-}
-
-.main-layout-container {
-}
-.content-inside {
-  //overflow: auto;
-}
-
-.main-layout-left-drawer {
-  .drawer-inside-of-MapOfQuestions{
-    height: 100%;
-  }
-}
-</style>
-
-<style lang="scss">
 .main-layout-header {
   background-color: #f1f1f1;
   display: flex;
@@ -216,6 +192,36 @@ export default {
     }
   }
 }
+
+.user-main-layout-header {
+  background-color: #f1f1f1;
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 24px;
+
+  .header-inside {
+    width: 100%;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    color: #65677F;
+  }
+}
+
+.main-layout-container {
+}
+.content-inside {
+  //overflow: auto;
+}
+
+.main-layout-left-drawer {
+  .drawer-inside-of-MapOfQuestions{
+    height: 100%;
+  }
+}
+</style>
+
+<style lang="scss">
 
 .main-layout-container {
   background-color: #f1f1f1;
