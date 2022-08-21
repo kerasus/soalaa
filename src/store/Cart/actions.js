@@ -52,7 +52,9 @@ export function reviewCart (context, product) {
             cart.cartItems.list.push(product)
           }
         }
+
         context.commit('updateCart', cart)
+
         return resolve(response)
       })
       .catch((error) => {

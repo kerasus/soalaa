@@ -3,22 +3,22 @@
     <q-card class="invoice-cart">
       <q-card-section class="invoice-total-price-section invoice-cart-section">
         <div class="total-shopping-cart price-section">
-          <div class="title">جمع سبد خرید {{ `(${test})` }}</div>
-          <div class="price">{{ total }}
+          <div class="title">جمع سبد خرید {{ `(${cart.cartItems?.list?.length})` }}</div>
+          <div class="price">{{ totalBasePrice }}
             <span class="iran-money-unit">تومان</span>
           </div>
         </div>
 
         <div class="wallet-credit price-section">
-          <div class="title">اعتبار کیف پول</div>
-          <div class="price">{{ total }}
+          <div class="title">استفاده از کیف پول</div>
+          <div class="price"> {{ amountUsingWallet }}
             <span class="iran-money-unit">تومان</span>
           </div>
         </div>
 
         <div class="purchase-profit price-section">
           <div class="title">سود شما از خرید</div>
-          <div class="price">{{ `(${test}٪) ` + total }}
+          <div class="price">{{ `(${ discountInPercent }٪) ` + totalDiscount }}
             <span class="iran-money-unit">تومان</span>
           </div>
         </div>
@@ -49,7 +49,7 @@
       <q-card-section class="payment-section invoice-cart-section">
         <div class="final-price price-section">
           <div class="title">مبلغ نهایی</div>
-          <div class="price">{{ total }}
+          <div class="price">{{ totalFinalPrice }}
             <span class="iran-money-unit">تومان</span>
           </div>
         </div>
@@ -97,7 +97,7 @@
             <p class="title">توضیحات</p>
 
             <q-input
-              v-model="couponValue"
+              v-model="shoppingDescribtion"
               type="text"
               label="اگر توضیحی درباره ی محصول دارید اینجا بنویسید"
               class="payment-description-input"
@@ -116,7 +116,7 @@
         </div>
 
         <q-separator
-          v-if="isUserLogin"
+          v-if="!isUserLogin"
           class="invoice-separator"
         />
       </q-card-section>
@@ -128,7 +128,7 @@
         <p class="title">برای ادامه ثبت سفارش، به حساب کاربری خود وارد شوید </p>
 
         <q-input
-          v-model="couponValue"
+          v-model="userEnteredLoginInfo.mobile"
           type="text"
           label="شماره موبایل خود را وارد کنید"
           class="login-input"
@@ -136,7 +136,7 @@
         />
 
         <q-input
-          v-model="couponValue"
+          v-model="userEnteredLoginInfo.password"
           type="text"
           label="رمز عبور خود را وارد کنید"
           class="login-input"
@@ -150,7 +150,7 @@
 
         <div
           class="sign-in-button"
-          @click="signIn"
+          @click="login"
         >
           ورود به حساب کاربری
         </div>
@@ -163,7 +163,7 @@
         class="final-price price-section"
       >
         <div class="title">مبلغ نهایی:</div>
-        <div class="price">{{ total }}
+        <div class="price">{{ totalFinalPrice }}
           <span class="iran-money-unit">تومان</span>
         </div>
       </div>
@@ -182,13 +182,42 @@ export default {
   name: 'CartInvoice',
   data() {
     return {
-      test: 4,
       total: '1000000',
       couponValue: null,
-      selectedBank: null
+      shoppingDescription: null,
+      userEnteredLoginInfo: {
+        password: '',
+        mobile: ''
+      },
+      selectedBank: null,
+      gatewayRedirectAddress: '',
+      amountUsingWallet: ''
     }
   },
+  mounted () {
+    this.cartReview()
+  },
   computed: {
+    cart () {
+      return this.$store.getters['Cart/cart']
+    },
+
+    totalFinalPrice () {
+      return this.cart.price?.final
+    },
+
+    totalBasePrice () {
+      return this.cart.price?.base
+    },
+
+    totalDiscount () {
+      return this.cart.price?.discount
+    },
+
+    discountInPercent () {
+      return this.cart.price?.discountInPercent()
+    },
+
     isUserLogin () {
       return this.$store.getters['Auth/isUserLogin']
     },
@@ -198,12 +227,22 @@ export default {
     }
   },
   methods: {
-    payment() {
-      console.log('hi')
+    cartReview () {
+      this.$store.dispatch('Cart/reviewCart')
+        .then((response) => {
+          this.amountUsingWallet = response.data.data.pay_by_wallet
+          this.gatewayRedirectAddress = response.data.data.redirect_to_gateway
+        })
     },
 
-    signIn() {
-      console.log('hi')
+    payment () {
+      if (this.gatewayRedirectAddress) {
+        window.location.href = this.gatewayRedirectAddress
+      }
+    },
+
+    login () {
+      this.$store.dispatch('Auth/login', this.userEnteredLoginInfo)
     }
   }
 }
