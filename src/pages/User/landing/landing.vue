@@ -2,8 +2,8 @@
   <div class="landing-page">
     <nav-bar />
     <landing-header  />
-    <why class="landing-width"/>
-    <features class="landing-width"/>
+    <why class="landing-width" />
+    <features class="landing-width" />
     <submit-table class="landing-width" />
     <exam-rules class="landing-width" />
     <faq class="landing-width" />
