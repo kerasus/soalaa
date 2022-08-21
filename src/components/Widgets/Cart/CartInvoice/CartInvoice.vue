@@ -243,6 +243,11 @@ export default {
 
     login () {
       this.$store.dispatch('Auth/login', this.userEnteredLoginInfo)
+        .then(() => {
+          if (this.isUserLogin) {
+            this.cartReview()
+          }
+        })
     }
   }
 }
