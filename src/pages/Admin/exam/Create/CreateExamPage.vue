@@ -52,7 +52,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'عنوان آزمون', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-12' }
+            { type: 'input', name: 'title', responseKey: 'data.title', label: '', col: 'col-12', placeholder: ' ' }
           ]
         },
         {
@@ -88,7 +88,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'زمان شروع آزمون', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: ' زمان شروع آزمون', col: 'col-12', calendarIcon: 'isax:calendar-1' }
+            { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: '', col: 'col-12', calendarIcon: 'isax:calendar-1', placeholder: 'زمان شروع آزمون' }
           ]
         },
         {
@@ -97,7 +97,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'زمان تاخیر(دقیقه)', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: ' زمان شروع آزمون', col: 'col-12' }
+            { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: '', col: 'col-12', placeholder: 'زمان تاخیر' }
 
           ]
         },
@@ -107,7 +107,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'زمان تاخیر(دقیقه)', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-12', value: 0 }
+            { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: '', col: 'col-12', value: 0, placeholder: ' ' }
           ]
         },
         {
@@ -116,7 +116,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'مدت زمان آزمون(دقیقه)', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'exam_time', responseKey: 'data.time', label: 'مدت زمان آزمون(دقیقه)', col: 'col-12', value: 0 }
+            { type: 'input', name: 'exam_time', responseKey: 'data.time', label: '', col: 'col-12', value: 0, placeholder: ' ' }
           ]
         },
         {

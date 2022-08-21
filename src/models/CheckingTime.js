@@ -37,7 +37,6 @@ class CheckingTimeList extends Collection {
 
   addEnd () {
     const lastItem = this.getLastItem()
-    console.log('lastItem', lastItem)
     if (!lastItem) {
       return
     }

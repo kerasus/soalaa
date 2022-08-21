@@ -10,11 +10,12 @@
         دریافت کد فعالسازی
       </q-btn>
     </div>
-    <div v-if="totalTime" class="row justify-center q-ma-lg">
+    <div v-if="totalTime"
+         class="row justify-center q-ma-lg">
       <div class="col-12 row justify-center mit">
-               <span
-                 :class="totalTime <60 ? 'red-text' : ''"
-               >{{ ((totalTime) % 3600) % 60 }}</span>
+        <span
+          :class="totalTime <60 ? 'red-text' : ''"
+        >{{ ((totalTime) % 3600) % 60 }}</span>
         <span>:</span>
         <span
           :class="totalTime <60 ? 'red-text' : ''"

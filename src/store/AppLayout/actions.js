@@ -7,5 +7,19 @@ export function showConfirmDialog (context, newInfo) {
 }
 
 export function updateTemplateHeaderType (context, newInfo) {
-  this.commit('AppLayout/changeTemplateHeaderType', newInfo)
+  if (newInfo.headerType !== undefined) {
+    this.commit('AppLayout/changeTemplateHeaderType', newInfo.headerType)
+  }
+  if (newInfo.sideBarType !== undefined) {
+    this.commit('AppLayout/changeTemplateSideBarType', newInfo.sideBarType)
+  }
+  if (newInfo.headerVisibility !== undefined) {
+    this.commit('AppLayout/updateLayoutHeaderVisible', newInfo.headerVisibility)
+  }
+  if (newInfo.sideBarVisibility !== undefined) {
+    this.commit('AppLayout/updateLayoutLeftDrawerVisible', newInfo.sideBarVisibility)
+    this.commit('AppLayout/updateLayoutRightDrawerVisible', newInfo.sideBarVisibility)
+  } else {
+    return null
+  }
 }

@@ -38,7 +38,7 @@ export default {
         this.loading = false
       })
       .catch(err => {
-        console.log(err)
+        console.error(err)
         this.loading = false
       })
   },
@@ -49,7 +49,6 @@ export default {
   },
   methods: {
     test (value) {
-      console.log('ticked', value)
       this.testArr = []
       value.forEach(val => {
         this.testArr.push(val.id)

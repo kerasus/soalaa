@@ -1,5 +1,5 @@
 <template>
-<exam-report-info/>
+  <exam-report-info />
 </template>
 
 <script>

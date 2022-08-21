@@ -5,7 +5,9 @@
         <!--        -----------------------------------------------------Logo Section--------------------------------------------   -->
         <div class="col-3 flex logo">
           <div class="logo-pic">
-            <q-img src="/img/soalaLogo.png" width="71px" height="34px"/>
+            <q-img src="/img/soalaLogo.png"
+                   width="71px"
+                   height="34px" />
           </div>
         </div>
         <!--        -----------------------------------------------------Tabs Section--------------------------------------------   -->
@@ -70,15 +72,19 @@
                    unelevated
                    rounded
                    size="12px"
-                   class="action-btn"/>
+                   class="action-btn" />
             <q-btn icon="isax:shopping-cart"
                    unelevated
                    rounded
                    size="12px"
-                   class="action-btn"/>
+                   class="action-btn" />
           </div>
-          <q-btn flat class="btn-user-profile">
-            <q-img class="user-photo" :src="'https://cdn.quasar.dev/img/avatar2.jpg'" width="48px" height="48px" />
+          <q-btn flat
+                 class="btn-user-profile">
+            <q-img class="user-photo"
+                   :src="'https://cdn.quasar.dev/img/avatar2.jpg'"
+                   width="48px"
+                   height="48px" />
           </q-btn>
         </div>
       </div>

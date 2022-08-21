@@ -1,16 +1,22 @@
-<!--       -----------------------ToDO => change dashboard route name ------------------------ -->
+<!--       -----------------------ToDO => change last v-else-ifs ------------------------ -->
 
 <template>
-  <quasar-template-builder v-model:value="properties" @onResize="resize">
+  <quasar-template-builder v-model:value="properties"
+                           @onResize="resize">
     <template #header>
-      <div v-if="templateHeaderType === 'onlineQuiz.alaaView'" class="header-inside row">
-        <online-quiz-template-header/>
+      <div v-if="templateHeaderType === 'quiz'"
+           class="header-inside row">
+        <online-quiz-template-header />
       </div>
-      <div v-else-if="templateHeaderType === 'dashboard'" class="header-inside row">
-        <user-template-header/>
+      <div v-else-if="templateHeaderType === 'default'"
+           class="user-main-layout-header">
+        <div class="header-inside row">
+          <user-template-header />
+        </div>
       </div>
-      <div v-else  class="header-inside row">
-        <template-header/>
+      <div v-else-if="templateHeaderType === 'panel'"
+           class="main-layout-header row">
+        <template-header />
       </div>
       <q-linear-progress
         v-if="$store.getters['loading/loading']"
@@ -19,28 +25,41 @@
         class="q-mt-sm"
         indeterminate
       />
-      <q-resize-observer @resize="setHeaderDimension"/>
+      <q-resize-observer @resize="setHeaderDimension" />
     </template>
     <template #left-drawer>
-      <div class="drawer-inside-of-MapOfQuestions" v-if="$route.name === 'onlineQuiz.alaaView'">
-        <sideMenuMapOfQuestions/>
+      <div class="drawer-inside-of-MapOfQuestions"
+           v-if="templateSideBarType === 'quiz'">
+        <sideMenuMapOfQuestions />
       </div>
-      <div class="drawer-inside" v-else>
-        <side-menu-dashboard/>
+      <div class="drawer-inside"
+           v-else-if="templateSideBarType === 'panel'">
+        <side-menu-dashboard />
       </div>
     </template>
     <template #content>
-      <div ref="contentInside" class="content-inside">
-        <q-dialog v-model="confirmDialogData.show" persistent>
+      <div ref="contentInside"
+           class="content-inside">
+        <q-dialog v-model="confirmDialogData.show"
+                  persistent>
           <q-card class="q-pa-md q-pb-none">
-            <q-card-section >
-              <q-icon name="warning" color="warning" size="2rem" />
+            <q-card-section>
+              <q-icon name="warning"
+                      color="warning"
+                      size="2rem" />
               {{confirmDialogData.message}}
             </q-card-section>
             <q-separator />
-            <q-card-actions align="right" class="q-pb-none">
-              <q-btn color="green" flat  @click="confirmDialogAction(true)" v-close-popup >بله</q-btn>
-              <q-btn color="red" flat  @click="confirmDialogAction(false)" v-close-popup >خیر</q-btn>
+            <q-card-actions align="right"
+                            class="q-pb-none">
+              <q-btn color="green"
+                     flat
+                     @click="confirmDialogAction(true)"
+                     v-close-popup>بله</q-btn>
+              <q-btn color="red"
+                     flat
+                     @click="confirmDialogAction(false)"
+                     v-close-popup>خیر</q-btn>
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -67,6 +86,7 @@ export default {
     return {
       keepAliveComponents: KeepAliveComponents,
       templateHeaderType: '',
+      templateSideBarType: '',
       properties: {
         layoutView: 'lHh Lpr lFf',
         layoutHeader: true,
@@ -94,24 +114,35 @@ export default {
     confirmDialogData () {
       return this.$store.getters['AppLayout/confirmDialog']
     },
-    getTemplateHeaderType () {
+    getTemplateTypes () {
       return () => {
-        this.$store.dispatch('AppLayout/updateTemplateHeaderType', this.$route.name)
-        // this.$store.commit('AppLayout/updateTemplateHeaderType', this.$route.name)
+        this.$store.dispatch('AppLayout/updateTemplateHeaderType', {
+          headerVisibility: true,
+          headerType: 'default',
+          sideBarVisibility: true,
+          sideBarType: 'panel'
+        })
         this.templateHeaderType = this.$store.getters['AppLayout/templateHeaderType']
+        this.templateSideBarType = this.$store.getters['AppLayout/templateSideBarType']
+        // console.log(this.templateSideBarType)
+        // console.log(this.templateHeaderType)
       }
     }
   },
+  watch: {
+  },
   mounted () {
-    this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
   },
   created () {
-    this.getTemplateHeaderType()
-    this.setLayoutCustomClass()
-    const localData = this.$store.getters['AppLayout/appLayout']
-    Object.assign(this.properties, localData)
+    this.getTemplateTypes()
+    this.updateLayout()
+    // const localData = this.$store.getters['AppLayout/appLayout']
+    // Object.assign(this.properties, localData)
   },
   methods: {
+    updateLayout () {
+      this.$store.dispatch('AppLayout/updateStore', this.properties)
+    },
     confirmDialogAction (data) {
       if (this.confirmDialogData) this.confirmDialogData.callback(data)
       else {
@@ -122,13 +153,6 @@ export default {
     },
     setHeaderDimension (value) {
       this.$refs.contentInside.style.height = 'calc(100vh +' + value.height + 'px'
-    },
-    setLayoutCustomClass () {
-      if (this.templateHeaderType === 'dashboard') {
-        this.properties.layoutHeaderCustomClass = 'user-main-layout-header row'
-        return
-      }
-      this.properties.layoutHeaderCustomClass = 'main-layout-header row'
     },
     resize (val) {
       this.$store.commit('AppLayout/updateWindowSize', val)
@@ -149,41 +173,10 @@ export default {
 
 <style lang="scss" scoped>
 .main-layout-header {
-  .header-inside{
-    width: 100%;
-  }
+
+  width: 100%;
 
 }
-
-:deep(.user-main-layout-header) {
-  background-color: #f1f1f1;
-  display: flex;
-  flex-direction: row;
-  padding-bottom: 24px;
-
-  .header-inside {
-    width: 100%;
-    background: #fff;
-    display: flex;
-    justify-content: center;
-    color: #65677F;
-  }
-}
-
-.main-layout-container {
-}
-.content-inside {
-  //overflow: auto;
-}
-
-.main-layout-left-drawer {
-  .drawer-inside-of-MapOfQuestions{
-    height: 100%;
-  }
-}
-</style>
-
-<style lang="scss">
 .main-layout-header {
   background-color: #f1f1f1;
   display: flex;
@@ -216,6 +209,35 @@ export default {
     }
   }
 }
+
+.user-main-layout-header {
+  background-color: #f1f1f1;
+  display: flex;
+  flex-direction: row;
+
+  .header-inside {
+    width: 100%;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    color: #65677F;
+  }
+}
+
+.main-layout-container {
+}
+.content-inside {
+  //overflow: auto;
+}
+
+.main-layout-left-drawer {
+  .drawer-inside-of-MapOfQuestions{
+    height: 100%;
+  }
+}
+</style>
+
+<style lang="scss">
 
 .main-layout-container {
   background-color: #f1f1f1;
