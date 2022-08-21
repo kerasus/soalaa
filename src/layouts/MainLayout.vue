@@ -101,6 +101,8 @@ export default {
       return () => {
         this.templateHeaderType = this.$store.getters['AppLayout/templateHeaderType']
         this.templateSideBarType = this.$store.getters['AppLayout/templateSideBarType']
+        console.log(this.templateSideBarType)
+        console.log(this.templateHeaderType)
       }
     }
   },
