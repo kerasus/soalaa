@@ -602,6 +602,7 @@ export default {
         .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
           min-height: 40px;
           color: #65677F;
+
         }
         .q-field__control::before, .q-field__control::after {
           display: none;
@@ -635,6 +636,8 @@ export default {
       .detail-box {
         .q-field__control {
           height: 42px;
+          background: #F4F5F6 ;
+
         }
 
         .q-field {
@@ -666,6 +669,8 @@ export default {
         .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
           min-height: 40px;
           color: #65677F;
+          background: #F4F5F6 ;
+
         }
 
         .q-field__control::before, .q-field__control::after {

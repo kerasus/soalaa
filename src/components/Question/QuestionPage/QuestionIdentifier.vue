@@ -448,7 +448,7 @@ export default {
 
       .input-container {
         .input-box {
-          width: 91%;
+          width: 89%;
         }
 
         .icon-box {
@@ -459,7 +459,7 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-left: 16px;
+          margin-left: 12px;
 
           .question-details-subject-img {
             height: 24px;

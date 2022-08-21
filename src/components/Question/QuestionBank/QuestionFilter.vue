@@ -92,6 +92,24 @@
         <div v-if="filterQuestions.major_type.length === 0"> هیچ رشته تحصیلی ایجاد نشده است</div>
 
       </question-filter-expansion>
+
+      <question-filter-expansion
+        header-title="درجه سختی"
+      >
+        <q-option-group
+          type="checkbox"
+          @update:model-value="onChangeLevels"
+          :options="filterQuestions.levels.map(option => {
+            return {
+              label: option.value,
+              value: option
+            }
+          })"
+          v-model="selectedLevels"
+        />
+        <div v-if="filterQuestions.levels.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
+
+      </question-filter-expansion>
     </div>
   </div>
 </template>
@@ -119,6 +137,7 @@ export default {
       selectedReference: [],
       selectedYears: [],
       selectedMajors: [],
+      selectedLevels: [],
       selectedTags: [],
       filtersData: {
         tags: []
@@ -163,6 +182,9 @@ export default {
     },
     onChangeReference (value) {
       this.changeFilterData('reference', value)
+    },
+    onChangeLevels (value) {
+      this.changeFilterData('level', value)
     },
     onChangeYears (value) {
       this.changeFilterData('years', value)
