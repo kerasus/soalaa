@@ -1,5 +1,5 @@
 <template>
-this will be replaced
+  this will be replaced
 </template>
 
 <script>

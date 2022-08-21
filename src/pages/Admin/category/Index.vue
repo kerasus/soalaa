@@ -20,12 +20,25 @@
             />
           </template>
           <template v-else-if="inputData.props.col.name === 'actions'">
-            <q-btn round flat dense size="md" color="info" icon="info" :to="{name:'Admin.Category.Show', params: {id: inputData.props.row.id}}">
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   color="info"
+                   icon="info"
+                   :to="{name:'Admin.Category.Show', params: {id: inputData.props.row.id}}">
               <q-tooltip>
                 مشاهده
               </q-tooltip>
             </q-btn>
-            <q-btn v-if="false" round flat dense size="md" color="negative" icon="delete" class="q-ml-md"
+            <q-btn v-if="false"
+                   round
+                   flat
+                   dense
+                   size="md"
+                   color="negative"
+                   icon="delete"
+                   class="q-ml-md"
                    @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
               <q-tooltip>
                 حذف

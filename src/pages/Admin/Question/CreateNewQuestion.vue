@@ -1,10 +1,14 @@
 <template>
   <div class="row q-pa-md">
-    <q-dialog persistent v-model="dialog" class="new-question-dialog">
+    <q-dialog persistent
+              v-model="dialog"
+              class="new-question-dialog">
       <q-card class=" bg-grey-1">
         <q-card-section>
-          <div class="text-grey-10" style="font-size: 16px;"> سوال را به کدام صورت درج می کنید؟ </div>
-          <div class="text-grey-7" style="padding-top: 10px;">لطفا انتخاب کنید که سوال را به کدام روش ثبت می کنید.</div>
+          <div class="text-grey-10"
+               style="font-size: 16px;"> سوال را به کدام صورت درج می کنید؟ </div>
+          <div class="text-grey-7"
+               style="padding-top: 10px;">لطفا انتخاب کنید که سوال را به کدام روش ثبت می کنید.</div>
         </q-card-section>
         <q-card-actions align="center">
           <div class="col-12">

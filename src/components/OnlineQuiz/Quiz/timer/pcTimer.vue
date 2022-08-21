@@ -37,8 +37,8 @@
       >
         زمان گذشته:
         <span class="time-margin-top">
-            {{ passedTime }}
-          </span>
+          {{ passedTime }}
+        </span>
       </div>
       <div class="col-7 timer-text">
         <div v-if="show && remainingTime && currentCat">

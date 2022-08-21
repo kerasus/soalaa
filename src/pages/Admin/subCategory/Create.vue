@@ -27,7 +27,7 @@ export default {
       showRouteName: 'Admin.subCategory.Show',
       indexRouteName: 'Admin.subCategory.Index',
       inputs: [
-        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' },
+        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6', placeholder: ' ', filled: true },
         { type: 'select', options: [], optionLabel: 'title', optionValue: 'id', name: 'category_id', responseKey: 'data.category_id', label: 'دفترچه', col: 'col-md-6' }
       ],
       categories: []
@@ -45,7 +45,7 @@ export default {
           that.inputs[1].options = that.categories
         })
         .catch(function (error) {
-          console.log(error)
+          console.error(error)
         })
     }
   }

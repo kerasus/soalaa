@@ -1,11 +1,11 @@
 <template>
-    <div class="type-section">
-          <vue-tiptap-katex
-            ref="tiptap"
-            :loading="loading"
-            :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"
-          />
-        </div>
+  <div class="type-section">
+    <vue-tiptap-katex
+      ref="tiptap"
+      :loading="loading"
+      :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"
+    />
+  </div>
 </template>
 <script>
 
@@ -53,7 +53,6 @@ export default {
   },
   methods: {
     getContent () {
-      console.log('value', this.$refs.tiptap.getContent())
       return this.$refs.tiptap.getContent()
       // this.$emit('update:modelValue', this.$refs.tiptap.getContent())
     },

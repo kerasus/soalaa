@@ -9,10 +9,11 @@
           <q-card-section class="box-titles">
             صورت سوال
           </q-card-section>
-<!--          <v-card-title class="body-1">-->
-<!--            -->
-<!--          </v-card-title>-->
-          <q-card-actions vertical class="question-box-card-action">
+          <!--          <v-card-title class="body-1">-->
+          <!--            -->
+          <!--          </v-card-title>-->
+          <q-card-actions vertical
+                          class="question-box-card-action">
             <div class="row">
               <div
                 v-if="editStatus"
@@ -43,13 +44,13 @@
                     class="btnAddImage"
                     icon="mdi-plus"
                   ></q-btn>
-<!--                  <v-btn-->
-<!--                    large-->
-<!--                    text-->
-<!--                    class="btnAddImage"-->
-<!--                  >-->
-<!--                    <v-icon>mdi-plus</v-icon>-->
-<!--                  </v-btn>-->
+                  <!--                  <v-btn-->
+                  <!--                    large-->
+                  <!--                    text-->
+                  <!--                    class="btnAddImage"-->
+                  <!--                  >-->
+                  <!--                    <v-icon>mdi-plus</v-icon>-->
+                  <!--                  </v-btn>-->
                 </file-upload>
               </div>
               <div
@@ -92,13 +93,14 @@
                   <q-img
                     style="height: 60px; max-width: 100%"
                   >
-                      <div
-                        class="row fit wrap justify-center items-center"
-                      >
-                        <div>
-                          <q-icon name="mdi-image-off" size="md" ></q-icon>
-                        </div>
+                    <div
+                      class="row fit wrap justify-center items-center"
+                    >
+                      <div>
+                        <q-icon name="mdi-image-off"
+                                size="md"></q-icon>
                       </div>
+                    </div>
                   </q-img>
                 </q-card>
               </div>
@@ -195,7 +197,8 @@
                       class="row fit wrap justify-center items-center"
                     >
                       <div>
-                        <q-icon name="mdi-image-off" size="md" ></q-icon>
+                        <q-icon name="mdi-image-off"
+                                size="md"></q-icon>
                       </div>
                     </div>
                   </q-img>
@@ -313,20 +316,13 @@ export default {
   },
   methods: {
     showImgPanel (src) {
-      console.log('src -----------', src)
       this.$emit('imgClicked', src)
     },
     fileUpdated () {
-      const files = {
-        questionFile: this.questionFile,
-        answerFiles: this.answerFiles
-      }
       if (this.questionFile[0]) {
         this.question.statement_photo = this.questionFile[0].file
       }
       this.question.answer_photos = this.answerFiles.map(item => item.file)
-      console.log('files', files)
-      console.log('this.question', this.question)
       this.$emit('input', this.question)
     },
     copyImageAddress (url) {
@@ -410,8 +406,7 @@ export default {
         img.onload = () => {
           this.$refs.answerImages.update(newFile, { error: '', height: img.height, width: img.width })
         }
-        img.οnerrοr = (e) => {
-          console.log('e', e)
+        img.οnerrοr = () => {
           this.$refs.answerImages.update(newFile, { error: 'parsing image size' })
         }
         img.src = newFile.blob
@@ -437,9 +432,9 @@ export default {
           // error
         }
         if (newFile.success && !oldFile.success) {
-          // success
-          console.log('oldFile.response.url', oldFile.response.url)
-          console.log('this.answerFiles', this.answerFiles)
+          // // success
+          // console.log('oldFile.response.url', oldFile.response.url)
+          // console.log('this.answerFiles', this.answerFiles)
         }
       }
       if (!newFile && oldFile) {
@@ -503,8 +498,7 @@ export default {
       input.multiple = true
       document.querySelector('body').appendChild(input)
       input.click()
-      input.onchange = (e) => {
-        console.log('e', e)
+      input.onchange = () => {
         this.$refs.answerImages.addInputFile(input).then(function () {
           document.querySelector('body').removeChild(input)
         })

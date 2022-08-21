@@ -1,6 +1,6 @@
 <template>
   <div
-  class="profile-card"
+    class="profile-card"
   >
     <q-img
       style="background-color: #e8e8e8;"
