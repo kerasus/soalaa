@@ -14,8 +14,26 @@ class PlayerSource extends Model {
       {
         key: 'label',
         default: ''
+      },
+      {
+        key: 'caption',
+        default: ''
+      },
+      {
+        key: 'link',
+        default: ''
+      },
+      {
+        key: 'res',
+        default: ''
+      },
+      {
+        key: 'selected',
+        default: false
       }
     ])
+    this.label = this.res
+    this.src = this.link
   }
 }
 
