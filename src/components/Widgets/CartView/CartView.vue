@@ -276,8 +276,45 @@ export default {
 @media screen and (max-width: 1024px) {
 }
 @media screen and (max-width: 600px) {
+  :deep(.q-btn .q-btn__content) {
+    margin: 0px !important;
+  }
+  .cart-items {
+    .cart-card {
+      .content {
+        margin-top: 18px;
+        padding-bottom: 25px;
+        .price-container {
+          .previous {
+            margin-right: 8px !important;
+          }
+        }
+      }
+      .image {
+        width: 110px !important;
+        height: 110px !important;
+        background-repeat: round !important;
+        border-radius: 0;
+      }
+      .actions {
+        .products-container {
+          margin-right: 0px !important;
+          .details {
+            margin-left: 0px !important;
+            margin-right: 16px !important;
+            font-weight: 400;
+            font-size: 12px;
+          }
+          .link {
+            font-weight: 400;
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
 }
-@media screen and (max-width: 350px) {
+@media screen and (min-width: 350px) and (max-width: 600px) {
   .cart-card {
     padding-bottom: 40px !important;
     .content {
@@ -294,8 +331,15 @@ export default {
         }
       }
       .price-container {
+        margin-right: 12px;
         .previous {
           margin-right: 13px !important;
+        }
+        .current {
+          font-size: 16px !important;
+        }
+        .toman {
+          font-size: 14px !important;
         }
       }
     }
