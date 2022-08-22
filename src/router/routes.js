@@ -450,12 +450,6 @@ const routes = [
     }
   },
   {
-    path: '/cart',
-    name: 'cart',
-    component: () => import('pages/cart.vue'),
-    meta: {}
-  },
-  {
     path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
     name: 'onlineQuiz.mbtiBartle',
     component: () => import('pages/User/exam/participate/MBTI_Bartle'),

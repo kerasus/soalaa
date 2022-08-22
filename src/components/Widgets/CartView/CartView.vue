@@ -1,42 +1,52 @@
 <template>
-  <div v-show="cartItems.length">
-    <div class="cart-count">سبدخرید شما (4 محصول)</div>
+  <div v-show="count !== 0">
+    <div class="cart-count">سبدخرید شما ({{count}} محصول)</div>
     <div class="cart-items-container">
-      <div class="cart-items" v-for="ci in cartItems" :key="ci">
+      <div class="cart-items"
+           v-for="ci in cartItems"
+           :key="ci">
         <q-card class="cart-card">
-          <div class="image"></div>
+          <div class="image">
+            <q-img :src="ci.product.photo"></q-img>
+          </div>
           <div class="content">
-            <div class="title">{{ ci.title }}</div>
+            <div class="title">{{ ci.product.title }}</div>
             <div class="desc-container">
               <div class="item">
                 <div class="icon-spacing icon-teacher"></div>
-                <div class="desc">{{ ci.desc.producer }}</div>
+                <div class="desc">{{ ci.product.attributes.info.teacher.join('، ') }}</div>
               </div>
               <div class="item">
                 <div class="icon-spacing icon-book"></div>
-                <div class="desc">{{ ci.desc.grade }}</div>
+                <div class="desc">رشته تحصیلی: {{ ci.product.attributes.info.major.join(' - ') }}</div>
               </div>
               <div class="item">
                 <div class="icon-spacing icon-menu-board"></div>
-                <div class="desc">{{ ci.desc.examTime }}</div>
+                <div class="desc">{{ ci.product.attributes.info.production_year.join('، ') }}</div>
               </div>
             </div>
             <div class="price-container">
-              <div class="discount">{{ ci.price.discount }}</div>
-              <div class="previous">{{ ci.price.previous }}</div>
-              <div class="current">{{ ci.price.current }}</div>
+              <div class="discount">{{ Math.floor(ci.price.discount/ ci.price.base * 100) }}%</div>
+              <div class="previous">{{ ci.price.base.toLocaleString() }}</div>
+              <div class="current">{{ ci.price.final.toLocaleString() }}</div>
               <div class="toman">تومان</div>
             </div>
           </div>
           <div class="actions">
-            <q-btn unelevated class="trash">
+            <q-btn unelevated
+                   class="trash"
+                   @click="removeItem(ci)">
               <div class="icon-trash"></div>
             </q-btn>
             <div class="products-container">
-              <q-btn unelevated>
+              <q-btn unelevated
+                     @click="goToDescPage(ci)">
                 <div class="link">{{ descLinkLabel }}</div>
               </q-btn>
-              <q-btn unelevated class="details-btn">
+              <q-btn unelevated
+                     class="details-btn"
+                     @click="descShow(ci)"
+              >
                 <div class="details">
                   <div class="icon-caret"></div>
                   <div>جزئیات محصول</div>
@@ -53,61 +63,21 @@
 <script>
 export default {
   name: 'cartView',
+  data() {
+    return {
+      cartItems: []
+    }
+  },
+  props: {
+    getData: {
+      type: Function
+    }
+  },
   created() {
-    // this.cartItems = [
-    //   {
-    //     title: 'آزمـون مرحله سوم سه‌آ',
-    //     desc: {
-    //       producer: 'گروه آموزشی آلاء',
-    //       grade: 'رشته تحصیلی: ریاضی - تجربی',
-    //       examTime: 'تاریخ آزمون : 23 مرداد'
-    //     },
-    //     price: {
-    //       discount: '20%',
-    //       previous: '970.000',
-    //       current: '970.000'
-    //     }
-    //   },
-    //   {
-    //     title: 'آزمـون مرحله سوم سه‌آ',
-    //     desc: {
-    //       producer: 'گروه آموزشی آلاء',
-    //       grade: 'رشته تحصیلی: ریاضی - تجربی',
-    //       examTime: 'تاریخ آزمون : 23 مرداد'
-    //     },
-    //     price: {
-    //       discount: '20%',
-    //       previous: '970.000',
-    //       current: '970.000'
-    //     }
-    //   },
-    //   {
-    //     title: 'آزمـون مرحله سوم سه‌آ',
-    //     desc: {
-    //       producer: 'گروه آموزشی آلاء',
-    //       grade: 'رشته تحصیلی: ریاضی - تجربی',
-    //       examTime: 'تاریخ آزمون : 23 مرداد'
-    //     },
-    //     price: {
-    //       discount: '20%',
-    //       previous: '970.000',
-    //       current: '970.000'
-    //     }
-    //   },
-    //   {
-    //     title: 'آزمـون مرحله سوم سه‌آ',
-    //     desc: {
-    //       producer: 'گروه آموزشی آلاء',
-    //       grade: 'رشته تحصیلی: ریاضی - تجربی',
-    //       examTime: 'تاریخ آزمون : 23 مرداد'
-    //     },
-    //     price: {
-    //       discount: '20%',
-    //       previous: '970.000',
-    //       current: '970.000'
-    //     }
-    //   }
-    // ]
+    this.loading = true
+  },
+  mounted() {
+    this.cartReview()
   },
   computed: {
     windowSize() {
@@ -119,6 +89,39 @@ export default {
       } else {
         return 'صفحه محصول'
       }
+    }
+  },
+  methods: {
+    cartReview() {
+      this.$store.commit('loading/loading', true)
+      this.$store.dispatch('Cart/reviewCart')
+        .then((response) => {
+          this.cartItems = []
+          this.count = response.data.data.count
+          if (this.count > 0) {
+            response.data.data.items.forEach(item => {
+              this.cartItems.push(...item.order_product)
+            })
+          }
+          this.$store.commit('loading/loading', false)
+        })
+    },
+    goToDescPage(ci) {
+      // TODO:
+      // do something with: ci.product.url.web
+      window.location.href = ci.product.url.web
+    },
+    descShow(ci) {
+      // TODO:
+      // do something with: ci.product.url.api
+      window.location.href = ci.product.url.api
+    },
+    removeItem(ci) {
+      this.$store.commit('loading/loading', true)
+
+      this.$store.dispatch('Cart/removeItemFromCart', ci.id).then(() => {
+        this.cartReview()
+      })
     }
   }
 }

@@ -25,11 +25,32 @@ export default {
                   {
                     widgets: [
                       {
+                        name: 'CartView'
+                      }
+                    ],
+                    options: {
+                      className: 'col-md-8 col-12'
+                    }
+                  },
+                  {
+                    widgets: [
+                      {
                         name: 'CartInvoice'
                       }
                     ],
                     options: {
-                      className: 'col-md-4 col-12'
+                      className: 'col-md-4 col-12 invoice-container'
+                    }
+                  },
+
+                  {
+                    widgets: [
+                      {
+                        name: 'CartEmpty'
+                      }
+                    ],
+                    options: {
+                      className: 'col-12'
                     }
                   }
                 ],
@@ -48,7 +69,7 @@ export default {
       options: []
     }
   },
-  created () {
+  created() {
     this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
     this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
   },
@@ -67,5 +88,8 @@ export default {
     width: 100% !important;
     margin-bottom: 72px;
   }
+}
+:deep(.invoice-container){
+margin-top: 22px;
 }
 </style>

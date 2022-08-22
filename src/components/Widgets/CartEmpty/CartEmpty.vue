@@ -1,5 +1,6 @@
 <template>
-  <div class="cart-container" v-if="cartItems.length === 0">
+  <div class="cart-container"
+       v-if="count === 0">
     <div class="cart-image"></div>
     <div class="title">سبد خرید شما خالی است!</div>
     <div class="back">بازگشت به فروشگاه</div>
@@ -10,7 +11,21 @@
 export default {
   name: 'CartEmpty',
   created() {
-    this.cartItems = []
+    this.cartReview()
+  },
+  data() {
+    return {
+      count: -1
+    }
+  },
+  methods: {
+    cartReview() {
+      this.$store.dispatch('Cart/reviewCart')
+        .then((response) => {
+          console.log(response.data.data.count)
+          this.count = response.data.data.count
+        })
+    }
   }
 }
 </script>
@@ -25,7 +40,7 @@ export default {
 .cart-container {
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: 80vh;
   justify-content: center;
   align-items: center;
   flex-direction: column;
