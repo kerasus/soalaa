@@ -25,43 +25,43 @@
         >
           <div
             :class="{
-            'question-number-in-list': true,
-            circle: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o',
-            cross: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x',
-            bookmark: getUserQuestionData(question.id) && getUserQuestionData(question.id).bookmarked
-          }"
+              'question-number-in-list': true,
+              circle: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o',
+              cross: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x',
+              bookmark: getUserQuestionData(question.id) && getUserQuestionData(question.id).bookmarked
+            }"
             @click="ClickQuestionNumber(question.id)"
           >
-          <span v-if="getUserQuestionData(question.id)">
-            {{ getQuestionNumberFromId(question.id) }}
-                                                                                                           <q-tooltip
-                                                                                                             v-if="getUserQuestionData(question.id)=== true"
-                                                                                                             anchor="bottom middle"
-                                                                                                           >
-              <span>
-              <q-icon
-                v-if="showDateOfAnsweredAt"
-                icon="mdi-calendar-check-outline"
-              />
-              <q-icon
-                icon="mdi-clock-check-outline"
-              />
-              {{ showAnsweredAt(getUserQuestionData(question.id).answered_at) }}
+            <span v-if="getUserQuestionData(question.id)">
+              {{ getQuestionNumberFromId(question.id) }}
+              <q-tooltip
+                v-if="getUserQuestionData(question.id)=== true"
+                anchor="bottom middle"
+              >
+                <span>
+                  <q-icon
+                    v-if="showDateOfAnsweredAt"
+                    icon="mdi-calendar-check-outline"
+                  />
+                  <q-icon
+                    icon="mdi-clock-check-outline"
+                  />
+                  {{ showAnsweredAt(getUserQuestionData(question.id).answered_at) }}
+                </span>
+              </q-tooltip>
             </span>
-            </q-tooltip>
-          </span>
             <span v-else>
-            {{ getQuestionNumberFromId(question.id) }}
-          </span>
+              {{ getQuestionNumberFromId(question.id) }}
+            </span>
           </div>
           <div
             v-for="choice in question.choices.list"
             :key="choice.id"
             :class="{
-            'choice-in-list': true,
-            active: getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id,
-            answer: choice.answer
-          }"
+              'choice-in-list': true,
+              active: getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id,
+              answer: choice.answer
+            }"
             @click="AnswerClicked({ questionId: question.id, choiceId: choice.id})"
           >
             <q-icon
@@ -79,7 +79,7 @@
           </div>
         </div>
       </div>
-      <q-resize-observer @resize="setBubbleSheetDimensions"/>
+      <q-resize-observer @resize="setBubbleSheetDimensions" />
     </div>
   </div>
 </template>

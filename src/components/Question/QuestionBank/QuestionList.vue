@@ -1,7 +1,10 @@
 <template>
-  <question-item v-if="questions.loading" :question="loadingQuestion"/>
+  <question-item v-if="questions.loading"
+                 :question="loadingQuestion" />
   <template v-else>
-    <question-item v-for="question in questions.list" :key="question.id" :question="question"/>
+    <question-item v-for="question in questions.list"
+                   :key="question.id"
+                   :question="question" />
   </template>
 </template>
 

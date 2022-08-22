@@ -5,6 +5,11 @@ export function drawer (state) {
 export function appBar (state) {
   return state.appBar
 }
+
+export function loginDialog (state) {
+  return state.loginDialog
+}
+
 export function confirmDialog (state) {
   return state.confirmDialog
 }

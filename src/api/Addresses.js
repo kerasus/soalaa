@@ -143,6 +143,7 @@ const API_ADDRESS = {
       setQueryParams('majors')
       setQueryParams('reference')
       setQueryParams('tags')
+      setQueryParams('level')
 
       if (typeof page !== 'undefined') {
         page = '&page=' + page
@@ -151,6 +152,8 @@ const API_ADDRESS = {
       }
 
       let queryParam = page
+      // const examQuesry = '&exam=0'
+      // queryParam += examQuesry
       Object.keys(filters).forEach(filterKey => {
         queryParam += filters[filterKey]
       })

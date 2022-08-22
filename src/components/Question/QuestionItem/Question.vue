@@ -5,13 +5,18 @@
     <q-skeleton type="text" width="50%" height="30px"/>
     <q-skeleton width="30%" height="200px" style="border-radius: 10px"/>
   </template> -->
-  <vue-katex :input="question.statement"/>
+  <vue-katex :input="question.statement" />
   <template v-if="question.loading">
-    <div class="choice-column col-3" v-for="item in 4" :key="item">
-      <div class="question-choice false" style="margin-bottom: 2px">
+    <div class="choice-column col-3"
+         v-for="item in 4"
+         :key="item">
+      <div class="question-choice false"
+           style="margin-bottom: 2px">
         {{ item }}
       </div>
-      <q-skeleton type="text" width="100px" height="25px"/>
+      <q-skeleton type="text"
+                  width="100px"
+                  height="25px" />
     </div>
   </template>
   <template v-else>
@@ -22,7 +27,8 @@
       :class="questionCol"
       :dir="isLtrQuestion()? 'ltr':''"
       v-for="(choice , index) in question.choices.list"
-      :choice="choice" :key="index">
+      :choice="choice"
+      :key="index">
     </QuestionChoice>
   </template>
 </template>

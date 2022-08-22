@@ -2,7 +2,8 @@
   <div class="question-details">
     <div class="box-title">مشخصات سوال</div>
     <div class="details-container-1 default-details-container row">
-      <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+      <div class="detail-box detail-box-first"
+           :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">نام آزمون</div>
         <q-select
           borderless
@@ -14,7 +15,8 @@
           :loading="exams.loading"
         />
       </div>
-      <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+      <div class="detail-box"
+           :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">درس</div>
         <q-select
           borderless
@@ -26,7 +28,8 @@
           :loading="lessons.loading"
         />
       </div>
-      <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+      <div class="detail-box"
+           :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">ترتیب</div>
         <q-input
           borderless
@@ -39,7 +42,8 @@
       <!--        <div class="detail-box-title">درجه سختی</div>-->
       <!--        <q-select borderless v-model="model" :options="options"/>-->
       <!--      </div>-->
-      <div class="detail-box detail-box-last-of-row-1" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+      <div class="detail-box detail-box-last-of-row-1"
+           :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <q-btn
           unelevated
           :loading="draftBtnLoading"
@@ -49,20 +53,30 @@
         />
       </div>
     </div>
-    <div v-if="exams && lessons.list.length" :key="question.exams.list.length">
-      <div v-for="(item, index) in question.exams.list" :key="index" class="flex row">
+    <div v-if="exams && lessons.list.length"
+         :key="question.exams.list.length">
+      <div v-for="(item, index) in question.exams.list"
+           :key="index"
+           class="flex row">
 
-        <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+        <div class="detail-box detail-box-first"
+             :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
           {{ item.exam.title }}
         </div>
-        <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+        <div class="detail-box detail-box-first"
+             :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
           {{ item.sub_category.title }}
         </div>
-        <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+        <div class="detail-box detail-box-last"
+             :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
           {{ item.order }}
         </div>
-        <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          <q-btn unelevated icon="mdi-delete" class="draft-btn default-detail-btn" @click="detach(item)" />
+        <div class="detail-box detail-box-last"
+             :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+          <q-btn unelevated
+                 icon="mdi-delete"
+                 class="draft-btn default-detail-btn"
+                 @click="detach(item)" />
         </div>
       </div>
     </div>

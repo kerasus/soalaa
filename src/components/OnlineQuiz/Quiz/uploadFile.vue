@@ -69,7 +69,8 @@
             :disable="item.descriptive_answers_booklet || item.loading.answer ? true :false"
             @update:model-value="addFiles (item.questionFile, item, 'answer')"
           >
-            <template v-if="item.answerFile" v-slot:append>
+            <template v-if="item.answerFile"
+                      v-slot:append>
               <q-icon
                 v-if="!item.loading.answer"
                 name="cancel"

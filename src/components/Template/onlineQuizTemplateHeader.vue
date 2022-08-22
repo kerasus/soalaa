@@ -34,7 +34,7 @@
         dense
         unelevated
       >
-        <online-quiz-top-menu/>
+        <online-quiz-top-menu />
       </q-btn-dropdown>
     </div>
   </div>

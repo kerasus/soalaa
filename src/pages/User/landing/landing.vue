@@ -2,8 +2,8 @@
   <div class="landing-page">
     <nav-bar />
     <landing-header  />
-    <why class="landing-width"/>
-    <features class="landing-width"/>
+    <why class="landing-width" />
+    <features class="landing-width" />
     <submit-table class="landing-width" />
     <exam-rules class="landing-width" />
     <faq class="landing-width" />
@@ -30,15 +30,13 @@ export default {
     examRules,
     faq
   },
-  mounted () {
+  created () {
     this.closeSidBarAndAppbar()
   },
   methods: {
     closeSidBarAndAppbar () {
-      setTimeout(() => {
-        this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
-        this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
-      }, 50)
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
+      this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
     }
   }
 }

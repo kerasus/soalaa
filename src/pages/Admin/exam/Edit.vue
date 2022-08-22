@@ -10,12 +10,12 @@
       :after-load-input-data="getOptions"
       :before-get-data="getCategories"
     >
-      <template #after-form-builder >
+      <template #after-form-builder>
         <q-card class="category-card">
           <q-card-section>
             <h6 class="category-header q-ma-md">لیست دفترچه ها</h6>
           </q-card-section>
-          <q-separator/>
+          <q-separator />
           <q-card-section class="flex">
             <div class="row bg-grey-3 add-category-box">
               <q-select
@@ -77,7 +77,7 @@
                   :value="category.id"
                   label="دفترچه"
                   :options="categoryOptions"
-                  option-value="categoryOptions"
+                  option-value="id"
                   option-label="title"
                   emit-value
                   map-options
@@ -135,7 +135,7 @@ export default {
       showRouteName: 'Admin.Exam.Show',
       options: null,
       inputs: [
-        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' },
+        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6', placeholder: ' ', filled: true },
         {
           type: 'Select',
           name: 'type_id',
@@ -146,8 +146,8 @@ export default {
           optionValue: 'id',
           optionLabel: 'value'
         },
-        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: ' زمان شروع', col: 'col-md-4' },
-        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: ' زمان پایان', col: 'col-md-4' },
+        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: '', col: 'col-md-4', placeholder: 'زمان شروع' },
+        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: '', col: 'col-md-4', placeholder: 'زمان پایان' },
         { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-md-4' },
         { type: 'Checkbox', name: 'enable', responseKey: 'data.enable', label: 'فعال', col: 'col-md-4' },
         { type: 'Checkbox', name: 'is_free', responseKey: 'data.is_free', label: 'رایگان', col: 'col-md-4' },
@@ -169,6 +169,7 @@ export default {
       loading: true
     })
     this.api += '/' + this.$route.params.id
+    this.getCategoryList()
   },
   methods: {
     getCategories (response, setNewInputData) {
@@ -178,6 +179,13 @@ export default {
       const responseCategories = response.data.categories
       const categoriesIndex = this.inputs.findIndex(item => item.name === 'categories')
       this.inputs[categoriesIndex].value = responseCategories
+    },
+    getCategoryList() {
+      this.$axios.get(API_ADDRESS.questionCategory.base)
+        .then((response) => {
+          this.categoryOptions = response.data.data
+        })
+        .catch(() => {})
     },
     getOptions () {
       this.$axios.get(API_ADDRESS.option.base)
@@ -203,6 +211,10 @@ export default {
     addCategory () {
       if (this.totalCategory) {
         return
+      }
+      if (this.category.title.id) {
+        this.category.id = this.category.title.id
+        this.category.title = this.category.title.title
       }
       this.inputs[this.examCategoriesIndex].value = this.inputs[this.examCategoriesIndex].value.concat(this.category)
       this.category = { title: '', id: '', order: 0, time: 0 }

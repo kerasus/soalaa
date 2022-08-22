@@ -12,18 +12,22 @@
         <!--        <progress-linear :active="loadingList" />-->
         <q-banner
           v-if="exams.list.length === 0 && !loadingList"
-          inline-actions rounded class="bg-blue text-white">
+          inline-actions
+          rounded
+          class="bg-blue text-white">
           <template v-slot:avatar>
-            <q-icon name="mdi-information" color="white"></q-icon>
+            <q-icon name="mdi-information"
+                    color="white"></q-icon>
           </template>
           آزمونی وجود ندارد
         </q-banner>
-        <div class="row" v-if="exams.list.length > 0 && !loadingList">
+        <div class="row"
+             v-if="exams.list.length > 0 && !loadingList">
           <div class="col">
             <div class="row table-header"
                  style="padding-bottom: 12px;"
             >
-              <div class="col col-1"/>
+              <div class="col col-1" />
               <div class="col col-3 text-center examList-title-text"
               >
                 عنوان آزمون
@@ -47,7 +51,7 @@
               >
                 عملیات
               </div>
-              <div class="col col-1"/>
+              <div class="col col-1" />
             </div>
             <div class="row exam-info-bar"
                  v-for="item in exams.list"
@@ -62,7 +66,7 @@
                   class="d-flex exam-list-sheet"
                 >
                   <div class="row table-row justify-center">
-                    <div class="col col-1 exam-list-empty-col"/>
+                    <div class="col col-1 exam-list-empty-col" />
                     <div class="col col-12 col-md-3 pr-7 justify-center text-center examList-content-text"
                     >
                       {{ item.title }}
@@ -138,11 +142,16 @@
                         unelevated
                         @click="getConfirmation(item.user_exam_id)"
                       >
-                        <q-icon name="isax:tick-circle" size="20px" style="margin-left: 3px;"/>
+                        <q-icon name="isax:tick-circle"
+                                size="20px"
+                                style="margin-left: 3px;" />
                         ثبت پاسخنامه ذخیره شده
                       </q-btn>
                       <template v-if="item.booklet_url">
-                        <q-btn class="exam-list-menu-btn exam-action-big-btn  exam-btn-text" unelevated label="لیست دفترچه ها" style="background: #71C5F4">
+                        <q-btn class="exam-list-menu-btn exam-action-big-btn  exam-btn-text"
+                               unelevated
+                               label="لیست دفترچه ها"
+                               style="background: #71C5F4">
                           <q-menu
                             fit
                             transition-show="flip-right"
@@ -158,7 +167,8 @@
                                   :key="'questions_booklet_url-'+1"
                                   class="exam-btn-text">
                                   <span class="exam-list-menu-title">
-                                    <q-icon name="isax:book-1" size="20px"/>
+                                    <q-icon name="isax:book-1"
+                                            size="20px" />
                                     {{ item.booklet_url[1].category_title }}
                                   </span>
                                 </q-item-section>
@@ -173,12 +183,13 @@
                                   class="exam-btn-text"
                                 >
                                   <span class="exam-list-menu-title">
-                                    <q-icon name="isax:note-2" size="20px"/>
-                                     پاسخ {{ item.booklet_url[1].category_title }}
+                                    <q-icon name="isax:note-2"
+                                            size="20px" />
+                                    پاسخ {{ item.booklet_url[1].category_title }}
                                   </span>
                                 </q-item-section>
                               </q-item>
-                              <q-separator/>
+                              <q-separator />
                               <q-item
                                 v-if="item.booklet_url[0]"
                                 clickable
@@ -189,7 +200,8 @@
                                   class="exam-btn-text"
                                 >
                                   <span class="exam-list-menu-title">
-                                    <q-icon name="isax:book-1" size="20px"/>
+                                    <q-icon name="isax:book-1"
+                                            size="20px" />
                                     {{ item.booklet_url[0].category_title }}
                                   </span>
                                 </q-item-section>
@@ -204,7 +216,8 @@
                                   class="exam-btn-text"
                                 >
                                   <span class="exam-list-menu-title">
-                                    <q-icon name="isax:note-2" size="20px"/>
+                                    <q-icon name="isax:note-2"
+                                            size="20px" />
                                     پاسخ {{ item.booklet_url[0].category_title }}
                                   </span>
                                 </q-item-section>
@@ -219,11 +232,13 @@
                         flat
                         disabled
                       >
-                        <q-icon name="isax:info-circle" size="20px" style="margin-left: 3px;"/>
+                        <q-icon name="isax:info-circle"
+                                size="20px"
+                                style="margin-left: 3px;" />
                         {{ item.holding_status }}
                       </q-btn>
                     </div>
-                    <div class="col col-1 exam-list-empty-col"/>
+                    <div class="col col-1 exam-list-empty-col" />
                   </div>
                 </div>
               </div>

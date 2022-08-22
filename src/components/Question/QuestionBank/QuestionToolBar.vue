@@ -15,12 +15,13 @@
               >
                 حذف انتخاب ها
               </q-btn>
-              <q-btn class="add-to-btn" flat>
+              <q-btn class="add-to-btn"
+                     flat>
                 <q-icon name="isax:add">
                 </q-icon>
                 <span>
-            افزودن به
-          </span>
+                  افزودن به
+                </span>
               </q-btn>
             </div>
             <div class="toolbar-checkbox">
@@ -62,20 +63,23 @@
             <div class="row">
               <div class="col-4 q-pt-sm q-pl-xs">
                 <div class="chart-titles">
-                  <q-badge class="titles-icon hard" rounded/>
+                  <q-badge class="titles-icon hard"
+                           rounded />
                   <div>سخت</div>
                 </div>
                 <div class="chart-titles">
-                  <q-badge class="titles-icon medium" rounded></q-badge>
+                  <q-badge class="titles-icon medium"
+                           rounded></q-badge>
                   <div>متوسط</div>
                 </div>
                 <div class="chart-titles">
-                  <q-badge class="titles-icon easy" rounded></q-badge>
+                  <q-badge class="titles-icon easy"
+                           rounded></q-badge>
                   <div>آسان</div>
                 </div>
               </div>
               <div class="question-highchart col-8 ">
-                <highcharts :options="chartOptions"/>
+                <highcharts :options="chartOptions" />
               </div>
             </div>
           </div>
@@ -103,7 +107,8 @@
       </q-card-section>
     </q-expansion-item>
   </q-card>
-  <q-page-sticky class="pageSticky lg-hide" position="bottom">
+  <q-page-sticky class="pageSticky lg-hide"
+                 position="bottom">
     <div class="shapes flex ">
       <div class="circle">
         <q-btn
@@ -141,12 +146,13 @@
             </q-btn>
           </div>
           <div class="add-to-btn-container">
-            <q-btn class="add-to-btn" flat>
+            <q-btn class="add-to-btn"
+                   flat>
               <q-icon name="isax:add">
               </q-icon>
               <span>
-            افزودن به
-          </span>
+                افزودن به
+              </span>
             </q-btn>
           </div>
         </div>
@@ -158,7 +164,7 @@
                 class="choices-checkbox"
                 label="انتخاب همه"
                 name="checkbox"
-                @click="selectAllQuestions"/>
+                @click="selectAllQuestions" />
             </div>
           </div>
           <div class="choices-number-container">
@@ -172,7 +178,8 @@
       </div>
     </div>
   </q-page-sticky>
-  <q-dialog class="dialogueCard" v-model="ToolbarDialog">
+  <q-dialog class="dialogueCard"
+            v-model="ToolbarDialog">
     <q-card class="dialogueCardContainer">
       <div class="dialogHeader">
         <div class="dialogTitle"> سوالات انتخاب شده:</div>
@@ -199,20 +206,23 @@
       <div class="dialogChart">
         <div class="dialogChartTitles">
           <div class="chart-titles">
-            <q-badge class="titles-icon hard" rounded/>
+            <q-badge class="titles-icon hard"
+                     rounded />
             <div>سخت</div>
           </div>
           <div class="chart-titles">
-            <q-badge class="titles-icon medium" rounded></q-badge>
+            <q-badge class="titles-icon medium"
+                     rounded></q-badge>
             <div>متوسط</div>
           </div>
           <div class="chart-titles">
-            <q-badge class="titles-icon easy" rounded></q-badge>
+            <q-badge class="titles-icon easy"
+                     rounded></q-badge>
             <div>آسان</div>
           </div>
         </div>
         <div class="dialogHighchart">
-          <highcharts :options="chartOptions"/>
+          <highcharts :options="chartOptions" />
         </div>
       </div>
     </q-card>
