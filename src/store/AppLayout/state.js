@@ -1,6 +1,7 @@
 export default function () {
   return {
     drawer: false,
+    loginDialog: false,
     confirmDialog: {
       show: false,
       message: '',
