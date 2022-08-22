@@ -33,7 +33,7 @@
           </q-btn>
           <div class="products-container">
             <q-btn unelevated>
-              <div class="link">صفحه محصول</div>
+              <div class="link">{{ descLinkLabel }}</div>
             </q-btn>
             <q-btn unelevated class="details-btn">
               <div class="details">
@@ -106,6 +106,18 @@ export default {
         }
       }
     ]
+  },
+  computed: {
+    windowSize() {
+      return this.$store.getters['AppLayout/windowSize']
+    },
+    descLinkLabel() {
+      if (this.windowSize.x > 1024) {
+        return 'رفتن به صفحه محصول'
+      } else {
+        return 'صفحه محصول'
+      }
+    }
   }
 }
 </script>
@@ -269,24 +281,54 @@ export default {
   height: 14px;
 }
 
-@media screen and (max-width: 1920px) {
+@media screen and (min-width: 1920px) {
 }
-@media screen and (max-width: 1440px) {
+@media screen and (min-width: 1440px) {
 }
-@media screen and (max-width: 1024px) {
+@media screen and (min-width: 1024px) and (max-width: 1439px) {
+  .cart-items-container {
+    .cart-items {
+      .cart-card {
+        .image {
+          margin: 16px !important;
+        }
+        .actions {
+          .products-container {
+            margin-bottom: 10px !important;
+            .details {
+              margin-left: 5px !important;
+            }
+          }
+        }
+        .content {
+          .desc-container {
+            .item {
+              margin-top: 9px !important;
+            }
+          }
+        }
+      }
+    }
+  }
 }
-@media screen and (max-width: 600px) {
+@media screen and (min-width: 600px) and (max-width: 1023px) {
   :deep(.q-btn .q-btn__content) {
     margin: 0px !important;
   }
   .cart-items {
     .cart-card {
       .content {
-        margin-top: 18px;
+        margin-top: 20px;
         padding-bottom: 25px;
         .price-container {
           .previous {
             margin-right: 8px !important;
+          }
+        }
+        .desc-container {
+          margin-top: 8px !important;
+          .item {
+            margin-top: 7px !important;
           }
         }
       }
@@ -314,10 +356,11 @@ export default {
     }
   }
 }
-@media screen and (min-width: 350px) and (max-width: 600px) {
+@media screen and (min-width: 350px) and (max-width: 599px) {
   .cart-card {
     padding-bottom: 40px !important;
     .content {
+      margin-top: 0px !important;
       padding-top: 49px !important;
       .title {
         position: absolute;
@@ -331,7 +374,6 @@ export default {
         }
       }
       .price-container {
-        margin-right: 12px;
         .previous {
           margin-right: 13px !important;
         }
@@ -348,7 +390,7 @@ export default {
         margin-bottom: 5px !important;
         margin-right: 0px !important;
         .details-btn {
-          margin-left: 20px !important;
+          margin-left: 25px !important;
         }
       }
       .details {
