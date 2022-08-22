@@ -420,13 +420,14 @@ const routes = [
             component: () => import('pages/User/landing/landing')
           }
         ]
+      },
+      {
+        path: '/cart',
+        name: 'cart',
+        component: () => import('pages/Cart/Cart')
       }
+
     ]
-  },
-  {
-    path: '/cart',
-    name: 'cart',
-    component: () => import('pages/Cart/Cart')
   },
   {
     path: '/admin/exam/:quizId/:lessonId/print',
