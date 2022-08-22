@@ -38,74 +38,83 @@
           {{ activeTab.des }}
         </div>
       </div>
-      <div class="table-box">
+      <div class="table-box-container ">
         <!--        <table-component :table-data="data"/>-->
-        <table class="table">
-          <tr>
-            <th colspan="4"
-                class="top-of-table">
-              <div class="drop-down-btn">
-                <q-select
-                  v-model="selectedGrade"
-                  borderless
-                  option-label="title"
-                  dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
-                  hide-bottom-space
-                  dense
-                  :options="gradeOptions"
-                  class="select-1 dropdown-btn q-mr-md">
-                  <template v-slot:selected>
-                    <span class="custom-label-prefix"> مقطع تحصیلی: </span>
-                    {{ selectedGrade.title }}
-                  </template>
-                </q-select>
-                <q-select v-model="selectedMajor"
-                          borderless
-                          dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
-                          hide-bottom-space
-                          dense
-                          :options="majorOptions"
-                          option-label="title"
-                          class="select-2 dropdown-btn"
-                >
-                  <template v-slot:selected>
-                    <span class="custom-label-prefix"> رشته تحصیلی: </span>
-                    {{ selectedMajor.title }}
-                  </template>
-                </q-select>
-              </div>
-            </th>
-          </tr>
-          <tr>
-            <th class='table-title'>شماره</th>
-            <th class='table-title'>تاریخ</th>
-            <th class='table-title'>عنوان</th>
-            <th class='table-title'>ثبت‌نام کامل</th>
-          </tr>
-          <tr v-for="item in dataTable"
-              :key="item">
-            <td class="number custom-border">{{ item.number }}</td>
-            <td class="date custom-border">{{ item.date }}</td>
-            <td class="title custom-border">{{ item.title }}</td>
-            <td class="submitStatus custom-border">
-              <div class="flex items-center justify-center"
-                   v-if="item.submitStatus">
-                <svg width="21"
-                     height="20"
-                     viewBox="0 0 21 20"
-                     fill="none"
-                     xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M10.5 20C16.0228 20 20.5 15.5228 20.5 10C20.5 4.47715 16.0228 0 10.5 0C4.97715 0 0.5 4.47715 0.5 10C0.5 15.5228 4.97715 20 10.5 20ZM16.0588 7.50027C16.3351 7.19167 16.3089 6.71752 16.0003 6.44123C15.6917 6.16493 15.2175 6.19113 14.9412 6.49973L11.5721 10.2629C10.8894 11.0254 10.4296 11.5363 10.0365 11.8667C9.66207 12.1814 9.44213 12.25 9.25 12.25C9.05787 12.25 8.83794 12.1814 8.46348 11.8667C8.0704 11.5363 7.61064 11.0254 6.92794 10.2629L6.05877 9.29209C5.78248 8.98349 5.30833 8.9573 4.99973 9.23359C4.69113 9.50988 4.66493 9.98403 4.94123 10.2926L5.84753 11.3049C6.48338 12.0152 7.01374 12.6076 7.49835 13.0149C8.01099 13.4458 8.56393 13.75 9.25 13.75C9.93607 13.75 10.489 13.4458 11.0016 13.0149C11.4863 12.6076 12.0166 12.0152 12.6525 11.3049L16.0588 7.50027Z"
-                        fill="#2DBB33" />
-                </svg>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="3"
-                class="table-footer-pic-box">
+        <div class="table-parent bg-blue-2 q-pt-sm">
+          <div class="drop-down-btn ">
+            <q-select
+              v-model="selectedGrade"
+              borderless
+              option-label="title"
+              dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
+              hide-bottom-space
+              dense
+              :options="gradeOptions"
+              class="select-1 dropdown-btn first q-mr-md">
+              <template v-slot:selected>
+                <span class="custom-label-prefix"> مقطع تحصیلی: </span>
+                {{ selectedGrade.title }}
+              </template>
+            </q-select>
+            <q-select v-model="selectedMajor"
+                      borderless
+                      dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
+                      hide-bottom-space
+                      dense
+                      :options="majorOptions"
+                      option-label="title"
+                      class="select-2 dropdown-btn"
+            >
+              <template v-slot:selected>
+                <span class="custom-label-prefix"> رشته تحصیلی: </span>
+                {{ selectedMajor.title }}
+              </template>
+            </q-select>
+          </div>
+          <table class="table">
+            <tr>
+              <th class='table-title'>شماره</th>
+              <th class='table-title'>تاریخ</th>
+              <th class='table-title'>عنوان</th>
+              <th v-if="selectiveRegister"
+                  class='table-title'>ثبت‌نام انتخابی</th>
+              <th class='table-title'
+                  :class="selectiveRegister? '':''">ثبت‌نام کامل</th>
+            </tr>
+            <tr v-for="item in dataTable"
+                :key="item">
+              <td class="number custom-border">{{ item.number }}</td>
+              <td class="date custom-border">{{ item.date }}</td>
+              <td class="title custom-border">{{ item.title }}</td>
+              <td v-if="selectiveRegister"
+                  class="submitStatus-selective-mode custom-border">
+                <div class="flex items-center justify-center"
+                     v-if="item.submitStatus">
+                  <div class="empty-circle"></div>
+
+                </div>
+              </td>
+              <td class="custom-border"
+                  :class="selectiveRegister ? 'submitStatus-selective-mode ': 'submitStatus' ">
+                <div class="flex items-center justify-center"
+                     v-if="item.submitStatus">
+                  <svg width="21"
+                       height="20"
+                       viewBox="0 0 21 20"
+                       fill="none"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M10.5 20C16.0228 20 20.5 15.5228 20.5 10C20.5 4.47715 16.0228 0 10.5 0C4.97715 0 0.5 4.47715 0.5 10C0.5 15.5228 4.97715 20 10.5 20ZM16.0588 7.50027C16.3351 7.19167 16.3089 6.71752 16.0003 6.44123C15.6917 6.16493 15.2175 6.19113 14.9412 6.49973L11.5721 10.2629C10.8894 11.0254 10.4296 11.5363 10.0365 11.8667C9.66207 12.1814 9.44213 12.25 9.25 12.25C9.05787 12.25 8.83794 12.1814 8.46348 11.8667C8.0704 11.5363 7.61064 11.0254 6.92794 10.2629L6.05877 9.29209C5.78248 8.98349 5.30833 8.9573 4.99973 9.23359C4.69113 9.50988 4.66493 9.98403 4.94123 10.2926L5.84753 11.3049C6.48338 12.0152 7.01374 12.6076 7.49835 13.0149C8.01099 13.4458 8.56393 13.75 9.25 13.75C9.93607 13.75 10.489 13.4458 11.0016 13.0149C11.4863 12.6076 12.0166 12.0152 12.6525 11.3049L16.0588 7.50027Z"
+                          fill="#2DBB33" />
+                  </svg>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <div class="bottom-of flex">
+            <div
+              class="table-footer-pic-box">
               <div class="table-footer-container">
                 <div class="pic-container">
                   <q-img src="https://nodes.alaatv.com/upload/landing/3a/13.png"
@@ -135,9 +144,9 @@
                   </q-btn>
                 </div>
               </div>
-            </td>
-            <td colspan="1"
-                class="price-submit-box">
+            </div>
+            <div
+              class="price-submit-box">
               <div class="price-submit-in-footer">
                 <div class="price-box">
                   <div>
@@ -170,14 +179,12 @@
                   </q-btn>
                 </div>
               </div>
-            </td>
-          </tr>
-        </table>
+            </div>
+          </div>
+        </div>
         <div>
-
         </div>
       </div>
-
     </div>
     <q-resize-observer @resize="onResize" />
   </div>
@@ -193,6 +200,7 @@ export default {
 
   data: () => ({
     data: [],
+    selectiveRegister: true,
     activeTab: '',
     exams: [
       {
@@ -274,7 +282,8 @@ export default {
   },
   computed: {
     dataTable() {
-      return this.data.filter(item => (item.selectedGradeId === this.selectedGrade.id && item.activeTabId === this.activeTab.id && item.selectedMajorId === this.selectedMajor.id))
+      // return this.data.filter(item => (item.selectedGradeId === this.selectedGrade.id && item.activeTabId === this.activeTab.id && item.selectedMajorId === this.selectedMajor.id))
+      return this.data.filter(item => (item.selectedGradeId === 2 && item.activeTabId === 2 && item.selectedMajorId === 2))
     }
   },
   methods: {
@@ -358,256 +367,273 @@ export default {
         margin: 0;
       }
     }
-    .table-box{
+    .table-box-container{
       padding: 0 24px 24px 24px;
-      .table {
-        width: 100%;
-        background: #fafafa;
-        color: #232323 !important;
-        border-width: 2px;
-        border-style: hidden;
-        box-shadow: 0 0 0 2px #DBDBDB;
-        border-collapse: collapse;
-        border-radius: 22px;
-        td {
-          padding: 8px 0;
-          background: #FAFAFA;
-          text-align: center;
-          font-weight: 500;
-          font-size: 14px;
-          line-height: 24px;
+      .table-parent{
+        border: 2px solid red;
+        border-radius: 24px;
+        .drop-down-btn {
+          display: flex;
+          border-bottom: none;
+          padding: 16px;
+
+          .dropdown-btn {
+
+            &.first{
+              margin-bottom: 15px;
+            }
+            &:deep(.q-icon ) {
+              width: 15px;
+              height: 10px;
+            }
+
+            &:deep(.q-field__control) {
+              background: #E9E9E9;
+              border-radius: 24px;
+            }
+
+            &:deep(.q-field__native ) {
+              padding: 0 12.5px;
+            }
+
+            &:deep(.q-field__append ) {
+              padding-right: 20px;
+            }
+
+            .custom-label-prefix {
+              font-style: normal;
+              font-weight: 700;
+              font-size: 16px;
+              line-height: 24px;
+              color: #232323;
+            }
+          }
+
+          .select-1 {
+            &:deep(.q-field__inner) {
+              width: 231px;
+            }
+          }
+
+          .select-2 {
+            &:deep(.q-field__inner) {
+              width: 173px;
+            }
+          }
         }
+        .table-footer-pic-box {
+          width: 701px;
+          background: #FFF2CB;
+          border-radius: 0 0 0 22px;
+          padding: 0;
+          border-left: 1px solid #DBDBDB;
+          border-left: 1px solid;
 
-        th {
-          padding-top: 8px;
+          .table-footer-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            height: 100%;
+
+            .pic-container {
+              width: 200px;
+              align-self: end;
+
+              .img {
+                width: 100%;
+                border-radius: 0 0 0 22px;
+
+              }
+
+            }
+
+            .download-box {
+              align-self: center;
+
+              .text-style {
+                font-style: normal;
+                font-weight: 700;
+                font-size: 18px;
+                line-height: 24px;
+                text-align: center;
+                color: #232323;
+                margin-bottom: 16px;
+              }
+
+              .download-btn {
+                width: 150px;
+                height: 40px;
+                background: #FFF2CB;
+                border: 2px solid #2A2A2A;
+                border-radius: 24px;
+              }
+
+            }
+          }
         }
+        .price-submit-box {
+          padding: 0;
+          border-radius: 22px;
 
-        tr {
-
-          .top-of-table {
-            padding: 0;
-            .drop-down-btn {
+          .price-submit-in-footer {
+            width: 356px;
+            .price-box {
               display: flex;
-              border-bottom: none;
-              padding: 16px;
+              justify-content: center;
+              align-items: center;
+              height: 75px;
+              border-bottom: 1px solid #DBDBDB;
+              background: #F7F7F7;
 
-              .dropdown-btn {
-                &:deep(.q-icon ) {
-                  width: 15px;
-                  height: 10px;
+              .single-price {
+                font-weight: 500;
+                font-size: 11px;
+                line-height: 16px;
+                font-style: normal;
+                padding-bottom: 8px;
+              }
+
+              .price {
+                font-style: normal;
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 16px;
+              }
+            }
+
+            .submit-box {
+              padding-top: 12px;
+              height: 163px;
+              width: 100%;
+              text-align: center;
+
+              .exam-price {
+                font-style: normal;
+                font-weight: 500;
+                font-size: 12px;
+                line-height: 16px;
+                color: #232323;
+                margin-bottom: 12px;
+              }
+
+              .exam-price-box {
+                margin-bottom: 7px;
+
+                .discount-tag {
+                  padding: 4px 8px;
+                  color: #DB1F1F;
+                  background: #FFDEDE;
+                  border-radius: 8px;
+                  margin-right: 4px;
                 }
 
-                &:deep(.q-field__control) {
-                  background: #E9E9E9;
-                  border-radius: 24px;
-                }
-
-                &:deep(.q-field__native ) {
-                  padding: 0 12.5px;
-                }
-
-                &:deep(.q-field__append ) {
-                  padding-right: 20px;
-                }
-
-                .custom-label-prefix {
+                .main-price {
                   font-style: normal;
                   font-weight: 700;
                   font-size: 16px;
-                  line-height: 24px;
-                  color: #232323;
+                  line-height: 16px;
+                  text-decoration-line: line-through;
+                  color: #DB1F1F;
                 }
               }
 
-              .select-1 {
-                &:deep(.q-field__inner) {
-                  width: 231px;
-                }
+              .final-price-box {
+                font-style: normal;
+                font-weight: 900;
+                font-size: 20px;
+                line-height: 16px;
+                color: #232323;
+                margin-bottom: 12px;
               }
 
-              .select-2 {
-                &:deep(.q-field__inner) {
-                  width: 173px;
+              .sub-btn {
+                width: 324px;
+                height: 48px;
+                background: #FFBD07;
+                border-radius: 24px;
+
+                .sub-btn-text {
+                  font-style: normal;
+                  font-weight: 700;
+                  font-size: 16px;
+                  line-height: 16px;
+                  color: #2B2B2B;
                 }
               }
             }
           }
-
-          .table-title {
-            font-style: normal;
-            font-weight: 700;
-            font-size: 16px;
+        }
+        .table {
+          width: 100%;
+          background: #fafafa;
+          color: #232323 !important;
+          border-width: 2px;
+          border-style: hidden;
+          border-collapse: collapse;
+          td {
+            padding: 8px 0;
+            background: #FAFAFA;
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
             line-height: 24px;
-            color: #232323;
-            border-top: 1px solid #DBDBDB;
-            border-left: 1px solid #DBDBDB;
           }
 
-          .custom-border {
-            border-bottom: 1px solid #DBDBDB;
-            border-left: 1px solid #DBDBDB;
+          th {
+            padding-top: 8px;
           }
 
-          .number {
-            width: 97px;
+          tr {
 
-          }
+            .top-of-table {
+              padding: 0;
+            }
 
-          .date {
-            width: 95px;
-          }
+            .table-title {
+              font-style: normal;
+              font-weight: 700;
+              font-size: 16px;
+              line-height: 24px;
+              color: #232323;
+              border-top: 1px solid #DBDBDB;
+              border-left: 1px solid #DBDBDB;
+            }
 
-          .title {
-            width: 509px;
-          }
+            .custom-border {
+              border-bottom: 1px solid #DBDBDB;
+              border-left: 1px solid #DBDBDB;
+            }
 
-          .submitStatus {
-            width: 357px;
-          }
+            .number {
+              width: 97px;
 
-          .table-footer-pic-box {
-            height: 235px;
-            background: #FFF2CB;
-            border-radius: 0 0 0 22px;
-            padding: 0;
-            border-left: 1px solid #DBDBDB;
-            border-left: 1px solid;
+            }
 
-            .table-footer-container {
-              display: grid;
-              grid-template-columns: 1fr 2fr;
-              height: 100%;
+            .date {
+              width: 95px;
+            }
 
-              .pic-container {
-                width: 200px;
-                align-self: end;
+            .title {
+              width: 509px;
+            }
 
-                .img {
-                  width: 100%;
-                  border-radius: 0 0 0 22px;
+            .submitStatus {
+              width: 357px;
+            }
 
-                }
-
-              }
-
-              .download-box {
-                align-self: center;
-
-                .text-style {
-                  font-style: normal;
-                  font-weight: 700;
-                  font-size: 18px;
-                  line-height: 24px;
-                  text-align: center;
-                  color: #232323;
-                  margin-bottom: 16px;
-                }
-
-                .download-btn {
-                  width: 150px;
-                  height: 40px;
-                  background: #FFF2CB;
-                  border: 2px solid #2A2A2A;
-                  border-radius: 24px;
-                }
-
+            .submitStatus-selective-mode{
+              width: 180px;
+              .empty-circle{
+                border-radius: 24px;
+                min-width: 21.5px;
+                min-height: 21.5px;
+                border: 2px solid #232323;
+                cursor: pointer;
               }
             }
           }
-
-          .price-submit-box {
-            padding: 0;
-            border-radius: 22px;
-
-            .price-submit-in-footer {
-
-              .price-box {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 75px;
-                border-bottom: 1px solid #DBDBDB;
-                background: #F7F7F7;
-
-                .single-price {
-                  font-weight: 500;
-                  font-size: 11px;
-                  line-height: 16px;
-                  font-style: normal;
-                  padding-bottom: 8px;
-                }
-
-                .price {
-                  font-style: normal;
-                  font-weight: 700;
-                  font-size: 16px;
-                  line-height: 16px;
-                }
-              }
-
-              .submit-box {
-                padding-top: 12px;
-                height: 163px;
-
-                .exam-price {
-                  font-style: normal;
-                  font-weight: 500;
-                  font-size: 12px;
-                  line-height: 16px;
-                  color: #232323;
-                  margin-bottom: 12px;
-                }
-
-                .exam-price-box {
-                  margin-bottom: 7px;
-
-                  .discount-tag {
-                    padding: 4px 8px;
-                    color: #DB1F1F;
-                    background: #FFDEDE;
-                    border-radius: 8px;
-                    margin-right: 4px;
-                  }
-
-                  .main-price {
-                    font-style: normal;
-                    font-weight: 700;
-                    font-size: 16px;
-                    line-height: 16px;
-                    text-decoration-line: line-through;
-                    color: #DB1F1F;
-                  }
-                }
-
-                .final-price-box {
-                  font-style: normal;
-                  font-weight: 900;
-                  font-size: 20px;
-                  line-height: 16px;
-                  color: #232323;
-                  margin-bottom: 12px;
-                }
-
-                .sub-btn {
-                  width: 324px;
-                  height: 48px;
-                  background: #FFBD07;
-                  border-radius: 24px;
-
-                  .sub-btn-text {
-                    font-style: normal;
-                    font-weight: 700;
-                    font-size: 16px;
-                    line-height: 16px;
-                    color: #2B2B2B;
-                  }
-                }
-              }
-            }
-          }
-
         }
       }
+
     }
   }
 }
@@ -638,6 +664,10 @@ export default {
           .submitStatus {
             width: 297px;
           }
+          .submitStatus-selective-mode{
+            width: 180px;
+
+          }
         }
       }
     }
@@ -652,7 +682,7 @@ export default {
         font-size: 14px;
         line-height: 20px;
       }
-      .table-box{
+      .table-box-container{
         .table {
           width: 100%;
 
@@ -670,6 +700,9 @@ export default {
 
             .submitStatus {
               width: 177px;
+            }
+            .submitStatus-selective-mode{
+              width: 121px;
             }
             .table-footer-pic-box {
               height: 184px;
@@ -804,7 +837,7 @@ export default {
         display: flex;
       }
 
-      .table-box{
+      .table-box-container{
         padding: 0;
         .table {
           width: 100%;
@@ -825,6 +858,9 @@ export default {
             .submitStatus {
               width: 181px;
             }
+            .submitStatus-selective-mode{
+              width: 108px;
+            }
           }
         }
       }
@@ -839,6 +875,252 @@ export default {
     padding-bottom: 40px;
     .table-section-title {
       font-size: 20px;
+    }
+    .submit-table {
+      padding: 0;
+      .table-description {
+        padding: 0;
+        line-height: 18px;
+      }
+      .tabs {
+        display: none;
+      }
+      .q-select-mode-tabs{
+        display: block;
+        margin-bottom: 16px;
+        &:deep(.q-icon ) {
+          width: 15px;
+          height: 10px;
+        }
+        &:deep(.q-field__native ) {
+          padding: 0 12.5px;
+          font-weight: 900;
+          font-size: 14px;
+          line-height: 24px;
+          color: #2B2B2B;
+        }
+        &:deep(.q-field__control) {
+          background: #FFBD07;
+          border-radius: 24px;
+          border: 1px solid black;
+        }
+        &:deep(.q-field__append ) {
+          padding-right: 20px;
+        }
+      }
+      .drop-down-btn {
+        display: flex;
+
+      }
+
+      .table-box-container{
+        padding: 0;
+        .table-parent{
+          .drop-down-btn {
+            flex-direction: column;
+            .dropdown-btn {
+              width: 100%;
+              &:deep(.q-icon ) {
+                width: 9px;
+                height: 4px;
+              }
+
+              &:deep(.q-field__native ) {
+                padding: 0 12.5px;
+              }
+
+              &:deep(.q-field__append ) {
+                padding-right: 12px;
+              }
+
+              .custom-label-prefix {
+                font-weight: 700;
+                font-size: 12px;
+                line-height: 24px;
+              }
+            }
+
+            .select-1 {
+              &:deep(.q-field__inner) {
+                width: 231px;
+              }
+            }
+
+            .select-2 {
+              &:deep(.q-field__inner) {
+                width: 173px;
+              }
+            }
+          }
+          .table-footer-pic-box {
+            order:2;
+            width: 100%;
+            .table-footer-container {
+              display: grid;
+              grid-template-columns: 1fr 2fr;
+              height: 100%;
+
+              .pic-container {
+                width: 100px;
+              }
+
+              .download-box {
+                align-self: center;
+
+                .text-style {
+                  display: none;
+                }
+
+                .download-btn {
+                  width: 130px;
+                  height: 32px;
+                  background: #FFF2CB;
+                  border-width: 1px;
+                  span{
+                    font-size: 12px;
+                  }
+                }
+
+              }
+            }
+          }
+          .price-submit-box {
+            order:1;
+            padding: 0;
+            border-radius: 22px;
+
+            .price-submit-in-footer {
+              width: 356px;
+              .price-box {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 75px;
+                border-bottom: 1px solid #DBDBDB;
+                background: #F7F7F7;
+
+                .single-price {
+                  font-weight: 500;
+                  font-size: 11px;
+                  line-height: 16px;
+                  font-style: normal;
+                  padding-bottom: 8px;
+                }
+
+                .price {
+                  font-style: normal;
+                  font-weight: 700;
+                  font-size: 16px;
+                  line-height: 16px;
+                }
+              }
+
+              .submit-box {
+                padding-top: 12px;
+                height: 163px;
+                width: 100%;
+                text-align: center;
+
+                .exam-price {
+                  font-style: normal;
+                  font-weight: 500;
+                  font-size: 12px;
+                  line-height: 16px;
+                  color: #232323;
+                  margin-bottom: 12px;
+                }
+
+                .exam-price-box {
+                  margin-bottom: 7px;
+
+                  .discount-tag {
+                    padding: 4px 8px;
+                    color: #DB1F1F;
+                    background: #FFDEDE;
+                    border-radius: 8px;
+                    margin-right: 4px;
+                  }
+
+                  .main-price {
+                    font-style: normal;
+                    font-weight: 700;
+                    font-size: 16px;
+                    line-height: 16px;
+                    text-decoration-line: line-through;
+                    color: #DB1F1F;
+                  }
+                }
+
+                .final-price-box {
+                  font-style: normal;
+                  font-weight: 900;
+                  font-size: 20px;
+                  line-height: 16px;
+                  color: #232323;
+                  margin-bottom: 12px;
+                }
+
+                .sub-btn {
+                  width: 324px;
+                  height: 48px;
+                  background: #FFBD07;
+                  border-radius: 24px;
+
+                  .sub-btn-text {
+                    font-style: normal;
+                    font-weight: 700;
+                    font-size: 16px;
+                    line-height: 16px;
+                    color: #2B2B2B;
+                  }
+                }
+              }
+            }
+          }
+          .table {
+            width: 100%;
+            td{
+              font-style: normal;
+              font-weight: 500;
+              font-size: 8px;
+              line-height: 24px;
+            }
+
+            tr {
+              .table-title {
+                font-weight: 700;
+                font-size: 8px;
+                line-height: 24px;
+              }
+              .number {
+                width: 32px;
+              }
+
+              .date {
+                width: 34px;
+              }
+
+              .title {
+                width: 93px;
+              }
+
+              .submitStatus {
+                width: 129px;
+              }
+              .submitStatus-selective-mode{
+                width: 65px;
+                .empty-circle{
+                  min-width: 14.5px;
+                  min-height: 14.5px;
+                  border-width: 1px;
+                 }
+              }
+            }
+          }
+        }
+
+      }
+
     }
   }
 
