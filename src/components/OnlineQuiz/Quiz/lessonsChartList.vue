@@ -17,57 +17,61 @@
       <q-markup-table class="tableSize">
         <template v-slot:default>
           <thead>
-          <tr>
-            <th class="text-left">
-              عنوان
-            </th>
-            <th class="text-left">
-              عملیات
-            </th>
-          </tr>
+            <tr>
+              <th class="text-left">
+                عنوان
+              </th>
+              <th class="text-left">
+                عملیات
+              </th>
+            </tr>
           </thead>
           <tbody>
-          <tr
-            v-for="item in lessonsList.list"
-            :key="item.id"
-          >
-            <td>{{ item.title }}</td>
-            <td class="actionsColumn">
-              <q-btn
-                v-if="item.permissions.view"
-                class="q-mx-sm"
-                size="12px"
-                round
-                dark-percentage
-                @click="redirect(item)"
-                color="green">
-                <q-icon
-                  name="mdi-notebook-outline"
-                  size="sm"
-                />
-                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                  <span class="smallFontSize">مشاهده سوالات دروس</span>
-                </q-tooltip>
-              </q-btn>
-              <q-btn
-                v-if="item.permissions.view"
-                class="q-mx-sm"
-                size="12px"
-                round
-                dark-percentage
-                color="blue"
-                @click="redirect(item)"
-              >
-                <q-icon
-                  name="mdi-video"
-                  size="sm"
-                />
-                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                  <span class="smallFontSize">ثبت ویدئو تحلیل</span>
-                </q-tooltip>
-              </q-btn>
-            </td>
-          </tr>
+            <tr
+              v-for="item in lessonsList.list"
+              :key="item.id"
+            >
+              <td>{{ item.title }}</td>
+              <td class="actionsColumn">
+                <q-btn
+                  v-if="item.permissions.view"
+                  class="q-mx-sm"
+                  size="12px"
+                  round
+                  dark-percentage
+                  @click="redirect(item)"
+                  color="green">
+                  <q-icon
+                    name="mdi-notebook-outline"
+                    size="sm"
+                  />
+                  <q-tooltip anchor="top middle"
+                             self="bottom middle"
+                             :offset="[10, 10]">
+                    <span class="smallFontSize">مشاهده سوالات دروس</span>
+                  </q-tooltip>
+                </q-btn>
+                <q-btn
+                  v-if="item.permissions.view"
+                  class="q-mx-sm"
+                  size="12px"
+                  round
+                  dark-percentage
+                  color="blue"
+                  @click="redirect(item)"
+                >
+                  <q-icon
+                    name="mdi-video"
+                    size="sm"
+                  />
+                  <q-tooltip anchor="top middle"
+                             self="bottom middle"
+                             :offset="[10, 10]">
+                    <span class="smallFontSize">ثبت ویدئو تحلیل</span>
+                  </q-tooltip>
+                </q-btn>
+              </td>
+            </tr>
           </tbody>
         </template>
       </q-markup-table>
@@ -110,7 +114,6 @@ export default {
       return axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.quizId))
     },
     redirect (link) {
-      console.log(link)
     }
   }
 }

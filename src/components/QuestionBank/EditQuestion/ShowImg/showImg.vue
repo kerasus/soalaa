@@ -9,7 +9,8 @@
         <div class="col box-titles">
           <span> فایل های بارگزاری شده</span>
         </div>
-        <div class="col text-right" style="margin-left: 16px;">
+        <div class="col text-right"
+             style="margin-left: 16px;">
           <q-btn
             flat
             round

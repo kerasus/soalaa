@@ -164,7 +164,6 @@ export default {
   },
   methods: {
     changeVertical (id, value) {
-      console.log(id, value)
       document.querySelector('#question' + id).style.top = value + 'px'
     },
     updateFontSize () {
@@ -258,7 +257,7 @@ export default {
           this.loading = false
         }).catch(err => {
           this.loading = false
-          console.log(err)
+          console.error(err)
         })
     },
 
