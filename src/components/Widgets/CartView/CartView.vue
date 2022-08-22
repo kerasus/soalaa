@@ -1,49 +1,51 @@
 <template>
-  <div class="cart-count">سبدخرید شما (4 محصول)</div>
-  <div class="cart-items-container">
-    <div class="cart-items" v-for="ci in cartItems" :key="ci">
-      <q-card class="cart-card">
-        <div class="image"></div>
-        <div class="content">
-          <div class="title">{{ ci.title }}</div>
-          <div class="desc-container">
-            <div class="item">
-              <div class="icon-spacing icon-teacher"></div>
-              <div class="desc">{{ ci.desc.producer }}</div>
-            </div>
-            <div class="item">
-              <div class="icon-spacing icon-book"></div>
-              <div class="desc">{{ ci.desc.grade }}</div>
-            </div>
-            <div class="item">
-              <div class="icon-spacing icon-menu-board"></div>
-              <div class="desc">{{ ci.desc.examTime }}</div>
-            </div>
-          </div>
-          <div class="price-container">
-            <div class="discount">{{ ci.price.discount }}</div>
-            <div class="previous">{{ ci.price.previous }}</div>
-            <div class="current">{{ ci.price.current }}</div>
-            <div class="toman">تومان</div>
-          </div>
-        </div>
-        <div class="actions">
-          <q-btn unelevated class="trash">
-            <div class="icon-trash"></div>
-          </q-btn>
-          <div class="products-container">
-            <q-btn unelevated>
-              <div class="link">{{ descLinkLabel }}</div>
-            </q-btn>
-            <q-btn unelevated class="details-btn">
-              <div class="details">
-                <div class="icon-caret"></div>
-                <div>جزئیات محصول</div>
+  <div v-show="cartItems.length">
+    <div class="cart-count">سبدخرید شما (4 محصول)</div>
+    <div class="cart-items-container">
+      <div class="cart-items" v-for="ci in cartItems" :key="ci">
+        <q-card class="cart-card">
+          <div class="image"></div>
+          <div class="content">
+            <div class="title">{{ ci.title }}</div>
+            <div class="desc-container">
+              <div class="item">
+                <div class="icon-spacing icon-teacher"></div>
+                <div class="desc">{{ ci.desc.producer }}</div>
               </div>
-            </q-btn>
+              <div class="item">
+                <div class="icon-spacing icon-book"></div>
+                <div class="desc">{{ ci.desc.grade }}</div>
+              </div>
+              <div class="item">
+                <div class="icon-spacing icon-menu-board"></div>
+                <div class="desc">{{ ci.desc.examTime }}</div>
+              </div>
+            </div>
+            <div class="price-container">
+              <div class="discount">{{ ci.price.discount }}</div>
+              <div class="previous">{{ ci.price.previous }}</div>
+              <div class="current">{{ ci.price.current }}</div>
+              <div class="toman">تومان</div>
+            </div>
           </div>
-        </div>
-      </q-card>
+          <div class="actions">
+            <q-btn unelevated class="trash">
+              <div class="icon-trash"></div>
+            </q-btn>
+            <div class="products-container">
+              <q-btn unelevated>
+                <div class="link">{{ descLinkLabel }}</div>
+              </q-btn>
+              <q-btn unelevated class="details-btn">
+                <div class="details">
+                  <div class="icon-caret"></div>
+                  <div>جزئیات محصول</div>
+                </div>
+              </q-btn>
+            </div>
+          </div>
+        </q-card>
+      </div>
     </div>
   </div>
 </template>
@@ -52,60 +54,60 @@
 export default {
   name: 'cartView',
   created() {
-    this.cartItems = [
-      {
-        title: 'آزمـون مرحله سوم سه‌آ',
-        desc: {
-          producer: 'گروه آموزشی آلاء',
-          grade: 'رشته تحصیلی: ریاضی - تجربی',
-          examTime: 'تاریخ آزمون : 23 مرداد'
-        },
-        price: {
-          discount: '20%',
-          previous: '970.000',
-          current: '970.000'
-        }
-      },
-      {
-        title: 'آزمـون مرحله سوم سه‌آ',
-        desc: {
-          producer: 'گروه آموزشی آلاء',
-          grade: 'رشته تحصیلی: ریاضی - تجربی',
-          examTime: 'تاریخ آزمون : 23 مرداد'
-        },
-        price: {
-          discount: '20%',
-          previous: '970.000',
-          current: '970.000'
-        }
-      },
-      {
-        title: 'آزمـون مرحله سوم سه‌آ',
-        desc: {
-          producer: 'گروه آموزشی آلاء',
-          grade: 'رشته تحصیلی: ریاضی - تجربی',
-          examTime: 'تاریخ آزمون : 23 مرداد'
-        },
-        price: {
-          discount: '20%',
-          previous: '970.000',
-          current: '970.000'
-        }
-      },
-      {
-        title: 'آزمـون مرحله سوم سه‌آ',
-        desc: {
-          producer: 'گروه آموزشی آلاء',
-          grade: 'رشته تحصیلی: ریاضی - تجربی',
-          examTime: 'تاریخ آزمون : 23 مرداد'
-        },
-        price: {
-          discount: '20%',
-          previous: '970.000',
-          current: '970.000'
-        }
-      }
-    ]
+    // this.cartItems = [
+    //   {
+    //     title: 'آزمـون مرحله سوم سه‌آ',
+    //     desc: {
+    //       producer: 'گروه آموزشی آلاء',
+    //       grade: 'رشته تحصیلی: ریاضی - تجربی',
+    //       examTime: 'تاریخ آزمون : 23 مرداد'
+    //     },
+    //     price: {
+    //       discount: '20%',
+    //       previous: '970.000',
+    //       current: '970.000'
+    //     }
+    //   },
+    //   {
+    //     title: 'آزمـون مرحله سوم سه‌آ',
+    //     desc: {
+    //       producer: 'گروه آموزشی آلاء',
+    //       grade: 'رشته تحصیلی: ریاضی - تجربی',
+    //       examTime: 'تاریخ آزمون : 23 مرداد'
+    //     },
+    //     price: {
+    //       discount: '20%',
+    //       previous: '970.000',
+    //       current: '970.000'
+    //     }
+    //   },
+    //   {
+    //     title: 'آزمـون مرحله سوم سه‌آ',
+    //     desc: {
+    //       producer: 'گروه آموزشی آلاء',
+    //       grade: 'رشته تحصیلی: ریاضی - تجربی',
+    //       examTime: 'تاریخ آزمون : 23 مرداد'
+    //     },
+    //     price: {
+    //       discount: '20%',
+    //       previous: '970.000',
+    //       current: '970.000'
+    //     }
+    //   },
+    //   {
+    //     title: 'آزمـون مرحله سوم سه‌آ',
+    //     desc: {
+    //       producer: 'گروه آموزشی آلاء',
+    //       grade: 'رشته تحصیلی: ریاضی - تجربی',
+    //       examTime: 'تاریخ آزمون : 23 مرداد'
+    //     },
+    //     price: {
+    //       discount: '20%',
+    //       previous: '970.000',
+    //       current: '970.000'
+    //     }
+    //   }
+    // ]
   },
   computed: {
     windowSize() {

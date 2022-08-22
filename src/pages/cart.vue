@@ -31,21 +31,31 @@ export default {
                     }
                   },
                   {
+                    // widgets: [
+                    //   {
+                    //     name: 'test-component2-widget'
+                    //   }
+                    // ],
+                    // options: {
+                    //   className: 'col-md-3 q-pl-md col-xs-12'
+                    // }
+                  },
+                  {
                     widgets: [
                       {
-                        name: 'test-component2-widget'
+                        name: 'cart-empty'
                       }
                     ],
                     options: {
-                      className: 'col-md-3 q-pl-md col-xs-12'
+                      className: 'col-xs-12'
                     }
                   }
                 ],
                 options: {
-                  boxed: true,
-                  style: {
-                    marginTop: '30px'
-                  }
+                  // boxed: true,
+                  // style: {
+                  //   marginTop: '30px'
+                  // }
                 }
               }
             ]
