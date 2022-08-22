@@ -202,7 +202,7 @@ export default {
         {
           title: 'سفارش‌ های من',
           icon: 'isax:clipboard-text',
-          routeName: 'myOrders',
+          routeName: 'User.MyOrders',
           permission: 'all',
           active: false,
           children: []
