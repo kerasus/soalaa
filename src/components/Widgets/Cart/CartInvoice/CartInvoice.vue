@@ -2,28 +2,69 @@
   <div class="invoice-container">
     <q-card class="invoice-cart">
       <q-card-section class="invoice-total-price-section invoice-cart-section">
-        <div class="total-shopping-cart price-section">
+        <div
+          class="total-shopping-cart price-section"
+        >
           <div class="title">جمع سبد خرید {{ `(${cart.cartItems?.list?.length})` }}</div>
-          <div class="price">{{ totalBasePrice }}
+          <div
+            v-if="loading"
+            class="loading-spinner"
+          >
+            <q-spinner-tail
+              color="orange"
+              size="2em"
+            />
+          </div>
+          <div
+            v-else
+            class="price"
+          >
+            {{ totalBasePrice }}
             <span class="iran-money-unit">تومان</span>
           </div>
         </div>
 
         <div class="wallet-credit price-section">
           <div class="title">استفاده از کیف پول</div>
-          <div class="price"> {{ amountUsingWallet }}
+          <div
+            v-if="loading"
+            class="loading-spinner"
+          >
+            <q-spinner-tail
+              color="orange"
+              size="2em"
+            />
+          </div>
+          <div
+            v-else
+            class="price"
+          >
+            {{ amountUsingWallet }}
             <span class="iran-money-unit">تومان</span>
           </div>
         </div>
 
         <div class="purchase-profit price-section">
           <div class="title">سود شما از خرید</div>
-          <div class="price">{{ `(${ discountInPercent }٪) ` + totalDiscount }}
+          <div
+            v-if="loading"
+            class="loading-spinner"
+          >
+            <q-spinner-tail
+              color="orange"
+              size="2em"
+            />
+          </div>
+          <div
+            v-else
+            class="price"
+          >
+            {{ `(${discountInPercent}٪) ` + totalDiscount }}
             <span class="iran-money-unit">تومان</span>
           </div>
         </div>
 
-        <q-separator class="invoice-separator"/>
+        <q-separator class="invoice-separator" />
       </q-card-section>
 
       <q-card-section class="invoice-coupon-section invoice-cart-section">
@@ -38,18 +79,32 @@
             outlined
           >
             <template v-slot:append>
-              <q-btn label="ثبت" flat/>
+              <q-btn label="ثبت"
+                     flat />
             </template>
           </q-input>
         </div>
 
-        <q-separator class="invoice-separator"/>
+        <q-separator class="invoice-separator" />
       </q-card-section>
 
       <q-card-section class="payment-section invoice-cart-section">
         <div class="final-price price-section">
           <div class="title">مبلغ نهایی</div>
-          <div class="price">{{ totalFinalPrice }}
+          <div
+            v-if="loading"
+            class="loading-spinner"
+          >
+            <q-spinner-tail
+              color="orange"
+              size="2em"
+            />
+          </div>
+          <div
+            v-else
+            class="price"
+          >
+            {{ totalFinalPrice }}
             <span class="iran-money-unit">تومان</span>
           </div>
         </div>
@@ -60,38 +115,51 @@
         >
           <p class="payment-title">درگاه پرداخت</p>
 
-          <div class="banks-gateway-list row">
+          <div
+            v-if="loading"
+            class="loading-spinner"
+          >
+            <q-spinner-tail
+              color="orange"
+              size="3em"
+            />
+          </div>
+
+          <div
+            v-else
+            class="banks-gateway-list row"
+          >
             <div class="bank-gateway-container col-lg-6  col-md-12 col-sm-6 col-xs-12">
-            <div class="bank-gateway">
-              <div class="bank-icon-container">
-                <q-image class="bank-icon"/>
-              </div>
-
-              <q-radio
-                v-model="selectedBank"
-                val="2"
-                dir="ltr"
-                label="بانک سامان"
-                class="select-bank-radio-button"
-              />
-            </div>
-            </div>
-
-          <div class="bank-gateway-container col-lg-6  col-md-12 col-sm-6 col-xs-12">
               <div class="bank-gateway">
                 <div class="bank-icon-container">
-                  <q-image class="bank-icon"/>
+                  <q-image class="bank-icon" />
                 </div>
-                  <q-radio
-                    v-model="selectedBank"
-                    val="1"
-                    dir="ltr"
-                    label="بانک سامان"
-                    class="select-bank-radio-button"
-                  />
+
+                <q-radio
+                  v-model="selectedBank"
+                  val="2"
+                  dir="ltr"
+                  label="بانک سامان"
+                  class="select-bank-radio-button"
+                />
               </div>
-          </div>
             </div>
+
+            <div class="bank-gateway-container col-lg-6  col-md-12 col-sm-6 col-xs-12">
+              <div class="bank-gateway">
+                <div class="bank-icon-container">
+                  <q-image class="bank-icon" />
+                </div>
+                <q-radio
+                  v-model="selectedBank"
+                  val="1"
+                  dir="ltr"
+                  label="بانک سامان"
+                  class="select-bank-radio-button"
+                />
+              </div>
+            </div>
+          </div>
 
           <div class="payment-description">
             <p class="title">توضیحات</p>
@@ -137,7 +205,7 @@
 
         <q-input
           v-model="userEnteredLoginInfo.password"
-          type="text"
+          type="password"
           label="رمز عبور خود را وارد کنید"
           class="login-input"
           outlined
@@ -145,7 +213,9 @@
 
         <p class="no-account">
           حساب کاربری ندارید؟
-          <router-link to="/" class="sign-in">ثبت نام کنید</router-link>
+          <router-link to="/"
+                       class="sign-in">ثبت نام کنید
+          </router-link>
         </p>
 
         <div
@@ -163,7 +233,20 @@
         class="final-price price-section"
       >
         <div class="title">مبلغ نهایی:</div>
-        <div class="price">{{ totalFinalPrice }}
+        <div
+          v-if="loading"
+          class="loading-spinner"
+        >
+          <q-spinner-tail
+            color="orange"
+            size="2em"
+          />
+        </div>
+        <div
+          v-else
+          class="price"
+        >
+          {{ totalFinalPrice }}
           <span class="iran-money-unit">تومان</span>
         </div>
       </div>
@@ -191,58 +274,66 @@ export default {
       },
       selectedBank: null,
       gatewayRedirectAddress: '',
-      amountUsingWallet: ''
+      amountUsingWallet: '',
+      loading: false
     }
   },
-  mounted () {
+
+  created() {
+    this.loading = true
+  },
+
+  mounted() {
     this.cartReview()
   },
+
   computed: {
-    cart () {
+    cart() {
       return this.$store.getters['Cart/cart']
     },
 
-    totalFinalPrice () {
+    totalFinalPrice() {
       return this.getPriceFormat(this.cart.price?.final)
     },
 
-    totalBasePrice () {
+    totalBasePrice() {
       return this.getPriceFormat(this.cart.price?.base)
     },
 
-    totalDiscount () {
+    totalDiscount() {
       return this.getPriceFormat(this.cart.price?.discount)
     },
 
-    discountInPercent () {
+    discountInPercent() {
       return this.cart.price?.discountInPercent()
     },
 
-    isUserLogin () {
+    isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
     },
 
-    windowSize () {
+    windowSize() {
       return this.$store.getters['AppLayout/windowSize']
     }
   },
 
   methods: {
-    cartReview () {
+    cartReview() {
       this.$store.dispatch('Cart/reviewCart')
         .then((response) => {
           this.amountUsingWallet = this.getPriceFormat(response.data.data.pay_by_wallet)
           this.gatewayRedirectAddress = response.data.data.redirect_to_gateway
+          this.loading = false
         })
     },
 
-    payment () {
+    payment() {
       if (this.gatewayRedirectAddress) {
         window.location.href = this.gatewayRedirectAddress
       }
     },
 
-    login () {
+    login() {
       this.$store.dispatch('Auth/login', this.userEnteredLoginInfo)
         .then(() => {
           if (this.isUserLogin) {
@@ -251,9 +342,8 @@ export default {
         })
     },
 
-    getPriceFormat (price) {
+    getPriceFormat(price) {
       if (!price && price !== 0) {
-        console.log(price)
         return
       }
       return price.toLocaleString()
@@ -523,6 +613,11 @@ export default {
             @media screen and (max-width: 599px) {
               margin-bottom: 6px;
             }
+          }
+
+          .loading-spinner {
+            display: flex;
+            justify-content: center
           }
 
           .banks-gateway-list {
