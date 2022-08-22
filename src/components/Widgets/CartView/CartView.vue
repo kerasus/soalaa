@@ -91,6 +91,7 @@ export default {
       }
     }
   },
+
   methods: {
     cartReview() {
       this.$store.commit('loading/loading', true)
