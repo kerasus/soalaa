@@ -6,21 +6,27 @@
     v-model:create-inputs="createInputs"
     v-bind="allProps"
   >
-<!--    {inputData, showConfirmRemoveDialog}-->
+    <!--    {inputData, showConfirmRemoveDialog}-->
     <template v-slot:entity-crud-table-cell="{inputData}">
       <q-td :props="inputData.props">
         <template v-if="inputData.props.col.name === 'actions'">
-                    <q-btn round flat dense size="md" color="info" icon="info" :to="{name:'Admin.AuthorshipDates.Show', params: {id: inputData.props.row.id}}">
-                      <q-tooltip>
-                       مشاهده
-                      </q-tooltip>
-                    </q-btn>
-<!--          <q-btn round flat dense size="md" color="negative" icon="delete" class="q-ml-md"-->
-<!--                 @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">-->
-<!--            <q-tooltip>-->
-<!--              حذف-->
-<!--            </q-tooltip>-->
-<!--          </q-btn>-->
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="info"
+                 icon="info"
+                 :to="{name:'Admin.AuthorshipDates.Show', params: {id: inputData.props.row.id}}">
+            <q-tooltip>
+              مشاهده
+            </q-tooltip>
+          </q-btn>
+          <!--          <q-btn round flat dense size="md" color="negative" icon="delete" class="q-ml-md"-->
+          <!--                 @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">-->
+          <!--            <q-tooltip>-->
+          <!--              حذف-->
+          <!--            </q-tooltip>-->
+          <!--          </q-btn>-->
         </template>
         <template v-else-if="inputData.props.col.name === 'description'">
           <div v-html="inputData.props.value" />
@@ -116,15 +122,15 @@ export default {
         }
       },
       defaultInputs: [
-        { type: 'input', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-3' },
-        { type: 'input', name: 'type', label: 'نوع', responseKey: 'data.type', col: 'col-md-3' },
-        { type: 'dateTime', name: 'updated_at', label: 'تاریخ ایجاد', responseKey: 'data.updated_at', col: 'col-md-3' },
-        { type: 'dateTime', name: 'created_at', label: 'تاریخ ویرایش', responseKey: 'data.created_at', col: 'col-md-3' },
-        { type: 'input', name: 'value', label: 'تاریخ تالیف', responseKey: 'data.value', col: 'col-md-12' }
+        { type: 'input', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'input', name: 'type', label: 'نوع', responseKey: 'data.type', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'dateTime', name: 'updated_at', label: '', responseKey: 'data.updated_at', col: 'col-md-3', placeholder: 'تاریخ ایجاد' },
+        { type: 'dateTime', name: 'created_at', label: '', responseKey: 'data.created_at', col: 'col-md-3', placeholder: 'تاریخ ویرایش' },
+        { type: 'input', name: 'value', label: 'تاریخ تالیف', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true }
       ],
       createInputs: [
         { type: 'hidden', name: 'type', value: 'year_type', label: '', col: 'col-12' },
-        { type: 'input', name: 'value', label: 'تاریخ تالیف', col: 'col-md-3' }
+        { type: 'input', name: 'value', label: 'تاریخ تالیف', col: 'col-md-3', placeholder: ' ', filled: true }
       ],
       editInputs: [],
       showInputs: [],

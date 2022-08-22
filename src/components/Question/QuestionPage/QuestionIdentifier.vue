@@ -2,7 +2,8 @@
   <div class="question-details">
     <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
-      <div class="detail-box col-3" style="padding-right:0;">
+      <div class="detail-box col-3"
+           style="padding-right:0;">
         <div class="detail-box-title">مرجع</div>
         <q-select
           borderless
@@ -82,7 +83,9 @@
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
           <div class="input-box">
-            <q-input v-model="lessonsTitles" dense disable/>
+            <q-input v-model="lessonsTitles"
+                     dense
+                     disable />
           </div>
           <div class="icon-box">
             <q-btn
@@ -96,15 +99,15 @@
         </div>
       </div>
     </div>
-<!--    <q-btn-->
-<!--      unelevated-->
-<!--      color="primary"-->
-<!--      class="q-mr-xl btn-md text-right"-->
-<!--      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"-->
-<!--      @click="getIdentifierData"-->
-<!--    >-->
-<!--      ثبت مباحث انتخاب شده-->
-<!--    </q-btn>-->
+    <!--    <q-btn-->
+    <!--      unelevated-->
+    <!--      color="primary"-->
+    <!--      class="q-mr-xl btn-md text-right"-->
+    <!--      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"-->
+    <!--      @click="getIdentifierData"-->
+    <!--    >-->
+    <!--      ثبت مباحث انتخاب شده-->
+    <!--    </q-btn>-->
     <question-tree-modal
       ref="questionTreeModal"
       v-model:dialogValue="dialogValue"

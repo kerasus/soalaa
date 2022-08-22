@@ -59,18 +59,18 @@ const AxiosHooks = (function () {
       messages.push('ابتدا وارد سامانه شوید.')
       deAuthorizeUser(router, store)
     } else if (error.response.data.error && AjaxResponseMessages.isCustomMessage(error.response.data.error.code)) {
-      console.log('error.response.data.error.code', AjaxResponseMessages.getMessage(error.response.data.error.code))
+      console.error('error.response.data.error.code', AjaxResponseMessages.getMessage(error.response.data.error.code))
       messages.push(AjaxResponseMessages.getMessage(error.response.data.error.code))
     } else if (error.response.data.error && !AjaxResponseMessages.isCustomMessage(error.response.data.error.code)) {
       for (const [key, value] of Object.entries(error.response.data.error)) {
-        console.log('key', key)
+        console.error('key', key)
         if (typeof value === 'string') {
           messages.push(value)
         }
       }
     } else if (error.response.data.errors) {
       for (const [key, value] of Object.entries(error.response.data.errors)) {
-        console.log('key', key)
+        console.error('key', key)
         if (typeof value === 'string') {
           messages.push(value)
         } else {

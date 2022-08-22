@@ -6,13 +6,13 @@
           expand-icon="isax:arrow-down-1"
         >
           <template v-slot:header>
-            <div class="filter-option-container" >
+            <div class="filter-option-container">
               <div class="filter-option-title">
                 {{ headerTitle }}
               </div>
             </div>
           </template>
-          <slot/>
+          <slot />
         </q-expansion-item>
       </q-card-section>
     </q-card>

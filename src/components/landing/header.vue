@@ -10,12 +10,14 @@
         همه رتبه برتر ها، تو هر آزمون، ابتدا خودشونو با خودشون میسنجن؛ و میدونن هیچ آزمونی به اندازه کنکور مخاطب نداره
         پس درگیر جامعه آماری نمیشن. سه‌آ کامل آنالیزت میکنه و بعد با جامعه آماری کنکور سال پیش، مقایسه‌ت میکنه.
       </div>
-      <q-btn unelevated class="submit-btn" label="ثبت نام آزمون"/>
+      <q-btn unelevated
+             class="submit-btn"
+             label="ثبت نام آزمون" />
     </div>
     <div class="video-box flex items-center justify-center">
       <video-player
         :sources="source"
-        poster="https://nodes.alaatv.com/media/thumbnails/1612/1612012nbhu.jpg"/>
+        poster="https://nodes.alaatv.com/media/thumbnails/1612/1612012nbhu.jpg" />
       <!--      <div class="video-btn flex items-center justify-between q-px-md">-->
       <!--        مشاهده ویدئو-->
       <!--        <div class="video-icon flex items-center">-->
@@ -41,10 +43,7 @@ export default {
   },
   data: () => ({
     source: new PlayerSourceList([{ src: 'https://nodes.alaatv.com/upload/vast/videos/HD_720p/1647426360_1245.mp4' }])
-  }),
-  mounted () {
-    console.log('this.source :', this.source)
-  }
+  })
 }
 </script>
 

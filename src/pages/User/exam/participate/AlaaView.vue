@@ -1,8 +1,10 @@
 <template>
   <div class="row quiz-page"
        :style="{ height: '100%'}">
-    <div class="col " :style="{ 'min-height': '100%' }">
-      <div class="row main-page" :style="{ 'min-width': '100%' }">
+    <div class="col "
+         :style="{ 'min-height': '100%' }">
+      <div class="row main-page"
+           :style="{ 'min-width': '100%' }">
         <div class="col btnpre col-md-1 justify-start sm-hide xs-hide">
           <q-btn
             v-if="getQuestionNumberFromId(currentQuestion.id) !== 1"
@@ -90,7 +92,7 @@
                 v-if="currentQuestion.in_active_category"
                 class="renderedPanel"
               >
-                <vue-katex :input="currentQuestion.statement"/>
+                <vue-katex :input="currentQuestion.statement" />
               </div>
               <q-card
                 v-if="!currentQuestion.in_active_category"
@@ -144,7 +146,7 @@
       </div>
     </div>
     <div class="timer-row col">
-      <Timer/>
+      <Timer />
     </div>
   </div>
 </template>
@@ -271,10 +273,15 @@ export default {
   height: 100%;
   padding: 0px 0px 0px 12px;
   .timer-row {
+    //max-width: calc(75% - 150px);
     width: calc(75% - 150px);
     position: absolute;
     bottom: 0;
+    min-width: 130px;
     right: 100px;
+    //@media screen and (max-width: 1024px) {
+    //  width: calc(84% - 150px);
+    //}
   }
   .main-page{
     display: flex;
@@ -286,6 +293,7 @@ export default {
     .middle-page{
       display: flex;
       flex-direction: column;
+      padding-bottom: 103px;
       .question-header {
         display: flex;
         color: var(--text-2);

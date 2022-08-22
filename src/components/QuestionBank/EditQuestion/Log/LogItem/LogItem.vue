@@ -6,15 +6,15 @@
           class="log-item-avatar"
           size="24px"
         >
-                  <img :src="log.causer.photo">
-<!--          <img src="https://cdn.quasar.dev/img/avatar.png">-->
+          <img :src="log.causer.photo">
+          <!--          <img src="https://cdn.quasar.dev/img/avatar.png">-->
         </q-avatar>
         <span class="log-editor">
           {{ log.causer.full_name + ' ' }}
         </span>
         <span>
           {{ log.log_status.title }}
-      </span>
+        </span>
       </div>
       <div class="col-md-2 col-xs-6 log-date-time">
         <span class="log-time">
@@ -50,7 +50,8 @@
         </ul>
       </div>
     </div>
-    <q-separator size="2px" class="log-list-separator"/>
+    <q-separator size="2px"
+                 class="log-list-separator" />
   </div>
 </template>
 

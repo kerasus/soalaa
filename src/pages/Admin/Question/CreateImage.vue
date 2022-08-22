@@ -23,10 +23,14 @@
     </div>
     <div class="row">
       <div class="col-6">
-        <upload-image v-model="question" title="صورت سوال" field-key="statement_photo"/>
+        <upload-image v-model="question"
+                      title="صورت سوال"
+                      field-key="statement_photo" />
       </div>
       <div class="col-6">
-        <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photos"/>
+        <upload-image v-model="question"
+                      title="پاسخ سوال"
+                      field-key="answer_photos" />
       </div>
     </div>
     <div class="relative-position">
