@@ -248,7 +248,9 @@ const API_ADDRESS = {
     }
   },
   cart: {
-    orderproduct: apiV2Server + '/orderproduct',
+    orderproduct(id) {
+      return apiV2Server + '/orderproduct/' + id
+    },
     review: apiV2Server + '/checkout/review'
   }
 }
