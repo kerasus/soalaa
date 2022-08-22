@@ -782,9 +782,7 @@ export default {
               }
             }
 
-            .price-submit-box {
-
-              .price-submit-in-footer {
+           .price-submit-in-footer {
 
                 .price-box {
                   height: 64px;
@@ -829,7 +827,14 @@ export default {
                   }
                 }
               }
+
+            .price-submit-box-pack-mode{
+              //width: 100%;
             }
+            .price-submit-box-selective-mode{
+              //width: 50%;
+            }
+
           }
         }
       }
@@ -895,31 +900,34 @@ export default {
       .table-box-container {
         padding: 0;
 
-        .table {
-          width: 100%;
+        .table-parent{
+          .table {
+            width: 100%;
 
-          tr {
-            .number {
-              width: 60px;
-            }
+            tr {
+              .number {
+                width: 60px;
+              }
 
-            .date {
-              width: 60px;
-            }
+              .date {
+                width: 60px;
+              }
 
-            .title {
-              width: 164px;
-            }
+              .title {
+                width: 164px;
+              }
 
-            .submitStatus {
-              width: 181px;
-            }
+              .submitStatus {
+                width: 181px;
+              }
 
-            .submitStatus-selective-mode {
-              width: 108px;
+              .submitStatus-selective-mode {
+                width: 108px;
+              }
             }
           }
         }
+
       }
 
     }
@@ -1058,14 +1066,7 @@ export default {
             }
           }
 
-          .price-submit-box {
-            order: 1;
-            padding: 0;
-            border-radius: 0;
-            width: 100%;
-
-            .price-submit-in-footer {
-              width: 100%;
+          .price-submit-in-footer {
 
               .price-box {
                 display: flex;
@@ -1130,6 +1131,12 @@ export default {
                 }
               }
             }
+
+          .price-submit-box-pack-mode{
+            width: 100%;
+          }
+          .price-submit-box-selective-mode{
+            width: 50%;
           }
 
           .table {
