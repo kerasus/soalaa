@@ -1,7 +1,8 @@
 <template>
   <div class="question-details">
     <div class="details-container-2 default-details-container row">
-      <div class="detail-box detail-box-last-of-row" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+      <div class="detail-box detail-box-last-of-row"
+           :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <q-btn
           unelevated
           :loading="draftBtnLoading"

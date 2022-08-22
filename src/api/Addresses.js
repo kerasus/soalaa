@@ -3,6 +3,8 @@ const lumenServer = process.env.AAA_API
 const authServer = process.env.AUTH_API
 const timeServer = process.env.GET_TIME_SERVER
 const socketServer = process.env.SOCKET_SERVER
+const apiV2Server = process.env.AUTH_API
+
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
   socket: socketServer,
@@ -143,6 +145,7 @@ const API_ADDRESS = {
       setQueryParams('majors')
       setQueryParams('reference')
       setQueryParams('tags')
+      setQueryParams('level')
 
       if (typeof page !== 'undefined') {
         page = '&page=' + page
@@ -151,6 +154,8 @@ const API_ADDRESS = {
       }
 
       let queryParam = page
+      // const examQuesry = '&exam=0'
+      // queryParam += examQuesry
       Object.keys(filters).forEach(filterKey => {
         queryParam += filters[filterKey]
       })
@@ -241,6 +246,12 @@ const API_ADDRESS = {
     setTags (questionId) {
       return lumenServer + '/id/soalaQestion/' + questionId
     }
+  },
+  cart: {
+    orderproduct(id) {
+      return apiV2Server + '/orderproduct/' + id
+    },
+    review: apiV2Server + '/checkout/review'
   }
 }
 export default API_ADDRESS

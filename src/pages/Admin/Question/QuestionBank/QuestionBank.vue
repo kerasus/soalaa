@@ -1,8 +1,9 @@
 <template>
   <div class="main-container">
     <div class="row">
-      <div ref="header" class="col-12 question-bank-header">
-        <QuestionBankHeader/>
+      <div ref="header"
+           class="col-12 question-bank-header">
+        <QuestionBankHeader />
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
         <question-filter
@@ -24,7 +25,8 @@
           />
         </div>
         <div class="question-bank-content">
-          <question-item v-if="questions.loading" :question="loadingQuestion" />
+          <question-item v-if="questions.loading"
+                         :question="loadingQuestion" />
           <template v-else>
             <question-item
               v-for="question in questions.list"
@@ -67,7 +69,21 @@ export default {
       filterQuestions: {
         major_type: [],
         reference_type: [],
-        year_type: []
+        year_type: [],
+        levels: [
+          {
+            id: '1',
+            value: 'آسان'
+          },
+          {
+            id: '2',
+            value: 'متوسط'
+          },
+          {
+            id: '3',
+            value: 'سخت'
+          }
+        ]
       },
       questionListKey: Date.now(),
       selectedQuestions: [],
@@ -177,11 +193,13 @@ export default {
     getFiltersForRequest (filterData) {
       return {
         tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
+        level: (filterData.level) ? filterData.level.map(item => item.id) : [],
         years: (filterData.years) ? filterData.years.map(item => item.id) : [],
         majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
         reference: (filterData.reference) ? filterData.reference.map(item => item.id) : []
       }
     },
+
     getQuestionData (page, filters) {
       if (!page) {
         page = 1
@@ -196,7 +214,7 @@ export default {
           this.questions.loading = false
         })
         .catch(function (error) {
-          console.log(error)
+          console.error(error)
           this.loadingQuestion.loading = false
           this.questions.loading = false
         })
@@ -213,9 +231,6 @@ export default {
               this.filterQuestions.major_type.push(option)
             }
           })
-        })
-        .catch(function (error) {
-          console.log(error)
         })
     },
     selectAllQuestions () {

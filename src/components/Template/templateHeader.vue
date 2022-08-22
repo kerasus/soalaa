@@ -32,7 +32,7 @@
         gutter="sm"
       >
         <template v-slot:separator>
-          <q-icon name="isax:arrow-right-3 "/>
+          <q-icon name="isax:arrow-right-3 " />
         </template>
         <q-breadcrumbs-el
           v-for="(breadcrumb, index) in breadcrumbs.path"
@@ -70,7 +70,9 @@
       dense
       unelevated
     >
-      <q-badge color="red" rounded floating>3</q-badge>
+      <q-badge color="red"
+               rounded
+               floating>3</q-badge>
     </q-btn-dropdown>
     <q-btn v-if="!user || user.id === null"
            class="toolbar-button"
@@ -91,7 +93,7 @@
       dir="ltr"
       dense
       unelevated
-      >
+    >
       <q-list>
         <q-item>
           <q-item-section>
@@ -101,7 +103,9 @@
             </q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable v-close-popup @click="logOut">
+        <q-item clickable
+                v-close-popup
+                @click="logOut">
           <q-item-section>
             <q-item-label>خروج</q-item-label>
           </q-item-section>

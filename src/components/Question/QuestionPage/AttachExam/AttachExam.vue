@@ -6,7 +6,9 @@
           <div class="detail-box-title">آزمون ها</div>
           <div class="input-container">
             <div class="input-box">
-              <q-input v-model="definedExamsTitle" dense disable/>
+              <q-input v-model="definedExamsTitle"
+                       dense
+                       disable />
             </div>
             <div class="icon-box">
               <q-btn
@@ -96,31 +98,34 @@
                   ترتیب
                 </div>
               </div>
-              <div v-if="exams && lessons.list.length" :key="question.exams.list.length">
-            <div v-for="(item, index) in question.exams.list" :key="index" class="flex row attached-exam">
-              <div class="detail-box exam-result attached-exam-title  detail-box-first col-7">
-                {{ item.exam.title }}
-              </div>
-              <div class="detail-box exam-result detail-box-first col-3">
-                {{ item.sub_category.title }}
-              </div>
-              <div class="detail-box exam-result order-exam-title detail-box-last col-1">
-                {{ item.order }}
-              </div>
-              <div class="detail-box detach-box detail-box-last col-1">
-                <q-btn
-                  unelevated
-                  icon="isax:trash"
-                  class="detach-btn
+              <div v-if="exams && lessons.list.length"
+                   :key="question.exams.list.length">
+                <div v-for="(item, index) in question.exams.list"
+                     :key="index"
+                     class="flex row attached-exam">
+                  <div class="detail-box exam-result attached-exam-title  detail-box-first col-7">
+                    {{ item.exam.title }}
+                  </div>
+                  <div class="detail-box exam-result detail-box-first col-3">
+                    {{ item.sub_category.title }}
+                  </div>
+                  <div class="detail-box exam-result order-exam-title detail-box-last col-1">
+                    {{ item.order }}
+                  </div>
+                  <div class="detail-box detach-box detail-box-last col-1">
+                    <q-btn
+                      unelevated
+                      icon="isax:trash"
+                      class="detach-btn
                    default-detail-btn"
-                  @click="detach(item)"
-                />
+                      @click="detach(item)"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-            </div>
-          </div>
-          <div class="text-right close-btn-box" >
+          <div class="text-right close-btn-box">
             <q-btn
               class="close-btn"
               label="بستن"
@@ -602,6 +607,7 @@ export default {
         .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
           min-height: 40px;
           color: #65677F;
+
         }
         .q-field__control::before, .q-field__control::after {
           display: none;
@@ -635,6 +641,8 @@ export default {
       .detail-box {
         .q-field__control {
           height: 42px;
+          background: #F4F5F6 ;
+
         }
 
         .q-field {
@@ -666,6 +674,8 @@ export default {
         .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
           min-height: 40px;
           color: #65677F;
+          background: #F4F5F6 ;
+
         }
 
         .q-field__control::before, .q-field__control::after {

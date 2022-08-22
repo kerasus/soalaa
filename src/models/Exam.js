@@ -99,7 +99,8 @@ class Exam extends Model {
           make_report_for_remaining_only: false,
           temp_exams_in_exam_interval: false,
           consider_negative_point: false,
-          populate_school_ranking: false
+          populate_school_ranking: false,
+          right_answer_weight: false
         }
       },
 
@@ -167,7 +168,8 @@ class Exam extends Model {
       make_report_for_remaining_only: false,
       temp_exams_in_exam_interval: false,
       consider_negative_point: false,
-      populate_school_ranking: false
+      populate_school_ranking: false,
+      right_answer_weight: false
     }
     Object.assign(temp, this.report_config)
     this.report_config = temp
@@ -213,7 +215,6 @@ class Exam extends Model {
     const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
     this.questions.list.forEach((question) => {
       if (question.statement) {
-        console.log('exam model run')
         question.ltr = !!question.statement.match(englishRegex)
       }
     })

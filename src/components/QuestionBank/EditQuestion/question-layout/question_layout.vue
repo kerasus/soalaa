@@ -64,9 +64,9 @@
             </div>
           </div>
           <div class="row items-center">
-          <div>
-            {{ (index + 1) + ') ' }}
-          </div>
+            <div>
+              {{ (index + 1) + ') ' }}
+            </div>
           </div>
         </div>
       </div>

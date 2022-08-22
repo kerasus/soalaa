@@ -10,22 +10,41 @@
       <template #table-cell="{inputData, showConfirmRemoveDialog}">
         <q-td :props="inputData.props">
           <template v-if="inputData.props.col.name === 'actions'">
-            <q-btn round flat dense size="md" color="info" icon="info" @click="showExam(inputData.props.row.id)">
-              <q-tooltip anchor="top middle" self="bottom middle">
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   color="info"
+                   icon="isax:eye"
+                   @click="showExam(inputData.props.row.id)">
+              <q-tooltip anchor="top middle"
+                         self="bottom middle">
                 مشاهده
               </q-tooltip>
             </q-btn>
-<!--            <q-btn round flat dense size="md" color="purple" icon="edit" :to="{name:'Admin.Exam.Edit', params: {id: inputData.props.row.id}}">-->
-<!--              <q-tooltip anchor="top middle" self="bottom middle">-->
-<!--                ویرایش-->
-<!--              </q-tooltip>-->
-<!--            </q-btn>-->
-            <q-btn round flat dense size="md" color="indigo" icon="auto_stories"  @click="showLessonsList(inputData.props.row.id, inputData.props.row.title)">
-              <q-tooltip anchor="top middle" self="bottom middle">
+            <!--            <q-btn round flat dense size="md" color="purple" icon="edit" :to="{name:'Admin.Exam.Edit', params: {id: inputData.props.row.id}}">-->
+            <!--              <q-tooltip anchor="top middle" self="bottom middle">-->
+            <!--                ویرایش-->
+            <!--              </q-tooltip>-->
+            <!--            </q-btn>-->
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   color="indigo"
+                   icon="auto_stories"
+                   @click="showLessonsList(inputData.props.row.id, inputData.props.row.title)">
+              <q-tooltip anchor="top middle"
+                         self="bottom middle">
                 مشاهده دروس
               </q-tooltip>
             </q-btn>
-            <q-btn round flat dense size="md" color="blue" icon="assignment">
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   color="blue"
+                   icon="assignment">
               <q-menu
                 class="options-menu"
                 transition-show="jump-down"
@@ -51,13 +70,33 @@
                   </q-item>
                 </q-list>
               </q-menu>
-              <q-tooltip anchor="top middle" self="bottom middle">
+              <q-tooltip anchor="top middle"
+                         self="bottom middle">
                 مشاهده نتایج
               </q-tooltip>
             </q-btn>
-            <q-btn round flat dense size="md" color="red" icon="delete"  @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
-              <q-tooltip anchor="top middle" self="bottom middle">
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   color="red"
+                   icon="delete"
+                   @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
+              <q-tooltip anchor="top middle"
+                         self="bottom middle">
                 حذف آزمون
+              </q-tooltip>
+            </q-btn>
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   color="info"
+                   icon="info"
+                   :to="{name:'Admin.Exam.MoreActions', params: {id: inputData.props.row.id}}">
+              <q-tooltip anchor="top middle"
+                         self="bottom middle">
+                عملیات بیشتر
               </q-tooltip>
             </q-btn>
           </template>

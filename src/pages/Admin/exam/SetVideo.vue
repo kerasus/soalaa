@@ -1,129 +1,129 @@
 <template>
-     <div
-       class="set-video-back-btn q-mx-auto "
-     >
-       <q-btn
-         class="q-mx-sm float-right"
-         round
-         dark-percentage
-         color="primary"
-         @click=this.$router.go(-1)
-         icon="isax:arrow-left-2"
-       />
+  <div
+    class="set-video-back-btn q-mx-auto "
+  >
+    <q-btn
+      class="q-mx-sm float-right"
+      round
+      dark-percentage
+      color="primary"
+      @click=this.$router.go(-1)
+      icon="isax:arrow-left-2"
+    />
 
-    </div>
-    <q-card
-      class="set-video q-mx-auto q-pa-0"
-      :style="{'max-width':'800px'}"
-    >
-      <q-card-section
+  </div>
+  <q-card
+    class="set-video q-mx-auto q-pa-0"
+    :style="{'max-width':'800px'}"
+  >
+    <q-card-section
       class="q-pa-0"
+    >
+      <transition
+        appear
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
       >
-        <transition
-          appear
-          enter-active-class="animated fadeIn"
-          leave-active-class="animated fadeOut"
+        <q-toolbar
+          class="set-video-toolbar bg-deep-purple-11  q-mx-auto"
+          :style="{'height' : '64px'}"
+          dark
         >
-          <q-toolbar
-            class="set-video-toolbar bg-deep-purple-11  q-mx-auto"
-            :style="{'height' : '64px'}"
-            dark
-          >
-            <q-toolbar-title v-if="selectedSubCategory">
-              {{quizTitle + ': ' + selectedSubCategory.title }}
-            </q-toolbar-title>
+          <q-toolbar-title v-if="selectedSubCategory">
+            {{quizTitle + ': ' + selectedSubCategory.title }}
+          </q-toolbar-title>
 
-            <q-space />
-            <q-btn
-              color="white"
-              flat
-              round
-              @click="addVideo"
-              icon="mdi-plus"
-            >
-              <q-tooltip
-                anchor="top middle"
-                :offset="[20,33]"
-              >
-                <span class="smallFontSize">لینک جدید</span>
-              </q-tooltip>
-            </q-btn>
-            <q-btn
-              color="white"
-              flat
-              round
-              @click="saveVideos"
-              icon="mdi-check"
-            >
-              <q-tooltip
-                anchor="top middle"
-                :offset="[20,33]"
-              >
-                <span class="smallFontSize">ثبت</span>
-              </q-tooltip>
-            </q-btn>
-            <q-inner-loading
-              :showing="loading"
-              color="primary"
-              dark
-              label-class="text-teal"
-              label-style="font-size: 1.1em"
-            />
-          </q-toolbar>
-        </transition>
-          <q-list
-            v-for="(item, index) in videos"
-            :key="index"
+          <q-space />
+          <q-btn
+            color="white"
+            flat
+            round
+            @click="addVideo"
+            icon="mdi-plus"
           >
-            <q-item
-              bordered
+            <q-tooltip
+              anchor="top middle"
+              :offset="[20,33]"
             >
-              <q-item-section>
-                <q-input
-                  v-model="videos[index]"
-                  type="url"
-                  outlined
-                  dense
-                  :style="{ 'max-width': '650px' }"
-                />
-              </q-item-section>
-              <q-item-section avatar>
-                <q-btn
-                  color="primary"
-                  flat
-                  round
-                  icon="mdi-play-box-outline"
-                  :href="item"
-                  target="_blank"
-                >
-                  <q-tooltip
-                    anchor="top middle"
-                    :offset="[20,33]"
-                  >
-                    <span class="smallFontSize">مشاهده کانتنت</span>
-                  </q-tooltip>
-                </q-btn>
-              </q-item-section>
-              <q-item-section avatar>
-                <q-btn
-                  color="red"
-                  flat
-                  round
-                  @click="removeVideo(index)"
-                  icon="mdi-close"
-                >
-                  <q-tooltip
-                    anchor="top middle"
-                    :offset="[20,33]"
-                  >
-                    <span class="smallFontSize" >حذف لینک</span>
-                  </q-tooltip>
-                </q-btn>
-              </q-item-section>
-            </q-item>
-          </q-list>
-      </q-card-section>
-    </q-card>
+              <span class="smallFontSize">لینک جدید</span>
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            color="white"
+            flat
+            round
+            @click="saveVideos"
+            icon="mdi-check"
+          >
+            <q-tooltip
+              anchor="top middle"
+              :offset="[20,33]"
+            >
+              <span class="smallFontSize">ثبت</span>
+            </q-tooltip>
+          </q-btn>
+          <q-inner-loading
+            :showing="loading"
+            color="primary"
+            dark
+            label-class="text-teal"
+            label-style="font-size: 1.1em"
+          />
+        </q-toolbar>
+      </transition>
+      <q-list
+        v-for="(item, index) in videos"
+        :key="index"
+      >
+        <q-item
+          bordered
+        >
+          <q-item-section>
+            <q-input
+              v-model="videos[index]"
+              type="url"
+              outlined
+              dense
+              :style="{ 'max-width': '650px' }"
+            />
+          </q-item-section>
+          <q-item-section avatar>
+            <q-btn
+              color="primary"
+              flat
+              round
+              icon="mdi-play-box-outline"
+              :href="item"
+              target="_blank"
+            >
+              <q-tooltip
+                anchor="top middle"
+                :offset="[20,33]"
+              >
+                <span class="smallFontSize">مشاهده کانتنت</span>
+              </q-tooltip>
+            </q-btn>
+          </q-item-section>
+          <q-item-section avatar>
+            <q-btn
+              color="red"
+              flat
+              round
+              @click="removeVideo(index)"
+              icon="mdi-close"
+            >
+              <q-tooltip
+                anchor="top middle"
+                :offset="[20,33]"
+              >
+                <span class="smallFontSize">حذف لینک</span>
+              </q-tooltip>
+            </q-btn>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script>

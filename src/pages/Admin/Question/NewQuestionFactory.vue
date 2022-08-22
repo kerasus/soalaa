@@ -7,7 +7,8 @@
         کارخانه سوال
       </p>
       <!--  -------------------- nav bar ----------------------------------------------------------------- -->
-      <div class="row justify-center q-mx-xl" style="margin-bottom: 50px">
+      <div class="row justify-center q-mx-xl"
+           style="margin-bottom: 50px">
         <div class="col">
           <q-btn
             unelevated
@@ -66,29 +67,29 @@
       <!--  -------------------- table title ------------------------------------------------------------ -->
       <div class="row q-mx-xl q-mb-lg">
         <div class="col-2">
-           <span class=" q-ml-lg table-title-style">
-              #
-            </span>
+          <span class=" q-ml-lg table-title-style">
+            #
+          </span>
         </div>
         <div class="col-3">
-           <span class="table-title-style">
-              سوال
-            </span>
+          <span class="table-title-style">
+            سوال
+          </span>
         </div>
         <div class="col-2">
-           <span class="table-title-style">
-              تاریخ ایجاد
-            </span>
+          <span class="table-title-style">
+            تاریخ ایجاد
+          </span>
         </div>
         <div class="col-3">
-           <span class=" table-title-style">
-              وضعیت
-            </span>
+          <span class=" table-title-style">
+            وضعیت
+          </span>
         </div>
         <div class="col-2">
-             <span class=" table-title-style">
-              عملیات
-            </span>
+          <span class=" table-title-style">
+            عملیات
+          </span>
         </div>
       </div>
       <!--  -------------------- table content ------------------------------------------------------------ -->
@@ -113,9 +114,9 @@
               </span>
             </div>
             <div class="col-2">
-          <span class="table-title-style column-statement-text">
-            {{ item.shamsiDate('created_at').dateTime }}
-          </span>
+              <span class="table-title-style column-statement-text">
+                {{ item.shamsiDate('created_at').dateTime }}
+              </span>
             </div>
             <div class="col-3">
               <q-btn
@@ -211,7 +212,6 @@ export default {
       const statusesId = (!itemId) ? [] : [itemId]
       axios.get(API_ADDRESS.question.index(statusesId, page))
         .then(response => {
-          console.log('filter respob=nse :', response)
           that.questions = new QuestionList(response.data.data)
           that.page = response.data.meta.current_page
           that.pageCount = Math.ceil(response.data.meta.total / response.data.meta.per_page)

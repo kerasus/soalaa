@@ -35,7 +35,7 @@
             />
           </div>
           <!-- -------------------------- upload file ---------------------->
-<!--          ToDo : UploadImg -->
+          <!--          ToDo : UploadImg -->
           <UploadImg
             v-if="this.showImgComponentStatus()"
             v-model="currentQuestion"
@@ -74,18 +74,18 @@
             @addComment="addComment"
           />
         </div>
-<!--        todo : v-overlay -->
-<!--        <v-overlay :value="loading">-->
-<!--          <v-progress-circular-->
-<!--            :size="70"-->
-<!--            :width="7"-->
-<!--            indeterminate-->
-<!--            color="white"-->
-<!--          />-->
-<!--        </v-overlay>-->
-      </div>
+        <!--        todo : v-overlay -->
+        <!--        <v-overlay :value="loading">-->
+        <!--          <v-progress-circular-->
+        <!--            :size="70"-->
+        <!--            :width="7"-->
+        <!--            indeterminate-->
+        <!--            color="white"-->
+        <!--          />-->
+        <!--        </v-overlay>-->
       </div>
     </div>
+  </div>
 </template>
 
 <script>

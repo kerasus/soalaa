@@ -3,64 +3,64 @@
   <div class="question-layout">
     <div class="question ">
       <div
-          v-if="status"
-          style="margin-bottom: 20px"
+        v-if="status"
+        style="margin-bottom: 20px"
       >
         تایپ سوال
       </div>
       <question_field
-          ref="questionStatement"
-          :key="'statement' + domKey"
-          v-model="question.statement"
-          class="q-mb-lg"
-          :edit-status="status"
-          placeholder="صورت سوال"
-          :question-id="value.id ? value.id : 'null'"
-          @input="updateQuestion"
+        ref="questionStatement"
+        :key="'statement' + domKey"
+        v-model="question.statement"
+        class="q-mb-lg"
+        :edit-status="status"
+        placeholder="صورت سوال"
+        :question-id="value.id ? value.id : 'null'"
+        @input="updateQuestion"
       />
     </div>
     <div
-        v-for="(item, index) in question.choices.list"
-        :key="index"
-        class="row question-layout-options"
-        :class="status ? 'q-mb-md  question-options white': '  question-o' +
+      v-for="(item, index) in question.choices.list"
+      :key="index"
+      class="row question-layout-options"
+      :class="status ? 'q-mb-md  question-options white': '  question-o' +
         'ptions'"
     >
       <div class="col-2">
-      <div class="row">
-      <div :class="status ?'col-10' :'col-10'">
-<!--        Todo : v-autocomplete -->
-        <q-select
-        :options="mbtiValue"
-        option-label="text"
-        option-value="value"
-        v-model="item.answer"
-        />
-<!--            <v-autocomplete-->
-<!--                v-model="item.answer"-->
-<!--                :items="mbti_value"-->
-<!--                label="انتخاب مقدار"-->
-<!--                dense-->
-<!--                outlined-->
-<!--                rounded-->
-<!--                :disabled="!status"-->
-<!--                @change="updateQuestion"-->
-<!--            />-->
-      </div>
-        <div class="col-1">
-          {{ (index + 1) + ') ' }}
+        <div class="row">
+          <div :class="status ?'col-10' :'col-10'">
+            <!--        Todo : v-autocomplete -->
+            <q-select
+              :options="mbtiValue"
+              option-label="text"
+              option-value="value"
+              v-model="item.answer"
+            />
+            <!--            <v-autocomplete-->
+            <!--                v-model="item.answer"-->
+            <!--                :items="mbti_value"-->
+            <!--                label="انتخاب مقدار"-->
+            <!--                dense-->
+            <!--                outlined-->
+            <!--                rounded-->
+            <!--                :disabled="!status"-->
+            <!--                @change="updateQuestion"-->
+            <!--            />-->
+          </div>
+          <div class="col-1">
+            {{ (index + 1) + ') ' }}
+          </div>
         </div>
-      </div>
       </div>
       <div class="answer-editor col-10">
         <div>
           <question_field
-              :ref="'choice' + (index + 1)"
-              :key="'choices' + (index + 1) + domKey"
-              v-model="item.title"
-              :edit-status="status"
-              :question-id="value.id ? value.id : 'null'"
-              @input="updateQuestion"
+            :ref="'choice' + (index + 1)"
+            :key="'choices' + (index + 1) + domKey"
+            v-model="item.title"
+            :edit-status="status"
+            :question-id="value.id ? value.id : 'null'"
+            @input="updateQuestion"
           />
         </div>
       </div>
