@@ -64,6 +64,13 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
+    layoutConfig: {
+      headerVisibility: true,
+      headerType: 'default',
+      sideBarVisibility: true,
+      // sideBarType: 'default'
+      sideBarType: 'panel'
+    },
     children: [
       {
         path: '',
@@ -82,12 +89,6 @@ const routes = [
         name: 'dashboard',
         component: () => import('pages/User/exam/List'),
         breadcrumbs: { title: 'پیشخوان' },
-        layoutConfig: {
-          headerVisibility: false,
-          headerType: 'A',
-          sideBarVisibility: false,
-          sideBarType: 'A'
-        },
         meta: {
           middlewares: [auth]
         }
@@ -132,6 +133,12 @@ const routes = [
         component: () => import('layouts/AdminLayout.vue'),
         meta: {
           middlewares: [auth]
+        },
+        layoutConfig: {
+          headerVisibility: true,
+          headerType: 'panel',
+          sideBarVisibility: true,
+          sideBarType: 'panel'
         },
         children: [
           {
@@ -441,6 +448,12 @@ const routes = [
         path: '/onlineQuiz/alaaView/:quizId/:questNumber',
         name: 'onlineQuiz.alaaView',
         component: () => import('pages/User/exam/participate/AlaaView'),
+        layoutConfig: {
+          headerVisibility: true,
+          headerType: 'quiz',
+          sideBarVisibility: true,
+          sideBarType: 'quiz'
+        },
         meta: {
           middlewares: [auth]
         }
@@ -449,6 +462,12 @@ const routes = [
         path: '/onlineQuiz/konkoorView/:quizId',
         name: 'konkoorView',
         component: () => import('pages/User/exam/participate/konkoorView'),
+        layoutConfig: {
+          headerVisibility: true,
+          headerType: 'quiz',
+          sideBarVisibility: true,
+          sideBarType: 'quiz'
+        },
         meta: {
           middlewares: [auth]
         }
