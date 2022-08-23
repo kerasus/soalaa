@@ -16,7 +16,7 @@
     </div>
     <div class="video-box flex items-center justify-center">
       <video-player
-        :sources="source"
+        :sources="videosSrc"
         poster="https://nodes.alaatv.com/media/thumbnails/1612/1612012nbhu.jpg" />
       <!--      <div class="video-btn flex items-center justify-between q-px-md">-->
       <!--        مشاهده ویدئو-->
@@ -37,13 +37,18 @@ import { PlayerSourceList } from 'src/models/PlayerSource'
 import VideoPlayer from 'components/VideoPlayer'
 
 export default {
-  name: 'LandingHeader',
+  name: 'header',
   components: {
     VideoPlayer
   },
   data: () => ({
-    source: new PlayerSourceList([{ src: 'https://nodes.alaatv.com/upload/vast/videos/HD_720p/1647426360_1245.mp4' }])
+    videosSrc: new PlayerSourceList([
+      { link: 'https://nodes.alaatv.com/media/1612/HD_720p/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت عالی', res: '720p' },
+      { link: 'https://nodes.alaatv.com/media/1612/hq/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت بالا', res: '480p' },
+      { link: 'https://nodes.alaatv.com/media/1612/240p/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت متوسط', res: '240p' }
+    ])
   })
+
 }
 </script>
 
@@ -246,9 +251,10 @@ export default {
     }
   }
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 599px) {
   .landing-header {
     padding: 0 15px 40px 15px;
+    margin-bottom: 40px !important;
     background: url("https://nodes.alaatv.com/upload/landing/3a/h5.png");
     .introduction {
       padding-top:43px;

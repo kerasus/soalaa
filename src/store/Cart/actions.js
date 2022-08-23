@@ -45,10 +45,12 @@ export function reviewCart (context, product) {
           cartItems: new CartItemList(),
           couponInfo: new Coupon(invoice.coupon)
         }
-
-        invoice.items[0].order_product.forEach((order) => {
-          cart.cartItems.list.push(order.product)
-        })
+        // means that there are items in cart
+        if (invoice.count > 0) {
+          invoice.items[0].order_product.forEach((order) => {
+            cart.cartItems.list.push(order.product)
+          })
+        }
 
         if (product) {
           const isExist = cart.cartItems.list.find(
