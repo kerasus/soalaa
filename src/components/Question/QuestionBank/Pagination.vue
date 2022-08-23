@@ -2,16 +2,16 @@
   <div class="question-bank-pagination q-pa-lg flex flex-center">
     {{ this.checkedStyle }}
     <q-pagination
+      v-model="checkedStyle"
       active-color="primary"
       outline
       direction-links
-      v-model="checkedStyle"
       color="black"
       :max="meta.last_page"
       :max-pages="7"
       boundary-numbers
-      @update:model-value="updatePage"
       :disable="disable"
+      @update:model-value="updatePage"
     />
   </div>
 </template>

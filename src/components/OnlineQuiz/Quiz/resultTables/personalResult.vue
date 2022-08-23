@@ -3,8 +3,8 @@
     class="personal-results"
   >
     <div
-      class="row"
       v-if="report"
+      class="row"
     >
       <div
         class="col col-12 col-md-7"
@@ -113,8 +113,8 @@
                       رتبه در شهر
                     </div>
                     <div
-                      class="col col-3 text-center"
                       v-if="report.main.rank_school"
+                      class="col col-3 text-center"
                     >
                       رتبه در مدرسه
                     </div>
@@ -129,8 +129,8 @@
                     <div class="col text-center"
                          :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_city }}</div>
                     <div
-                      class="col col-3 text-center"
                       v-if="report.main.rank_school"
+                      class="col col-3 text-center"
                     >{{ report.main.rank_school }}</div>
                   </div>
                 </q-card-section>

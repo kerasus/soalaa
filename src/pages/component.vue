@@ -8,8 +8,8 @@
       :key="item"
     >
       <q-btn
-        unelevated
         v-if="item.class === 'second-type'"
+        unelevated
         :color="item.color"
         class="q-mr-xl"
         :class="'btn-' + item.size"
@@ -22,13 +22,13 @@
     class="flex justify-center"
   >
     <div
-      class="flex justify-center"
       v-for="item in btnStyle"
       :key="item"
+      class="flex justify-center"
     >
       <q-btn
-        unelevated
         v-if="item.class === 'first-type'"
+        unelevated
         :color="item.color"
         class="q-mr-xl"
         :class="'btn-' + item.size"
@@ -48,8 +48,8 @@
       :class="item.margin"
     >
       <q-btn
-        unelevated
         v-if="item.class === 'icon-type'"
+        unelevated
         :outline="item.outline"
         :flat="item.flat"
         :color="item.color"

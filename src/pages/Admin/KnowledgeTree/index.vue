@@ -1,12 +1,12 @@
 <template>
   <tree
-    @ticked="test"
     ref="tree"
     tick-strategy="strict"
     :editable="true"
     :get-node-by-id="getNodeById"
     :add-new-node="createNode"
     :edit-node="editNode"
+    @ticked="test"
   />
 <!--  <q-btn v-for="(t, k) in testArr" :key="k" :label="t" @click="test2"/>-->
 </template>

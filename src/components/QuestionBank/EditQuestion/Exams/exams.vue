@@ -60,8 +60,8 @@
         </div>
 
       </div>
-      <div class="row q-mb-md q-col-gutter-md"
-           v-if="!status && attaches.length>0"
+      <div v-if="!status && attaches.length>0"
+           class="row q-mb-md q-col-gutter-md"
       >
         <div class="col-5">
           <span class="attached-exams-title">
@@ -132,8 +132,8 @@
             class="custom-btn-radius"
             :loading="loading"
             :disabled="loading"
-            @click="detach(item)"
             icon="mdi-trash-can-outline"
+            @click="detach(item)"
           />
         </div>
       </div>

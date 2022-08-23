@@ -116,6 +116,10 @@ export default {
 }
 
 .image-upload-parent {
+  .filepond--file-info {
+    position: relative;
+    right: -517px;
+  }
   .filepond--image-preview-wrapper {
     .filepond--image-preview {
       .filepond--image-clip {

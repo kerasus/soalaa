@@ -2,8 +2,8 @@
   <div class="question-card">
     <q-card>
       <q-card-section
-        class="first-row"
         v-if="questionData.source_data.question"
+        class="first-row"
       >
         <q-card class="title-card">
           <q-card-section
@@ -20,9 +20,9 @@
               class="rounded-borders question-select-part"
             >
               <q-item
-                clickable
-                v-ripple
                 v-if="questionData.source_data.choiceDescription1"
+                v-ripple
+                clickable
 
               >
                 <q-item-section>
@@ -33,9 +33,9 @@
                 </q-item-section>
               </q-item>
               <q-item
-                clickable
-                v-ripple
                 v-if="questionData.source_data.choiceDescription2"
+                v-ripple
+                clickable
               >
                 <q-item-section>
                   <div
@@ -45,9 +45,9 @@
                 </q-item-section>
               </q-item>
               <q-item
-                clickable
-                v-ripple
                 v-if="questionData.source_data.choiceDescription3"
+                v-ripple
+                clickable
               >
                 <q-item-section>
                   <div
@@ -57,9 +57,9 @@
                 </q-item-section>
               </q-item>
               <q-item
-                clickable
-                v-ripple
                 v-if="questionData.source_data.choiceDescription4"
+                v-ripple
+                clickable
               >
                 <q-item-section>
                   <div
@@ -97,10 +97,10 @@
                     </span>
                   </div>
                   <q-item-label
-                    class="profile-publish-year"
                     v-if="originItem.publishYear"
-                    v-html="originItem.publishYear.title"
+                    class="profile-publish-year"
                     caption
+                    v-html="originItem.publishYear.title"
                   />
                   <q-item-label
                     v-if="originItem.questionOrder"

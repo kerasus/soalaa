@@ -6,8 +6,8 @@
       class="col-md-5 right-side"
     >
       <q-virtual-scroll
-        class="konkoor-view-scroll"
         ref="scroller"
+        class="konkoor-view-scroll"
         :items="questions"
         :virtual-scroll-item-size="450"
         :virtual-scroll-slice-size="5"
@@ -15,8 +15,8 @@
       >
         <template v-slot="{ item, index }">
           <q-item
-            class="question-field"
             :key="index"
+            class="question-field"
             dense
           >
             <q-item-section>
@@ -98,10 +98,10 @@
             پاسخنامه کاربر
           </div>
           <q-space></q-space>
-          <q-btn dense
+          <q-btn v-close-popup
+                 dense
                  flat
-                 icon="close"
-                 v-close-popup>
+                 icon="close">
             <q-tooltip class="bg-white text-blue">بستن</q-tooltip>
           </q-btn>
         </q-bar>

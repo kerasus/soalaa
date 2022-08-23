@@ -1,7 +1,7 @@
 <template>
   <div class="row q-pa-md">
-    <q-dialog persistent
-              v-model="dialog"
+    <q-dialog v-model="dialog"
+              persistent
               class="new-question-dialog">
       <q-card class=" bg-grey-1">
         <q-card-section>

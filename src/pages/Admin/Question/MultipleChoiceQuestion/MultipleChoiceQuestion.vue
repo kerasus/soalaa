@@ -16,9 +16,9 @@
       class="row main-card-section multiple-answer"
     >
       <div
-        class="col-lg-6 col-12"
         v-for="(item, index) in question.choices.list"
         :key="item.order"
+        class="col-lg-6 col-12"
       >
         <div class="card-section-header">
           <q-btn
@@ -29,8 +29,8 @@
             @click="removeChoice(item.order)"
           />
           <q-radio
-            dense
             v-model="choice"
+            dense
             :val="'choice' + index"
             :label="'گزینه ' + (index + 1)"
             color="primary"
@@ -42,6 +42,20 @@
             :ref="'tiptapChoice' + index"
             :key="'choices' + index + domKey"
           />
+        </div>
+      </div>
+    </q-card-section>
+    <q-card-section class="row main-card-section">
+      <div class="col-12">
+        <div class="card-section-header">
+          <q-btn
+            class="icon-type"
+            icon="isax:add-square5"
+            color="positive"
+            flat
+            @click="addChoice"
+          />
+          <span>گزینه جدید</span>
         </div>
       </div>
     </q-card-section>

@@ -30,10 +30,10 @@
                   <!--        TODO :  window.innerWidth MUST BE REPLACED   -->
                   <q-tab
                     v-for="(item, index) in report.sub_category"
+                    :id="'lessonTab' + index"
                     :key="index"
                     :name="item.sub_category_id"
                     :label="item.sub_category"
-                    :id="'lessonTab' + index"
                     :disable="tabPanelDisabled"
                     @click="onVideoTabChange(index)"
                   ></q-tab>
@@ -60,10 +60,10 @@
                           <div class="timestamp">زمانکوب ها</div>
                           <q-list dense>
                             <q-item
-                              clickable
-                              v-ripple
                               v-for="(currentVideoItem, i) in currentVideoContent.timepoints"
                               :key="i"
+                              v-ripple
+                              clickable
                               @click="playTimePoint(i)"
                             >
                               <q-item-section>{{ currentVideoItem.title }}</q-item-section>
@@ -84,8 +84,8 @@
                         ویدیویی منتشر نشده
                       </q-banner>
                     </div>
-                    <div class="row videoPlayer-pages-box"
-                         v-if="currentVideoContent">
+                    <div v-if="currentVideoContent"
+                         class="row videoPlayer-pages-box">
                       <div class="col">
                         <div
                           class="flex flex-center"

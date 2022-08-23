@@ -19,9 +19,9 @@
 
         <div v-if="listConfig.questionInfo"
              class="question-tags">
-          <div class="tag"
-               v-for="(item, index) in question.tags.list"
-               :key="index">
+          <div v-for="(item, index) in question.tags.list"
+               :key="index"
+               class="tag">
             <q-skeleton v-if="question.loading"
                         class="info-title"
                         type="text"
@@ -156,10 +156,10 @@
                                        size="20px"
                                        color="primary" />
                   <q-toggle v-else
-                            class="menu-toggle"
                             v-model="confirmQuestion"
-                            @update:model-value="emitAdminActions('confirmQuestion', question)"
-                            color="primary" />
+                            class="menu-toggle"
+                            color="primary"
+                            @update:model-value="emitAdminActions('confirmQuestion', question)" />
                 </q-item>
               </q-list>
             </q-menu>
@@ -214,7 +214,8 @@
               </div>
               <div v-if="question.descriptive_answer"
                    class="question-answer-description">
-                {{ question.descriptive_answer }}
+                <!--                <vue-katex :input="question.descriptive_answer" />-->
+                <vue-katex :input="question.descriptive_answer" />
               </div>
               <p v-else>
                 پاسخ تشریحی ندارد.
@@ -242,8 +243,8 @@
                  :outline="question.selected"
                  color="primary"
                  class="question-item-button"
-                 @click="selectQuestion"
-                 :icon="question.selected ? 'isax:minus' : 'isax:add'" />
+                 :icon="question.selected ? 'isax:minus' : 'isax:add'"
+                 @click="selectQuestion" />
         </div>
         <div v-if="finalApprovalMode">
           <q-btn unelevated
@@ -319,15 +320,15 @@
         <!--              {{descriptiveAnswerExpanded?  'بستن پاسخ تشریحی' : 'نمایش پاسخ تشریحی'}}-->
         <!--              <q-icon id="toggle-icon" name="isax:arrow-down-1" ></q-icon>-->
         <!--            </div>-->
-        <q-btn flat
+        <q-btn v-if="listConfig.descriptiveAnswer"
+               flat
                role="presentation"
                class="no-padding"
-               v-if="listConfig.descriptiveAnswer"
                :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
                @click="descriptiveAnswerExpanded = !descriptiveAnswerExpanded">
           <template v-slot:default>
-            <span class="q-pr-sm"
-                  v-if="descriptiveAnswerExpanded">
+            <span v-if="descriptiveAnswerExpanded"
+                  class="q-pr-sm">
               بستن پاسخ تشریحی
             </span>
             <div v-else
@@ -343,8 +344,8 @@
   <q-dialog v-model="reportProblemDialog.show">
     <q-card flat
             class="report-problem-dialog">
-      <q-btn flat
-             v-close-popup
+      <q-btn v-close-popup
+             flat
              round
              dense
              icon="close"
@@ -354,10 +355,10 @@
         <div class="title-style">
           نوع خطا
         </div>
-        <q-select filled
+        <q-select v-model="reportProblemDialog.problemType"
+                  filled
                   dense
                   dropdown-icon="isax:arrow-down-1"
-                  v-model="reportProblemDialog.problemType"
                   :options="reportProblemDialog.problems"
                   label="پاسخ نادرست" />
       </q-card-section>
@@ -371,15 +372,15 @@
                  type="textarea" />
       </q-card-section>
       <q-card-actions class="action-box no-padding">
-        <q-btn unelevated
+        <q-btn v-close-popup
+               unelevated
                label="انصراف"
-               class="cancel question-item-button"
-               v-close-popup />
-        <q-btn unelevated
+               class="cancel question-item-button" />
+        <q-btn v-close-popup
+               unelevated
                label="ثبت"
                color="primary"
-               class="question-item-button"
-               v-close-popup />
+               class="question-item-button" />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -389,10 +390,11 @@
 import { Question } from 'src/models/Question'
 import question from './Question'
 import VideoPlayer from 'components/VideoPlayer'
+import VueKatex from 'components/VueKatex'
 
 export default {
   name: 'QuestionItem',
-  components: { question, VideoPlayer },
+  components: { VueKatex, question, VideoPlayer },
   props: {
     question: {
       type: Question,

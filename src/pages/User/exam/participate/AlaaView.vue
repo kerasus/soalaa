@@ -88,8 +88,8 @@
             </div>
             <div class="col question-body">
               <div
-                :class="{ ltr: isLtrString(currentQuestion.statement)}"
                 v-if="currentQuestion.in_active_category"
+                :class="{ ltr: isLtrString(currentQuestion.statement)}"
                 class="renderedPanel"
               >
                 <vue-katex :input="currentQuestion.statement" />
@@ -106,15 +106,15 @@
                 </q-card-section>
               </q-card>
             </div>
-            <div class="col question-answers"
-                 v-if="currentQuestion.in_active_category"
+            <div v-if="currentQuestion.in_active_category"
+                 class="col question-answers"
             >
               <div
                 class="row">
                 <div
-                  class="choice-parent col-12 col-md-6"
                   v-for="item in currentQuestion.choices.list"
                   :key="item.id"
+                  class="choice-parent col-12 col-md-6"
                 >
                   <choice
                     :question-id="currentQuestion.id"

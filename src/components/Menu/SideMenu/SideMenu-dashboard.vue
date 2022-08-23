@@ -41,8 +41,8 @@
               target="_blank"
             >
               <q-item
-                clickable
                 v-ripple:deep-purple
+                clickable
                 :active="false"
                 active-class="active-route"
               >
@@ -105,10 +105,10 @@
           </q-expansion-item>
           <q-item
             v-else
+            v-model="clickedItem"
             :to="(item.routeName) ? {name: item.routeName} : null"
             class="item-list"
             :class="{ 'alone-item': !item.children.length}"
-            v-model="clickedItem"
             exact-active-class="active-route"
           >
             <div class="section-title">
@@ -223,22 +223,22 @@ export default {
           active: false,
           children: []
         },
-        {
-          title: 'گزارشات',
-          icon: 'isax:graph',
-          permission: 'examStore',
-          routeName: null,
-          active: false,
-          children: []
-        },
-        {
-          title: 'تنظیمات',
-          icon: 'isax:setting-2',
-          routeName: 'Admin.Settings',
-          permission: 'examStore',
-          active: false,
-          children: []
-        },
+        // {
+        //   title: 'گزارشات',
+        //   icon: 'isax:graph',
+        //   permission: 'examStore',
+        //   routeName: null,
+        //   active: false,
+        //   children: []
+        // },
+        // {
+        //   title: 'تنظیمات',
+        //   icon: 'isax:setting-2',
+        //   routeName: 'Admin.Settings',
+        //   permission: 'examStore',
+        //   active: false,
+        //   children: []
+        // },
         {
           title: 'سوالات متداول',
           icon: 'isax:message-question',

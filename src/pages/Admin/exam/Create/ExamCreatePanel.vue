@@ -52,8 +52,8 @@
       <q-dialog v-model="examConfirmedDialog">
         <q-card flat
                 class="report-problem-dialog">
-          <q-btn flat
-                 v-close-popup
+          <q-btn v-close-popup
+                 flat
                  round
                  dense
                  icon="close"

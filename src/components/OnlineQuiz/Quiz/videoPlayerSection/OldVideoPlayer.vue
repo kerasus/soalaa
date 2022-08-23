@@ -1,6 +1,6 @@
 <template>
-  <div class="vPlayer"
-       id="videoPlayer">
+  <div id="videoPlayer"
+       class="vPlayer">
     <div id="videoPlayer-timeStamp"
          dir="rtl"
          style="font-family: 'serif', IRANSans;">
@@ -76,8 +76,8 @@
         <!--        </v-btn>-->
       </transition>
     </div>
-    <video ref="videoPlayer"
-           id="my-video"
+    <video id="my-video"
+           ref="videoPlayer"
            dir="ltr"
            class="video-js vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause">
 

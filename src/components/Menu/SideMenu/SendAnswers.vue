@@ -36,10 +36,10 @@
             پاسخنامه کاربر
           </div>
           <q-space></q-space>
-          <q-btn dense
+          <q-btn v-close-popup
+                 dense
                  flat
-                 icon="close"
-                 v-close-popup>
+                 icon="close">
             <q-tooltip class="bg-white text-blue">بستن</q-tooltip>
           </q-btn>
         </q-bar>
