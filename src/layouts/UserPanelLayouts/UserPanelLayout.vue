@@ -1,14 +1,14 @@
 <template>
   <div class="row user-panel-layout">
     <user-side-bar class="col-xl-3 col-lg-3 col-md-3" />
-    <div class="col-xl-9 col-lg-9 col-md-9">
+    <div class="col-xl-9 col-lg-9 col-md-9 user-panel-content">
       <Router :include="keepAliveComponents" />
     </div>
   </div>
 </template>
 
 <script>
-import UserSideBar from 'pages/User/MyOrders/UserSideBar'
+import UserSideBar from 'layouts/UserPanelLayouts/UserSideBar'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 import Router from 'src/router/Router'
 export default {
@@ -56,6 +56,14 @@ export default {
   margin: auto;
   @media screen and (max-width: 1439px) {
     max-width: 100%;
+  }
+  .user-panel-content {
+    @media screen and (max-width: 1439px) {
+      padding-right: 32px;
+    }
+    @media screen and (max-width: 1148px) {
+      padding-right: 20px;
+    }
   }
 }
 </style>
