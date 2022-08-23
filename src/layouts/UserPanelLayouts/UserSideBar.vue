@@ -128,12 +128,6 @@ export default {
 
 <style lang="scss" scoped>
 .user-panel-side-bar {
-  @media screen and (max-width: 1439px) {
-    padding-left: 32px;
-  }
-  @media screen and (max-width: 1148px) {
-    padding-left: 20px;
-  }
   .profile-box {
     font-style: normal;
     font-weight: 400;
