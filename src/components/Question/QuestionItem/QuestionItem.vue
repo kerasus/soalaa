@@ -214,7 +214,8 @@
               </div>
               <div v-if="question.descriptive_answer"
                    class="question-answer-description">
-                {{ question.descriptive_answer }}
+                <!--                <vue-katex :input="question.descriptive_answer" />-->
+                <vue-katex :input="question.descriptive_answer" />
               </div>
               <p v-else>
                 پاسخ تشریحی ندارد.
@@ -389,10 +390,11 @@
 import { Question } from 'src/models/Question'
 import question from './Question'
 import VideoPlayer from 'components/VideoPlayer'
+import VueKatex from 'components/VueKatex'
 
 export default {
   name: 'QuestionItem',
-  components: { question, VideoPlayer },
+  components: { VueKatex, question, VideoPlayer },
   props: {
     question: {
       type: Question,
