@@ -66,11 +66,11 @@
               :options="provinces"
               option-label="title"
               option-value="id"
-              @filter="filterProvinces"
               map-options
               emit-value
               :rules="[
                 val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
+              @filter="filterProvinces"
             >
               <template v-slot:no-option>
                 <q-item>
@@ -90,12 +90,12 @@
               color="light-blue-6"
               emit-value
               label="شهر"
-              @filter="filterCity"
               :options="citiesForSelectedProvince"
               option-label="title"
               option-value="id"
               :rules="[
                 val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
+              @filter="filterCity"
             >
               <template v-slot:no-option>
                 <q-item>

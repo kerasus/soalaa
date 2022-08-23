@@ -1,8 +1,8 @@
 <template>
   <div class="exam-card">
     <entity-crud-form-builder
-      v-model:value="inputs"
       ref="EntityCrudFormBuilder"
+      v-model:value="inputs"
     />
   </div>
 </template>

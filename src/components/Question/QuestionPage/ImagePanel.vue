@@ -31,8 +31,8 @@
       </q-card-section>
       <div>
         <q-card-section>
-          <img class="main-image"
-               v-if="selectedImageSrc"
+          <img v-if="selectedImageSrc"
+               class="main-image"
                :src="selectedImageSrc">
           <div class="all-images">
             صورت سوال

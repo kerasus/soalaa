@@ -1,8 +1,8 @@
 <template>
   <div
+    :id="defaultOptions.id"
     class="page-builder-section"
     :class="className"
-    :id="defaultOptions.id"
     :style="style"
   >
     <page-builder-row

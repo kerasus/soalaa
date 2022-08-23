@@ -36,8 +36,8 @@
     <div class="relative-position">
       <div class="attach-btn row">
         <question-identifier
-          editable
           ref="questionIdentifier"
+          editable
           class="col-12"
           :exams="examList"
           :lessons="subCategoriesList"

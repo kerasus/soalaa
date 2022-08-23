@@ -20,12 +20,12 @@
       <q-resize-observer @resize="setHeaderDimension" />
     </template>
     <template #left-drawer>
-      <div class="drawer-inside-of-MapOfQuestions"
-           v-if="$route.name === 'onlineQuiz.alaaView'">
+      <div v-if="$route.name === 'onlineQuiz.alaaView'"
+           class="drawer-inside-of-MapOfQuestions">
         <sideMenuMapOfQuestions />
       </div>
-      <div class="drawer-inside"
-           v-else>
+      <div v-else
+           class="drawer-inside">
         <side-menu-dashboard />
       </div>
     </template>
@@ -44,14 +44,14 @@
             <q-separator />
             <q-card-actions align="right"
                             class="q-pb-none">
-              <q-btn color="green"
+              <q-btn v-close-popup
+                     color="green"
                      flat
-                     @click="confirmDialogAction(true)"
-                     v-close-popup>بله</q-btn>
-              <q-btn color="red"
+                     @click="confirmDialogAction(true)">بله</q-btn>
+              <q-btn v-close-popup
+                     color="red"
                      flat
-                     @click="confirmDialogAction(false)"
-                     v-close-popup>خیر</q-btn>
+                     @click="confirmDialogAction(false)">خیر</q-btn>
             </q-card-actions>
           </q-card>
         </q-dialog>

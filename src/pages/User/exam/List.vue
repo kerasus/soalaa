@@ -21,8 +21,8 @@
           </template>
           آزمونی وجود ندارد
         </q-banner>
-        <div class="row"
-             v-if="exams.list.length > 0 && !loadingList">
+        <div v-if="exams.list.length > 0 && !loadingList"
+             class="row">
           <div class="col">
             <div class="row table-header"
                  style="padding-bottom: 12px;"
@@ -36,14 +36,14 @@
               >
                 شروع آزمون
               </div>
-              <div class="col col-2"
-                   v-if="false"
+              <div v-if="false"
+                   class="col col-2"
                    style="padding-right: 24px;"
               >
                 زمان پایان آزمون
               </div>
-              <div class="col col-1"
-                   v-if="false"
+              <div v-if="false"
+                   class="col col-1"
               >
                 میزان تاخیر مجاز
               </div>
@@ -53,9 +53,9 @@
               </div>
               <div class="col col-1" />
             </div>
-            <div class="row exam-info-bar"
-                 v-for="item in exams.list"
+            <div v-for="item in exams.list"
                  :key="item.id"
+                 class="row exam-info-bar"
             >
               <div class="col">
                 <!--                elevation="0"
@@ -78,16 +78,16 @@
                         {{ item.shamsiDate('start_at').date }}
                       </span>
                     </div>
-                    <div class="col col-12 col-md-2"
-                         v-if="false"
+                    <div v-if="false"
+                         class="col col-12 col-md-2"
                     >
                       <span class="d-inline-block-md d-none">
                         زمان پایان آزمون:
                       </span>
                       {{ item.shamsiDate('finish_at').dateTime }}
                     </div>
-                    <div class="col col-12 col-md-1"
-                         v-if="false"
+                    <div v-if="false"
+                         class="col col-12 col-md-1"
                     >
                       <span class="d-inline-block-md d-none">
                         میزان تاخیر مجاز:

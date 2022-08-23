@@ -12,17 +12,17 @@
           <span> سازنده سوال :</span> <span> فیلان دبیر</span>
         </p>
       </div>
-      <div class="col-4"
-           v-if="question.id === null"
+      <div v-if="question.id === null"
+           class="col-4"
       >
         <div class="row">
           <div class="col">
             <div class="row justify-end">
               <div class="col">
                 <q-btn
+                  v-ripple
                   rounded
                   unelevated
-                  v-ripple
                   color="green"
                   class="save-btn-default"
                   @click="btn_clicked('create')"
@@ -34,9 +34,9 @@
               </div>
               <div class="col">
                 <q-btn
+                  v-ripple
                   rounded
                   unelevated
-                  v-ripple
                   color="white"
                   text-color="grey-10"
                   class="draft-btn-default"
@@ -52,8 +52,8 @@
         </div>
       </div>
       <!---------------------------------edit page-------------------------------->
-      <div class="col"
-           v-if="question.id && editStatus"
+      <div v-if="question.id && editStatus"
+           class="col"
       >
         <div class="row">
           <div class="col">
@@ -99,15 +99,15 @@
         </div>
       </div>
       <!-------------------------------show page--------------------------------->
-      <div class="col"
-           v-if="!editStatus"
+      <div v-if="!editStatus"
+           class="col"
       >
         <div class="row justify-end">
           <div class="col-3">
             <q-btn
+              v-ripple
               rounded
               unelevated
-              v-ripple
               color="white"
               text-color="grey-10"
               class="edit-btn-default"
@@ -120,9 +120,9 @@
           </div>
           <div class="col-3">
             <q-btn
+              v-ripple
               rounded
               unelevated
-              v-ripple
               color="white"
               text-color="grey-10"
               class="edit-btn-default"
