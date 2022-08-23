@@ -139,6 +139,7 @@ export default {
   line-height: 22px;
   letter-spacing: -0.02em;
   color: #65677f;
+  margin-top: 24px;
 }
 .cart-items-container {
   margin-top: 22px;

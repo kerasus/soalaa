@@ -358,6 +358,7 @@ export default {
 
 <style lang="scss" scoped>
 .invoice-container {
+  margin-top: 68px;
   margin-left: 30px;
 
   @media screen and (max-width: 1023px) {

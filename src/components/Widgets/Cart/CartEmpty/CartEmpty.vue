@@ -22,7 +22,6 @@ export default {
     cartReview() {
       this.$store.dispatch('Cart/reviewCart')
         .then((response) => {
-          console.log(response.data.data.count)
           this.count = response.data.data.count
         })
     }
