@@ -1,10 +1,13 @@
 <template>
-  <div>
+  <div
+    class="my-orders-list"
+  >
     <entity-index
-      title="لیست آزمون ها"
+      title="سفارش های من"
       :api="api"
       :table="table"
       :table-keys="tableKeys"
+      :default-layout="false"
       :create-route-name="'Admin.Exam.Create'"
     >
       <template #table-cell="{inputData, showConfirmRemoveDialog}">
@@ -293,11 +296,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.user-panel-layout {
-  max-width: 1362px;
-  margin: auto;
-  @media screen and (max-width: 1439px) {
-    max-width: 100%;
+.my-orders-list {
+  :deep(.quasar-crud-index-table) {
+    padding: 0 !important;
   }
 }
 </style>
