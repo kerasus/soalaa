@@ -134,7 +134,9 @@ export default {
       ],
       editInputs: [],
       showInputs: [],
-      indexInputs: []
+      indexInputs: [
+        { type: 'hidden' }
+      ]
     }
   },
   methods: {
