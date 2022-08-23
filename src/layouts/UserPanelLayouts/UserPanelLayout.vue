@@ -1,7 +1,7 @@
 <template>
   <div class="row user-panel-layout">
     <user-side-bar class="col-xl-3 col-lg-3 col-md-3" />
-    <div class="col-xl-9 col-lg-9 col-md-9 user-panel-content">
+    <div class="col-xl-9 col-lg-9 col-md-9 col-12 user-panel-content">
       <Router :include="keepAliveComponents" />
     </div>
   </div>
@@ -57,13 +57,21 @@ export default {
   @media screen and (max-width: 1439px) {
     max-width: 100%;
   }
-  .user-panel-content {
-    @media screen and (max-width: 1439px) {
-      padding-right: 32px;
-    }
-    @media screen and (max-width: 1148px) {
-      padding-right: 20px;
-    }
+  @media screen and (max-width: 1439px) {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  @media screen and (max-width: 1148px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  @media screen and (max-width: 1023px) {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  @media screen and (max-width: 600px) {
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 </style>
