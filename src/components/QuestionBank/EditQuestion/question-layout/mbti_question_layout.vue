@@ -31,10 +31,10 @@
           <div :class="status ?'col-10' :'col-10'">
             <!--        Todo : v-autocomplete -->
             <q-select
+              v-model="item.answer"
               :options="mbtiValue"
               option-label="text"
               option-value="value"
-              v-model="item.answer"
             />
             <!--            <v-autocomplete-->
             <!--                v-model="item.answer"-->

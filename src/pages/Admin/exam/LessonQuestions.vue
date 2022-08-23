@@ -56,16 +56,16 @@
       </div>
     </q-card>
     <q-virtual-scroll
-      class="konkoor-view-scroll q-pa-md q-mt-md"
       ref="scroller"
-      :items="filteredQuestions"
       :key="questionListKey"
+      class="konkoor-view-scroll q-pa-md q-mt-md"
+      :items="filteredQuestions"
       @virtual-scroll="onScroll"
     >
       <template v-slot="{ item, index }">
         <q-item
-          class="question-field no-padding q-mb-md"
           :key="index"
+          class="question-field no-padding q-mb-md"
           dense
         >
           <q-item-section>

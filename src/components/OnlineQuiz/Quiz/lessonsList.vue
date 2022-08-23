@@ -8,8 +8,8 @@
           round
           dark-percentage
           color="primary"
-          @click="goBack"
           icon="isax:arrow-left-2"
+          @click="goBack"
         />
       </div>
     </div>
@@ -73,8 +73,8 @@
                         class="q-mx-sm"
                         size="12px"
                         dark-percentage
-                        @click="redirectTo(subcategory)"
-                        color="green">
+                        color="green"
+                        @click="redirectTo(subcategory)">
                         <q-icon
                           name="mdi-notebook-outline"
                           size="sm"

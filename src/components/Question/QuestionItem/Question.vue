@@ -7,9 +7,9 @@
   </template> -->
   <vue-katex :input="question.statement" />
   <template v-if="question.loading">
-    <div class="choice-column col-3"
-         v-for="item in 4"
-         :key="item">
+    <div v-for="item in 4"
+         :key="item"
+         class="choice-column col-3">
       <div class="question-choice false"
            style="margin-bottom: 2px">
         {{ item }}
@@ -21,14 +21,14 @@
   </template>
   <template v-else>
     <QuestionChoice
+      v-for="(choice , index) in question.choices.list"
       id="test"
       ref="questionChoice"
+      :key="index"
       class=" col-lg-3 col-md-3 col-sm-12"
       :class="questionCol"
       :dir="isLtrQuestion()? 'ltr':''"
-      v-for="(choice , index) in question.choices.list"
-      :choice="choice"
-      :key="index">
+      :choice="choice">
     </QuestionChoice>
   </template>
 </template>

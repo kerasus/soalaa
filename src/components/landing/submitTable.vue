@@ -6,13 +6,13 @@
     <div class="submit-table">
       <div class="exams-box">
         <div class="tabs">
-          <q-btn unelevated
-                 v-for="exam in exams"
-                 @click="activeTab = exam"
+          <q-btn v-for="exam in exams"
                  :key="exam.id"
+                 unelevated
                  :name="exam"
                  class="exam-btn"
                  :class="{'active-exam-btn':activeTab.id === exam.id}"
+                 @click="activeTab = exam"
           >
             <span class="btn-text">
               {{ exam.title }}
@@ -101,8 +101,8 @@
             <td class="date custom-border">{{ item.date }}</td>
             <td class="title custom-border">{{ item.title }}</td>
             <td class="submitStatus custom-border">
-              <div class="flex items-center justify-center"
-                   v-if="item.submitStatus">
+              <div v-if="item.submitStatus"
+                   class="flex items-center justify-center">
                 <svg width="21"
                      height="20"
                      viewBox="0 0 21 20"

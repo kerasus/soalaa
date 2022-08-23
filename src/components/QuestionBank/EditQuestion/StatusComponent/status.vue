@@ -10,10 +10,10 @@
           class="status-card"
         >
           <q-select
+            v-model="newStatus.changeState"
             rounded
             borderless
             dense
-            v-model="newStatus.changeState"
             :options="statuses.list"
             option-label="display_title"
             option-value="id"
@@ -28,8 +28,8 @@
           flat
           class=" status-card"
         >
-          <q-input borderless
-                   v-model="text"
+          <q-input v-model="text"
+                   borderless
                    dense
                    model-value=""></q-input>
         </q-card>
@@ -40,8 +40,8 @@
           color="green"
           :loading="loading"
           :disabled="loading"
-          @click="sendStatus"
           class="status-button"
+          @click="sendStatus"
         >
           ذخیره
         </q-btn>

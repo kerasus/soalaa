@@ -7,8 +7,8 @@
           round
           dark-percentage
           color="primary"
-          @click= this.$router.go(-1)
           icon="isax:arrow-left-2"
+          @click= this.$router.go(-1)
         />
       </div>
     </div>
@@ -65,8 +65,8 @@
           <q-btn
             rounded
             color="indigo-11"
-            @click="DoFilter"
             style="width: 150px"
+            @click="DoFilter"
           >
             اعمال فیلتر
           </q-btn>
@@ -76,8 +76,8 @@
             rounded
             color="amber-6"
             :loading="fileLoading"
-            @click="getExcel"
             style="width: 150px"
+            @click="getExcel"
           >
             تولید Excel
           </q-btn>
@@ -120,14 +120,14 @@
         <q-tab-panels v-model="tabs">
           <q-tab-panel name="rank">
             <q-markup-table
-              class="my-sticky-header-table tabs-content"
               id="scroll-target-id"
+              class="my-sticky-header-table tabs-content"
               dense
             >
               <q-infinite-scroll
-                @load="loadRankData"
                 :offset="250"
                 scroll-target="#scroll-target-id"
+                @load="loadRankData"
               >
                 <thead
                   v-if="results[0]"

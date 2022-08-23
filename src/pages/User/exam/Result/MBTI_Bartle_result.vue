@@ -44,9 +44,9 @@
                dir="ltr"
           >
             <div
-              class="col-md-6 col-12 mitra"
               v-for="(item, index) in result.details"
               :key="index"
+              class="col-md-6 col-12 mitra"
               dir="rtl"
             >
               <div

@@ -7,8 +7,8 @@
       round
       dark-percentage
       color="primary"
-      @click=this.$router.go(-1)
       icon="isax:arrow-left-2"
+      @click=this.$router.go(-1)
     />
 
   </div>
@@ -38,8 +38,8 @@
             color="white"
             flat
             round
-            @click="addVideo"
             icon="mdi-plus"
+            @click="addVideo"
           >
             <q-tooltip
               anchor="top middle"
@@ -52,8 +52,8 @@
             color="white"
             flat
             round
-            @click="saveVideos"
             icon="mdi-check"
+            @click="saveVideos"
           >
             <q-tooltip
               anchor="top middle"
@@ -109,8 +109,8 @@
               color="red"
               flat
               round
-              @click="removeVideo(index)"
               icon="mdi-close"
+              @click="removeVideo(index)"
             >
               <q-tooltip
                 anchor="top middle"

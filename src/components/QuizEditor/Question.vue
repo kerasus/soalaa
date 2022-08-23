@@ -123,8 +123,8 @@
           <q-toggle
             v-else
             v-model="source.confirmed"
-            @update:model-value="confirmQuestion"
             color="primary"
+            @update:model-value="confirmQuestion"
           >
             <q-tooltip>
               تایید سوال

@@ -8,8 +8,8 @@
           round
           dark-percentage
           color="primary"
-          @click= this.$router.go(-1)
           icon="isax:arrow-left-2"
+          @click= this.$router.go(-1)
         />
       </div>
     </div>
@@ -39,8 +39,8 @@
                   size="12px"
                   round
                   dark-percentage
-                  @click="redirect(item)"
-                  color="green">
+                  color="green"
+                  @click="redirect(item)">
                   <q-icon
                     name="mdi-notebook-outline"
                     size="sm"

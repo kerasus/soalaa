@@ -25,8 +25,8 @@
               <q-icon
                 v-if="!item.loading.question"
                 name="cancel"
-                @click="deleteFile (item, 'questionFile', 'question')"
                 class="cursor-pointer"
+                @click="deleteFile (item, 'questionFile', 'question')"
               />
             </template>
           </q-file>
@@ -74,8 +74,8 @@
               <q-icon
                 v-if="!item.loading.answer"
                 name="cancel"
-                @click="deleteFile (item, 'answerFile', 'answer')"
                 class="cursor-pointer"
+                @click="deleteFile (item, 'answerFile', 'answer')"
               />
             </template>
           </q-file>

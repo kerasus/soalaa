@@ -103,8 +103,8 @@
             </q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable
-                v-close-popup
+        <q-item v-close-popup
+                clickable
                 @click="logOut">
           <q-item-section>
             <q-item-label>خروج</q-item-label>

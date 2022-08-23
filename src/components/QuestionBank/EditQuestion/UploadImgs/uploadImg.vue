@@ -63,8 +63,8 @@
                     v-if="(editStatus && file.thumb) || (!editStatus && file)"
                     :src="(editStatus) ? file.thumb : file"
                     class="q-mt-3"
-                    @click="showImgPanel(((editStatus) ? file.thumb : file))"
                     style="height: 60px; max-width: 100%"
+                    @click="showImgPanel(((editStatus) ? file.thumb : file))"
                   />
                   <span v-else>No Images</span>
                   <q-card-section
@@ -186,8 +186,8 @@
                 </div>
               </div>
               <div
-                class="col"
                 v-if="!editStatus && answerFiles.length === 0"
+                class="col"
               >
                 <q-card>
                   <q-img
