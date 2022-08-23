@@ -6,13 +6,13 @@
     <div class="submit-table">
       <div class="exams-box">
         <div class="tabs">
-          <q-btn unelevated
-                 v-for="exam in exams"
-                 @click="activeTab = exam"
+          <q-btn v-for="exam in tabPages"
                  :key="exam.id"
+                 unelevated
                  :name="exam"
                  class="exam-btn"
                  :class="{'active-exam-btn':activeTab.id === exam.id}"
+                 @click="activeTab = exam"
           >
             <span class="btn-text">
               {{ exam.title }}
@@ -23,7 +23,7 @@
         <div class="exams-q-select">
           <q-select
             v-model="activeTab"
-            :options="exams"
+            :options="tabPages"
             dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
             hide-bottom-space
             dense
@@ -35,33 +35,35 @@
           </q-select>
         </div>
         <div class="table-description">
-          {{ activeTab.des }}
+          {{ description }}
         </div>
       </div>
-      <div class="table-box-container ">
+      <div class="table-box-container">
         <!--        <table-component :table-data="data"/>-->
         <div class="table-parent q-pt-sm">
-          <div class="major-grade-btn ">
+          <div class="major-grade-btn">
             <q-select
+              v-if="currentGrades.length>0"
               v-model="selectedGrade"
               borderless
               option-label="title"
               dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
               hide-bottom-space
               dense
-              :options="gradeOptions"
+              :options="currentGrades"
               class="select-1 dropdown-btn first q-mr-md">
               <template v-slot:selected>
                 <span class="custom-label-prefix"> مقطع تحصیلی: </span>
                 {{ selectedGrade.title }}
               </template>
             </q-select>
-            <q-select v-model="selectedMajor"
+            <q-select v-if="currentMajors.length >0"
+                      v-model="selectedMajor"
                       borderless
                       dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
                       hide-bottom-space
                       dense
-                      :options="majorOptions"
+                      :options="currentMajors"
                       option-label="title"
                       class="select-2 dropdown-btn"
             >
@@ -94,21 +96,20 @@
               >{{ item.title }}</td>
               <td v-if="selectiveRegister"
                   class="submitStatus-selective-mode custom-border">
-                <div class="flex items-center justify-center"
-                     v-if="item.submitStatus">
+                <div
+                  class="flex items-center justify-center">
                   <div class="empty-circle"></div>
 
                 </div>
               </td>
               <td class="custom-border"
                   :class="selectiveRegister ? 'submitStatus-selective-mode ': 'submitStatus' ">
-                <div class="flex items-center justify-center"
-                     v-if="item.submitStatus">
-                  <svg width="21"
-                       height="20"
-                       viewBox="0 0 21 20"
-                       fill="none"
-                       xmlns="http://www.w3.org/2000/svg">
+                <div
+                  class="flex items-center justify-center svg">
+                  <svg
+                    viewBox="0 0 21 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
                           clip-rule="evenodd"
                           d="M10.5 20C16.0228 20 20.5 15.5228 20.5 10C20.5 4.47715 16.0228 0 10.5 0C4.97715 0 0.5 4.47715 0.5 10C0.5 15.5228 4.97715 20 10.5 20ZM16.0588 7.50027C16.3351 7.19167 16.3089 6.71752 16.0003 6.44123C15.6917 6.16493 15.2175 6.19113 14.9412 6.49973L11.5721 10.2629C10.8894 11.0254 10.4296 11.5363 10.0365 11.8667C9.66207 12.1814 9.44213 12.25 9.25 12.25C9.05787 12.25 8.83794 12.1814 8.46348 11.8667C8.0704 11.5363 7.61064 11.0254 6.92794 10.2629L6.05877 9.29209C5.78248 8.98349 5.30833 8.9573 4.99973 9.23359C4.69113 9.50988 4.66493 9.98403 4.94123 10.2926L5.84753 11.3049C6.48338 12.0152 7.01374 12.6076 7.49835 13.0149C8.01099 13.4458 8.56393 13.75 9.25 13.75C9.93607 13.75 10.489 13.4458 11.0016 13.0149C11.4863 12.6076 12.0166 12.0152 12.6525 11.3049L16.0588 7.50027Z"
@@ -218,7 +219,6 @@
         </div>
       </div>
     </div>
-    <q-resize-observer @resize="onResize" />
   </div>
 </template>
 
@@ -233,36 +233,9 @@ export default {
   data: () => ({
     data: [],
     selectiveRegister: false,
-    activeTab: '',
-    exams: [
-      {
-        title: 'آزمون سه‌آ ویژه کنکور ۱۴۰۲',
-        id: 1,
-        des: 'ده مرحله آزمون آزمایشی سه‌آ ویژه کنکور سراسری 1402 سه‌آ که دوربین مخفی هم داره.ده مرحله آزمون آزمایشی سه‌آ ویژه کنکور سراسری 1402 سه‌آ که دوربین مخفی هم داره. ده مرحله آزمون آزمایشی سه‌آ ویژه کنکور سراسری 1402 سه‌آ که دوربین مخفی هم داره.'
-      },
-      {
-        title: 'آزمون سه‌آ های دهم و یازدهم',
-        id: 2,
-        des: 'ده مرحله آزمون آزمایشی سه‌آ ویژه کنکور سراسری 1402 سه‌آ که دوربین مخفی هم داره.ده مرحله آزمون آزمایشی سه‌آ ویژه کنکور سراسری 1402 سه‌آ که دوربین مخفی هم داره. ده مرحله آزمون آزمایشی سه‌آ ویژه کنکور سراسری 1402 سه‌آ که دوربین مخفی هم داره.'
-
-      },
-      {
-        title: 'آزمون سه‌آ هفتم، هشتم و نهم',
-        id: 3,
-        des: 'ده مرحله آزمون آزمایشی سه‌آ ویژه کنکور سراسری 1402 سه‌آ که دوربین مخفی هم داره.ده مرحله آزمون آزمایشی سه‌آ ویژه کنکور سراسری 1402 سه‌آ که دوربین مخفی هم داره. ده مرحله آزمون آزمایشی سه‌آ ویژه کنکور سراسری 1402 سه‌آ که دوربین مخفی هم داره.'
-
-      },
-      {
-        title: 'آزمون سه‌آ ویژه قبولی تیزهوشان هفتم و دهم',
-        id: 4,
-        des: 'ده مرحله آزمون آزمایشی سه‌آ ویژه کنکور سراسری 1402 سه‌آ که دوربین مخفی هم داره.ده مرحله آزمون آزمایشی سه‌آ ویژه کنکور سراسری 1402 سه‌آ که دوربین مخفی هم داره. ده مرحله آزمون آزمایشی سه‌آ ویژه کنکور سراسری 1402 سه‌آ که دوربین مخفی هم داره.'
-
-      }
-    ],
-    selectedGrade: '',
-    gradeOptions: [{ id: 1, title: 'grade1' }, { id: 2, title: 'grade2' }, { id: 3, title: 'grade3' }],
-    majorOptions: [{ id: 1, title: 'major1' }, { id: 2, title: 'major2' }, { id: 3, title: 'major3' }],
-    selectedMajor: '',
+    activeTab: {},
+    selectedGrade: {},
+    selectedMajor: {},
     tabPages: [
       {
         id: 0,
@@ -861,7 +834,7 @@ export default {
       {
         id: 2,
         description: 'دانش آموزان پایه هفتم،‌هشتم و نهم برای آشنایی هرچه بیشتر با فضای آزمون های تستی و کنکور لازم است میزان توانایی خود را در آزمون های تستی بسنجند. آزمون های سه آ در این پایه ها در زمان هایی قرارداده شده است که با برنامه آزمون های تشریحی بیشترین مطابقت را داشته باشد',
-        majors: null,
+        majors: [],
         title: ' آزمون سه‌آ ویژه هفتم، هشتم و نهم',
         grades: [{ id: 2, title: 'نهم' }, { id: 0, title: 'دهم' }, { id: 1, title: 'یازدهم' }],
         exams: [
@@ -1015,7 +988,7 @@ export default {
             text: 'در آزمون تیزهوشان نهم به دهم سنجش براساس استعداد تحصیلی و تحلیلی صورت می گیرد. بنابراین آزمون های سه آ در قالب 5 مرحله جزئی و 2 آزمون شبیه ساز آزمون تیزهوشان برگزار می شود که در آن سوالات استعداد تحلیلی همواره قرار دارند و سوالات استعداد تحصیلی براساس پیشروی دروس برنامه ریزی شده اند. در جدول پایین "(ج)" و "(ب)" به ترتیب نمایش اختصاری کلمه "جمع بندی" و "بخشی از" می‌باشد.'
           }
         ],
-        majors: null,
+        majors: [],
         title: 'آزمون سه‌آ ویژه قبولی تیزهوشان',
         grades: [{ id: 2, title: 'نهم' }, { id: 3, title: 'ششم' }],
         exams: [
@@ -1180,24 +1153,23 @@ export default {
   }),
   created() {
     this.initPageData()
-    for (let i = 0; i < 10; i++) {
-      this.data.push(
-        {
-          selectedGradeId: 2,
-          activeTabId: 2,
-          selectedMajorId: 2,
-          number: i,
-          date: i + '/2',
-          title: 'عنوان آزمون شماره yek',
-          submitStatus: true
-        }
-      )
-    }
   },
   computed: {
     dataTable() {
-      // return this.data.filter(item => (item.selectedGradeId === this.selectedGrade.id && item.activeTabId === this.activeTab.id && item.selectedMajorId === this.selectedMajor.id))
-      return this.data.filter(item => (item.selectedGradeId === 2 && item.activeTabId === 2 && item.selectedMajorId === 2))
+      return this.activeTab.exams.filter(item => ((this.activeTab.majors.length > 0 ? item.major_id === this.selectedMajor.id : true) && (this.activeTab.grades.length > 0 ? item.grade_id === this.selectedGrade.id : true)))
+    },
+    currentMajors() {
+      return this.activeTab.majors
+    },
+    currentGrades() {
+      return this.activeTab.grades
+    },
+    description() {
+      if (this.activeTab.id !== 3) {
+        return this.activeTab.description
+      }
+      // return this.activeTab.description[this.selectedGrade.id].text
+      return ''
     }
   },
   methods: {
@@ -1207,7 +1179,7 @@ export default {
       this.setFirstExamActive()
     },
     setFirstExamActive() {
-      this.activeTab = this.exams[0]
+      this.activeTab = this.tabPages[0]
     }
   }
 
@@ -1400,6 +1372,7 @@ export default {
             align-items: center;
             height: 75px;
             border-bottom: 1px solid #DBDBDB;
+            border-top: 1px solid #DBDBDB;
             background: #F7F7F7;
 
             .single-price {
@@ -1500,12 +1473,20 @@ export default {
           border-style: hidden;
           border-collapse: collapse;
 
+          .svg{
+            svg{
+              width: 20px;
+              height: 20px;
+            }
+
+          }
+
           td {
             padding: 8px 0;
             background: #FAFAFA;
             text-align: center;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 12px;
             line-height: 24px;
           }
 
@@ -1584,7 +1565,7 @@ export default {
             width: 182px ;
           }
           .download-picture-box {
-            width: 583px;
+            width: 581px;
             &.download-picture-selective-mode{
               width: 507px;
             }
@@ -1922,7 +1903,7 @@ export default {
 
         .table-parent{
           .download-picture-box{
-            width: 297px;
+            width: 279px;
             .table-footer-container{
               .pic-container{
                 width: 124px;
@@ -1950,7 +1931,7 @@ export default {
             }
           }
           .price-submit-in-footer {
-              width: 107px;
+              width: 179px;
             .price-box {
 
               height: 64px;
@@ -2020,6 +2001,14 @@ export default {
           .table {
             width: 100%;
 
+            .svg{
+              svg{
+                width: 16px;
+                height: 16px;
+              }
+
+            }
+
             tr {
               .number {
                 width: 56px;
@@ -2070,6 +2059,12 @@ export default {
 
     .submit-table {
       padding: 0;
+      .exams-box{
+        padding: 30px;
+      }
+      .table-description{
+        margin-bottom: 0;
+      }
 
       .table-description {
         padding: 0;
@@ -2267,6 +2262,13 @@ export default {
 
           .table {
             width: 100%;
+            .svg{
+              svg{
+                width: 13px;
+                height: 13px;
+              }
+
+            }
 
             td {
               font-style: normal;
