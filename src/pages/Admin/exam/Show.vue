@@ -8,6 +8,8 @@
       :entity-param-key="entityParamKey"
       :edit-route-name="editRouteName"
       :index-route-name="indexRouteName"
+      :copy-on-click="true"
+      @onCopyToClipboard="onCopyToClipboard"
     >
       <template #after-form-builder>
         <div
@@ -88,6 +90,11 @@ export default {
     }
   },
   methods: {
+    onCopyToClipboard (data) {
+      this.$q.notify({
+        message: 'مقدار ' + data.input.label + ' کپی شد.'
+      })
+    },
     generateJsonFile (id, withAnswer) {
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.post(API_ADDRESS.exam.generateExamFile(id, withAnswer))

@@ -1,5 +1,6 @@
 <template>
-  <div class="invoice-container">
+  <div class="invoice-container"
+       v-if="count !=0">
     <q-card class="invoice-cart">
       <q-card-section class="invoice-total-price-section invoice-cart-section">
         <div
@@ -275,7 +276,8 @@ export default {
       selectedBank: null,
       gatewayRedirectAddress: '',
       amountUsingWallet: '',
-      loading: false
+      loading: false,
+      count: 0
     }
   },
 
@@ -324,6 +326,7 @@ export default {
           this.amountUsingWallet = this.getPriceFormat(response.data.data.pay_by_wallet)
           this.gatewayRedirectAddress = response.data.data.redirect_to_gateway
           this.loading = false
+          this.count = response.data.data.count
         })
     },
 
