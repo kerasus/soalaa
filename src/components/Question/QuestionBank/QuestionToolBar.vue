@@ -10,8 +10,8 @@
             <div class="toolbar-btn">
               <q-btn
                 class="delete-choices-btn"
-                @click=deleteAllChoose()
                 flat
+                @click=deleteAllChoose()
               >
                 حذف انتخاب ها
               </q-btn>
@@ -26,9 +26,9 @@
             </div>
             <div class="toolbar-checkbox">
               <q-checkbox
+                v-model="checkbox"
                 class="choices-checkbox"
                 label="انتخاب همه"
-                v-model="checkbox"
                 indeterminate-value="maybe"
                 @click="selectAllQuestions">
               </q-checkbox>
@@ -86,9 +86,9 @@
           <div class="question-deActive">
             <div class=" delete-all">
               <q-btn
-                @click=deleteAllChoose()
                 rounded
                 flat
+                @click=deleteAllChoose()
               >
                 حذف انتخاب ها
               </q-btn>
@@ -139,8 +139,8 @@
           <div class="delete-choices-btn-container">
             <q-btn
               class="delete-choices-btn"
-              @click=deleteAllChoose()
               flat
+              @click=deleteAllChoose()
             >
               حذف انتخاب ها
             </q-btn>
@@ -178,8 +178,8 @@
       </div>
     </div>
   </q-page-sticky>
-  <q-dialog class="dialogueCard"
-            v-model="ToolbarDialog">
+  <q-dialog v-model="ToolbarDialog"
+            class="dialogueCard">
     <q-card class="dialogueCardContainer">
       <div class="dialogHeader">
         <div class="dialogTitle"> سوالات انتخاب شده:</div>
@@ -193,9 +193,9 @@
       </div>
       <div class="dialogChip">
         <q-chip
-          class="filter-items"
           v-for="item in countOfSelectedSubCategory"
           :key="item"
+          class="filter-items"
           icon-remove="mdi-close"
           removable
           @remove="RemoveSelectedChoice(item)"

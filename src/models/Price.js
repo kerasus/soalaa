@@ -7,6 +7,7 @@ class Price extends Model {
       { key: 'base' },
       { key: 'discount' },
       { key: 'final' },
+      { key: 'payableByWallet' },
       { key: 'discountDetail' }
     ])
   }

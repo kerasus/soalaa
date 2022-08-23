@@ -8,20 +8,20 @@
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
         <question-filter
           ref="filter"
+          :filterQuestions="filterQuestions"
           @onFilter="onFilter"
           @delete-filter="deleteFilterItem"
-          :filterQuestions="filterQuestions"
         />
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
           <QuestionToolBar
+            :key="questionListKey"
             :check-box="checkBox"
             :selectedQuestions="selectedQuestions"
             @remove="RemoveChoice"
             @deleteAllQuestions="deleteAllQuestions"
             @selectAllQuestions="selectAllQuestions"
-            :key="questionListKey"
           />
         </div>
         <div class="question-bank-content">

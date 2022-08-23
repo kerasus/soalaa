@@ -22,16 +22,16 @@
         class="row multiple-choice-Answer"
       >
         <div
-          class="col-6 answer-box"
           v-for="(item, index) in question.choices.list"
           :key="item.order"
+          class="col-6 answer-box"
         >
           <q-card class="col-6 default-questions-card">
             <q-card-section class="default-Qcard-title">
               <q-radio
+                v-model="choice"
                 dense
                 disable
-                v-model="choice"
                 :val="'choice' + index"
                 :label="'گزینه ' + (index + 1)"
                 color="primary"

@@ -1,8 +1,8 @@
 <template>
   <div class="flex justify-center">
     <video
-      ref="videoPlayer"
       id="my-video"
+      ref="videoPlayer"
       controls
       preload="auto"
       :height="calcTheHeight"

@@ -8,6 +8,10 @@ export function updateBubbleSize (state, newInfo) {
   state.bubbleSize = newInfo
 }
 
+export function updateLoginDialog (state, newInfo) {
+  state.loginDialog = newInfo
+}
+
 export function showConfirmDialog (state, newInfo) {
   state.confirmDialog = newInfo
 }

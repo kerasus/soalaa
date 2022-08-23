@@ -6,8 +6,8 @@
                     width="330px"
                     height="400px"
                     class="q-ml-xs" />
-        <div class="exam-detail-content"
-             v-else>
+        <div v-else
+             class="exam-detail-content">
           <div class="exam-specifications flex justify-between">
             <div class="header-title"> مشخصات آزمون </div>
             <div class="exam-title"> آزمون ۱۲۳۴۵۶۷</div>

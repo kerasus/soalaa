@@ -32,12 +32,12 @@
       :columns="headers"
       :rows="rows"
       row-key="name"
-      @row-click="rowClick"
       rows-per-page-label="تعداد ردیف در هر صفحه"
       :rows-per-page-options="[15,15]"
       :loading="$store.getters['loading/loading']"
       loading-label="لطفا منتظر بمانید..."
       :no-data-label="$store.getters['loading/loading'] ? '' : 'متاسفم:( موردی وجود ندارد...'"
+      @row-click="rowClick"
     >
       <template v-slot:header="props">
         <q-tr :props="props">

@@ -31,8 +31,8 @@
               <div class="col-12 detail-box detail-box-first">
                 <div class="detail-box-title">آزمون</div>
                 <q-select
-                  borderless
                   v-model="selectedExam"
+                  borderless
                   :options="exams.list"
                   option-value="exam_id"
                   option-label="title"
@@ -43,8 +43,8 @@
               <div class="col-4 detail-box detail-box-first">
                 <div class="detail-box-title ">دفترچه</div>
                 <q-select
-                  borderless
                   v-model="selectedCategory"
+                  borderless
                   :options="categories.list"
                   option-value="id"
                   option-label="title"
@@ -55,8 +55,8 @@
               <div class="col-3 detail-box">
                 <div class="detail-box-title">درس</div>
                 <q-select
-                  borderless
                   v-model="selectedLesson"
+                  borderless
                   :options="subCategoriesFilteredList"
                   option-value="id"
                   option-label="title"
@@ -68,8 +68,8 @@
                 <div class="detail-box box-order">
                   <div class="detail-box-title">ترتیب</div>
                   <q-input
-                    borderless
                     v-model="order"
+                    borderless
                     type="number"
                     :rules="numberRules"
                   />
