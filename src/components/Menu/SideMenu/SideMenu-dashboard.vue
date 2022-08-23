@@ -223,14 +223,14 @@ export default {
           active: false,
           children: []
         },
-        {
-          title: 'گزارشات',
-          icon: 'isax:graph',
-          permission: 'examStore',
-          routeName: null,
-          active: false,
-          children: []
-        },
+        // {
+        //   title: 'گزارشات',
+        //   icon: 'isax:graph',
+        //   permission: 'examStore',
+        //   routeName: null,
+        //   active: false,
+        //   children: []
+        // },
         {
           title: 'تنظیمات',
           icon: 'isax:setting-2',
