@@ -138,7 +138,7 @@ export default {
       })
         .then((response) => {
           this.loadingList = false
-          this.$axios.defaults.headers.common.Authorization = 'Bearer ' + this.$store.getters['Auth/accessToken']
+          // this.$axios.defaults.headers.common.Authorization = 'Bearer ' + this.$store.getters['Auth/accessToken']
           this.redirectTo()
           this.$store.commit('Auth/updateUser', response.data.data.user)
           // this.getUserData().then(() => { this.redirectTo() })
