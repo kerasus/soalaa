@@ -2,9 +2,9 @@
   <div v-show="count !== 0">
     <div class="cart-count">سبدخرید شما ({{count}} محصول)</div>
     <div class="cart-items-container">
-      <div class="cart-items"
-           v-for="ci in cartItems"
-           :key="ci">
+      <div v-for="ci in cartItems"
+           :key="ci"
+           class="cart-items">
         <q-card class="cart-card">
           <div class="image">
             <q-img :src="ci.product.photo"></q-img>

@@ -61,8 +61,8 @@
       <td class="date custom-border">{{ item.date }}</td>
       <td class="title custom-border">{{ item.title }}</td>
       <td class="submitStatus custom-border">
-        <div class="flex items-center justify-center"
-             v-if="item.submitStatus">
+        <div v-if="item.submitStatus"
+             class="flex items-center justify-center">
           <svg width="21"
                height="20"
                viewBox="0 0 21 20"
