@@ -53,9 +53,9 @@
       <user-panel-base-menu />
     </div>
     <!--     Todo : usage of :mode="'drawer'" for panel in mobile size , default is 'sideBar'-->
-    <div class="bg-white">
-      <user-panel-base-menu :mode="'drawer'" />
-    </div>
+    <!--    <div class="bg-white">-->
+    <!--      <user-panel-base-menu :mode="'drawer'" />-->
+    <!--    </div>-->
   </div>
 </template>
 
