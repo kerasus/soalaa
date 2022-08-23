@@ -69,10 +69,10 @@ const routes = [
         path: '',
         name: 'dashboard',
         component: () => import('pages/User/exam/List'),
-        breadcrumbs: { title: 'پیشخوان' },
-        meta: {
-          middlewares: [auth]
-        }
+        breadcrumbs: { title: 'پیشخوان' }
+        // meta: {
+        //   middlewares: [auth]
+        // }
       },
       {
         path: 'component',
@@ -420,7 +420,13 @@ const routes = [
             component: () => import('pages/User/landing/landing')
           }
         ]
+      },
+      {
+        path: '/cart',
+        name: 'cart',
+        component: () => import('pages/Cart/Cart')
       }
+
     ]
   },
   {
