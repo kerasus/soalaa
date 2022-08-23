@@ -66,10 +66,10 @@ export default {
 }
 </style>
 <style  lang="scss">
-@import 'src/assets/scss/YekanBakh.scss';
+@import 'src/assets/scss/Peyda.scss';
 .landing-page{
   *{
-    font-family:'yekanbakh' ;
+    font-family: 'peyda';
   }
 }
 </style>

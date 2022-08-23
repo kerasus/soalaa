@@ -20,7 +20,7 @@
 
           </q-btn>
         </div>
-        <div class="q-select-mode-tabs">
+        <div class="exams-q-select">
           <q-select
             v-model="activeTab"
             :options="exams"
@@ -40,8 +40,8 @@
       </div>
       <div class="table-box-container ">
         <!--        <table-component :table-data="data"/>-->
-        <div class="table-parent bg-blue-2 q-pt-sm">
-          <div class="drop-down-btn ">
+        <div class="table-parent q-pt-sm">
+          <div class="major-grade-btn ">
             <q-select
               v-model="selectedGrade"
               borderless
@@ -85,9 +85,13 @@
             </tr>
             <tr v-for="item in dataTable"
                 :key="item">
-              <td class="number custom-border">{{ item.number }}</td>
-              <td class="date custom-border">{{ item.date }}</td>
-              <td class="title custom-border">{{ item.title }}</td>
+              <td class="number custom-border"
+                  :class="{'number-selective': selectiveRegister}">{{ item.number }}</td>
+              <td class="date custom-border"
+                  :class="{'date-selective': selectiveRegister}">{{ item.date }}</td>
+              <td class="title custom-border"
+                  :class="{ 'title-selective-mod': selectiveRegister}"
+              >{{ item.title }}</td>
               <td v-if="selectiveRegister"
                   class="submitStatus-selective-mode custom-border">
                 <div class="flex items-center justify-center"
@@ -115,7 +119,8 @@
             </tr>
           </table>
           <div class="bottom-of flex">
-            <div class="table-footer-pic-box">
+            <div class="download-picture-box"
+                 :class="{'download-picture-selective-mode' :selectiveRegister}">
               <div class="table-footer-container">
                 <div class="pic-container">
                   <q-img src="https://nodes.alaatv.com/upload/landing/3a/13.png"
@@ -147,7 +152,7 @@
               </div>
             </div>
             <div v-if="selectiveRegister"
-                 class="price-submit-in-footer price-submit-box-selective-mode">
+                 class="price-submit-in-footer price-submit-box-selective-mode ">
               <div class="price-box">
                 <div>
                   <span class="single-price">
@@ -158,10 +163,10 @@
                   <span class="price">تومان</span>
                 </div>
               </div>
-              <div class="submit-box">
-                <span class="exam-price">
+              <div class="submit-box single-mode">
+                <div class="exam-price">
                   قیمت آزمون کامل
-                </span>
+                </div>
                 <div class="final-price-box">
                   <span>۱۱۰٫۰۰۰</span>
                   <span>تومان</span>
@@ -342,7 +347,15 @@ export default {
   }
 
   .submit-table {
-    .q-select-mode-tabs {
+    background: #FFFFFF;
+    box-shadow: 0 4px 16px 2px rgba(40, 40, 40, 0.08);
+    border-radius: 24px;
+    &:deep(.q-btn) {
+      .q-btn__content {
+        margin: 0;
+      }
+    }
+    .exams-q-select {
       display: none;
     }
 
@@ -389,24 +402,14 @@ export default {
       margin-bottom: 30px;
     }
 
-    background: #FFFFFF;
-    box-shadow: 0 4px 16px 2px rgba(40, 40, 40, 0.08);
-    border-radius: 24px;
-
-    &:deep(.q-btn) {
-      .q-btn__content {
-        margin: 0;
-      }
-    }
-
     .table-box-container {
       padding: 0 24px 24px 24px;
 
       .table-parent {
-        border: 2px solid red;
+        border: 2px solid #DBDBDB;
         border-radius: 24px;
 
-        .drop-down-btn {
+        .major-grade-btn {
           display: flex;
           border-bottom: none;
           padding: 16px;
@@ -457,7 +460,7 @@ export default {
           }
         }
 
-        .table-footer-pic-box {
+        .download-picture-box {
           width: 701px;
           background: #FFF2CB;
           border-radius: 0 0 0 22px;
@@ -538,6 +541,13 @@ export default {
             height: 163px;
             width: 100%;
             text-align: center;
+            &.single-mode{
+              display:flex;
+              flex-direction: column;
+              justify-content: space-around;
+              align-items: center;
+
+            }
 
             .exam-price {
               font-style: normal;
@@ -661,7 +671,6 @@ export default {
 
             .submitStatus-selective-mode {
               width: 180px;
-
               .empty-circle {
                 border-radius: 24px;
                 min-width: 21.5px;
@@ -681,33 +690,83 @@ export default {
 @media screen and (max-width: 1439px) {
   .table-section {
     .submit-table {
-
-      .drop-down-btn {
+      .major-grade-btn {
         display: flex;
       }
-
-      .table {
-        width: 100%;
-
-        tr {
-          .number {
-          }
-
-          .date {
-
-          }
-
-          .title {
-            width: 390px;
-          }
-
-          .submitStatus {
+      .table-box-container{
+        .table-parent{
+          .price-submit-box-pack-mode{
             width: 297px;
           }
+          .price-submit-box-selective-mode{
+            width: 182px ;
+          }
+          .download-picture-box {
+            width: 583px;
+            &.download-picture-selective-mode{
+              width: 507px;
+            }
+            .table-footer-container {
+              display: grid;
+              grid-template-columns: 1fr 2fr;
+              height: 100%;
+              .pic-container {
+                width: 200px;
+                align-self: end;
+                .img {
+                  width: 100%;
+                  border-radius: 0 0 0 22px;
 
-          .submitStatus-selective-mode {
-            width: 180px;
+                }
+              }
 
+              .download-box {
+                align-self: center;
+
+                .text-style {
+                  font-style: normal;
+                  font-weight: 700;
+                  font-size: 18px;
+                  line-height: 24px;
+                  text-align: center;
+                  color: #232323;
+                  margin-bottom: 16px;
+                }
+
+                .download-btn {
+                  width: 150px;
+                  height: 40px;
+                  background: #FFF2CB;
+                  border: 2px solid #2A2A2A;
+                  border-radius: 24px;
+                }
+
+              }
+            }
+          }
+          .table {
+            width: 100%;
+
+            tr {
+              .number {
+              }
+
+              .date {
+
+              }
+
+              .title {
+                width: 390px;
+                &.title-selective-mod{
+                  width: 316px;
+                }
+              }
+
+              .submitStatus {
+                width: 297px;
+              }
+
+            }
           }
         }
       }
@@ -725,65 +784,142 @@ export default {
       }
 
       .table-box-container {
-        .table {
-          width: 100%;
-
-          tr {
-            .number {
+        .table-parent{
+          .download-picture-box {
+            width: 462px;
+            &.download-picture-selective-mode{
+              width: 398px;
             }
 
-            .date {
+            .table-footer-container {
 
-            }
+              .pic-container {
+                width: 160px;
+                align-self: end;
 
-            .title {
-              width: 272px;
-            }
-
-            .submitStatus {
-              width: 177px;
-            }
-
-            .submitStatus-selective-mode {
-              width: 121px;
-            }
-
-            .table-footer-pic-box {
-              height: 184px;
-
-              .table-footer-container {
-
-                .pic-container {
-                  width: 160px;
-                  align-self: end;
-
-                  .img {
-                    width: 100%;
-                    border-radius: 0 0 0 22px;
-
-                  }
+                .img {
+                  width: 100%;
+                  border-radius: 0 0 0 22px;
 
                 }
 
-                .download-box {
+              }
 
-                  .text-style {
-                    font-size: 16px;
-                    line-height: 24px;
-                    margin-bottom: 15px;
-                  }
+              .download-box {
 
-                  .download-btn {
-                    width: 142px;
-                    height: 32px;
-                  }
-
+                .text-style {
+                  font-size: 16px;
+                  line-height: 24px;
+                  margin-bottom: 15px;
                 }
+
+                .download-btn {
+                  width: 142px;
+                  height: 32px;
+                }
+
+              }
+            }
+          }
+          .price-submit-in-footer {
+            width: 120px;
+            .price-box {
+
+              height: 64px;
+
+              .single-price {
+                font-size: 11px;
+                line-height: 16px;
+              }
+
+              .price {
+                font-size: 16px;
+                line-height: 16px;
               }
             }
 
-           .price-submit-in-footer {
+            .submit-box {
+              padding-top: 8px;
+              height: 123px;
+              text-align: center;
 
+              .exam-price {
+                font-style: normal;
+                font-weight: 500;
+                font-size: 12px;
+                line-height: 16px;
+                color: #232323;
+                margin-bottom: 12px;
+              }
+
+              .exam-price-box {
+                margin-bottom: 7px;
+
+                .discount-tag {
+                  padding: 4px 5px;
+                  font-size: 10px;
+                  line-height: 16px;
+                  border-radius: 8px;
+                  margin-right: 4px;
+                }
+
+                .main-price {
+                  font-size: 10px;
+                  line-height: 16px;
+                  text-decoration-line: line-through;
+                  color: #DB1F1F;
+                }
+              }
+
+              .final-price-box {
+                font-size: 16px;
+                line-height: 16px;
+                margin-bottom: 8px;
+              }
+
+              .sub-btn {
+                width: 77px;
+                height: 24px;
+
+                .sub-btn-text {
+                  font-weight: 700;
+                  font-size: 14px;
+                  line-height: 16px;
+                }
+              }
+            }
+          }
+          .table {
+            width: 100%;
+
+            tr {
+              .number {
+                width: 97px;
+              }
+
+              .date {
+                width: 97px;
+
+              }
+
+              .title {
+                width: 272px;
+                &.title-selective-mod{
+                  width: 208px;
+                }
+
+              }
+
+              .submitStatus {
+                width: 177px;
+              }
+              .submitStatus-selective-mode {
+                width: 121px;
+              }
+
+              .price-submit-in-footer {
+                background: #7c12c3;
+                padding: 3px;
                 .price-box {
                   height: 64px;
                 }
@@ -828,15 +964,17 @@ export default {
                 }
               }
 
-            .price-submit-box-pack-mode{
-              //width: 100%;
-            }
-            .price-submit-box-selective-mode{
-              //width: 50%;
-            }
+              .price-submit-box-pack-mode{
+                //width: 100%;
+              }
+              .price-submit-box-selective-mode{
+                //width: 50%;
+              }
 
+            }
           }
         }
+
       }
 
     }
@@ -865,7 +1003,7 @@ export default {
         display: none;
       }
 
-      .q-select-mode-tabs {
+      .exams-q-select {
         display: block;
         margin-bottom: 16px;
 
@@ -893,7 +1031,7 @@ export default {
         }
       }
 
-      .drop-down-btn {
+      .major-grade-btn {
         display: flex;
       }
 
@@ -901,20 +1039,125 @@ export default {
         padding: 0;
 
         .table-parent{
+          .download-picture-box{
+            width: 297px;
+            .table-footer-container{
+              .pic-container{
+                width: 124px;
+              }
+              .download-box{
+                margin-left: -35px;
+                .text-style{
+                  font-weight: 700;
+                  font-size: 12px;
+                  line-height: 16px;
+                  text-align: left;
+                }
+                .download-btn{
+                  width: 130px;
+                  height: 32px;
+                  span{
+                    font-size: 12px;
+                  }
+                }
+              }
+            }
+
+            &.download-picture-selective-mode{
+              width: 243px;
+            }
+          }
+          .price-submit-in-footer {
+              width: 107px;
+            .price-box {
+
+              height: 64px;
+
+              .single-price {
+                font-size: 11px;
+                line-height: 16px;
+              }
+
+              .price {
+                font-size: 16px;
+                line-height: 16px;
+              }
+            }
+
+            .submit-box {
+              padding-top: 8px;
+              height: 123px;
+              text-align: center;
+
+              .exam-price {
+                font-style: normal;
+                font-weight: 500;
+                font-size: 12px;
+                line-height: 16px;
+                color: #232323;
+                margin-bottom: 12px;
+              }
+
+              .exam-price-box {
+                margin-bottom: 7px;
+
+                .discount-tag {
+                  padding: 4px 5px;
+                  font-size: 10px;
+                  line-height: 16px;
+                  border-radius: 8px;
+                  margin-right: 4px;
+                }
+
+                .main-price {
+                  font-size: 10px;
+                  line-height: 16px;
+                  text-decoration-line: line-through;
+                  color: #DB1F1F;
+                }
+              }
+
+              .final-price-box {
+                font-size: 16px;
+                line-height: 16px;
+                margin-bottom: 8px;
+              }
+
+              .sub-btn {
+                width: 77px;
+                height: 24px;
+
+                .sub-btn-text {
+                  font-weight: 700;
+                  font-size: 14px;
+                  line-height: 16px;
+                }
+              }
+            }
+          }
           .table {
             width: 100%;
 
             tr {
               .number {
-                width: 60px;
+                width: 56px;
+                &.number-selective{
+                  width: 49px;
+                }
               }
 
               .date {
                 width: 60px;
+                &.date-selective{
+                  width: 49px;
+                }
               }
 
               .title {
                 width: 164px;
+                &.title-selective-mod{
+                  width: 151px;
+                }
               }
 
               .submitStatus {
@@ -955,7 +1198,7 @@ export default {
         display: none;
       }
 
-      .q-select-mode-tabs {
+      .exams-q-select {
         display: block;
         margin-bottom: 16px;
 
@@ -983,7 +1226,7 @@ export default {
         }
       }
 
-      .drop-down-btn {
+      .major-grade-btn {
         display: flex;
       }
 
@@ -991,7 +1234,7 @@ export default {
         padding: 0;
 
         .table-parent {
-          .drop-down-btn {
+          .major-grade-btn {
             flex-direction: column;
 
             .dropdown-btn {
@@ -1030,7 +1273,7 @@ export default {
             }
           }
 
-          .table-footer-pic-box {
+          .download-picture-box {
             order: 2;
             width: 100%;
             border-radius: 22px 0 22px 0;
@@ -1119,7 +1362,7 @@ export default {
 
                 .sub-btn {
                   width: calc(100% - 30px);
-                  height: 48px;
+                  height: 32px;
 
                   .sub-btn-text {
                     font-style: normal;
@@ -1137,6 +1380,7 @@ export default {
           }
           .price-submit-box-selective-mode{
             width: 50%;
+
           }
 
           .table {
