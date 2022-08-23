@@ -128,7 +128,7 @@ export default {
       ],
       createInputs: [
         { type: 'hidden', name: 'type', value: 'reference_type', label: '', col: 'col-12' },
-        { type: 'input', name: 'value', label: 'عنوان مرجع', col: 'col-md-3', placeholder: ' ', filled: true }
+        { type: 'input', name: 'value', label: 'عنوان', col: 'col-md-3', placeholder: ' ', filled: true }
       ],
       editInputs: [],
       showInputs: [],
