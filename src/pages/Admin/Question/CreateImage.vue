@@ -3,14 +3,15 @@
     <div class="row">
       <div class="col flex justify-between">
         <span>
-          برای ثبت سوال جدید میتوانید تصویر صورت سوال را در این صفحه آپلود کنید یا به صورت مستقیم آن ها را تایپ کنید
-          <q-btn
-            icon-right="isax:info-circle"
-            label="بیشتر بخوانید"
-            flat
-            rounded
-            color="primary"
-          />
+          برای ثبت سوال جدید میتوانید تصویر صورت سوال را در این صفحه آپلود کنید یا به صورت مستقیم آن ها را تایپ کنید.
+          <!--          Todo : codes below are suspended ( no current design )-->
+          <!--          <q-btn-->
+          <!--            icon-right="isax:info-circle"-->
+          <!--            label="بیشتر بخوانید"-->
+          <!--            flat-->
+          <!--            rounded-->
+          <!--            color="primary"-->
+          <!--          />-->
         </span>
         <q-btn
           label="تایپ سوال"
