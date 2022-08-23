@@ -251,9 +251,10 @@ export default {
     }
   }
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 599px) {
   .landing-header {
     padding: 0 15px 40px 15px;
+    margin-bottom: 40px !important;
     background: url("https://nodes.alaatv.com/upload/landing/3a/h5.png");
     .introduction {
       padding-top:43px;

@@ -232,7 +232,7 @@ export default {
 
   data: () => ({
     data: [],
-    selectiveRegister: true,
+    selectiveRegister: false,
     activeTab: '',
     exams: [
       {
@@ -263,20 +263,902 @@ export default {
     gradeOptions: [{ id: 1, title: 'grade1' }, { id: 2, title: 'grade2' }, { id: 3, title: 'grade3' }],
     majorOptions: [{ id: 1, title: 'major1' }, { id: 2, title: 'major2' }, { id: 3, title: 'major3' }],
     selectedMajor: '',
-
     tabPages: [
       {
         id: 0,
-        description: '',
-        majors: [{ id: 0, title: '' }],
-        grades: [{ id: 0, title: '' }],
+        title: 'آزمون سه‌آ ویژه کنکور 1402',
+        description: ' سه آ برای کنکوری ها شامل 10 مرحله آزمون جزئی و جامع است که برای داوطلب کنکور تعداد بسیار متناسبی است. با پیشروی طبق برنامه آزمون های سه آ، هر یک از مطالب پایه و دوازدهم حداقل دوبار در آزمون های جزئی تکرار می شوند. برنامه ریزی دقیق، سوالات استاندارد، کارنامه آنی و حل ویدیویی مهم ترین ویژگی های آزمون های سه آ است. در جدول پایین "(ج)" و "(ب)" به ترتیب نمایش اختصاری کلمه "جمع بندی" و "بخشی از" می‌باشد.',
+        majors: [{ id: 0, title: 'ریاضی' }, { id: 1, title: 'تجربی' }, { id: 2, title: 'انسانی' }],
+        grades: [],
+        exams: [
+          {
+            id: 0,
+            major_id: 0,
+            grade_id: null,
+            title: '(ج) پایه ',
+            pack_price: 110000,
+            date: '5/7/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: 0,
+            grade_id: null,
+            title: 'ترم 1 دوازدهم و (ب) پایه ',
+            pack_price: 110000,
+            date: '10/8/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: 0,
+            grade_id: null,
+            title: 'ترم 1 دوازدهم و (ب) پایه',
+            pack_price: 110000,
+            date: '15/9/1401',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: 0,
+            grade_id: null,
+            title: '(ج) ترم 1 دوازدهم ',
+            pack_price: 110000,
+            date: '27/10/1401',
+            number: 4,
+            selective: false
+          },
+          {
+            id: 4,
+            major_id: 0,
+            grade_id: null,
+            title: 'ترم 2 دوازدهم و (ب) پایه',
+            pack_price: 110000,
+            date: '25/11/1401',
+            number: 5,
+            selective: false
+          },
+          {
+            id: 5,
+            major_id: 0,
+            grade_id: null,
+            title: 'ترم 2 دوازدهم و (ب) پایه',
+            pack_price: 110000,
+            date: '23/12/1401',
+            number: 6,
+            selective: false
+          },
+          {
+            id: 6,
+            major_id: 0,
+            grade_id: null,
+            title: '(ج) پایه',
+            pack_price: 110000,
+            date: '22/1/1402',
+            number: 7,
+            selective: false
+          },
+          {
+            id: 7,
+            major_id: 0,
+            grade_id: null,
+            title: '(ج) دوازدهم',
+            pack_price: 110000,
+            date: '26/2/1402',
+            number: 8,
+            selective: false
+          },
+          {
+            id: 8,
+            major_id: 0,
+            grade_id: null,
+            title: 'شبیه ساز کنکور',
+            pack_price: 110000,
+            date: '23/3/1402',
+            number: 9,
+            selective: false
+          },
+          {
+            id: 9,
+            major_id: 0,
+            grade_id: null,
+            title: 'شبیه ساز کنکور',
+            pack_price: 110000,
+            date: '30/3/1402',
+            number: 10,
+            selective: false
+          },
+
+          {
+            id: 0,
+            major_id: 1,
+            grade_id: null,
+            title: '(ج) پایه ',
+            pack_price: 110000,
+            date: '5/7/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: 1,
+            grade_id: null,
+            title: 'ترم 1 دوازدهم و (ب) پایه ',
+            pack_price: 110000,
+            date: '10/8/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: 1,
+            grade_id: null,
+            title: 'ترم 1 دوازدهم و (ب) پایه',
+            pack_price: 110000,
+            date: '15/9/1401',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: 1,
+            grade_id: null,
+            title: '(ج) ترم 1 دوازدهم ',
+            pack_price: 110000,
+            date: '27/10/1401',
+            number: 4,
+            selective: false
+          },
+          {
+            id: 4,
+            major_id: 1,
+            grade_id: null,
+            title: 'ترم 2 دوازدهم و (ب) پایه',
+            pack_price: 110000,
+            date: '25/11/1401',
+            number: 5,
+            selective: false
+          },
+          {
+            id: 5,
+            major_id: 1,
+            grade_id: null,
+            title: 'ترم 2 دوازدهم و (ب) پایه',
+            pack_price: 110000,
+            date: '23/12/1401',
+            number: 6,
+            selective: false
+          },
+          {
+            id: 6,
+            major_id: 1,
+            grade_id: null,
+            title: '(ج) پایه',
+            pack_price: 110000,
+            date: '22/1/1402',
+            number: 7,
+            selective: false
+          },
+          {
+            id: 7,
+            major_id: 1,
+            grade_id: null,
+            title: '(ج) دوازدهم',
+            pack_price: 110000,
+            date: '26/2/1402',
+            number: 8,
+            selective: false
+          },
+          {
+            id: 8,
+            major_id: 1,
+            grade_id: null,
+            title: 'شبیه ساز کنکور',
+            pack_price: 110000,
+            date: '23/3/1402',
+            number: 9,
+            selective: false
+          },
+          {
+            id: 9,
+            major_id: 1,
+            grade_id: null,
+            title: 'شبیه ساز کنکور',
+            pack_price: 110000,
+            date: '30/3/1402',
+            number: 10,
+            selective: false
+          },
+
+          {
+            id: 0,
+            major_id: 2,
+            grade_id: null,
+            title: '(ج) پایه ',
+            pack_price: 110000,
+            date: '5/7/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: 2,
+            grade_id: null,
+            title: 'ترم 1 دوازدهم و (ب) پایه ',
+            pack_price: 110000,
+            date: '10/8/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: 2,
+            grade_id: null,
+            title: 'ترم 1 دوازدهم و (ب) پایه',
+            pack_price: 110000,
+            date: '15/9/1401',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: 2,
+            grade_id: null,
+            title: '(ج) ترم 1 دوازدهم ',
+            pack_price: 110000,
+            date: '27/10/1401',
+            number: 4,
+            selective: false
+          },
+          {
+            id: 4,
+            major_id: 2,
+            grade_id: null,
+            title: 'ترم 2 دوازدهم و (ب) پایه',
+            pack_price: 110000,
+            date: '25/11/1401',
+            number: 5,
+            selective: false
+          },
+          {
+            id: 5,
+            major_id: 2,
+            grade_id: null,
+            title: 'ترم 2 دوازدهم و (ب) پایه',
+            pack_price: 110000,
+            date: '23/12/1401',
+            number: 6,
+            selective: false
+          },
+          {
+            id: 6,
+            major_id: 2,
+            grade_id: null,
+            title: '(ج) پایه',
+            pack_price: 110000,
+            date: '22/1/1402',
+            number: 7,
+            selective: false
+          },
+          {
+            id: 7,
+            major_id: 2,
+            grade_id: null,
+            title: '(ج) دوازدهم',
+            pack_price: 110000,
+            date: '26/2/1402',
+            number: 8,
+            selective: false
+          },
+          {
+            id: 8,
+            major_id: 2,
+            grade_id: null,
+            title: 'شبیه ساز کنکور',
+            pack_price: 110000,
+            date: '23/3/1402',
+            number: 9,
+            selective: false
+          },
+          {
+            id: 9,
+            major_id: 2,
+            grade_id: null,
+            title: 'شبیه ساز کنکور',
+            pack_price: 110000,
+            date: '30/3/1402',
+            number: 10,
+            selective: false
+          }
+        ],
+        prices: [
+          {
+            major_id: 0,
+            grade_id: 0,
+            unit: {
+              price: 18900
+            },
+            pack: {
+              unit_price: 18900,
+              discount: 76000,
+              price: 110000
+            }
+          }
+        ]
+      },
+      {
+        id: 1,
+        title: 'آزمون سه‌آ ویژه دهم و یازدهم',
+        description: ' دانش آموزان پایه دهم و یازدهم برای آشنایی هرچه بیشتر با فضای آزمون های تستی و کنکور لازم است میزان توانایی خود را در آزمون های تستی بسنجند. آزمون های سه آ در این پایه ها در زمان هایی قرارداده شده است که با برنامه آزمون های تشریحی و نهایی بیشترین مطابقت را داشته باشد.',
+        majors: [{ id: 0, title: 'ریاضی' }, { id: 1, title: 'تجربی' }, { id: 2, title: 'انسانی' }],
+        grades: [{ id: 0, title: 'دهم' }, { id: 1, title: 'یازدهم' }],
         exams: [
           {
             id: 0,
             major_id: 0,
             grade_id: 0,
-            title: 'dddd',
-            pack_price: 110000
+            title: 'میان ترم 1',
+            pack_price: 110000,
+            date: '17/8/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: 0,
+            grade_id: 0,
+            title: '(ج) ترم 1',
+            pack_price: 110000,
+            date: '4/11/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: 0,
+            grade_id: 0,
+            title: '(ج) ترم 2',
+            pack_price: 110000,
+            date: '19/2/1402',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: 0,
+            grade_id: 0,
+            title: '(ج) کل سال',
+            pack_price: 110000,
+            date: '30/3/1402',
+            number: 4,
+            selective: false
+          },
+
+          {
+            id: 0,
+            major_id: 1,
+            grade_id: 0,
+            title: 'میان ترم 1',
+            pack_price: 110000,
+            date: '17/8/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: 1,
+            grade_id: 0,
+            title: '(ج) ترم 1',
+            pack_price: 110000,
+            date: '4/11/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: 1,
+            grade_id: 0,
+            title: '(ج) ترم 2',
+            pack_price: 110000,
+            date: '19/2/1402',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: 1,
+            grade_id: 0,
+            title: '(ج) کل سال',
+            pack_price: 110000,
+            date: '30/3/1402',
+            number: 4,
+            selective: false
+          },
+
+          {
+            id: 0,
+            major_id: 2,
+            grade_id: 0,
+            title: 'میان ترم 1',
+            pack_price: 110000,
+            date: '17/8/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: 2,
+            grade_id: 0,
+            title: '(ج) ترم 1',
+            pack_price: 110000,
+            date: '4/11/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: 2,
+            grade_id: 0,
+            title: '(ج) ترم 2',
+            pack_price: 110000,
+            date: '19/2/1402',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: 2,
+            grade_id: 0,
+            title: '(ج) کل سال',
+            pack_price: 110000,
+            date: '30/3/1402',
+            number: 4,
+            selective: false
+          },
+
+          {
+            id: 0,
+            major_id: 0,
+            grade_id: 1,
+            title: 'میان ترم 1',
+            pack_price: 110000,
+            date: '17/8/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: 0,
+            grade_id: 1,
+            title: '(ج) ترم 1',
+            pack_price: 110000,
+            date: '4/11/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: 0,
+            grade_id: 1,
+            title: '(ج) ترم 2',
+            pack_price: 110000,
+            date: '19/2/1402',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: 0,
+            grade_id: 1,
+            title: '(ج) کل سال',
+            pack_price: 110000,
+            date: '30/3/1402',
+            number: 4,
+            selective: false
+          },
+
+          {
+            id: 0,
+            major_id: 1,
+            grade_id: 1,
+            title: 'میان ترم 1',
+            pack_price: 110000,
+            date: '17/8/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: 1,
+            grade_id: 1,
+            title: '(ج) ترم 1',
+            pack_price: 110000,
+            date: '4/11/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: 1,
+            grade_id: 1,
+            title: '(ج) ترم 2',
+            pack_price: 110000,
+            date: '19/2/1402',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: 1,
+            grade_id: 1,
+            title: '(ج) کل سال',
+            pack_price: 110000,
+            date: '30/3/1402',
+            number: 4,
+            selective: false
+          },
+
+          {
+            id: 0,
+            major_id: 2,
+            grade_id: 1,
+            title: 'میان ترم 1',
+            pack_price: 110000,
+            date: '17/8/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: 2,
+            grade_id: 1,
+            title: '(ج) ترم 1',
+            pack_price: 110000,
+            date: '4/11/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: 2,
+            grade_id: 1,
+            title: '(ج) ترم 2',
+            pack_price: 110000,
+            date: '19/2/1402',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: 2,
+            grade_id: 1,
+            title: '(ج) کل سال',
+            pack_price: 110000,
+            date: '30/3/1402',
+            number: 4,
+            selective: false
+          }
+
+        ],
+        prices: [
+          {
+            major_id: 0,
+            grade_id: 0,
+            unit: {
+              price: 18900
+            },
+            pack: {
+              unit_price: 18900,
+              discount: 76000,
+              price: 110000
+            }
+          }
+        ]
+      },
+      {
+        id: 2,
+        description: 'دانش آموزان پایه هفتم،‌هشتم و نهم برای آشنایی هرچه بیشتر با فضای آزمون های تستی و کنکور لازم است میزان توانایی خود را در آزمون های تستی بسنجند. آزمون های سه آ در این پایه ها در زمان هایی قرارداده شده است که با برنامه آزمون های تشریحی بیشترین مطابقت را داشته باشد',
+        majors: null,
+        title: ' آزمون سه‌آ ویژه هفتم، هشتم و نهم',
+        grades: [{ id: 2, title: 'نهم' }, { id: 0, title: 'دهم' }, { id: 1, title: 'یازدهم' }],
+        exams: [
+          {
+            id: 0,
+            major_id: null,
+            grade_id: 0,
+            title: 'میان ترم 1',
+            pack_price: 110000,
+            date: '17/9/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: null,
+            grade_id: 0,
+            title: '(ج) ترم 1',
+            pack_price: 110000,
+            date: '6/11/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: null,
+            grade_id: 0,
+            title: 'میان ترم 2',
+            pack_price: 110000,
+            date: '17/1/1402',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: null,
+            grade_id: 0,
+            title: '(ج) ترم 2',
+            pack_price: 110000,
+            date: '28/2/1402',
+            number: 4,
+            selective: false
+          },
+
+          {
+            id: 0,
+            major_id: null,
+            grade_id: 1,
+            title: 'میان ترم 1',
+            pack_price: 110000,
+            date: '17/9/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: null,
+            grade_id: 1,
+            title: '(ج) ترم 1',
+            pack_price: 110000,
+            date: '6/11/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: null,
+            grade_id: 1,
+            title: 'میان ترم 2',
+            pack_price: 110000,
+            date: '17/1/1402',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: null,
+            grade_id: 1,
+            title: '(ج) ترم 2',
+            pack_price: 110000,
+            date: '28/2/1402',
+            number: 4,
+            selective: false
+          },
+
+          {
+            id: 0,
+            major_id: null,
+            grade_id: 2,
+            title: 'میان ترم 1',
+            pack_price: 110000,
+            date: '17/9/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: null,
+            grade_id: 2,
+            title: '(ج) ترم 1',
+            pack_price: 110000,
+            date: '6/11/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: null,
+            grade_id: 2,
+            title: 'میان ترم 2',
+            pack_price: 110000,
+            date: '17/1/1402',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: null,
+            grade_id: 2,
+            title: '(ج) ترم 2',
+            pack_price: 110000,
+            date: '28/2/1402',
+            number: 4,
+            selective: false
+          }
+        ],
+        prices: [
+          {
+            major_id: 0,
+            grade_id: 0,
+            unit: {
+              price: 18900
+            },
+            pack: {
+              unit_price: 18900,
+              discount: 76000,
+              price: 110000
+            }
+          }
+        ]
+      },
+      {
+        id: 3,
+        description: [
+          {
+            id: 3,
+            text: 'در آزمون تیزهوشان ششم به هفتم سنجش براساس هوش، خلاقیت و استعداد تحلیلی صورت می گیرد. بنابراین آزمون های سه آ در قالب 7 مرحله به صورت کاملا مشابه با آزمون تیزهوشان از مباحث هوش، خلاقیت و استعداد تحلیلی برگزار می شود. در جدول پایین "(ج)" نمایش اختصاری کلمه "جمع بندی" می‌باشد.'
+          },
+          {
+            id: 2,
+            text: 'در آزمون تیزهوشان نهم به دهم سنجش براساس استعداد تحصیلی و تحلیلی صورت می گیرد. بنابراین آزمون های سه آ در قالب 5 مرحله جزئی و 2 آزمون شبیه ساز آزمون تیزهوشان برگزار می شود که در آن سوالات استعداد تحلیلی همواره قرار دارند و سوالات استعداد تحصیلی براساس پیشروی دروس برنامه ریزی شده اند. در جدول پایین "(ج)" و "(ب)" به ترتیب نمایش اختصاری کلمه "جمع بندی" و "بخشی از" می‌باشد.'
+          }
+        ],
+        majors: null,
+        title: 'آزمون سه‌آ ویژه قبولی تیزهوشان',
+        grades: [{ id: 2, title: 'نهم' }, { id: 3, title: 'ششم' }],
+        exams: [
+          {
+            id: 0,
+            major_id: null,
+            grade_id: 2,
+            title: 'شبیه ساز 1',
+            pack_price: 110000,
+            date: '19/8/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: null,
+            grade_id: 2,
+            title: 'شبیه ساز 2',
+            pack_price: 110000,
+            date: '1/10/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: null,
+            grade_id: 2,
+            title: 'شبیه ساز 3',
+            pack_price: 110000,
+            date: '6/11/1401',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: null,
+            grade_id: 2,
+            title: 'شبیه ساز 4',
+            pack_price: 110000,
+            date: '18/12/1401',
+            number: 4,
+            selective: false
+          },
+          {
+            id: 4,
+            major_id: null,
+            grade_id: 2,
+            title: 'شبیه ساز 5',
+            pack_price: 110000,
+            date: '17/1/1402',
+            number: 5,
+            selective: false
+          },
+          {
+            id: 5,
+            major_id: null,
+            grade_id: 2,
+            title: 'شبیه ساز 6',
+            pack_price: 110000,
+            date: '14/2/1402',
+            number: 6,
+            selective: false
+          },
+          {
+            id: 6,
+            major_id: null,
+            grade_id: 2,
+            title: 'شبیه ساز 7',
+            pack_price: 110000,
+            date: '28/2/1402',
+            number: 7,
+            selective: false
+          },
+
+          {
+            id: 0,
+            major_id: null,
+            grade_id: 3,
+            title: '(ب) ترم 1',
+            pack_price: 110000,
+            date: '19/8/1401',
+            number: 1,
+            selective: false
+          },
+          {
+            id: 1,
+            major_id: null,
+            grade_id: 3,
+            title: '(ب) ترم 1',
+            pack_price: 110000,
+            date: '1/10/1401',
+            number: 2,
+            selective: false
+          },
+          {
+            id: 2,
+            major_id: null,
+            grade_id: 3,
+            title: '(ج) ترم 1',
+            pack_price: 110000,
+            date: '6/11/1401',
+            number: 3,
+            selective: false
+          },
+          {
+            id: 3,
+            major_id: null,
+            grade_id: 3,
+            title: 'ترم 1 + (ب) ترم 2',
+            pack_price: 110000,
+            date: '18/12/1401',
+            number: 4,
+            selective: false
+          },
+          {
+            id: 4,
+            major_id: null,
+            grade_id: 3,
+            title: 'شبیه ساز 1',
+            pack_price: 110000,
+            date: '17/1/1402',
+            number: 5,
+            selective: false
+          },
+          {
+            id: 5,
+            major_id: null,
+            grade_id: 3,
+            title: 'شبیه ساز 2',
+            pack_price: 110000,
+            date: '14/2/1402',
+            number: 6,
+            selective: false
+          },
+          {
+            id: 6,
+            major_id: null,
+            grade_id: 3,
+            title: 'شبیه ساز 3',
+            pack_price: 110000,
+            date: '28/2/1402',
+            number: 7,
+            selective: false
           }
         ],
         prices: [
@@ -1180,7 +2062,7 @@ export default {
 
 @media screen and (max-width: 599px) {
   .table-section {
-    padding-bottom: 40px;
+    margin-bottom: 40px !important;
 
     .table-section-title {
       font-size: 20px;
