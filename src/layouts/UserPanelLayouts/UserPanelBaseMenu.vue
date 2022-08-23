@@ -49,10 +49,10 @@
           </q-expansion-item>
           <q-item
             v-else
+            v-model="clickedItem"
             :to="(item.routeName) ? {name: item.routeName} : null"
             class="item-list"
             :class="{ 'alone-item': !item.children.length , 'alone-item-mode-drawer' : mode === 'drawer'}"
-            v-model="clickedItem"
             :exact-active-class="getQItemExactActiveClass"
           >
             <div class="section-title">
