@@ -5,6 +5,8 @@
       <q-page padding
               class="flex justify-center items-start">
         <q-stepper
+          ref="stepper"
+          v-model="step"
           animated
           header-nav
           flat
@@ -12,8 +14,6 @@
           alternative-labels
           :contracted="isContracted"
           color="secondary"
-          v-model="step"
-          ref="stepper"
           style="max-width: 600px"
         >
           <q-step name="pick"
@@ -42,32 +42,32 @@
                 <div class="col-3 q-pa-md flex flex-center"
                      :class="topL === 'h' ? 'bg-primary text-white' : 'bg-orange text-grey-9'">
                   <q-option-group
+                    v-model="topL"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="topL"
                     :options="[{ label: 'l', value: 'l'}, { label: 'h', value: 'h'}]"
                   />
                 </div>
                 <div class="col-6 q-pa-md flex flex-center bg-primary text-white">
                   <q-option-group
+                    v-model="topC"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="topC"
                     :options="[{ label: 'h', value: 'h'}, { label: 'H', value: 'H'}]"
                   />
                 </div>
                 <div class="col-3 q-pa-md flex flex-center"
                      :class="topR === 'h' ? 'bg-primary text-white' : 'bg-orange text-grey-9'">
                   <q-option-group
+                    v-model="topR"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="topR"
                     :options="[{ label: 'r', value: 'r'}, { label: 'h', value: 'h'}]"
                   />
                 </div>
@@ -76,11 +76,11 @@
               <div class="row">
                 <div class="col-3 q-px-md q-py-xl flex flex-center bg-orange text-grey-9">
                   <q-option-group
+                    v-model="middleL"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="middleL"
                     :options="[{ label: 'l', value: 'l'}, { label: 'L', value: 'L'}]"
                   />
                 </div>
@@ -89,11 +89,11 @@
                 </div>
                 <div class="col-3 q-px-md q-py-xl flex flex-center bg-orange text-grey-9">
                   <q-option-group
+                    v-model="middleR"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="middleR"
                     :options="[{ label: 'r', value: 'r'}, { label: 'R', value: 'R'}]"
                   />
                 </div>
@@ -103,32 +103,32 @@
                 <div class="col-3 q-pa-md flex flex-center"
                      :class="bottomL === 'f' ? 'bg-grey-8 text-white' : 'bg-orange text-grey-9'">
                   <q-option-group
+                    v-model="bottomL"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="bottomL"
                     :options="[{ label: 'l', value: 'l'}, { label: 'f', value: 'f'}]"
                   />
                 </div>
                 <div class="col-6 q-pa-md flex flex-center bg-grey-8 text-white">
                   <q-option-group
+                    v-model="bottomC"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="bottomC"
                     :options="[{ label: 'f', value: 'f'}, { label: 'F', value: 'F'}]"
                   />
                 </div>
                 <div class="col-3 q-pa-md flex flex-center"
                      :class="bottomR === 'f' ? 'bg-grey-8 text-white' : 'bg-orange text-grey-9'">
                   <q-option-group
+                    v-model="bottomR"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="bottomR"
                     :options="[{ label: 'r', value: 'r'}, { label: 'f', value: 'f'}]"
                   />
                 </div>
@@ -274,8 +274,8 @@
                      class="col-12 col-sm-auto">
                   <q-btn class="full-width"
                          color="primary"
-                         @click="$refs.stepper.next()"
-                         label="Continue" />
+                         label="Continue"
+                         @click="$refs.stepper.next()" />
                 </div>
                 <div class="col-12 col-sm-auto">
                   <q-btn class="full-width"
@@ -297,10 +297,10 @@
             <q-separator />
 
             <q-card-actions align="right">
-              <q-btn color="brand-primary"
+              <q-btn v-close-popup
+                     color="brand-primary"
                      flat
-                     label="Close"
-                     v-close-popup />
+                     label="Close" />
             </q-card-actions>
           </q-card>
         </q-dialog>

@@ -20,9 +20,9 @@
 
     <q-card-section class="filter-section">
       <q-select
+        v-model="searchInput"
         filled
         dropdown-icon="isax:arrow-down-1"
-        v-model="searchInput"
         label="جدیدترین"
         class="backGround-gray-input filter-input"
       >
@@ -36,8 +36,8 @@
     </q-card-section>
   </q-card>
   <q-dialog
-    class="dialog-filter-card"
     v-model="FilterOptionDialog"
+    class="dialog-filter-card"
     persistent
     maximized
     transition-show="slide-right"

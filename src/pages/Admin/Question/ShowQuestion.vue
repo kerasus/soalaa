@@ -28,8 +28,8 @@
           />
         </div>
         <component
-          v-if="question.type"
           :is="getComponent"
+          v-if="question.type"
           v-bind="allProps"
           :class="{ 'col-7': isPanelOpened }"
         />

@@ -28,11 +28,11 @@
     <q-separator></q-separator>
     <div class="q-pa-lg">
       <q-input
+        ref="userName"
+        v-model="username"
         bottom-slots
         color="blue-8"
-        ref="userName"
         name="userName"
-        v-model="username"
         label="شماره همراه"
         @keydown.enter="getEnter('pass')"
       >
@@ -41,14 +41,14 @@
         </template>
       </q-input>
       <q-input
+        ref="pass"
+        v-model="password"
         color="blue-8"
         bottom-slots
-        ref="pass"
         name="pass"
-        v-model="password"
         label="رمز"
-        @keydown.enter="login"
-        type="password">
+        type="password"
+        @keydown.enter="login">
         <template v-slot:before>
           <q-icon name="lock"></q-icon>
         </template>

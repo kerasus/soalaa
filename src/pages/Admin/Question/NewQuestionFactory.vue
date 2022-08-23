@@ -24,8 +24,8 @@
         <div class="col-6 text-center">
           <div class="q-gutter-y-md tabs-style text-center">
             <q-tabs
-              dir="ltr"
               v-model="tab"
+              dir="ltr"
               inline-label
               indicator-color="transparent"
               active-color="primary"

@@ -6,8 +6,8 @@
            style="padding-right:0;">
         <div class="detail-box-title">مرجع</div>
         <q-select
-          borderless
           v-model="questionAuthor"
+          borderless
           option-value="id"
           option-label="value"
           use-input
@@ -20,10 +20,10 @@
       <div class="detail-box col-3">
         <div class="detail-box-title">تاریخ تالیف</div>
         <q-select
+          v-model="authorshipDate"
           borderless
           option-value="id"
           option-label="value"
-          v-model="authorshipDate"
           :options="authorshipDatesList"
           use-input
           use-chips
@@ -34,10 +34,10 @@
       <div class="detail-box col-3">
         <div class="detail-box-title">درجه سختی</div>
         <q-select
+          v-model="questionLevel"
           option-value="id"
           option-label="value"
           borderless
-          v-model="questionLevel"
           :options="levels"
           emit-value
           map-options
@@ -56,22 +56,22 @@
       <div class="detail-box detail-box-first col-3">
         <div class="detail-box-title">پایه تحصیلی</div>
         <q-select
+          v-model="grade"
           borderless
           option-value="id"
           option-label="title"
-          v-model="grade"
           :options="gradesList"
-          @update:model-value="gradeSelected"
           :disable="!editable"
+          @update:model-value="gradeSelected"
         />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title">رشته تحصیلی</div>
         <q-select
+          v-model="majors"
           borderless
           option-value="id"
           option-label="value"
-          v-model="majors"
           :options="majorList"
           use-input
           use-chips
@@ -92,8 +92,8 @@
               unelevated
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
-              @click="dialogValue = true"
               :disable="!isTreeModalAvailable"
+              @click="dialogValue = true"
             />
           </div>
         </div>

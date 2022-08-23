@@ -71,6 +71,7 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'prefer-promise-reject-errors': 'off',
 
+    "vue/attributes-order": 'error',
     "vue/max-attributes-per-line": 'error',
     "vue/html-indent": 'error',
     "vue/html-closing-bracket-spacing": 'error',

@@ -16,8 +16,8 @@
           class="row"
         >
           <q-select
-            class="q-pa-md col-md-4"
             v-model="category.title"
+            class="q-pa-md col-md-4"
             :value="category.id"
             label="دفترچه"
             :options="inputs[examCategoriesIndex].value"
@@ -28,14 +28,14 @@
             disable
           />
           <q-input
-            class="q-pa-md col-md-3"
             v-model="category.order"
+            class="q-pa-md col-md-3"
             label="ترتیب"
             disable
           />
           <q-input
-            class="q-pa-md col-md-3"
             v-model="category.time"
+            class="q-pa-md col-md-3"
             label="زمان"
             disable
           />
