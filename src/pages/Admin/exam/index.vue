@@ -179,8 +179,8 @@ export default {
       inputs: [
         { type: 'input', name: 'title', label: 'عنوان', responseKey: 'data.title', col: 'col-md-3', placeholder: ' ', filled: true },
         // { type: 'input', name: 'type', label: 'نوع', responseKey: 'data.type', col: 'col-md-3', placeholder: ' ', filled: true },
-        { type: 'date', name: 'updated_at', label: '', responseKey: 'data.updated_at', col: 'col-md-3', placeholder: 'تاریخ شروع از' },
-        { type: 'date', name: 'created_at', label: '', responseKey: 'data.created_at', col: 'col-md-3', placeholder: 'تاریخ شروع تا' }
+        { type: 'date', name: 'started_from', label: '', col: 'col-md-3', placeholder: 'تاریخ شروع از' },
+        { type: 'date', name: 'started_till', label: '', col: 'col-md-3', placeholder: 'تاریخ شروع تا' }
       ]
     }
   },
