@@ -1,6 +1,5 @@
 <template>
-  <div v-if="count === 0"
-       class="cart-container">
+  <div class="cart-container">
     <div class="cart-image"></div>
     <div class="title">سبد خرید شما خالی است!</div>
     <div class="back">بازگشت به فروشگاه</div>
@@ -10,22 +9,11 @@
 <script>
 export default {
   name: 'CartEmpty',
-  created() {
-    this.cartReview()
-  },
+  created() {},
   data() {
-    return {
-      count: -1
-    }
+    return {}
   },
-  methods: {
-    cartReview() {
-      this.$store.dispatch('Cart/reviewCart')
-        .then((response) => {
-          this.count = response.data.data.count
-        })
-    }
-  }
+  methods: {}
 }
 </script>
 
