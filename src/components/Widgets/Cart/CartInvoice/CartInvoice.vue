@@ -304,10 +304,6 @@ export default {
     this.loadData()
   },
 
-  mounted() {
-    this.loadData()
-  },
-
   computed: {
     cart() {
       return this.$store.getters['Cart/cart']
@@ -331,10 +327,6 @@ export default {
 
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
-    },
-
-    windowSize() {
-      return this.$store.getters['AppLayout/windowSize']
     }
   },
 
@@ -379,6 +371,7 @@ export default {
 
   @media screen and (max-width: 1023px) {
     margin-left: 0;
+    margin-top: 0;
   }
 
   .invoice-cart {
