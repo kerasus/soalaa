@@ -248,8 +248,9 @@ const API_ADDRESS = {
     }
   },
   cart: {
-    orderproduct(id) {
-      return apiV2Server + '/orderproduct/' + id
+    orderproduct: {
+      add: apiV2Server + '/orderproduct',
+      delete (id) { return apiV2Server + '/orderproduct/' + id }
     },
     review: apiV2Server + '/checkout/review'
   }

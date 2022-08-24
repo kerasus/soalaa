@@ -12,7 +12,7 @@ export function addToCart (context, product) {
   return new Promise((resolve, reject) => {
     if (isUserLogin) {
       axios
-        .post(API_ADDRESS.cart.orderproduct, { product_id: product.id })
+        .post(API_ADDRESS.cart.orderproduct.add, { product_id: product.id })
         .then((response) => {
           return resolve(response)
         })
@@ -78,7 +78,7 @@ export function removeItemFromCart (context, productId) {
   return new Promise((resolve, reject) => {
     if (isUserLogin) {
       axios
-        .delete(API_ADDRESS.cart.orderproduct(productId))
+        .delete(API_ADDRESS.cart.orderproduct.delete(productId))
         .then((response) => {
           return resolve(response)
         })
