@@ -166,8 +166,6 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
-import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 // import Assistant from 'src/plugins/assistant'
 export default {
@@ -237,9 +235,9 @@ export default {
   },
   methods: {
     resetAnswerCount (subcategoryId) {
-      for (const sub_category_id in this.answerCounts) {
-        this.answerCounts[sub_category_id].correct = 0
-        this.answerCounts[sub_category_id].incorrect = 0
+      for (const subCategoryId in this.answerCounts) {
+        this.answerCounts[subCategoryId].correct = 0
+        this.answerCounts[subCategoryId].incorrect = 0
       }
 
       if (this.percents[subcategoryId] < -33.33 || this.percents[subcategoryId] > 100) {
@@ -313,6 +311,9 @@ export default {
     prepareTakhmineRotbeReport (resetPercents) {
       const that = this,
         takhminReport = JSON.parse(JSON.stringify(this.report))
+      if (!takhminReport.main) {
+        takhminReport.main = {}
+      }
       takhminReport.main.percent = 0
       takhminReport.main.rank_city = 0
       takhminReport.main.rank_province = 0
@@ -378,7 +379,7 @@ export default {
           sub_category_id: keys[i]
         })
       }
-      axios.post(API_ADDRESS.exam.takhminRotbe, {
+      this.$axios.post(API_ADDRESS.exam.takhminRotbe, {
         exam_user_id: that.takhminReport.exam_user.id,
         percents: sentPercents
       })

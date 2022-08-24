@@ -1,3 +1,6 @@
+export function updateLinearLoading (state, newInfo) {
+  state.linearLoading = !!newInfo
+}
 
 export function updateWindowSize (state, newInfo) {
   state.windowSize.x = newInfo.width

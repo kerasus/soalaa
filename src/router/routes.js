@@ -162,19 +162,27 @@ const routes = [
                 ]
               },
               {
-                name: 'Admin.Exam.Lessons',
-                path: 'lessons/:quizId',
-                component: () => import('src/pages/Admin/exam/lessons.vue'),
+                name: 'Admin.Exam.Categories',
+                path: ':exam_id/category',
+                component: () => import('pages/Admin/exam/ExamCategoryList.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionShowcategorires')
                 ]
               },
               {
-                name: 'Admin.Exam.Lessons.List',
-                path: 'lessons/:quizId/chart',
-                component: () => import('src/pages/Admin/exam/lessonsChart.vue'),
+                name: 'Admin.Exam.Categories.SubCategories',
+                path: ':exam_id/category/:category_id/sub-category',
+                component: () => import('pages/Admin/exam/ExamSubCategoryList.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionShowcategorires')
+                ]
+              },
+              {
+                path: ':exam_id/sub-category/:subcategory_id/questions',
+                name: 'Admin.Exam.SubCategory.Questions',
+                component: () => import('pages/Admin/exam/SubCategoryQuestions'),
+                middleware: [
+                  Permissions.hasPermission('examquestionAttachShow')
                 ]
               },
               {
@@ -183,14 +191,6 @@ const routes = [
                 component: () => import('src/pages/Admin/exam/SetVideo.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionVideos')
-                ]
-              },
-              {
-                path: ':quizId/:lessonId',
-                name: 'exams.lessons.questions',
-                component: () => import('pages/Admin/exam/LessonQuestions'),
-                middleware: [
-                  Permissions.hasPermission('examquestionAttachShow')
                 ]
               },
               {
@@ -221,7 +221,7 @@ const routes = [
               {
                 path: 'list',
                 name: 'Admin.Question.Factory',
-                component: () => (import('pages/Admin/Question/NewQuestionFactory')),
+                component: () => (import('pages/Admin/Question/QuestionFactory')),
                 meta: {
                   middlewares: [
                     auth,
