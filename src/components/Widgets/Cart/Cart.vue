@@ -1,4 +1,10 @@
 <template>
+  <!--  <div>-->
+  <!--    <q-btn-->
+  <!--      label="add to cart"-->
+  <!--      @click="add"-->
+  <!--    />-->
+  <!--  </div>-->
   <div class="cart-template row">
     <div
       v-if="count !== 0"
@@ -53,11 +59,11 @@ export default {
   },
 
   methods: {
-    add () {
-      this.$store.dispatch('Cart/addToCart', { id: 748 }).then(() => {
-        this.cartReview()
-      })
-    },
+    // add () {
+    //   this.$store.dispatch('Cart/addToCart', { id: 747 }).then(() => {
+    //     this.cartReview()
+    //   })
+    // },
     cartReview() {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('Cart/reviewCart')
