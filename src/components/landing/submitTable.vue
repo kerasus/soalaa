@@ -12,7 +12,7 @@
                  :name="exam"
                  class="exam-btn"
                  :class="{'active-exam-btn':activeTab.id === exam.id}"
-                 @click="activeTab = exam"
+                 @click="updateActiveTab(exam)"
           >
             <span class="btn-text">
               {{ exam.title }}
@@ -31,6 +31,7 @@
             borderless
             rounded
             option-label="title"
+            @update:model-value="setFirstMajorsGradesSelected"
           >
           </q-select>
         </div>
@@ -40,7 +41,7 @@
       </div>
       <div class="table-box-container">
         <!--        <table-component :table-data="data"/>-->
-        <div class="table-parent q-pt-sm">
+        <div class="table-parent">
           <div class="major-grade-btn">
             <q-select
               v-if="currentGrades.length>0"
@@ -51,7 +52,7 @@
               hide-bottom-space
               dense
               :options="currentGrades"
-              class="select-1 dropdown-btn first q-mr-md">
+              class="dropdown-btn first q-mr-md">
               <template v-slot:selected>
                 <span class="custom-label-prefix"> مقطع تحصیلی: </span>
                 {{ selectedGrade.title }}
@@ -153,7 +154,7 @@
               </div>
             </div>
             <div v-if="selectiveRegister"
-                 class="price-submit-in-footer price-submit-box-selective-mode ">
+                 class="price-submit-in-footer price-submit-box-selective-mode border-right">
               <div class="price-box">
                 <div>
                   <span class="single-price">
@@ -193,9 +194,9 @@
                 </div>
               </div>
               <div class="submit-box">
-                <span class="exam-price">
+                <div class="exam-price">
                   قیمت آزمون کامل
-                </span>
+                </div>
                 <div class="exam-price-box">
                   <span class="discount-tag"> تخفیف٪</span>
                   <span class="main-price"> ۱۸۶٫۰۰۰ </span>
@@ -232,7 +233,6 @@ export default {
 
   data: () => ({
     data: [],
-    selectiveRegister: false,
     activeTab: {},
     selectedGrade: {},
     selectedMajor: {},
@@ -252,7 +252,7 @@ export default {
             pack_price: 110000,
             date: '5/7/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -262,7 +262,7 @@ export default {
             pack_price: 110000,
             date: '10/8/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -272,7 +272,7 @@ export default {
             pack_price: 110000,
             date: '15/9/1401',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -282,7 +282,7 @@ export default {
             pack_price: 110000,
             date: '27/10/1401',
             number: 4,
-            selective: false
+            selective: true
           },
           {
             id: 4,
@@ -292,7 +292,7 @@ export default {
             pack_price: 110000,
             date: '25/11/1401',
             number: 5,
-            selective: false
+            selective: true
           },
           {
             id: 5,
@@ -302,7 +302,7 @@ export default {
             pack_price: 110000,
             date: '23/12/1401',
             number: 6,
-            selective: false
+            selective: true
           },
           {
             id: 6,
@@ -312,7 +312,7 @@ export default {
             pack_price: 110000,
             date: '22/1/1402',
             number: 7,
-            selective: false
+            selective: true
           },
           {
             id: 7,
@@ -322,7 +322,7 @@ export default {
             pack_price: 110000,
             date: '26/2/1402',
             number: 8,
-            selective: false
+            selective: true
           },
           {
             id: 8,
@@ -332,7 +332,7 @@ export default {
             pack_price: 110000,
             date: '23/3/1402',
             number: 9,
-            selective: false
+            selective: true
           },
           {
             id: 9,
@@ -342,7 +342,7 @@ export default {
             pack_price: 110000,
             date: '30/3/1402',
             number: 10,
-            selective: false
+            selective: true
           },
 
           {
@@ -353,7 +353,7 @@ export default {
             pack_price: 110000,
             date: '5/7/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -363,7 +363,7 @@ export default {
             pack_price: 110000,
             date: '10/8/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -373,7 +373,7 @@ export default {
             pack_price: 110000,
             date: '15/9/1401',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -383,7 +383,7 @@ export default {
             pack_price: 110000,
             date: '27/10/1401',
             number: 4,
-            selective: false
+            selective: true
           },
           {
             id: 4,
@@ -393,7 +393,7 @@ export default {
             pack_price: 110000,
             date: '25/11/1401',
             number: 5,
-            selective: false
+            selective: true
           },
           {
             id: 5,
@@ -403,7 +403,7 @@ export default {
             pack_price: 110000,
             date: '23/12/1401',
             number: 6,
-            selective: false
+            selective: true
           },
           {
             id: 6,
@@ -413,7 +413,7 @@ export default {
             pack_price: 110000,
             date: '22/1/1402',
             number: 7,
-            selective: false
+            selective: true
           },
           {
             id: 7,
@@ -423,7 +423,7 @@ export default {
             pack_price: 110000,
             date: '26/2/1402',
             number: 8,
-            selective: false
+            selective: true
           },
           {
             id: 8,
@@ -433,7 +433,7 @@ export default {
             pack_price: 110000,
             date: '23/3/1402',
             number: 9,
-            selective: false
+            selective: true
           },
           {
             id: 9,
@@ -443,7 +443,7 @@ export default {
             pack_price: 110000,
             date: '30/3/1402',
             number: 10,
-            selective: false
+            selective: true
           },
 
           {
@@ -454,7 +454,7 @@ export default {
             pack_price: 110000,
             date: '5/7/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -464,7 +464,7 @@ export default {
             pack_price: 110000,
             date: '10/8/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -474,7 +474,7 @@ export default {
             pack_price: 110000,
             date: '15/9/1401',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -484,7 +484,7 @@ export default {
             pack_price: 110000,
             date: '27/10/1401',
             number: 4,
-            selective: false
+            selective: true
           },
           {
             id: 4,
@@ -494,7 +494,7 @@ export default {
             pack_price: 110000,
             date: '25/11/1401',
             number: 5,
-            selective: false
+            selective: true
           },
           {
             id: 5,
@@ -504,7 +504,7 @@ export default {
             pack_price: 110000,
             date: '23/12/1401',
             number: 6,
-            selective: false
+            selective: true
           },
           {
             id: 6,
@@ -514,7 +514,7 @@ export default {
             pack_price: 110000,
             date: '22/1/1402',
             number: 7,
-            selective: false
+            selective: true
           },
           {
             id: 7,
@@ -524,7 +524,7 @@ export default {
             pack_price: 110000,
             date: '26/2/1402',
             number: 8,
-            selective: false
+            selective: true
           },
           {
             id: 8,
@@ -534,7 +534,7 @@ export default {
             pack_price: 110000,
             date: '23/3/1402',
             number: 9,
-            selective: false
+            selective: true
           },
           {
             id: 9,
@@ -544,7 +544,7 @@ export default {
             pack_price: 110000,
             date: '30/3/1402',
             number: 10,
-            selective: false
+            selective: true
           }
         ],
         prices: [
@@ -577,7 +577,7 @@ export default {
             pack_price: 110000,
             date: '17/8/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -587,7 +587,7 @@ export default {
             pack_price: 110000,
             date: '4/11/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -597,7 +597,7 @@ export default {
             pack_price: 110000,
             date: '19/2/1402',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -607,7 +607,7 @@ export default {
             pack_price: 110000,
             date: '30/3/1402',
             number: 4,
-            selective: false
+            selective: true
           },
 
           {
@@ -618,7 +618,7 @@ export default {
             pack_price: 110000,
             date: '17/8/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -628,7 +628,7 @@ export default {
             pack_price: 110000,
             date: '4/11/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -638,7 +638,7 @@ export default {
             pack_price: 110000,
             date: '19/2/1402',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -648,7 +648,7 @@ export default {
             pack_price: 110000,
             date: '30/3/1402',
             number: 4,
-            selective: false
+            selective: true
           },
 
           {
@@ -659,7 +659,7 @@ export default {
             pack_price: 110000,
             date: '17/8/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -669,7 +669,7 @@ export default {
             pack_price: 110000,
             date: '4/11/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -679,7 +679,7 @@ export default {
             pack_price: 110000,
             date: '19/2/1402',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -689,7 +689,7 @@ export default {
             pack_price: 110000,
             date: '30/3/1402',
             number: 4,
-            selective: false
+            selective: true
           },
 
           {
@@ -700,7 +700,7 @@ export default {
             pack_price: 110000,
             date: '17/8/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -710,7 +710,7 @@ export default {
             pack_price: 110000,
             date: '4/11/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -720,7 +720,7 @@ export default {
             pack_price: 110000,
             date: '19/2/1402',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -730,7 +730,7 @@ export default {
             pack_price: 110000,
             date: '30/3/1402',
             number: 4,
-            selective: false
+            selective: true
           },
 
           {
@@ -741,7 +741,7 @@ export default {
             pack_price: 110000,
             date: '17/8/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -751,7 +751,7 @@ export default {
             pack_price: 110000,
             date: '4/11/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -761,7 +761,7 @@ export default {
             pack_price: 110000,
             date: '19/2/1402',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -771,7 +771,7 @@ export default {
             pack_price: 110000,
             date: '30/3/1402',
             number: 4,
-            selective: false
+            selective: true
           },
 
           {
@@ -782,7 +782,7 @@ export default {
             pack_price: 110000,
             date: '17/8/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -792,7 +792,7 @@ export default {
             pack_price: 110000,
             date: '4/11/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -802,7 +802,7 @@ export default {
             pack_price: 110000,
             date: '19/2/1402',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -812,7 +812,7 @@ export default {
             pack_price: 110000,
             date: '30/3/1402',
             number: 4,
-            selective: false
+            selective: true
           }
 
         ],
@@ -846,7 +846,7 @@ export default {
             pack_price: 110000,
             date: '17/9/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -856,7 +856,7 @@ export default {
             pack_price: 110000,
             date: '6/11/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -866,7 +866,7 @@ export default {
             pack_price: 110000,
             date: '17/1/1402',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -876,7 +876,7 @@ export default {
             pack_price: 110000,
             date: '28/2/1402',
             number: 4,
-            selective: false
+            selective: true
           },
 
           {
@@ -887,7 +887,7 @@ export default {
             pack_price: 110000,
             date: '17/9/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -897,7 +897,7 @@ export default {
             pack_price: 110000,
             date: '6/11/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -907,7 +907,7 @@ export default {
             pack_price: 110000,
             date: '17/1/1402',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -917,7 +917,7 @@ export default {
             pack_price: 110000,
             date: '28/2/1402',
             number: 4,
-            selective: false
+            selective: true
           },
 
           {
@@ -928,7 +928,7 @@ export default {
             pack_price: 110000,
             date: '17/9/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -938,7 +938,7 @@ export default {
             pack_price: 110000,
             date: '6/11/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -948,7 +948,7 @@ export default {
             pack_price: 110000,
             date: '17/1/1402',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -958,7 +958,7 @@ export default {
             pack_price: 110000,
             date: '28/2/1402',
             number: 4,
-            selective: false
+            selective: true
           }
         ],
         prices: [
@@ -1000,7 +1000,7 @@ export default {
             pack_price: 110000,
             date: '19/8/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -1010,7 +1010,7 @@ export default {
             pack_price: 110000,
             date: '1/10/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -1020,7 +1020,7 @@ export default {
             pack_price: 110000,
             date: '6/11/1401',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -1030,7 +1030,7 @@ export default {
             pack_price: 110000,
             date: '18/12/1401',
             number: 4,
-            selective: false
+            selective: true
           },
           {
             id: 4,
@@ -1040,7 +1040,7 @@ export default {
             pack_price: 110000,
             date: '17/1/1402',
             number: 5,
-            selective: false
+            selective: true
           },
           {
             id: 5,
@@ -1050,7 +1050,7 @@ export default {
             pack_price: 110000,
             date: '14/2/1402',
             number: 6,
-            selective: false
+            selective: true
           },
           {
             id: 6,
@@ -1060,7 +1060,7 @@ export default {
             pack_price: 110000,
             date: '28/2/1402',
             number: 7,
-            selective: false
+            selective: true
           },
 
           {
@@ -1071,7 +1071,7 @@ export default {
             pack_price: 110000,
             date: '19/8/1401',
             number: 1,
-            selective: false
+            selective: true
           },
           {
             id: 1,
@@ -1081,7 +1081,7 @@ export default {
             pack_price: 110000,
             date: '1/10/1401',
             number: 2,
-            selective: false
+            selective: true
           },
           {
             id: 2,
@@ -1091,7 +1091,7 @@ export default {
             pack_price: 110000,
             date: '6/11/1401',
             number: 3,
-            selective: false
+            selective: true
           },
           {
             id: 3,
@@ -1101,7 +1101,7 @@ export default {
             pack_price: 110000,
             date: '18/12/1401',
             number: 4,
-            selective: false
+            selective: true
           },
           {
             id: 4,
@@ -1111,7 +1111,7 @@ export default {
             pack_price: 110000,
             date: '17/1/1402',
             number: 5,
-            selective: false
+            selective: true
           },
           {
             id: 5,
@@ -1121,7 +1121,7 @@ export default {
             pack_price: 110000,
             date: '14/2/1402',
             number: 6,
-            selective: false
+            selective: true
           },
           {
             id: 6,
@@ -1131,7 +1131,7 @@ export default {
             pack_price: 110000,
             date: '28/2/1402',
             number: 7,
-            selective: false
+            selective: true
           }
         ],
         prices: [
@@ -1170,13 +1170,30 @@ export default {
       }
       // return this.activeTab.description[this.selectedGrade.id].text
       return ''
+    },
+    selectiveRegister() {
+      return true
     }
   },
   methods: {
-    onResize(data) {
-    },
     initPageData() {
       this.setFirstExamActive()
+      this.setFirstMajorsGradesSelected()
+    },
+    updateActiveTab(exam) {
+      this.activeTab = exam
+      this.setFirstMajorsGradesSelected()
+    },
+    setFirstMajorsGradesSelected() {
+      if (this.currentMajors.length > 0) {
+        this.selectedMajor = this.currentMajors[0]
+      }
+
+      if (this.currentGrades.length > 0) {
+        this.selectedGrade = this.currentGrades[0]
+      }
+    },
+    onResize(data) {
     },
     setFirstExamActive() {
       this.activeTab = this.tabPages[0]
@@ -1270,10 +1287,6 @@ export default {
 
           .dropdown-btn {
 
-            &.first {
-              margin-bottom: 15px;
-            }
-
             &:deep(.q-icon ) {
               width: 15px;
               height: 10px;
@@ -1300,32 +1313,23 @@ export default {
               color: #232323;
             }
           }
-
-          .select-1 {
-            &:deep(.q-field__inner) {
-              width: 231px;
-            }
-          }
-
-          .select-2 {
-            &:deep(.q-field__inner) {
-              width: 173px;
-            }
-          }
         }
 
         .download-picture-box {
-          width: 701px;
+          width: 702px;
           background: #FFF2CB;
           border-radius: 0 0 0 22px;
           padding: 0;
-          border-left: 1px solid #DBDBDB;
-          border-left: 1px solid;
+          border-right: 1px solid #DBDBDB;
+          &.download-picture-selective-mode{
+            width: 699px;
+          }
 
           .table-footer-container {
             display: grid;
             grid-template-columns: 1fr 2fr;
             height: 100%;
+            border-top: 1px solid #DBDBDB;
 
             .pic-container {
               width: 200px;
@@ -1341,6 +1345,7 @@ export default {
 
             .download-box {
               align-self: center;
+              text-align: center;
 
               .text-style {
                 font-style: normal;
@@ -1392,17 +1397,14 @@ export default {
           }
 
           .submit-box {
-            padding-top: 12px;
+            padding: 16px 0;
             height: 163px;
             width: 100%;
             text-align: center;
-            &.single-mode{
-              display:flex;
-              flex-direction: column;
-              justify-content: space-around;
-              align-items: center;
-
-            }
+            display:flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
 
             .exam-price {
               font-style: normal;
@@ -1463,8 +1465,12 @@ export default {
           width: 356px;
         }
         .price-submit-box-selective-mode{
-            width: 178px ;
+            width: 179px ;
+          &.border-right{
+            border-right:1px solid #DBDBDB;
+          }
         }
+
         .table {
           width: 100%;
           background: #fafafa;
@@ -1472,6 +1478,8 @@ export default {
           border-width: 2px;
           border-style: hidden;
           border-collapse: collapse;
+          border-top: 2px solid #DBDBDB;
+          overflow: hidden;
 
           .svg{
             svg{
@@ -1491,7 +1499,7 @@ export default {
           }
 
           th {
-            padding-top: 8px;
+            padding: 8px 0;
           }
 
           tr {
@@ -1567,12 +1575,9 @@ export default {
           .download-picture-box {
             width: 581px;
             &.download-picture-selective-mode{
-              width: 507px;
+              width: 514px;
             }
             .table-footer-container {
-              display: grid;
-              grid-template-columns: 1fr 2fr;
-              height: 100%;
               .pic-container {
                 width: 200px;
                 align-self: end;
@@ -1673,7 +1678,6 @@ export default {
                 .text-style {
                   font-size: 16px;
                   line-height: 24px;
-                  margin-bottom: 15px;
                 }
 
                 .download-btn {
@@ -1685,7 +1689,7 @@ export default {
             }
           }
           .price-submit-in-footer {
-            width: 120px;
+            width: 176px;
             .price-box {
 
               height: 64px;
@@ -1712,11 +1716,11 @@ export default {
                 font-size: 12px;
                 line-height: 16px;
                 color: #232323;
-                margin-bottom: 12px;
+                margin-bottom: 0;
               }
 
               .exam-price-box {
-                margin-bottom: 7px;
+                margin-bottom: 5px;
 
                 .discount-tag {
                   padding: 4px 5px;
@@ -1752,6 +1756,9 @@ export default {
               }
             }
           }
+          .price-submit-box-selective-mode{
+            width: 119px;
+          }
           .table {
             width: 100%;
 
@@ -1779,54 +1786,6 @@ export default {
               .submitStatus-selective-mode {
                 width: 121px;
               }
-
-              .price-submit-in-footer {
-                background: #7c12c3;
-                padding: 3px;
-                .price-box {
-                  height: 64px;
-                }
-
-                .submit-box {
-                  padding-top: 3px;
-                  height: 123px;
-
-                  .exam-price {
-                    font-size: 11px;
-                    margin-bottom: 6px;
-                  }
-
-                  .exam-price-box {
-                    margin-bottom: 3px;
-
-                    .discount-tag {
-                      padding: 0 8px;
-                      font-size: 10px;
-                      line-height: 16px;
-                    }
-
-                    .main-price {
-                      font-size: 12px;
-                    }
-                  }
-
-                  .final-price-box {
-                    font-size: 18px;
-                    line-height: 16px;
-                    margin-bottom: 7px;
-                  }
-
-                  .sub-btn {
-                    width: 145px;
-                    height: 32px;
-
-                    .sub-btn-text {
-                      font-size: 13px;
-                    }
-                  }
-                }
-              }
-
               .price-submit-box-pack-mode{
                 //width: 100%;
               }
@@ -1927,7 +1886,7 @@ export default {
             }
 
             &.download-picture-selective-mode{
-              width: 243px;
+              width: 251px;
             }
           }
           .price-submit-in-footer {
@@ -1958,11 +1917,10 @@ export default {
                 font-size: 12px;
                 line-height: 16px;
                 color: #232323;
-                margin-bottom: 12px;
+                margin-bottom: 0;
               }
 
               .exam-price-box {
-                margin-bottom: 7px;
 
                 .discount-tag {
                   padding: 4px 5px;
@@ -1977,6 +1935,44 @@ export default {
                   line-height: 16px;
                   text-decoration-line: line-through;
                   color: #DB1F1F;
+                }
+              }
+
+              .final-price-box {
+                font-size: 16px;
+                line-height: 16px;
+                margin-bottom: 8px;
+              }
+
+              .sub-btn {
+                width: 77px;
+                height: 24px;
+
+                .sub-btn-text {
+                  font-weight: 700;
+                  font-size: 14px;
+                  line-height: 16px;
+                }
+              }
+            }
+          }
+          .price-submit-box-selective-mode{
+            width: 103px ;
+            .submit-box {
+              padding-top: 8px;
+              height: 123px;
+              text-align: center;
+
+              .exam-price {
+                font-style: normal;
+                font-weight: 500;
+                font-size: 12px;
+              }
+
+              .exam-price-box {
+
+                .discount-tag {
+                  font-size: 9px;
                 }
               }
 
@@ -2129,6 +2125,9 @@ export default {
               &:deep(.q-field__append ) {
                 padding-right: 12px;
               }
+              &.first{
+                margin-bottom: 16px;
+              }
 
               .custom-label-prefix {
                 font-weight: 700;
@@ -2136,29 +2135,15 @@ export default {
                 line-height: 24px;
               }
             }
-
-            .select-1 {
-              &:deep(.q-field__inner) {
-                width: 231px;
-              }
-            }
-
-            .select-2 {
-              &:deep(.q-field__inner) {
-                width: 173px;
-              }
-            }
           }
 
           .download-picture-box {
             order: 2;
             width: 100%;
-            border-radius: 22px 0 22px 0;
+            border-radius: 22px 0 22px 22px;
+            border-top: 1px solid #DBDBDB;
 
             .table-footer-container {
-              display: grid;
-              grid-template-columns: 1fr 2fr;
-              height: 100%;
 
               .pic-container {
                 width: 100px;
@@ -2166,6 +2151,7 @@ export default {
 
               .download-box {
                 align-self: center;
+                justify-self: center;
 
                 .text-style {
                   display: none;
@@ -2184,10 +2170,13 @@ export default {
 
               }
             }
+            &.download-picture-selective-mode{
+              width: 100%;
+            }
           }
 
           .price-submit-in-footer {
-
+                width:108px ;
               .price-box {
                 display: flex;
                 justify-content: center;
@@ -2214,27 +2203,26 @@ export default {
 
               .submit-box {
                 padding-top: 8px;
-                height: 98px;
+                height: 120px;
                 width: 100%;
 
                 .exam-price {
                   font-style: normal;
                   font-weight: 500;
-                  font-size: 12px;
+                  font-size: 11px;
                   line-height: 16px;
-                  color: #232323;
-                  margin-bottom: 12px;
+                  margin-bottom: 0;
                 }
 
                 .exam-price-box {
-                  display: none;
+                  //display: none;
                 }
 
                 .final-price-box {
                   font-weight: 900;
                   font-size: 16px;
                   line-height: 16px;
-                  margin-bottom: 12px;
+                  margin-bottom: 4px;
                 }
 
                 .sub-btn {
@@ -2257,6 +2245,12 @@ export default {
           }
           .price-submit-box-selective-mode{
             width: 50%;
+            &.border-right{
+              border-right:none;
+            }
+            .submit-box{
+              border-right:1px solid #DBDBDB;
+            }
 
           }
 

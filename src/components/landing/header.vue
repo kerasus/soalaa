@@ -89,7 +89,7 @@ export default {
     }
 
     .submit-btn {
-      width: 105px;
+      width: 115px;
       height: 40px;
       background: #FFC107;
       border-radius: 24px;
@@ -103,7 +103,7 @@ export default {
 
   .video-box {
     width: 350px;
-    height: 200px;
+    height: auto;
     background: #E2E2E2;
     border-radius: 24px;
 
@@ -135,29 +135,22 @@ export default {
       }
 
       .submit-btn {
-        width: 105px;
+        width: 110px;
         height: 40px;
-        background: #FFC107;
-        border-radius: 24px;
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
         line-height: 24px;
-        color: #212121;
+
       }
     }
 
     .video-box {
       width: 320px;
-      height: 200px;
-      background: #E2E2E2;
-      border-radius: 24px;
 
       .video-btn {
         width: 150px;
         height: 40px;
-        background: #FFF0C1;
-        border: 2px solid #FFC107;
         border-radius: 24px;
 
         .video-icon {
@@ -183,25 +176,19 @@ export default {
       .submit-btn {
         width: 105px;
         height: 40px;
-        background: #FFC107;
-        border-radius: 24px;
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
         line-height: 24px;
-        color: #212121;
       }
     }
 
     .video-box {
       width: 320px;
-      height: 200px;
-      border-radius: 24px;
       .video-btn {
         width: 150px;
         height: 40px;
-        background: #FFF0C1;
-        border: 2px solid #FFC107;
+
         border-radius: 24px;
 
         .video-icon {
@@ -239,13 +226,11 @@ export default {
 
     .video-box {
       width: 328px;
-      height: 172px;
 
       .video-btn {
         width: 150px;
         height: 40px;
-        background: #FFF0C1;
-        border: 2px solid #FFC107;
+
         border-radius: 24px;
       }
     }
@@ -254,7 +239,6 @@ export default {
 @media screen and (max-width: 599px) {
   .landing-header {
     padding: 0 15px 40px 15px;
-    margin-bottom: 40px !important;
     background: url("https://nodes.alaatv.com/upload/landing/3a/h5.png");
     .introduction {
       padding-top:43px;

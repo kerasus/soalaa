@@ -1,5 +1,6 @@
 export default function () {
   return {
+    linearLoading: false,
     drawer: false,
     loginDialog: false,
     confirmDialog: {
@@ -18,7 +19,6 @@ export default function () {
       left: 0,
       right: 0
     },
-    appLayout: {},
     breadcrumbs: {
       visible: true,
       loading: false,
