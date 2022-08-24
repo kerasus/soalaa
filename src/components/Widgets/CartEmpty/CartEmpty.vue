@@ -1,6 +1,6 @@
 <template>
-  <div class="cart-container"
-       v-if="count === 0">
+  <div v-if="count === 0"
+       class="cart-container">
     <div class="cart-image"></div>
     <div class="title">سبد خرید شما خالی است!</div>
     <div class="back">بازگشت به فروشگاه</div>

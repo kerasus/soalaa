@@ -1,6 +1,6 @@
 <template>
-  <div class="invoice-container"
-       v-if="count !=0">
+  <div v-if="count !=0"
+       class="invoice-container">
     <q-card class="invoice-cart">
       <q-card-section class="invoice-total-price-section invoice-cart-section">
         <div

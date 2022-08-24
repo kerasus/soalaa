@@ -89,7 +89,7 @@ export default {
     }
 
     .submit-btn {
-      width: 105px;
+      width: 115px;
       height: 40px;
       background: #FFC107;
       border-radius: 24px;
@@ -135,15 +135,13 @@ export default {
       }
 
       .submit-btn {
-        width: 105px;
+        width: 110px;
         height: 40px;
-        background: #FFC107;
-        border-radius: 24px;
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
         line-height: 24px;
-        color: #212121;
+
       }
     }
 
@@ -156,8 +154,6 @@ export default {
       .video-btn {
         width: 150px;
         height: 40px;
-        background: #FFF0C1;
-        border: 2px solid #FFC107;
         border-radius: 24px;
 
         .video-icon {
@@ -183,13 +179,10 @@ export default {
       .submit-btn {
         width: 105px;
         height: 40px;
-        background: #FFC107;
-        border-radius: 24px;
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
         line-height: 24px;
-        color: #212121;
       }
     }
 
@@ -200,8 +193,7 @@ export default {
       .video-btn {
         width: 150px;
         height: 40px;
-        background: #FFF0C1;
-        border: 2px solid #FFC107;
+
         border-radius: 24px;
 
         .video-icon {
@@ -244,8 +236,7 @@ export default {
       .video-btn {
         width: 150px;
         height: 40px;
-        background: #FFF0C1;
-        border: 2px solid #FFC107;
+
         border-radius: 24px;
       }
     }
