@@ -1,51 +1,59 @@
 <template>
-  <div v-show="count !== 0">
+  <div>
     <div class="cart-count">سبدخرید شما ({{count}} محصول)</div>
     <div class="cart-items-container">
-      <div v-for="ci in cartItems"
-           :key="ci"
+      <div v-for="item in cartItems"
+           :key="item.id"
            class="cart-items">
         <q-card class="cart-card">
           <div class="image">
-            <q-img :src="ci.product.photo"></q-img>
+            <q-img :src="item.product.photo"></q-img>
           </div>
           <div class="content">
-            <div class="title">{{ ci.product.title }}</div>
-            <div class="desc-container">
+            <div class="title">{{ item.product.title }}</div>
+            <div
+              v-if="item.product && item.product.attributes && item.product.attributes.info"
+              class="desc-container"
+            >
               <div class="item">
                 <div class="icon-spacing icon-teacher"></div>
-                <div class="desc">{{ ci.product.attributes.info.teacher.join('، ') }}</div>
+                <div class="desc">{{ item.product.attributes.info.teacher.join('، ') }}</div>
               </div>
               <div class="item">
-                <div class="icon-spacing icon-book"></div>
-                <div class="desc">رشته تحصیلی: {{ ci.product.attributes.info.major.join(' - ') }}</div>
+                <div class="icon-spaitemng icon-book"></div>
+                <div class="desc">رشته تحصیلی: {{ item.product.attributes.info.major.join(' - ') }}</div>
               </div>
               <div class="item">
                 <div class="icon-spacing icon-menu-board"></div>
-                <div class="desc">{{ ci.product.attributes.info.production_year.join('، ') }}</div>
+                <div class="desc">{{ item.product.attributes.info.production_year.join('، ') }}</div>
               </div>
             </div>
-            <div class="price-container">
-              <div class="discount">{{ Math.floor(ci.price.discount/ ci.price.base * 100) }}%</div>
-              <div class="previous">{{ ci.price.base.toLocaleString() }}</div>
-              <div class="current">{{ ci.price.final.toLocaleString() }}</div>
+            <div
+              v-if="item.price"
+              class="price-container"
+            >
+              <div class="discount">{{ item.price.discountInPercent() }}%</div>
+              <div class="previous">{{ item.price.toman('base', null) }}</div>
+              <div class="current">{{ item.price.toman('final', null) }}</div>
               <div class="toman">تومان</div>
             </div>
           </div>
           <div class="actions">
-            <q-btn unelevated
-                   class="trash"
-                   @click="removeItem(ci)">
+            <q-btn
+              unelevated
+              class="trash"
+              @click="removeItem(item)"
+            >
               <div class="icon-trash"></div>
             </q-btn>
             <div class="products-container">
               <q-btn unelevated
-                     @click="goToDescPage(ci)">
+                     @click="goToDescPage(item)">
                 <div class="link">{{ descLinkLabel }}</div>
               </q-btn>
               <q-btn unelevated
                      class="details-btn"
-                     @click="descShow(ci)"
+                     @click="descShow(item)"
               >
                 <div class="details">
                   <div class="icon-caret"></div>
@@ -61,11 +69,14 @@
 </template>
 
 <script>
+import Widgets from 'components/PageBuilder/Widgets'
+
 export default {
   name: 'cartView',
+  mixins: [Widgets],
   data() {
     return {
-      cartItems: []
+
     }
   },
   props: {
@@ -76,10 +87,13 @@ export default {
   created() {
     this.loading = true
   },
-  mounted() {
-    this.cartReview()
-  },
   computed: {
+    cartItems () {
+      return this.$store.getters['Cart/cart'].cartItems.list
+    },
+    count () {
+      return this.$store.getters['Cart/cart'].count
+    },
     windowSize() {
       return this.$store.getters['AppLayout/windowSize']
     },
@@ -96,15 +110,8 @@ export default {
     cartReview() {
       this.$store.commit('loading/loading', true)
       this.$store.dispatch('Cart/reviewCart')
-        .then((response) => {
-          this.cartItems = []
-          this.count = response.data.data.count
-          if (this.count > 0) {
-            response.data.data.items.forEach(item => {
-              this.cartItems.push(...item.order_product)
-            })
-          }
-          this.$store.commit('loading/loading', false)
+        .then(() => {
+          this.$store.dispatch('loading/overlayLoading', false)
         })
     },
     goToDescPage(ci) {
@@ -118,8 +125,7 @@ export default {
       window.location.href = ci.product.url.api
     },
     removeItem(ci) {
-      this.$store.commit('loading/loading', true)
-
+      this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('Cart/removeItemFromCart', ci.id).then(() => {
         this.cartReview()
       })
