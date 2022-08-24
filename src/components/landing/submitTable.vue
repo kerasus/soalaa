@@ -41,7 +41,7 @@
       </div>
       <div class="table-box-container">
         <!--        <table-component :table-data="data"/>-->
-        <div class="table-parent q-pt-sm">
+        <div class="table-parent">
           <div class="major-grade-btn">
             <q-select
               v-if="currentGrades.length>0"
@@ -52,7 +52,7 @@
               hide-bottom-space
               dense
               :options="currentGrades"
-              class="select-1 dropdown-btn first q-mr-md">
+              class="dropdown-btn first q-mr-md">
               <template v-slot:selected>
                 <span class="custom-label-prefix"> مقطع تحصیلی: </span>
                 {{ selectedGrade.title }}
@@ -194,9 +194,9 @@
                 </div>
               </div>
               <div class="submit-box">
-                <span class="exam-price">
+                <div class="exam-price">
                   قیمت آزمون کامل
-                </span>
+                </div>
                 <div class="exam-price-box">
                   <span class="discount-tag"> تخفیف٪</span>
                   <span class="main-price"> ۱۸۶٫۰۰۰ </span>
@@ -1287,10 +1287,6 @@ export default {
 
           .dropdown-btn {
 
-            &.first {
-              margin-bottom: 15px;
-            }
-
             &:deep(.q-icon ) {
               width: 15px;
               height: 10px;
@@ -1317,18 +1313,6 @@ export default {
               color: #232323;
             }
           }
-
-          .select-1 {
-            &:deep(.q-field__inner) {
-              width: 231px;
-            }
-          }
-
-          .select-2 {
-            &:deep(.q-field__inner) {
-              width: 173px;
-            }
-          }
         }
 
         .download-picture-box {
@@ -1336,8 +1320,7 @@ export default {
           background: #FFF2CB;
           border-radius: 0 0 0 22px;
           padding: 0;
-          border-left: 1px solid #DBDBDB;
-          border-left: 1px solid;
+          border-right: 1px solid #DBDBDB;
           &.download-picture-selective-mode{
             width: 699px;
           }
@@ -1346,6 +1329,7 @@ export default {
             display: grid;
             grid-template-columns: 1fr 2fr;
             height: 100%;
+            border-top: 1px solid #DBDBDB;
 
             .pic-container {
               width: 200px;
@@ -1361,7 +1345,7 @@ export default {
 
             .download-box {
               align-self: center;
-              justify-self: center;
+              text-align: center;
 
               .text-style {
                 font-style: normal;
@@ -1413,17 +1397,14 @@ export default {
           }
 
           .submit-box {
-            padding-top: 12px;
+            padding: 16px 0;
             height: 163px;
             width: 100%;
             text-align: center;
-            &.single-mode{
-              display:flex;
-              flex-direction: column;
-              justify-content: space-around;
-              align-items: center;
-
-            }
+            display:flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
 
             .exam-price {
               font-style: normal;
@@ -1497,6 +1478,8 @@ export default {
           border-width: 2px;
           border-style: hidden;
           border-collapse: collapse;
+          border-top: 2px solid #DBDBDB;
+          overflow: hidden;
 
           .svg{
             svg{
@@ -1516,7 +1499,7 @@ export default {
           }
 
           th {
-            padding-top: 8px;
+            padding: 8px 0;
           }
 
           tr {
@@ -1595,9 +1578,6 @@ export default {
               width: 514px;
             }
             .table-footer-container {
-              display: grid;
-              grid-template-columns: 1fr 2fr;
-              height: 100%;
               .pic-container {
                 width: 200px;
                 align-self: end;
@@ -1698,7 +1678,6 @@ export default {
                 .text-style {
                   font-size: 16px;
                   line-height: 24px;
-                  margin-bottom: 15px;
                 }
 
                 .download-btn {
@@ -1737,11 +1716,11 @@ export default {
                 font-size: 12px;
                 line-height: 16px;
                 color: #232323;
-                margin-bottom: 12px;
+                margin-bottom: 0;
               }
 
               .exam-price-box {
-                margin-bottom: 7px;
+                margin-bottom: 5px;
 
                 .discount-tag {
                   padding: 4px 5px;
@@ -1938,11 +1917,10 @@ export default {
                 font-size: 12px;
                 line-height: 16px;
                 color: #232323;
-                margin-bottom: 12px;
+                margin-bottom: 0;
               }
 
               .exam-price-box {
-                margin-bottom: 7px;
 
                 .discount-tag {
                   padding: 4px 5px;
@@ -1989,9 +1967,6 @@ export default {
                 font-style: normal;
                 font-weight: 500;
                 font-size: 12px;
-                line-height: 16px;
-                color: #232323;
-                margin-bottom: 12px;
               }
 
               .exam-price-box {
@@ -2150,23 +2125,14 @@ export default {
               &:deep(.q-field__append ) {
                 padding-right: 12px;
               }
+              &.first{
+                margin-bottom: 16px;
+              }
 
               .custom-label-prefix {
                 font-weight: 700;
                 font-size: 12px;
                 line-height: 24px;
-              }
-            }
-
-            .select-1 {
-              &:deep(.q-field__inner) {
-                width: 231px;
-              }
-            }
-
-            .select-2 {
-              &:deep(.q-field__inner) {
-                width: 173px;
               }
             }
           }
@@ -2178,9 +2144,6 @@ export default {
             border-top: 1px solid #DBDBDB;
 
             .table-footer-container {
-              display: grid;
-              grid-template-columns: 1fr 2fr;
-              height: 100%;
 
               .pic-container {
                 width: 100px;
@@ -2240,27 +2203,26 @@ export default {
 
               .submit-box {
                 padding-top: 8px;
-                height: 98px;
+                height: 120px;
                 width: 100%;
 
                 .exam-price {
                   font-style: normal;
                   font-weight: 500;
-                  font-size: 12px;
+                  font-size: 11px;
                   line-height: 16px;
-                  color: #232323;
-                  margin-bottom: 12px;
+                  margin-bottom: 0;
                 }
 
                 .exam-price-box {
-                  display: none;
+                  //display: none;
                 }
 
                 .final-price-box {
                   font-weight: 900;
                   font-size: 16px;
                   line-height: 16px;
-                  margin-bottom: 12px;
+                  margin-bottom: 4px;
                 }
 
                 .sub-btn {
@@ -2283,6 +2245,12 @@ export default {
           }
           .price-submit-box-selective-mode{
             width: 50%;
+            &.border-right{
+              border-right:none;
+            }
+            .submit-box{
+              border-right:1px solid #DBDBDB;
+            }
 
           }
 

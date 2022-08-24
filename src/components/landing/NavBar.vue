@@ -70,6 +70,9 @@ export default {
       margin: 0;
     }
   }
+  .logo{
+    width: 105px;
+  }
   .submit-btn-style {
     box-sizing: border-box;
     width: 105px;
@@ -119,6 +122,9 @@ export default {
         }
       }
     }
+    .logo{
+      width: 96px;
+    }
     .submit-btn-style {
       width: 96px;
       height: 32px;
@@ -130,7 +136,7 @@ export default {
 }
 @media  screen and (max-width: 600px) {
   .nav-bar {
-    padding: 16px 15px;
+    padding: 16px 15px !important;
   }
 }
 </style>
