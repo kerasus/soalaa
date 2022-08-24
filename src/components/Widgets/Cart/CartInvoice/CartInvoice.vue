@@ -6,7 +6,7 @@
         <div
           class="total-shopping-cart price-section"
         >
-          <div class="title">جمع سبد خرید {{ `(${cart.cartItems?.list?.length})` }}</div>
+          <div class="title">جمع سبد خرید{{ `(${cart.cartItems?.list?.length})` }}</div>
           <div
             v-if="loading"
             class="loading-spinner"
@@ -481,7 +481,7 @@ export default {
           .title {
             font-style: normal;
             font-weight: 400;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 25px;
             letter-spacing: -0.03em;
             color: #23263B;
@@ -707,7 +707,7 @@ export default {
                   &:deep(.q-radio__label) {
                     font-style: normal;
                     font-weight: 400;
-                    font-size: 12px;
+                    font-size: 11px;
                     line-height: 19px;
                     letter-spacing: -0.05em;
                     color: #23263B;
