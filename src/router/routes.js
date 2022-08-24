@@ -221,7 +221,7 @@ const routes = [
               {
                 path: 'list',
                 name: 'Admin.Question.Factory',
-                component: () => (import('pages/Admin/Question/NewQuestionFactory')),
+                component: () => (import('pages/Admin/Question/QuestionFactory')),
                 meta: {
                   middlewares: [
                     auth,
