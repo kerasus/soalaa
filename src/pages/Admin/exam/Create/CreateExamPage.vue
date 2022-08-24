@@ -11,9 +11,14 @@
 import { EntityCrudFormBuilder } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 import { Exam } from 'src/models/Exam'
+import mixinTree from 'src/mixin/Tree'
+
 export default {
   name: 'CreateExamPage',
   components: { EntityCrudFormBuilder },
+  mixins: [
+    mixinTree
+  ],
   data () {
     return {
       model: 'one',
@@ -23,6 +28,10 @@ export default {
       showRouteParamKey: 'id',
       showRouteName: 'Admin.Exam.Show',
       indexRouteName: 'Admin.Exam.Index',
+      gradesList: null,
+      lessonGroupList: null,
+      lessonsList: null,
+      majorList: null,
       inputs: [
         {
           type: 'formBuilder',
@@ -70,7 +79,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'رشته تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'zirgorooh_type', responseKey: 'data.zirgorooh_type', options: [{ label: 'زیرگروه1', value: '6225f4828044517f52500c07' }, { label: 'زیرگروه2', value: '6225f4828044517f52500c08' }], col: 'col-12' }
+            { type: 'select', name: 'major_type', responseKey: 'data.major_type', col: 'col-12' }
           ]
         },
         {
@@ -79,7 +88,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'پایه تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'booklet_type', responseKey: 'data.booklet_type', options: [{ label: '1', value: '6225f4828044517f52500c0d' }, { label: '2', value: '6225f4828044517f52500c0c' }], col: 'col-12' }
+            { type: 'select', name: 'grade_type', responseKey: 'data.grade_type', col: 'col-12' }
           ]
         },
         {
@@ -96,7 +105,7 @@ export default {
           name: 'formBuilderCol',
           col: 'col-12 col-md-3 col-sm-6',
           value: [
-            { type: 'separator', label: 'زمان تاخیر(دقیقه)', size: '0', separatorType: 'none', col: 'col-12' },
+            { type: 'separator', label: 'زمان پایان آزمون', size: '0', separatorType: 'none', col: 'col-12' },
             { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: '', col: 'col-12', placeholder: 'زمان تاخیر' }
 
           ]
@@ -249,7 +258,7 @@ export default {
     }
   },
   created () {
-    this.getType()
+    this.getPageReady()
   },
   mounted () {
     // const element = document.getElementsByClassName('')
@@ -265,19 +274,64 @@ export default {
     }
   },
   methods: {
-    getType () {
+    getPageReady () {
+      this.getExamTypeList()
+      this.getGradesList()
+      this.loadMajorList()
+    },
+    getExamTypeList () {
       this.$axios.get(API_ADDRESS.option.base)
         .then((response) => {
           this.typeOptions = response.data.data.filter(data => data.type === 'exam_type')
           this.inputs.forEach(input => {
-            if (input.name === 'type_id') {
-              this.typeOptions.forEach(type => {
-                input.options.push(type)
+            if (input.type === 'formBuilder') {
+              input.value.forEach(item => {
+                if (item.name === 'question_type') {
+                  item.options = []
+                  this.typeOptions.forEach(type => {
+                    item.options.push({ label: type.value, value: type.id })
+                  })
+                }
               })
             }
           })
         })
         .catch(() => {})
+    },
+    getGradesList () {
+      this.getRootNode('test').then(response => {
+        this.gradesList = response.data.data.children
+        this.inputs.forEach(input => {
+          if (input.type === 'formBuilder') {
+            input.value.forEach(item => {
+              if (item.name === 'grade_type') {
+                item.options = []
+                this.gradesList.forEach(type => {
+                  item.options.push({ label: type.title, value: type.id })
+                })
+              }
+            })
+          }
+        })
+      })
+    },
+    loadMajorList () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
+        .then((response) => {
+          this.majorList = response.data.data
+          this.inputs.forEach(input => {
+            if (input.type === 'formBuilder') {
+              input.value.forEach(item => {
+                if (item.name === 'major_type') {
+                  item.options = []
+                  this.majorList.forEach(type => {
+                    item.options.push({ label: type.value, value: type.id })
+                  })
+                }
+              })
+            }
+          })
+        })
     },
     deleteCategory (id) {
       const index = this.inputs[this.examCategoriesIndex].value.findIndex(item => item.id === id)
