@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12">
       <div class="tableSize">
-        <span>{{  examTitle }}</span>
+        <span>{{ examTitle }}</span>
         <q-btn
           class="q-mx-sm float-right"
           round
@@ -66,6 +66,7 @@
                     </q-input>
                   </div>
                   <div class="row q-pt-sm">
+                    {{subcategory}}
                     <div class="col-6">
                       <q-btn
                         v-if="subcategory.permissions.view"
@@ -74,7 +75,7 @@
                         size="12px"
                         dark-percentage
                         color="green"
-                        @click="redirectTo(subcategory)">
+                        @click="redirectTo(subcategory.id)">
                         <q-icon
                           name="mdi-notebook-outline"
                           size="sm"
@@ -143,7 +144,9 @@ export default {
       }
     },
     goBack () {
-      this.$router.push('/admin/exam')
+      this.$router.push({
+        name: 'Admin.Exam.Index'
+      })
     },
     async loadLessons () {
       this.lessonsList.loading = true
@@ -174,9 +177,16 @@ export default {
         }
       })
     },
-    redirectTo (link) {
+    redirectTo (id) {
       const examId = this.$route.params.examId
-      this.$router.push('/admin/exam/' + examId + '/' + link.id)
+      // this.$router.push('/admin/exam/' + examId + '/' + link.id)
+      this.$router.push({
+        name: 'Admin.Exam.SubCategory.Questions',
+        params: {
+          examId,
+          subcategory_id: id
+        }
+      })
     },
     updateOrder (subcategory) {
       if (subcategory.order === null) {

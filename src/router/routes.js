@@ -171,9 +171,17 @@ const routes = [
                 children: [
                   {
                     name: 'Admin.Exam.Categories.SubCategories',
-                    path: ':categoryId/sub-category',
+                    path: ':category_id/sub-category',
                     component: () => import('pages/Admin/exam/ExamSubCategoryList.vue')
                   }
+                ]
+              },
+              {
+                path: ':examId/:subcategory_id',
+                name: 'Admin.Exam.SubCategory.Questions',
+                component: () => import('pages/Admin/exam/SubCategoryQuestions'),
+                middleware: [
+                  Permissions.hasPermission('examquestionAttachShow')
                 ]
               },
               {
@@ -190,14 +198,6 @@ const routes = [
                 component: () => import('src/pages/Admin/exam/SetVideo.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionVideos')
-                ]
-              },
-              {
-                path: ':quizId/:lessonId',
-                name: 'exams.lessons.questions',
-                component: () => import('pages/Admin/exam/LessonQuestions'),
-                middleware: [
-                  Permissions.hasPermission('examquestionAttachShow')
                 ]
               },
               {

@@ -101,7 +101,7 @@ import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { copyToClipboard } from 'quasar'
 
 export default {
-  name: 'LessonDetails',
+  name: 'SubCategoryQuestions',
   components: {
     QuestionItem
   },
@@ -295,8 +295,8 @@ export default {
       }
     },
     getQuizDataAndSubCategories () {
-      return this.$axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.quizId), {
-        sub_categories: [this.$route.params.lessonId]
+      return this.$axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.examId), {
+        sub_categories: [this.$route.params.subcategory_id]
       })
     },
     loadSubCategories (quizResponse, reload) {
