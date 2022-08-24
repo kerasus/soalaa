@@ -251,10 +251,10 @@ export default {
     },
     showLessonsList (id, title) {
       this.$router.push({
-        name: 'Admin.Exam.Lessons',
+        name: 'Admin.Exam.Categories',
         params: {
-          quizId: id,
-          quizTitle: title
+          examId: id,
+          examTitle: title
         }
       })
     },

@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12">
       <div class="tableSize">
-        <span>{{  quizTitle }}</span>
+        <span>{{  examTitle }}</span>
         <q-btn
           class="q-mx-sm float-right"
           round
@@ -125,21 +125,21 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { mixinAuth, mixinGetQuizData, mixinQuiz } from 'src/mixin/Mixins'
 
 export default {
-  name: 'LessonsList',
+  name: 'ExamSubCategoryList',
   data: () => ({
     lessonsList: new QuestSubcategoryList(),
-    quizTitle: ''
+    examTitle: ''
   }),
   mixins: [mixinAuth, mixinQuiz, mixinGetQuizData],
   created () {
-    this.getQuizTitle()
+    this.getExamTitle()
     this.loadLessons()
   },
   methods: {
-    async getQuizTitle () {
-      const res = await this.getQuizData(this.$route.params.quizId)
+    async getExamTitle () {
+      const res = await this.getQuizData(this.$route.params.examId)
       if (res.data.data) {
-        this.quizTitle = res.data.data.title
+        this.examTitle = res.data.data.title
       }
     },
     goBack () {
@@ -160,7 +160,7 @@ export default {
       }
     },
     getLessons () {
-      return axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.quizId))
+      return axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.examId))
     },
     redirect (link) {
     },
@@ -169,14 +169,14 @@ export default {
         name: 'Admin.Exam.video.set',
         params: {
           subcategory_id: id,
-          examId: this.$route.params.quizId,
-          quizTitle: this.$route.params.quizTitle
+          examId: this.$route.params.examId,
+          examTitle: this.$route.params.examTitle
         }
       })
     },
     redirectTo (link) {
-      const quizId = this.$route.params.quizId
-      this.$router.push('/admin/exam/' + quizId + '/' + link.id)
+      const examId = this.$route.params.examId
+      this.$router.push('/admin/exam/' + examId + '/' + link.id)
     },
     updateOrder (subcategory) {
       if (subcategory.order === null) {
@@ -186,7 +186,7 @@ export default {
       axios.post(API_ADDRESS.questionSubcategory.updateOrder, {
         sub_category_id: subcategory.id,
         order: subcategory.order,
-        exam_id: this.$route.params.quizId
+        exam_id: this.$route.params.examId
       })
         .then((response) => {
           subcategory.loading = false

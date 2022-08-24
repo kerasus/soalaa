@@ -162,11 +162,18 @@ const routes = [
                 ]
               },
               {
-                name: 'Admin.Exam.Lessons',
-                path: 'lessons/:quizId',
-                component: () => import('src/pages/Admin/exam/lessons.vue'),
+                name: 'Admin.Exam.Categories',
+                path: ':examId/category',
+                component: () => import('pages/Admin/exam/ExamCategoryList.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionShowcategorires')
+                ],
+                children: [
+                  {
+                    name: 'Admin.Exam.Categories.SubCategories',
+                    path: ':categoryId/sub-category',
+                    component: () => import('pages/Admin/exam/ExamSubCategoryList.vue')
+                  }
                 ]
               },
               {
