@@ -6,9 +6,10 @@
       :api="api"
       :table="table"
       :table-keys="tableKeys"
-      :show-search-button="false"
       :create-route-name="'Admin.Exam.Create'"
     >
+      <!--            :show-search-button="false"
+-->
       <template #table-cell="{inputData, showConfirmRemoveDialog}">
         <q-td :props="inputData.props">
           <template v-if="inputData.props.col.name === 'actions'">
@@ -18,7 +19,8 @@
                    size="md"
                    color="info"
                    icon="isax:eye"
-                   @click="showExam(inputData.props.row.id)">
+                   :to="{name:'Admin.Exam.Show', params: {id: inputData.props.row.id}}"
+            >
               <q-tooltip anchor="top middle"
                          self="bottom middle">
                 مشاهده
@@ -35,7 +37,8 @@
                    size="md"
                    color="indigo"
                    icon="auto_stories"
-                   @click="showLessonsList(inputData.props.row.id, inputData.props.row.title)">
+                   :to="{name:'Admin.Exam.Categories', params: {exam_id: inputData.props.row.id , examTitle: inputData.props.row.title}}"
+            >
               <q-tooltip anchor="top middle"
                          self="bottom middle">
                 مشاهده دروس
@@ -58,7 +61,7 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                    @click="goExamResult(inputData.props.row.id)"
+                    :to="{name:'Admin.Exam.AllResults', params: {id: inputData.props.row.id}}"
                   >
                     <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>
                   </q-item>
@@ -66,7 +69,7 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                    @click="showLessonsChartList(inputData.props.row.id, inputData.props.row.title)"
+                    :to="{name:'Admin.Exam.Lessons.List', params: {quizId: inputData.props.row.id, quizTitle: inputData.props.row.title}}"
                   >
                     <q-item-section>کارنامه سرگروه</q-item-section>
                   </q-item>
@@ -81,18 +84,6 @@
                    flat
                    dense
                    size="md"
-                   color="red"
-                   icon="delete"
-                   @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
-              <q-tooltip anchor="top middle"
-                         self="bottom middle">
-                حذف آزمون
-              </q-tooltip>
-            </q-btn>
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
                    color="info"
                    icon="info"
                    :to="{name:'Admin.Exam.MoreActions', params: {id: inputData.props.row.id}}">
@@ -101,6 +92,19 @@
                 عملیات بیشتر
               </q-tooltip>
             </q-btn>
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   color="red"
+                   icon="delete"
+                   @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
+              <q-tooltip anchor="top middle"
+                         self="bottom middle">
+                حذف آزمون
+              </q-tooltip>
+            </q-btn>
+
           </template>
           <template v-else>
             {{ inputData.props.value }}
@@ -248,32 +252,6 @@ export default {
     getRemoveMessage (row) {
       const title = row.title
       return 'آیا از حذف ' + title + ' اطمینان دارید؟'
-    },
-    showLessonsList (id, title) {
-      this.$router.push({
-        name: 'Admin.Exam.Categories',
-        params: {
-          examId: id,
-          examTitle: title
-        }
-      })
-    },
-    showLessonsChartList (id, title) {
-      this.$router.push({
-        name: 'Admin.Exam.Lessons.List',
-        params: {
-          quizId: id,
-          quizTitle: title
-        }
-      })
-    },
-    goExamResult (id) {
-      this.$router.push({
-        name: 'Admin.Exam.AllResults',
-        params: {
-          id
-        }
-      })
     }
 
   }

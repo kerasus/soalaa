@@ -163,6 +163,9 @@ export default {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.questionListKey = Date.now()
       return newList
+    },
+    examId () {
+      return this.$route.params.exam_id
     }
   },
   methods: {
@@ -295,7 +298,7 @@ export default {
       }
     },
     getQuizDataAndSubCategories () {
-      return this.$axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.examId), {
+      return this.$axios.post(API_ADDRESS.exam.examQuestion(this.examId), {
         sub_categories: [this.$route.params.subcategory_id]
       })
     },

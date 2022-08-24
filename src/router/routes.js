@@ -163,33 +163,26 @@ const routes = [
               },
               {
                 name: 'Admin.Exam.Categories',
-                path: ':examId/category',
+                path: ':exam_id/category',
                 component: () => import('pages/Admin/exam/ExamCategoryList.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionShowcategorires')
-                ],
-                children: [
-                  {
-                    name: 'Admin.Exam.Categories.SubCategories',
-                    path: ':category_id/sub-category',
-                    component: () => import('pages/Admin/exam/ExamSubCategoryList.vue')
-                  }
                 ]
               },
               {
-                path: ':examId/:subcategory_id',
+                name: 'Admin.Exam.Categories.SubCategories',
+                path: ':exam_id/category/:category_id/sub-category',
+                component: () => import('pages/Admin/exam/ExamSubCategoryList.vue'),
+                middlewares: [
+                  Permissions.hasPermission('examquestionShowcategorires')
+                ]
+              },
+              {
+                path: ':exam_id/sub-category/:subcategory_id/questions',
                 name: 'Admin.Exam.SubCategory.Questions',
                 component: () => import('pages/Admin/exam/SubCategoryQuestions'),
                 middleware: [
                   Permissions.hasPermission('examquestionAttachShow')
-                ]
-              },
-              {
-                name: 'Admin.Exam.Lessons.List',
-                path: 'lessons/:quizId/chart',
-                component: () => import('src/pages/Admin/exam/lessonsChart.vue'),
-                middlewares: [
-                  Permissions.hasPermission('examquestionShowcategorires')
                 ]
               },
               {
