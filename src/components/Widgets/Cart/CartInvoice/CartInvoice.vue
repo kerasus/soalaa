@@ -1,6 +1,6 @@
 <template>
-  <div v-if="count !=0"
-       class="invoice-container">
+  <div
+    class="invoice-container">
     <q-card class="invoice-cart">
       <q-card-section class="invoice-total-price-section invoice-cart-section">
         <div
@@ -133,7 +133,10 @@
             <div class="bank-gateway-container col-lg-6  col-md-12 col-sm-6 col-xs-12">
               <div class="bank-gateway">
                 <div class="bank-icon-container">
-                  <q-image class="bank-icon" />
+                  <q-img
+                    src="https://alaatv.com/acm/extra/payment/gateway/parsian-logo.png"
+                    class="bank-icon"
+                  />
                 </div>
 
                 <q-radio
@@ -149,7 +152,10 @@
             <div class="bank-gateway-container col-lg-6  col-md-12 col-sm-6 col-xs-12">
               <div class="bank-gateway">
                 <div class="bank-icon-container">
-                  <q-image class="bank-icon" />
+                  <q-img
+                    src="https://alaatv.com/acm/extra/payment/gateway/parsian-logo.png"
+                    class="bank-icon"
+                  />
                 </div>
                 <q-radio
                   v-model="selectedBank"
@@ -262,11 +268,23 @@
 </template>
 
 <script>
+import Widgets from 'src/components/PageBuilder/Widgets'
+
 export default {
   name: 'CartInvoice',
+  mixins: [Widgets],
+  props: {
+    data: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
+
   data() {
     return {
-      total: '1000000',
+      reviewResponse: {},
       couponValue: null,
       shoppingDescription: null,
       userEnteredLoginInfo: {
@@ -276,17 +294,18 @@ export default {
       selectedBank: null,
       gatewayRedirectAddress: '',
       amountUsingWallet: '',
-      loading: false,
-      count: 0
+      shoppingDescribtion: '',
+      loading: false
     }
   },
 
   created() {
     this.loading = true
+    this.loadData()
   },
 
   mounted() {
-    this.cartReview()
+    this.loadData()
   },
 
   computed: {
@@ -320,14 +339,11 @@ export default {
   },
 
   methods: {
-    cartReview() {
-      this.$store.dispatch('Cart/reviewCart')
-        .then((response) => {
-          this.amountUsingWallet = this.getPriceFormat(response.data.data.pay_by_wallet)
-          this.gatewayRedirectAddress = response.data.data.redirect_to_gateway
-          this.loading = false
-          this.count = response.data.data.count
-        })
+    loadData() {
+      this.reviewResponse = this.data
+      this.amountUsingWallet = this.getPriceFormat(this.reviewResponse.pay_by_wallet)
+      this.gatewayRedirectAddress = this.reviewResponse.redirect_to_gateway
+      this.loading = false
     },
 
     payment() {
