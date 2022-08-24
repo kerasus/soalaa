@@ -66,7 +66,6 @@
                     </q-input>
                   </div>
                   <div class="row q-pt-sm">
-                    {{subcategory}}
                     <div class="col-6">
                       <q-btn
                         v-if="subcategory.permissions.view"
@@ -179,7 +178,6 @@ export default {
     },
     redirectTo (id) {
       const examId = this.$route.params.examId
-      // this.$router.push('/admin/exam/' + examId + '/' + link.id)
       this.$router.push({
         name: 'Admin.Exam.SubCategory.Questions',
         params: {
