@@ -41,14 +41,15 @@ export function reviewCart (context, product) {
         const invoice = response.data.data
 
         const cart = {
+          count: invoice.count,
           price: new Price(invoice.price),
           cartItems: new CartItemList(),
           couponInfo: new Coupon(invoice.coupon)
         }
-        // means that there are items in cart
+
         if (invoice.count > 0) {
           invoice.items[0].order_product.forEach((order) => {
-            cart.cartItems.list.push(order.product)
+            cart.cartItems.list.push(order)
           })
         }
 
