@@ -7,6 +7,7 @@ class Cart extends Model {
   constructor (data) {
     super(data, [
       { key: 'id' },
+      { key: 'count' },
       {
         key: 'couponInfo',
         relatedModel: Coupon
