@@ -515,18 +515,18 @@ export default {
 
               @media screen and (max-width: 1439px) {
                 padding: 0 12px;
-                min-width: 174px;
+                //min-width: 174px;
                 width: 100%;
               }
 
               @media screen and (max-width: 1023px) {
                 padding: 0 16px;
-                min-width: 392px;
+                //min-width: 392px;
               }
 
               @media screen and (max-width: 599px) {
                 padding: 0 12px;
-                min-width: 196px;
+                //min-width: 196px;
               }
             }
 
