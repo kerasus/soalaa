@@ -63,7 +63,10 @@
             </div>
           </div>
 
-          <div class="product-details">
+          <div
+            class="product-details"
+            :class="expanded ?'on-open-expansion': ''"
+          >
             <div
               v-if="item.price"
               class="price-container"
@@ -84,22 +87,68 @@
               </div>
             </div>
 
-            <div class="action-buttons">
+            <div
+              class="action-buttons"
+              :class="expanded ? '' : 'open-expansion'"
+            >
               <a
+                v-if="!expanded"
                 class="link"
                 :href="item.product?.url?.web"
               >
                 {{ descLinkLabel }}
               </a>
 
-              <q-btn-dropdown
-                class="details-button"
+              <q-expansion-item
+                v-model="expanded"
                 label="جزئیات محصول"
-                dropdown-icon="isax:arrow-down-1"
-                flat
-                @click="descShow(item)"
+                class="details-expansion"
+                :class="expanded ?'open-expansion-style': ''"
+                :header-class=" expanded ? 'hide-expansion-header' : ''"
               >
-              </q-btn-dropdown>
+                <q-card>
+                  <q-card-section class="details-expansion-card">
+                    <div
+                      v-for="i in 3"
+                      :key="i"
+                      class="pamphlet"
+                    >
+                      <div class="title ellipsis">
+                        جزوات آمار و احتمال یازدهم با تدریس علی صدری
+                      </div>
+
+                      <div class="right-part">
+                        <span class="price">
+                          123456 تومان
+                        </span>
+                        <q-btn
+                          unelevated
+                          class="trash-button"
+                          icon="isax:trash"
+                          @click="removeItem(item)"
+                        />
+                      </div>
+                    </div>
+                  </q-card-section>
+
+                  <q-card-section class="details-expansion-actions">
+                    <a
+                      class="link expansion-link"
+                      :href="item.product?.url?.web"
+                    >
+                      {{ descLinkLabel }}
+                    </a>
+                    <q-btn-dropdown
+                      class="details-button"
+                      label="جزئیات محصول"
+                      dropdown-icon="isax:arrow-down-1"
+                      flat
+                      @click="expanded = !expanded"
+                    >
+                    </q-btn-dropdown>
+                  </q-card-section>
+                </q-card>
+              </q-expansion-item>
             </div>
           </div>
         </q-card-section>
@@ -116,7 +165,8 @@ export default {
   mixins: [Widgets],
   data() {
     return {
-
+      test: null,
+      expanded: false
     }
   },
   props: {
@@ -355,6 +405,10 @@ export default {
               flex-direction: column;
             }
 
+            &.on-open-expansion {
+              flex-direction: column;
+            }
+
             .price-container {
               display: flex;
               align-items: center;
@@ -449,6 +503,8 @@ export default {
                 line-height: 19px;
                 color: #9690E4;
                 margin-right: 24px;
+                cursor: pointer;
+                text-decoration: none;
 
                 @media screen and (max-width: 1439px) {
                   margin-right: 12px;
@@ -459,7 +515,8 @@ export default {
                 }
               }
 
-              .details-button {
+              .details-expansion {
+                .details-button {
                 font-style: normal;
                 font-weight: 400;
                 font-size: 12px;
@@ -474,6 +531,109 @@ export default {
                 }
               }
 
+                &.open-expansion-style {
+                  width: 100%;
+                }
+
+                .details-expansion-card {
+                  padding: 0;
+
+                  .pamphlet {
+                    padding: 10px 16px;
+                    background: #FFFFFF;
+                    border: 1.5px solid #E4E8EF;
+                    border-radius: 8px;
+                    height: 40px;
+                    margin-bottom: 10px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    @media screen and (max-width: 599px) {
+                      flex-direction: column;
+                      padding: 10px 12px;
+                      height: 68px;
+                    }
+
+                    .title {
+                      font-style: normal;
+                      font-weight: 400;
+                      font-size: 12px;
+                      line-height: 19px;
+                      letter-spacing: -0.03em;
+                      color: #6D708B;
+                      min-width: 264px;
+                      width: 100%;
+                    }
+
+                    .right-part {
+                      display: flex;
+                      align-items: center;
+                      width: 100%;
+                      justify-content: end;
+
+                      .price {
+                        font-style: normal;
+                        font-weight: 400;
+                        font-size: 12px;
+                        line-height: 19px;
+                        color: #6D708B;
+                        margin-right: 16px;
+
+                        @media screen and (max-width: 599px) {
+                          margin-right: 10px;
+                        }
+                      }
+
+                      .trash-button {
+                        &:deep(.q-icon) {
+                          font-size: 14px;
+                          color: #6D708B;;
+                        }
+                      }
+
+                    }
+                  }
+                }
+
+                .details-expansion-actions {
+                  display: flex;
+                  justify-content: end;
+                  align-items: center;
+                  padding: 0;
+
+                  .expansion-link {
+                    margin-right: 24px;
+                  }
+                }
+
+                &:deep(.hide-expansion-header) {
+                  display: none;
+                }
+
+                &:deep(.q-item__label) {
+                  font-style: normal;
+                  font-weight: 400;
+                  font-size: 12px;
+                  line-height: 19px !important;
+                  color: #65677F;
+                }
+
+                &:deep(.q-item__section--main ~ .q-item__section--side) {
+                  padding-left: 0;
+
+                }
+
+                &:deep(.q-item) {
+                  padding: 0;
+                }
+
+                &:deep(.q-icon) {
+                  font-size: 24px;
+                  margin-left: 2px;
+                }
+              }
+
               &:deep(.q-btn) {
                 min-height: 24px !important;
               }
@@ -483,5 +643,6 @@ export default {
         }
       }
     }
+
 }
 </style>
