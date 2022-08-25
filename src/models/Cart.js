@@ -6,20 +6,27 @@ import { CartItem, CartItemList } from './CartItem'
 class Cart extends Model {
   constructor (data) {
     super(data, [
-      { key: 'id' },
-      { key: 'count' },
       {
         key: 'couponInfo',
         relatedModel: Coupon
       },
       {
-        key: 'cartItems',
+        key: 'items',
         relatedModel: CartItemList
       },
       {
         key: 'price',
         relatedModel: Price
-      }
+      },
+      { key: 'pay_by_wallet' },
+      { key: 'coupon' },
+      {
+        key: 'order_has_donate',
+        default: false
+      },
+      { key: 'count' },
+      { key: 'redirect_to_gateway' }
+
     ])
   }
 
@@ -86,4 +93,5 @@ class CartList extends Collection {
     return Cart
   }
 }
+
 export { Cart, CartList }
