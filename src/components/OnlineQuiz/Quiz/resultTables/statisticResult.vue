@@ -77,8 +77,8 @@ export default {
           text: 'نمودار مقایسه عملکرد'
         },
         credits: {
-          text: '3a.alaatv.com',
-          href: 'https://www.3a.alaatv.com'
+          text: 'soalaa.com',
+          href: 'https://www.soalaa.com'
         },
         yAxis: {
           title: {
