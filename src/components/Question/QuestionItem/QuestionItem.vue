@@ -95,9 +95,15 @@
                 class="source-date"
               >{{ question.years[0].value }}</div>
             </div>
-            <div class="source-avatar">
+            <div
+              v-if="question.reference[0]"
+              class="source-avatar"
+            >
               <!--              question.reference[0].photos-->
-              <q-avatar size="36px">
+              <q-avatar
+                v-if="!question.reference[0].photos"
+                size="36px"
+              >
                 <svg xmlns="http://www.w3.org/2000/svg"
                      width="72"
                      height="35"

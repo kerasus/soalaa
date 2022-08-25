@@ -118,7 +118,18 @@ export default {
 .image-upload-parent {
   .filepond--file-info {
     position: relative;
-    right: -517px;
+    //right: -517px;
+    right: 0;
+    left: 668px;
+    @media screen and (max-width: 1500px) {
+      left: 449px;
+    }
+    @media screen and (max-width: 1400px) {
+      left: 575px;
+    }
+    @media screen and (max-width: 1200px) {
+      left: 482px;
+    }
   }
   .filepond--image-preview-wrapper {
     .filepond--image-preview {
