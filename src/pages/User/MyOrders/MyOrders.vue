@@ -383,6 +383,21 @@ export default {
     }
     .q-pagination {
       //background: red;
+      :first-child {
+        background: #FFFFFF;
+        border-radius: 12px;
+      }
+      .q-btn {
+        color: #6D708B !important;
+        width: 40px;
+        height: 40px;
+        padding: 0 !important;
+        :first-child {
+          background: none;
+          //border-radius: n;
+        }
+
+      }
     }
   }
 }
