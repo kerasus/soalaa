@@ -25,16 +25,14 @@ export default {
                   {
                     widgets: [
                       {
-                        name: 'CartInvoice'
+                        name: 'Cart'
                       }
-                    ],
-                    options: {
-                      className: 'col-md-4 col-12'
-                    }
+                    ]
                   }
                 ],
                 options: {
                   boxed: true,
+                  boxedWidth: 1362,
                   style: {
                     marginTop: '30px'
                   }
@@ -48,7 +46,7 @@ export default {
       options: []
     }
   },
-  created () {
+  created() {
     this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
     this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
   },
@@ -61,11 +59,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.cart-page {
-  &:deep(.boxed) {
-    max-width: 1362px !important;
-    width: 100% !important;
-    margin-bottom: 72px;
-  }
-}
 </style>

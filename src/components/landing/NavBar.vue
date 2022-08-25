@@ -33,7 +33,6 @@
         unelevated
         class="submit-btn-style"
         label="ثبت نام آزمون"
-        @click="showLoginDialog"
       />
     </div>
   </div>
@@ -42,19 +41,14 @@
 
 <script>
 export default {
-  name: 'NavBar',
-  methods: {
-    showLoginDialog () {
-      this.$store.dispatch('AppLayout/showLoginDialog')
-    }
-  }
+  name: 'NavBar'
 }
 </script>
 
 <style lang="scss" scoped>
 .nav-bar-position{
-//position: fixed;
-//width: 100%;
+  //position: fixed;
+  //width: 100%;
 }
 .nav-bar {
   padding: 20px 0;
@@ -66,7 +60,6 @@ export default {
       line-height: 24px;
       color: #474747;
       cursor: pointer;
-
       &.middle{
         margin: 0 46px;
       }
@@ -77,6 +70,9 @@ export default {
       margin: 0;
     }
   }
+  .logo{
+    width: 105px;
+  }
   .submit-btn-style {
     box-sizing: border-box;
     width: 105px;
@@ -84,7 +80,6 @@ export default {
     background: #FFF0C1;
     border: 2px solid #FEA800;
     border-radius: 24px;
-
   }
 }
 @media screen and (max-width: 1439px){
@@ -127,7 +122,9 @@ export default {
         }
       }
     }
-
+    .logo{
+      width: 96px;
+    }
     .submit-btn-style {
       width: 96px;
       height: 32px;
@@ -139,8 +136,7 @@ export default {
 }
 @media  screen and (max-width: 600px) {
   .nav-bar {
-    padding: 16px 15px;
+    padding: 16px 15px !important;
   }
 }
-
 </style>

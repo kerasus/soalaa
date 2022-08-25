@@ -43,19 +43,19 @@ const API_ADDRESS = {
   entityCrud: {
     authorshipDates: {
       show: lumenServer + '/option/',
-      edit: lumenServer + '/admin/user',
+      edit: lumenServer + '/option',
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=year_type&with_pagination=true'
     },
     questionAuthors: {
       show: lumenServer + '/option/',
-      edit: lumenServer + '/admin/user',
+      edit: lumenServer + '/option',
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=reference_type&with_pagination=true'
     },
     majors: {
       show: lumenServer + '/option/',
-      edit: lumenServer + '/admin/user',
+      edit: lumenServer + '/option',
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=major_type&with_pagination=true'
     }
@@ -248,8 +248,9 @@ const API_ADDRESS = {
     }
   },
   cart: {
-    orderproduct(id) {
-      return apiV2Server + '/orderproduct/' + id
+    orderproduct: {
+      add: apiV2Server + '/orderproduct',
+      delete (id) { return apiV2Server + '/orderproduct/' + id }
     },
     review: apiV2Server + '/checkout/review'
   }

@@ -3,6 +3,7 @@
     <nav-bar />
     <landing-header  />
     <why class="landing-width" />
+    <banner class="landing-width" />
     <features class="landing-width" />
     <submit-table class="landing-width" />
     <exam-rules class="landing-width" />
@@ -17,6 +18,7 @@ import landingHeader from 'src/components/landing/header'
 import why from 'src/components/landing/why3A'
 import features from 'src/components/landing/3aFeatures'
 import examRules from 'components/landing/examRules'
+import banner from 'components/landing/banner'
 import submitTable from 'components/landing/submitTable'
 import faq from 'components/landing/faq'
 export default {
@@ -28,9 +30,10 @@ export default {
     NavBar,
     submitTable,
     examRules,
+    banner,
     faq
   },
-  created () {
+  mounted () {
     this.closeSidBarAndAppbar()
   },
   methods: {
@@ -57,7 +60,7 @@ export default {
     @media screen and (max-width: 768px) {
       width: 510px;
     }
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 599px) {
       width: 100%;
       padding: 0 16px;
     }
@@ -66,10 +69,10 @@ export default {
 }
 </style>
 <style  lang="scss">
-@import 'src/assets/scss/YekanBakh.scss';
+@import 'src/assets/scss/Peyda.scss';
 .landing-page{
   *{
-    font-family:'yekanbakh' ;
+    font-family: 'peyda';
   }
 }
 </style>

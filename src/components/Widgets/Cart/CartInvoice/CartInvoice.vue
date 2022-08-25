@@ -1,11 +1,12 @@
 <template>
-  <div class="invoice-container">
+  <div
+    class="invoice-container">
     <q-card class="invoice-cart">
       <q-card-section class="invoice-total-price-section invoice-cart-section">
         <div
           class="total-shopping-cart price-section"
         >
-          <div class="title">جمع سبد خرید {{ `(${cart.cartItems?.list?.length})` }}</div>
+          <div class="title">جمع سبد خرید{{ `(${cart.cartItems?.list?.length})` }}</div>
           <div
             v-if="loading"
             class="loading-spinner"
@@ -132,7 +133,10 @@
             <div class="bank-gateway-container col-lg-6  col-md-12 col-sm-6 col-xs-12">
               <div class="bank-gateway">
                 <div class="bank-icon-container">
-                  <q-image class="bank-icon" />
+                  <q-img
+                    src="https://alaatv.com/acm/extra/payment/gateway/parsian-logo.png"
+                    class="bank-icon"
+                  />
                 </div>
 
                 <q-radio
@@ -148,7 +152,10 @@
             <div class="bank-gateway-container col-lg-6  col-md-12 col-sm-6 col-xs-12">
               <div class="bank-gateway">
                 <div class="bank-icon-container">
-                  <q-image class="bank-icon" />
+                  <q-img
+                    src="https://alaatv.com/acm/extra/payment/gateway/parsian-logo.png"
+                    class="bank-icon"
+                  />
                 </div>
                 <q-radio
                   v-model="selectedBank"
@@ -261,11 +268,23 @@
 </template>
 
 <script>
+import Widgets from 'src/components/PageBuilder/Widgets'
+
 export default {
   name: 'CartInvoice',
+  mixins: [Widgets],
+  props: {
+    data: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
+
   data() {
     return {
-      total: '1000000',
+      reviewResponse: {},
       couponValue: null,
       shoppingDescription: null,
       userEnteredLoginInfo: {
@@ -275,16 +294,14 @@ export default {
       selectedBank: null,
       gatewayRedirectAddress: '',
       amountUsingWallet: '',
+      shoppingDescribtion: '',
       loading: false
     }
   },
 
   created() {
     this.loading = true
-  },
-
-  mounted() {
-    this.cartReview()
+    this.loadData()
   },
 
   computed: {
@@ -310,21 +327,15 @@ export default {
 
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
-    },
-
-    windowSize() {
-      return this.$store.getters['AppLayout/windowSize']
     }
   },
 
   methods: {
-    cartReview() {
-      this.$store.dispatch('Cart/reviewCart')
-        .then((response) => {
-          this.amountUsingWallet = this.getPriceFormat(response.data.data.pay_by_wallet)
-          this.gatewayRedirectAddress = response.data.data.redirect_to_gateway
-          this.loading = false
-        })
+    loadData() {
+      this.reviewResponse = this.data
+      this.amountUsingWallet = this.getPriceFormat(this.reviewResponse.pay_by_wallet)
+      this.gatewayRedirectAddress = this.reviewResponse.redirect_to_gateway
+      this.loading = false
     },
 
     payment() {
@@ -355,10 +366,12 @@ export default {
 
 <style lang="scss" scoped>
 .invoice-container {
+  margin-top: 68px;
   margin-left: 30px;
 
   @media screen and (max-width: 1023px) {
     margin-left: 0;
+    margin-top: 0;
   }
 
   .invoice-cart {
@@ -468,7 +481,7 @@ export default {
           .title {
             font-style: normal;
             font-weight: 400;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 25px;
             letter-spacing: -0.03em;
             color: #23263B;
@@ -489,7 +502,6 @@ export default {
           }
 
           .coupon-input {
-
             @media screen and (max-width: 1023px) {
               width: 100%;
             }
@@ -503,15 +515,18 @@ export default {
 
               @media screen and (max-width: 1439px) {
                 padding: 0 12px;
+                //min-width: 174px;
                 width: 100%;
               }
 
               @media screen and (max-width: 1023px) {
                 padding: 0 16px;
+                //min-width: 392px;
               }
 
               @media screen and (max-width: 599px) {
                 padding: 0 12px;
+                //min-width: 196px;
               }
             }
 
@@ -556,6 +571,7 @@ export default {
           display: flex;
           justify-content: space-between;
           margin-bottom: 24px;
+          align-items: center;
 
           @media screen and (max-width: 1439px) {
             margin-bottom: 18px;
@@ -694,7 +710,7 @@ export default {
                   &:deep(.q-radio__label) {
                     font-style: normal;
                     font-weight: 400;
-                    font-size: 12px;
+                    font-size: 11px;
                     line-height: 19px;
                     letter-spacing: -0.05em;
                     color: #23263B;

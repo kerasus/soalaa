@@ -83,7 +83,8 @@
                     <div class="col text-center">
                       {{ report.n_normal_participants }}
                     </div>
-                    <div class="col text-center">
+                    <div v-if="report.main"
+                         class="col text-center">
                       {{ report.main.taraaz }}
                     </div>
                   </div>
@@ -95,10 +96,11 @@
         <div class="row default-resultTable-row">
           <div class="col card-col default-resultTable-col">
             <div class="card-parent elevation-1">
-              <q-card
-                class="mb-2 default-result-card"
+              <q-card v-if="report.main"
+                      class="mb-2 default-result-card"
               >
-                <q-card-section class="card-title-section">
+                <q-card-section
+                  class="card-title-section">
                   <div class="row">
                     <div class="col text-center"
                          :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
