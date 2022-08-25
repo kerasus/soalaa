@@ -151,6 +151,25 @@ const routes = [
         ]
       },
       {
+        path: 'user',
+        name: 'User',
+        component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
+        meta: {
+          middlewares: [auth]
+        },
+        children: [
+          {
+            path: 'my-orders',
+            name: 'User.MyOrders',
+            component: () => import('pages/User/MyOrders/MyOrders'),
+            breadcrumbs: { title: 'سفارش های من' },
+            meta: {
+              middlewares: [auth]
+            }
+          }
+        ]
+      },
+      {
         path: 'component',
         name: 'component',
         component: () => import('src/pages/component'),
