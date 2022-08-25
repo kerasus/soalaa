@@ -3,6 +3,7 @@
     class="my-orders-list"
   >
     <entity-index
+      class="orders-list-entity-index"
       title="سفارش های من"
       :api="api"
       :table="table"
@@ -12,72 +13,108 @@
     >
       <template #table-cell="{inputData, showConfirmRemoveDialog}">
         <q-td :props="inputData.props">
-          <template v-if="inputData.props.col.name === 'actions'">
+          <template v-if="inputData.props.col.name === 'start_at'">
+            <div
+              v-if="inputData.props.row.n_questions === 0"
+              class="payment-okay"
+            >
+              پرداخت نشده
+            </div>
+            <div
+              v-else-if="inputData.props.row.n_questions === 1"
+              class="payment-not-okay"
+            >
+              پرداخت شده
+            </div>
+            <div
+              v-else
+              class="payment-installment"
+            >
+              پرداخت قسطی
+            </div>
+          </template>
+          <template v-if="inputData.props.col.name === 'details'">
             <q-btn round
                    flat
                    dense
                    size="md"
-                   color="info"
-                   icon="isax:eye"
                    @click="showExam(inputData.props.row.id)">
               <q-tooltip anchor="top middle"
                          self="bottom middle">
                 مشاهده
               </q-tooltip>
+              <svg width="24"
+                   height="24"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12"
+                        cy="6"
+                        r="2"
+                        fill="#6D708B" />
+                <circle cx="12"
+                        cy="12"
+                        r="2"
+                        fill="#6D708B" />
+                <circle cx="12"
+                        cy="18"
+                        r="2"
+                        fill="#6D708B" />
+              </svg>
             </q-btn>
             <!--            <q-btn round flat dense size="md" color="purple" icon="edit" :to="{name:'Admin.Exam.Edit', params: {id: inputData.props.row.id}}">-->
             <!--              <q-tooltip anchor="top middle" self="bottom middle">-->
             <!--                ویرایش-->
             <!--              </q-tooltip>-->
             <!--            </q-btn>-->
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="indigo"
-                   icon="auto_stories"
-                   @click="showLessonsList(inputData.props.row.id, inputData.props.row.title)">
-              <q-tooltip anchor="top middle"
-                         self="bottom middle">
-                مشاهده دروس
-              </q-tooltip>
-            </q-btn>
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="blue"
-                   icon="assignment">
-              <q-menu
-                class="options-menu"
-                transition-show="jump-down"
-                transition-hide="jump-up"
-                :offset="[150,5]"
-              >
-                <q-list style="min-width: 100px">
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
-                    @click="goExamResult(inputData.props.row.id)"
-                  >
-                    <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>
-                  </q-item>
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
-                    @click="showLessonsChartList(inputData.props.row.id, inputData.props.row.title)"
-                  >
-                    <q-item-section>کارنامه سرگروه</q-item-section>
-                  </q-item>
-                </q-list>
-              </q-menu>
-              <q-tooltip anchor="top middle"
-                         self="bottom middle">
-                مشاهده نتایج
-              </q-tooltip>
-            </q-btn>
+            <!--            <q-btn round-->
+            <!--                   flat-->
+            <!--                   dense-->
+            <!--                   size="md"-->
+            <!--                   color="indigo"-->
+            <!--                   icon="auto_stories"-->
+            <!--                   @click="showLessonsList(inputData.props.row.id, inputData.props.row.title)">-->
+            <!--              <q-tooltip anchor="top middle"-->
+            <!--                         self="bottom middle">-->
+            <!--                مشاهده دروس-->
+            <!--              </q-tooltip>-->
+            <!--            </q-btn>-->
+            <!--            <q-btn round-->
+            <!--                   flat-->
+            <!--                   dense-->
+            <!--                   size="md"-->
+            <!--                   color="blue"-->
+            <!--                   icon="assignment">-->
+            <!--              <q-menu-->
+            <!--                class="options-menu"-->
+            <!--                transition-show="jump-down"-->
+            <!--                transition-hide="jump-up"-->
+            <!--                :offset="[150,5]"-->
+            <!--              >-->
+            <!--                <q-list style="min-width: 100px">-->
+            <!--                  <q-item-->
+            <!--                    v-ripple:yellow-->
+            <!--                    clickable-->
+            <!--                    manual-focus-->
+            <!--                    @click="goExamResult(inputData.props.row.id)"-->
+            <!--                  >-->
+            <!--                    <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>-->
+            <!--                  </q-item>-->
+            <!--                  <q-item-->
+            <!--                    v-ripple:yellow-->
+            <!--                    clickable-->
+            <!--                    manual-focus-->
+            <!--                    @click="showLessonsChartList(inputData.props.row.id, inputData.props.row.title)"-->
+            <!--                  >-->
+            <!--                    <q-item-section>کارنامه سرگروه</q-item-section>-->
+            <!--                  </q-item>-->
+            <!--                </q-list>-->
+            <!--              </q-menu>-->
+            <!--              <q-tooltip anchor="top middle"-->
+            <!--                         self="bottom middle">-->
+            <!--                مشاهده نتایج-->
+            <!--              </q-tooltip>-->
+            <!--            </q-btn>-->
             <q-btn round
                    flat
                    dense
@@ -90,18 +127,18 @@
                 حذف آزمون
               </q-tooltip>
             </q-btn>
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="info"
-                   icon="info"
-                   :to="{name:'Admin.Exam.MoreActions', params: {id: inputData.props.row.id}}">
-              <q-tooltip anchor="top middle"
-                         self="bottom middle">
-                عملیات بیشتر
-              </q-tooltip>
-            </q-btn>
+            <!--            <q-btn round-->
+            <!--                   flat-->
+            <!--                   dense-->
+            <!--                   size="md"-->
+            <!--                   color="info"-->
+            <!--                   icon="info"-->
+            <!--                   :to="{name:'Admin.Exam.MoreActions', params: {id: inputData.props.row.id}}">-->
+            <!--              <q-tooltip anchor="top middle"-->
+            <!--                         self="bottom middle">-->
+            <!--                عملیات بیشتر-->
+            <!--              </q-tooltip>-->
+            <!--            </q-btn>-->
           </template>
           <template v-else>
             {{ inputData.props.value }}
@@ -147,42 +184,44 @@ export default {
           {
             name: 'title',
             required: true,
-            label: 'عنوان',
+            label: 'شماره سفارش',
             align: 'left',
             field: row => row.title
           },
+          // {
+          //   name: 'start_at',
+          //   // name: 'payment_status',
+          //   required: true,
+          //   label: 'وضعیت ‌پرداخت',
+          //   align: 'left',
+          //   field: row => moment(row.start_at, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
+          // },
           {
             name: 'start_at',
+            // name: 'payment_status',
             required: true,
-            label: 'شروع',
-            align: 'left',
-            field: row => moment(row.start_at, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
+            label: 'وضعیت ‌پرداخت',
+            align: 'left'
+            // field: row => row.n_questions
           },
           {
             name: 'finish_at',
             required: true,
-            label: 'پایان',
+            label: 'مبلغ',
             align: 'left',
             field: row => moment(row.finish_at, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
           },
           {
             name: 'delay_time',
             required: true,
-            label: 'میزان تاخیر',
+            label: 'تاریخ سفارش',
             align: 'left',
             field: row => row.delay_time
           },
           {
-            name: 'delay_time',
+            name: 'details',
             required: true,
-            label: 'تعداد سوالات',
-            align: 'left',
-            field: row => row.n_questions
-          },
-          {
-            name: 'actions',
-            required: true,
-            label: 'عملیات',
+            label: 'جزئیات',
             align: 'left',
             field: row => row.actions
           }
@@ -297,8 +336,54 @@ export default {
 
 <style scoped lang="scss">
 .my-orders-list {
+  .payment-okay {
+    color: #4CAF50;
+  }
+  .payment-not-okay {
+    color: #E86562;
+  }
+  .payment-installment {
+    color: #8ED6FF;
+  }
   :deep(.quasar-crud-index-table) {
     padding: 0 !important;
+    .q-table__container {
+      background: #FFFFFF;
+      box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+      border-radius: 16px;
+      .q-table__middle {
+        //.q-table {
+          table {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 25px;
+            letter-spacing: -0.03em;
+            color: #6D708B;
+            th {
+              font-weight: 400;
+              font-size: 16px;
+              line-height: 25px;
+              color: #6D708B;
+            }
+            tr {
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 22px;
+              color: #434765;
+              &:nth-child(2n) {
+                background: #F6F9FF;
+              }
+              :not(:last-child) > td {
+                border-bottom-width: 0 !important;
+              }
+            }
+          }
+        //}
+      }
+    }
+    .q-pagination {
+      //background: red;
+    }
   }
 }
 </style>
