@@ -88,83 +88,9 @@ const routes = [
             component: () => import('pages/User/MyOrders/MyOrders'),
             breadcrumbs: { title: 'سفارش های من' },
             meta: {
-              middlewares: [auth]
-            }
-          }
-        ]
-      },
-      {
-        path: 'user',
-        name: 'User',
-        component: () => import('layouts/UserPanelLayout'),
-        meta: {
-          middlewares: [auth]
-        },
-        children: [
-          {
-            path: 'my-orders',
-            name: 'User.MyOrders',
-            component: () => import('pages/User/MyOrders/MyOrders'),
-            breadcrumbs: { title: 'سفارش های من' },
-            meta: {
-              middlewares: [auth]
-            }
-          }
-        ]
-      },
-      {
-        path: 'user',
-        name: 'User',
-        component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
-        meta: {
-          middlewares: [auth]
-        },
-        children: [
-          {
-            path: 'my-orders',
-            name: 'User.MyOrders',
-            component: () => import('pages/User/MyOrders/MyOrders'),
-            breadcrumbs: { title: 'سفارش های من' },
-            meta: {
-              middlewares: [auth]
-            }
-          }
-        ]
-      },
-      {
-        path: 'user',
-        name: 'User',
-        component: () => import('layouts/UserPanelLayout'),
-        meta: {
-          middlewares: [auth]
-        },
-        children: [
-          {
-            path: 'my-orders',
-            name: 'User.MyOrders',
-            component: () => import('pages/User/MyOrders/MyOrders'),
-            breadcrumbs: { title: 'سفارش های من' },
-            meta: {
-              middlewares: [auth]
-            }
-          }
-        ]
-      },
-      {
-        path: 'user',
-        name: 'User',
-        component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
-        meta: {
-          middlewares: [auth]
-        },
-        children: [
-          {
-            path: 'my-orders',
-            name: 'User.MyOrders',
-            component: () => import('pages/User/MyOrders/MyOrders'),
-            breadcrumbs: { title: 'سفارش های من' },
-            meta: {
-              middlewares: [auth]
+              middlewares: [
+                Permissions.hasPermission('examStore')
+              ]
             }
           }
         ]
