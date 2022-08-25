@@ -413,6 +413,10 @@ const routes = [
         path: '/landing',
         name: 'landing',
         component: () => import('layouts/LandingLayout'),
+        meta: {
+          middlewares: [
+            Permissions.hasPermission('examStore')]
+        },
         children: [
           {
             path: '',
@@ -424,7 +428,11 @@ const routes = [
       {
         path: '/cart',
         name: 'cart',
-        component: () => import('pages/Cart/Cart')
+        component: () => import('pages/Cart/Cart'),
+        meta: {
+          middlewares: [
+            Permissions.hasPermission('examStore')]
+        }
       }
 
     ]
