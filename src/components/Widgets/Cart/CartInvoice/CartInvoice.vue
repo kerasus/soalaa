@@ -502,7 +502,6 @@ export default {
           }
 
           .coupon-input {
-
             @media screen and (max-width: 1023px) {
               width: 100%;
             }
@@ -516,15 +515,18 @@ export default {
 
               @media screen and (max-width: 1439px) {
                 padding: 0 12px;
+                min-width: 174px;
                 width: 100%;
               }
 
               @media screen and (max-width: 1023px) {
                 padding: 0 16px;
+                min-width: 392px;
               }
 
               @media screen and (max-width: 599px) {
                 padding: 0 12px;
+                min-width: 196px;
               }
             }
 
@@ -569,6 +571,7 @@ export default {
           display: flex;
           justify-content: space-between;
           margin-bottom: 24px;
+          align-items: center;
 
           @media screen and (max-width: 1439px) {
             margin-bottom: 18px;
