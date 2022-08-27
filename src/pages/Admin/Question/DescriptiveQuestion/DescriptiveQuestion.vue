@@ -276,7 +276,15 @@ export default {
 //  }
 //}
 </style>
-<!--<style lang="scss">-->
+<style lang="scss">
+[dir="rtl"] .filepond--root {
+  text-align: left #{"/* rtl:ignore */"} !important ;
+  direction: ltr #{"/* rtl:ignore */"} !important;
+}
+.filepond--file-info {
+  transform: none !important;
+}
+</style>
 <!--// USED IN MANY OTHER COMPONENTS-->
 <!--.default-questions-card {-->
 <!--  background: #FFFFFF;-->

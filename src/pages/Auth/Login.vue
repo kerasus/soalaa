@@ -10,7 +10,16 @@
 import Auth from 'src/components/Auth'
 export default {
   name: 'Login',
-  components: { Auth }
+  components: { Auth },
+  created () {
+    this.closeSidBarAndAppbar()
+  },
+  methods: {
+    closeSidBarAndAppbar () {
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
+      this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
+    }
+  }
 }
 </script>
 

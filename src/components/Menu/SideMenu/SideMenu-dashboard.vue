@@ -200,6 +200,14 @@ export default {
           ]
         },
         {
+          title: 'سفارش‌ های من',
+          icon: 'isax:clipboard-text',
+          routeName: 'User.MyOrders',
+          permission: 'examStore',
+          active: false,
+          children: []
+        },
+        {
           title: 'درخت دانش',
           icon: 'isax:tree',
           permission: 'examStore',
