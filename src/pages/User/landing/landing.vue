@@ -6,7 +6,8 @@
     />
     <landing-header @onClickRegisterBtn="scrollToExamsTable" />
     <why class="landing-width" />
-    <banner class="landing-width" />
+    <banner v-if="false"
+            class="landing-width" />
     <features class="landing-width" />
     <submit-table ref="SubmitTable"
                   class="landing-width" />
