@@ -67,12 +67,50 @@ const routes = [
     children: [
       {
         path: '',
+        name: 'landing',
+        component: () => import('layouts/LandingLayout'),
+        children: [
+          {
+            path: '',
+            name: 'landing1',
+            component: () => import('pages/User/landing/landing')
+          }
+        ]
+      },
+      {
+        path: 'dashboard',
         name: 'dashboard',
         component: () => import('pages/User/exam/List'),
         breadcrumbs: { title: 'پیشخوان' },
         meta: {
           middlewares: [auth]
         }
+      },
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('pages/Auth/Login.vue')
+      },
+      {
+        path: 'user',
+        name: 'User',
+        component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
+        meta: {
+          middlewares: [auth]
+        },
+        children: [
+          {
+            path: 'my-orders',
+            name: 'User.MyOrders',
+            component: () => import('pages/User/MyOrders/MyOrders'),
+            breadcrumbs: { title: 'سفارش های من' },
+            meta: {
+              middlewares: [
+                Permissions.hasPermission('examStore')
+              ]
+            }
+          }
+        ]
       },
       {
         path: 'component',
@@ -408,24 +446,16 @@ const routes = [
         meta: {
           middlewares: [auth]
         }
+      },
+      {
+        path: '/cart',
+        name: 'cart',
+        component: () => import('pages/Cart/Cart'),
+        meta: {
+          middlewares: [
+            Permissions.hasPermission('examStore')]
+        }
       }
-      // {
-      //   path: '/landing',
-      //   name: 'landing',
-      //   component: () => import('layouts/LandingLayout'),
-      //   children: [
-      //     {
-      //       path: '',
-      //       name: 'landing1',
-      //       component: () => import('pages/User/landing/landing')
-      //     }
-      //   ]
-      // },
-      // {
-      //   path: '/cart',
-      //   name: 'cart',
-      //   component: () => import('pages/Cart/Cart')
-      // }
 
     ]
   },
@@ -434,11 +464,6 @@ const routes = [
     name: 'Admin.Exam.Lessons.PrintQuestions',
     component: () => import('pages/Admin/Question/QuestionExport/preview.vue'),
     middleware: []
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('pages/Auth/Login.vue')
   },
   // are u mr Esmaeili ? '' : dont touch this route
   {

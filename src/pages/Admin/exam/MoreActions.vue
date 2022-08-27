@@ -1,50 +1,68 @@
 <template>
   <div>
-    <div class="q-pa-md">
-      <q-btn
-        color="primary"
-        class="full-width"
-        label="ساخت فایل سوالات"
-        @click="generateJsonFile(entityId, false)"
-      />
-    </div>
-    <div class="q-pa-md">
-      <q-btn
-        color="primary"
-        class="full-width"
-        label="ساخت فایل سوالات با جواب"
-        @click="generateJsonFile(entityId, true)"
-      />
+    <q-expansion-item label="ساخت فایل سوالات">
+      <div class="more-action-btns">
+        <div class="q-pa-md btn">
+          <q-btn
+            color="primary"
+            class="full-width"
+            label="ساخت فایل سوالات"
+            @click="generateJsonFile(entityId, false)"
+          />
+        </div>
+        <div class="q-pa-md btn">
+          <q-btn
+            color="primary"
+            class="full-width"
+            label="ساخت فایل سوالات با جواب"
+            @click="generateJsonFile(entityId, true)"
+          />
+        </div>
+      </div>
+    </q-expansion-item>
+    <div class="q-pt-md">
+      <q-expansion-item
+        label="ویرایش کارنامه آزمون"
+        expand-separator
+      >
+        <portlet>
+          <!--          <template v-slot:title>-->
+          <!--          </template>-->
+          <template v-slot:content>
+            <edit-exam-report />
+          </template>
+        </portlet>
+      </q-expansion-item>
     </div>
     <div class="q-pt-md">
-      <portlet>
-        <template v-slot:title>
-          ویرایش کارنامه آزمون
-        </template>
-        <template v-slot:content>
-          <edit-exam-report />
-        </template>
-      </portlet>
+      <q-expansion-item
+        expand-separator
+        label="آپلود فایل سوالات و جواب ها"
+      >
+        <portlet>
+          <!--          <template v-slot:title>-->
+          <!--            آپلود فایل سوالات و جواب ها-->
+          <!--          </template>-->
+          <template v-slot:content>
+            <upload />
+          </template>
+        </portlet>
+      </q-expansion-item>
     </div>
     <div class="q-pt-md">
-      <portlet>
-        <template v-slot:title>
-          آپلود فایل سوالات و جواب ها
-        </template>
-        <template v-slot:content>
-          <upload />
-        </template>
-      </portlet>
-    </div>
-    <div class="q-pt-md">
-      <portlet>
-        <template v-slot:title>
-          اصلاح ضرایب
-        </template>
-        <template v-slot:content>
-          <edit-coefficients />
-        </template>
-      </portlet>
+      <q-expansion-item
+        label="اصلاح ضرایب"
+        expand-separator
+      >
+        <portlet>
+          <!--          <template v-slot:title>-->
+          <!--            اصلاح ضرایب-->
+          <!--          </template>-->
+          <template v-slot:content>
+            <edit-coefficients />
+          </template>
+        </portlet>
+      </q-expansion-item>
     </div>
   </div>
 </template>
@@ -90,6 +108,20 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.more-action-btns {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  .btn {
+    width: 100%;
+  }
+}
+.q-expansion-item {
+  background: #DBDBDB;
+  border-radius: 16px;
+}
+.q-focus-helper, .q-focusable, .q-manual-focusable, .q-hoverable {
+  border-radius: 16px;
+}
 </style>

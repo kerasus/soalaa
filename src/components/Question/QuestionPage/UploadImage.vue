@@ -75,6 +75,10 @@ export default {
 </script>
 
 <style lang="scss">
+[dir="rtl"] .filepond--root {
+  text-align: left #{"/* rtl:ignore */"} !important ;
+  direction: ltr #{"/* rtl:ignore */"} !important;
+}
 .drop-area-parent {
   width: 100%;
   height: 240px;
@@ -117,9 +121,23 @@ export default {
 
 .image-upload-parent {
   .filepond--file-info {
-    position: relative;
-    right: -517px;
+    transform: none !important;
   }
+  //.filepond--file-info {
+  //  position: relative;
+  //  //right: -517px;
+  //  right: 0;
+  //  left: 668px;
+  //  @media screen and (max-width: 1500px) {
+  //    left: 449px;
+  //  }
+  //  @media screen and (max-width: 1400px) {
+  //    left: 575px;
+  //  }
+  //  @media screen and (max-width: 1200px) {
+  //    left: 482px;
+  //  }
+  //}
   .filepond--image-preview-wrapper {
     .filepond--image-preview {
       .filepond--image-clip {
