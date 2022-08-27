@@ -56,16 +56,16 @@
       </div>
     </q-card>
     <q-virtual-scroll
-      class="konkoor-view-scroll q-pa-md q-mt-md"
       ref="scroller"
-      :items="filteredQuestions"
       :key="questionListKey"
+      class="konkoor-view-scroll q-pa-md q-mt-md"
+      :items="filteredQuestions"
       @virtual-scroll="onScroll"
     >
       <template v-slot="{ item, index }">
         <q-item
-          class="question-field no-padding q-mb-md"
           :key="index"
+          class="question-field no-padding q-mb-md"
           dense
         >
           <q-item-section>
@@ -101,7 +101,7 @@ import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { copyToClipboard } from 'quasar'
 
 export default {
-  name: 'LessonDetails',
+  name: 'SubCategoryQuestions',
   components: {
     QuestionItem
   },
@@ -163,6 +163,9 @@ export default {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.questionListKey = Date.now()
       return newList
+    },
+    examId () {
+      return this.$route.params.exam_id
     }
   },
   methods: {
@@ -295,8 +298,8 @@ export default {
       }
     },
     getQuizDataAndSubCategories () {
-      return this.$axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.quizId), {
-        sub_categories: [this.$route.params.lessonId]
+      return this.$axios.post(API_ADDRESS.exam.examQuestion(this.examId), {
+        sub_categories: [this.$route.params.subcategory_id]
       })
     },
     loadSubCategories (quizResponse, reload) {

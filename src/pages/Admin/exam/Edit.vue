@@ -19,8 +19,8 @@
           <q-card-section class="flex">
             <div class="row bg-grey-3 add-category-box">
               <q-select
-                class="q-pa-md col-md-4"
                 v-model="category.title"
+                class="q-pa-md col-md-4"
                 :value="category"
                 label="دفترچه"
                 :options="categoryOptions"
@@ -31,14 +31,14 @@
                 :disable="totalCategory"
               />
               <q-input
-                class="q-pa-md col-md-3"
                 v-model="category.order"
+                class="q-pa-md col-md-3"
                 label="ترتیب"
                 :disable="totalCategory"
               />
               <q-input
-                class="q-pa-md col-md-3"
                 v-model="category.time"
+                class="q-pa-md col-md-3"
                 label="زمان"
                 :disable="totalCategory"
               />
@@ -58,8 +58,8 @@
           </q-card-section>
           <q-card-section>
             <div
-              class="category-list"
-              v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length === 0">
+              v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length === 0"
+              class="category-list">
               <p class="bg-red-2 alert">در حال حاضر دفترچه ای به آزمون اضافه نشده است !</p>
             </div>
             <div
@@ -72,8 +72,8 @@
                 class="row col-md-12 category-list-row"
               >
                 <q-select
-                  class="q-pa-md col-md-4"
                   v-model="category.title"
+                  class="q-pa-md col-md-4"
                   :value="category.id"
                   label="دفترچه"
                   :options="categoryOptions"
@@ -83,13 +83,13 @@
                   map-options
                 />
                 <q-input
-                  class="q-pa-md col-md-3"
                   v-model="category.order"
+                  class="q-pa-md col-md-3"
                   label="ترتیب"
                 />
                 <q-input
-                  class="q-pa-md col-md-3"
                   v-model="category.time"
+                  class="q-pa-md col-md-3"
                   label="زمان"
                 />
                 <div class="q-pa-md col-md-2 flex">

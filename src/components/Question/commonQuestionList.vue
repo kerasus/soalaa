@@ -1,9 +1,9 @@
 <template>
   <div class="common-questions">
     <div
-      class="question-body"
       v-for="( question , index ) in allQuestions"
       :key="index"
+      class="question-body"
     >
       <q-expansion-item
         class="question-expansion shadow-2"

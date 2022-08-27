@@ -1,3 +1,6 @@
+export function updateLinearLoading (state, newInfo) {
+  state.linearLoading = !!newInfo
+}
 
 export function updateWindowSize (state, newInfo) {
   state.windowSize.x = newInfo.width
@@ -6,6 +9,10 @@ export function updateWindowSize (state, newInfo) {
 
 export function updateBubbleSize (state, newInfo) {
   state.bubbleSize = newInfo
+}
+
+export function updateLoginDialog (state, newInfo) {
+  state.loginDialog = newInfo
 }
 
 export function showConfirmDialog (state, newInfo) {

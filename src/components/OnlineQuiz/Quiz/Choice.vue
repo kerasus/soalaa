@@ -14,10 +14,10 @@
       </div>
       <div class="answer-checkbox">
         <q-checkbox
-          dense
-          @click="answerClicked"
-          size="60px"
           v-model="isSelected"
+          dense
+          size="60px"
+          @click="answerClicked"
         />
       </div>
     </div>

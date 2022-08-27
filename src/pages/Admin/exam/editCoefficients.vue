@@ -10,18 +10,18 @@
       >
         <q-btn
           color="green"
-          @click="getExamInfo"
           icon="mdi-eye"
           size="md"
           flat
           rounded
           fab-mini
+          @click="getExamInfo"
         />
       </q-input>
       <br>
       <q-btn
-        class="copy-coefficient"
         v-if="sourceExamInfoForCopyCoefficient.title"
+        class="copy-coefficient"
         block
         color="cyan"
         dark
@@ -83,9 +83,9 @@
     </div>
     <div class="col-md-12 q-pa-sm">
       <q-expansion-item
-        class="bg-white rounded-borders q-mb-md"
         v-for="(subGroup, index) in subGroups"
         :key="index"
+        class="bg-white rounded-borders q-mb-md"
         :label='subGroup.title'
       >
         <q-card>

@@ -1,39 +1,75 @@
 <template>
   <div class="landing-page">
-    <nav-bar />
-    <landing-header  />
+    <nav-bar @onClickRegisterBtn="scrollToExamsTable"
+             @onClickConditionsBtn="scrollToExamRules"
+             @onClickFaqsBtn="scrollToFaqs"
+    />
+    <landing-header @onClickRegisterBtn="scrollToExamsTable" />
     <why class="landing-width" />
+    <banner v-if="false"
+            class="landing-width" />
     <features class="landing-width" />
-    <submit-table class="landing-width" />
-    <exam-rules class="landing-width" />
-    <faq class="landing-width" />
-
+    <submit-table ref="SubmitTable"
+                  class="landing-width" />
+    <exam-rules ref="ExamRules"
+                class="landing-width" />
+    <faq ref="Faq"
+         class="landing-width" />
+    <landing-footer />
   </div>
 </template>
 
 <script>
 import NavBar from 'src/components/landing/NavBar'
-import landingHeader from 'src/components/landing/header'
+import LandingHeader from 'src/components/landing/LandingHeader'
 import why from 'src/components/landing/why3A'
 import features from 'src/components/landing/3aFeatures'
 import examRules from 'components/landing/examRules'
+import banner from 'components/landing/banner'
 import submitTable from 'components/landing/submitTable'
 import faq from 'components/landing/faq'
+import LandingFooter from 'components/landing/3a-exams/LandingFooter'
+import { scroll } from 'quasar'
+
 export default {
   name: 'landing',
   components: {
-    landingHeader,
+    LandingHeader,
     why,
     features,
     NavBar,
     submitTable,
     examRules,
+    banner,
+    LandingFooter,
     faq
   },
   created () {
     this.closeSidBarAndAppbar()
   },
   methods: {
+    scrollToExamsTable () {
+      this.scrollTo('SubmitTable')
+    },
+    scrollToExamRules () {
+      this.scrollTo('ExamRules')
+    },
+    scrollToFaqs () {
+      this.scrollTo('Faq')
+    },
+    scrollTo (ref) {
+      this.$nextTick(() => {
+        const refObject = this.$refs[ref]
+        if (!refObject) {
+          return
+        }
+        const scrollTargetElement = refObject.$el
+        const target = scroll.getScrollTarget(scrollTargetElement)
+        const offset = scrollTargetElement.offsetTop
+        const duration = 500
+        scroll.setVerticalScrollPosition(target, offset, duration)
+      })
+    },
     closeSidBarAndAppbar () {
       this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
       this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
@@ -57,7 +93,7 @@ export default {
     @media screen and (max-width: 768px) {
       width: 510px;
     }
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 599px) {
       width: 100%;
       padding: 0 16px;
     }
@@ -66,10 +102,10 @@ export default {
 }
 </style>
 <style  lang="scss">
-@import 'src/assets/scss/YekanBakh.scss';
+@import 'src/assets/scss/Peyda.scss';
 .landing-page{
   *{
-    font-family:'yekanbakh' ;
+    font-family: 'peyda';
   }
 }
 </style>

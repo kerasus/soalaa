@@ -2,13 +2,13 @@
   <div class="takhmin-rotbe">
     <div style="background-color: rgb(244, 244, 244)">
       <div class="d-flex justify-center wrapper">
-        <div class="row"
-             v-if="report">
+        <div v-if="report"
+             class="row">
           <div class="col col-12 proceeds-table">
             <q-btn class="full-width"
                    label="تخمین رتبه"
-                   @click="sendData"
-                   style="background-color: #00bcd4; color: #fffaee" />
+                   style="background-color: #00bcd4; color: #fffaee"
+                   @click="sendData" />
           </div>
           <div class="col col-md-7 col-12 default-result-table">
             <div class="row default-resultTable-row">
@@ -37,38 +37,38 @@
                             :props="props">
                         <!--                    {{ props.row.right_answer }}-->
                         <q-input
-                          type="number"
                           v-model="answerCounts[props.row.sub_category_id].correct"
+                          type="number"
                           debounce="500"
                           :rules="[numberRule]"
-                          @change="calcPercent(props.row.sub_category_id, $event.target)"
                           dense
                           autofocus
+                          @change="calcPercent(props.row.sub_category_id, $event.target)"
                         />
                       </q-td>
                       <q-td key="wrong_answer"
                             :props="props">
                         <!--                    {{ props.row.wrong_answer }}-->
                         <q-input
-                          type="number"
                           v-model="answerCounts[props.row.sub_category_id].incorrect"
+                          type="number"
                           debounce="500"
                           :rules="[numberRule]"
-                          @change="calcPercent(props.row.sub_category_id, $event.target)"
                           dense
                           autofocus
+                          @change="calcPercent(props.row.sub_category_id, $event.target)"
                         />
                       </q-td>
                       <q-td key="percent"
                             :props="props">
                         <!--                    {{ props.row.percent }}-->
                         <q-input
-                          type="number"
                           v-model="percents[props.row.sub_category_id]"
+                          type="number"
                           :rules="[numberRule, percentRule]"
-                          @change="resetAnswerCount(props.row.sub_category_id)"
                           dense
                           autofocus
+                          @change="resetAnswerCount(props.row.sub_category_id)"
                         />
                       </q-td>
                       <q-td key="rank_city"
@@ -166,8 +166,6 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
-import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 // import Assistant from 'src/plugins/assistant'
 export default {
@@ -237,9 +235,9 @@ export default {
   },
   methods: {
     resetAnswerCount (subcategoryId) {
-      for (const sub_category_id in this.answerCounts) {
-        this.answerCounts[sub_category_id].correct = 0
-        this.answerCounts[sub_category_id].incorrect = 0
+      for (const subCategoryId in this.answerCounts) {
+        this.answerCounts[subCategoryId].correct = 0
+        this.answerCounts[subCategoryId].incorrect = 0
       }
 
       if (this.percents[subcategoryId] < -33.33 || this.percents[subcategoryId] > 100) {
@@ -313,6 +311,9 @@ export default {
     prepareTakhmineRotbeReport (resetPercents) {
       const that = this,
         takhminReport = JSON.parse(JSON.stringify(this.report))
+      if (!takhminReport.main) {
+        takhminReport.main = {}
+      }
       takhminReport.main.percent = 0
       takhminReport.main.rank_city = 0
       takhminReport.main.rank_province = 0
@@ -378,7 +379,7 @@ export default {
           sub_category_id: keys[i]
         })
       }
-      axios.post(API_ADDRESS.exam.takhminRotbe, {
+      this.$axios.post(API_ADDRESS.exam.takhminRotbe, {
         exam_user_id: that.takhminReport.exam_user.id,
         percents: sentPercents
       })

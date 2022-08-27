@@ -10,26 +10,26 @@
            class="header-inside row">
         <template-header />
       </div>
+      <q-resize-observer @resize="setHeaderDimension" />
+    </template>
+    <template #left-drawer>
+      <div v-if="$route.name === 'onlineQuiz.alaaView'"
+           class="drawer-inside-of-MapOfQuestions">
+        <sideMenuMapOfQuestions />
+      </div>
+      <div v-else
+           class="drawer-inside">
+        <side-menu-dashboard />
+      </div>
+    </template>
+    <template #content>
       <q-linear-progress
-        v-if="$store.getters['loading/loading']"
+        v-if="linearLoading"
         color="primary"
         reverse
         class="q-mt-sm"
         indeterminate
       />
-      <q-resize-observer @resize="setHeaderDimension" />
-    </template>
-    <template #left-drawer>
-      <div class="drawer-inside-of-MapOfQuestions"
-           v-if="$route.name === 'onlineQuiz.alaaView'">
-        <sideMenuMapOfQuestions />
-      </div>
-      <div class="drawer-inside"
-           v-else>
-        <side-menu-dashboard />
-      </div>
-    </template>
-    <template #content>
       <div ref="contentInside"
            class="content-inside">
         <q-dialog v-model="confirmDialogData.show"
@@ -44,16 +44,19 @@
             <q-separator />
             <q-card-actions align="right"
                             class="q-pb-none">
-              <q-btn color="green"
+              <q-btn v-close-popup
+                     color="green"
                      flat
-                     @click="confirmDialogAction(true)"
-                     v-close-popup>بله</q-btn>
-              <q-btn color="red"
+                     @click="confirmDialogAction(true)">بله</q-btn>
+              <q-btn v-close-popup
+                     color="red"
                      flat
-                     @click="confirmDialogAction(false)"
-                     v-close-popup>خیر</q-btn>
+                     @click="confirmDialogAction(false)">خیر</q-btn>
             </q-card-actions>
           </q-card>
+        </q-dialog>
+        <q-dialog v-model="loginDialog">
+          <auth />
         </q-dialog>
         <Router :include="keepAliveComponents" />
       </div>
@@ -62,17 +65,18 @@
 </template>
 
 <script>
-import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
-import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
-import { QuasarTemplateBuilder } from 'quasar-template-builder'
-import templateHeader from 'components/Template/templateHeader'
-import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 import { ref } from 'vue'
+import { QuasarTemplateBuilder } from 'quasar-template-builder'
 import Router from 'src/router/Router'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import Auth from 'components/Auth'
+import templateHeader from 'components/Template/templateHeader'
+import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
+import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
+import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 
 export default {
-  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
+  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader, Auth },
   data () {
     return {
       keepAliveComponents: KeepAliveComponents,
@@ -100,14 +104,27 @@ export default {
     }
   },
   computed: {
+    loginDialog: {
+      get () {
+        return this.$store.getters['AppLayout/loginDialog']
+      },
+      set (newValue) {
+        if (!newValue) {
+          this.$store.commit('AppLayout/updateLoginDialog', false)
+          return
+        }
+        this.$store.dispatch('AppLayout/showLoginDialog')
+      }
+    },
     confirmDialogData () {
       return this.$store.getters['AppLayout/confirmDialog']
+    },
+    linearLoading () {
+      return this.$store.getters['AppLayout/linearLoading']
     }
   },
   created () {
     this.updateLayout()
-    // const localData = this.$store.getters['AppLayout/appLayout']
-    // Object.assign(this.properties, localData)
   },
   methods: {
     updateLayout () {

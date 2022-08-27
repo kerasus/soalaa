@@ -1,13 +1,13 @@
 <template>
-  <div class="flex justify-center">
+  <div class="flex justify-center full-width videoPlayer-container-radius">
     <video
-      ref="videoPlayer"
       id="my-video"
+      ref="videoPlayer"
       controls
       preload="auto"
       :height="calcTheHeight"
       :width="calcTheWidth"
-      class="video-js vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause"
+      class="video-js vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause videoPlayer-container-radius"
     />
   </div>
 </template>
@@ -17,6 +17,7 @@ import videojs from 'video.js'
 import videojsBrand from 'videojs-brand'
 import fa from 'video.js/dist/lang/fa.json'
 import { PlayerSourceList } from 'src/models/PlayerSource'
+
 require('video.js/dist/video-js.css')
 require('@silvermine/videojs-quality-selector')(videojs)
 require('@silvermine/videojs-quality-selector/dist/css/quality-selector.css')
@@ -34,14 +35,14 @@ export default {
     },
     keepCalculating: {
       type: Boolean,
-      default () {
+      default() {
         return true
       }
     }
   },
-  data () {
+  data() {
     return {
-      options: {
+      videoOptions: {
         controlBar: {
           TimeDivider: true,
           children: [
@@ -75,29 +76,29 @@ export default {
       player: null
     }
   },
-  created () {
+  created() {
     this.setOptions()
   },
-  mounted () {
+  mounted() {
     this.initPlayer()
   },
   computed: {
-    calcTheHeight () {
+    calcTheHeight() {
       return '100%'
     },
-    calcTheWidth () {
+    calcTheWidth() {
       return '100%'
     }
   },
-  beforeUnmount () {
+  beforeUnmount() {
     if (this.player) {
       this.player.dispose()
     }
   },
   methods: {
-    initPlayer () {
-      videojs.plugin('brand', videojsBrand)
-      this.player = videojs(this.$refs.videoPlayer, this.options, this.onPlayerReady)
+    initPlayer() {
+      videojs.registerPlugin('brand', videojsBrand)
+      this.player = videojs(this.$refs.videoPlayer, this.videoOptions, this.onPlayerReady)
       this.player.brand({
         image: 'https://nodes.alaatv.com/upload/alaa-logo-small.png',
         title: 'alaatv',
@@ -106,7 +107,7 @@ export default {
       })
       this.player.src(this.sources.list)
     },
-    onPlayerReady () {
+    onPlayerReady() {
       // this.player.on('timeupdate', function () {
       //   if (this.keepCalculating) {
       //     this.calcWatchedPercentage(this.player.currentTime(), this.player.duration())
@@ -119,21 +120,21 @@ export default {
       //   }
       // })
     },
-    setOptions () {
+    setOptions() {
       this.setSources()
       this.setPoster()
     },
-    setSources () {
-      this.options.sources = this.sources.list
+    setSources() {
+      this.videoOptions.sources = this.sources.list
     },
-    setPoster () {
-      this.options.poster = this.poster
+    setPoster() {
+      this.videoOptions.poster = this.poster
     },
-    reloadPlayerSources () {
+    reloadPlayerSources() {
       this.player.src(this.sources.list)
       this.player.poster(this.poster)
     },
-    calcWatchedPercentage (currentTime, duration) {
+    calcWatchedPercentage(currentTime, duration) {
       const watchedPercentage = ((currentTime / duration) * 100)
       const videoPlayerTimeData = {
         currentTime,
@@ -142,7 +143,7 @@ export default {
       }
       this.$emit('calcTimeData', videoPlayerTimeData)
     },
-    videoStatus (val) {
+    videoStatus(val) {
       this.videoIsPlaying = val
     }
   },
@@ -155,8 +156,18 @@ export default {
 </script>
 
 <style lang="scss">
+.videoPlayer-container-radius{
+ border-radius: inherit;
+}
+.vjs-poster{
+  border-radius: inherit;
+}
+#my-video_html5_api{
+  border-radius: inherit;
+}
 #my-video .vjs-big-play-button {
   border: none;
+  border-radius: inherit;
   width: 80px;
   height: 80px;
   line-height: 2em;
@@ -166,11 +177,11 @@ export default {
   background-color: #FFB74D;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
   font-size: 52px;
-  border-radius:20px;
-  -moz-border-radius:100px;
-  -webkit-border-radius:100px;
+  -moz-border-radius: 100px;
+  -webkit-border-radius: 100px;
   margin-top: -0.817em;
 }
+
 .video-js .vjs-big-play-button .vjs-icon-placeholder:before {
   content: "\f4cd";
   left: -12px;
@@ -180,11 +191,29 @@ export default {
   border: none !important;
   box-shadow: none !important;
 }
-.vjs-brand-container{
-  .vjs-brand-container-link{
-    img{
+
+.vjs-control-bar {
+  .vjs-volume-panel {
+    .vjs-volume-control {
+      right: -45px !important;
+    }
+  }
+}
+
+.vjs-brand-container {
+  .vjs-brand-container-link {
+    img {
       height: 25px;
       padding-top: 3px;
+    }
+  }
+}
+
+.vjs-progress-control {
+  .vjs-progress-holder {
+    .vjs-play-progress::before {
+      left: -8px ;
+      right: auto ;
     }
   }
 }

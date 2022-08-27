@@ -66,8 +66,8 @@
           </div>
           <div class="col-12">
             <q-input
-              type="number"
               v-model="exam.report_config.right_answer_weight"
+              type="number"
               label="right_answer_weight"
             />
           </div>

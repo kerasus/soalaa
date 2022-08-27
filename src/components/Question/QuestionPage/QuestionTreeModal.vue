@@ -22,10 +22,10 @@
             <div class="detail-box">
               <div class="detail-box-title">نام درس</div>
               <q-select
+                v-model="lesson"
                 filled
                 dense
                 dropdown-icon="isax:arrow-down-1"
-                v-model="lesson"
                 option-label="title"
                 :options="lessonsList"
                 :disable="!doesHaveLessons"
@@ -34,11 +34,11 @@
             </div>
             <div class="question-tree">
               <tree
-                @ticked="updateNodes"
                 ref="tree"
                 :key="treeKey"
                 tick-strategy="strict"
                 :get-node-by-id="getNodeById"
+                @ticked="updateNodes"
                 @lazy-loaded="syncAllCheckedIds"
               />
             </div>
@@ -80,10 +80,10 @@
           </div>
           <div class="close-btn-box text-right">
             <q-btn
+              v-close-popup
               class="close-btn"
               label="بستن"
               color="primary"
-              v-close-popup
             />
           </div>
         </div>

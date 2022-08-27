@@ -1,9 +1,11 @@
 import API_ADDRESS from 'src/api/Addresses'
+import { axios } from 'boot/axios'
 
 export function login (context, data) {
-  return this.$axios.post(API_ADDRESS.auth.login, data)
+  return axios.post(API_ADDRESS.auth.login, data)
     .then(res => {
       const accessToken = res.data.data.access_token
+      axios.defaults.headers.common.Authorization = 'Bearer ' + accessToken
       context.commit('updateAccessToken', accessToken)
       context.commit('updateUser', res.data.data.user)
       context.commit('setAccessToken', accessToken)

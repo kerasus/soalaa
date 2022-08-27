@@ -123,8 +123,8 @@
           <q-toggle
             v-else
             v-model="source.confirmed"
-            @update:model-value="confirmQuestion"
             color="primary"
+            @update:model-value="confirmQuestion"
           >
             <q-tooltip>
               تایید سوال
@@ -148,7 +148,7 @@
         <div
           v-if="source.statement_photo && !source.statement"
           class="photo-section">
-          <p v-if="$route.name === 'exams.lessons.questions'">
+          <p v-if="$route.name === 'Admin.Exam.SubCategory.Questions'">
             ({{ getSubCategoryName }}) (ترتیب: {{ source.order }})(شماره: {{ source.questNumber }})  -  صورت سوال :
           </p>
           <p v-else>

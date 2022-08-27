@@ -14,8 +14,8 @@
                   :style="{ 'width':'150px','height': '20px' }"
                   flat
                   class="sideBtnIcons"
-                  @click="goToPrevQuestion('onlineQuiz.alaaView')"
                   icon="mdi-chevron-right"
+                  @click="goToPrevQuestion('onlineQuiz.alaaView')"
                 />
               </div>
               <div class="col-3  xs-hide flex justify-center align-center">

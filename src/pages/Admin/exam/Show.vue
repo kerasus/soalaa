@@ -8,6 +8,8 @@
       :entity-param-key="entityParamKey"
       :edit-route-name="editRouteName"
       :index-route-name="indexRouteName"
+      :copy-on-click="true"
+      @onCopyToClipboard="onCopyToClipboard"
     >
       <template #after-form-builder>
         <div
@@ -16,8 +18,8 @@
           class="row"
         >
           <q-select
-            class="q-pa-md col-md-4"
             v-model="category.title"
+            class="q-pa-md col-md-4"
             :value="category.id"
             label="دفترچه"
             :options="inputs[examCategoriesIndex].value"
@@ -28,14 +30,14 @@
             disable
           />
           <q-input
-            class="q-pa-md col-md-3"
             v-model="category.order"
+            class="q-pa-md col-md-3"
             label="ترتیب"
             disable
           />
           <q-input
-            class="q-pa-md col-md-3"
             v-model="category.time"
+            class="q-pa-md col-md-3"
             label="زمان"
             disable
           />
@@ -88,6 +90,11 @@ export default {
     }
   },
   methods: {
+    onCopyToClipboard (data) {
+      this.$q.notify({
+        message: 'مقدار ' + data.input.label + ' کپی شد.'
+      })
+    },
     generateJsonFile (id, withAnswer) {
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.post(API_ADDRESS.exam.generateExamFile(id, withAnswer))

@@ -67,12 +67,50 @@ const routes = [
     children: [
       {
         path: '',
+        name: 'landing',
+        component: () => import('layouts/LandingLayout'),
+        children: [
+          {
+            path: '',
+            name: 'landing1',
+            component: () => import('pages/User/landing/landing')
+          }
+        ]
+      },
+      {
+        path: 'dashboard',
         name: 'dashboard',
         component: () => import('pages/User/exam/List'),
         breadcrumbs: { title: 'پیشخوان' },
         meta: {
           middlewares: [auth]
         }
+      },
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('pages/Auth/Login.vue')
+      },
+      {
+        path: 'user',
+        name: 'User',
+        component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
+        meta: {
+          middlewares: [auth]
+        },
+        children: [
+          {
+            path: 'my-orders',
+            name: 'User.MyOrders',
+            component: () => import('pages/User/MyOrders/MyOrders'),
+            breadcrumbs: { title: 'سفارش های من' },
+            meta: {
+              middlewares: [
+                Permissions.hasPermission('examStore')
+              ]
+            }
+          }
+        ]
       },
       {
         path: 'component',
@@ -162,19 +200,27 @@ const routes = [
                 ]
               },
               {
-                name: 'Admin.Exam.Lessons',
-                path: 'lessons/:quizId',
-                component: () => import('src/pages/Admin/exam/lessons.vue'),
+                name: 'Admin.Exam.Categories',
+                path: ':exam_id/category',
+                component: () => import('pages/Admin/exam/ExamCategoryList.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionShowcategorires')
                 ]
               },
               {
-                name: 'Admin.Exam.Lessons.List',
-                path: 'lessons/:quizId/chart',
-                component: () => import('src/pages/Admin/exam/lessonsChart.vue'),
+                name: 'Admin.Exam.Categories.SubCategories',
+                path: ':exam_id/category/:category_id/sub-category',
+                component: () => import('pages/Admin/exam/ExamSubCategoryList.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionShowcategorires')
+                ]
+              },
+              {
+                path: ':exam_id/sub-category/:subcategory_id/questions',
+                name: 'Admin.Exam.SubCategory.Questions',
+                component: () => import('pages/Admin/exam/SubCategoryQuestions'),
+                middleware: [
+                  Permissions.hasPermission('examquestionAttachShow')
                 ]
               },
               {
@@ -183,14 +229,6 @@ const routes = [
                 component: () => import('src/pages/Admin/exam/SetVideo.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionVideos')
-                ]
-              },
-              {
-                path: ':quizId/:lessonId',
-                name: 'exams.lessons.questions',
-                component: () => import('pages/Admin/exam/LessonQuestions'),
-                middleware: [
-                  Permissions.hasPermission('examquestionAttachShow')
                 ]
               },
               {
@@ -221,7 +259,7 @@ const routes = [
               {
                 path: 'list',
                 name: 'Admin.Question.Factory',
-                component: () => (import('pages/Admin/Question/NewQuestionFactory')),
+                component: () => (import('pages/Admin/Question/QuestionFactory')),
                 meta: {
                   middlewares: [
                     auth,
@@ -410,17 +448,15 @@ const routes = [
         }
       },
       {
-        path: '/landing',
-        name: 'landing',
-        component: () => import('layouts/LandingLayout'),
-        children: [
-          {
-            path: '',
-            name: 'landing1',
-            component: () => import('pages/User/landing/landing')
-          }
-        ]
+        path: '/cart',
+        name: 'cart',
+        component: () => import('pages/Cart/Cart'),
+        meta: {
+          middlewares: [
+            Permissions.hasPermission('examStore')]
+        }
       }
+
     ]
   },
   {
@@ -428,11 +464,6 @@ const routes = [
     name: 'Admin.Exam.Lessons.PrintQuestions',
     component: () => import('pages/Admin/Question/QuestionExport/preview.vue'),
     middleware: []
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('pages/Auth/Login.vue')
   },
   // are u mr Esmaeili ? '' : dont touch this route
   {

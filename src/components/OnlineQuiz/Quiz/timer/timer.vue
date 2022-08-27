@@ -1,15 +1,15 @@
 <template>
   <div>
     <mobile-timer
-      class="Mobiletimer"
       v-if="windowSize.x < 1024"
+      class="Mobiletimer"
       :passed-time="passedTime"
       :remaining-time="remainTime"
       :current-cat="currentCat"
     />
     <pc-timer
-      class="Pctimer"
       v-else
+      class="Pctimer"
       :passed-time="passedTime"
       :remaining-time="remainTime"
       :current-cat="currentCat"

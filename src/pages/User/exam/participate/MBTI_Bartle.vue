@@ -22,8 +22,8 @@
     </div>
     <div class="row justify-between">
       <div
-        class="q-mx-xl text-subtitle1 text-grey-10"
         v-if="quiz"
+        class="q-mx-xl text-subtitle1 text-grey-10"
         v-text="quiz.title"
       />
       <div

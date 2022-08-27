@@ -24,8 +24,8 @@
         <div class="col-6 text-center">
           <div class="q-gutter-y-md tabs-style text-center">
             <q-tabs
-              dir="ltr"
               v-model="tab"
+              dir="ltr"
               inline-label
               indicator-color="transparent"
               active-color="primary"
@@ -34,7 +34,7 @@
                 v-for="(item, index) in questionStatusList.list"
                 :key="index"
                 :label="item.display_title"
-                @click="filter(item.id)"
+                @click="filter(item.id, page)"
               />
             </q-tabs>
           </div>
@@ -169,14 +169,13 @@
 </template>
 
 <script>
-import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { QuestionList } from 'src/models/Question'
 // import VueKatex from '@/components/VueKatex'
 
 export default {
-  name: 'NewQuestionFactory',
+  name: 'QuestionFactory',
   components: {
     // VueKatex
   },
@@ -196,11 +195,10 @@ export default {
   methods: {
     getNavBarItems () {
       const that = this
-      that.questionStatusList.fetch()
-        .then(response => {
-          that.questionStatusList = new QuestionStatusList(response.data.data)
-          that.filter()
-        })
+      this.$axios.get(API_ADDRESS.question.status.base).then(response => {
+        that.questionStatusList = new QuestionStatusList(response.data.data)
+        that.filter()
+      })
     },
     filter (itemId, page) {
       if (itemId) {
@@ -210,7 +208,7 @@ export default {
       // that.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: 'کمی صبر کنید...' })
       that.$store.dispatch('loading/overlayLoading', true)
       const statusesId = (!itemId) ? [] : [itemId]
-      axios.get(API_ADDRESS.question.index(statusesId, page))
+      this.$axios.get(API_ADDRESS.question.index(statusesId, page))
         .then(response => {
           that.questions = new QuestionList(response.data.data)
           that.page = response.data.meta.current_page

@@ -6,8 +6,8 @@
            :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">نام آزمون</div>
         <q-select
-          borderless
           v-model="selectedExam"
+          borderless
           :options="exams.list"
           option-value="exam_id"
           option-label="title"
@@ -19,8 +19,8 @@
            :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">درس</div>
         <q-select
-          borderless
           v-model="selectedLesson"
+          borderless
           :options="lessons.list"
           option-value="id"
           option-label="title"
@@ -32,8 +32,8 @@
            :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">ترتیب</div>
         <q-input
-          borderless
           v-model="order"
+          borderless
           type="number"
           :rules="numberRules"
         />

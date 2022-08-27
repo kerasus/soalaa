@@ -1,10 +1,19 @@
-export function drawer (state) {
-  return state.drawer
+export function linearLoading (state) {
+  return state.linearLoading
 }
 
-export function appBar (state) {
-  return state.appBar
+// export function drawer (state) {
+//   return state.drawer
+// }
+//
+// export function appBar (state) {
+//   return state.appBar
+// }
+
+export function loginDialog (state) {
+  return state.loginDialog
 }
+
 export function confirmDialog (state) {
   return state.confirmDialog
 }
@@ -29,8 +38,4 @@ export function breadcrumbLoading (state) {
 }
 export function breadcrumbsVisibility (state) {
   return state.breadcrumbs.visible
-}
-
-export function appLayout (state) {
-  return state.appLayout
 }
