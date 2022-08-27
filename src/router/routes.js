@@ -67,12 +67,29 @@ const routes = [
     children: [
       {
         path: '',
+        name: 'landing',
+        component: () => import('layouts/LandingLayout'),
+        children: [
+          {
+            path: '',
+            name: 'landing1',
+            component: () => import('pages/User/landing/landing')
+          }
+        ]
+      },
+      {
+        path: 'dashboard',
         name: 'dashboard',
         component: () => import('pages/User/exam/List'),
         breadcrumbs: { title: 'پیشخوان' },
         meta: {
           middlewares: [auth]
         }
+      },
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('pages/Auth/Login.vue')
       },
       {
         path: 'user',
@@ -431,22 +448,6 @@ const routes = [
         }
       },
       {
-        path: '/landing',
-        name: 'landing',
-        component: () => import('layouts/LandingLayout'),
-        meta: {
-          middlewares: [
-            Permissions.hasPermission('examStore')]
-        },
-        children: [
-          {
-            path: '',
-            name: 'landing1',
-            component: () => import('pages/User/landing/landing')
-          }
-        ]
-      },
-      {
         path: '/cart',
         name: 'cart',
         component: () => import('pages/Cart/Cart'),
@@ -463,11 +464,6 @@ const routes = [
     name: 'Admin.Exam.Lessons.PrintQuestions',
     component: () => import('pages/Admin/Question/QuestionExport/preview.vue'),
     middleware: []
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('pages/Auth/Login.vue')
   },
   // are u mr Esmaeili ? '' : dont touch this route
   {
