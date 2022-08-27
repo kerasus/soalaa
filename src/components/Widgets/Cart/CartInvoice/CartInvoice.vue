@@ -465,6 +465,7 @@ export default {
           display: flex;
           align-items: center;
           margin-bottom: 20px;
+          justify-content: space-between;
 
           @media screen and (max-width: 1439px) {
             margin-bottom: 14px;
@@ -486,6 +487,7 @@ export default {
             letter-spacing: -0.03em;
             color: #23263B;
             margin-right: 16px;
+            min-width: 72px;
 
             @media screen and (max-width: 1439px) {
               margin-right: 4px;
