@@ -45,6 +45,20 @@
         </div>
       </div>
     </q-card-section>
+    <q-card-section class="row main-card-section">
+      <div class="col-12">
+        <div class="card-section-header">
+          <q-btn
+            class="icon-type"
+            icon="isax:add-square5"
+            color="positive"
+            flat
+            @click="addChoice"
+          />
+          <span>گزینه جدید</span>
+        </div>
+      </div>
+    </q-card-section>
     <q-card-section class="main-card-section long-answer">
       <div class="card-section-header">پاسخ تشریحی</div>
       <div class="answer-box">
@@ -322,6 +336,12 @@ export default {
       }
     }
   }
+}
+</style>
+<style lang="scss">
+[dir="rtl"] .filepond--root {
+  text-align: left #{"/* rtl:ignore */"} !important ;
+  direction: ltr #{"/* rtl:ignore */"} !important;
 }
 </style>
 

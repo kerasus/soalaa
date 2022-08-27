@@ -59,7 +59,7 @@
             <div v-for="item in 3"
                  :key="item"
                  class="level-circles"
-                 :class="item === questionLevelClasses[questionLevel].lvl ? questionLevelClasses[questionLevel].class : ''">
+                 :class="item === questionLevelClasses[questionLevel].level ? questionLevelClasses[questionLevel].class : ''">
             </div>
           </div>
         </div>
@@ -86,11 +86,24 @@
           <div v-else
                class="source-content">
             <div class="source-text">
-              <div class="source-name">سازمان سنجش</div>
-              <div class="source-date">99 - 1400</div>
+              <div
+                v-if="question.reference[0]"
+                class="source-name"
+              >{{ question.reference[0].value }}</div>
+              <div
+                v-if="question.years[0]"
+                class="source-date"
+              >{{ question.years[0].value }}</div>
             </div>
-            <div class="source-avatar">
-              <q-avatar size="36px">
+            <div
+              v-if="question.reference[0]"
+              class="source-avatar"
+            >
+              <!--              question.reference[0].photos-->
+              <q-avatar
+                v-if="!question.reference[0].photos"
+                size="36px"
+              >
                 <svg xmlns="http://www.w3.org/2000/svg"
                      width="72"
                      height="35"
@@ -214,7 +227,8 @@
               </div>
               <div v-if="question.descriptive_answer"
                    class="question-answer-description">
-                {{ question.descriptive_answer }}
+                <!--                <vue-katex :input="question.descriptive_answer" />-->
+                <vue-katex :input="question.descriptive_answer" />
               </div>
               <p v-else>
                 پاسخ تشریحی ندارد.
@@ -389,10 +403,11 @@
 import { Question } from 'src/models/Question'
 import question from './Question'
 import VideoPlayer from 'components/VideoPlayer'
+import VueKatex from 'components/VueKatex'
 
 export default {
   name: 'QuestionItem',
-  components: { question, VideoPlayer },
+  components: { VueKatex, question, VideoPlayer },
   props: {
     question: {
       type: Question,
@@ -429,7 +444,7 @@ export default {
       questionChoiceList: [],
       confirmQuestion: false,
       descriptiveAnswerExpanded: false,
-      questionLevel: 1,
+      questionLevel: 2,
       listConfig: {
         questionId: false,
         questionLevel: false,
@@ -454,27 +469,27 @@ export default {
       questionCol: '',
       questionLevelClasses: {
         1: {
-          lvl: 3,
+          level: 1,
           class: 'easy',
           title: 'آسان'
         },
+        // 2: {
+        //   level: 3,
+        //   class: 'easy',
+        //   title: 'آسان'
+        // },
         2: {
-          lvl: 3,
-          class: 'easy',
-          title: 'آسان'
+          level: 2,
+          class: 'medium',
+          title: 'متوسط'
         },
+        // 3: {
+        //   level: 2,
+        //   class: 'medium',
+        //   title: 'متوسط'
+        // },
         3: {
-          lvl: 2,
-          class: 'medium',
-          title: 'متوسط'
-        },
-        4: {
-          lvl: 2,
-          class: 'medium',
-          title: 'متوسط'
-        },
-        5: {
-          lvl: 1,
+          level: 3,
           class: 'hard',
           title: 'سخت'
         }
@@ -539,7 +554,7 @@ export default {
       this.$emit('checkSelect', this.question)
     },
     setQuestionLevel () {
-      this.questionLevel = 1
+      this.questionLevel = this.question.level
     },
     setPageConfig () {
       this.applyPageStrategy()
@@ -689,6 +704,18 @@ export default {
             width: 20px;
             height: 20px;
             background: #F4F5F6;
+
+            &.easy {
+              background: #8ED6FF;
+            }
+
+            &.medium {
+              background: #FFCA28;
+            }
+
+            &.hard {
+              background: #DA5F5C;
+            }
           }
         }
       }
@@ -996,7 +1023,7 @@ export default {
 <!--  &lt;!&ndash;              <div v-for="item in 3"&ndash;&gt;-->
 <!--  &lt;!&ndash;                   :key="item"&ndash;&gt;-->
 <!--  &lt;!&ndash;                   class="level-circles"&ndash;&gt;-->
-<!--  &lt;!&ndash;                   :class="item === questionLevelClasses[questionLevel].lvl ?  questionLevelClasses[questionLevel].class : ''"&ndash;&gt;-->
+<!--  &lt;!&ndash;                   :class="item === questionLevelClasses[questionLevel].level ?  questionLevelClasses[questionLevel].class : ''"&ndash;&gt;-->
 <!--  &lt;!&ndash;              />&ndash;&gt;-->
 <!--  &lt;!&ndash;            </template>&ndash;&gt;-->
 <!--  &lt;!&ndash;          </div>&ndash;&gt;-->

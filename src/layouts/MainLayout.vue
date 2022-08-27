@@ -10,13 +10,6 @@
            class="header-inside row">
         <template-header />
       </div>
-      <q-linear-progress
-        v-if="$store.getters['loading/loading']"
-        color="primary"
-        reverse
-        class="q-mt-sm"
-        indeterminate
-      />
       <q-resize-observer @resize="setHeaderDimension" />
     </template>
     <template #left-drawer>
@@ -30,6 +23,13 @@
       </div>
     </template>
     <template #content>
+      <q-linear-progress
+        v-if="linearLoading"
+        color="primary"
+        reverse
+        class="q-mt-sm"
+        indeterminate
+      />
       <div ref="contentInside"
            class="content-inside">
         <q-dialog v-model="confirmDialogData.show"
@@ -118,6 +118,9 @@ export default {
     },
     confirmDialogData () {
       return this.$store.getters['AppLayout/confirmDialog']
+    },
+    linearLoading () {
+      return this.$store.getters['AppLayout/linearLoading']
     }
   },
   created () {

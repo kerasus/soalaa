@@ -200,6 +200,14 @@ export default {
           ]
         },
         {
+          title: 'سفارش‌ های من',
+          icon: 'isax:clipboard-text',
+          routeName: 'User.MyOrders',
+          permission: 'examStore',
+          active: false,
+          children: []
+        },
+        {
           title: 'درخت دانش',
           icon: 'isax:tree',
           permission: 'examStore',
@@ -223,22 +231,22 @@ export default {
           active: false,
           children: []
         },
-        {
-          title: 'گزارشات',
-          icon: 'isax:graph',
-          permission: 'examStore',
-          routeName: null,
-          active: false,
-          children: []
-        },
-        {
-          title: 'تنظیمات',
-          icon: 'isax:setting-2',
-          routeName: 'Admin.Settings',
-          permission: 'examStore',
-          active: false,
-          children: []
-        },
+        // {
+        //   title: 'گزارشات',
+        //   icon: 'isax:graph',
+        //   permission: 'examStore',
+        //   routeName: null,
+        //   active: false,
+        //   children: []
+        // },
+        // {
+        //   title: 'تنظیمات',
+        //   icon: 'isax:setting-2',
+        //   routeName: 'Admin.Settings',
+        //   permission: 'examStore',
+        //   active: false,
+        //   children: []
+        // },
         {
           title: 'سوالات متداول',
           icon: 'isax:message-question',

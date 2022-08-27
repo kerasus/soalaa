@@ -33,6 +33,7 @@
         unelevated
         class="submit-btn-style"
         label="ثبت نام آزمون"
+        @click="onClickRegisterBtn"
       />
     </div>
   </div>
@@ -41,7 +42,12 @@
 
 <script>
 export default {
-  name: 'NavBar'
+  name: 'NavBar',
+  methods: {
+    onClickRegisterBtn () {
+      this.$emit('onClickRegisterBtn')
+    }
+  }
 }
 </script>
 
@@ -69,6 +75,9 @@ export default {
     .q-btn__content {
       margin: 0;
     }
+  }
+  .logo{
+    width: 105px;
   }
   .submit-btn-style {
     box-sizing: border-box;
@@ -119,6 +128,9 @@ export default {
         }
       }
     }
+    .logo{
+      width: 96px;
+    }
     .submit-btn-style {
       width: 96px;
       height: 32px;
@@ -130,7 +142,7 @@ export default {
 }
 @media  screen and (max-width: 600px) {
   .nav-bar {
-    padding: 16px 15px;
+    padding: 16px 15px !important;
   }
 }
 </style>

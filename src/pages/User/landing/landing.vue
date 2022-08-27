@@ -1,13 +1,15 @@
 <template>
   <div class="landing-page">
-    <nav-bar />
-    <landing-header  />
+    <nav-bar @onClickRegisterBtn="scrollToExamsTable" />
+    <landing-header @onClickRegisterBtn="scrollToExamsTable" />
     <why class="landing-width" />
+    <banner class="landing-width" />
     <features class="landing-width" />
-    <submit-table class="landing-width" />
+    <submit-table ref="SubmitTable"
+                  class="landing-width" />
     <exam-rules class="landing-width" />
     <faq class="landing-width" />
-
+    <footer-component />
   </div>
 </template>
 
@@ -17,8 +19,12 @@ import landingHeader from 'src/components/landing/header'
 import why from 'src/components/landing/why3A'
 import features from 'src/components/landing/3aFeatures'
 import examRules from 'components/landing/examRules'
+import banner from 'components/landing/banner'
 import submitTable from 'components/landing/submitTable'
 import faq from 'components/landing/faq'
+import footerComponent from 'components/landing/3a-exams/footer.vue'
+import { scroll } from 'quasar'
+
 export default {
   name: 'landing',
   components: {
@@ -28,12 +34,30 @@ export default {
     NavBar,
     submitTable,
     examRules,
+    banner,
+    footerComponent,
     faq
   },
-  mounted () {
+  created () {
     this.closeSidBarAndAppbar()
   },
   methods: {
+    scrollToExamsTable () {
+      this.scrollTo('SubmitTable')
+    },
+    scrollTo (ref) {
+      this.$nextTick(() => {
+        const refObject = this.$refs[ref]
+        if (!refObject) {
+          return
+        }
+        const scrollTargetElement = refObject.$el
+        const target = scroll.getScrollTarget(scrollTargetElement)
+        const offset = scrollTargetElement.offsetTop
+        const duration = 500
+        scroll.setVerticalScrollPosition(target, offset, duration)
+      })
+    },
     closeSidBarAndAppbar () {
       this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
       this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
@@ -57,7 +81,7 @@ export default {
     @media screen and (max-width: 768px) {
       width: 510px;
     }
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 599px) {
       width: 100%;
       padding: 0 16px;
     }
