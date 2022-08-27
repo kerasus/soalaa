@@ -7,62 +7,66 @@
       class="cart-items"
     >
       <q-card class="cart-card">
-        <q-card-section class="order-image-section">
-          <q-img
-            :src="item.product.photo"
-            class="order-image"
-          />
-        </q-card-section>
-
-        <q-card-section class="card-content-section ">
-          <div class="order-item-header">
-            <div class="title ellipsis">
-              {{ item.product.title }}
-            </div>
-
-            <q-btn
-              unelevated
-              class="trash-button"
-              icon="isax:trash"
-              @click="removeItem(item)"
+        <q-card-section class="card-section">
+          <div class="order-image-section">
+            <q-img
+              :src="item.product.photo"
+              class="order-image"
             />
           </div>
 
-          <div
-            v-if="item.product && item.product.attributes && item.product.attributes.info"
-            class="product-information"
-          >
-            <div class="product-info">
-              <q-icon
-                name="isax:teacher"
-                class="info-icon"
-              />
-              <div class="info-value">
-                {{ item.product.attributes.info.teacher.join('، ') }}
+          <div class="product-text-info">
+            <div class="order-item-header">
+              <div class="title ellipsis">
+                {{ item.product.title }}
               </div>
+
+              <q-btn
+                unelevated
+                class="trash-button"
+                icon="isax:trash"
+                @click="removeItem(item)"
+              />
             </div>
 
-            <div class="product-info">
-              <q-icon
-                name="isax:book-1"
-                class="info-icon"
-              />
-              <div class="info-value">
-                رشته تحصیلی: {{ item.product.attributes.info.major.join(' - ') }}
+            <div
+              v-if="item.product && item.product.attributes && item.product.attributes.info"
+              class="product-information"
+            >
+              <div class="product-info">
+                <q-icon
+                  name="isax:teacher"
+                  class="info-icon"
+                />
+                <div class="info-value">
+                  {{ item.product.attributes.info.teacher.join('، ') }}
+                </div>
               </div>
-            </div>
 
-            <div class="product-info">
-              <q-icon
-                name="isax:menu-board4"
-                class="info-icon"
-              />
-              <div class="info-value">
-                {{ item.product.attributes.info.production_year.join('، ') }}
+              <div class="product-info">
+                <q-icon
+                  name="isax:book-1"
+                  class="info-icon"
+                />
+                <div class="info-value">
+                  رشته تحصیلی: {{ item.product.attributes.info.major.join(' - ') }}
+                </div>
+              </div>
+
+              <div class="product-info">
+                <q-icon
+                  name="isax:menu-board4"
+                  class="info-icon"
+                />
+                <div class="info-value">
+                  {{ item.product.attributes.info.production_year.join('، ') }}
+                </div>
               </div>
             </div>
           </div>
+        </q-card-section>
 
+        <q-card-section class="card-actions">
           <div
             class="product-details"
             :class="expanded ?'on-open-expansion': ''"
@@ -106,8 +110,8 @@
                 :class="expanded ?'open-expansion-style': ''"
                 :header-class=" expanded ? 'hide-expansion-header' : ''"
               >
-                <q-card>
-                  <q-card-section class="details-expansion-card">
+                <q-card class="details-expansion-card">
+                  <q-card-section class="details-expansion-card-section">
                     <div
                       v-for="i in 3"
                       :key="i"
@@ -118,12 +122,15 @@
                       </div>
 
                       <div class="right-part">
-                        <span class="price">
+                        <span
+                          class="price"
+                          :class="i !== 1 ? 'without-trash': ''"
+                        >
                           123456 تومان
                         </span>
                         <q-btn
                           unelevated
-                          class="trash-button"
+                          :class="i === 1 ? 'trash-button': 'hidden-trash-button'"
                           icon="isax:trash"
                           @click="removeItem(item)"
                         />
@@ -141,7 +148,7 @@
                     <q-btn-dropdown
                       class="details-button"
                       label="جزئیات محصول"
-                      dropdown-icon="isax:arrow-down-1"
+                      dropdown-icon="isax:arrow-up-2"
                       flat
                       @click="expanded = !expanded"
                     >
@@ -152,6 +159,7 @@
             </div>
           </div>
         </q-card-section>
+
       </q-card>
     </div>
   </div>
@@ -250,12 +258,11 @@ export default {
         box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6),
         2px 4px 10px rgba(112, 108, 162, 0.05);
         border-radius: 16px;
-        display: flex;
-        padding: 20px;
+        padding: 20px 20px 4px 20px;
         margin-bottom: 16px;
 
         @media screen and (max-width: 1439px) {
-          padding: 16px;
+          padding: 16px 16px 0 16px;
           border-radius: 12px;
         }
 
@@ -269,140 +276,161 @@ export default {
           margin-bottom: 19px;
         }
 
-        .order-image-section {
+        .card-section {
           padding: 0;
-          margin-right: 20px;
+          display: flex;
 
-          @media screen and (max-width: 1439px) {
-            margin-right: 16px;
-          }
+          .order-image-section {
+            padding: 0;
+            margin-right: 20px;
 
-          @media screen and (max-width: 599px) {
-            margin-right: 8px;
-          }
-
-          .order-image {
-            height: 144px;
-            width: 144px;
-            border-radius: 10px;
-
-            @media screen and (max-width: 1023px) {
-              width: 110px;
-              height: 110px;
+            @media screen and (max-width: 1439px) {
+              margin-right: 16px;
             }
 
             @media screen and (max-width: 599px) {
-              width: 72px;
-              height: 72px;
-              margin-top: 34px;
+              margin-right: 8px;
+            }
+
+            .order-image {
+              height: 144px;
+              width: 144px;
+              border-radius: 10px;
+
+              @media screen and (max-width: 1023px) {
+                width: 110px;
+                height: 110px;
+              }
+
+              @media screen and (max-width: 599px) {
+                width: 72px;
+                height: 72px;
+                margin-top: 34px;
+              }
+            }
+          }
+
+          .product-text-info {
+            flex-direction: column;
+            width: 100%;
+            .order-item-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              height: 24px;
+              margin-bottom: 10px;
+
+              @media screen and (max-width: 1023px) {
+                margin-bottom: 12px;
+              }
+
+              @media screen and (max-width: 599px) {
+                justify-content: end;
+                align-items: normal;
+                margin-bottom: 8px;
+              }
+
+              .title {
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 25px;
+                letter-spacing: -0.03em;
+                color: #434765;
+                width: 100%;
+
+                @media screen and (max-width: 599px) {
+                  position: absolute;
+                  padding-right: 36px;
+                  font-size: 14px;
+                }
+              }
+
+              .trash-button {
+                &:deep(.q-btn__content) {
+                  @media screen and (max-width: 599px) {
+                    align-items: normal;
+                  }
+                }
+
+                &:deep(.q-icon) {
+                  font-size: 18px;
+                  color: #434765;
+                }
+              }
+            }
+
+            .product-information {
+              margin-bottom: 3px;
+
+              @media screen and (max-width: 1439px) {
+                margin-bottom: 0;
+              }
+
+              @media screen and (max-width: 599px) {
+                margin-bottom: 5px;
+              }
+
+              .product-info {
+                display: flex;
+                align-items: center;
+                margin-bottom: 8px;
+
+                @media screen and (max-width: 1439px) {
+                  margin-bottom: 9px;
+                }
+
+                @media screen and (max-width: 1023px) {
+                  margin-bottom: 7px;
+                }
+
+                @media screen and (max-width: 599px) {
+                  margin-bottom: 6px;
+                }
+
+                .info-icon {
+                  font-size: 12px;
+                  margin-right: 6px;
+                  color: #65677f;
+                }
+
+                .info-value {
+                  font-style: normal;
+                  font-weight: 400;
+                  font-size: 12px;
+                  line-height: 19px;
+                  color: #65677f;
+                }
+              }
             }
           }
         }
 
-        .card-content-section {
+        .card-actions {
           padding: 0;
           display: flex;
-          flex-direction: column;
-          width: 100%;
-
-          .order-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 24px;
-            margin-bottom: 10px;
-
-            @media screen and (max-width: 1023px) {
-              margin-bottom: 12px;
-            }
-
-            @media screen and (max-width: 599px) {
-              justify-content: end;
-              align-items: normal;
-              margin-bottom: 8px;
-            }
-
-            .title {
-              font-style: normal;
-              font-weight: 600;
-              font-size: 16px;
-              line-height: 25px;
-              letter-spacing: -0.03em;
-              color: #434765;
-              min-width: 260px;
-              width: 100%;
-
-              @media screen and (max-width: 599px) {
-                position: absolute;
-                font-size: 14px;
-                left: -78px;
-              }
-            }
-
-            .trash-button {
-              &:deep(.q-btn__content) {
-                @media screen and (max-width: 599px) {
-                  align-items: normal;
-                }
-              }
-
-              &:deep(.q-icon) {
-                font-size: 18px;
-                color: #434765;
-              }
-            }
-          }
-
-          .product-information {
-            margin-bottom: 3px;
-
-            @media screen and (max-width: 1439px) {
-              margin-bottom: 0;
-            }
-
-            @media screen and (max-width: 599px) {
-              margin-bottom: 5px;
-            }
-
-            .product-info {
-              display: flex;
-              align-items: center;
-              margin-bottom: 8px;
-
-              @media screen and (max-width: 1439px) {
-                margin-bottom: 9px;
-              }
-
-              @media screen and (max-width: 1023px) {
-                margin-bottom: 7px;
-              }
-
-              @media screen and (max-width: 599px) {
-                margin-bottom: 6px;
-              }
-
-              .info-icon {
-                font-size: 12px;
-                margin-right: 6px;
-                color: #65677f;
-              }
-
-              .info-value {
-                font-style: normal;
-                font-weight: 400;
-                font-size: 12px;
-                line-height: 19px;
-                color: #65677f;
-              }
-            }
-          }
+          justify-content: left;
 
           .product-details {
             display: flex;
             justify-content: space-between;
+            width: 100%;
+            margin-top: -32px;
+            margin-left: 164px;
+
+            @media screen and (max-width: 1439px) {
+              margin-left: 160px;
+            }
+
+            @media screen and (max-width: 1023px) {
+              flex-direction: column;
+              align-items: end;
+              margin-left: 0;
+
+            }
 
             @media screen and (max-width: 599px) {
-              flex-direction: column;
+              margin-top: 0;
             }
 
             &.on-open-expansion {
@@ -413,16 +441,12 @@ export default {
               display: flex;
               align-items: center;
 
-              @media screen and (max-width: 599px) {
-                justify-content: space-between;
-              }
-
               .discount-part {
                 display: flex;
                 align-items: center;
 
                 @media screen and (max-width: 599px) {
-                  margin-bottom: 6px;
+                  margin-right: 6px;
                 }
 
                 .discount-percent {
@@ -492,10 +516,8 @@ export default {
             .action-buttons {
               display: flex;
               align-items: center;
-
-              @media screen and (max-width: 599px) {
-                justify-content: space-between;
-              }
+              width: 100%;
+              justify-content: left;
 
               .link {
                 font-weight: 600;
@@ -511,99 +533,127 @@ export default {
                 }
 
                 @media screen and (max-width: 1023px) {
-                  margin-right: 6px;
+                  margin-right: 24px;
                 }
               }
 
               .details-expansion {
+
                 .details-button {
-                font-style: normal;
-                font-weight: 400;
-                font-size: 12px;
-                line-height: 19px;
-                color: #65677F;
+                  font-style: normal;
+                  font-weight: 400;
+                  font-size: 12px;
+                  line-height: 19px;
+                  color: #65677F;
 
-                @media screen and (max-width: 599px) {}
+                  @media screen and (max-width: 599px) {}
 
-                &:deep(.q-icon) {
-                  font-size: 14px;
-                  margin-left: 2px;
+                  &:deep(.q-icon) {
+                    font-size: 14px;
+                    margin-left: 2px;
+                  }
                 }
-              }
 
                 &.open-expansion-style {
                   width: 100%;
                 }
 
                 .details-expansion-card {
-                  padding: 0;
+                  margin-bottom: 20px;
 
-                  .pamphlet {
-                    padding: 10px 16px;
-                    background: #FFFFFF;
-                    border: 1.5px solid #E4E8EF;
-                    border-radius: 8px;
-                    height: 40px;
-                    margin-bottom: 10px;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
+                  @media screen and (max-width: 1439px) {
+                    margin-bottom: 16px;
+                  }
+
+                  @media screen and (max-width: 599px) {
+                    margin-bottom: 12px;
+                  }
+
+                  .details-expansion-card-section {
+                    padding: 0;
+                    margin: 20px 0 20px 0;
 
                     @media screen and (max-width: 599px) {
-                      flex-direction: column;
-                      padding: 10px 12px;
-                      height: 68px;
+                      margin: 16px 0 16px 0;
                     }
 
-                    .title {
-                      font-style: normal;
-                      font-weight: 400;
-                      font-size: 12px;
-                      line-height: 19px;
-                      letter-spacing: -0.03em;
-                      color: #6D708B;
-                      min-width: 264px;
-                      width: 100%;
-                    }
-
-                    .right-part {
+                    .pamphlet {
+                      padding: 10px 16px;
+                      background: #FFFFFF;
+                      border: 1.5px solid #E4E8EF;
+                      border-radius: 8px;
+                      height: 40px;
+                      margin-bottom: 10px;
                       display: flex;
+                      justify-content: space-between;
                       align-items: center;
-                      width: 100%;
-                      justify-content: end;
 
-                      .price {
+                      @media screen and (max-width: 599px) {
+                        flex-direction: column;
+                        padding: 10px 12px;
+                        height: 68px;
+                      }
+
+                      .title {
                         font-style: normal;
                         font-weight: 400;
                         font-size: 12px;
                         line-height: 19px;
-                        color: #6D708B;
-                        margin-right: 16px;
-
-                        @media screen and (max-width: 599px) {
-                          margin-right: 10px;
-                        }
+                        letter-spacing: -0.03em;
+                        color: #6D708B;padding-right: 30px;
+                        width: 100%;
                       }
 
-                      .trash-button {
-                        &:deep(.q-icon) {
-                          font-size: 14px;
-                          color: #6D708B;;
+                      .right-part {
+                        display: flex;
+                        align-items: center;
+                        width: 100%;
+                        justify-content: end;
+
+                        .price {
+                          font-style: normal;
+                          font-weight: 400;
+                          font-size: 12px;
+                          line-height: 19px;
+                          color: #6D708B;
+                          margin-right: 16px;
+
+                          &.without-trash {
+                            margin-right: 36px;
+
+                            @media screen and (max-width: 599px) {
+                              margin-right: 28px;
+                            }
+                          }
+
+                          @media screen and (max-width: 599px) {
+                            margin-right: 10px;
+                          }
+                        }
+
+                        .hidden-trash-button {
+                          display: none
+                        }
+
+                        .trash-button {
+                          &:deep(.q-icon) {
+                            font-size: 14px;
+                            color: #6D708B;;
+                          }
                         }
                       }
-
                     }
                   }
-                }
 
-                .details-expansion-actions {
-                  display: flex;
-                  justify-content: end;
-                  align-items: center;
-                  padding: 0;
+                  .details-expansion-actions {
+                    display: flex;
+                    justify-content: end;
+                    align-items: center;
+                    padding: 0;
 
-                  .expansion-link {
-                    margin-right: 24px;
+                    .expansion-link {
+                      margin-right: 24px;
+                    }
                   }
                 }
 
@@ -621,7 +671,6 @@ export default {
 
                 &:deep(.q-item__section--main ~ .q-item__section--side) {
                   padding-left: 0;
-
                 }
 
                 &:deep(.q-item) {
@@ -641,6 +690,7 @@ export default {
             }
           }
         }
+
       }
     }
 
