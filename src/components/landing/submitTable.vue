@@ -97,10 +97,8 @@
               >{{ item.title }}</td>
               <td v-if="selectiveRegister"
                   class="submitStatus-selective-mode custom-border">
-                <div
-                  class="flex items-center justify-center">
+                <div class="flex items-center justify-center">
                   <div class="empty-circle"></div>
-
                 </div>
               </td>
               <td class="custom-border"
@@ -207,7 +205,9 @@
                   <span>تومان</span>
                 </div>
                 <q-btn unelevated
-                       class="sub-btn">
+                       class="sub-btn"
+                       @click="showMessageDialog"
+                >
                   <span class="sub-btn-text">
                     ثبت‌نام
                   </span>
@@ -220,6 +220,24 @@
         </div>
       </div>
     </div>
+    <q-dialog v-model="messageDialog">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">توجه!</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          در حال حاضر محصول فعال نیست.
+        </q-card-section>
+
+        <q-card-actions align="right"
+                        class="bg-white text-teal">
+          <q-btn v-close-popup
+                 flat
+                 label="بستن" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -230,8 +248,8 @@ export default {
   components: {
     // tableComponent
   },
-
   data: () => ({
+    messageDialog: false,
     data: [],
     activeTab: {},
     selectedGrade: {},
@@ -1172,10 +1190,13 @@ export default {
       return ''
     },
     selectiveRegister() {
-      return true
+      return false
     }
   },
   methods: {
+    showMessageDialog () {
+      this.messageDialog = true
+    },
     initPageData() {
       this.setFirstExamActive()
       this.setFirstMajorsGradesSelected()

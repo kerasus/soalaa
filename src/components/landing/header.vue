@@ -12,7 +12,9 @@
       </div>
       <q-btn unelevated
              class="submit-btn"
-             label="ثبت نام آزمون" />
+             label="ثبت نام آزمون"
+             @click="onClickRegisterBtn"
+      />
     </div>
     <div class="video-box flex items-center justify-center">
       <video-player
@@ -47,8 +49,12 @@ export default {
       { link: 'https://nodes.alaatv.com/media/1612/hq/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت بالا', res: '480p' },
       { link: 'https://nodes.alaatv.com/media/1612/240p/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت متوسط', res: '240p' }
     ])
-  })
-
+  }),
+  methods: {
+    onClickRegisterBtn () {
+      this.$emit('onClickRegisterBtn')
+    }
+  }
 }
 </script>
 

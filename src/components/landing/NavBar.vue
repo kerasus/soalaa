@@ -33,6 +33,7 @@
         unelevated
         class="submit-btn-style"
         label="ثبت نام آزمون"
+        @click="onClickRegisterBtn"
       />
     </div>
   </div>
@@ -41,7 +42,12 @@
 
 <script>
 export default {
-  name: 'NavBar'
+  name: 'NavBar',
+  methods: {
+    onClickRegisterBtn () {
+      this.$emit('onClickRegisterBtn')
+    }
+  }
 }
 </script>
 
