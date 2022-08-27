@@ -121,8 +121,7 @@ export default {
 
 .image-upload-parent {
   .filepond--file-info {
-    position: relative;
-    right: -517px;
+    transform: none !important;
   }
   //.filepond--file-info {
   //  position: relative;
