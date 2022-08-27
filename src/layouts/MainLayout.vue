@@ -1,4 +1,4 @@
-<!--       -----------------------ToDO => change dashboard route name ------------------------ -->
+<!--       -----------------------ToDO => change last v-else-ifs ------------------------ -->
 
 <template>
   <quasar-template-builder v-model:value="properties"
@@ -90,7 +90,7 @@ import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuest
 import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 
 export default {
-  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader, UserTemplateHeader, Auth },
+  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader, UserTemplateHeader },
   data () {
     return {
       keepAliveComponents: KeepAliveComponents,
@@ -246,14 +246,7 @@ export default {
   //overflow: auto;
 }
 
-.main-layout-left-drawer {
-  .drawer-inside-of-MapOfQuestions{
-    height: 100%;
-  }
 }
-</style>
-
-<style lang="scss">
 .main-layout-header {
   background-color: #f1f1f1;
   display: flex;
