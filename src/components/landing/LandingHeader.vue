@@ -39,7 +39,7 @@ import { PlayerSourceList } from 'src/models/PlayerSource'
 import VideoPlayer from 'components/VideoPlayer'
 
 export default {
-  name: 'header',
+  name: 'LandingHeader',
   components: {
     VideoPlayer
   },
