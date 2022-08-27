@@ -14,51 +14,51 @@
         <div class="col-6 flex justify-center">
           <q-list class="flex tabs-list">
             <q-item
-              clickable
               v-ripple
+              clickable
               :active="selected === 'exams'"
-              @click="selected = 'exams'"
-              active-class="active-item">
+              active-class="active-item"
+              @click="selected = 'exams'">
               <q-item-section class="tab-title">
                 آزمون ها
               </q-item-section>
             </q-item>
             <q-item
-              clickable
               v-ripple
+              clickable
               :active="selected === 'questionBank'"
-              @click="selected = 'questionBank'"
-              active-class="active-item">
+              active-class="active-item"
+              @click="selected = 'questionBank'">
               <q-item-section class="tab-title">
                 بانک سوال
               </q-item-section>
             </q-item>
             <q-item
-              clickable
               v-ripple
+              clickable
               :active="selected === 'soalaMag'"
-              @click="selected = 'soalaMag'"
-              active-class="active-item">
+              active-class="active-item"
+              @click="selected = 'soalaMag'">
               <q-item-section class="tab-title">
                 سوالامگ
               </q-item-section>
             </q-item>
             <q-item
-              clickable
               v-ripple
+              clickable
               :active="selected === 'askedQuestions'"
-              @click="selected = 'askedQuestions'"
-              active-class="active-item">
+              active-class="active-item"
+              @click="selected = 'askedQuestions'">
               <q-item-section class="tab-title">
                 سوالات متداول
               </q-item-section>
             </q-item>
             <q-item
-              clickable
               v-ripple
+              clickable
               :active="selected === 'contactUs'"
-              @click="selected = 'contactUs'"
-              active-class="active-item">
+              active-class="active-item"
+              @click="selected = 'contactUs'">
               <q-item-section class="tab-title">
                 تماس با ما
               </q-item-section>

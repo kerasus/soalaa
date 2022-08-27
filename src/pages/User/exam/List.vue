@@ -285,7 +285,6 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('AppLayout/updateAppBarAndDrawer', true)
     this.disconnectSocket()
   },
   methods: {

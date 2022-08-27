@@ -4,29 +4,29 @@
   <quasar-template-builder v-model:value="properties"
                            @onResize="resize">
     <template #header>
-      <div v-if="templateHeaderType === 'quiz'"
+      <div v-if="getTemplateHeaderType === 'quiz'"
            class="header-inside row">
         <online-quiz-template-header />
       </div>
-      <div v-else-if="templateHeaderType === 'default'"
+      <div v-else-if="getTemplateHeaderType === 'default'"
            class="user-main-layout-header">
         <div class="header-inside row">
           <user-template-header />
         </div>
       </div>
-      <div v-else-if="templateHeaderType === 'panel'"
+      <div v-else-if="getTemplateHeaderType === 'panel'"
            class="main-layout-header row">
         <template-header />
       </div>
       <q-resize-observer @resize="setHeaderDimension" />
     </template>
     <template #left-drawer>
-      <div class="drawer-inside-of-MapOfQuestions"
-           v-if="templateSideBarType === 'quiz'">
+      <div v-if="getTemplateSideBarType === 'quiz'"
+           class="drawer-inside-of-MapOfQuestions">
         <sideMenuMapOfQuestions />
       </div>
-      <div class="drawer-inside"
-           v-else-if="templateSideBarType === 'panel'">
+      <div v-else-if="getTemplateSideBarType === 'panel'"
+           class="drawer-inside">
         <side-menu-dashboard />
       </div>
     </template>
@@ -73,49 +73,41 @@
 </template>
 
 <script>
-import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
-import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
 import { QuasarTemplateBuilder } from 'quasar-template-builder'
 import templateHeader from 'components/Headers/templateHeader'
 import onlineQuizTemplateHeader from 'components/Headers/onlineQuizTemplateHeader'
 import UserTemplateHeader from 'components/Headers/userTemplateHeader'
 import { ref } from 'vue'
-import { QuasarTemplateBuilder } from 'quasar-template-builder'
 import Router from 'src/router/Router'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 import Auth from 'components/Auth'
-import templateHeader from 'components/Template/templateHeader'
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
-import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 
 export default {
-  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader, UserTemplateHeader },
+  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader, UserTemplateHeader, Auth },
   data () {
     return {
       keepAliveComponents: KeepAliveComponents,
-      templateHeaderType: '',
-      templateSideBarType: '',
-      properties: {
-        layoutView: 'lHh Lpr lFf',
-        layoutHeader: true,
-        layoutHeaderVisible: true,
-        layoutHeaderReveal: false,
-        layoutHeaderElevated: false,
-        layoutHeaderBordered: false,
-        layoutLeftDrawer: true,
-        layoutLeftDrawerVisible: true,
-        layoutLeftDrawerOverlay: false,
-        layoutLeftDrawerElevated: false,
-        layoutLeftDrawerBordered: false,
-        layoutLeftDrawerWidth: 325,
-        layoutPageContainer: true,
-        layoutRightDrawer: false,
-        layoutFooter: false,
-        layoutHeaderCustomClass: '',
-        layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
-        layoutPageContainerCustomClass: 'main-layout-container'
-      },
+      // properties: {
+      //   layoutView: 'lHh Lpr lFf',
+      //   layoutHeader: true,
+      //   layoutHeaderReveal: false,
+      //   layoutHeaderElevated: false,
+      //   layoutHeaderBordered: false,
+      //   layoutLeftDrawer: true,
+      //   layoutLeftDrawerOverlay: false,
+      //   layoutLeftDrawerElevated: false,
+      //   layoutLeftDrawerBordered: false,
+      //   layoutLeftDrawerWidth: 325,
+      //   layoutLeftDrawerBehavior: 'panel',
+      //   layoutPageContainer: true,
+      //   layoutRightDrawer: false,
+      //   layoutFooter: false,
+      //   layoutHeaderCustomClass: '',
+      //   layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
+      //   layoutPageContainerCustomClass: 'main-layout-container'
+      // },
       contentInside: ref(0)
     }
   },
@@ -138,19 +130,11 @@ export default {
     linearLoading () {
       return this.$store.getters['AppLayout/linearLoading']
     },
-    getTemplateTypes () {
-      return () => {
-        this.$store.dispatch('AppLayout/updateTemplateHeaderType', {
-          headerVisibility: true,
-          headerType: 'default',
-          sideBarVisibility: true,
-          sideBarType: 'panel'
-        })
-        this.templateHeaderType = this.$store.getters['AppLayout/templateHeaderType']
-        this.templateSideBarType = this.$store.getters['AppLayout/templateSideBarType']
-        // console.log(this.templateSideBarType)
-        // console.log(this.templateHeaderType)
-      }
+    getTemplateHeaderType() {
+      return this.$store.getters['AppLayout/templateHeaderType']
+    },
+    getTemplateSideBarType() {
+      return this.$store.getters['AppLayout/templateSideBarType']
     }
   },
   watch: {
@@ -158,10 +142,7 @@ export default {
   mounted () {
   },
   created () {
-    this.getTemplateTypes()
-    this.updateLayout()
-    // const localData = this.$store.getters['AppLayout/appLayout']
-    // Object.assign(this.properties, localData)
+    // this.updateLayout()
   },
   methods: {
     updateLayout () {
@@ -214,22 +195,7 @@ export default {
   background-color: #f1f1f1;
   display: flex;
   flex-direction: row;
-  padding-bottom: 24px;
-
-  .header-inside {
-    width: 100%;
-    background: #fff;
-    display: flex;
-    justify-content: center;
-    color: #65677F;
-  }
-}
-
-:deep(.user-main-layout-header) {
-  background-color: #f1f1f1;
-  display: flex;
-  flex-direction: row;
-  padding-bottom: 24px;
+  width: 100%;
 
   .header-inside {
     width: 100%;
@@ -244,8 +210,6 @@ export default {
 }
 .content-inside {
   //overflow: auto;
-}
-
 }
 .main-layout-header {
   background-color: #f1f1f1;
@@ -280,19 +244,19 @@ export default {
   }
 }
 
-.user-main-layout-header {
-  background-color: #f1f1f1;
-  display: flex;
-  flex-direction: row;
-
-  .header-inside {
-    width: 100%;
-    background: #fff;
-    display: flex;
-    justify-content: center;
-    color: #65677F;
-  }
-}
+//.user-main-layout-header {
+//  background-color: #f1f1f1;
+//  display: flex;
+//  flex-direction: row;
+//
+//  .header-inside {
+//    width: 100%;
+//    background: #fff;
+//    display: flex;
+//    justify-content: center;
+//    color: #65677F;
+//  }
+//}
 
 .main-layout-container {
 }

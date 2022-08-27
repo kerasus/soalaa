@@ -66,7 +66,7 @@ const routes = [
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     layoutConfig: {
       headerVisibility: true,
-      headerType: 'default',
+      headerType: 'panel',
       sideBarVisibility: true,
       // sideBarType: 'default'
       sideBarType: 'panel'
@@ -89,6 +89,33 @@ const routes = [
         name: 'dashboard',
         component: () => import('pages/User/exam/List'),
         breadcrumbs: { title: 'پیشخوان' },
+        layoutConfig: {
+          name: 'dashboard',
+          headerVisibility: true,
+          headerType: 'default',
+          sideBarVisibility: false,
+          // sideBarType: 'default'
+          sideBarType: 'panel',
+          properties: {
+            layoutView: 'lHh Lpr lFf',
+            layoutHeader: true,
+            layoutHeaderReveal: false,
+            layoutHeaderElevated: false,
+            layoutHeaderBordered: false,
+            layoutLeftDrawer: true,
+            layoutLeftDrawerOverlay: false,
+            layoutLeftDrawerElevated: false,
+            layoutLeftDrawerBordered: false,
+            layoutLeftDrawerWidth: 325,
+            layoutLeftDrawerBehavior: 'panel',
+            layoutPageContainer: true,
+            layoutRightDrawer: false,
+            layoutFooter: false,
+            layoutHeaderCustomClass: '',
+            layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
+            layoutPageContainerCustomClass: 'main-layout-container'
+          }
+        },
         meta: {
           middlewares: [auth]
         }
@@ -111,6 +138,12 @@ const routes = [
             name: 'User.MyOrders',
             component: () => import('pages/User/MyOrders/MyOrders'),
             breadcrumbs: { title: 'سفارش های من' },
+            layoutConfig: {
+              name: 'User.MyOrders',
+              headerVisibility: true,
+              headerType: 'default',
+              sideBarVisibility: false
+            },
             meta: {
               middlewares: [
                 Permissions.hasPermission('examStore')
