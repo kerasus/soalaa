@@ -25,9 +25,21 @@
         </svg>
       </div>
       <div class="nav-item-box flex xs-hide">
-        <div class="nav-item">آزمون سه‌آ</div>
-        <div class="nav-item middle ">شرایط برگزاری آزمون</div>
-        <div class="nav-item">سوالات متداول</div>
+        <div class="nav-item"
+             @click="onClickRegisterBtn"
+        >
+          آزمون سه‌آ
+        </div>
+        <div class="nav-item middle"
+             @click="onClickConditionsBtn"
+        >
+          شرایط برگزاری آزمون
+        </div>
+        <div class="nav-item"
+             @click="onClickFaqsBtn"
+        >
+          سوالات متداول
+        </div>
       </div>
       <q-btn
         unelevated
@@ -43,9 +55,16 @@
 <script>
 export default {
   name: 'NavBar',
+  emits: ['onClickRegisterBtn', 'onClickConditionsBtn', 'onClickFaqsBtn'],
   methods: {
     onClickRegisterBtn () {
       this.$emit('onClickRegisterBtn')
+    },
+    onClickConditionsBtn () {
+      this.$emit('onClickConditionsBtn')
+    },
+    onClickFaqsBtn () {
+      this.$emit('onClickFaqsBtn')
     }
   }
 }
