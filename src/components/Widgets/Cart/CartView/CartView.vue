@@ -1,6 +1,5 @@
 <template>
   <div class="cart-view-widget">
-    <div class="cart-count">سبدخرید شما ({{count}} محصول)</div>
     <div
       v-for="item in cartItems"
       :key="item.id"
@@ -189,9 +188,6 @@ export default {
     cartItems () {
       return this.$store.getters['Cart/cart'].cartItems.list
     },
-    count () {
-      return this.$store.getters['Cart/cart'].count
-    },
     windowSize() {
       return this.$store.getters['AppLayout/windowSize']
     },
@@ -237,21 +233,6 @@ export default {
   &:deep(.q-btn .q-btn__content) {
     margin: 0;
   }
-
-  .cart-count {
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 22px;
-    color: #6D708B;
-    margin: 24px 0 22px 0;
-
-    @media screen and (max-width: 1439px) {
-      letter-spacing: -0.03em;
-      margin: 20px 0;
-    }
-  }
-
   .cart-items {
       .cart-card {
         background: #ffffff;
