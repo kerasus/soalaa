@@ -163,6 +163,9 @@ export default {
   text-align: left #{"/* rtl:ignore */"} !important ;
   direction: ltr #{"/* rtl:ignore */"} !important;
 }
+.filepond--file-info {
+  transform: none !important;
+}
 </style>
 <style lang="scss">
 .default-questions-card {

@@ -281,6 +281,9 @@ export default {
   text-align: left #{"/* rtl:ignore */"} !important ;
   direction: ltr #{"/* rtl:ignore */"} !important;
 }
+.filepond--file-info {
+  transform: none !important;
+}
 </style>
 <!--// USED IN MANY OTHER COMPONENTS-->
 <!--.default-questions-card {-->
