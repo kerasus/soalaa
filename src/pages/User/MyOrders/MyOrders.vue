@@ -383,7 +383,40 @@ export default {
     }
     .q-pagination {
       //background: red;
-      :first-child {
+      //.q-btn--flat {
+      //  background: #FFFFFF;
+      //  border-radius: 12px;
+      //}
+      :not(.justify-center) {
+        button {
+          &:last-child {
+            background: #FFFFFF;
+            border-radius: 12px;
+          }
+          &:first-child {
+            background: #FFFFFF;
+            border-radius: 12px;
+          }
+        }
+      }
+
+      .q-btn--actionable {
+        //background: none;
+      }
+      //button &:last-child {
+      //  background: #FFFFFF;
+      //  border-radius: 12px;
+      //}
+      :nth-child(1):nth-last-child(1) {
+        background: #FFFFFF;
+        border-radius: 12px;
+      }
+      //:not(.q-btn--actionable)
+      :first-child &button {
+        background: #FFFFFF;
+        border-radius: 12px;
+      }
+      :last-child &button {
         background: #FFFFFF;
         border-radius: 12px;
       }
