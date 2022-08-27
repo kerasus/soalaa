@@ -159,7 +159,7 @@
                     قیمت تک مرحله
                   </span>
                   <br>
-                  <span class="price">۱۸٫۹۰۰ </span>
+                  <span class="price">{{activeTab.prices[0].unit.unit_price}}</span>
                   <span class="price">تومان</span>
                 </div>
               </div>
@@ -187,7 +187,7 @@
                     قیمت تک مرحله
                   </span>
                   <br>
-                  <span class="price">۱۸٫۹۰۰ </span>
+                  <span class="price">{{activeTab.prices[0].pack.unit_price}} </span>
                   <span class="price">تومان</span>
                 </div>
               </div>
@@ -197,11 +197,11 @@
                 </div>
                 <div class="exam-price-box">
                   <span class="discount-tag"> تخفیف٪</span>
-                  <span class="main-price"> ۱۸۶٫۰۰۰ </span>
+                  <span class="main-price"> {{ activeTab.prices[0].pack.basePrice }}</span>
                   <span class="main-price"> تومان</span>
                 </div>
                 <div class="final-price-box">
-                  <span>۱۱۰٫۰۰۰</span>
+                  <span> {{activeTab.prices[0].pack.finalPrice }}</span>
                   <span>تومان</span>
                 </div>
                 <q-btn unelevated
@@ -570,15 +570,18 @@ export default {
             major_id: 0,
             grade_id: 0,
             unit: {
-              price: 18900
+              unit_price: '69,000'
             },
             pack: {
-              unit_price: 18900,
-              discount: 76000,
-              price: 110000
+              unit_price: '49,000',
+              finalPrice: '490,000',
+              basePrice: '690,000',
+              basePricee: ''
             }
           }
-        ]
+        ],
+        producBandle: [],
+        selective: true
       },
       {
         id: 1,
@@ -838,16 +841,16 @@ export default {
           {
             major_id: 0,
             grade_id: 0,
-            unit: {
-              price: 18900
-            },
+            unit: null,
             pack: {
-              unit_price: 18900,
-              discount: 76000,
-              price: 110000
+              unit_price: '69,000',
+              finalPrice: '0',
+              basePrice: '270,000',
+              basePricee: ''
             }
           }
-        ]
+        ],
+        selective: false
       },
       {
         id: 2,
@@ -983,16 +986,16 @@ export default {
           {
             major_id: 0,
             grade_id: 0,
-            unit: {
-              price: 18900
-            },
+            unit: null,
             pack: {
-              unit_price: 18900,
-              discount: 76000,
-              price: 110000
+              unit_price: '69,000',
+              finalPrice: '0',
+              basePrice: '276,000',
+              basePricee: ''
             }
           }
-        ]
+        ],
+        selective: false
       },
       {
         id: 3,
@@ -1157,15 +1160,17 @@ export default {
             major_id: 0,
             grade_id: 0,
             unit: {
-              price: 18900
+              unit_price: '69,000'
             },
             pack: {
-              unit_price: 18900,
-              discount: 76000,
-              price: 110000
+              unit_price: '49,000',
+              finalPrice: '343,000',
+              basePrice: '483,000',
+              basePricee: ''
             }
           }
-        ]
+        ],
+        selective: true
       }
     ]
   }),
@@ -1190,6 +1195,7 @@ export default {
       return ''
     },
     selectiveRegister() {
+      // return this.activeTab.selective
       return false
     }
   },
