@@ -28,7 +28,7 @@
       v-if="count"
       class="side-invoice col-md-4 col-12"
     >
-      <cart-invoice :data="checkOutReviewResponse" />
+      <cart-invoice />
     </div>
 
     <div
@@ -55,7 +55,6 @@ export default {
 
   data() {
     return {
-      checkOutReviewResponse: {}
     }
   },
 
@@ -79,7 +78,6 @@ export default {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('Cart/reviewCart')
         .then((response) => {
-          this.checkOutReviewResponse = response.data.data
           this.$store.dispatch('loading/overlayLoading', false)
         })
     }
