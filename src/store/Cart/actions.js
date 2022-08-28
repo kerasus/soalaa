@@ -43,22 +43,22 @@ export function reviewCart (context, product) {
         const cart = {
           count: invoice.count,
           price: new Price(invoice.price),
-          cartItems: new CartItemList(),
+          items: new CartItemList(),
           couponInfo: new Coupon(invoice.coupon)
         }
 
         if (invoice.count > 0) {
           invoice.items[0].order_product.forEach((order) => {
-            cart.cartItems.list.push(order)
+            cart.items.list.push(order)
           })
         }
 
         if (product) {
-          const isExist = cart.cartItems.list.find(
+          const isExist = cart.items.list.find(
             (item) => item.id === product.id
           )
           if (!isExist) {
-            cart.cartItems.list.push(product)
+            cart.items.list.push(product)
           }
         }
 
@@ -103,7 +103,7 @@ export function deleteList (context) {
 
   return new Promise((resolve, reject) => {
     if (isUserLogin) {
-      cart.cartItems.list.forEach((item) => {
+      cart.items.list.forEach((item) => {
         // TODO => very bad code
         context
           .dispatch('removeItemFromCart', item.id)
