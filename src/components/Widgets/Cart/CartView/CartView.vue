@@ -24,7 +24,7 @@
                 unelevated
                 class="trash-button"
                 icon="isax:trash"
-                @click="removeItem(order)"
+                @click="changeDialogState(true, order.grand)"
               />
             </div>
 
@@ -131,7 +131,6 @@
                           unelevated
                           :class="i === 1 ? 'trash-button': 'hidden-trash-button'"
                           icon="isax:trash"
-                          @click="removeorder(item)"
                         />
                       </div>
                     </div>
@@ -162,6 +161,45 @@
       </q-card>
     </div>
   </div>
+
+  <q-dialog
+    v-model="dialogState"
+    class="delete-dialog"
+  >
+    <q-card class="delete-dialog-card">
+      <q-card-section class="close-button-section">
+        <q-icon
+          class="close-dialog-button"
+          name="isax:close-circle"
+          @click="changeDialogState(false)"
+        />
+      </q-card-section>
+
+      <q-card-section class="delete-dialog-card-section">
+        <div class="info-icon">
+          <q-icon name="isax:info-circle" />
+        </div>
+
+        <p class="are-u-sure-statement">آیا از حذف محصول مطمئن هستید؟</p>
+      </q-card-section>
+
+      <q-card-actions class="delete-dialog-card-actions">
+        <div
+          class="dont-delete-button"
+          @click="changeDialogState(false)"
+        >
+          انصراف
+        </div>
+
+        <div
+          class="surely-delete-button"
+          @click="removeItem(clickedItemToRemove)"
+        >
+          بله، مطمئن هستم
+        </div>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
@@ -172,8 +210,10 @@ export default {
   mixins: [Widgets],
   data() {
     return {
+      dialogState: false,
       test: null,
-      expanded: false
+      expanded: false,
+      clickedItemToRemove: null
     }
   },
   props: {
@@ -211,21 +251,32 @@ export default {
           this.$store.dispatch('loading/overlayLoading', false)
         })
     },
+
     goToDescPage(ci) {
       // TODO:
       // do something with: ci.product.url.web
       window.location.href = ci.product.url.web
     },
+
     descShow(ci) {
       // TODO:
       // do something with: ci.product.url.api
       window.location.href = ci.product.url.api
     },
+
     removeItem(ci) {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('Cart/removeItemFromCart', ci.id).then(() => {
         this.cartReview()
+        this.changeDialogState(false)
       })
+    },
+
+    changeDialogState (state, item) {
+      if (item) {
+        this.clickedItemToRemove = item
+      }
+      this.dialogState = state
     }
   }
 }
@@ -678,5 +729,93 @@ export default {
       }
     }
 
+}
+
+.delete-dialog {
+  .delete-dialog-card {
+    width: 348px;
+    background: #FFFFFF;
+    border-radius: 10px;
+
+    .close-button-section {
+      padding: 12px 12px 0 12px;
+      text-align: right;
+      .close-dialog-button {
+        font-size: 24px;
+        color: #6D708B;
+        cursor: pointer;
+      }
+    }
+
+    .delete-dialog-card-section {
+      padding: 0 24px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .info-icon {
+        font-size: 58px;
+        color: #E86562;
+      }
+
+      .are-u-sure-statement {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 25px;
+        text-align: center;
+        color: #23263B;
+      }
+    }
+
+   .delete-dialog-card-actions {
+     padding: 24px;
+     display: flex;
+     justify-content: space-between;
+
+     .surely-delete-button {
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-style: normal;
+       font-weight: 600;
+       font-size: 14px;
+       line-height: 22px;
+       letter-spacing: -0.03em;
+       color: #FFFFFF;
+       width: 144px;
+       height: 40px;
+       background: #8075DC;
+       box-shadow: 0 4px 12px rgba(62, 61, 67, 0.15);
+       border-radius: 8px;
+       cursor: pointer;
+
+       @media screen and (max-width: 599px) {
+         width: 122px;
+       }
+     }
+
+     .dont-delete-button {
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-style: normal;
+       font-weight: 400;
+       font-size: 14px;
+       line-height: 22px;
+       width: 144px;
+       height: 40px;
+       color: #6D708B;
+       background: #F6F9FF;
+       border-radius: 8px;
+       padding: 9px;
+       cursor: pointer;
+
+       @media screen and (max-width: 599px) {
+         width: 122px;
+       }
+     }
+   }
+  }
 }
 </style>
