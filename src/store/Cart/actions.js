@@ -1,7 +1,5 @@
 import API_ADDRESS from 'src/api/Addresses'
-import Price from 'src/models/Price'
-import { Coupon } from 'src/models/Coupon'
-import { CartItemList } from 'src/models/CartItem'
+import { Cart } from 'src/models/Cart'
 import { axios } from 'src/boot/axios'
 import CookieCart from 'src/assets/js/CookieCart'
 
@@ -40,12 +38,7 @@ export function reviewCart (context, product) {
       .then((response) => {
         const invoice = response.data.data
 
-        const cart = {
-          count: invoice.count,
-          price: new Price(invoice.price),
-          items: new CartItemList(),
-          couponInfo: new Coupon(invoice.coupon)
-        }
+        const cart = new Cart(invoice)
 
         if (invoice.count > 0) {
           invoice.items[0].order_product.forEach((order) => {
