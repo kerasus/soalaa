@@ -1,15 +1,15 @@
 <template>
   <div class="cart-view-widget">
     <div
-      v-for="item in cartItems"
-      :key="item.id"
+      v-for="order in orderList"
+      :key="order.id"
       class="cart-items"
     >
       <q-card class="cart-card">
         <q-card-section class="card-section">
           <div class="order-image-section">
             <q-img
-              :src="item.product.photo"
+              :src="order.grand.photo"
               class="order-image"
             />
           </div>
@@ -17,19 +17,19 @@
           <div class="product-text-info">
             <div class="order-item-header">
               <div class="title ellipsis">
-                {{ item.product.title }}
+                {{ order.grand.title }}
               </div>
 
               <q-btn
                 unelevated
                 class="trash-button"
                 icon="isax:trash"
-                @click="removeItem(item)"
+                @click="removeItem(order)"
               />
             </div>
 
             <div
-              v-if="item.product && item.product.attributes && item.product.attributes.info"
+              v-if="order.grand && order.grand.attributes && order.grand.attributes.info"
               class="product-information"
             >
               <div class="product-info">
@@ -38,7 +38,7 @@
                   class="info-icon"
                 />
                 <div class="info-value">
-                  {{ item.product.attributes.info.teacher.join('، ') }}
+                  {{ order.grand.attributes.info.teacher.join('، ') }}
                 </div>
               </div>
 
@@ -48,7 +48,7 @@
                   class="info-icon"
                 />
                 <div class="info-value">
-                  رشته تحصیلی: {{ item.product.attributes.info.major.join(' - ') }}
+                  رشته تحصیلی: {{ order.grand.attributes.info.major.join(' - ') }}
                 </div>
               </div>
 
@@ -58,7 +58,7 @@
                   class="info-icon"
                 />
                 <div class="info-value">
-                  {{ item.product.attributes.info.production_year.join('، ') }}
+                  {{ order.grand.attributes.info.production_year.join('، ') }}
                 </div>
               </div>
             </div>
@@ -71,21 +71,21 @@
             :class="expanded ?'on-open-expansion': ''"
           >
             <div
-              v-if="item.price"
+              v-if="order.price"
               class="price-container"
             >
               <div class="discount-part">
                 <div class="discount-percent">
-                  {{ item.price.discountInPercent() }}%
+                  {{ order.price.discountInPercent() }}%
                 </div>
 
                 <div class="base-price">
-                  {{ item.price.toman('base', null) }}
+                  {{ order.price.toman('base', null) }}
                 </div>
               </div>
 
               <div class="final-part">
-                <div class="final-price">{{ item.price.toman('final', null) }}</div>
+                <div class="final-price">{{ order.price.toman('final', null) }}</div>
                 <div class="toman">تومان</div>
               </div>
             </div>
@@ -97,7 +97,7 @@
               <a
                 v-if="!expanded"
                 class="link"
-                :href="item.product?.url?.web"
+                :href="order.grand?.url?.web"
               >
                 {{ descLinkLabel }}
               </a>
@@ -131,7 +131,7 @@
                           unelevated
                           :class="i === 1 ? 'trash-button': 'hidden-trash-button'"
                           icon="isax:trash"
-                          @click="removeItem(item)"
+                          @click="removeorder(item)"
                         />
                       </div>
                     </div>
@@ -140,7 +140,7 @@
                   <q-card-section class="details-expansion-actions">
                     <a
                       class="link expansion-link"
-                      :href="item.product?.url?.web"
+                      :href="order.grand?.url?.web"
                     >
                       {{ descLinkLabel }}
                     </a>
@@ -185,8 +185,11 @@ export default {
     this.loading = true
   },
   computed: {
-    cartItems () {
-      return this.$store.getters['Cart/cart'].cartItems.list
+    cart() {
+      return this.$store.getters['Cart/cart']
+    },
+    orderList () {
+      return this.$store.getters['Cart/cart'].items.list
     },
     windowSize() {
       return this.$store.getters['AppLayout/windowSize']
