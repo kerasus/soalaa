@@ -124,5 +124,7 @@ export default {
 }
 .filepond--file-info {
   transform: none !important;
+  margin-left: 2.5em #{"/* rtl:ignore */"} !important;
+  margin-right: 0.5em #{"/* rtl:ignore */"} !important;
 }
 </style>
