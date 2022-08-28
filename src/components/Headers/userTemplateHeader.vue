@@ -5,9 +5,14 @@
         <!--        -----------------------------------------------------Logo Section--------------------------------------------   -->
         <div class="col-3 flex logo">
           <div class="logo-pic">
-            <q-img src="/img/soalaLogo.png"
+            <q-img src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
                    width="71px"
-                   height="34px" />
+                   height="71px" />
+          </div>
+          <div>
+            <q-btn flat
+                   icon="mdi-more"
+                   @click="toggleLeftDrawer" />
           </div>
         </div>
         <!--        -----------------------------------------------------Tabs Section--------------------------------------------   -->
@@ -73,7 +78,7 @@
                    rounded
                    size="12px"
                    class="action-btn" />
-            <q-btn icon="isax:shopping-cart"
+            <q-btn icon="isax:shopping-bag"
                    unelevated
                    rounded
                    size="12px"
@@ -93,11 +98,30 @@
 </template>
 
 <script>
+
+import { mapGetters, mapMutations } from 'vuex'
+
 export default {
   name: 'UserTemplateHeader',
   data () {
     return {
       selected: 'exams'
+    }
+  },
+  computed: {
+    ...mapGetters('Auth', [
+      'user'
+    ]),
+    ...mapGetters('AppLayout', [
+      'layoutLeftDrawerVisible'
+    ])
+  },
+  methods: {
+    ...mapMutations('AppLayout', [
+      'updateLayoutLeftDrawerVisible'
+    ]),
+    toggleLeftDrawer () {
+      this.updateLayoutLeftDrawerVisible(true)
     }
   }
 }

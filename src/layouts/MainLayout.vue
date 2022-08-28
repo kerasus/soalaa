@@ -28,6 +28,10 @@
            class="drawer-inside">
         <side-menu-dashboard />
       </div>
+      <div v-else-if="getTemplateLeftSideBarType === 'default'"
+           class="drawer-inside">
+        <user-side-bar />
+      </div>
     </template>
     <template #content>
       <q-linear-progress
@@ -82,9 +86,10 @@ import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 import Auth from 'components/Auth'
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
+import UserSideBar from 'layouts/UserPanelLayouts/UserSideBar'
 
 export default {
-  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader, UserTemplateHeader, Auth },
+  components: { UserSideBar, Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader, UserTemplateHeader, Auth },
   data () {
     return {
       keepAliveComponents: KeepAliveComponents,

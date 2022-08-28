@@ -137,7 +137,9 @@ const routes = [
               name: 'User.MyOrders',
               layoutHeaderVisible: true,
               layoutHeaderType: 'default',
-              layoutLeftDrawerVisible: false
+              layoutLeftDrawerVisible: false,
+              layoutLeftSideBarType: 'default',
+              layoutLeftDrawerOverlay: true
             },
             meta: {
               middlewares: [
