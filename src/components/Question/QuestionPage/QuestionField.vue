@@ -39,7 +39,7 @@ export default {
       type: String
     }
   },
-  data () {
+  data() {
     return {
       value: 'What you see is <b>what</b> you get.',
       html: '',
@@ -96,6 +96,7 @@ export default {
     border: 1px solid var(--3a-Neutral1);
     border-radius: 16px;
   }
+
   &:deep(.tiptap-header) {
     border-radius: 16px 16px 0 0;
     background-color: var(--3a-Neutral3);
@@ -107,6 +108,7 @@ export default {
 .katex .mtight {
   font-family: IRANSans;
 }
+
 .inline .v-btn.blue--text {
   display: none;
 }
