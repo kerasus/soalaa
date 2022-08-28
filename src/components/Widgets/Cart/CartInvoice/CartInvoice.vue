@@ -40,7 +40,7 @@
             v-else
             class="price"
           >
-            {{ amountUsingWallet }}
+            {{ amountUsingWallet}}
             <span class="iran-money-unit">تومان</span>
           </div>
         </div>
@@ -284,7 +284,6 @@ export default {
 
   data() {
     return {
-      reviewResponse: {},
       couponValue: null,
       shoppingDescription: null,
       userEnteredLoginInfo: {
@@ -292,17 +291,12 @@ export default {
         mobile: ''
       },
       selectedBank: null,
-      gatewayRedirectAddress: '',
-      amountUsingWallet: '',
       shoppingDescribtion: '',
       loading: false
     }
   },
 
-  created() {
-    this.loading = true
-    this.loadData()
-  },
+  created() {},
 
   computed: {
     cart() {
@@ -310,15 +304,15 @@ export default {
     },
 
     totalFinalPrice() {
-      return this.getPriceFormat(this.cart.price?.final)
+      return this.getPriceFormat('final')
     },
 
     totalBasePrice() {
-      return this.getPriceFormat(this.cart.price?.base)
+      return this.getPriceFormat('base')
     },
 
     totalDiscount() {
-      return this.getPriceFormat(this.cart.price?.discount)
+      return this.getPriceFormat('discount')
     },
 
     discountInPercent() {
@@ -327,20 +321,19 @@ export default {
 
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
+    },
+
+    amountUsingWallet () {
+      return this.cart.pay_by_wallet.toLocaleString()
     }
   },
 
   methods: {
-    loadData() {
-      this.reviewResponse = this.data
-      this.amountUsingWallet = this.getPriceFormat(this.reviewResponse.pay_by_wallet)
-      this.gatewayRedirectAddress = this.reviewResponse.redirect_to_gateway
-      this.loading = false
-    },
-
     payment() {
-      if (this.gatewayRedirectAddress) {
-        window.location.href = this.gatewayRedirectAddress
+      const gatewayRedirectAddress = this.cart.redirect_to_gateway
+
+      if (gatewayRedirectAddress) {
+        window.location.href = gatewayRedirectAddress
       }
     },
 
@@ -353,11 +346,8 @@ export default {
         })
     },
 
-    getPriceFormat(price) {
-      if (!price && price !== 0) {
-        return
-      }
-      return price.toLocaleString()
+    getPriceFormat(priceKey) {
+      return this.cart.price.toman(priceKey, null)
     }
 
   }
