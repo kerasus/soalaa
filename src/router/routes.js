@@ -65,11 +65,27 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     layoutConfig: {
-      headerVisibility: true,
-      headerType: 'panel',
-      sideBarVisibility: true,
-      // sideBarType: 'default'
-      sideBarType: 'panel'
+      layoutHeaderVisible: true,
+      layoutHeaderType: 'panel',
+      layoutLeftDrawerVisible: true,
+      layoutLeftSideBarType: 'panel',
+      layoutView: 'lHh Lpr lFf',
+      layoutHeader: true,
+      layoutHeaderReveal: false,
+      layoutHeaderElevated: false,
+      layoutHeaderBordered: false,
+      layoutLeftDrawer: true,
+      layoutLeftDrawerOverlay: false,
+      layoutLeftDrawerElevated: false,
+      layoutLeftDrawerBordered: false,
+      layoutLeftDrawerWidth: 325,
+      layoutLeftDrawerBehavior: 'panel',
+      layoutPageContainer: true,
+      layoutRightDrawer: false,
+      layoutFooter: false,
+      layoutHeaderCustomClass: '',
+      layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
+      layoutPageContainerCustomClass: 'main-layout-container'
     },
     children: [
       {
@@ -90,31 +106,10 @@ const routes = [
         component: () => import('pages/User/exam/List'),
         breadcrumbs: { title: 'پیشخوان' },
         layoutConfig: {
-          name: 'dashboard',
-          headerVisibility: true,
-          headerType: 'default',
-          sideBarVisibility: false,
-          // sideBarType: 'default'
-          sideBarType: 'panel',
-          properties: {
-            layoutView: 'lHh Lpr lFf',
-            layoutHeader: true,
-            layoutHeaderReveal: false,
-            layoutHeaderElevated: false,
-            layoutHeaderBordered: false,
-            layoutLeftDrawer: true,
-            layoutLeftDrawerOverlay: false,
-            layoutLeftDrawerElevated: false,
-            layoutLeftDrawerBordered: false,
-            layoutLeftDrawerWidth: 325,
-            layoutLeftDrawerBehavior: 'panel',
-            layoutPageContainer: true,
-            layoutRightDrawer: false,
-            layoutFooter: false,
-            layoutHeaderCustomClass: '',
-            layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
-            layoutPageContainerCustomClass: 'main-layout-container'
-          }
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'panel',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'panel'
         },
         meta: {
           middlewares: [auth]
@@ -140,9 +135,9 @@ const routes = [
             breadcrumbs: { title: 'سفارش های من' },
             layoutConfig: {
               name: 'User.MyOrders',
-              headerVisibility: true,
-              headerType: 'default',
-              sideBarVisibility: false
+              layoutHeaderVisible: true,
+              layoutHeaderType: 'default',
+              layoutLeftDrawerVisible: false
             },
             meta: {
               middlewares: [
@@ -168,10 +163,10 @@ const routes = [
           middlewares: [auth]
         },
         layoutConfig: {
-          headerVisibility: true,
-          headerType: 'panel',
-          sideBarVisibility: true,
-          sideBarType: 'panel'
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'panel',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'panel'
         },
         children: [
           {
@@ -482,10 +477,10 @@ const routes = [
         name: 'onlineQuiz.alaaView',
         component: () => import('pages/User/exam/participate/AlaaView'),
         layoutConfig: {
-          headerVisibility: true,
-          headerType: 'quiz',
-          sideBarVisibility: true,
-          sideBarType: 'quiz'
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
         },
         meta: {
           middlewares: [auth]
@@ -496,10 +491,10 @@ const routes = [
         name: 'konkoorView',
         component: () => import('pages/User/exam/participate/konkoorView'),
         layoutConfig: {
-          headerVisibility: true,
-          headerType: 'quiz',
-          sideBarVisibility: true,
-          sideBarType: 'quiz'
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
         },
         meta: {
           middlewares: [auth]

@@ -34,8 +34,12 @@ export function templateHeaderType (state) {
   return state.templateHeaderType
 }
 
-export function templateSideBarType (state) {
-  return state.templateSideBarType
+export function templateLeftSideBarType (state) {
+  return state.templateLeftSideBarType
+}
+
+export function templateRightSideBarType (state) {
+  return state.templateRightSideBarType
 }
 
 export function breadcrumbs (state) {

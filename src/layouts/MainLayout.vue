@@ -1,8 +1,7 @@
 <!--       -----------------------ToDO => change last v-else-ifs ------------------------ -->
 
 <template>
-  <quasar-template-builder v-model:value="properties"
-                           @onResize="resize">
+  <quasar-template-builder @onResize="resize">
     <template #header>
       <div v-if="getTemplateHeaderType === 'quiz'"
            class="header-inside row">
@@ -21,11 +20,11 @@
       <q-resize-observer @resize="setHeaderDimension" />
     </template>
     <template #left-drawer>
-      <div v-if="getTemplateSideBarType === 'quiz'"
+      <div v-if="getTemplateLeftSideBarType === 'quiz'"
            class="drawer-inside-of-MapOfQuestions">
         <sideMenuMapOfQuestions />
       </div>
-      <div v-else-if="getTemplateSideBarType === 'panel'"
+      <div v-else-if="getTemplateLeftSideBarType === 'panel'"
            class="drawer-inside">
         <side-menu-dashboard />
       </div>
@@ -89,25 +88,6 @@ export default {
   data () {
     return {
       keepAliveComponents: KeepAliveComponents,
-      // properties: {
-      //   layoutView: 'lHh Lpr lFf',
-      //   layoutHeader: true,
-      //   layoutHeaderReveal: false,
-      //   layoutHeaderElevated: false,
-      //   layoutHeaderBordered: false,
-      //   layoutLeftDrawer: true,
-      //   layoutLeftDrawerOverlay: false,
-      //   layoutLeftDrawerElevated: false,
-      //   layoutLeftDrawerBordered: false,
-      //   layoutLeftDrawerWidth: 325,
-      //   layoutLeftDrawerBehavior: 'panel',
-      //   layoutPageContainer: true,
-      //   layoutRightDrawer: false,
-      //   layoutFooter: false,
-      //   layoutHeaderCustomClass: '',
-      //   layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
-      //   layoutPageContainerCustomClass: 'main-layout-container'
-      // },
       contentInside: ref(0)
     }
   },
@@ -133,8 +113,8 @@ export default {
     getTemplateHeaderType() {
       return this.$store.getters['AppLayout/templateHeaderType']
     },
-    getTemplateSideBarType() {
-      return this.$store.getters['AppLayout/templateSideBarType']
+    getTemplateLeftSideBarType() {
+      return this.$store.getters['AppLayout/templateLeftSideBarType']
     }
   },
   watch: {
@@ -142,7 +122,6 @@ export default {
   mounted () {
   },
   created () {
-    // this.updateLayout()
   },
   methods: {
     updateLayout () {
