@@ -5,6 +5,17 @@
   <!--      @click="add"-->
   <!--    />-->
   <!--  </div>-->
+  <div
+    v-if="count > 0"
+    class="cart-count">
+    سبدخرید شما ({{count}} محصول)
+  </div>
+  <div
+    v-else
+    class="cart-count"
+  >
+    سبدخرید شما ({{count}})
+  </div>
   <div class="cart-template row">
     <div
       v-if="count !== 0"
@@ -17,7 +28,7 @@
       v-if="count"
       class="side-invoice col-md-4 col-12"
     >
-      <cart-invoice :data="checkOutReviewResponse" />
+      <cart-invoice />
     </div>
 
     <div
@@ -44,7 +55,6 @@ export default {
 
   data() {
     return {
-      checkOutReviewResponse: {}
     }
   },
 
@@ -68,7 +78,6 @@ export default {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('Cart/reviewCart')
         .then((response) => {
-          this.checkOutReviewResponse = response.data.data
           this.$store.dispatch('loading/overlayLoading', false)
         })
     }
@@ -76,6 +85,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.cart-count {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: #6D708B;
+  margin: 24px 0 22px 0;
 
+  @media screen and (max-width: 1439px) {
+    letter-spacing: -0.03em;
+    margin: 20px 0;
+  }
+}
 </style>
