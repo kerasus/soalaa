@@ -1,7 +1,5 @@
 import API_ADDRESS from 'src/api/Addresses'
-import Price from 'src/models/Price'
-import { Coupon } from 'src/models/Coupon'
-import { CartItemList } from 'src/models/CartItem'
+import { Cart } from 'src/models/Cart'
 import { axios } from 'src/boot/axios'
 import CookieCart from 'src/assets/js/CookieCart'
 
@@ -40,25 +38,20 @@ export function reviewCart (context, product) {
       .then((response) => {
         const invoice = response.data.data
 
-        const cart = {
-          count: invoice.count,
-          price: new Price(invoice.price),
-          cartItems: new CartItemList(),
-          couponInfo: new Coupon(invoice.coupon)
-        }
+        const cart = new Cart(invoice)
 
         if (invoice.count > 0) {
           invoice.items[0].order_product.forEach((order) => {
-            cart.cartItems.list.push(order)
+            cart.items.list.push(order)
           })
         }
 
         if (product) {
-          const isExist = cart.cartItems.list.find(
+          const isExist = cart.items.list.find(
             (item) => item.id === product.id
           )
           if (!isExist) {
-            cart.cartItems.list.push(product)
+            cart.items.list.push(product)
           }
         }
 
@@ -103,7 +96,7 @@ export function deleteList (context) {
 
   return new Promise((resolve, reject) => {
     if (isUserLogin) {
-      cart.cartItems.list.forEach((item) => {
+      cart.items.list.forEach((item) => {
         // TODO => very bad code
         context
           .dispatch('removeItemFromCart', item.id)

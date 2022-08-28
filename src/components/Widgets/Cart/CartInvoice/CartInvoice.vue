@@ -6,7 +6,7 @@
         <div
           class="total-shopping-cart price-section"
         >
-          <div class="title">جمع سبد خرید{{ `(${cart.cartItems?.list?.length})` }}</div>
+          <div class="title">جمع سبد خرید{{ `(${cart.count})` }}</div>
           <div
             v-if="loading"
             class="loading-spinner"
@@ -40,7 +40,7 @@
             v-else
             class="price"
           >
-            {{ amountUsingWallet }}
+            {{ amountUsingWallet}}
             <span class="iran-money-unit">تومان</span>
           </div>
         </div>
@@ -284,7 +284,6 @@ export default {
 
   data() {
     return {
-      reviewResponse: {},
       couponValue: null,
       shoppingDescription: null,
       userEnteredLoginInfo: {
@@ -292,17 +291,12 @@ export default {
         mobile: ''
       },
       selectedBank: null,
-      gatewayRedirectAddress: '',
-      amountUsingWallet: '',
       shoppingDescribtion: '',
       loading: false
     }
   },
 
-  created() {
-    this.loading = true
-    this.loadData()
-  },
+  created() {},
 
   computed: {
     cart() {
@@ -310,15 +304,15 @@ export default {
     },
 
     totalFinalPrice() {
-      return this.getPriceFormat(this.cart.price?.final)
+      return this.getPriceFormat('final')
     },
 
     totalBasePrice() {
-      return this.getPriceFormat(this.cart.price?.base)
+      return this.getPriceFormat('base')
     },
 
     totalDiscount() {
-      return this.getPriceFormat(this.cart.price?.discount)
+      return this.getPriceFormat('discount')
     },
 
     discountInPercent() {
@@ -327,20 +321,19 @@ export default {
 
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
+    },
+
+    amountUsingWallet () {
+      return this.cart.pay_by_wallet.toLocaleString()
     }
   },
 
   methods: {
-    loadData() {
-      this.reviewResponse = this.data
-      this.amountUsingWallet = this.getPriceFormat(this.reviewResponse.pay_by_wallet)
-      this.gatewayRedirectAddress = this.reviewResponse.redirect_to_gateway
-      this.loading = false
-    },
-
     payment() {
-      if (this.gatewayRedirectAddress) {
-        window.location.href = this.gatewayRedirectAddress
+      const gatewayRedirectAddress = this.cart.redirect_to_gateway
+
+      if (gatewayRedirectAddress) {
+        window.location.href = gatewayRedirectAddress
       }
     },
 
@@ -353,11 +346,8 @@ export default {
         })
     },
 
-    getPriceFormat(price) {
-      if (!price && price !== 0) {
-        return
-      }
-      return price.toLocaleString()
+    getPriceFormat(priceKey) {
+      return this.cart.price.toman(priceKey, null)
     }
 
   }
@@ -366,12 +356,10 @@ export default {
 
 <style lang="scss" scoped>
 .invoice-container {
-  margin-top: 68px;
   margin-left: 30px;
 
   @media screen and (max-width: 1023px) {
     margin-left: 0;
-    margin-top: 0;
   }
 
   .invoice-cart {
@@ -465,6 +453,7 @@ export default {
           display: flex;
           align-items: center;
           margin-bottom: 20px;
+          justify-content: space-between;
 
           @media screen and (max-width: 1439px) {
             margin-bottom: 14px;
@@ -486,6 +475,7 @@ export default {
             letter-spacing: -0.03em;
             color: #23263B;
             margin-right: 16px;
+            min-width: 72px;
 
             @media screen and (max-width: 1439px) {
               margin-right: 4px;
@@ -673,6 +663,7 @@ export default {
                 border: 1.3px solid #E7ECF4;
                 border-radius: 8px;
                 padding: 8px;
+                cursor: pointer;
 
                 @media screen and (max-width: 1439px) {
                   width: 100%;
