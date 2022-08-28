@@ -228,7 +228,7 @@ export default {
     overflow-x: auto;
     height: 450px;
     .q-card {
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+      box-shadow: rgba(50, 50, 93, 0.25) 0 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     }
   }
   .image-panel-header {
@@ -275,12 +275,12 @@ export default {
 .main-image {
   width: 100%;
 }
-</style>
-<style lang="scss">
+
+// ToDo: check this styles in scoped style tag
 .question-image-float-panel {
-    .q-card {
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-    }
+  .q-card {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  }
   .question-image-panel {
     .image-panel-box {
       overflow-x: auto;

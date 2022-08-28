@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import VueKatex from 'components/VueKatex'
+import VueKatex from 'src/components/VueKatex'
 
 export default {
   components: {

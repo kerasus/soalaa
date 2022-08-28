@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import VueKatex from 'components/VueKatex'
+import VueKatex from 'src/components/VueKatex'
 import QuestionChoice from 'components/Question/QuestionItem/QuestionChoice'
 import { Question } from 'src/models/Question'
 export default {

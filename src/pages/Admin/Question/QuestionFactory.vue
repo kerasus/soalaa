@@ -172,13 +172,9 @@
 import API_ADDRESS from 'src/api/Addresses'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { QuestionList } from 'src/models/Question'
-// import VueKatex from '@/components/VueKatex'
 
 export default {
   name: 'QuestionFactory',
-  components: {
-    // VueKatex
-  },
   data () {
     return {
       questionStatusList: new QuestionStatusList(),

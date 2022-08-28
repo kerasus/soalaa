@@ -89,13 +89,12 @@
 </template>
 
 <script>
-// ToDo eslint
+import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import navBar from 'components/QuestionBank/EditQuestion/NavBar/navBar'
 import MbtiQuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/mbti_question_layout'
 // eslint-disable-next-line camelcase
 import attach_list from 'components/QuestionBank/EditQuestion/Exams/exams'
 import StatusComponent from 'components/QuestionBank/EditQuestion/StatusComponent/status'
-import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import { Question } from 'src/models/Question'
 import { Log, LogList } from 'src/models/Log'
 import { ExamList } from 'src/models/Exam'
@@ -114,7 +113,7 @@ export default {
     LogListComponent,
     attach_list
   },
-  data () {
+  data() {
     return {
       optionQuestionId: null,
       temp: null,
@@ -178,7 +177,7 @@ export default {
       questionType: ''
     }
   },
-  created () {
+  created() {
     const that = this
     axios.get(API_ADDRESS.option.base + '?type=question_type')
       .then(function (response) {
@@ -209,13 +208,13 @@ export default {
     this.setUploadImgStatus()
   },
   methods: {
-    setQuestionTypeText () {
+    setQuestionTypeText() {
       this.questionType = 'typeText'
       this.dialog = false
       this.checkNavbarVisibilityOnCreatPage()
     },
-    addComment (eventData) {
-      axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
+    addComment(eventData) {
+      axios.post(API_ADDRESS.log.addComment(eventData.logId), {comment: eventData.text})
         .then(response => {
           // iterating over the array to find the log that has changed
           for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
@@ -229,7 +228,7 @@ export default {
           }
         })
     },
-    navBarAction_create (statusId) {
+    navBarAction_create(statusId) {
       // set status_id
       if (!statusId) {
         statusId = this.questionStatusId_draft
@@ -240,12 +239,12 @@ export default {
       this.setMainChoicesInCreateMode(statusId) // یاس
     },
 
-    navBarAction_saveDraft () {
+    navBarAction_saveDraft() {
       const IdPendingToType = this.questionStatusId_pending_to_type
       this.navBarAction_create(IdPendingToType)
     },
 
-    navBarAction_save () {
+    navBarAction_save() {
       const currentQuestion = this.currentQuestion
       this.$refs.mtbiQlayout.getContent()
       currentQuestion.type_id = this.optionQuestionId
@@ -256,19 +255,19 @@ export default {
             color: 'green',
             icon: 'thumb_up'
           })
-          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
+          this.$router.push({name: 'Admin.Question.Show', params: {question_id: this.$route.params.question_id}})
         })
     },
 
-    navBarAction_cancel () {
-      this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
+    navBarAction_cancel() {
+      this.$router.push({name: 'Admin.Question.Show', params: {question_id: this.$route.params.question_id}})
     },
 
-    navBarAction_edit () {
-      this.$router.push({ name: 'question.mbti.edit', params: { question_id: this.$route.params.question_id } })
+    navBarAction_edit() {
+      this.$router.push({name: 'question.mbti.edit', params: {question_id: this.$route.params.question_id}})
     },
 
-    navBarAction_remove () {
+    navBarAction_remove() {
       const that = this
       this.$store.commit('AppLayout/showConfirmDialog', {
         message: 'از حذف کامل سوال از پایگاه داده و حذف از تمامی آزمون ها اطمینان دارید؟',
@@ -282,14 +281,14 @@ export default {
           }
           axios.delete(API_ADDRESS.question.delete(this.$route.params.question_id))
             .then(() => {
-              that.$router.push({ name: 'question.list' })
+              that.$router.push({name: 'question.list'})
             })
         }
       })
     },
 
-    setQuestionPhotos (statusId) { // یاس
-      this.$store.dispatch('loading/overlayLoading', { loading: true, message: 'کمی صبر کنید...' })
+    setQuestionPhotos(statusId) { // یاس
+      this.$store.dispatch('loading/overlayLoading', {loading: true, message: 'کمی صبر کنید...'})
       const formData = new FormData()
       formData.append('status_id', statusId)
       formData.append('statement_photo', this.currentQuestion.statement_photo)
@@ -299,14 +298,14 @@ export default {
       axios.post(API_ADDRESS.question.create, formData)
         .then((response) => {
           const questionId = response.data.data.id
-          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
-          this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+          this.$router.push({name: 'Admin.Question.Show', params: {question_id: questionId}})
+          this.$store.dispatch('loading/overlayLoading', {loading: false, message: ''})
         }).catch(() => {
-          this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
-        })
+        this.$store.dispatch('loading/overlayLoading', {loading: false, message: ''})
+      })
     },
 
-    setPageStatus () {
+    setPageStatus() {
       const title = this.$route.name.replace('question.mbti.', '')
       this.pageStatuses.forEach(item => {
         if (item.title === title) {
@@ -317,12 +316,12 @@ export default {
       })
     },
 
-    getPageStatus () {
+    getPageStatus() {
       const target = this.pageStatuses.find(item => item.state)
       return (target) ? target.title : false
     },
 
-    getQuestionStatus () {
+    getQuestionStatus() {
       const that = this
       const list = this.questionStatuses.list
       return that.questionStatuses.fetch()
@@ -335,7 +334,7 @@ export default {
         })
     },
 
-    checkUrl () {
+    checkUrl() {
       this.edit_status = (this.getPageStatus() === 'create' || this.getPageStatus() === 'edit')
       const that = this
       const loadExamListPromise = this.loadExamList()
@@ -355,7 +354,7 @@ export default {
         })
     },
 
-    changeStatus (newStatus) {
+    changeStatus(newStatus) {
       const that = this
       axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
         status_id: newStatus.changeState,
@@ -367,7 +366,7 @@ export default {
         })
     },
 
-    attachQuestion (item) {
+    attachQuestion(item) {
       if (this.getPageStatus() === 'create') {
         this.attachQuestionOnCreateMode(item)
       } else {
@@ -375,7 +374,7 @@ export default {
       }
     },
 
-    attachQuestionOnEditMode (item) {
+    attachQuestionOnEditMode(item) {
       this.attachLoading = true
       axios.post(API_ADDRESS.question.attach, {
         order: item.order,
@@ -394,7 +393,7 @@ export default {
         })
     },
 
-    attachQuestionOnCreateMode (item) {
+    attachQuestionOnCreateMode(item) {
       const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam.id))
       const selectedQuizzes = this.selectedQuizzes
       this.totalExams[targetExamIndex] = item
@@ -404,7 +403,7 @@ export default {
       this.updateSelectedQuizzes()
     },
 
-    detachQuestion (item) {
+    detachQuestion(item) {
       const that = this
       this.$store.commit('AppLayout/showConfirmDialog', {
         message: 'از حذف سوال از آزمون اطمینان دارید؟',
@@ -425,7 +424,7 @@ export default {
       })
     },
 
-    detachQuestionOnEditMode (item) {
+    detachQuestionOnEditMode(item) {
       this.attachLoading = true
       axios.post(API_ADDRESS.question.detach(this.$route.params.question_id), {
         detaches: [{
@@ -450,21 +449,21 @@ export default {
         })
     },
 
-    detachQuestionOnCreateMode (item) {
+    detachQuestionOnCreateMode(item) {
       const detachedExamIndex = this.selectedQuizzes.indexOf(item)
       this.selectedQuizzes.splice(detachedExamIndex, 1)
       this.dialog = false
       this.updateSelectedQuizzes()
     },
 
-    showImgComponentStatus () {
+    showImgComponentStatus() {
       if (this.getPageStatus() === 'create') {
         return this.questionType === 'typeImage'
       }
       return this.doesPhotosExist()
     },
 
-    showQuestionComponentStatus () {
+    showQuestionComponentStatus() {
       if (this.getPageStatus() === 'create') {
         return this.questionType === 'typeText'
       } else if (this.getPageStatus() === 'show') {
@@ -474,7 +473,7 @@ export default {
       return true
     },
 
-    loadCurrentQuestionData () {
+    loadCurrentQuestionData() {
       const that = this
       this.loading = true
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
@@ -489,7 +488,7 @@ export default {
         })
     },
 
-    getLogs () {
+    getLogs() {
       this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
         .then((response) => {
           this.currentQuestion.logs = new LogList(response.data.data)
@@ -498,17 +497,17 @@ export default {
         })
     },
 
-    updateQuestion (eventData) {
+    updateQuestion(eventData) {
       this.currentQuestion = new Question(eventData)
       window.app.set(this, 'currentQuestion', new Question(eventData))
     },
 
-    updateAttachList (exams) {
+    updateAttachList(exams) {
       this.selectedQuizzes = exams
       this.updateSelectedQuizzes()
     },
 
-    updateSelectedQuizzes () {
+    updateSelectedQuizzes() {
       const selectedQuizzes = JSON.parse(JSON.stringify(this.selectedQuizzes))
       selectedQuizzes.forEach((item, i) => {
         selectedQuizzes[i].subId = i + 1
@@ -517,7 +516,7 @@ export default {
       this.selectedQuizzes = selectedQuizzes
     },
 
-    setNullKeys () {
+    setNullKeys() {
       const currentQuestion = this.currentQuestion
       if (!currentQuestion.statement) {
         currentQuestion.statement = ''
@@ -531,7 +530,7 @@ export default {
         currentQuestion.descriptive_answer = ''
       }
     },
-    loadExamList () {
+    loadExamList() {
       const that = this
       return new ExamList().fetch()
         .then((response) => {
@@ -541,7 +540,7 @@ export default {
         })
     },
 
-    loadSubcategories () {
+    loadSubcategories() {
       return this.subCategoriesList.fetch()
         .then((response) => {
           this.subCategoriesList = new QuestSubcategoryList(response.data.data)
@@ -550,14 +549,14 @@ export default {
         })
     },
 
-    makeShowImgPanelVisible (src) {
+    makeShowImgPanelVisible(src) {
       this.imgSrc = src
       this.questionColsNumber = 7
       this.uploadImgColsNumber.show = true
       this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
     },
 
-    makeShowImgPanelInvisible () {
+    makeShowImgPanelInvisible() {
       this.uploadImgColsNumber.show = false
       this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
       if (this.currentQuestion.logs.list.length > 0) {
@@ -567,13 +566,13 @@ export default {
       }
     },
 
-    setQuestionLayoutCols () {
+    setQuestionLayoutCols() {
       if (this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       }
     },
 
-    setInsertedQuestions () { // یاس
+    setInsertedQuestions() { // یاس
       const currentQuestion = this.currentQuestion
       // set exams
       this.$refs.mtbiQlayout.getContent()
@@ -590,9 +589,9 @@ export default {
       currentQuestion
         .create(null, API_ADDRESS.question.createAndAttach())
         .then((response) => {
-          this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+          this.$store.dispatch('loading/overlayLoading', {loading: false, message: ''})
           const questionId = response.data.data.id
-          this.$router.push({ name: 'question.mbti.show', params: { question_id: questionId } })
+          this.$router.push({name: 'question.mbti.show', params: {question_id: questionId}})
           this.questionType = 'typeText'
           this.currentQuestion.statement = ''
           this.currentQuestion.choices.list.forEach((item) => {
@@ -606,7 +605,7 @@ export default {
         })
     },
 
-    doesPhotosExist () {
+    doesPhotosExist() {
       if (this.currentQuestion.answer_photos) {
         if (this.currentQuestion.answer_photos.length > 0) {
           return true
@@ -620,11 +619,11 @@ export default {
       return false
     },
 
-    setUploadImgStatus () {
+    setUploadImgStatus() {
       this.upload_img_status = (this.getPageStatus() === 'create')
     },
 
-    setMainChoicesInCreateMode (statusId) {
+    setMainChoicesInCreateMode(statusId) {
       if (this.questionType === 'typeText') {
         this.setInsertedQuestions()
       } else if (this.questionType === 'typeImage') {
@@ -634,18 +633,18 @@ export default {
       }
     },
 
-    checkTextCondition () {
+    checkTextCondition() {
       return !!this.currentQuestion.statement
     },
 
-    checkNavbarVisibility () {
+    checkNavbarVisibility() {
       if (this.getPageStatus() === 'create') {
         return this.NavbarVisibilityOnCreatPage
       }
       return true
     },
 
-    checkNavbarVisibilityOnCreatPage () {
+    checkNavbarVisibilityOnCreatPage() {
       this.NavbarVisibilityOnCreatPage = true
     }
   }

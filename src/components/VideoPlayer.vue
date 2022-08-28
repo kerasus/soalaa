@@ -14,6 +14,7 @@
 
 <script>
 import videojs from 'video.js'
+
 import videojsBrand from 'videojs-brand'
 import fa from 'video.js/dist/lang/fa.json'
 import { PlayerSourceList } from 'src/models/PlayerSource'
@@ -155,7 +156,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+// ToDo: check this styles in scoped style tag
 .videoPlayer-container-radius{
  border-radius: inherit;
 }

@@ -152,11 +152,11 @@
 </template>
 
 <script>
+import VueKatex from 'src/components/VueKatex'
 import Choice from 'src/components/OnlineQuiz/Quiz/Choice'
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer } from 'src/mixin/Mixins'
 import Assistant from 'src/plugins/assistant'
-import VueKatex from 'components/VueKatex'
 
 export default {
   name: 'AlaaView',
