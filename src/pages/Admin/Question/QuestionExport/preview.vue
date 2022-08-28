@@ -118,9 +118,9 @@
 </template>
 
 <script>
+import VueKatex from 'src/components/VueKatex'
 import VueTiptapKatex from 'vue3-tiptap-katex'
 import API_ADDRESS from 'src/api/Addresses.js'
-import VueKatex from 'components/VueKatex'
 import { Exam } from 'src/models/Exam'
 import { QuestionList } from 'src/models/Question'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'

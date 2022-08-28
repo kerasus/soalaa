@@ -222,7 +222,9 @@ const AdminActionOnQuestion = {
       this.question.loading = false
     },
     redirectToShowPage (questionId) {
-      this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
+      const routeData = this.$router.resolve({ name: 'Admin.Question.Show', params: { question_id: questionId } })
+      window.open(routeData.href, '_blank')
+      window.location.reload()
     },
     redirectToEditPage () {
       this.$router.push({ name: 'Admin.Question.Edit', params: { question_id: this.$route.params.question_id } })

@@ -40,14 +40,14 @@ export default {
       default: false
     }
   },
-  data () {
+  data() {
     return {
       checkedStyle: 1,
       disableValue: false
     }
   },
   methods: {
-    updatePage (val) {
+    updatePage(val) {
       this.$emit('updateCurrentPage', val)
     }
   }
@@ -55,14 +55,15 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.question-bank-pagination{
-.q-btn--actionable{
-  width: 35px;
-  height: 35px;
-  background: #FFFFFF;
-  border-radius: 12px;
-  margin-right: 3px;
-}
+<style lang="scss" scoped>
+// ToDo: check this styles in scoped style tag
+.question-bank-pagination {
+  .q-btn--actionable {
+    width: 35px;
+    height: 35px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    margin-right: 3px;
+  }
 }
 </style>

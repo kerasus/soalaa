@@ -206,10 +206,10 @@
 </template>
 
 <script>
+import VueKatex from 'src/components/VueKatex'
 import 'src/assets/scss/markdownKatex.scss'
 import { mixinQuiz } from 'src/mixin/Mixins'
 import API_ADDRESS from 'src/api/Addresses'
-import VueKatex from 'src/components/VueKatex'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { copyToClipboard } from 'quasar'
 export default {
