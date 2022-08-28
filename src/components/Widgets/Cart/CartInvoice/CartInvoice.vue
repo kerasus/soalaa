@@ -663,6 +663,7 @@ export default {
                 border: 1.3px solid #E7ECF4;
                 border-radius: 8px;
                 padding: 8px;
+                cursor: pointer;
 
                 @media screen and (max-width: 1439px) {
                   width: 100%;
