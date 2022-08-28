@@ -100,8 +100,8 @@ export default {
     }
   }
 }
-</style>
-<style lang="scss">
+
+// ToDo: check this styles in scoped style tag
 .question-details {
   .default-details-container {
     .detail-box {

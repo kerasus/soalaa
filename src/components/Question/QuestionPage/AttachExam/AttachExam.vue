@@ -501,9 +501,8 @@ export default {
     height: 40px;
   }
 }
-</style>
 
-<style lang="scss">
+// ToDo: check this styles in scoped style tag
 .exam-details {
   .exam-details-all-boxes {
     .details-container-2 {

@@ -66,6 +66,8 @@ module.exports = {
     'import/namespace': 'error',
     'import/default': 'error',
     'import/export': 'error',
+    // 'simple-import-sort/imports': 'error',
+    // 'simple-import-sort/exports': 'error',
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
