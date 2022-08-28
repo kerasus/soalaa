@@ -6,7 +6,7 @@
         <div
           class="total-shopping-cart price-section"
         >
-          <div class="title">جمع سبد خرید{{ `(${cart.cartItems?.list?.length})` }}</div>
+          <div class="title">جمع سبد خرید{{ `(${cart.count})` }}</div>
           <div
             v-if="loading"
             class="loading-spinner"
@@ -366,12 +366,10 @@ export default {
 
 <style lang="scss" scoped>
 .invoice-container {
-  margin-top: 68px;
   margin-left: 30px;
 
   @media screen and (max-width: 1023px) {
     margin-left: 0;
-    margin-top: 0;
   }
 
   .invoice-cart {
