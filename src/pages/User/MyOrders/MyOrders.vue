@@ -158,26 +158,6 @@ export default {
   components: { EntityIndex },
   data () {
     return {
-      properties: {
-        layoutView: 'lHh Lpr lFf',
-        layoutHeader: true,
-        layoutHeaderVisible: true,
-        layoutHeaderReveal: false,
-        layoutHeaderElevated: false,
-        layoutHeaderBordered: false,
-        layoutLeftDrawer: true,
-        layoutLeftDrawerVisible: false,
-        layoutLeftDrawerOverlay: false,
-        layoutLeftDrawerElevated: false,
-        layoutLeftDrawerBordered: false,
-        layoutLeftDrawerWidth: 325,
-        layoutPageContainer: true,
-        layoutRightDrawer: false,
-        layoutFooter: false,
-        layoutHeaderCustomClass: 'main-layout-header row',
-        layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
-        layoutPageContainerCustomClass: 'main-layout-container'
-      },
       expanded: true,
       table: {
         columns: [
@@ -239,12 +219,8 @@ export default {
     }
   },
   created () {
-    this.updateLayout()
   },
   methods: {
-    updateLayout () {
-      this.$store.dispatch('AppLayout/updateStore', this.properties)
-    },
     showExam (id) {
       this.$router.push({
         name: 'Admin.Exam.Show',
@@ -383,7 +359,40 @@ export default {
     }
     .q-pagination {
       //background: red;
-      :first-child {
+      //.q-btn--flat {
+      //  background: #FFFFFF;
+      //  border-radius: 12px;
+      //}
+      :not(.justify-center) {
+        button {
+          &:last-child {
+            background: #FFFFFF;
+            border-radius: 12px;
+          }
+          &:first-child {
+            background: #FFFFFF;
+            border-radius: 12px;
+          }
+        }
+      }
+
+      .q-btn--actionable {
+        //background: none;
+      }
+      //button &:last-child {
+      //  background: #FFFFFF;
+      //  border-radius: 12px;
+      //}
+      :nth-child(1):nth-last-child(1) {
+        background: #FFFFFF;
+        border-radius: 12px;
+      }
+      //:not(.q-btn--actionable)
+      :first-child &button {
+        background: #FFFFFF;
+        border-radius: 12px;
+      }
+      :last-child &button {
         background: #FFFFFF;
         border-radius: 12px;
       }
