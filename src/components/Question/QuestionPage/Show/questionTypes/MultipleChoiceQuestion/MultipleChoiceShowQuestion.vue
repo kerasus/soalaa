@@ -69,8 +69,8 @@
 </template>
 
 <script>
+import VueKatex from 'src/components/VueKatex'
 import { Question } from 'src/models/Question'
-import VueKatex from 'components/VueKatex'
 export default {
   name: 'MultipleChoiceShowQuestion',
   components: {
