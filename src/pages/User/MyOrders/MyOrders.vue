@@ -217,7 +217,7 @@ export default {
   },
   methods: {
     showDetailsDialog (rowData) {
-      console.log('rowData', rowData)
+      // console.log('rowData', rowData)
       this.detailsDialog = true
     },
     getRemoveMessage (row) {
