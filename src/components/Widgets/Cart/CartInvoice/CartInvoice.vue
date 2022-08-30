@@ -329,6 +329,14 @@ export default {
   },
 
   methods: {
+    cartReview() {
+      this.$store.commit('loading/loading', true)
+      this.$store.dispatch('Cart/reviewCart')
+        .then(() => {
+          this.$store.dispatch('loading/overlayLoading', false)
+        })
+    },
+
     payment() {
       const gatewayRedirectAddress = this.cart.redirect_to_gateway
 
