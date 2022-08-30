@@ -99,7 +99,11 @@ export default {
   methods: {
     initPlayer() {
       videojs.registerPlugin('brand', videojsBrand)
-      this.player = videojs(this.$refs.videoPlayer, this.videoOptions, this.onPlayerReady)
+      this.player = videojs(
+        this.$refs.videoPlayer,
+        this.videoOptions,
+        this.onPlayerReady
+      )
       this.player.brand({
         image: 'https://nodes.alaatv.com/upload/alaa-logo-small.png',
         title: 'alaatv',
@@ -109,17 +113,17 @@ export default {
       this.player.src(this.sources.list)
     },
     onPlayerReady() {
-      // this.player.on('timeupdate', function () {
-      //   if (this.keepCalculating) {
-      //     this.calcWatchedPercentage(this.player.currentTime(), this.player.duration())
-      //   }
-      //   document.querySelector('.video-js').focus()
-      //   if (!this.player.paused() && !this.player.userActive()) {
-      //     this.videoStatus(false)
-      //   } else if (!this.player.paused()) {
-      //     this.videoStatus(true)
-      //   }
-      // })
+      this.player.on('timeupdate', () => {
+        const buffPerc = this.player.bufferedPercent()
+        // console.log(this.player.getMedia())
+        console.log(this.player.videoWidth())
+        console.log(this.player.videoHeight())
+        const progressPercentageByTime =
+          this.player.currentTime() /
+          (this.player.currentTime() + this.player.remainingTime())
+        console.log('progressPercentageByTime', progressPercentageByTime)
+        console.log('buffPerc', buffPerc)
+      })
     },
     setOptions() {
       this.setSources()
@@ -136,7 +140,7 @@ export default {
       this.player.poster(this.poster)
     },
     calcWatchedPercentage(currentTime, duration) {
-      const watchedPercentage = ((currentTime / duration) * 100)
+      const watchedPercentage = (currentTime / duration) * 100
       const videoPlayerTimeData = {
         currentTime,
         duration,
@@ -158,13 +162,13 @@ export default {
 
 <style lang="scss" scoped>
 // ToDo: check this styles in scoped style tag
-.videoPlayer-container-radius{
- border-radius: inherit;
-}
-.vjs-poster{
+.videoPlayer-container-radius {
   border-radius: inherit;
 }
-#my-video_html5_api{
+.vjs-poster {
+  border-radius: inherit;
+}
+#my-video_html5_api {
   border-radius: inherit;
 }
 #my-video .vjs-big-play-button {
@@ -176,8 +180,9 @@ export default {
   top: 50%;
   margin-left: -1em;
   color: #fff;
-  background-color: #FFB74D;
-  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+  background-color: #ffb74d;
+  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6),
+    2px 4px 10px rgba(112, 108, 162, 0.05);
   font-size: 52px;
   -moz-border-radius: 100px;
   -webkit-border-radius: 100px;
@@ -185,7 +190,7 @@ export default {
 }
 
 .video-js .vjs-big-play-button .vjs-icon-placeholder:before {
-  content: "\f4cd";
+  content: '\f4cd';
   left: -12px;
   top: -10px;
   font-size: 110px;
@@ -214,8 +219,8 @@ export default {
 .vjs-progress-control {
   .vjs-progress-holder {
     .vjs-play-progress::before {
-      left: -8px ;
-      right: auto ;
+      left: -8px;
+      right: auto;
     }
   }
 }
