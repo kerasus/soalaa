@@ -112,24 +112,25 @@
                 <q-card class="details-expansion-card">
                   <q-card-section class="details-expansion-card-section">
                     <div
-                      v-for="i in 3"
-                      :key="i"
+                      v-for="(orderProduct, index) in order.order_product.list"
+                      :key="orderProduct.id"
                       class="pamphlet"
                     >
                       <div class="title ellipsis">
-                        جزوات آمار و احتمال یازدهم با تدریس علی صدری
+                        {{ orderProduct.product.title }}
                       </div>
 
                       <div class="right-part">
                         <span
                           class="price"
-                          :class="i !== 1 ? 'without-trash': ''"
+                          :class="index !== 0 ? 'without-trash': ''"
                         >
-                          123456 تومان
+                          {{index}}
+                          {{ orderProduct.price.toman('final') }}
                         </span>
                         <q-btn
                           unelevated
-                          :class="i === 1 ? 'trash-button': 'hidden-trash-button'"
+                          :class="index === 0 ? 'trash-button': 'hidden-trash-button'"
                           icon="isax:trash"
                         />
                       </div>
