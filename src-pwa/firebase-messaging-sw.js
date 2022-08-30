@@ -1,4 +1,6 @@
+// eslint-disable-next-line
 importScripts('https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js')
+// eslint-disable-next-line
 importScripts('https://www.gstatic.com/firebasejs/7.19.1/firebase-messaging.js')
 
 const firebaseConfig = {
@@ -14,11 +16,13 @@ const firebaseConfig = {
 
 self.addEventListener('install', () => {
 })
-
+// eslint-disable-next-line
 firebase.initializeApp(firebaseConfig)
+// eslint-disable-next-line
 const messaging = firebase.messaging()
 
 messaging.setBackgroundMessageHandler(function (payload) {
+  // eslint-disable-next-line
   const promiseChain = clients.matchAll({
     type: 'window',
     includeUncontrolled: true
@@ -41,16 +45,19 @@ messaging.getToken({ vapidKey: 'BKJlaTO0dnXtHHFho3i53VF_mGMkyxSv0dnC7ldF1wTZ8sRg
   .then((currentToken) => {
     if (currentToken) {
       // console.log('Send the token to your server and update the UI if necessary')
+      // eslint-disable-next-line
       console.warn('client token', currentToken)
       // Send the token to your server and update the UI if necessary
       // ...
     } else {
       // Show permission request UI
+      // eslint-disable-next-line
       console.warn('No registration token available. Request permission to generate one.')
       // ...
     }
   })
   .catch((err) => {
+    // eslint-disable-next-line
     console.warn('An error occurred while retrieving token. ', err)
     // ...
   })

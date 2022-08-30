@@ -361,7 +361,7 @@ export default {
               }
 
               @media screen and (max-width: 599px) {
-                justify-content: end;
+                justify-content: flex-end;
                 align-items: normal;
                 margin-bottom: 8px;
               }
@@ -460,7 +460,7 @@ export default {
 
             @media screen and (max-width: 1023px) {
               flex-direction: column;
-              align-items: end;
+              align-items: flex-end;
               margin-left: 0;
 
             }
@@ -644,7 +644,7 @@ export default {
                         display: flex;
                         align-items: center;
                         width: 100%;
-                        justify-content: end;
+                        justify-content: flex-end;
 
                         .price {
                           font-style: normal;
@@ -683,7 +683,7 @@ export default {
 
                   .details-expansion-actions {
                     display: flex;
-                    justify-content: end;
+                    justify-content: flex-end;
                     align-items: center;
                     padding: 0;
 

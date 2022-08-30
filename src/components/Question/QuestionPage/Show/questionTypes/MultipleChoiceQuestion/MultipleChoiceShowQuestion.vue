@@ -69,8 +69,8 @@
 </template>
 
 <script>
+import VueKatex from 'src/components/VueKatex'
 import { Question } from 'src/models/Question'
-import VueKatex from 'components/VueKatex'
 export default {
   name: 'MultipleChoiceShowQuestion',
   components: {
@@ -165,6 +165,8 @@ export default {
 }
 .filepond--file-info {
   transform: none !important;
+  margin-left: 2.5em #{"/* rtl:ignore */"} !important;
+  margin-right: 0.5em #{"/* rtl:ignore */"} !important;
 }
 </style>
 <style lang="scss">
