@@ -3,7 +3,7 @@
     <div class="side-logo">
       <div class="logo-image">
         <q-img
-          src="https://3a.alaatv.com/img/logo-1.png"
+          src="https://soalaa.com/img/logo-1.png"
           width="150px"
         />
       </div>

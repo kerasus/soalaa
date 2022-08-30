@@ -10,6 +10,7 @@
 const ESLintPlugin = require('eslint-webpack-plugin')
 const { configure } = require('quasar/wrappers')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const path = require('path')
 
@@ -30,7 +31,8 @@ module.exports = configure(function (ctx) {
       'appConfig',
       'middleware',
       'icon',
-      'breadcrumbs'
+      'breadcrumbs',
+      'routesLayoutConfigs'
     ],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -91,6 +93,13 @@ module.exports = configure(function (ctx) {
             return options
           })
 
+        // chain.module.rule('css')
+        //   .test(/\.css$/)
+        //   .use('mini-css-extract-plugin')
+        //   .options({
+        //     ignoreOrder: true
+        //   })
+
         // chain.plugin('friendly-errors').tap(args => {
         //   // the actual transformer defined by vue-cli-3
         //   const vueCli3Transformer = args[0].additionalTransformers[0]
@@ -129,15 +138,18 @@ module.exports = configure(function (ctx) {
             }
           ]
         }))
+        // cfg.plugins.push(new MiniCssExtractPlugin({
+        //   ignoreOrder: true
+        // }))
       }
     },
 
-    // // Full list of options: https://quasar.dev/quasar-cli-vite/quasar-config-js#sourcefiles
-    // sourceFiles: {
-    //   pwaRegisterServiceWorker: './src-pwa/register-service-worker.js';
-    //   pwaServiceWorker: './src-pwa/firebase-messaging-sw.js';
-    //   pwaManifestFile?: string;
-    // },
+    // Full list of options: https://quasar.dev/quasar-cli-vite/quasar-config-js#sourcefiles
+    sourceFiles: {
+      pwaRegisterServiceWorker: './src-pwa/register-service-worker.js',
+      pwaServiceWorker: './src-pwa/firebase-messaging-sw.js'
+      // pwaManifestFile?: string;
+    },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
@@ -248,6 +260,10 @@ module.exports = configure(function (ctx) {
     pwa: {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
+
+      // https://quasar.dev/quasar-cli-webpack/developing-pwa/configuring-pwa#reload-and-update-automatically
+      skipWaiting: true,
+      clientsClaim: true,
 
       // for the custom service worker ONLY (/src-pwa/custom-service-worker.[js|ts])
       // if using workbox in InjectManifest mode

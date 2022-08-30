@@ -43,7 +43,7 @@
 
 <script>
 export default {
-  name: 'footer'
+  name: 'LandingFooter'
 }
 </script>
 

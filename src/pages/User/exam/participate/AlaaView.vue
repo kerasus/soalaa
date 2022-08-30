@@ -112,11 +112,12 @@
               <div
                 class="row">
                 <div
-                  v-for="item in currentQuestion.choices.list"
+                  v-for="(item, index) in currentQuestion.choices.list"
                   :key="item.id"
                   class="choice-parent col-12 col-md-6"
                 >
                   <choice
+                    :choice-number="index+1"
                     :question-id="currentQuestion.id"
                     :choice="item"
                     :is-rtl="!isLtrString(item.title)"
@@ -152,11 +153,11 @@
 </template>
 
 <script>
+import VueKatex from 'src/components/VueKatex'
 import Choice from 'src/components/OnlineQuiz/Quiz/Choice'
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer } from 'src/mixin/Mixins'
 import Assistant from 'src/plugins/assistant'
-import VueKatex from 'components/VueKatex'
 
 export default {
   name: 'AlaaView',

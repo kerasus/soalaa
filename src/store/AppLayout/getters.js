@@ -30,6 +30,18 @@ export function ColumnsWidth (state) {
   return state.ColumnsWidth
 }
 
+export function templateHeaderType (state) {
+  return state.templateHeaderType
+}
+
+export function templateLeftSideBarType (state) {
+  return state.templateLeftSideBarType
+}
+
+export function templateRightSideBarType (state) {
+  return state.templateRightSideBarType
+}
+
 export function breadcrumbs (state) {
   return state.breadcrumbs
 }

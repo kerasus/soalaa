@@ -19,7 +19,7 @@
     <div class="video-box flex items-center justify-center">
       <video-player
         :sources="videosSrc"
-        poster="https://nodes.alaatv.com/media/thumbnails/1612/1612012nbhu.jpg" />
+        poster="https://nodes.alaatv.com/upload/vast/videos/3A_LANDING/video%20tubmail.jpg" />
       <!--      <div class="video-btn flex items-center justify-between q-px-md">-->
       <!--        مشاهده ویدئو-->
       <!--        <div class="video-icon flex items-center">-->
@@ -39,15 +39,15 @@ import { PlayerSourceList } from 'src/models/PlayerSource'
 import VideoPlayer from 'components/VideoPlayer'
 
 export default {
-  name: 'header',
+  name: 'LandingHeader',
   components: {
     VideoPlayer
   },
   data: () => ({
     videosSrc: new PlayerSourceList([
-      { link: 'https://nodes.alaatv.com/media/1612/HD_720p/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت عالی', res: '720p' },
-      { link: 'https://nodes.alaatv.com/media/1612/hq/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت بالا', res: '480p' },
-      { link: 'https://nodes.alaatv.com/media/1612/240p/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت متوسط', res: '240p' }
+      // { link: 'https://nodes.alaatv.com/media/1612/HD_720p/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت عالی', res: '720p' },
+      { link: 'https://nodes.alaatv.com/upload/vast/videos/3A_LANDING/landing%20video.mp4', ext: 'mp4', size: null, caption: 'کیفیت بالا', res: '480p' }
+      // { link: 'https://nodes.alaatv.com/media/1612/240p/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت متوسط', res: '240p' }
     ])
   }),
   methods: {

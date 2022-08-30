@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import BtnBox from 'components/Question/QuestionPage/BtnBox'
 /* eslint-disable no-var */
 // import { defineAsyncComponent } from 'vue'
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
@@ -50,7 +51,6 @@ import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import CommentBox from 'components/Question/QuestionPage/StatusChange'
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'

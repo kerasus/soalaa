@@ -26,8 +26,7 @@
         expand-separator
       >
         <portlet>
-          <!--          <template v-slot:title>-->
-          <!--          </template>-->
+          <template v-slot:title><span></span></template>
           <template v-slot:content>
             <edit-exam-report />
           </template>
@@ -40,9 +39,7 @@
         label="آپلود فایل سوالات و جواب ها"
       >
         <portlet>
-          <!--          <template v-slot:title>-->
-          <!--            آپلود فایل سوالات و جواب ها-->
-          <!--          </template>-->
+          <template v-slot:title><span></span></template>
           <template v-slot:content>
             <upload />
           </template>
@@ -55,9 +52,7 @@
         expand-separator
       >
         <portlet>
-          <!--          <template v-slot:title>-->
-          <!--            اصلاح ضرایب-->
-          <!--          </template>-->
+          <template v-slot:title><span></span></template>
           <template v-slot:content>
             <edit-coefficients />
           </template>

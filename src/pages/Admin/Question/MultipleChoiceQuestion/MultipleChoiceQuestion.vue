@@ -343,6 +343,11 @@ export default {
   text-align: left #{"/* rtl:ignore */"} !important ;
   direction: ltr #{"/* rtl:ignore */"} !important;
 }
+.filepond--file-info {
+  transform: none !important;
+  margin-left: 2.5em #{"/* rtl:ignore */"} !important;
+  margin-right: 0.5em #{"/* rtl:ignore */"} !important;
+}
 </style>
 
 <!--<style scoped lang="scss">-->

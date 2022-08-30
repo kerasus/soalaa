@@ -121,8 +121,9 @@ export default {
 
 .image-upload-parent {
   .filepond--file-info {
-    position: relative;
-    right: -517px;
+    transform: none !important;
+    margin-left: 2.5em #{"/* rtl:ignore */"} !important;
+    margin-right: 0.5em #{"/* rtl:ignore */"} !important;
   }
   //.filepond--file-info {
   //  position: relative;
