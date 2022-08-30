@@ -9,6 +9,9 @@ export default function () {
       buttons: {
       }
     },
+    templateHeaderType: '',
+    templateLeftSideBarType: '',
+    templateRightSideBarType: '',
     windowSize: {
       x: 0,
       y: 0

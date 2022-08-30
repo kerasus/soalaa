@@ -112,11 +112,12 @@
               <div
                 class="row">
                 <div
-                  v-for="item in currentQuestion.choices.list"
+                  v-for="(item, index) in currentQuestion.choices.list"
                   :key="item.id"
                   class="choice-parent col-12 col-md-6"
                 >
                   <choice
+                    :choice-number="index+1"
                     :question-id="currentQuestion.id"
                     :choice="item"
                     :is-rtl="!isLtrString(item.title)"
