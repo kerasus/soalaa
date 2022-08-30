@@ -700,17 +700,19 @@ export default {
       display: none !important;
     }
 
-    .q-table__card {
-      box-shadow: none;
-      border-bottom: 1px solid #E4E8EF;
-      padding: 16px 20px;
-    }
+    @media screen and (max-width: 600px) {
+      .q-table__card {
+        box-shadow: none;
+        border-bottom: 1px solid #E4E8EF;
+        padding: 16px 20px;
+      }
 
-    .q-table__grid-item {
-      padding: 0;
-      .q-table__grid-item-row {
-        display: flex;
-        justify-content: space-between;
+      .q-table__grid-item {
+        padding: 0;
+        .q-table__grid-item-row {
+          display: flex;
+          justify-content: space-between;
+        }
       }
     }
 
