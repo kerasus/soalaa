@@ -1,8 +1,32 @@
 <template>
+  <div style="display: none"> {{windowSize}}</div>
   <div
+    v-if="!hasUserOrdered"
+  >
+    <div class="empty-order-list">
+      <q-img
+        class="image"
+        :src="'https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_orders.png'"
+      />
+      <div class="list-text">
+        لیست سفارش‌های شما خالی است!
+      </div>
+      <div class="back-to-shop">
+        <q-btn
+          class="back-to-shop-btn"
+          flat
+          :color="'primary'"
+          label="رفتن به فروشگاه"
+          :to="{name:'landing1'}"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    v-else
     class="my-orders-list"
   >
-    <!--    <div>سفارش های من</div>-->
+    <div class="title">سفارش های من</div>
     <!--          :api="getEntityApi"-->
     <entity-index
       class="orders-list-entity-index"
@@ -15,6 +39,8 @@
     >
       <template #table-cell="{inputData}">
         <q-td :props="inputData.props">
+          {{setHasUserOrderedValue(inputData.props.row)}}
+
           <template v-if="inputData.props.col.name === 'details'">
             <q-btn round
                    flat
@@ -138,7 +164,6 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-
   </div>
 </template>
 
@@ -156,9 +181,9 @@ export default {
     OrderedProducts,
     EntityIndex
   },
-  data () {
+  data() {
     return {
-      expanded: true,
+      expanded: false,
       table: {
         columns: [
           {
@@ -168,14 +193,6 @@ export default {
             align: 'left',
             field: row => row.id
           },
-          // {
-          //   name: 'start_at',
-          //   // name: 'payment_status',
-          //   required: true,
-          //   label: 'وضعیت ‌پرداخت',
-          //   align: 'left',
-          //   field: row => moment(row.start_at, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
-          // },
           {
             name: 'paymentstatus',
             // name: 'payment_status',
@@ -460,19 +477,21 @@ export default {
         created_at: '2022-07-25 04:26:11',
         completed_at: '2022-07-25 08:56:11'
       },
-      detailsDialog: true
+      detailsDialog: false,
+      hasUserOrdered: true,
+      firstRowPassed: false
     }
   },
-  created () {
+  created() {
   },
   computed: {
-    user () {
+    user() {
       if (this.$store.getters['Auth/user']) {
         return this.$store.getters['Auth/user']
       }
       return new User()
     },
-    getEntityApi () {
+    getEntityApi() {
       return API_ADDRESS.user.getOrderList(this.user.id)
     },
     getCurrentOrderCompletedAt() {
@@ -480,14 +499,21 @@ export default {
         return moment(this.currentOrder.completed_at, 'YYYY-M-D').format('jYYYY/jMM/jDD')
       }
     },
-    discountInPercent () {
+    windowSize () {
+      if (this.$store.getters['AppLayout/windowSize'].x < 600) {
+        // console.log('q-table__grid-item-row')
+        return
+      }
+      return this.$store.getters['AppLayout/windowSize']
+    },
+    discountInPercent() {
       return (discount, base) => {
         return Math.round(discount * 100 / base)
       }
     }
   },
   methods: {
-    showDetailsDialog (rowData) {
+    showDetailsDialog(rowData) {
       // console.log('rowData', rowData)
       // this.currentOrder = new Order(rowData)
       // this.currentOrder = rowData
@@ -585,7 +611,16 @@ export default {
       }
       this.detailsDialog = true
     },
-    getRemoveMessage (row) {
+    setHasUserOrderedValue(rowData) {
+      if (this.firstRowPassed) {
+        return
+      }
+      if (rowData.id) {
+        this.hasUserOrdered = true
+      }
+      this.firstRowPassed = true
+    },
+    getRemoveMessage(row) {
       const title = row.title
       return 'آیا از حذف ' + title + ' اطمینان دارید؟'
     }
@@ -595,178 +630,288 @@ export default {
 
 <style scoped lang="scss">
 .my-orders-list {
+  .title {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+    text-align: left;
+    color: #434765;
+    padding-bottom: 24px;
+  }
+
   .payment-okay {
     color: #4CAF50;
   }
+
   .payment-not-okay {
     color: #E86562;
   }
+
   .payment-installment {
     color: #8ED6FF;
   }
+
   :deep(.quasar-crud-index-table) {
     padding: 0 !important;
+
     .q-table__container {
       background: #FFFFFF;
       box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       border-radius: 16px;
+
       .q-table__middle {
         //.q-table {
-          table {
+        table {
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 25px;
+          letter-spacing: -0.03em;
+          color: #6D708B;
+
+          th {
             font-weight: 400;
             font-size: 16px;
             line-height: 25px;
-            letter-spacing: -0.03em;
             color: #6D708B;
-            th {
-              font-weight: 400;
-              font-size: 16px;
-              line-height: 25px;
-              color: #6D708B;
+          }
+
+          tr {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 22px;
+            color: #434765;
+
+            &:nth-child(2n) {
+              background: #F6F9FF;
             }
-            tr {
-              font-weight: 400;
-              font-size: 14px;
-              line-height: 22px;
-              color: #434765;
-              &:nth-child(2n) {
-                background: #F6F9FF;
-              }
-              :not(:last-child) > td {
-                border-bottom-width: 0 !important;
-              }
+
+            :not(:last-child) > td {
+              border-bottom-width: 0 !important;
             }
           }
+        }
+
         //}
       }
     }
-    .q-pagination {
-      //background: red;
-      //.q-btn--flat {
-      //  background: #FFFFFF;
-      //  border-radius: 12px;
-      //}
-      :not(.justify-center) {
-        button {
-          &:last-child {
-            background: #FFFFFF;
-            border-radius: 12px;
-          }
-          &:first-child {
-            background: #FFFFFF;
-            border-radius: 12px;
-          }
-        }
-      }
 
-      .q-btn--actionable {
-        //background: none;
-      }
-      //button &:last-child {
-      //  background: #FFFFFF;
-      //  border-radius: 12px;
-      //}
-      :nth-child(1):nth-last-child(1) {
-        background: #FFFFFF;
-        border-radius: 12px;
-      }
-      //:not(.q-btn--actionable)
-      :first-child &button {
-        background: #FFFFFF;
-        border-radius: 12px;
-      }
-      :last-child &button {
-        background: #FFFFFF;
-        border-radius: 12px;
-      }
-      .q-btn {
-        color: #6D708B !important;
-        width: 40px;
-        height: 40px;
-        padding: 0 !important;
-        :first-child {
-          background: none;
-          //border-radius: n;
-        }
+    .q-table__top {
+      display: none !important;
+    }
 
+    .q-table__card {
+      box-shadow: none;
+      border-bottom: 1px solid #E4E8EF;
+      padding: 16px 20px;
+    }
+
+    .q-table__grid-item {
+      padding: 0;
+      .q-table__grid-item-row {
+        display: flex;
+        justify-content: space-between;
       }
     }
+
+  //.q-pagination {
+  //    //background: red;
+  //    //.q-btn--flat {
+  //    //  background: #FFFFFF;
+  //    //  border-radius: 12px;
+  //    //}
+  //    :not(.justify-center) {
+  //      button {
+  //        &:last-child {
+  //          background: #FFFFFF;
+  //          border-radius: 12px;
+  //        }
+  //
+  //        &:first-child {
+  //          background: #FFFFFF;
+  //          border-radius: 12px;
+  //        }
+  //      }
+  //    }
+  //
+  //    .q-btn--actionable {
+  //      //background: none;
+  //    }
+  //
+  //    //button &:last-child {
+  //    //  background: #FFFFFF;
+  //    //  border-radius: 12px;
+  //    //}
+  //    :nth-child(1):nth-last-child(1) {
+  //      background: #FFFFFF;
+  //      border-radius: 12px;
+  //    }
+  //
+  //    //:not(.q-btn--actionable)
+  //    :first-child &button {
+  //      background: #FFFFFF;
+  //      border-radius: 12px;
+  //    }
+  //
+  //    :last-child &button {
+  //      background: #FFFFFF;
+  //      border-radius: 12px;
+  //    }
+  //
+  //    .q-btn {
+  //      color: #6D708B !important;
+  //      width: 40px;
+  //      height: 40px;
+  //      padding: 0 !important;
+  //
+  //      :first-child {
+  //        background: none;
+  //        //border-radius: n;
+  //      }
+  //
+  //    }
+  //  }
   }
+
   .details-dialog {
     background: #FFFFFF;
     box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
     border-radius: 16px;
   }
 }
-</style>
-<style lang="scss">
-//.my-orders-list {
-  .order-details-dialog {
-    background: #FFFFFF;
-    box-shadow: none !important;
-    border-radius: 16px !important;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 25px;
-    text-align: left;
-    letter-spacing: -0.03em;
-    color: #434765;
-    width: 830px;
-    height: 640px;
-    overflow-x: scroll;
+.empty-order-list {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 37px;
+  text-align: center;
+  color: #6D708B;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  //.q-img
+  .list-text {
     @media screen and (max-width: 1439px) {
-      width: 664px;
-      height: 480px;
+      font-size: 22px;
+      line-height: 34px;
+      text-align: center;
+      color: #6D708B;
+    }
+  }
+  .image {
+    width: 290px;
+    height: 290px;
+    margin-bottom: 60px;
+    @media screen and (max-width: 1439px) {
+      width: 230px;
+      height: 230px;
+      margin-bottom: 48px;
     }
     @media screen and (max-width: 1023px) {
-      width: 540px;
-      height: 640px;
+      width: 290px;
+      height: 290px;
     }
-    .dialog-header {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      align-items: center;
-      .title {
-        justify-self: center;
-      }
+    @media screen and (max-width: 599px) {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 40px;
     }
-    .info {
-      display: grid;
-      grid-template-columns: auto auto;
-      align-items: center;
-      padding: 16px 30px;
-      .info-box {
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 25px;
-        text-align: left;
-        letter-spacing: -0.03em;
-        color: #6D708B;
-      }
-      .part2 {
-        padding-top: 20px;
-      }
+  }
+  .back-to-shop-btn {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+    text-align: center;
+    color: #8075DC;
+    @media screen and (max-width: 599px) {
+      font-size: 14px;
+      line-height: 22px;
+      color: #8075DC;
     }
-    .info-discount {
-      color: #DA5F5C;
-      padding: 0 8px;
+  }
+}
+</style>
+<style lang="scss">
+// TODo IMPORTANT : pleeaaaseee let me know if you ever touched this
+//.my-orders-list {
+.order-details-dialog {
+  background: #FFFFFF;
+  box-shadow: none !important;
+  border-radius: 16px !important;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 25px;
+  text-align: left;
+  letter-spacing: -0.03em;
+  color: #434765;
+  width: 830px;
+  height: 640px;
+  overflow-x: scroll;
+  @media screen and (max-width: 1439px) {
+    width: 664px;
+    height: 480px;
+  }
+  @media screen and (max-width: 1023px) {
+    width: 540px;
+    height: 640px;
+  }
+
+  .dialog-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+
+    .title {
+      justify-self: center;
     }
-    .default-info {
-      color: #434765;
-      padding: 0 8px;
-      &.paid {
-        padding-left: 0;
-      }
-    }
-    .products {
+  }
+
+  .info {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    padding: 16px 30px;
+
+    .info-box {
       font-weight: 400;
       font-size: 16px;
       line-height: 25px;
       text-align: left;
       letter-spacing: -0.03em;
-      color: #434765;
+      color: #6D708B;
+    }
+
+    .part2 {
+      padding-top: 20px;
     }
   }
+
+  .info-discount {
+    color: #DA5F5C;
+    padding: 0 8px;
+  }
+
+  .default-info {
+    color: #434765;
+    padding: 0 8px;
+
+    &.paid {
+      padding-left: 0;
+    }
+  }
+
+  .products {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 25px;
+    text-align: left;
+    letter-spacing: -0.03em;
+    color: #434765;
+  }
+}
+
 //}
 </style>
