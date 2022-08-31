@@ -68,41 +68,7 @@ export default {
   components: { UserPanelBaseMenu },
   data () {
     return {
-      clickedItem: null,
-      titlesList: [
-        {
-          title: 'داشبورد',
-          icon: 'isax:home',
-          routeName: 'dashboard',
-          permission: 'all',
-          active: false,
-          children: []
-        },
-        {
-          title: 'آزمون ها',
-          icon: 'isax:task-square',
-          routeName: 'dashboard',
-          permission: 'all',
-          active: false,
-          children: []
-        },
-        {
-          title: 'سفارش‌ های من',
-          icon: 'isax:clipboard-text',
-          routeName: 'myOrders',
-          permission: 'all',
-          active: false,
-          children: []
-        }
-        // {
-        //   title: 'تنظیمات',
-        //   icon: 'isax:setting-2',
-        //   routeName: 'Admin.Settings',
-        //   permission: 'examStore',
-        //   active: false,
-        //   children: []
-        // },
-      ]
+      clickedItem: null
     }
   },
   methods: {
