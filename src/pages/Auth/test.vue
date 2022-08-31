@@ -1,16 +1,25 @@
 <template>
   <div>
     <h5>THIS COMPONENT IS JUST FOR TEST</h5>
+    <video-player   :sources="videosSrc"
+                    poster="https://nodes.alaatv.com/upload/vast/videos/3A_LANDING/video%20tubmail.jpg" />
   </div>
 </template>
 
 <script>
+import VideoPlayer from 'components/VideoPlayer'
+import { PlayerSourceList } from 'src/models/PlayerSource'
 export default {
   name: 'Test',
-  components: {},
+  components: { VideoPlayer },
   mixins: [],
   data () {
     return {
+      videosSrc: new PlayerSourceList([
+        // { link: 'https://nodes.alaatv.com/media/1612/HD_720p/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت عالی', res: '720p' },
+        { link: 'https://nodes.alaatv.com/upload/vast/videos/3A_LANDING/landing%20video.mp4', ext: 'mp4', size: null, caption: 'کیفیت بالا', res: '480p' }
+        // { link: 'https://nodes.alaatv.com/media/1612/240p/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت متوسط', res: '240p' }
+      ]),
       testValue: '',
       testValue1: ''
     }

@@ -27,7 +27,7 @@
             dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
             hide-bottom-space
             dense
-            color="grey-10"
+            color="amber-14"
             borderless
             rounded
             option-label="title"
@@ -47,6 +47,7 @@
               v-if="currentGrades.length>0"
               v-model="selectedGrade"
               borderless
+              color="amber-14"
               option-label="title"
               dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
               hide-bottom-space
@@ -61,6 +62,7 @@
             <q-select v-if="currentMajors.length >0"
                       v-model="selectedMajor"
                       borderless
+                      color="amber-14"
                       dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
                       hide-bottom-space
                       dense
@@ -206,6 +208,7 @@
                 </div>
                 <q-btn unelevated
                        class="sub-btn"
+                       :class="{'active': activeTab.submitMode === 'pack'}"
                        @click="showMessageDialog"
                 >
                   <span class="sub-btn-text">
@@ -565,6 +568,7 @@ export default {
             selective: true
           }
         ],
+        submitMode: 'pack',
         prices: [
           {
             major_id: 0,
@@ -580,7 +584,7 @@ export default {
             }
           }
         ],
-        producBandle: [],
+        productBandle: [],
         selective: true
       },
       {
@@ -837,6 +841,7 @@ export default {
           }
 
         ],
+        submitMode: 'pack',
         prices: [
           {
             major_id: 0,
@@ -856,6 +861,7 @@ export default {
         id: 2,
         description: 'دانش آموزان پایه هفتم،‌هشتم و نهم برای آشنایی هرچه بیشتر با فضای آزمون های تستی و کنکور لازم است میزان توانایی خود را در آزمون های تستی بسنجند. آزمون های سه آ در این پایه ها در زمان هایی قرارداده شده است که با برنامه آزمون های تشریحی بیشترین مطابقت را داشته باشد',
         majors: [],
+        submitMode: 'pack',
         title: ' آزمون سه‌آ ویژه هفتم، هشتم و نهم',
         grades: [{ id: 2, title: 'نهم' }, { id: 0, title: 'دهم' }, { id: 1, title: 'یازدهم' }],
         exams: [
@@ -1010,6 +1016,7 @@ export default {
           }
         ],
         majors: [],
+        submitMode: 'pack',
         title: 'آزمون سه‌آ ویژه قبولی تیزهوشان',
         grades: [{ id: 2, title: 'نهم' }, { id: 3, title: 'ششم' }],
         exams: [
@@ -1390,6 +1397,12 @@ export default {
                 background: #FFF2CB;
                 border: 2px solid #2A2A2A;
                 border-radius: 24px;
+                span{
+                    font-weight: 700;
+                    font-size: 12px;
+                    line-height: 16px;
+                    margin-left: 11px;
+                  }
               }
 
             }
@@ -1475,8 +1488,13 @@ export default {
             .sub-btn {
               width: calc(100% - 32px);
               height: 48px;
-              background: #FFBD07;
+              background: #FFF0C1;
+              border: 2px solid #FFBD07;
               border-radius: 24px;
+              &.active{
+                background: #FFBD07;
+                border: none;
+              }
 
               .sub-btn-text {
                 font-style: normal;
@@ -1629,11 +1647,11 @@ export default {
                 }
 
                 .download-btn {
-                  width: 150px;
-                  height: 40px;
-                  background: #FFF2CB;
-                  border: 2px solid #2A2A2A;
-                  border-radius: 24px;
+                  span{
+                    font-size: 14px;
+                    line-height: 16px;
+                    margin-left: 11px;
+                  }
                 }
 
               }
@@ -1710,6 +1728,10 @@ export default {
                 .download-btn {
                   width: 142px;
                   height: 32px;
+                  span{
+                    font-size: 10px;
+                    line-height: 16px;
+                  }
                 }
 
               }
@@ -1905,9 +1927,6 @@ export default {
                 .download-btn{
                   width: 130px;
                   height: 32px;
-                  span{
-                    font-size: 12px;
-                  }
                 }
               }
             }
@@ -2191,7 +2210,7 @@ export default {
                   border-width: 1px;
 
                   span {
-                    font-size: 12px;
+                    margin-left: 9px;
                   }
                 }
 
