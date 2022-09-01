@@ -84,13 +84,17 @@ export default {
   },
   mounted() {
     this.initPlayer()
-  },
-  computed: {
-    calcTheHeight() {
-      return '100%'
-    },
-    calcTheWidth() {
-      return '100%'
+    const video = this.$refs.videoPlayer
+    if (video) {
+      // console.log('video :', video)
+      video.addEventListener('progress', (event) => {
+        // console.log('event : ', event)
+        // console.log('video', video)
+        // console.log('video.srcObject', video.srcObject)
+        // console.log('video.buffered :', video.buffered)
+        // video.srcObject
+        // video.buffered
+      })
     }
   },
   beforeUnmount() {

@@ -246,6 +246,7 @@
 
 <script>
 // import tableComponent from 'src/components/landing/table'
+import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'submitTable',
   components: {
@@ -584,7 +585,44 @@ export default {
             }
           }
         ],
-        productBandle: [],
+        productBandles: [
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          }
+        ],
         selective: true
       },
       {
@@ -855,7 +893,82 @@ export default {
             }
           }
         ],
-        selective: false
+        selective: false,
+        productBandles: [
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          }
+
+        ]
       },
       {
         id: 2,
@@ -1001,7 +1114,43 @@ export default {
             }
           }
         ],
-        selective: false
+        selective: false,
+        productBandles: [{
+          major_id: 0,
+          grade_id: null,
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: ''
+        },
+        {
+          major_id: 0,
+          grade_id: null,
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: ''
+        },
+        {
+          major_id: 0,
+          grade_id: null,
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: ''
+        }]
       },
       {
         id: 3,
@@ -1177,7 +1326,43 @@ export default {
             }
           }
         ],
-        selective: true
+        selective: true,
+        productBandles: [{
+          major_id: 0,
+          grade_id: null,
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: ''
+        },
+        {
+          major_id: 0,
+          grade_id: null,
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: ''
+        },
+        {
+          major_id: 0,
+          grade_id: null,
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: ''
+        }]
       }
     ]
   }),
@@ -1186,6 +1371,7 @@ export default {
   },
   computed: {
     dataTable() {
+      // return this.activeTab.exams.filter(item => ((this.activeTab.majors.length > 0 ? item.major_id === this.selectedMajor.id : true) && (this.activeTab.grades.length > 0 ? item.grade_id === this.selectedGrade.id : true)))
       return this.activeTab.exams.filter(item => ((this.activeTab.majors.length > 0 ? item.major_id === this.selectedMajor.id : true) && (this.activeTab.grades.length > 0 ? item.grade_id === this.selectedGrade.id : true)))
     },
     currentMajors() {
@@ -1202,8 +1388,8 @@ export default {
       return ''
     },
     selectiveRegister() {
-      // return this.activeTab.selective
-      return false
+      return this.activeTab.selective
+      // return false
     }
   },
   methods: {
@@ -1213,6 +1399,18 @@ export default {
     initPageData() {
       this.setFirstExamActive()
       this.setFirstMajorsGradesSelected()
+      this.getProducts()
+    },
+    async getProducts() {
+      try {
+        const productList = await this.callProductApi()
+        console.log('productList', productList)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    callProductApi() {
+      return this.$axios.get(API_ADDRESS.product.all)
     },
     updateActiveTab(exam) {
       this.activeTab = exam

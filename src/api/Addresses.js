@@ -247,6 +247,9 @@ const API_ADDRESS = {
       return lumenServer + '/id/soalaQestion/' + questionId
     }
   },
+  product: {
+    all: authServer + '/product/soalaa/all'
+  },
   cart: {
     orderproduct: {
       add: apiV2Server + '/orderproduct',
