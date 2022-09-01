@@ -124,6 +124,14 @@ const routes = [
         path: 'user',
         name: 'User',
         component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
+        layoutConfig: {
+          name: 'User.MyOrders',
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false,
+          layoutLeftSideBarType: 'default',
+          layoutLeftDrawerOverlay: true
+        },
         meta: {
           middlewares: [auth]
         },
@@ -133,19 +141,19 @@ const routes = [
             name: 'User.MyOrders',
             component: () => import('pages/User/MyOrders/MyOrders'),
             breadcrumbs: { title: 'سفارش های من' },
-            layoutConfig: {
-              name: 'User.MyOrders',
-              layoutHeaderVisible: true,
-              layoutHeaderType: 'default',
-              layoutLeftDrawerVisible: false,
-              layoutLeftSideBarType: 'default',
-              layoutLeftDrawerOverlay: true
-            },
             meta: {
               middlewares: [
                 Permissions.hasPermission('examStore')
               ]
             }
+          },
+          {
+            path: '/user_exam_list',
+            name: 'User.Exam.List',
+            component: () => import('pages/User/exam/List'),
+            middleware: [
+              Permissions.hasPermission('examStore')
+            ]
           }
         ]
       },
@@ -451,12 +459,6 @@ const routes = [
           },
           { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings'), breadcrumbs: { title: 'تنظیمات' } }
         ]
-      },
-      {
-        path: '/user_exam_list',
-        name: 'user.exam.list',
-        component: () => import('pages/User/exam/List'),
-        middleware: [auth]
       },
       {
         path: '/onlineQuiz/results/:exam_id/:user_exam_id',
