@@ -39,9 +39,9 @@ export default {
   margin-bottom: 18px;
   .answer-text{
     line-height: 24px;
+    margin: 0 8px;
   }
   .question-choice-number {
-    margin:3px 10px 0 10px;
     border-radius: 50%;
     text-align: center;
     color: #ffffff;
