@@ -64,6 +64,29 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
+    layoutConfig: {
+      layoutHeaderVisible: true,
+      layoutHeaderType: 'panel',
+      layoutLeftDrawerVisible: true,
+      layoutLeftSideBarType: 'panel',
+      layoutView: 'lHh Lpr lFf',
+      layoutHeader: true,
+      layoutHeaderReveal: false,
+      layoutHeaderElevated: false,
+      layoutHeaderBordered: false,
+      layoutLeftDrawer: true,
+      layoutLeftDrawerOverlay: false,
+      layoutLeftDrawerElevated: false,
+      layoutLeftDrawerBordered: false,
+      layoutLeftDrawerWidth: 325,
+      layoutLeftDrawerBehavior: 'panel',
+      layoutPageContainer: true,
+      layoutRightDrawer: false,
+      layoutFooter: false,
+      layoutHeaderCustomClass: '',
+      layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
+      layoutPageContainerCustomClass: 'main-layout-container'
+    },
     children: [
       {
         path: '',
@@ -82,6 +105,12 @@ const routes = [
         name: 'dashboard',
         component: () => import('pages/User/exam/List'),
         breadcrumbs: { title: 'پیشخوان' },
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'panel',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'panel'
+        },
         meta: {
           middlewares: [auth]
         }
@@ -95,6 +124,14 @@ const routes = [
         path: 'user',
         name: 'User',
         component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
+        layoutConfig: {
+          name: 'User.MyOrders',
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false,
+          layoutLeftSideBarType: 'default',
+          layoutLeftDrawerOverlay: true
+        },
         meta: {
           middlewares: [auth]
         },
@@ -109,6 +146,14 @@ const routes = [
                 Permissions.hasPermission('examStore')
               ]
             }
+          },
+          {
+            path: '/user_exam_list',
+            name: 'User.Exam.List',
+            component: () => import('pages/User/exam/List'),
+            middleware: [
+              Permissions.hasPermission('examStore')
+            ]
           }
         ]
       },
@@ -126,6 +171,12 @@ const routes = [
         component: () => import('layouts/AdminLayout.vue'),
         meta: {
           middlewares: [auth]
+        },
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'panel',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'panel'
         },
         children: [
           {
@@ -410,12 +461,6 @@ const routes = [
         ]
       },
       {
-        path: '/user_exam_list',
-        name: 'user.exam.list',
-        component: () => import('pages/User/exam/List'),
-        middleware: [auth]
-      },
-      {
         path: '/onlineQuiz/results/:exam_id/:user_exam_id',
         name: 'user.exam.results',
         component: () => import('pages/User/exam/Result'),
@@ -435,6 +480,12 @@ const routes = [
         path: '/onlineQuiz/alaaView/:quizId/:questNumber',
         name: 'onlineQuiz.alaaView',
         component: () => import('pages/User/exam/participate/AlaaView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
         meta: {
           middlewares: [auth]
         }
@@ -443,6 +494,12 @@ const routes = [
         path: '/onlineQuiz/konkoorView/:quizId',
         name: 'konkoorView',
         component: () => import('pages/User/exam/participate/konkoorView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
         meta: {
           middlewares: [auth]
         }
