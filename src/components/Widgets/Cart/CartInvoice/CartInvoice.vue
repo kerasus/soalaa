@@ -338,6 +338,8 @@ export default {
     },
 
     payment() {
+      this.$store.commit('loading/loading', true)
+
       this.$store.dispatch('Cart/paymentCheckout')
         .then((response) => {
           console.log('res', response)
@@ -345,6 +347,9 @@ export default {
           anchor.href = response.data.data.url
           anchor.target = '_blank'
           anchor.click()
+          this.$store.commit('loading/loading', false)
+        }).catch(() => {
+          this.$store.commit('loading/loading', false)
         })
     },
 
