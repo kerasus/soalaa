@@ -35,6 +35,7 @@
       :table="table"
       :table-keys="tableKeys"
       :default-layout="false"
+      :table-grid-size="$q.screen.lt.sm"
       :create-route-name="'Admin.Exam.Create'"
     >
       <template #table-cell="{inputData}">
@@ -77,6 +78,39 @@
             {{ inputData.props.value }}
           </template>
         </q-td>
+      </template>
+      <template v-slot:table-item-cell="{inputData}">
+        <q-card>
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 @click="showDetailsDialog(inputData.props.row)">
+            <!--              <q-tooltip anchor="top middle"-->
+            <!--                         self="bottom middle">-->
+            <!--                مشاهده-->
+            <!--              </q-tooltip>-->
+            <svg width="24"
+                 height="24"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12"
+                      cy="6"
+                      r="2"
+                      fill="#6D708B" />
+              <circle cx="12"
+                      cy="12"
+                      r="2"
+                      fill="#6D708B" />
+              <circle cx="12"
+                      cy="18"
+                      r="2"
+                      fill="#6D708B" />
+            </svg>
+
+          </q-btn>
+        </q-card>
       </template>
     </entity-index>
     <q-dialog v-model="detailsDialog">
@@ -156,11 +190,6 @@
           >
             <ordered-products :order="product" />
           </div>
-          <!--          -->
-          <!--          <ordered-products />-->
-          <!--          <ordered-products />-->
-          <!--          <ordered-products />-->
-          <!--          <ordered-products />-->
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -193,29 +222,29 @@ export default {
             align: 'left',
             field: row => row.id
           },
-          {
-            name: 'paymentstatus',
-            // name: 'payment_status',
-            required: true,
-            label: 'وضعیت ‌پرداخت',
-            align: 'left',
-            field: row => row.paymentstatus.name,
-            classes: row => row.paymentstatus.id === 1 ? 'payment-not-okay' : row.paymentstatus.id === 3 ? 'payment-okay' : row.paymentstatus.id === 4 ? 'payment-installment' : ''
-          },
-          {
-            name: 'price',
-            required: true,
-            label: 'مبلغ',
-            align: 'left',
-            field: row => row.price
-          },
-          {
-            name: 'completed_at',
-            required: true,
-            label: 'تاریخ سفارش',
-            align: 'left',
-            field: row => moment(row.completed_at, 'YYYY-M-D').format('jYYYY/jMM/jDD')
-          },
+          // {
+          //   name: 'paymentstatus',
+          //   // name: 'payment_status',
+          //   required: true,
+          //   label: 'وضعیت ‌پرداخت',
+          //   align: 'left',
+          //   field: row => row.paymentstatus.name,
+          //   classes: row => row.paymentstatus.id === 1 ? 'payment-not-okay' : row.paymentstatus.id === 3 ? 'payment-okay' : row.paymentstatus.id === 4 ? 'payment-installment' : ''
+          // },
+          // {
+          //   name: 'price',
+          //   required: true,
+          //   label: 'مبلغ',
+          //   align: 'left',
+          //   field: row => row.price
+          // },
+          // {
+          //   name: 'completed_at',
+          //   required: true,
+          //   label: 'تاریخ سفارش',
+          //   align: 'left',
+          //   field: row => moment(row.completed_at, 'YYYY-M-D').format('jYYYY/jMM/jDD')
+          // },
           {
             name: 'details',
             required: true,
@@ -492,7 +521,8 @@ export default {
       return new User()
     },
     getEntityApi() {
-      return API_ADDRESS.user.getOrderList(this.user.id)
+      // return API_ADDRESS.user.getOrderList(this.user.id)
+      return API_ADDRESS.exam.base(1)
     },
     getCurrentOrderCompletedAt() {
       return (CompletedAt) => {
@@ -715,64 +745,6 @@ export default {
         }
       }
     }
-
-  //.q-pagination {
-  //    //background: red;
-  //    //.q-btn--flat {
-  //    //  background: #FFFFFF;
-  //    //  border-radius: 12px;
-  //    //}
-  //    :not(.justify-center) {
-  //      button {
-  //        &:last-child {
-  //          background: #FFFFFF;
-  //          border-radius: 12px;
-  //        }
-  //
-  //        &:first-child {
-  //          background: #FFFFFF;
-  //          border-radius: 12px;
-  //        }
-  //      }
-  //    }
-  //
-  //    .q-btn--actionable {
-  //      //background: none;
-  //    }
-  //
-  //    //button &:last-child {
-  //    //  background: #FFFFFF;
-  //    //  border-radius: 12px;
-  //    //}
-  //    :nth-child(1):nth-last-child(1) {
-  //      background: #FFFFFF;
-  //      border-radius: 12px;
-  //    }
-  //
-  //    //:not(.q-btn--actionable)
-  //    :first-child &button {
-  //      background: #FFFFFF;
-  //      border-radius: 12px;
-  //    }
-  //
-  //    :last-child &button {
-  //      background: #FFFFFF;
-  //      border-radius: 12px;
-  //    }
-  //
-  //    .q-btn {
-  //      color: #6D708B !important;
-  //      width: 40px;
-  //      height: 40px;
-  //      padding: 0 !important;
-  //
-  //      :first-child {
-  //        background: none;
-  //        //border-radius: n;
-  //      }
-  //
-  //    }
-  //  }
   }
 
   .details-dialog {
