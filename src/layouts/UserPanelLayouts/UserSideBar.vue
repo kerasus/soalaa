@@ -120,6 +120,9 @@ export default {
       margin-bottom: 10px;
 
     }
+    @media screen and (max-width: 1023px) {
+      width: 100%;
+    }
     @media screen and (max-width: 599px) {}
     .profile-detail {
       display: grid;
@@ -207,6 +210,10 @@ export default {
       font-weight: 400;
       font-size: 14px;
       line-height: 22px;
+    }
+    @media screen and (max-width: 1023px) {
+      width: 100%;
+      height: calc(100vh - 100px);
     }
     @media screen and (max-width: 599px) {
       //width: 100%;
