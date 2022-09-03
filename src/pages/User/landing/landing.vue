@@ -80,7 +80,7 @@ export default {
 
 <style lang="scss" scoped>
 .landing-page{
-  background: linear-gradient(-134deg, #EAB311 -52.45%, rgba(255, 255, 255, 0) 48.84%);
+  background: linear-gradient(-138.47deg, #EAB311 -52.45%, rgba(255, 255, 255, 0) 48.84%);
   &:deep(.landing-width){
      width: 1110px;
      margin: auto;
