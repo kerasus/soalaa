@@ -59,7 +59,9 @@
               clickable
               :active="selected === item.selected"
               active-class="active-item"
-              @click="selected = item.selected">
+              :to="{ name: item.to }"
+              @click="selected = item.selected"
+            >
               <q-item-section class="tab-title">
                 {{ item.title }}
               </q-item-section>
@@ -110,27 +112,32 @@ export default {
   name: 'UserTemplateHeader',
   data () {
     return {
-      selected: 'exams',
+      selected: '',
       headerItems: [
         {
           selected: 'exams',
-          title: 'آزمون ها'
+          title: 'آزمون ها',
+          to: 'User.Exam.List'
         },
         {
           selected: 'questionBank',
-          title: 'بانک سوال'
+          title: 'بانک سوال',
+          to: ''
         },
         {
           selected: 'soalaMag',
-          title: 'سوالامگ'
+          title: 'سوالامگ',
+          to: ''
         },
         {
           selected: 'askedQuestions',
-          title: 'سوالات متداول'
+          title: 'سوالات متداول',
+          to: ''
         },
         {
           selected: 'contactUs',
-          title: 'تماس با ما'
+          title: 'تماس با ما',
+          to: ''
         }
       ]
     }
