@@ -43,32 +43,42 @@
           {{setHasUserOrderedValue(inputData.props.row)}}
 
           <template v-if="inputData.props.col.name === 'details'">
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   @click="showDetailsDialog(inputData.props.row)">
+            <q-btn
+              round
+              flat
+              dense
+              size="md"
+              @click="showDetailsDialog(inputData.props.row)"
+            >
               <!--              <q-tooltip anchor="top middle"-->
               <!--                         self="bottom middle">-->
               <!--                مشاهده-->
               <!--              </q-tooltip>-->
-              <svg width="24"
-                   height="24"
-                   viewBox="0 0 24 24"
-                   fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12"
-                        cy="6"
-                        r="2"
-                        fill="#6D708B" />
-                <circle cx="12"
-                        cy="12"
-                        r="2"
-                        fill="#6D708B" />
-                <circle cx="12"
-                        cy="18"
-                        r="2"
-                        fill="#6D708B" />
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="6"
+                  r="2"
+                  fill="#6D708B"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="2"
+                  fill="#6D708B"
+                />
+                <circle
+                  cx="12"
+                  cy="18"
+                  r="2"
+                  fill="#6D708B"
+                />
               </svg>
 
             </q-btn>
@@ -113,101 +123,26 @@
         </q-card>
       </template>
     </entity-index>
-    <q-dialog v-model="detailsDialog">
-      <q-card class="order-details-dialog">
-        <q-card-section class="dialog-header">
-          <div>
-            <q-btn
-              round
-              flat
-              dense
-              size="md"
-              @click="detailsDialog = false"
-            >
-              <svg width="24"
-                   height="24"
-                   viewBox="0 0 24 24"
-                   fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 16L16 8"
-                      stroke="#65677F"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round" />
-                <path d="M16 16L8 8"
-                      stroke="#65677F"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round" />
-              </svg>
-
-            </q-btn>
-          </div>
-          <div class="title">جزییات سفارش</div>
-          <div></div>
-        </q-card-section>
-        <q-card-section class="info">
-          <div class="info-box part1">
-            <div class="default-info paid">اطلاعات کلی</div>
-            <div>
-              شماره سفارش:
-              <span class="default-info">{{ currentOrder.id }}</span>
-            </div>
-            <div>
-              وضعیت پرداخت:
-              <span class="default-info">{{ currentOrder.paymentstatus.name }}</span>
-            </div>
-            <div>
-              تاریخ سفارش:
-              <span class="default-info">{{ getCurrentOrderCompletedAt(currentOrder.completed_at) }}</span>
-            </div>
-          </div>
-          <div class="info-box part2">
-            <div>
-              جمع مبلغ سفارش:
-              <span class="default-info">{{ currentOrder.price }} تومان</span>
-            </div>
-            <div>
-              میزان تخفیف:
-              <span class="info-discount">({{ discountInPercent(currentOrder.discount, currentOrder.price) }}%)</span>
-              <!--              <span class="default-info paid">پرداخت شده</span>-->
-              <span class="default-info">{{ currentOrder.discount }} تومان</span>
-            </div>
-            <div>
-              مبلغ نهایی:
-              <span class="default-info">{{ currentOrder.paid_price }}</span>
-            </div>
-          </div>
-        </q-card-section>
-        <q-card-section
-          v-if="currentOrder.orderproducts && currentOrder.orderproducts.length > 0 "
-          class="products"
-        >
-          <div class="default-info paid">محصولات سفارش</div>
-          <div
-            v-for="(product) in currentOrder.orderproducts"
-            :key="product.id"
-          >
-            <ordered-products :order="product" />
-          </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+    <order-details-dialog
+      v-model:dialogValue="detailsDialog"
+      :order="currentOrder"
+    />
   </div>
 </template>
 
 <script>
 import { EntityIndex } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
-import OrderedProducts from 'components/MyOrders/OrderedProducts'
 import { User } from 'src/models/User'
 import moment from 'moment-jalaali'
+import { Order } from 'src/models/Order'
+import OrderDetailsDialog from 'components/MyOrders/OrderDetailsDialog'
 // import { Order } from 'src/models/Order'
 // import { Question } from 'src/models/Question'
 export default {
   name: 'MyOrders',
   components: {
-    OrderedProducts,
+    OrderDetailsDialog,
     EntityIndex
   },
   data() {
@@ -264,251 +199,253 @@ export default {
       },
       // currentOrder: new Order(),
       // currentOrder: null,
-      currentOrder: {
-        id: 1801136,
-        discount: 0,
-        customer_description: null,
-        price: 0,
-        paid_price: 0,
-        refund_price: 0,
-        debt: 0,
-        orderstatus: {
-          id: 2,
-          name: 'ثبت نهایی'
-        },
-        paymentstatus: {
-          id: 3,
-          name: 'پرداخت شده'
-        },
-        orderproducts: [
-          {
-            id: 2268936,
-            quantity: 1,
-            type: 2,
-            product: [
-              {
-                price: {
-                  discountDetail: {
-                    productDiscount: 100,
-                    bonDiscount: 0,
-                    productDiscountAmount: 0
-                  },
-                  extraCost: 0,
-                  base: 0,
-                  discount: 0,
-                  final: 0
-                },
-                id: 772,
-                redirect_url: null,
-                type: 1,
-                category: 'آزمون/سه آ',
-                title: 'آزمون المپیاد زیست سنجاب دهم',
-                is_free: 0,
-                url: {
-                  web: 'http://office.alaa.tv:8080/product/772',
-                  api: 'http://office.alaa.tv:8080/api/v2/product/772'
-                },
-                photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-                attributes: {
-                  info: {
-                    teacher: [
-                      'گروه مؤلفین'
-                    ],
-                    shipping_method: [
-                      'آنلاین_مجازی'
-                    ],
-                    major: [
-                      'تجربی'
-                    ],
-                    services: [
-                      'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-                    ],
-                    download_date: null,
-                    educational_system: [
-                      'نظام جدید'
-                    ],
-                    duration: null,
-                    production_year: [
-                      '99-00'
-                    ]
-                  },
-                  extra: null
-                },
-                redirect_code: null
-              },
-              {
-                price: {
-                  discountDetail: {
-                    productDiscount: 100,
-                    bonDiscount: 0,
-                    productDiscountAmount: 0
-                  },
-                  extraCost: 0,
-                  base: 0,
-                  discount: 0,
-                  final: 0
-                },
-                id: 772,
-                redirect_url: null,
-                type: 1,
-                category: 'آزمون/سه آ',
-                title: 'آزمون المپیاد زیست سنجاب دهم',
-                is_free: 0,
-                url: {
-                  web: 'http://office.alaa.tv:8080/product/772',
-                  api: 'http://office.alaa.tv:8080/api/v2/product/772'
-                },
-                photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-                attributes: {
-                  info: {
-                    teacher: [
-                      'گروه مؤلفین'
-                    ],
-                    shipping_method: [
-                      'آنلاین_مجازی'
-                    ],
-                    major: [
-                      'تجربی'
-                    ],
-                    services: [
-                      'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-                    ],
-                    download_date: null,
-                    educational_system: [
-                      'نظام جدید'
-                    ],
-                    duration: null,
-                    production_year: [
-                      '99-00'
-                    ]
-                  },
-                  extra: null
-                },
-                redirect_code: null
-              },
-              {
-                price: {
-                  discountDetail: {
-                    productDiscount: 100,
-                    bonDiscount: 0,
-                    productDiscountAmount: 0
-                  },
-                  extraCost: 0,
-                  base: 0,
-                  discount: 0,
-                  final: 0
-                },
-                id: 772,
-                redirect_url: null,
-                type: 1,
-                category: 'آزمون/سه آ',
-                title: 'آزمون المپیاد زیست سنجاب دهم',
-                is_free: 0,
-                url: {
-                  web: 'http://office.alaa.tv:8080/product/772',
-                  api: 'http://office.alaa.tv:8080/api/v2/product/772'
-                },
-                photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-                attributes: {
-                  info: {
-                    teacher: [
-                      'گروه مؤلفین'
-                    ],
-                    shipping_method: [
-                      'آنلاین_مجازی'
-                    ],
-                    major: [
-                      'تجربی'
-                    ],
-                    services: [
-                      'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-                    ],
-                    download_date: null,
-                    educational_system: [
-                      'نظام جدید'
-                    ],
-                    duration: null,
-                    production_year: [
-                      '99-00'
-                    ]
-                  },
-                  extra: null
-                },
-                redirect_code: null
-              }],
-            grand: {
-              id: 772,
-              redirect_url: null,
-              type: 1,
-              category: 'آزمون/سه آ',
-              title: 'آزمون المپیاد زیست سنجاب دهم',
-              is_free: 0,
-              url: {
-                web: 'http://office.alaa.tv:8080/product/772',
-                api: 'http://office.alaa.tv:8080/api/v2/product/772'
-              },
-              photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-              attributes: {
-                info: {
-                  teacher: [
-                    'گروه مؤلفین'
-                  ],
-                  shipping_method: [
-                    'آنلاین_مجازی'
-                  ],
-                  major: [
-                    'تجربی'
-                  ],
-                  services: [
-                    'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-                  ],
-                  download_date: null,
-                  educational_system: [
-                    'نظام جدید'
-                  ],
-                  duration: null,
-                  production_year: [
-                    '99-00'
-                  ]
-                },
-                extra: null
-              },
-              redirect_code: null
-            },
-            price: {
-              discountDetail: {
-                productDiscount: 100,
-                bonDiscount: 0,
-                productDiscountAmount: 0
-              },
-              extraCost: 0,
-              base: 0,
-              discount: 0,
-              final: 0
-            },
-            photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-            extra_attributes: null
-          }
-        ],
-        coupon_info: null,
-        successful_transactions: null,
-        pending_transactions: null,
-        unpaid_transaction: null,
-        posting_info: null,
-        user: {
-          id: 219548,
-          first_name: 'علی',
-          last_name: 'اسماعیلی',
-          mobile: '09358745928',
-          national_code: '0014258269',
-          profile_completion: 77
-        },
-        created_at: '2022-07-25 04:26:11',
-        completed_at: '2022-07-25 08:56:11'
-      },
+      // currentOrder: {
+      //   id: 1801136,
+      //   discount: 0,
+      //   customer_description: null,
+      //   price: 0,
+      //   paid_price: 0,
+      //   refund_price: 0,
+      //   debt: 0,
+      //   orderstatus: {
+      //     id: 2,
+      //     name: 'ثبت نهایی'
+      //   },
+      //   paymentstatus: {
+      //     id: 3,
+      //     name: 'پرداخت شده'
+      //   },
+      //   orderproducts: [
+      //     {
+      //       id: 2268936,
+      //       quantity: 1,
+      //       type: 2,
+      //       product: [
+      //         {
+      //           price: {
+      //             discountDetail: {
+      //               productDiscount: 100,
+      //               bonDiscount: 0,
+      //               productDiscountAmount: 0
+      //             },
+      //             extraCost: 0,
+      //             base: 0,
+      //             discount: 0,
+      //             final: 0
+      //           },
+      //           id: 772,
+      //           redirect_url: null,
+      //           type: 1,
+      //           category: 'آزمون/سه آ',
+      //           title: 'آزمون المپیاد زیست سنجاب دهم',
+      //           is_free: 0,
+      //           url: {
+      //             web: 'http://office.alaa.tv:8080/product/772',
+      //             api: 'http://office.alaa.tv:8080/api/v2/product/772'
+      //           },
+      //           photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
+      //           attributes: {
+      //             info: {
+      //               teacher: [
+      //                 'گروه مؤلفین'
+      //               ],
+      //               shipping_method: [
+      //                 'آنلاین_مجازی'
+      //               ],
+      //               major: [
+      //                 'تجربی'
+      //               ],
+      //               services: [
+      //                 'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
+      //               ],
+      //               download_date: null,
+      //               educational_system: [
+      //                 'نظام جدید'
+      //               ],
+      //               duration: null,
+      //               production_year: [
+      //                 '99-00'
+      //               ]
+      //             },
+      //             extra: null
+      //           },
+      //           redirect_code: null
+      //         },
+      //         {
+      //           price: {
+      //             discountDetail: {
+      //               productDiscount: 100,
+      //               bonDiscount: 0,
+      //               productDiscountAmount: 0
+      //             },
+      //             extraCost: 0,
+      //             base: 0,
+      //             discount: 0,
+      //             final: 0
+      //           },
+      //           id: 772,
+      //           redirect_url: null,
+      //           type: 1,
+      //           category: 'آزمون/سه آ',
+      //           title: 'آزمون المپیاد زیست سنجاب دهم',
+      //           is_free: 0,
+      //           url: {
+      //             web: 'http://office.alaa.tv:8080/product/772',
+      //             api: 'http://office.alaa.tv:8080/api/v2/product/772'
+      //           },
+      //           photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
+      //           attributes: {
+      //             info: {
+      //               teacher: [
+      //                 'گروه مؤلفین'
+      //               ],
+      //               shipping_method: [
+      //                 'آنلاین_مجازی'
+      //               ],
+      //               major: [
+      //                 'تجربی'
+      //               ],
+      //               services: [
+      //                 'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
+      //               ],
+      //               download_date: null,
+      //               educational_system: [
+      //                 'نظام جدید'
+      //               ],
+      //               duration: null,
+      //               production_year: [
+      //                 '99-00'
+      //               ]
+      //             },
+      //             extra: null
+      //           },
+      //           redirect_code: null
+      //         },
+      //         {
+      //           price: {
+      //             discountDetail: {
+      //               productDiscount: 100,
+      //               bonDiscount: 0,
+      //               productDiscountAmount: 0
+      //             },
+      //             extraCost: 0,
+      //             base: 0,
+      //             discount: 0,
+      //             final: 0
+      //           },
+      //           id: 772,
+      //           redirect_url: null,
+      //           type: 1,
+      //           category: 'آزمون/سه آ',
+      //           title: 'آزمون المپیاد زیست سنجاب دهم',
+      //           is_free: 0,
+      //           url: {
+      //             web: 'http://office.alaa.tv:8080/product/772',
+      //             api: 'http://office.alaa.tv:8080/api/v2/product/772'
+      //           },
+      //           photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
+      //           attributes: {
+      //             info: {
+      //               teacher: [
+      //                 'گروه مؤلفین'
+      //               ],
+      //               shipping_method: [
+      //                 'آنلاین_مجازی'
+      //               ],
+      //               major: [
+      //                 'تجربی'
+      //               ],
+      //               services: [
+      //                 'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
+      //               ],
+      //               download_date: null,
+      //               educational_system: [
+      //                 'نظام جدید'
+      //               ],
+      //               duration: null,
+      //               production_year: [
+      //                 '99-00'
+      //               ]
+      //             },
+      //             extra: null
+      //           },
+      //           redirect_code: null
+      //         }],
+      //       grand: {
+      //         id: 772,
+      //         redirect_url: null,
+      //         type: 1,
+      //         category: 'آزمون/سه آ',
+      //         title: 'آزمون المپیاد زیست سنجاب دهم',
+      //         is_free: 0,
+      //         url: {
+      //           web: 'http://office.alaa.tv:8080/product/772',
+      //           api: 'http://office.alaa.tv:8080/api/v2/product/772'
+      //         },
+      //         photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
+      //         attributes: {
+      //           info: {
+      //             teacher: [
+      //               'گروه مؤلفین'
+      //             ],
+      //             shipping_method: [
+      //               'آنلاین_مجازی'
+      //             ],
+      //             major: [
+      //               'تجربی'
+      //             ],
+      //             services: [
+      //               'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
+      //             ],
+      //             download_date: null,
+      //             educational_system: [
+      //               'نظام جدید'
+      //             ],
+      //             duration: null,
+      //             production_year: [
+      //               '99-00'
+      //             ]
+      //           },
+      //           extra: null
+      //         },
+      //         redirect_code: null
+      //       },
+      //       price: {
+      //         discountDetail: {
+      //           productDiscount: 100,
+      //           bonDiscount: 0,
+      //           productDiscountAmount: 0
+      //         },
+      //         extraCost: 0,
+      //         base: 0,
+      //         discount: 0,
+      //         final: 0
+      //       },
+      //       photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
+      //       extra_attributes: null
+      //     }
+      //   ],
+      //   coupon_info: null,
+      //   successful_transactions: null,
+      //   pending_transactions: null,
+      //   unpaid_transaction: null,
+      //   posting_info: null,
+      //   user: {
+      //     id: 219548,
+      //     first_name: 'علی',
+      //     last_name: 'اسماعیلی',
+      //     mobile: '09358745928',
+      //     national_code: '0014258269',
+      //     profile_completion: 77
+      //   },
+      //   created_at: '2022-07-25 04:26:11',
+      //   completed_at: '2022-07-25 08:56:11'
+      // },
+      currentOrder: new Order(),
       detailsDialog: false,
       hasUserOrdered: true,
-      firstRowPassed: false
+      firstRowPassed: false,
+      test: new Order()
     }
   },
   created() {
@@ -521,8 +458,8 @@ export default {
       return new User()
     },
     getEntityApi() {
-      // return API_ADDRESS.user.getOrderList(this.user.id)
-      return API_ADDRESS.exam.base(1)
+      return API_ADDRESS.user.getOrderList(this.user.id)
+      // return API_ADDRESS.exam.base(1)
     },
     getCurrentOrderCompletedAt() {
       return (CompletedAt) => {
@@ -535,19 +472,12 @@ export default {
         return
       }
       return this.$store.getters['AppLayout/windowSize']
-    },
-    discountInPercent() {
-      return (discount, base) => {
-        return Math.round(discount * 100 / base)
-      }
     }
   },
   methods: {
     showDetailsDialog(rowData) {
       // console.log('rowData', rowData)
-      // this.currentOrder = new Order(rowData)
-      // this.currentOrder = rowData
-      this.currentOrder = {
+      this.currentOrder = new Order({
         id: 1801136,
         discount: 0,
         customer_description: null,
@@ -638,7 +568,8 @@ export default {
         },
         created_at: '2022-07-25 04:26:11',
         completed_at: '2022-07-25 08:56:11'
-      }
+      })
+      // this.currentOrder = rowData
       this.detailsDialog = true
     },
     setHasUserOrderedValue(rowData) {
@@ -724,6 +655,9 @@ export default {
 
         //}
       }
+      .q-table__grid-content {
+        flex-direction: column;
+      }
     }
 
     .q-table__top {
@@ -806,86 +740,4 @@ export default {
     }
   }
 }
-</style>
-<style lang="scss">
-// TODo IMPORTANT : pleeaaaseee let me know if you ever touched this
-//.my-orders-list {
-.order-details-dialog {
-  background: #FFFFFF;
-  box-shadow: none !important;
-  border-radius: 16px !important;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 25px;
-  text-align: left;
-  letter-spacing: -0.03em;
-  color: #434765;
-  width: 830px;
-  height: 640px;
-  overflow-x: scroll;
-  @media screen and (max-width: 1439px) {
-    width: 664px;
-    height: 480px;
-  }
-  @media screen and (max-width: 1023px) {
-    width: 540px;
-    height: 640px;
-  }
-
-  .dialog-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    align-items: center;
-
-    .title {
-      justify-self: center;
-    }
-  }
-
-  .info {
-    display: grid;
-    grid-template-columns: auto auto;
-    align-items: center;
-    padding: 16px 30px;
-
-    .info-box {
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 25px;
-      text-align: left;
-      letter-spacing: -0.03em;
-      color: #6D708B;
-    }
-
-    .part2 {
-      padding-top: 20px;
-    }
-  }
-
-  .info-discount {
-    color: #DA5F5C;
-    padding: 0 8px;
-  }
-
-  .default-info {
-    color: #434765;
-    padding: 0 8px;
-
-    &.paid {
-      padding-left: 0;
-    }
-  }
-
-  .products {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 25px;
-    text-align: left;
-    letter-spacing: -0.03em;
-    color: #434765;
-  }
-}
-
-//}
 </style>

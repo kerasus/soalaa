@@ -45,6 +45,13 @@ class Order extends Model {
       { key: 'completed_at' }
     ])
   }
+
+  checkInformationCompletionKey (key) {
+    return (
+      (this[key] !== null && typeof this[key] === 'object' && typeof this[key].id !== 'undefined' && this[key].id !== null) ||
+      (this[key] && typeof this[key].id === 'undefined')
+    )
+  }
 }
 
 class OrderList extends Collection {
