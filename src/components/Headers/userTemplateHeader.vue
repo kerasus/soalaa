@@ -4,43 +4,30 @@
       <div class="user-header-section">
         <!--        -----------------------------------------------------Logo Section--------------------------------------------   -->
         <div class="user-logo-section">
-          <!--          <div class="hamburger hamburger-1">-->
-          <!--            <q-btn-->
-          <!--              flat-->
-          <!--              @click="toggleLeftDrawer"-->
-          <!--            >-->
-          <!--              <svg width="24"-->
-          <!--                   height="24"-->
-          <!--                   viewBox="0 0 24 24"-->
-          <!--                   fill="none"-->
-          <!--                   xmlns="http://www.w3.org/2000/svg">-->
-          <!--                <path d="M3 7H21"-->
-          <!--                      stroke="#6D708B"-->
-          <!--                      stroke-width="1.5"-->
-          <!--                      stroke-linecap="round" />-->
-          <!--                <path d="M3 12H21"-->
-          <!--                      stroke="#6D708B"-->
-          <!--                      stroke-width="1.5"-->
-          <!--                      stroke-linecap="round" />-->
-          <!--                <path d="M3 17H21"-->
-          <!--                      stroke="#6D708B"-->
-          <!--                      stroke-width="1.5"-->
-          <!--                      stroke-linecap="round" />-->
-          <!--              </svg>-->
-          <!--            </q-btn>-->
-          <!--          </div>-->
-          <div
-            class="drawer-btn hamburger"
-          >
+          <div class="hamburger">
             <q-btn
-              class="toolbar-button"
-              icon="isax:menu-1"
-              color="white"
-              text-color="accent"
-              dense
-              unelevated
+              flat
               @click="toggleLeftDrawer"
-            />
+            >
+              <svg width="24"
+                   height="24"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 7H21"
+                      stroke="#6D708B"
+                      stroke-width="1.5"
+                      stroke-linecap="round" />
+                <path d="M3 12H21"
+                      stroke="#6D708B"
+                      stroke-width="1.5"
+                      stroke-linecap="round" />
+                <path d="M3 17H21"
+                      stroke="#6D708B"
+                      stroke-width="1.5"
+                      stroke-linecap="round" />
+              </svg>
+            </q-btn>
           </div>
           <div class="logo-pic">
             <q-img
@@ -59,6 +46,7 @@
               clickable
               :active="selected === item.selected"
               active-class="active-item"
+              @click="selected = item.selected">
               :to="{ name: item.to }"
               @click="selected = item.selected"
             >
@@ -112,32 +100,27 @@ export default {
   name: 'UserTemplateHeader',
   data () {
     return {
-      selected: '',
+      selected: 'exams',
       headerItems: [
         {
           selected: 'exams',
-          title: 'آزمون ها',
-          to: 'User.Exam.List'
+          title: 'آزمون ها'
         },
         {
           selected: 'questionBank',
-          title: 'بانک سوال',
-          to: ''
+          title: 'بانک سوال'
         },
         {
           selected: 'soalaMag',
-          title: 'سوالامگ',
-          to: ''
+          title: 'سوالامگ'
         },
         {
           selected: 'askedQuestions',
-          title: 'سوالات متداول',
-          to: ''
+          title: 'سوالات متداول'
         },
         {
           selected: 'contactUs',
-          title: 'تماس با ما',
-          to: ''
+          title: 'تماس با ما'
         }
       ]
     }
@@ -243,11 +226,6 @@ export default {
           @media screen and (max-width: 1023px) {
             display: block;
             margin-right: 20px;
-          }
-        }
-        .drawer-btn {
-          :deep(.q-btn) {
-            flex-direction: row !important;
           }
         }
       }
