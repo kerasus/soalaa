@@ -25,7 +25,8 @@ const API_ADDRESS = {
     formData: authServer + '/megaroute/getUserFormData',
     show_user: authServer + '/getUserFor3a',
     getOrderList (id) {
-      return authServer + '/user/' + id + '/orders?seller=2'
+      // return authServer + '/user/' + id + '/orders?seller=2'
+      return authServer + '/user/' + id + '/orders?seller=1'
     }
   },
   set: {
