@@ -2,11 +2,12 @@
   <div class="question-details">
     <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
-      <div class="detail-box col-3" style="padding-right:0;">
+      <div class="detail-box col-3"
+           style="padding-right:0;">
         <div class="detail-box-title">مرجع</div>
         <q-select
-          borderless
           v-model="questionAuthor"
+          borderless
           option-value="id"
           option-label="value"
           use-input
@@ -19,10 +20,10 @@
       <div class="detail-box col-3">
         <div class="detail-box-title">تاریخ تالیف</div>
         <q-select
+          v-model="authorshipDate"
           borderless
           option-value="id"
           option-label="value"
-          v-model="authorshipDate"
           :options="authorshipDatesList"
           use-input
           use-chips
@@ -33,10 +34,10 @@
       <div class="detail-box col-3">
         <div class="detail-box-title">درجه سختی</div>
         <q-select
+          v-model="questionLevel"
           option-value="id"
           option-label="value"
           borderless
-          v-model="questionLevel"
           :options="levels"
           emit-value
           map-options
@@ -55,22 +56,22 @@
       <div class="detail-box detail-box-first col-3">
         <div class="detail-box-title">پایه تحصیلی</div>
         <q-select
+          v-model="grade"
           borderless
           option-value="id"
           option-label="title"
-          v-model="grade"
           :options="gradesList"
-          @update:model-value="gradeSelected"
           :disable="!editable"
+          @update:model-value="gradeSelected"
         />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title">رشته تحصیلی</div>
         <q-select
+          v-model="majors"
           borderless
           option-value="id"
           option-label="value"
-          v-model="majors"
           :options="majorList"
           use-input
           use-chips
@@ -82,29 +83,31 @@
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
           <div class="input-box">
-            <q-input v-model="lessonsTitles" dense disable/>
+            <q-input v-model="lessonsTitles"
+                     dense
+                     disable />
           </div>
           <div class="icon-box">
             <q-btn
               unelevated
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
-              @click="dialogValue = true"
               :disable="!isTreeModalAvailable"
+              @click="dialogValue = true"
             />
           </div>
         </div>
       </div>
     </div>
-<!--    <q-btn-->
-<!--      unelevated-->
-<!--      color="primary"-->
-<!--      class="q-mr-xl btn-md text-right"-->
-<!--      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"-->
-<!--      @click="getIdentifierData"-->
-<!--    >-->
-<!--      ثبت مباحث انتخاب شده-->
-<!--    </q-btn>-->
+    <!--    <q-btn-->
+    <!--      unelevated-->
+    <!--      color="primary"-->
+    <!--      class="q-mr-xl btn-md text-right"-->
+    <!--      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"-->
+    <!--      @click="getIdentifierData"-->
+    <!--    >-->
+    <!--      ثبت مباحث انتخاب شده-->
+    <!--    </q-btn>-->
     <question-tree-modal
       ref="questionTreeModal"
       v-model:dialogValue="dialogValue"

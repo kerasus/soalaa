@@ -101,18 +101,18 @@
             :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
             @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
           >
-           <div class="choice-inside">
-             <q-icon
-               class="check-icon col"
-               color="green"
-               size="20px"
-               name="check"
-             />
-             <vue-katex
-               :input="(choiceNumber[index]) + choice.title"
-               :ltr="isLtrQuestion"
-             />
-           </div>
+            <div class="choice-inside">
+              <q-icon
+                class="check-icon col"
+                color="green"
+                size="20px"
+                name="check"
+              />
+              <vue-katex
+                :input="(choiceNumber[index]) + choice.title"
+                :ltr="isLtrQuestion"
+              />
+            </div>
           </q-item-section>
         </q-item>
       </q-list>
@@ -121,9 +121,9 @@
 </template>
 
 <script>
+import VueKatex from 'src/components/VueKatex'
 import 'src/assets/scss/markdownKatex.scss'
 import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
-import VueKatex from 'src/components/VueKatex'
 
 export default {
   name: 'questionField',

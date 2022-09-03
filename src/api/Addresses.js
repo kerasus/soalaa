@@ -3,6 +3,8 @@ const lumenServer = process.env.AAA_API
 const authServer = process.env.AUTH_API
 const timeServer = process.env.GET_TIME_SERVER
 const socketServer = process.env.SOCKET_SERVER
+const apiV2Server = process.env.AUTH_API
+
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
   socket: socketServer,
@@ -41,19 +43,19 @@ const API_ADDRESS = {
   entityCrud: {
     authorshipDates: {
       show: lumenServer + '/option/',
-      edit: lumenServer + '/admin/user',
+      edit: lumenServer + '/option',
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=year_type&with_pagination=true'
     },
     questionAuthors: {
       show: lumenServer + '/option/',
-      edit: lumenServer + '/admin/user',
+      edit: lumenServer + '/option',
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=reference_type&with_pagination=true'
     },
     majors: {
       show: lumenServer + '/option/',
-      edit: lumenServer + '/admin/user',
+      edit: lumenServer + '/option',
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=major_type&with_pagination=true'
     }
@@ -152,6 +154,8 @@ const API_ADDRESS = {
       }
 
       let queryParam = page
+      // const examQuesry = '&exam=0'
+      // queryParam += examQuesry
       Object.keys(filters).forEach(filterKey => {
         queryParam += filters[filterKey]
       })
@@ -242,6 +246,16 @@ const API_ADDRESS = {
     setTags (questionId) {
       return lumenServer + '/id/soalaQestion/' + questionId
     }
+  },
+  product: {
+    all: authServer + '/product/soalaa/all'
+  },
+  cart: {
+    orderproduct: {
+      add: apiV2Server + '/orderproduct',
+      delete (id) { return apiV2Server + '/orderproduct/' + id }
+    },
+    review: apiV2Server + '/checkout/review'
   }
 }
 export default API_ADDRESS

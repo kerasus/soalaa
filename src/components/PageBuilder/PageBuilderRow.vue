@@ -6,7 +6,8 @@
     }"
     :style="style"
   >
-    <div class="page-builder-row row" :id="defaultOptions.id">
+    <div :id="defaultOptions.id"
+         class="page-builder-row row">
       <page-builder-col
         v-for="(col, colIndex) in cols"
         :key="colIndex"

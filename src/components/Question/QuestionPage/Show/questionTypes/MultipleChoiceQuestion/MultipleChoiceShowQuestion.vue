@@ -22,16 +22,16 @@
         class="row multiple-choice-Answer"
       >
         <div
-          class="col-6 answer-box"
           v-for="(item, index) in question.choices.list"
           :key="item.order"
+          class="col-6 answer-box"
         >
           <q-card class="col-6 default-questions-card">
             <q-card-section class="default-Qcard-title">
               <q-radio
+                v-model="choice"
                 dense
                 disable
-                v-model="choice"
                 :val="'choice' + index"
                 :label="'گزینه ' + (index + 1)"
                 color="primary"
@@ -69,8 +69,8 @@
 </template>
 
 <script>
+import VueKatex from 'src/components/VueKatex'
 import { Question } from 'src/models/Question'
-import VueKatex from 'components/VueKatex'
 export default {
   name: 'MultipleChoiceShowQuestion',
   components: {
@@ -156,6 +156,17 @@ export default {
     }
 
   }
+}
+</style>
+<style lang="scss">
+[dir="rtl"] .filepond--root {
+  text-align: left #{"/* rtl:ignore */"} !important ;
+  direction: ltr #{"/* rtl:ignore */"} !important;
+}
+.filepond--file-info {
+  transform: none !important;
+  margin-left: 2.5em #{"/* rtl:ignore */"} !important;
+  margin-right: 0.5em #{"/* rtl:ignore */"} !important;
 }
 </style>
 <style lang="scss">

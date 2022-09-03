@@ -66,10 +66,21 @@ module.exports = {
     'import/namespace': 'error',
     'import/default': 'error',
     'import/export': 'error',
+    // 'simple-import-sort/imports': 'error',
+    // 'simple-import-sort/exports': 'error',
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
     'prefer-promise-reject-errors': 'off',
+
+    "vue/attributes-order": 'error',
+    "vue/max-attributes-per-line": 'error',
+    "vue/html-indent": 'error',
+    "vue/html-closing-bracket-spacing": 'error',
+    "no-console": [
+      "warn",
+      { "allow": ["clear", "info", "error", "dir", "trace", "groupEnd", "groupCollapsed"] }
+    ],
 
     'vue/multi-word-component-names': 'off',
 

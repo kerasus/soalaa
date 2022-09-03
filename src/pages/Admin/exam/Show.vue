@@ -8,16 +8,18 @@
       :entity-param-key="entityParamKey"
       :edit-route-name="editRouteName"
       :index-route-name="indexRouteName"
+      :copy-on-click="true"
+      @onCopyToClipboard="onCopyToClipboard"
     >
-      <template #after-form-builder >
+      <template #after-form-builder>
         <div
           v-for="(category , index) in inputs[examCategoriesIndex].value"
           :key="index"
           class="row"
         >
           <q-select
-            class="q-pa-md col-md-4"
             v-model="category.title"
+            class="q-pa-md col-md-4"
             :value="category.id"
             label="دفترچه"
             :options="inputs[examCategoriesIndex].value"
@@ -28,14 +30,14 @@
             disable
           />
           <q-input
-            class="q-pa-md col-md-3"
             v-model="category.order"
+            class="q-pa-md col-md-3"
             label="ترتیب"
             disable
           />
           <q-input
-            class="q-pa-md col-md-3"
             v-model="category.time"
+            class="q-pa-md col-md-3"
             label="زمان"
             disable
           />
@@ -63,7 +65,7 @@ export default {
       editRouteName: 'Admin.Exam.Edit',
       indexRouteName: 'Admin.Exam.Index',
       inputs: [
-        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' },
+        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6', placeholder: ' ', filled: true },
         {
           type: 'Select',
           name: 'type_id',
@@ -74,8 +76,8 @@ export default {
           optionValue: 'id',
           optionLabel: 'value'
         },
-        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: ' زمان شروع', col: 'col-md-4' },
-        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: ' زمان پایان', col: 'col-md-4' },
+        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: '', col: 'col-md-4', placeholder: 'زمان شروع' },
+        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: '', col: 'col-md-4', placeholder: 'زمان پایان' },
         { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-md-4' },
         { type: 'Checkbox', name: 'enable', responseKey: 'data.enable', label: 'فعال', col: 'col-md-4' },
         { type: 'Checkbox', name: 'is_free', responseKey: 'data.is_free', label: 'رایگان', col: 'col-md-4' },
@@ -88,6 +90,11 @@ export default {
     }
   },
   methods: {
+    onCopyToClipboard (data) {
+      this.$q.notify({
+        message: 'مقدار ' + data.input.label + ' کپی شد.'
+      })
+    },
     generateJsonFile (id, withAnswer) {
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.post(API_ADDRESS.exam.generateExamFile(id, withAnswer))

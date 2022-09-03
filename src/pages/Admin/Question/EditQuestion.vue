@@ -31,11 +31,11 @@
           />
         </div>
         <component
-          v-if="question.type"
           :is="getComponent"
+          v-if="question.type"
           v-bind="allProps"
-          :class="{ 'col-7': !imgFloatMode}"
           ref="currentEditComponent"
+          :class="{ 'col-7': !imgFloatMode}"
         />
       </div>
     </div>
@@ -82,6 +82,8 @@
 </template>
 
 <script>
+import BtnBox from 'components/Question/QuestionPage/BtnBox'
+import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 // detachUnsavedExam
 /* eslint-disable no-var */
 import { computed, defineAsyncComponent } from 'vue'
@@ -91,11 +93,9 @@ import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import StatusChange from 'components/Question/QuestionPage/StatusChange'
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
-import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import API_ADDRESS from 'src/api/Addresses'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'

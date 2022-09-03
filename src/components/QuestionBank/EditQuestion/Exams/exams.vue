@@ -7,19 +7,20 @@
       آزمون ها
     </p>
     <q-form>
-      <div v-if="status" class="row q-col-gutter-md attach-exams-box">
+      <div v-if="status"
+           class="row q-col-gutter-md attach-exams-box">
         <div class="col-5">
-        <q-select
-          v-model="chooseExam"
-          :rules="selectorRules"
-          borderless
-          dense
-          bg-color="white"
-          class="select-style"
-          label="انتخاب آزمون "
-          option-value="id"
-          :options="examList.list"
-          option-label="title" />
+          <q-select
+            v-model="chooseExam"
+            :rules="selectorRules"
+            borderless
+            dense
+            bg-color="white"
+            class="select-style"
+            label="انتخاب آزمون "
+            option-value="id"
+            :options="examList.list"
+            option-label="title" />
         </div>
         <div class="col-4">
           <q-select
@@ -32,7 +33,7 @@
             bg-color="white"
             option-label="title"
             option-value="id"
-            label="انتخاب درس"/>
+            label="انتخاب درس" />
         </div>
         <div class="col-2 number-input">
           <q-input
@@ -44,7 +45,7 @@
             borderless
             dense
             bg-color="white"
-            label="ترتیب"/>
+            label="ترتیب" />
         </div>
         <div class="col-1">
           <q-btn
@@ -59,8 +60,8 @@
         </div>
 
       </div>
-      <div class="row q-mb-md q-col-gutter-md"
-        v-if="!status && attaches.length>0"
+      <div v-if="!status && attaches.length>0"
+           class="row q-mb-md q-col-gutter-md"
       >
         <div class="col-5">
           <span class="attached-exams-title">
@@ -85,14 +86,14 @@
       >
         <div class="col-5">
           <q-card
-          flat
-          class="custom-card-style"
+            flat
+            class="custom-card-style"
           >
-           <q-card-section
-           class="text-center"
-           >
-             {{ item.exam.title }}
-           </q-card-section>
+            <q-card-section
+              class="text-center"
+            >
+              {{ item.exam.title }}
+            </q-card-section>
           </q-card>
         </div>
         <div class="col-4">
@@ -121,7 +122,7 @@
           </q-card>
         </div>
         <div
-           v-if="status"
+          v-if="status"
         >
           <q-btn
             unelevated
@@ -131,8 +132,8 @@
             class="custom-btn-radius"
             :loading="loading"
             :disabled="loading"
-            @click="detach(item)"
             icon="mdi-trash-can-outline"
+            @click="detach(item)"
           />
         </div>
       </div>

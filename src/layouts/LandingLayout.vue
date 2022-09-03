@@ -1,5 +1,5 @@
 <template>
-    <Router :include="keepAliveComponents" />
+  <Router :include="keepAliveComponents" />
 </template>
 
 <script>

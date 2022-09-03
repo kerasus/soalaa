@@ -25,8 +25,8 @@
               <q-icon
                 v-if="!item.loading.question"
                 name="cancel"
-                @click="deleteFile (item, 'questionFile', 'question')"
                 class="cursor-pointer"
+                @click="deleteFile (item, 'questionFile', 'question')"
               />
             </template>
           </q-file>
@@ -69,12 +69,13 @@
             :disable="item.descriptive_answers_booklet || item.loading.answer ? true :false"
             @update:model-value="addFiles (item.questionFile, item, 'answer')"
           >
-            <template v-if="item.answerFile" v-slot:append>
+            <template v-if="item.answerFile"
+                      v-slot:append>
               <q-icon
                 v-if="!item.loading.answer"
                 name="cancel"
-                @click="deleteFile (item, 'answerFile', 'answer')"
                 class="cursor-pointer"
+                @click="deleteFile (item, 'answerFile', 'answer')"
               />
             </template>
           </q-file>

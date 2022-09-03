@@ -8,8 +8,8 @@
       :key="item"
     >
       <q-btn
-        unelevated
         v-if="item.class === 'second-type'"
+        unelevated
         :color="item.color"
         class="q-mr-xl"
         :class="'btn-' + item.size"
@@ -22,13 +22,13 @@
     class="flex justify-center"
   >
     <div
-      class="flex justify-center"
       v-for="item in btnStyle"
       :key="item"
+      class="flex justify-center"
     >
       <q-btn
-        unelevated
         v-if="item.class === 'first-type'"
+        unelevated
         :color="item.color"
         class="q-mr-xl"
         :class="'btn-' + item.size"
@@ -37,7 +37,9 @@
       </q-btn>
     </div>
   </div>
-  <q-separator style="width: 60%; margin: 50px 20%" class="flex justify-center" color="primary"/>
+  <q-separator style="width: 60%; margin: 50px 20%"
+               class="flex justify-center"
+               color="primary" />
   <h5 class="q-ml-lg">نمونه استایل دکمه های آیکن دار:</h5>
   <div class="flex justify-center">
     <div
@@ -46,8 +48,8 @@
       :class="item.margin"
     >
       <q-btn
-        unelevated
         v-if="item.class === 'icon-type'"
+        unelevated
         :outline="item.outline"
         :flat="item.flat"
         :color="item.color"
@@ -55,7 +57,9 @@
       ></q-btn>
     </div>
   </div>
-  <q-separator style="width: 60%; margin: 50px 20%" class="flex justify-center" color="primary"/>
+  <q-separator style="width: 60%; margin: 50px 20%"
+               class="flex justify-center"
+               color="primary" />
   <h5 class="q-ml-lg">نمونه استایل Radio Button:</h5>
   <div class="flex justify-center">
     <div class="radio">
@@ -64,10 +68,12 @@
         :key="item"
         v-model="person"
         :checked-icon="item.icon"
-        :val="item.val"/>
+        :val="item.val" />
     </div>
   </div>
-  <q-separator style="width: 60%; margin: 50px 20%" class="flex justify-center" color="primary"/>
+  <q-separator style="width: 60%; margin: 50px 20%"
+               class="flex justify-center"
+               color="primary" />
 </template>
 
 <script>

@@ -1,16 +1,16 @@
 <template>
   <div class="exam-results">
-<!--    <v-row class="d-flex justify-center">-->
+    <!--    <v-row class="d-flex justify-center">-->
     <div class="row wrap justify-center">
       <div class="col results-info-col">
-        <info/>
+        <info />
       </div>
     </div>
     <div class="row wrap justify-center">
       <div class="col default-col-padding">
         <q-card
-            flat
-            class="infoCard content-center"
+          flat
+          class="infoCard content-center"
         >
           <div
             class="row main-tabs"
@@ -23,22 +23,22 @@
               سه آ
             </div>
             <div
-                v-if="report"
-                class="col col-6 col-xl-1 col-sm-3 default-result-padding"
+              v-if="report"
+              class="col col-6 col-xl-1 col-sm-3 default-result-padding"
             >
               شهر:
               {{ report.location.city }}
             </div>
             <div
-                v-if="report"
-                class="col col-6 col-xl-1 col-sm-3 default-result-padding"
+              v-if="report"
+              class="col col-6 col-xl-1 col-sm-3 default-result-padding"
             >
               استان:
               {{ report.location.province }}
             </div>
             <div
-                class="col col-12 col-xl-7 default-result-tabs-title"
-                :style="{ padding: '0 12px' }"
+              class="col col-12 col-xl-7 default-result-tabs-title"
+              :style="{ padding: '0 12px' }"
             >
               <q-tabs
                 v-model="tab"
@@ -48,12 +48,18 @@
                 align="justify"
                 class="result-tabs"
               >
-                <q-tab name="result" label="کارنامه"></q-tab>
-                <q-tab name="rank" label="تخمین رتبه"></q-tab>
-                <q-tab name="lessons" label="ریزدرس ها"></q-tab>
-                <q-tab name="KeyAnswers" label="پاسخبرگ کلیدی"></q-tab>
-                <q-tab name="descriptiveAnswers" label="پاسخ نامه تشریحی"></q-tab>
-                <q-tab name="videos" label="تحلیل ویدیویی"></q-tab>
+                <q-tab name="result"
+                       label="کارنامه"></q-tab>
+                <q-tab name="rank"
+                       label="تخمین رتبه"></q-tab>
+                <q-tab name="lessons"
+                       label="ریزدرس ها"></q-tab>
+                <q-tab name="KeyAnswers"
+                       label="پاسخبرگ کلیدی"></q-tab>
+                <q-tab name="descriptiveAnswers"
+                       label="پاسخ نامه تشریحی"></q-tab>
+                <q-tab name="videos"
+                       label="تحلیل ویدیویی"></q-tab>
               </q-tabs>
             </div>
           </div>
@@ -62,20 +68,22 @@
     </div>
     <div class="row wrap justify-center">
       <div class="col">
-        <q-tab-panels v-model="tab" animated swipeable>
+        <q-tab-panels v-model="tab"
+                      animated
+                      swipeable>
           <q-tab-panel name="result">
-            <PersonalResult :report="report"/>
+            <PersonalResult :report="report" />
           </q-tab-panel>
           <q-tab-panel name="rank">
-            <takhmin-rotbe :report="report"/>
+            <takhmin-rotbe :report="report" />
           </q-tab-panel>
           <q-tab-panel name="lessons">
-            <StatisticResult :report="report"/>
+            <StatisticResult :report="report" />
           </q-tab-panel>
           <q-tab-panel name="KeyAnswers">
             <BubbleSheet
-                :info="{ type: 'pasokh-nameh' }"
-                delay-time="0"
+              :info="{ type: 'pasokh-nameh' }"
+              delay-time="0"
             />
           </q-tab-panel>
           <q-tab-panel name="descriptiveAnswers">
@@ -85,16 +93,16 @@
               </p>
               <div v-if="report">
                 <div
-                    v-for="(item, index) in report.exams_booklet"
-                    :key="index"
-                    class="row download-row"
+                  v-for="(item, index) in report.exams_booklet"
+                  :key="index"
+                  class="row download-row"
                 >
                   <div
                     class="col col-12 col-sm-6"
                   >
                     <div
-                        v-if="item.descriptive_answers_url"
-                        class="download-box"
+                      v-if="item.descriptive_answers_url"
+                      class="download-box"
                     >
                       <p class="download-title">
                         دانلود پاسخنامه تشریحی {{
@@ -115,8 +123,8 @@
                     class="col col-12 col-sm-6"
                   >
                     <div
-                        v-if="item.questions_url"
-                        class="download-box"
+                      v-if="item.questions_url"
+                      class="download-box"
                     >
                       <p class="download-title">
                         دانلود سوالات {{ item.title }}
@@ -135,7 +143,8 @@
               </div>
             </q-card>
           </q-tab-panel>
-          <q-tab-panel name="videos" class="video-tab">
+          <q-tab-panel name="videos"
+                       class="video-tab">
             <tabs-of-lessons :report="report" />
           </q-tab-panel>
         </q-tab-panels>
@@ -145,7 +154,6 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info'
 import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
@@ -180,27 +188,22 @@ export default {
   }),
   created () {
     // console.log('report.exams_booklet', this.report.exams_booklet)
-    this.getUserData()
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
-  },
-  mounted () {
+    this.getUserData()
     this.getExamData()
-    // setTimeout(() => { this.tab = 'result' }, 2000)
   },
   methods: {
     getExamData () {
-      // ToDo : loading: false not working
-      // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-      // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+      this.$store.commit('AppLayout/updateLinearLoading', true)
       const that = this
-      const user_exam_id = this.$route.params.user_exam_id
-      const exam_id = this.$route.params.exam_id
+      const userExamId = this.$route.params.user_exam_id
+      const examId = this.$route.params.exam_id
       const examData = new ExamData(this.$axios)
-      examData.getUserExamWithCorrectAnswers(user_exam_id, exam_id)
+      examData.getUserExamWithCorrectAnswers(userExamId, examId)
         .loadQuestionsFromFile()
-        .getUserExamData(user_exam_id)
-        .getUserExamDataReport(user_exam_id)
+        .getUserExamData(userExamId)
+        .getUserExamDataReport(userExamId)
         .run()
         .then(() => {
           // save questions in localStorage
@@ -214,12 +217,12 @@ export default {
           that.report = examData.studentReport
           that.loadKarname(examData.studentReport)
           this.tab = 'result'
-          // that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+          this.$store.commit('AppLayout/updateLinearLoading', false)
         })
         .catch((error) => {
-          that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+          this.$store.commit('AppLayout/updateLinearLoading', false)
           that.goToExamList()
-          console.log(error)
+          console.error(error)
           this.$q.notify({
             type: 'negative',
             message: 'مشکلی در دریافت اطلاعات کارنامه رخ داده است.',
@@ -236,7 +239,10 @@ export default {
       this.loadSubCategory(report)
       this.loadZirGrooh(report.zirgorooh)
       this.loadBest(report.best)
-      report.main.taraaz = parseFloat(report.main.taraaz).toFixed(0)
+      const taraaz = report.main?.taraaz
+      if (typeof taraaz !== 'undefined' && taraaz !== null) {
+        report.main.taraaz = parseFloat(report.main.taraaz).toFixed(0)
+      }
     },
     loadBest (best) {
       best.sub_category.forEach((item, index) => {
@@ -248,7 +254,7 @@ export default {
     },
     loadSubCategory (report) {
       report.sub_category.forEach((item, index) => {
-        const targetBest = report.best.sub_category.find(sub_categoryItem => sub_categoryItem.sub_category === item.sub_category)
+        const targetBest = report.best.sub_category.find(subCategoryItem => subCategoryItem.sub_category === item.sub_category)
         item.percent = parseFloat(item.percent).toFixed(1)
         item.taraaz = parseFloat(item.taraaz).toFixed(0)
         item.empty = item.total_answer - item.right_answer - item.wrong_answer
@@ -270,19 +276,19 @@ export default {
         item.taraaz = parseFloat(item.taraaz).toFixed(0)
       })
     },
-    getContent (contentId, sub_categoryIndex) {
+    getContent (contentId, subCategoryIndex) {
       const that = this
       this.alaaContent.show(contentId)
         .then((response) => {
           that.currentVideo = response.data.data
-          that.initVideoJs(that.currentVideo.file.video, sub_categoryIndex)
+          that.initVideoJs(that.currentVideo.file.video, subCategoryIndex)
         })
         .catch((error) => {
           Assistant.reportErrors(error)
           that.currentVideo = null
         })
     },
-    getAlaaSet (setId, sub_categoryIndex) {
+    getAlaaSet (setId, subCategoryIndex) {
       const that = this
       this.alaaSet.loading = true
       this.alaaSet.show(setId)
@@ -290,7 +296,7 @@ export default {
           that.alaaSet.loading = false
           that.alaaSet = new AlaaSet(response.data.data)
           that.alaaVideos = that.alaaSet.contents.getVideos()
-          that.getContent(that.alaaVideos[0].id, sub_categoryIndex)
+          that.getContent(that.alaaVideos[0].id, subCategoryIndex)
         })
         .catch(() => {
           that.alaaSet.loading = false

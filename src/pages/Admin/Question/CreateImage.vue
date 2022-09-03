@@ -3,14 +3,15 @@
     <div class="row">
       <div class="col flex justify-between">
         <span>
-          برای ثبت سوال جدید میتوانید تصویر صورت سوال را در این صفحه آپلود کنید یا به صورت مستقیم آن ها را تایپ کنید
-          <q-btn
-            icon-right="isax:info-circle"
-            label="بیشتر بخوانید"
-            flat
-            rounded
-            color="primary"
-          />
+          برای ثبت سوال جدید میتوانید تصویر صورت سوال را در این صفحه آپلود کنید یا به صورت مستقیم آن ها را تایپ کنید.
+          <!--          Todo : codes below are suspended ( no current design )-->
+          <!--          <q-btn-->
+          <!--            icon-right="isax:info-circle"-->
+          <!--            label="بیشتر بخوانید"-->
+          <!--            flat-->
+          <!--            rounded-->
+          <!--            color="primary"-->
+          <!--          />-->
         </span>
         <q-btn
           label="تایپ سوال"
@@ -23,17 +24,21 @@
     </div>
     <div class="row">
       <div class="col-6">
-        <upload-image v-model="question" title="صورت سوال" field-key="statement_photo"/>
+        <upload-image v-model="question"
+                      title="صورت سوال"
+                      field-key="statement_photo" />
       </div>
       <div class="col-6">
-        <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photos"/>
+        <upload-image v-model="question"
+                      title="پاسخ سوال"
+                      field-key="answer_photos" />
       </div>
     </div>
     <div class="relative-position">
       <div class="attach-btn row">
         <question-identifier
-          editable
           ref="questionIdentifier"
+          editable
           class="col-12"
           :exams="examList"
           :lessons="subCategoriesList"
@@ -61,9 +66,9 @@
 </template>
 
 <script>
+import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
 import { Question } from 'src/models/Question'
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { computed } from 'vue'
 import { AdminActionOnQuestion } from 'src/mixin/Mixins'
 import { ExamList } from 'src/models/Exam'

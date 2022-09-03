@@ -12,47 +12,48 @@
           <span> سازنده سوال :</span> <span> فیلان دبیر</span>
         </p>
       </div>
-      <div class="col-4"
-           v-if="question.id === null"
+      <div v-if="question.id === null"
+           class="col-4"
       >
-          <div class="row">
-            <div class="col">
-              <div class="row justify-end">
-                <div class="col">
-                  <q-btn
-                    rounded
-                    unelevated
-                    v-ripple
-                    color="green"
-                    class="save-btn-default"
-                    @click="btn_clicked('create')"
-                  >
-                    <span class="save-btn-text-default" >
-                      ذخیره
-                    </span>
-                  </q-btn>
-                </div>
-                <div class="col">
-                  <q-btn
-                    rounded
-                    unelevated
-                    v-ripple
-                    color="white"
-                    text-color="grey-10"
-                    class="draft-btn-default"
-                    @click="btn_clicked('create')"
-                  >
-                  <q-icon class="draft-icon" name="mdi-square-edit-outline" />
-                      پیش نویس
-                  </q-btn>
-                </div>
+        <div class="row">
+          <div class="col">
+            <div class="row justify-end">
+              <div class="col">
+                <q-btn
+                  v-ripple
+                  rounded
+                  unelevated
+                  color="green"
+                  class="save-btn-default"
+                  @click="btn_clicked('create')"
+                >
+                  <span class="save-btn-text-default">
+                    ذخیره
+                  </span>
+                </q-btn>
+              </div>
+              <div class="col">
+                <q-btn
+                  v-ripple
+                  rounded
+                  unelevated
+                  color="white"
+                  text-color="grey-10"
+                  class="draft-btn-default"
+                  @click="btn_clicked('create')"
+                >
+                  <q-icon class="draft-icon"
+                          name="mdi-square-edit-outline" />
+                  پیش نویس
+                </q-btn>
               </div>
             </div>
           </div>
+        </div>
       </div>
       <!---------------------------------edit page-------------------------------->
-      <div class="col"
-           v-if="question.id && editStatus"
+      <div v-if="question.id && editStatus"
+           class="col"
       >
         <div class="row">
           <div class="col">
@@ -76,9 +77,9 @@
                   @click="btn_clicked('save')"
 
                 >
-                <span>
-                  ذخیره
-                </span>
+                  <span>
+                    ذخیره
+                  </span>
                 </q-btn>
               </div>
               <div class="col">
@@ -98,29 +99,30 @@
         </div>
       </div>
       <!-------------------------------show page--------------------------------->
-      <div class="col"
-           v-if="!editStatus"
+      <div v-if="!editStatus"
+           class="col"
       >
         <div class="row justify-end">
           <div class="col-3">
             <q-btn
+              v-ripple
               rounded
               unelevated
-              v-ripple
               color="white"
               text-color="grey-10"
               class="edit-btn-default"
               @click="btn_clicked('edit')"
             >
-              <q-icon class="edit-icon" name="mdi-square-edit-outline" />
+              <q-icon class="edit-icon"
+                      name="mdi-square-edit-outline" />
               ویرایش
             </q-btn>
           </div>
           <div class="col-3">
             <q-btn
+              v-ripple
               rounded
               unelevated
-              v-ripple
               color="white"
               text-color="grey-10"
               class="edit-btn-default"

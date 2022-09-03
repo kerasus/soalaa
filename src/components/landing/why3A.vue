@@ -6,7 +6,9 @@
       <div class="choosing-3a-reason ">
         <div class="reason-header">
           <span class="badge">1</span>
-          <q-img class="reason-image" :src="reasons[0].src" :width="imageWidth[0]" />
+          <q-img class="reason-image"
+                 :src="reasons[0].src"
+                 :width="imageWidth[0]" />
         </div>
         <div class="reason-body">
           <div class="reason-title">{{ reasons[0].title }}</div>
@@ -19,7 +21,9 @@
       <div class="choosing-3a-reason ">
         <div class="reason-header">
           <span class="badge">2</span>
-          <q-img class="reason-image" :src="reasons[1].src" :width="imageWidth[1]"/>
+          <q-img class="reason-image"
+                 :src="reasons[1].src"
+                 :width="imageWidth[1]" />
         </div>
         <div class="reason-body">
           <div class="reason-title">{{ reasons[1].title }}</div>
@@ -32,7 +36,9 @@
       <div class="choosing-3a-reason ">
         <div class="reason-header">
           <span class="badge">3</span>
-          <q-img class="reason-image" :src="reasons[2].src" :width="imageWidth[2]"/>
+          <q-img class="reason-image"
+                 :src="reasons[2].src"
+                 :width="imageWidth[2]" />
         </div>
         <div class="reason-body">
           <div class="reason-title">{{ reasons[2].title }}</div>
@@ -45,7 +51,9 @@
       <div class="choosing-3a-reason ">
         <div class="reason-header">
           <span class="badge">4</span>
-          <q-img class="reason-image" :src="reasons[3].src" :width="imageWidth[3]"/>
+          <q-img class="reason-image"
+                 :src="reasons[3].src"
+                 :width="imageWidth[3]" />
         </div>
         <div class="reason-body">
           <div class="reason-title">{{ reasons[3].title }}</div>
@@ -58,7 +66,9 @@
       <div class="choosing-3a-reason ">
         <div class="reason-header">
           <span class="badge">5</span>
-          <q-img class="reason-image" :src="reasons[4].src" :width="imageWidth[4]"/>
+          <q-img class="reason-image"
+                 :src="reasons[4].src"
+                 :width="imageWidth[4]" />
         </div>
         <div class="reason-body">
           <div class="reason-title">{{ reasons[4].title }}</div>
@@ -68,18 +78,20 @@
         </div>
       </div>
 
-      <div class="choosing-3a-reason ">
-        <div class="reason-header">
-          <span class="badge">6</span>
-          <q-img class="reason-image" :src="reasons[5].src" :width="imageWidth[5]" />
-        </div>
-        <div class="reason-body">
-          <div class="reason-title">{{ reasons[5].title }}</div>
-          <div class="reason-description">
-            {{ reasons[5].description }}
-          </div>
-        </div>
-      </div>
+      <!--      <div class="choosing-3a-reason ">-->
+      <!--        <div class="reason-header">-->
+      <!--          <span class="badge">6</span>-->
+      <!--          <q-img class="reason-image"-->
+      <!--                 :src="reasons[5].src"-->
+      <!--                 :width="imageWidth[5]" />-->
+      <!--        </div>-->
+      <!--        <div class="reason-body">-->
+      <!--          <div class="reason-title">{{ reasons[5].title }}</div>-->
+      <!--          <div class="reason-description">-->
+      <!--            {{ reasons[5].description }}-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
     </div>
 
   </div>
@@ -144,14 +156,13 @@ export default {
   },
   methods: {
     setImageWidth () {
-      console.log('hi')
       this.currentImagesWidthList = []
 
       if (this.windowSize.x > 768) {
         this.imageWidthList.forEach(item => {
           this.currentImagesWidthList.push(item.md)
         })
-      } else if (this.windowSize.x > 600) {
+      } else if (this.windowSize.x > 599) {
         this.imageWidthList.forEach(item => {
           this.currentImagesWidthList.push(item.sm)
         })
@@ -183,7 +194,7 @@ export default {
     padding-bottom: 68px;
   }
 
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 599px) {
     padding-bottom: 53px;
   }
 
@@ -201,7 +212,7 @@ export default {
       margin-bottom: 33px;
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 599px) {
       font-size: 20px;
       margin-bottom: 16px;
     }
@@ -210,33 +221,33 @@ export default {
   .choosing-3a-reason-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
 
     .choosing-3a-reason {
       background: #FFFFFF;
       box-shadow: 0 4px 16px 2px rgba(40, 40, 40, 0.08);
       border-radius: 24px;
-      width: 350px;
+      width: 340px;
       height: 357px;
-      margin-bottom: 40px;
       padding: 4px;
+      margin: 0 15px 40px 15px;
 
       @media only screen and (max-width: 1439px) {
-        width: 290px;
+        width: 280px;
         height: 412px;
       }
 
       @media only screen and (max-width: 1023px) {
-        width: 330px;
+        width: 315px;
         height: 357px;
       }
 
       @media only screen and (max-width: 768px) {
-        width: 240px;
+        width: 220px;
         height: 325px;
       }
 
-      @media only screen and (max-width: 600px) {
+      @media only screen and (max-width: 599px) {
         width: 100%;
         height: 292px;
         margin-bottom: 25px;
@@ -249,7 +260,7 @@ export default {
         display: flex;
         justify-content: center;
         position: relative;
-        @media only screen and (max-width: 600px) {
+        @media only screen and (max-width: 599px) {
           height: 127px;
         }
         .badge {
@@ -290,7 +301,7 @@ export default {
           @media only screen and (max-width: 768px) {
             font-size: 18px;
           }
-          @media only screen and (max-width: 600px) {
+          @media only screen and (max-width: 599px) {
             text-align: center;
           }
         }
@@ -304,7 +315,7 @@ export default {
           @media only screen and (max-width: 768px) {
             font-size: 12px;
           }
-          @media only screen and (max-width: 600px) {
+          @media only screen and (max-width: 599px) {
             text-align: center;
           }
         }

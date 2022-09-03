@@ -1,43 +1,73 @@
+<!--       -----------------------ToDO => change last v-else-ifs ------------------------ -->
+
 <template>
-  <quasar-template-builder v-model:value="properties" @onResize="resize">
+  <quasar-template-builder @onResize="resize">
     <template #header>
-      <div v-if="$route.name === 'onlineQuiz.alaaView'" class="header-inside row">
-        <online-quiz-template-header/>
+      <div v-if="getTemplateHeaderType === 'quiz'"
+           class="header-inside row">
+        <online-quiz-template-header />
       </div>
-      <div v-else  class="header-inside row">
-        <template-header/>
+      <div v-else-if="getTemplateHeaderType === 'default'"
+           class="user-main-layout-header">
+        <div class="header-inside row">
+          <user-template-header />
+        </div>
       </div>
+      <div v-else-if="getTemplateHeaderType === 'panel'"
+           class="main-layout-header row">
+        <template-header />
+      </div>
+      <q-resize-observer @resize="setHeaderDimension" />
+    </template>
+    <template #left-drawer>
+      <div v-if="getTemplateLeftSideBarType === 'quiz'"
+           class="drawer-inside-of-MapOfQuestions">
+        <sideMenuMapOfQuestions />
+      </div>
+      <div v-else-if="getTemplateLeftSideBarType === 'panel'"
+           class="drawer-inside">
+        <side-menu-dashboard />
+      </div>
+      <div v-else-if="getTemplateLeftSideBarType === 'default'"
+           class="drawer-inside">
+        <user-side-bar />
+      </div>
+    </template>
+    <template #content>
       <q-linear-progress
-        v-if="$store.getters['loading/loading']"
+        v-if="linearLoading"
         color="primary"
         reverse
         class="q-mt-sm"
         indeterminate
       />
-      <q-resize-observer @resize="setHeaderDimension"/>
-    </template>
-    <template #left-drawer>
-      <div class="drawer-inside-of-MapOfQuestions" v-if="$route.name === 'onlineQuiz.alaaView'">
-        <sideMenuMapOfQuestions/>
-      </div>
-      <div class="drawer-inside" v-else>
-        <side-menu-dashboard/>
-      </div>
-    </template>
-    <template #content>
-      <div ref="contentInside" class="content-inside">
-        <q-dialog v-model="confirmDialogData.show" persistent>
+      <div ref="contentInside"
+           class="content-inside">
+        <q-dialog v-model="confirmDialogData.show"
+                  persistent>
           <q-card class="q-pa-md q-pb-none">
-            <q-card-section >
-              <q-icon name="warning" color="warning" size="2rem" />
+            <q-card-section>
+              <q-icon name="warning"
+                      color="warning"
+                      size="2rem" />
               {{confirmDialogData.message}}
             </q-card-section>
             <q-separator />
-            <q-card-actions align="right" class="q-pb-none">
-              <q-btn color="green" flat  @click="confirmDialogAction(true)" v-close-popup >بله</q-btn>
-              <q-btn color="red" flat  @click="confirmDialogAction(false)" v-close-popup >خیر</q-btn>
+            <q-card-actions align="right"
+                            class="q-pb-none">
+              <q-btn v-close-popup
+                     color="green"
+                     flat
+                     @click="confirmDialogAction(true)">بله</q-btn>
+              <q-btn v-close-popup
+                     color="red"
+                     flat
+                     @click="confirmDialogAction(false)">خیر</q-btn>
             </q-card-actions>
           </q-card>
+        </q-dialog>
+        <q-dialog v-model="loginDialog">
+          <auth />
         </q-dialog>
         <Router :include="keepAliveComponents" />
       </div>
@@ -46,52 +76,57 @@
 </template>
 
 <script>
-import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
-import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
 import { QuasarTemplateBuilder } from 'quasar-template-builder'
-import templateHeader from 'components/Template/templateHeader'
-import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
+import templateHeader from 'components/Headers/templateHeader'
+import onlineQuizTemplateHeader from 'components/Headers/onlineQuizTemplateHeader'
+import UserTemplateHeader from 'components/Headers/userTemplateHeader'
 import { ref } from 'vue'
 import Router from 'src/router/Router'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import Auth from 'components/Auth'
+import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
+import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
+import UserSideBar from 'layouts/UserPanelLayouts/UserSideBar'
 
 export default {
-  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
+  components: { UserSideBar, Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader, UserTemplateHeader, Auth },
   data () {
     return {
       keepAliveComponents: KeepAliveComponents,
-      properties: {
-        layoutView: 'lHh Lpr lFf',
-        layoutHeader: true,
-        layoutHeaderVisible: true,
-        layoutHeaderReveal: false,
-        layoutHeaderElevated: false,
-        layoutHeaderBordered: false,
-        layoutLeftDrawer: true,
-        layoutLeftDrawerVisible: true,
-        layoutLeftDrawerOverlay: false,
-        layoutLeftDrawerElevated: false,
-        layoutLeftDrawerBordered: false,
-        layoutLeftDrawerWidth: 325,
-        layoutPageContainer: true,
-        layoutRightDrawer: false,
-        layoutFooter: false,
-        layoutHeaderCustomClass: 'main-layout-header row',
-        layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
-        layoutPageContainerCustomClass: 'main-layout-container'
-      },
       contentInside: ref(0)
     }
   },
   computed: {
+    loginDialog: {
+      get () {
+        return this.$store.getters['AppLayout/loginDialog']
+      },
+      set (newValue) {
+        if (!newValue) {
+          this.$store.commit('AppLayout/updateLoginDialog', false)
+          return
+        }
+        this.$store.dispatch('AppLayout/showLoginDialog')
+      }
+    },
     confirmDialogData () {
       return this.$store.getters['AppLayout/confirmDialog']
+    },
+    linearLoading () {
+      return this.$store.getters['AppLayout/linearLoading']
+    },
+    getTemplateHeaderType() {
+      return this.$store.getters['AppLayout/templateHeaderType']
+    },
+    getTemplateLeftSideBarType() {
+      return this.$store.getters['AppLayout/templateLeftSideBarType']
     }
   },
+  watch: {
+  },
+  mounted () {
+  },
   created () {
-    this.updateLayout()
-    // const localData = this.$store.getters['AppLayout/appLayout']
-    // Object.assign(this.properties, localData)
   },
   methods: {
     updateLayout () {
@@ -107,6 +142,13 @@ export default {
     },
     setHeaderDimension (value) {
       this.$refs.contentInside.style.height = 'calc(100vh +' + value.height + 'px'
+    },
+    setLayoutCustomClass () {
+      if (this.templateHeaderType === 'dashboard') {
+        this.properties.layoutHeaderCustomClass = 'user-main-layout-header row'
+        return
+      }
+      this.properties.layoutHeaderCustomClass = 'main-layout-header row'
     },
     resize (val) {
       this.$store.commit('AppLayout/updateWindowSize', val)
@@ -133,20 +175,26 @@ export default {
 
 }
 
+:deep(.user-main-layout-header) {
+  background-color: #f1f1f1;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  .header-inside {
+    width: 100%;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    color: #65677F;
+  }
+}
+
 .main-layout-container {
 }
 .content-inside {
   //overflow: auto;
 }
-
-.main-layout-left-drawer {
-  .drawer-inside-of-MapOfQuestions{
-    height: 100%;
-  }
-}
-</style>
-
-<style lang="scss">
 .main-layout-header {
   background-color: #f1f1f1;
   display: flex;
@@ -179,6 +227,35 @@ export default {
     }
   }
 }
+
+//.user-main-layout-header {
+//  background-color: #f1f1f1;
+//  display: flex;
+//  flex-direction: row;
+//
+//  .header-inside {
+//    width: 100%;
+//    background: #fff;
+//    display: flex;
+//    justify-content: center;
+//    color: #65677F;
+//  }
+//}
+
+.main-layout-container {
+}
+.content-inside {
+  //overflow: auto;
+}
+
+.main-layout-left-drawer {
+  .drawer-inside-of-MapOfQuestions{
+    height: 100%;
+  }
+}
+</style>
+
+<style lang="scss">
 
 .main-layout-container {
   background-color: #f1f1f1;

@@ -1,5 +1,5 @@
 <template>
-<category-list/>
+  <category-list />
 </template>
 
 <script>

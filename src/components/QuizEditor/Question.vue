@@ -15,7 +15,7 @@
           {{ item.first_name + ' ' + item.last_name }}
         </q-chip>
       </div>
-      <div v-else/>
+      <div v-else />
       <div class="action-btn-box grid-item">
         <div v-if="options.checkQuestion">
           <q-btn
@@ -98,7 +98,7 @@
             @click="redirectToEditPage"
           >
             <q-tooltip>
-             ویرایش سوال
+              ویرایش سوال
             </q-tooltip>
           </q-icon>
         </div>
@@ -108,7 +108,7 @@
             @click="copyIdToClipboard(source.id)"
           >
             <q-tooltip>
-             کپی شناسه سوال
+              کپی شناسه سوال
             </q-tooltip>
           </q-icon>
         </div>
@@ -120,20 +120,20 @@
             size="20px"
             color="primary"
           />
-        <q-toggle
-          v-else
-          v-model="source.confirmed"
-          @update:model-value="confirmQuestion"
-          color="primary"
-        >
-          <q-tooltip>
-            تایید سوال
-          </q-tooltip>
-        </q-toggle>
+          <q-toggle
+            v-else
+            v-model="source.confirmed"
+            color="primary"
+            @update:model-value="confirmQuestion"
+          >
+            <q-tooltip>
+              تایید سوال
+            </q-tooltip>
+          </q-toggle>
 
-        <slot
-          name="chartDetail"
-        />
+          <slot
+            name="chartDetail"
+          />
         </div>
       </div>
     </div>
@@ -148,15 +148,15 @@
         <div
           v-if="source.statement_photo && !source.statement"
           class="photo-section">
-          <p v-if="$route.name === 'exams.lessons.questions'">
+          <p v-if="$route.name === 'Admin.Exam.SubCategory.Questions'">
             ({{ getSubCategoryName }}) (ترتیب: {{ source.order }})(شماره: {{ source.questNumber }})  -  صورت سوال :
           </p>
           <p v-else>
             ({{ getSubCategoryName }}) ({{ source.order }}) -  صورت سوال :
           </p>
           <div
-               v-for="(statement_photo , index) in source.statement_photo"
-               :key="index"
+            v-for="(statement_photo , index) in source.statement_photo"
+            :key="index"
           >
             <q-img
               :src="statement_photo"
@@ -184,7 +184,8 @@
               class="fi fi-rr-check question-answer"></q-icon>
           </div>
         </div>
-        <div  v-if="source.answer_photos.length > 0 && !checkChoices()" class="photo-section">
+        <div  v-if="source.answer_photos.length > 0 && !checkChoices()"
+              class="photo-section">
           <p>
             پاسخ :
           </p>
@@ -201,14 +202,14 @@
         </div>
       </div>
     </div>
-    </div>
+  </div>
 </template>
 
 <script>
+import VueKatex from 'src/components/VueKatex'
 import 'src/assets/scss/markdownKatex.scss'
 import { mixinQuiz } from 'src/mixin/Mixins'
 import API_ADDRESS from 'src/api/Addresses'
-import VueKatex from 'src/components/VueKatex'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { copyToClipboard } from 'quasar'
 export default {

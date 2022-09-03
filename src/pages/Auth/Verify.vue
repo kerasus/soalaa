@@ -10,11 +10,12 @@
         دریافت کد فعالسازی
       </q-btn>
     </div>
-    <div v-if="totalTime" class="row justify-center q-ma-lg">
+    <div v-if="totalTime"
+         class="row justify-center q-ma-lg">
       <div class="col-12 row justify-center mit">
-               <span
-                 :class="totalTime <60 ? 'red-text' : ''"
-               >{{ ((totalTime) % 3600) % 60 }}</span>
+        <span
+          :class="totalTime <60 ? 'red-text' : ''"
+        >{{ ((totalTime) % 3600) % 60 }}</span>
         <span>:</span>
         <span
           :class="totalTime <60 ? 'red-text' : ''"
@@ -25,16 +26,16 @@
     <div class="q-px-lg">
       <q-input
         v-if="totalTime"
-        dir="ltr"
         v-model="typedCode"
+        dir="ltr"
         label="کد فعالسازی"
         @keydown="pressedEnter"
       />
     </div>
     <div class="row justify-center q-px-lg">
       <q-btn
-        rounded
         v-if="!totalTime && waiting"
+        rounded
         color="blue"
         @click="sendCode"
       >
@@ -43,8 +44,8 @@
     </div>
     <div class="row justify-center q-mt-lg">
       <q-btn
-        rounded
         v-if="totalTime"
+        rounded
         color="blue"
         @click="verifyCode"
       >

@@ -3,8 +3,8 @@
     class="personal-results"
   >
     <div
-      class="row"
       v-if="report"
+      class="row"
     >
       <div
         class="col col-12 col-md-7"
@@ -13,7 +13,7 @@
           <div class="col lessons-proceeds default-resultTable-col">
             <br>
             <span class="tableTitle col-12">
-                  جدول عملکرد دروس
+              جدول عملکرد دروس
             </span>
             <br>
             <br>
@@ -49,7 +49,7 @@
           <div class="col default-resultTable-col">
             <br>
             <span class="tableTitle ">
-                  نتیجه در زیر گروه ها
+              نتیجه در زیر گروه ها
             </span>
             <br>
             <br>
@@ -67,7 +67,7 @@
         <div class="row default-resultTable-row">
           <div class="col card-col default-resultTable-col">
             <div class="card-parent elevation-1">
-              <q-card class="default-result-card" >
+              <q-card class="default-result-card">
                 <q-card-section class="card-title-section">
                   <div class="row">
                     <div class="col text-center">
@@ -83,7 +83,8 @@
                     <div class="col text-center">
                       {{ report.n_normal_participants }}
                     </div>
-                    <div class="col text-center">
+                    <div v-if="report.main"
+                         class="col text-center">
                       {{ report.main.taraaz }}
                     </div>
                   </div>
@@ -95,23 +96,27 @@
         <div class="row default-resultTable-row">
           <div class="col card-col default-resultTable-col">
             <div class="card-parent elevation-1">
-              <q-card
-                class="mb-2 default-result-card"
+              <q-card v-if="report.main"
+                      class="mb-2 default-result-card"
               >
-                <q-card-section class="card-title-section">
+                <q-card-section
+                  class="card-title-section">
                   <div class="row">
-                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
+                    <div class="col text-center"
+                         :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
                       رتبه کل کشوری
                     </div>
-                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
+                    <div class="col text-center"
+                         :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
                       رتبه در استان
                     </div>
-                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
+                    <div class="col text-center"
+                         :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
                       رتبه در شهر
                     </div>
                     <div
-                      class="col col-3 text-center"
                       v-if="report.main.rank_school"
+                      class="col col-3 text-center"
                     >
                       رتبه در مدرسه
                     </div>
@@ -119,12 +124,15 @@
                 </q-card-section>
                 <q-card-section>
                   <div class="row">
-                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_country }}</div>
-                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_province }}</div>
-                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_city }}</div>
+                    <div class="col text-center"
+                         :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_country }}</div>
+                    <div class="col text-center"
+                         :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_province }}</div>
+                    <div class="col text-center"
+                         :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_city }}</div>
                     <div
-                      class="col col-3 text-center"
                       v-if="report.main.rank_school"
+                      class="col col-3 text-center"
                     >{{ report.main.rank_school }}</div>
                   </div>
                 </q-card-section>

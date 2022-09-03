@@ -7,15 +7,16 @@
     >
       {{ choice.number }}
     </div>
-    <div name="answer-text" class="answer-text">
-      <vue-katex :input="choice.title"/>
+    <div name="answer-text"
+         class="answer-text">
+      <vue-katex :input="choice.title" />
     </div>
   </div>
 
 </template>
 
 <script>
-import VueKatex from 'components/VueKatex'
+import VueKatex from 'src/components/VueKatex'
 
 export default {
   components: {

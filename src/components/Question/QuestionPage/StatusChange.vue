@@ -1,12 +1,13 @@
 <template>
   <div class="question-details">
-<!--    <div class="box-title">مشخصات سوال</div>-->
+    <!--    <div class="box-title">مشخصات سوال</div>-->
     <div class="details-container-2 default-details-container row">
-      <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+      <div class="detail-box detail-box-first"
+           :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">تعییر وضعیت</div>
         <q-select
-          borderless
           v-model="newStatus.changeState"
+          borderless
           :options="statuses.list"
           option-value="id"
           option-label="display_title"
@@ -14,11 +15,15 @@
           :loading="statuses.loading"
         />
       </div>
-      <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+      <div class="detail-box"
+           :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">افزودن کامنت</div>
-        <q-input borderless v-model="newStatus.commentAdded" type="text" />
+        <q-input v-model="newStatus.commentAdded"
+                 borderless
+                 type="text" />
       </div>
-      <div class="detail-box detail-box-last-of-row" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+      <div class="detail-box detail-box-last-of-row"
+           :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <q-btn
           unelevated
           :loading="statuses.loading"

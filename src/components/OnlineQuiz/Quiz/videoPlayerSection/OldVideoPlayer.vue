@@ -1,6 +1,9 @@
 <template>
-  <div class="vPlayer" id="videoPlayer">
-    <div id="videoPlayer-timeStamp" dir="rtl" style="font-family: 'serif', IRANSans;">
+  <div id="videoPlayer"
+       class="vPlayer">
+    <div id="videoPlayer-timeStamp"
+         dir="rtl"
+         style="font-family: 'serif', IRANSans;">
       <!--      <v-navigation-drawer-->
       <!--        right-->
       <!--        v-model="drawer"-->
@@ -73,7 +76,9 @@
         <!--        </v-btn>-->
       </transition>
     </div>
-    <video ref="videoPlayer" id="my-video" dir="ltr"
+    <video id="my-video"
+           ref="videoPlayer"
+           dir="ltr"
            class="video-js vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause">
 
     </video>
@@ -251,11 +256,11 @@ export default {
     toggleFavorite (id) {
       const that = this
       let count = -1
-      let currentTimepointIndex = null
-      this.timePoints.forEach(function (item, index) {
+      // let currentTimepointIndex = null
+      this.timePoints.forEach(function (item) {
         count++
         if (parseInt(item.id) === parseInt(id)) {
-          currentTimepointIndex = index
+          // currentTimepointIndex = index
           item.loading = true
           item.isFavored = !item.isFavored
           that.postIsFavored = {
@@ -268,7 +273,6 @@ export default {
       const requiredElement = document.querySelector('.video-js')
       requiredElement.focus()
       this.$emit('toggleBookmark', this.postIsFavored)
-      console.log('currentTimepointIndex', currentTimepointIndex)
       // setTimeout(function () {
       //   that.timePoints[currentTimepointIndex].loading = false
       // }, 200)

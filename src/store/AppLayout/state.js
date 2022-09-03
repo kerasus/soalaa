@@ -1,12 +1,17 @@
 export default function () {
   return {
+    linearLoading: false,
     drawer: false,
+    loginDialog: false,
     confirmDialog: {
       show: false,
       message: '',
       buttons: {
       }
     },
+    templateHeaderType: '',
+    templateLeftSideBarType: '',
+    templateRightSideBarType: '',
     windowSize: {
       x: 0,
       y: 0
@@ -17,7 +22,6 @@ export default function () {
       left: 0,
       right: 0
     },
-    appLayout: {},
     breadcrumbs: {
       visible: true,
       loading: false,

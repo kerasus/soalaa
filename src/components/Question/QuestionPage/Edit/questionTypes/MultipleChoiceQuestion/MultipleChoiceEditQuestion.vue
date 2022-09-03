@@ -1,76 +1,76 @@
 <template>
   <q-card class="edit-question-main-card custom-card">
     <q-card-section class="main-card-section question">
-        <div class="card-section-header">
-          <span>صورت سوال</span>
-        </div>
-        <div class="question-box">
-          <QuestionField
-            ref="tiptapQuestionStatement"
-            :key="'statement' + domKey"
-            :editorValue="question.statement"
-          />
-        </div>
-      </q-card-section>
+      <div class="card-section-header">
+        <span>صورت سوال</span>
+      </div>
+      <div class="question-box">
+        <QuestionField
+          ref="tiptapQuestionStatement"
+          :key="'statement' + domKey"
+          :editorValue="question.statement"
+        />
+      </div>
+    </q-card-section>
     <q-card-section
-        v-if="question.choices.list.length > 0"
-        class="row main-card-section multiple-answer"
+      v-if="question.choices.list.length > 0"
+      class="row main-card-section multiple-answer"
+    >
+      <div
+        v-for="(item, index) in question.choices.list"
+        :key="item.order"
+        class="col-lg-6 col-12"
       >
-        <div
-          class="col-lg-6 col-12"
-          v-for="(item, index) in question.choices.list"
-          :key="item.order"
-        >
-          <div class="card-section-header">
-            <q-btn
-              class="icon-type"
-              icon="isax:close-square5"
-              color="negative"
-              flat
-              @click="removeChoice(item.order)"
-            />
-            <q-radio
-              dense
-              v-model="choice"
-              :val="'choice' + index"
-              :label="'گزینه ' + (index + 1)"
-              color="primary"
-              @click="choiceClicked(item.order)"
-            />
-          </div>
-          <div class="multiple-answer-box">
-            <QuestionField
-              :ref="'tiptapChoice' + index"
-              :key="'choices' + index + domKey"
-              :editor-value="item.title"
-            />
-          </div>
-        </div>
-      </q-card-section>
-    <q-card-section class="row main-card-section">
-        <div class="col-12">
-          <div class="card-section-header">
-            <q-btn
-              class="icon-type"
-              icon="isax:add-square5"
-              color="positive"
-              flat
-              @click="addChoice"
-            />
-            <span>گزینه جدید</span>
-          </div>
-        </div>
-      </q-card-section>
-    <q-card-section class="main-card-section long-answer">
-        <div class="card-section-header">پاسخ تشریحی</div>
-        <div class="answer-box">
-          <QuestionField
-            ref="tiptapDescriptiveAnswer"
-            :key="'descriptive_answer' + domKey"
-            :editor-value="question.descriptive_answer"
+        <div class="card-section-header">
+          <q-btn
+            class="icon-type"
+            icon="isax:close-square5"
+            color="negative"
+            flat
+            @click="removeChoice(item.order)"
+          />
+          <q-radio
+            v-model="choice"
+            dense
+            :val="'choice' + index"
+            :label="'گزینه ' + (index + 1)"
+            color="primary"
+            @click="choiceClicked(item.order)"
           />
         </div>
-      </q-card-section>
+        <div class="multiple-answer-box">
+          <QuestionField
+            :ref="'tiptapChoice' + index"
+            :key="'choices' + index + domKey"
+            :editor-value="item.title"
+          />
+        </div>
+      </div>
+    </q-card-section>
+    <q-card-section class="row main-card-section">
+      <div class="col-12">
+        <div class="card-section-header">
+          <q-btn
+            class="icon-type"
+            icon="isax:add-square5"
+            color="positive"
+            flat
+            @click="addChoice"
+          />
+          <span>گزینه جدید</span>
+        </div>
+      </div>
+    </q-card-section>
+    <q-card-section class="main-card-section long-answer">
+      <div class="card-section-header">پاسخ تشریحی</div>
+      <div class="answer-box">
+        <QuestionField
+          ref="tiptapDescriptiveAnswer"
+          :key="'descriptive_answer' + domKey"
+          :editor-value="question.descriptive_answer"
+        />
+      </div>
+    </q-card-section>
   </q-card>
 </template>
 
@@ -332,6 +332,15 @@ export default {
 //}
 </style>
 <style lang="scss">
+[dir="rtl"] .filepond--root {
+  text-align: left #{"/* rtl:ignore */"} !important ;
+  direction: ltr #{"/* rtl:ignore */"} !important;
+}
+.filepond--file-info {
+  transform: none !important;
+  margin-left: 2.5em #{"/* rtl:ignore */"} !important;
+  margin-right: 0.5em #{"/* rtl:ignore */"} !important;
+}
 //// USED IN MANY OTHER COMPONENTS
 //.default-questions-card {
 //  background: #FFFFFF;

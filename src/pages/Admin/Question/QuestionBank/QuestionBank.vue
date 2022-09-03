@@ -1,30 +1,32 @@
 <template>
   <div class="main-container">
     <div class="row">
-      <div ref="header" class="col-12 question-bank-header">
-        <QuestionBankHeader/>
+      <div ref="header"
+           class="col-12 question-bank-header">
+        <QuestionBankHeader />
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
         <question-filter
           ref="filter"
+          :filterQuestions="filterQuestions"
           @onFilter="onFilter"
           @delete-filter="deleteFilterItem"
-          :filterQuestions="filterQuestions"
         />
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
           <QuestionToolBar
+            :key="questionListKey"
             :check-box="checkBox"
             :selectedQuestions="selectedQuestions"
             @remove="RemoveChoice"
             @deleteAllQuestions="deleteAllQuestions"
             @selectAllQuestions="selectAllQuestions"
-            :key="questionListKey"
           />
         </div>
         <div class="question-bank-content">
-          <question-item v-if="questions.loading" :question="loadingQuestion" />
+          <question-item v-if="questions.loading"
+                         :question="loadingQuestion" />
           <template v-else>
             <question-item
               v-for="question in questions.list"
@@ -49,10 +51,10 @@
 </template>
 
 <script>
+import pagination from 'components/Question/QuestionBank/Pagination'
 import API_ADDRESS from 'src/api/Addresses'
 import { Exam } from 'src/models/Exam'
 import { Question, QuestionList } from 'src/models/Question'
-import pagination from 'components/Question/QuestionBank/Pagination'
 import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
@@ -212,7 +214,7 @@ export default {
           this.questions.loading = false
         })
         .catch(function (error) {
-          console.log(error)
+          console.error(error)
           this.loadingQuestion.loading = false
           this.questions.loading = false
         })
@@ -229,9 +231,6 @@ export default {
               this.filterQuestions.major_type.push(option)
             }
           })
-        })
-        .catch(function (error) {
-          console.log(error)
         })
     },
     selectAllQuestions () {

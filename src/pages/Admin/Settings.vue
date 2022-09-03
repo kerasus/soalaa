@@ -2,8 +2,11 @@
   <q-layout :view="view">
 
     <q-page-container>
-      <q-page padding class="flex justify-center items-start">
+      <q-page padding
+              class="flex justify-center items-start">
         <q-stepper
+          ref="stepper"
+          v-model="step"
           animated
           header-nav
           flat
@@ -11,51 +14,60 @@
           alternative-labels
           :contracted="isContracted"
           color="secondary"
-          v-model="step"
-          ref="stepper"
           style="max-width: 600px"
         >
-          <q-step name="pick" title="Pick Layout Parts" :icon="mdiViewDashboard">
+          <q-step name="pick"
+                  title="Pick Layout Parts"
+                  :icon="mdiViewDashboard">
             <div class="column">
-              <q-toggle v-model="pick.header" label="I want a QHeader" />
-              <q-toggle v-model="pick.footer" label="I want a QFooter" />
-              <q-toggle v-model="pick.left" label="I want a left-side QDrawer" />
-              <q-toggle v-model="pick.right" label="I want a right-side QDrawer" />
+              <q-toggle v-model="pick.header"
+                        label="I want a QHeader" />
+              <q-toggle v-model="pick.footer"
+                        label="I want a QFooter" />
+              <q-toggle v-model="pick.left"
+                        label="I want a left-side QDrawer" />
+              <q-toggle v-model="pick.right"
+                        label="I want a right-side QDrawer" />
             </div>
           </q-step>
 
-          <q-step name="cfg" title="Configure Layout Parts" :icon="mdiCog" class="q-pb-lg">
+          <q-step name="cfg"
+                  title="Configure Layout Parts"
+                  :icon="mdiCog"
+                  class="q-pb-lg">
             <div class="q-mb-md text-grey-8">Layout "View"</div>
 
             <div class="q-mb-lg rounded-borders overflow-hidden shadow-2">
               <div class="row">
-                <div class="col-3 q-pa-md flex flex-center" :class="topL === 'h' ? 'bg-primary text-white' : 'bg-orange text-grey-9'">
+                <div class="col-3 q-pa-md flex flex-center"
+                     :class="topL === 'h' ? 'bg-primary text-white' : 'bg-orange text-grey-9'">
                   <q-option-group
+                    v-model="topL"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="topL"
                     :options="[{ label: 'l', value: 'l'}, { label: 'h', value: 'h'}]"
                   />
                 </div>
                 <div class="col-6 q-pa-md flex flex-center bg-primary text-white">
                   <q-option-group
+                    v-model="topC"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="topC"
                     :options="[{ label: 'h', value: 'h'}, { label: 'H', value: 'H'}]"
                   />
                 </div>
-                <div class="col-3 q-pa-md flex flex-center" :class="topR === 'h' ? 'bg-primary text-white' : 'bg-orange text-grey-9'">
+                <div class="col-3 q-pa-md flex flex-center"
+                     :class="topR === 'h' ? 'bg-primary text-white' : 'bg-orange text-grey-9'">
                   <q-option-group
+                    v-model="topR"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="topR"
                     :options="[{ label: 'r', value: 'r'}, { label: 'h', value: 'h'}]"
                   />
                 </div>
@@ -64,11 +76,11 @@
               <div class="row">
                 <div class="col-3 q-px-md q-py-xl flex flex-center bg-orange text-grey-9">
                   <q-option-group
+                    v-model="middleL"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="middleL"
                     :options="[{ label: 'l', value: 'l'}, { label: 'L', value: 'L'}]"
                   />
                 </div>
@@ -77,44 +89,46 @@
                 </div>
                 <div class="col-3 q-px-md q-py-xl flex flex-center bg-orange text-grey-9">
                   <q-option-group
+                    v-model="middleR"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="middleR"
                     :options="[{ label: 'r', value: 'r'}, { label: 'R', value: 'R'}]"
                   />
                 </div>
               </div>
 
               <div class="row">
-                <div class="col-3 q-pa-md flex flex-center" :class="bottomL === 'f' ? 'bg-grey-8 text-white' : 'bg-orange text-grey-9'">
+                <div class="col-3 q-pa-md flex flex-center"
+                     :class="bottomL === 'f' ? 'bg-grey-8 text-white' : 'bg-orange text-grey-9'">
                   <q-option-group
+                    v-model="bottomL"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="bottomL"
                     :options="[{ label: 'l', value: 'l'}, { label: 'f', value: 'f'}]"
                   />
                 </div>
                 <div class="col-6 q-pa-md flex flex-center bg-grey-8 text-white">
                   <q-option-group
+                    v-model="bottomC"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="bottomC"
                     :options="[{ label: 'f', value: 'f'}, { label: 'F', value: 'F'}]"
                   />
                 </div>
-                <div class="col-3 q-pa-md flex flex-center" :class="bottomR === 'f' ? 'bg-grey-8 text-white' : 'bg-orange text-grey-9'">
+                <div class="col-3 q-pa-md flex flex-center"
+                     :class="bottomR === 'f' ? 'bg-grey-8 text-white' : 'bg-orange text-grey-9'">
                   <q-option-group
+                    v-model="bottomR"
                     inline
                     color="white"
                     keep-color
                     dense
-                    v-model="bottomR"
                     :options="[{ label: 'r', value: 'r'}, { label: 'f', value: 'f'}]"
                   />
                 </div>
@@ -125,7 +139,8 @@
               <div class="q-pt-lg q-pb-sm text-grey-8">Header</div>
 
               <div class="q-pl-lg q-gutter-y-sm">
-                <q-toggle v-model="cfg.headerReveal" label="Header Reveal" />
+                <q-toggle v-model="cfg.headerReveal"
+                          label="Header Reveal" />
                 <q-select
                   v-model="cfg.headerSep"
                   label="Separator type"
@@ -145,7 +160,8 @@
               <div class="q-pt-lg q-pb-sm text-grey-8">Footer</div>
 
               <div class="q-pl-lg q-gutter-y-sm">
-                <q-toggle v-model="cfg.footerReveal" label="Footer Reveal" />
+                <q-toggle v-model="cfg.footerReveal"
+                          label="Footer Reveal" />
                 <q-select
                   v-model="cfg.footerSep"
                   label="Separator type"
@@ -165,7 +181,8 @@
               <div class="q-pt-lg q-pb-sm text-grey-8">Left-side Drawer</div>
 
               <div class="q-pl-lg q-gutter-y-sm">
-                <q-toggle v-model="cfg.leftOverlay" label="Overlay mode" />
+                <q-toggle v-model="cfg.leftOverlay"
+                          label="Overlay mode" />
                 <q-select
                   v-model="cfg.leftBehavior"
                   label="Behavior"
@@ -197,7 +214,8 @@
               <div class="q-pt-lg q-pb-sm text-grey-8">Right-side Drawer</div>
 
               <div class="q-pl-lg q-gutter-y-sm">
-                <q-toggle v-model="cfg.rightOverlay" label="Overlay mode" />
+                <q-toggle v-model="cfg.rightOverlay"
+                          label="Overlay mode" />
                 <q-select
                   v-model="cfg.rightBehavior"
                   label="Behavior"
@@ -227,13 +245,24 @@
             </template>
           </q-step>
 
-          <q-step name="play" title="Play with Layout" :icon="mdiPlayCircleOutline">
+          <q-step name="play"
+                  title="Play with Layout"
+                  :icon="mdiPlayCircleOutline">
             <div class="column">
-              <q-toggle v-model="play.header" :disable="!pick.header" label="Visible Header" />
-              <q-toggle v-model="play.footer" :disable="!pick.footer" label="Visible Footer" />
-              <q-toggle v-model="play.left" :disable="!pick.left" label="Visible left-side Drawer" />
-              <q-toggle v-model="play.right" :disable="!pick.right" label="Visible right-side Drawer" />
-              <q-toggle v-model="play.scroll" label="Inject Drawer content for scrolling" />
+              <q-toggle v-model="play.header"
+                        :disable="!pick.header"
+                        label="Visible Header" />
+              <q-toggle v-model="play.footer"
+                        :disable="!pick.footer"
+                        label="Visible Footer" />
+              <q-toggle v-model="play.left"
+                        :disable="!pick.left"
+                        label="Visible left-side Drawer" />
+              <q-toggle v-model="play.right"
+                        :disable="!pick.right"
+                        label="Visible right-side Drawer" />
+              <q-toggle v-model="play.scroll"
+                        label="Inject Drawer content for scrolling" />
             </div>
           </q-step>
 
@@ -241,11 +270,18 @@
             <q-stepper-navigation>
               <q-separator spaced />
               <div class="row q-col-gutter-sm">
-                <div v-if="step !== 'play'" class="col-12 col-sm-auto">
-                  <q-btn class="full-width" color="primary" @click="$refs.stepper.next()" label="Continue" />
+                <div v-if="step !== 'play'"
+                     class="col-12 col-sm-auto">
+                  <q-btn class="full-width"
+                         color="primary"
+                         label="Continue"
+                         @click="$refs.stepper.next()" />
                 </div>
                 <div class="col-12 col-sm-auto">
-                  <q-btn class="full-width" color="black" label="Export Layout" @click="exportDialog = true" />
+                  <q-btn class="full-width"
+                         color="black"
+                         label="Export Layout"
+                         @click="exportDialog = true" />
                 </div>
               </div>
             </q-stepper-navigation>
@@ -261,7 +297,10 @@
             <q-separator />
 
             <q-card-actions align="right">
-              <q-btn color="brand-primary" flat label="Close" v-close-popup />
+              <q-btn v-close-popup
+                     color="brand-primary"
+                     flat
+                     label="Close" />
             </q-card-actions>
           </q-card>
         </q-dialog>

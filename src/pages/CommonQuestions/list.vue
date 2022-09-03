@@ -1,5 +1,5 @@
 <template>
-  <questions/>
+  <questions />
 </template>
 
 <script>

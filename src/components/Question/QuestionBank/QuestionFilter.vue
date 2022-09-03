@@ -9,7 +9,10 @@
             </div>
           </q-card-section>
           <q-card-actions class="delete-all-container q-pa-none">
-            <q-btn flat rounded color="primary" @click="deleteAllFilters">
+            <q-btn flat
+                   rounded
+                   color="primary"
+                   @click="deleteAllFilters">
               حذف همه
             </q-btn>
           </q-card-actions>
@@ -34,10 +37,10 @@
         header-title="درس و مبحث"
       >
         <tree-component
-          @ticked="tickedData"
           ref="tree"
           tick-strategy="strict"
           :get-node-by-id="getNodeById"
+          @ticked="tickedData"
         />
       </question-filter-expansion>
 
@@ -45,15 +48,15 @@
         header-title="مرجع"
       >
         <q-option-group
+          v-model="selectedReference"
           type="checkbox"
-          @update:model-value="onChangeReference"
           :options="filterQuestions.reference_type.map(option => {
             return {
               label: option.value,
               value: option
             }
           })"
-          v-model="selectedReference"
+          @update:model-value="onChangeReference"
         />
         <div v-if="filterQuestions.reference_type.length === 0"> هیچ مرجعی ایجاد نشده است</div>
       </question-filter-expansion>
@@ -62,15 +65,15 @@
         header-title="سال انتشار"
       >
         <q-option-group
+          v-model="selectedYears"
           type="checkbox"
-          @update:model-value="onChangeYears"
           :options="filterQuestions.year_type.map(option => {
             return {
               label: option.value,
               value: option
             }
           })"
-          v-model="selectedYears"
+          @update:model-value="onChangeYears"
         />
         <div v-if="filterQuestions.year_type.length === 0"> هیچ سال انتشاری ایجاد نشده است</div>
       </question-filter-expansion>
@@ -79,15 +82,15 @@
         header-title="رشته تحصیلی"
       >
         <q-option-group
+          v-model="selectedMajors"
           type="checkbox"
-          @update:model-value="onChangeMajors"
           :options="filterQuestions.major_type.map(option => {
             return {
               label: option.value,
               value: option
             }
           })"
-          v-model="selectedMajors"
+          @update:model-value="onChangeMajors"
         />
         <div v-if="filterQuestions.major_type.length === 0"> هیچ رشته تحصیلی ایجاد نشده است</div>
 
@@ -97,15 +100,15 @@
         header-title="درجه سختی"
       >
         <q-option-group
+          v-model="selectedLevels"
           type="checkbox"
-          @update:model-value="onChangeLevels"
           :options="filterQuestions.levels.map(option => {
             return {
               label: option.value,
               value: option
             }
           })"
-          v-model="selectedLevels"
+          @update:model-value="onChangeLevels"
         />
         <div v-if="filterQuestions.levels.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
 
@@ -164,9 +167,6 @@ export default {
   created () {
     this.showTree('tree', this.getRootNode('test'))
       .then(() => {
-      })
-      .catch(err => {
-        console.log(err)
       })
   },
   methods: {

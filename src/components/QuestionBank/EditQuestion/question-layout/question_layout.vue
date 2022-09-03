@@ -64,9 +64,9 @@
             </div>
           </div>
           <div class="row items-center">
-          <div>
-            {{ (index + 1) + ') ' }}
-          </div>
+            <div>
+              {{ (index + 1) + ') ' }}
+            </div>
           </div>
         </div>
       </div>
@@ -110,11 +110,11 @@
           ref="descriptive"
           :key="'descriptive_answer' + domKey"
           v-model="question.descriptive_answer"
-          @value="console.log('ttttttttttttttttt', event)"
           :question-id="question.id ? question.id : 'null'"
           :edit-status="status"
           placeholder="پاسخ تشریحی"
           class="q-mb-lg"
+          @value="console.log('ttttttttttttttttt', event)"
           @questionData="getData"
         />
       </div>

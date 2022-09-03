@@ -1,31 +1,34 @@
 <template>
   <div class="answer-box"
-    @click="answerClicked"
+       @click="answerClicked"
   >
-    <div class="answer-sheet" :class="{ active: isSelected , 'bg-deep-purple-1': isSelected, 'ltr' : !isRtl }">
-      <div class="answer-text renderedPanel" :class="{'ltr' : !isRtl}"
+    <div class="answer-sheet"
+         :class="{ active: isSelected , 'bg-deep-purple-1': isSelected, 'ltr' : !isRtl }">
+      <div class="answer-text renderedPanel"
+           :class="{'ltr' : !isRtl}"
       >
         <vue-katex
           :input="choice.title"
           :ltr="!isRtl"
         />
+        <span class="choice-number">{{ '('+choiceNumber }}</span>
       </div>
       <div class="answer-checkbox">
         <q-checkbox
-          dense
-          @click="answerClicked"
-          size="60px"
           v-model="isSelected"
-         />
+          dense
+          size="60px"
+          @click="answerClicked"
+        />
       </div>
-  </div>
+    </div>
   </div>
 </template>
 
 <script>
+import VueKatex from 'src/components/VueKatex'
 import { mixinQuiz } from 'src/mixin/Mixins'
 import 'src/assets/scss/markdownKatex.scss'
-import VueKatex from 'src/components/VueKatex'
 
 export default {
   name: 'Choice',
@@ -33,7 +36,7 @@ export default {
     VueKatex
   },
   mixins: [mixinQuiz],
-  props: ['choice', 'questionId', 'isRtl'],
+  props: ['choice', 'questionId', 'isRtl', 'choiceNumber'],
   computed: {
     isSelected () {
       return this.getUserQuestionData(this.quiz.user_exam_id, this.questionId) && this.choice.id === this.getUserQuestionData(this.quiz.user_exam_id, this.questionId).answered_choice_id
@@ -94,7 +97,7 @@ export default {
         width: 100%;
         color: #777;
         padding-left: 30px;
-        display: block;
+        display: flex;
     }
     .answer-text.ltr {
         height: max-content;
@@ -102,7 +105,7 @@ export default {
         color: #777;
         padding-left: 0;
         padding-right: 30px;
-        display: block;
+        display: flex;
     }
     .answer-text .mesra {
       max-width: 100%;
@@ -126,5 +129,9 @@ export default {
         justify-content: center;
         align-items: center;
         transition: all ease-in-out 0.3s;
+    }
+
+    .choice-number {
+      font-weight: bold;
     }
 </style>

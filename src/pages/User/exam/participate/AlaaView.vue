@@ -1,8 +1,10 @@
 <template>
   <div class="row quiz-page"
        :style="{ height: '100%'}">
-    <div class="col " :style="{ 'min-height': '100%' }">
-      <div class="row main-page" :style="{ 'min-width': '100%' }">
+    <div class="col "
+         :style="{ 'min-height': '100%' }">
+      <div class="row main-page"
+           :style="{ 'min-width': '100%' }">
         <div class="col btnpre col-md-1 justify-start sm-hide xs-hide">
           <q-btn
             v-if="getQuestionNumberFromId(currentQuestion.id) !== 1"
@@ -86,11 +88,11 @@
             </div>
             <div class="col question-body">
               <div
-                :class="{ ltr: isLtrString(currentQuestion.statement)}"
                 v-if="currentQuestion.in_active_category"
+                :class="{ ltr: isLtrString(currentQuestion.statement)}"
                 class="renderedPanel"
               >
-                <vue-katex :input="currentQuestion.statement"/>
+                <vue-katex :input="currentQuestion.statement" />
               </div>
               <q-card
                 v-if="!currentQuestion.in_active_category"
@@ -104,17 +106,18 @@
                 </q-card-section>
               </q-card>
             </div>
-            <div class="col question-answers"
-                 v-if="currentQuestion.in_active_category"
+            <div v-if="currentQuestion.in_active_category"
+                 class="col question-answers"
             >
               <div
                 class="row">
                 <div
-                  class="choice-parent col-12 col-md-6"
-                  v-for="item in currentQuestion.choices.list"
+                  v-for="(item, index) in currentQuestion.choices.list"
                   :key="item.id"
+                  class="choice-parent col-12 col-md-6"
                 >
                   <choice
+                    :choice-number="index+1"
                     :question-id="currentQuestion.id"
                     :choice="item"
                     :is-rtl="!isLtrString(item.title)"
@@ -144,17 +147,17 @@
       </div>
     </div>
     <div class="timer-row col">
-      <Timer/>
+      <Timer />
     </div>
   </div>
 </template>
 
 <script>
+import VueKatex from 'src/components/VueKatex'
 import Choice from 'src/components/OnlineQuiz/Quiz/Choice'
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer } from 'src/mixin/Mixins'
 import Assistant from 'src/plugins/assistant'
-import VueKatex from 'components/VueKatex'
 
 export default {
   name: 'AlaaView',
@@ -271,10 +274,15 @@ export default {
   height: 100%;
   padding: 0px 0px 0px 12px;
   .timer-row {
+    //max-width: calc(75% - 150px);
     width: calc(75% - 150px);
     position: absolute;
     bottom: 0;
+    min-width: 130px;
     right: 100px;
+    //@media screen and (max-width: 1024px) {
+    //  width: calc(84% - 150px);
+    //}
   }
   .main-page{
     display: flex;
@@ -286,6 +294,7 @@ export default {
     .middle-page{
       display: flex;
       flex-direction: column;
+      padding-bottom: 103px;
       .question-header {
         display: flex;
         color: var(--text-2);

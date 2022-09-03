@@ -6,7 +6,9 @@
     >
       <q-card>
         <q-card-section class="row items-center">
-          <q-avatar icon="delete" color="primary" text-color="white" />
+          <q-avatar icon="delete"
+                    color="primary"
+                    text-color="white" />
           <span class="q-ml-sm">از حذف آزمون اطمینان دارید؟</span>
         </q-card-section>
 
@@ -30,12 +32,12 @@
       :columns="headers"
       :rows="rows"
       row-key="name"
-      @row-click="rowClick"
       rows-per-page-label="تعداد ردیف در هر صفحه"
       :rows-per-page-options="[15,15]"
       :loading="$store.getters['loading/loading']"
       loading-label="لطفا منتظر بمانید..."
       :no-data-label="$store.getters['loading/loading'] ? '' : 'متاسفم:( موردی وجود ندارد...'"
+      @row-click="rowClick"
     >
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -133,7 +135,8 @@
                 </q-item>
               </q-list>
             </q-menu>
-            <q-tooltip anchor="top middle" self="bottom middle">
+            <q-tooltip anchor="top middle"
+                       self="bottom middle">
               ویرایش
             </q-tooltip>
           </q-btn>
@@ -146,7 +149,8 @@
             size="11px"
             @click="sendLessonsListInfo"
           >
-            <q-tooltip anchor="top middle" self="bottom middle">
+            <q-tooltip anchor="top middle"
+                       self="bottom middle">
               مشاهده دروس
             </q-tooltip>
           </q-btn>
@@ -182,7 +186,8 @@
                 </q-item>
               </q-list>
             </q-menu>
-            <q-tooltip anchor="top middle" self="bottom middle">
+            <q-tooltip anchor="top middle"
+                       self="bottom middle">
               مشاهده نتایج
             </q-tooltip>
           </q-btn>

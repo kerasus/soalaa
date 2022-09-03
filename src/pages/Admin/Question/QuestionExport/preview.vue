@@ -118,9 +118,9 @@
 </template>
 
 <script>
+import VueKatex from 'src/components/VueKatex'
 import VueTiptapKatex from 'vue3-tiptap-katex'
 import API_ADDRESS from 'src/api/Addresses.js'
-import VueKatex from 'components/VueKatex'
 import { Exam } from 'src/models/Exam'
 import { QuestionList } from 'src/models/Question'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
@@ -164,7 +164,6 @@ export default {
   },
   methods: {
     changeVertical (id, value) {
-      console.log(id, value)
       document.querySelector('#question' + id).style.top = value + 'px'
     },
     updateFontSize () {
@@ -258,7 +257,7 @@ export default {
           this.loading = false
         }).catch(err => {
           this.loading = false
-          console.log(err)
+          console.error(err)
         })
     },
 

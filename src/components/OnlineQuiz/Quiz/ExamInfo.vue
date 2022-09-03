@@ -23,8 +23,8 @@
     <div class="date-part">
       <p class="date-label">زمان شروع:</p>
       <q-input
-        filled
         v-model="dateTime.startDate"
+        filled
         mask="date"
         :disable="show"
       >
@@ -58,8 +58,8 @@
         </template>
       </q-input>
       <q-input
-        filled
         v-model="dateTime.startTime"
+        filled
         mask="fulltime"
         :disable="show"
       >
@@ -95,8 +95,8 @@
     <div class="date-part">
       <p class="date-label">زمان پایان:</p>
       <q-input
-        filled
         v-model="dateTime.finishDate"
+        filled
         mask="date"
         :disable="show"
       >
@@ -129,8 +129,8 @@
         </template>
       </q-input>
       <q-input
-        filled
         v-model="dateTime.finishTime"
+        filled
         mask="fulltime"
         :disable="show"
       >
@@ -172,55 +172,55 @@
     <br>
     <div>
       <q-checkbox
-        class="options-check-box"
         v-model="examInfo.enable"
+        class="options-check-box"
         label="فعال"
         :disable="show"
       />
       <q-checkbox
-        class="options-check-box"
         v-model="examInfo.is_free"
+        class="options-check-box"
         label="رایگان"
         :disable="show"
       />
       <br>
       <q-checkbox
-        class="options-check-box"
         v-model="examInfo.is_register_open"
+        class="options-check-box"
         label="ثبت نام باز است."
         :disable="show"
       />
       <br>
       <q-checkbox
-        class="options-check-box"
         v-model="examInfo.is_open"
+        class="options-check-box"
         label="شرکت در آزمون باز است."
         :disable="show"
       />
       <br>
       <q-checkbox
-        class="options-check-box"
         v-model="examInfo.confirm"
+        class="options-check-box"
         label="تولید خودکار کارنامه"
         :disable="show"
       />
       <br>
       <q-checkbox
-        class="options-check-box"
         v-model="examInfo.generate_questions_automatically"
+        class="options-check-box"
         label="تولید خودکار سوال"
         :disable="show"
       />
     </div>
     <br>
     <div v-if="!examInfo.id">
-      <q-separator inset/>
+      <q-separator inset />
       <br>
       <div class="row">
         <div class="col-6">
           <q-select
-            class="create-mode-category"
             v-model="selectedCategory"
+            class="create-mode-category"
             :options="categoryTitles"
             emit-value
             map-options
@@ -230,8 +230,8 @@
         </div>
         <div class="col-6">
           <q-input
-            class="create-mode-category"
             v-model="selectedCategoryTime"
+            class="create-mode-category"
             type="number"
             label-color="grey-8"
             label="زمان"
@@ -243,8 +243,8 @@
       <div class="row">
         <div class="col-6">
           <q-input
-            class="create-mode-category"
             v-model="selectedCategoryOrder"
+            class="create-mode-category"
             type="number"
             label-color="grey-8"
             label="ترتیب"
@@ -263,7 +263,7 @@
       <br>
       <br>
       <br>
-      <q-separator inset/>
+      <q-separator inset />
       <br>
       <div
         v-for="item in examInfo.categories.list"
@@ -272,8 +272,8 @@
       >
         <div class="col-5">
           <q-select
-            class="create-mode-category"
             v-model="item.title"
+            class="create-mode-category"
             :options="categoryTitles"
             label-color="grey-8"
             label="category"
@@ -282,8 +282,8 @@
         </div>
         <div class="col-3">
           <q-input
-            class="create-mode-category"
             v-model="item.time"
+            class="create-mode-category"
             type="number"
             label-color="grey-8"
             label="زمان"
@@ -292,8 +292,8 @@
         </div>
         <div class="col">
           <q-input
-            class="create-mode-category"
             v-model="item.order"
+            class="create-mode-category"
             type="number"
             label-color="grey-8"
             label="ترتیب"
@@ -306,7 +306,7 @@
             color="red"
             icon="close"
             :disable="show"
-            @click="deleteCategory(item.id)"/>
+            @click="deleteCategory(item.id)" />
         </div>
       </div>
     </div>

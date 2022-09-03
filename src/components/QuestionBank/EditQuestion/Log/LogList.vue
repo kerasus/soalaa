@@ -2,54 +2,61 @@
   <div
     class="log-list"
   >
-     <q-toolbar class="justify-between">
-       <q-tabs
-         v-model="tab"
-         dense
-         class="taps-group text-grey"
-         active-color="dark"
-         indicator-color="secondary"
-         align="left"
-         narrow-indicator
-       >
-         <q-tab
-           name="history"
-           label="سابقه"
-         />
-         <q-tab name="comments" label="نظرات کاربران"/>
-       </q-tabs>
-       <q-btn class="icon-type report-btn" size="12px" icon-right="isax:danger4" label="گزارش خطا" flat />
-     </q-toolbar>
-     <q-separator class="separator-tabs"/>
-     <q-tab-panels v-model="tab" animated>
-       <q-tab-panel name="history">
-         <q-card class="log-list-tap-panel custom-card">
-           <q-scroll-area
-             class="scroll-bar"
-             tabindex="0"
-             :style="windowSize.x > 991 ? {height: '440px'}: {height: '497px'} "
-             visible
-           >
-             <div class="log-list-card">
-               <log-item
-                 v-for="(item, index) in logs.list"
-                 :key="index"
-                 :log="item"
-               />
-             </div>
-           </q-scroll-area>
-         </q-card>
-       </q-tab-panel>
-       <q-tab-panel class="flex" name="comments">
-         <q-card
-           class="log-list-tap-panel full-width flex bg-transparent"
-           flat
-         >
-           <div class="coming-soon">حالا حالاها خبری از این بخش نیست :)</div>
-         </q-card>
-       </q-tab-panel>
-     </q-tab-panels>
-   </div>
+    <q-toolbar class="justify-between">
+      <q-tabs
+        v-model="tab"
+        dense
+        class="taps-group text-grey"
+        active-color="dark"
+        indicator-color="secondary"
+        align="left"
+        narrow-indicator
+      >
+        <q-tab
+          name="history"
+          label="سابقه"
+        />
+        <q-tab name="comments"
+               label="نظرات کاربران" />
+      </q-tabs>
+      <q-btn class="icon-type report-btn"
+             size="12px"
+             icon-right="isax:danger4"
+             label="گزارش خطا"
+             flat />
+    </q-toolbar>
+    <q-separator class="separator-tabs" />
+    <q-tab-panels v-model="tab"
+                  animated>
+      <q-tab-panel name="history">
+        <q-card class="log-list-tap-panel custom-card">
+          <q-scroll-area
+            class="scroll-bar"
+            tabindex="0"
+            :style="windowSize.x > 991 ? {height: '440px'}: {height: '497px'} "
+            visible
+          >
+            <div class="log-list-card">
+              <log-item
+                v-for="(item, index) in logs.list"
+                :key="index"
+                :log="item"
+              />
+            </div>
+          </q-scroll-area>
+        </q-card>
+      </q-tab-panel>
+      <q-tab-panel class="flex"
+                   name="comments">
+        <q-card
+          class="log-list-tap-panel full-width flex bg-transparent"
+          flat
+        >
+          <div class="coming-soon">حالا حالاها خبری از این بخش نیست :)</div>
+        </q-card>
+      </q-tab-panel>
+    </q-tab-panels>
+  </div>
 </template>
 
 <script>
@@ -176,5 +183,4 @@ export default {
     color: var(--3a-TextSecondary);
   }
 }
-
 </style>

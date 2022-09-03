@@ -14,9 +14,9 @@
                   :style="{ 'width':'150px','height': '20px' }"
                   flat
                   class="sideBtnIcons"
-                  @click="goToPrevQuestion('onlineQuiz.alaaView')"
                   icon="mdi-chevron-right"
-                  />
+                  @click="goToPrevQuestion('onlineQuiz.alaaView')"
+                />
               </div>
               <div class="col-3  xs-hide flex justify-center align-center">
                 <svg
@@ -63,7 +63,7 @@
       </div>
       <div
         class="drawer shadow-13 flex justify-center "
-        :style="{height: drawerVisible ? '85px' : '0'}"
+        :style="{height: drawerVisible ? getDrawerHeight : '0'}"
       >
         <div>
           <p class="passedTimeText">
@@ -87,7 +87,7 @@
         >
           <q-icon
             size="40px"
-            name="mdi-close"/>
+            name="mdi-close" />
         </q-btn>
       </div>
     </div>
@@ -109,8 +109,21 @@ export default {
     drawerVisible: false
   }),
   methods: {
-    drawerUp () {
+    drawerUp() {
       this.drawerVisible = true
+    }
+  },
+  computed: {
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    },
+    getDrawerHeight() {
+      if (this.windowSize.x < 640 && this.windowSize.x > 451) {
+        return '138px'
+      } else if (this.windowSize.x < 450) {
+        return '160px'
+      }
+      return '115px'
     }
   }
 
@@ -270,7 +283,7 @@ export default {
     max-width: 50%;
   }
   .drawer {
-    width: 90%;
+    width: 122%;
     right: 5%;
   }
 
@@ -288,12 +301,34 @@ export default {
     width: 80%;
   }
   .drawer {
-    width: 90%;
+    width: 130%;
     right: 5%;
   }
 
   .passedTimeText {
     font-size: 2vw;
+  }
+
+  .remainingTimeText {
+    font-size: 2vw;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .timeCArdMob {
+    margin-right: 6%;
+    width: 60%;
+  }
+  .sideBtns{
+    float: left;
+    max-width: 50%;
+  }
+  .drawer {
+    width: 122%;
+    right: 5%;
+  }
+
+  .passedTimeText {
+    font-size: 2.6vw;
   }
 
   .remainingTimeText {

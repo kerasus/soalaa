@@ -10,24 +10,25 @@
             <div class="toolbar-btn">
               <q-btn
                 class="delete-choices-btn"
-                @click=deleteAllChoose()
                 flat
+                @click=deleteAllChoose()
               >
                 حذف انتخاب ها
               </q-btn>
-              <q-btn class="add-to-btn" flat>
+              <q-btn class="add-to-btn"
+                     flat>
                 <q-icon name="isax:add">
                 </q-icon>
                 <span>
-            افزودن به
-          </span>
+                  افزودن به
+                </span>
               </q-btn>
             </div>
             <div class="toolbar-checkbox">
               <q-checkbox
+                v-model="checkbox"
                 class="choices-checkbox"
                 label="انتخاب همه"
-                v-model="checkbox"
                 indeterminate-value="maybe"
                 @click="selectAllQuestions">
               </q-checkbox>
@@ -62,29 +63,32 @@
             <div class="row">
               <div class="col-4 q-pt-sm q-pl-xs">
                 <div class="chart-titles">
-                  <q-badge class="titles-icon hard" rounded/>
+                  <q-badge class="titles-icon hard"
+                           rounded />
                   <div>سخت</div>
                 </div>
                 <div class="chart-titles">
-                  <q-badge class="titles-icon medium" rounded></q-badge>
+                  <q-badge class="titles-icon medium"
+                           rounded></q-badge>
                   <div>متوسط</div>
                 </div>
                 <div class="chart-titles">
-                  <q-badge class="titles-icon easy" rounded></q-badge>
+                  <q-badge class="titles-icon easy"
+                           rounded></q-badge>
                   <div>آسان</div>
                 </div>
               </div>
               <div class="question-highchart col-8 ">
-                <highcharts :options="chartOptions"/>
+                <highcharts :options="chartOptions" />
               </div>
             </div>
           </div>
           <div class="question-deActive">
             <div class=" delete-all">
               <q-btn
-                @click=deleteAllChoose()
                 rounded
                 flat
+                @click=deleteAllChoose()
               >
                 حذف انتخاب ها
               </q-btn>
@@ -103,7 +107,8 @@
       </q-card-section>
     </q-expansion-item>
   </q-card>
-  <q-page-sticky class="pageSticky lg-hide" position="bottom">
+  <q-page-sticky class="pageSticky lg-hide"
+                 position="bottom">
     <div class="shapes flex ">
       <div class="circle">
         <q-btn
@@ -134,19 +139,20 @@
           <div class="delete-choices-btn-container">
             <q-btn
               class="delete-choices-btn"
-              @click=deleteAllChoose()
               flat
+              @click=deleteAllChoose()
             >
               حذف انتخاب ها
             </q-btn>
           </div>
           <div class="add-to-btn-container">
-            <q-btn class="add-to-btn" flat>
+            <q-btn class="add-to-btn"
+                   flat>
               <q-icon name="isax:add">
               </q-icon>
               <span>
-            افزودن به
-          </span>
+                افزودن به
+              </span>
             </q-btn>
           </div>
         </div>
@@ -158,7 +164,7 @@
                 class="choices-checkbox"
                 label="انتخاب همه"
                 name="checkbox"
-                @click="selectAllQuestions"/>
+                @click="selectAllQuestions" />
             </div>
           </div>
           <div class="choices-number-container">
@@ -172,7 +178,8 @@
       </div>
     </div>
   </q-page-sticky>
-  <q-dialog class="dialogueCard" v-model="ToolbarDialog">
+  <q-dialog v-model="ToolbarDialog"
+            class="dialogueCard">
     <q-card class="dialogueCardContainer">
       <div class="dialogHeader">
         <div class="dialogTitle"> سوالات انتخاب شده:</div>
@@ -186,9 +193,9 @@
       </div>
       <div class="dialogChip">
         <q-chip
-          class="filter-items"
           v-for="item in countOfSelectedSubCategory"
           :key="item"
+          class="filter-items"
           icon-remove="mdi-close"
           removable
           @remove="RemoveSelectedChoice(item)"
@@ -199,20 +206,23 @@
       <div class="dialogChart">
         <div class="dialogChartTitles">
           <div class="chart-titles">
-            <q-badge class="titles-icon hard" rounded/>
+            <q-badge class="titles-icon hard"
+                     rounded />
             <div>سخت</div>
           </div>
           <div class="chart-titles">
-            <q-badge class="titles-icon medium" rounded></q-badge>
+            <q-badge class="titles-icon medium"
+                     rounded></q-badge>
             <div>متوسط</div>
           </div>
           <div class="chart-titles">
-            <q-badge class="titles-icon easy" rounded></q-badge>
+            <q-badge class="titles-icon easy"
+                     rounded></q-badge>
             <div>آسان</div>
           </div>
         </div>
         <div class="dialogHighchart">
-          <highcharts :options="chartOptions"/>
+          <highcharts :options="chartOptions" />
         </div>
       </div>
     </q-card>

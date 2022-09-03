@@ -80,7 +80,6 @@ export default {
 
   methods: {
     getImageWidth () {
-      console.log('feature')
       this.currentImagesWidthList = []
 
       if (this.windowSize.x > 1439) {
