@@ -27,7 +27,7 @@
             dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
             hide-bottom-space
             dense
-            color="grey-10"
+            color="amber-14"
             borderless
             rounded
             option-label="title"
@@ -47,6 +47,7 @@
               v-if="currentGrades.length>0"
               v-model="selectedGrade"
               borderless
+              color="amber-14"
               option-label="title"
               dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
               hide-bottom-space
@@ -61,6 +62,7 @@
             <q-select v-if="currentMajors.length >0"
                       v-model="selectedMajor"
                       borderless
+                      color="amber-14"
                       dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
                       hide-bottom-space
                       dense
@@ -206,6 +208,7 @@
                 </div>
                 <q-btn unelevated
                        class="sub-btn"
+                       :class="{'active': activeTab.submitMode === 'pack'}"
                        @click="showMessageDialog"
                 >
                   <span class="sub-btn-text">
@@ -243,6 +246,7 @@
 
 <script>
 // import tableComponent from 'src/components/landing/table'
+import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'submitTable',
   components: {
@@ -565,6 +569,7 @@ export default {
             selective: true
           }
         ],
+        submitMode: 'pack',
         prices: [
           {
             major_id: 0,
@@ -580,7 +585,44 @@ export default {
             }
           }
         ],
-        producBandle: [],
+        productBandles: [
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          }
+        ],
         selective: true
       },
       {
@@ -837,6 +879,7 @@ export default {
           }
 
         ],
+        submitMode: 'pack',
         prices: [
           {
             major_id: 0,
@@ -850,12 +893,88 @@ export default {
             }
           }
         ],
-        selective: false
+        selective: false,
+        productBandles: [
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          },
+          {
+            major_id: 0,
+            grade_id: null,
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: ''
+          }
+
+        ]
       },
       {
         id: 2,
         description: 'دانش آموزان پایه هفتم،‌هشتم و نهم برای آشنایی هرچه بیشتر با فضای آزمون های تستی و کنکور لازم است میزان توانایی خود را در آزمون های تستی بسنجند. آزمون های سه آ در این پایه ها در زمان هایی قرارداده شده است که با برنامه آزمون های تشریحی بیشترین مطابقت را داشته باشد',
         majors: [],
+        submitMode: 'pack',
         title: ' آزمون سه‌آ ویژه هفتم، هشتم و نهم',
         grades: [{ id: 2, title: 'نهم' }, { id: 0, title: 'دهم' }, { id: 1, title: 'یازدهم' }],
         exams: [
@@ -995,7 +1114,43 @@ export default {
             }
           }
         ],
-        selective: false
+        selective: false,
+        productBandles: [{
+          major_id: 0,
+          grade_id: null,
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: ''
+        },
+        {
+          major_id: 0,
+          grade_id: null,
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: ''
+        },
+        {
+          major_id: 0,
+          grade_id: null,
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: ''
+        }]
       },
       {
         id: 3,
@@ -1010,6 +1165,7 @@ export default {
           }
         ],
         majors: [],
+        submitMode: 'pack',
         title: 'آزمون سه‌آ ویژه قبولی تیزهوشان',
         grades: [{ id: 2, title: 'نهم' }, { id: 3, title: 'ششم' }],
         exams: [
@@ -1170,7 +1326,43 @@ export default {
             }
           }
         ],
-        selective: true
+        selective: true,
+        productBandles: [{
+          major_id: 0,
+          grade_id: null,
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: ''
+        },
+        {
+          major_id: 0,
+          grade_id: null,
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: ''
+        },
+        {
+          major_id: 0,
+          grade_id: null,
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: ''
+        }]
       }
     ]
   }),
@@ -1179,6 +1371,7 @@ export default {
   },
   computed: {
     dataTable() {
+      // return this.activeTab.exams.filter(item => ((this.activeTab.majors.length > 0 ? item.major_id === this.selectedMajor.id : true) && (this.activeTab.grades.length > 0 ? item.grade_id === this.selectedGrade.id : true)))
       return this.activeTab.exams.filter(item => ((this.activeTab.majors.length > 0 ? item.major_id === this.selectedMajor.id : true) && (this.activeTab.grades.length > 0 ? item.grade_id === this.selectedGrade.id : true)))
     },
     currentMajors() {
@@ -1195,8 +1388,8 @@ export default {
       return ''
     },
     selectiveRegister() {
-      // return this.activeTab.selective
-      return false
+      return this.activeTab.selective
+      // return false
     }
   },
   methods: {
@@ -1206,6 +1399,18 @@ export default {
     initPageData() {
       this.setFirstExamActive()
       this.setFirstMajorsGradesSelected()
+      this.getProducts()
+    },
+    async getProducts() {
+      try {
+        const productList = await this.callProductApi()
+        console.log('productList', productList)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    callProductApi() {
+      return this.$axios.get(API_ADDRESS.product.all)
     },
     updateActiveTab(exam) {
       this.activeTab = exam
@@ -1390,6 +1595,12 @@ export default {
                 background: #FFF2CB;
                 border: 2px solid #2A2A2A;
                 border-radius: 24px;
+                span{
+                    font-weight: 700;
+                    font-size: 12px;
+                    line-height: 16px;
+                    margin-left: 11px;
+                  }
               }
 
             }
@@ -1475,8 +1686,13 @@ export default {
             .sub-btn {
               width: calc(100% - 32px);
               height: 48px;
-              background: #FFBD07;
+              background: #FFF0C1;
+              border: 2px solid #FFBD07;
               border-radius: 24px;
+              &.active{
+                background: #FFBD07;
+                border: none;
+              }
 
               .sub-btn-text {
                 font-style: normal;
@@ -1629,11 +1845,11 @@ export default {
                 }
 
                 .download-btn {
-                  width: 150px;
-                  height: 40px;
-                  background: #FFF2CB;
-                  border: 2px solid #2A2A2A;
-                  border-radius: 24px;
+                  span{
+                    font-size: 14px;
+                    line-height: 16px;
+                    margin-left: 11px;
+                  }
                 }
 
               }
@@ -1710,6 +1926,10 @@ export default {
                 .download-btn {
                   width: 142px;
                   height: 32px;
+                  span{
+                    font-size: 10px;
+                    line-height: 16px;
+                  }
                 }
 
               }
@@ -1905,9 +2125,6 @@ export default {
                 .download-btn{
                   width: 130px;
                   height: 32px;
-                  span{
-                    font-size: 12px;
-                  }
                 }
               }
             }
@@ -2191,7 +2408,7 @@ export default {
                   border-width: 1px;
 
                   span {
-                    font-size: 12px;
+                    margin-left: 9px;
                   }
                 }
 
