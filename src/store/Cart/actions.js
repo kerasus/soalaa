@@ -10,7 +10,7 @@ export function addToCart (context, data) {
   return new Promise((resolve, reject) => {
     if (isUserLogin) {
       axios
-        .post(API_ADDRESS.cart.orderproduct.add, { product_id: data.product.id, products: data.products, attribute: data.attribute, seller: 1 })
+        .post(API_ADDRESS.cart.orderproduct.add, { product_id: data.product.id, products: data.products, attribute: data.attribute, seller: 5 })
         .then((response) => {
           return resolve(response)
         })
