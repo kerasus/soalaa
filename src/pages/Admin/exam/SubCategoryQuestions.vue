@@ -78,6 +78,7 @@
               :questions-column="$refs.questionsColumn"
               :exam-id="$route.params.quizId"
               :sub-category="quizData.sub_categories"
+              :final-approval-mode="true"
               @detachQuestion="detachQuestion"
               @deleteQuestion="deleteQuestion"
               @copyIdToClipboard="copyIdToClipboard"
@@ -271,6 +272,7 @@ export default {
       return this.$axios.get(API_ADDRESS.question.confirm(question.id))
     },
     scrollToQuestion () {
+      console.log('this.questionSearchNumber', this.questionSearchNumber)
       this.scrollTo(null, this.questionSearchNumber)
     },
     questionListHeight () {
@@ -320,20 +322,20 @@ export default {
         })
     },
     scrollTo (questionId, questionNumber) {
-      // let questionIndex
-      // if (questionId) {
-      //   questionIndex = this.getQuestionIndexById(questionId)
-      // } else {
-      //   // questionIndex = questionNumber - this.firstQuestionOrder
-      //   questionIndex = questionNumber
-      // }
-      // this.$refs.scroller.scrollTo(questionIndex, 'start-force')
-      // for (let i = 1; i < 4; i++) {
-      //   setTimeout(() => {
-      //     this.$refs.scroller.scrollTo(questionIndex)
-      //   },
-      //   333 * i)
-      // }
+      let questionIndex
+      if (questionId) {
+        questionIndex = this.getQuestionIndexById(questionId)
+      } else {
+        // questionIndex = questionNumber - this.firstQuestionOrder
+        questionIndex = questionNumber
+      }
+      this.$refs.scroller.scrollTo(questionIndex, 'start-force')
+      for (let i = 1; i < 4; i++) {
+        setTimeout(() => {
+          this.$refs.scroller.scrollTo(questionIndex)
+        },
+        333 * i)
+      }
     },
     choiceClicked (questionId) {
       this.scrollTo(questionId)
