@@ -1,6 +1,6 @@
 <template>
   <div class="row user-panel-layout">
-    <user-side-bar class="col-xl-3 col-lg-3 col-md-3" />
+    <user-side-bar class="user-side-bar col-xl-3 col-lg-3 col-md-3" />
     <div class="col-xl-9 col-lg-9 col-md-9 col-12 user-panel-content">
       <Router :include="keepAliveComponents" />
     </div>
@@ -48,6 +48,11 @@ export default {
   @media screen and (max-width: 600px) {
     padding-left: 20px;
     padding-right: 20px;
+  }
+  .user-side-bar {
+    @media screen and (max-width: 1023px) {
+     display: none;
+    }
   }
 }
 </style>

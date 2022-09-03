@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="exam-index">
     <entity-index
       v-model:value="inputs"
       title="لیست آزمون ها"
@@ -259,6 +259,10 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.exam-index {
+  :deep(.q-card__section) {
+    background: #f4f6f9;
+  }
+}
 </style>

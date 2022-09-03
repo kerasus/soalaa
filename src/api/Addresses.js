@@ -23,7 +23,10 @@ const API_ADDRESS = {
       verify: authServer + '/mobile/verify'
     },
     formData: authServer + '/megaroute/getUserFormData',
-    show_user: authServer + '/getUserFor3a'
+    show_user: authServer + '/getUserFor3a',
+    getOrderList (id) {
+      return authServer + '/user/' + id + '/orders'
+    }
   },
   set: {
     base: authServer + '/set'
