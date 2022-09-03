@@ -251,7 +251,7 @@ const API_ADDRESS = {
     }
   },
   product: {
-    all: authServer + '/product/soalaa/all'
+    all: authServer + '/product/soalaa/all?seller=2'
   },
   cart: {
     orderproduct: {
