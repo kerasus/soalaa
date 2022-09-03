@@ -4,30 +4,43 @@
       <div class="user-header-section">
         <!--        -----------------------------------------------------Logo Section--------------------------------------------   -->
         <div class="user-logo-section">
-          <div class="hamburger">
+          <!--          <div class="hamburger hamburger-1">-->
+          <!--            <q-btn-->
+          <!--              flat-->
+          <!--              @click="toggleLeftDrawer"-->
+          <!--            >-->
+          <!--              <svg width="24"-->
+          <!--                   height="24"-->
+          <!--                   viewBox="0 0 24 24"-->
+          <!--                   fill="none"-->
+          <!--                   xmlns="http://www.w3.org/2000/svg">-->
+          <!--                <path d="M3 7H21"-->
+          <!--                      stroke="#6D708B"-->
+          <!--                      stroke-width="1.5"-->
+          <!--                      stroke-linecap="round" />-->
+          <!--                <path d="M3 12H21"-->
+          <!--                      stroke="#6D708B"-->
+          <!--                      stroke-width="1.5"-->
+          <!--                      stroke-linecap="round" />-->
+          <!--                <path d="M3 17H21"-->
+          <!--                      stroke="#6D708B"-->
+          <!--                      stroke-width="1.5"-->
+          <!--                      stroke-linecap="round" />-->
+          <!--              </svg>-->
+          <!--            </q-btn>-->
+          <!--          </div>-->
+          <div
+            class="drawer-btn hamburger"
+          >
             <q-btn
-              flat
+              class="toolbar-button"
+              icon="isax:menu-1"
+              color="white"
+              text-color="accent"
+              dense
+              unelevated
               @click="toggleLeftDrawer"
-            >
-              <svg width="24"
-                   height="24"
-                   viewBox="0 0 24 24"
-                   fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 7H21"
-                      stroke="#6D708B"
-                      stroke-width="1.5"
-                      stroke-linecap="round" />
-                <path d="M3 12H21"
-                      stroke="#6D708B"
-                      stroke-width="1.5"
-                      stroke-linecap="round" />
-                <path d="M3 17H21"
-                      stroke="#6D708B"
-                      stroke-width="1.5"
-                      stroke-linecap="round" />
-              </svg>
-            </q-btn>
+            />
           </div>
           <div class="logo-pic">
             <q-img
@@ -223,6 +236,11 @@ export default {
           @media screen and (max-width: 1023px) {
             display: block;
             margin-right: 20px;
+          }
+        }
+        .drawer-btn {
+          :deep(.q-btn) {
+            flex-direction: row !important;
           }
         }
       }
