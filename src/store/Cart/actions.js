@@ -66,6 +66,19 @@ export function reviewCart (context, product) {
   })
 }
 
+export function paymentCheckout (context) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(API_ADDRESS.cart.getPaymentRedirectEncryptedLink)
+      .then((response) => {
+        return resolve(response)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
 export function removeItemFromCart (context, productId) {
   const isUserLogin = !!this.getters['Auth/isUserLogin']
 
