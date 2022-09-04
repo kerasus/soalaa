@@ -45,48 +45,48 @@
           </div>
         </q-card-section>
 
-        <!--        <q-card-section-->
-        <!--          v-else-->
-        <!--          class="card-section"-->
-        <!--        >-->
-        <!--          <div-->
-        <!--            v-if="orderedItem.product.photo"-->
-        <!--            class="order-image-section"-->
-        <!--          >-->
-        <!--            <q-img-->
-        <!--              :src="orderedItem.product.photo"-->
-        <!--              class="order-image"-->
-        <!--            />-->
-        <!--          </div>-->
+        <q-card-section
+          v-else
+          class="card-section"
+        >
+          <div
+            v-if="orderedItem.order_product.list[0].photo"
+            class="order-image-section"
+          >
+            <q-img
+              :src="orderedItem.order_product.list[0].photo"
+              class="order-image"
+            />
+          </div>
 
-        <!--          <div class="product-text-info">-->
-        <!--            <div class="order-item-header">-->
-        <!--              <div class="title ellipsis">-->
-        <!--                {{ orderedItem.product.title }}-->
-        <!--              </div>-->
-        <!--            </div>-->
-        <!--            <div-->
-        <!--              class="price-container"-->
-        <!--            >-->
-        <!--              <div class="discount-part">-->
-        <!--                <div class="discount-percent">-->
-        <!--                  {{ orderedItem.product.price.discountInPercent() }}%-->
-        <!--                </div>-->
+          <div class="product-text-info">
+            <div class="order-item-header">
+              <div class="title ellipsis">
+                {{ orderedItem.order_product.list[0].product.title }}
+              </div>
+            </div>
+            <div
+              class="price-container"
+            >
+              <div class="discount-part">
+                <div class="discount-percent">
+                  {{ orderedItem.order_product.list[0].price.discountInPercent() }}%
+                </div>
 
-        <!--                <div class="base-price">-->
-        <!--                  {{ orderedItem.product.price.toman('base', null) }}-->
-        <!--                </div>-->
-        <!--              </div>-->
+                <div class="base-price">
+                  {{ orderedItem.order_product.list[0].price.toman('base', null) }}
+                </div>
+              </div>
 
-        <!--              <div class="final-part">-->
-        <!--                <div class="final-price">-->
-        <!--                  {{ orderedItem.product.price.toman('final', null) }}-->
-        <!--                </div>-->
-        <!--                <div class="toman">تومان</div>-->
-        <!--              </div>-->
-        <!--            </div>-->
-        <!--          </div>-->
-        <!--        </q-card-section>-->
+              <div class="final-part">
+                <div class="final-price">
+                  {{ orderedItem.order_product.list[0].price.toman('final', null) }}
+                </div>
+                <div class="toman">تومان</div>
+              </div>
+            </div>
+          </div>
+        </q-card-section>
         <q-card-section
           v-if="orderedItem.grand.id"
           class="card-actions"
