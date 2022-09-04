@@ -3,13 +3,10 @@
     {{ this.checkedStyle }}
     <q-pagination
       v-model="checkedStyle"
-      active-color="primary"
-      outline
       direction-links
       color="black"
       :max="meta.last_page"
       :max-pages="7"
-      boundary-numbers
       :disable="disable"
       @update:model-value="updatePage"
     />
