@@ -1,7 +1,7 @@
 import { Model, Collection } from 'js-abstract-model'
 import { User } from './User'
 import { Coupon } from './Coupon'
-// import {OrderProductList} from "src/models/OrderProduct";
+import { OrderProductList } from 'src/models/OrderProduct'
 import { OrderItemCollection } from './OrderItem'
 class Order extends Model {
   constructor (data) {
