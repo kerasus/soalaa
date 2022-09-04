@@ -1,17 +1,22 @@
 <template>
   <div class="cart-view-widget">
     <div
-      v-for="order in orderList"
+      v-for="(order, i) in orderList"
       :key="order.id"
       class="cart-items"
     >
-      <q-card class="cart-card">
+      <q-card
+        class="cart-card"
+        :class="order.order_product?.list.length > 0 ? '': 'cart'"
+      >
         <q-card-section class="card-section">
           <div class="order-image-section">
-            <q-img
-              :src="order.grand.photo"
-              class="order-image"
-            />
+            <div class="order-image-container">
+              <q-img
+                :src="order.grand.photo"
+                class="order-image"
+              />
+            </div>
           </div>
 
           <div class="product-text-info">
@@ -21,10 +26,11 @@
               </div>
 
               <q-btn
+                v-if="order.orderProductId"
                 unelevated
                 class="trash-button"
                 icon="isax:trash"
-                @click="changeDialogState(true, order.grand)"
+                @click="changeDialogState(true, order.orderProductId)"
               />
             </div>
 
@@ -32,7 +38,10 @@
               v-if="order.grand && order.grand.attributes && order.grand.attributes.info"
               class="product-information"
             >
-              <div class="product-info">
+              <div
+                v-if="order.grand.attributes.info.teacher"
+                class="product-info"
+              >
                 <q-icon
                   name="isax:teacher"
                   class="info-icon"
@@ -42,7 +51,10 @@
                 </div>
               </div>
 
-              <div class="product-info">
+              <div
+                v-if="order.grand.attributes.info.major"
+                class="product-info"
+              >
                 <q-icon
                   name="isax:book-1"
                   class="info-icon"
@@ -52,7 +64,10 @@
                 </div>
               </div>
 
-              <div class="product-info">
+              <div
+                v-if="order.grand.attributes.info.production_year"
+                class="product-info"
+              >
                 <q-icon
                   name="isax:menu-board4"
                   class="info-icon"
@@ -68,7 +83,7 @@
         <q-card-section class="card-actions">
           <div
             class="product-details"
-            :class="expanded ?'on-open-expansion': ''"
+            :class="expandedObject[i] ?'on-open-expansion': ''"
           >
             <div
               v-if="order.price"
@@ -92,10 +107,10 @@
 
             <div
               class="action-buttons"
-              :class="expanded ? '' : 'open-expansion'"
+              :class="expandedObject[i] ? '' : 'open-expansion'"
             >
               <a
-                v-if="!expanded"
+                v-if="!expandedObject[i] || !order.order_product"
                 class="link"
                 :href="order.grand?.url?.web"
               >
@@ -103,34 +118,36 @@
               </a>
 
               <q-expansion-item
-                v-model="expanded"
+                v-if="order.order_product?.list.length > 0"
+                v-model="expandedObject[i]"
                 label="جزئیات محصول"
                 class="details-expansion"
-                :class="expanded ?'open-expansion-style': ''"
-                :header-class=" expanded ? 'hide-expansion-header' : ''"
+                :class="expandedObject[i] ?'open-expansion-style': ''"
+                :header-class=" expandedObject[i] ? 'hide-expansion-header' : ''"
               >
                 <q-card class="details-expansion-card">
                   <q-card-section class="details-expansion-card-section">
                     <div
-                      v-for="i in 3"
-                      :key="i"
+                      v-for="(orderProduct, index) in order.order_product.list"
+                      :key="orderProduct.id"
                       class="pamphlet"
                     >
                       <div class="title ellipsis">
-                        جزوات آمار و احتمال یازدهم با تدریس علی صدری
+                        {{ orderProduct.product.title }}
                       </div>
 
                       <div class="right-part">
                         <span
                           class="price"
-                          :class="i !== 1 ? 'without-trash': ''"
+                          :class="index !== 0 ? 'without-trash': ''"
                         >
-                          123456 تومان
+                          {{ orderProduct.price.toman('final') }}
                         </span>
                         <q-btn
                           unelevated
-                          :class="i === 1 ? 'trash-button': 'hidden-trash-button'"
+                          :class="index === 0 ? 'trash-button': 'hidden-trash-button'"
                           icon="isax:trash"
+                          @click="changeDialogState(true, orderProduct.id)"
                         />
                       </div>
                     </div>
@@ -148,7 +165,7 @@
                       label="جزئیات محصول"
                       dropdown-icon="isax:arrow-up-2"
                       flat
-                      @click="expanded = !expanded"
+                      @click="expandedObject[i] = !expandedObject[i]"
                     >
                     </q-btn-dropdown>
                   </q-card-section>
@@ -193,7 +210,7 @@
 
         <div
           class="surely-delete-button"
-          @click="removeItem(clickedItemToRemove)"
+          @click="removeItem(clickedItemIdToRemove)"
         >
           بله، مطمئن هستم
         </div>
@@ -204,6 +221,7 @@
 
 <script>
 import Widgets from 'components/PageBuilder/Widgets'
+import { Product } from 'src/models/Product'
 
 export default {
   name: 'cartView',
@@ -212,28 +230,34 @@ export default {
     return {
       dialogState: false,
       test: null,
-      expanded: false,
-      clickedItemToRemove: null
+      expandedObject: {},
+      clickedItemIdToRemove: null
     }
   },
+
   props: {
     getData: {
       type: Function
     }
   },
+
   created() {
     this.loading = true
   },
+
   computed: {
     cart() {
       return this.$store.getters['Cart/cart']
     },
+
     orderList () {
-      return this.$store.getters['Cart/cart'].items.list
+      return this.getOrderedList(this.cart.items.list)
     },
+
     windowSize() {
       return this.$store.getters['AppLayout/windowSize']
     },
+
     descLinkLabel() {
       if (this.windowSize.x > 1439) {
         return 'رفتن به صفحه محصول'
@@ -252,29 +276,41 @@ export default {
         })
     },
 
-    goToDescPage(ci) {
-      // TODO:
-      // do something with: ci.product.url.web
-      window.location.href = ci.product.url.web
-    },
+    getOrderedList (cartItems) {
+      if (!cartItems || cartItems.list?.length === 0) {
+        return
+      }
+      const customItems = []
 
-    descShow(ci) {
-      // TODO:
-      // do something with: ci.product.url.api
-      window.location.href = ci.product.url.api
-    },
-
-    removeItem(ci) {
-      this.$store.dispatch('loading/overlayLoading', true)
-      this.$store.dispatch('Cart/removeItemFromCart', ci.id).then(() => {
-        this.cartReview()
-        this.changeDialogState(false)
+      cartItems.forEach((item, i) => {
+        if (item.grand.id) {
+          customItems.push(item)
+        } else if (!item.grand.id && item.order_product.list.length > 0) {
+          item.order_product.list.forEach(order => {
+            customItems.push({ grand: new Product(order.product), orderProductId: order.id })
+          })
+        }
+        this.expandedObject[i] = true
       })
+      return customItems
     },
 
-    changeDialogState (state, item) {
-      if (item) {
-        this.clickedItemToRemove = item
+    removeItem(order) {
+      this.$store.dispatch('loading/overlayLoading', true)
+      this.$store.dispatch('Cart/removeItemFromCart', order)
+        .then(() => {
+          this.cartReview()
+          this.$store.dispatch('loading/overlayLoading', false)
+          this.changeDialogState(false)
+        }).catch(() => {
+          this.changeDialogState(false)
+          this.$store.dispatch('loading/overlayLoading', false)
+        })
+    },
+
+    changeDialogState (state, itemId) {
+      if (itemId) {
+        this.clickedItemIdToRemove = itemId
       }
       this.dialogState = state
     }
@@ -310,6 +346,13 @@ export default {
           border-radius: 8px;
           margin-bottom: 19px;
         }
+        &.cart {
+          padding-bottom: 20px;
+
+          @media screen and (max-width: 1439px) {
+            padding-bottom: 16px;
+          }
+        }
 
         .card-section {
           padding: 0;
@@ -327,10 +370,11 @@ export default {
               margin-right: 8px;
             }
 
-            .order-image {
+            .order-image-container {
               height: 144px;
               width: 144px;
               border-radius: 10px;
+              background: #F6F9FF;
 
               @media screen and (max-width: 1023px) {
                 width: 110px;
@@ -341,6 +385,23 @@ export default {
                 width: 72px;
                 height: 72px;
                 margin-top: 34px;
+              }
+
+              .order-image {
+                height: 144px;
+                width: 144px;
+                border-radius: 10px;
+
+                @media screen and (max-width: 1023px) {
+                  width: 110px;
+                  height: 110px;
+                }
+
+                @media screen and (max-width: 599px) {
+                  width: 72px;
+                  height: 72px;
+                  margin-top: 34px;
+                }
               }
             }
           }
@@ -559,20 +620,20 @@ export default {
                 font-size: 12px;
                 line-height: 19px;
                 color: #9690E4;
-                margin-right: 24px;
                 cursor: pointer;
                 text-decoration: none;
-
-                @media screen and (max-width: 1439px) {
-                  margin-right: 12px;
-                }
-
-                @media screen and (max-width: 1023px) {
-                  margin-right: 24px;
-                }
               }
 
               .details-expansion {
+                margin-left: 24px;
+
+                @media screen and (max-width: 1439px) {
+                  margin-left: 12px;
+                }
+
+                @media screen and (max-width: 1023px) {
+                  margin-left: 24px;
+                }
 
                 .details-button {
                   font-style: normal;
@@ -580,8 +641,19 @@ export default {
                   font-size: 12px;
                   line-height: 19px;
                   color: #65677F;
+                  margin-left: 24px;
 
-                  @media screen and (max-width: 599px) {}
+                  @media screen and (max-width: 1439px) {
+                    margin-left: 12px;
+                  }
+
+                  @media screen and (max-width: 1023px) {
+                    margin-left: 24px;
+                  }
+
+                  @media screen and (max-width: 599px) {
+                    margin-left: 40px;
+                  }
 
                   &:deep(.q-icon) {
                     font-size: 14px;
