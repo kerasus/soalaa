@@ -27,7 +27,6 @@
     class="my-orders-list"
   >
     <div class="title">سفارش های من</div>
-    <!--          :api="getEntityApi"-->
     <entity-index
       class="orders-list-entity-index"
       title="سفارش های من"
@@ -134,11 +133,9 @@
 import { EntityIndex } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 import { User } from 'src/models/User'
-import moment from 'moment-jalaali'
+// import moment from 'moment-jalaali'
 import { Order } from 'src/models/Order'
 import OrderDetailsDialog from 'components/MyOrders/OrderDetailsDialog'
-// import { Order } from 'src/models/Order'
-// import { Question } from 'src/models/Question'
 export default {
   name: 'MyOrders',
   components: {
@@ -198,291 +195,12 @@ export default {
         pageKey: 'page'
       },
       // currentOrder: new Order(),
-      // currentOrder: null,
-      // currentOrder: {
-      //   id: 1801136,
-      //   discount: 0,
-      //   customer_description: null,
-      //   price: 0,
-      //   paid_price: 0,
-      //   refund_price: 0,
-      //   debt: 0,
-      //   orderstatus: {
-      //     id: 2,
-      //     name: 'ثبت نهایی'
-      //   },
-      //   paymentstatus: {
-      //     id: 3,
-      //     name: 'پرداخت شده'
-      //   },
-      //   orderproducts: [
-      //     {
-      //       id: 2268936,
-      //       quantity: 1,
-      //       type: 2,
-      //       product: [
-      //         {
-      //           price: {
-      //             discountDetail: {
-      //               productDiscount: 100,
-      //               bonDiscount: 0,
-      //               productDiscountAmount: 0
-      //             },
-      //             extraCost: 0,
-      //             base: 0,
-      //             discount: 0,
-      //             final: 0
-      //           },
-      //           id: 772,
-      //           redirect_url: null,
-      //           type: 1,
-      //           category: 'آزمون/سه آ',
-      //           title: 'آزمون المپیاد زیست سنجاب دهم',
-      //           is_free: 0,
-      //           url: {
-      //             web: 'http://office.alaa.tv:8080/product/772',
-      //             api: 'http://office.alaa.tv:8080/api/v2/product/772'
-      //           },
-      //           photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-      //           attributes: {
-      //             info: {
-      //               teacher: [
-      //                 'گروه مؤلفین'
-      //               ],
-      //               shipping_method: [
-      //                 'آنلاین_مجازی'
-      //               ],
-      //               major: [
-      //                 'تجربی'
-      //               ],
-      //               services: [
-      //                 'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-      //               ],
-      //               download_date: null,
-      //               educational_system: [
-      //                 'نظام جدید'
-      //               ],
-      //               duration: null,
-      //               production_year: [
-      //                 '99-00'
-      //               ]
-      //             },
-      //             extra: null
-      //           },
-      //           redirect_code: null
-      //         },
-      //         {
-      //           price: {
-      //             discountDetail: {
-      //               productDiscount: 100,
-      //               bonDiscount: 0,
-      //               productDiscountAmount: 0
-      //             },
-      //             extraCost: 0,
-      //             base: 0,
-      //             discount: 0,
-      //             final: 0
-      //           },
-      //           id: 772,
-      //           redirect_url: null,
-      //           type: 1,
-      //           category: 'آزمون/سه آ',
-      //           title: 'آزمون المپیاد زیست سنجاب دهم',
-      //           is_free: 0,
-      //           url: {
-      //             web: 'http://office.alaa.tv:8080/product/772',
-      //             api: 'http://office.alaa.tv:8080/api/v2/product/772'
-      //           },
-      //           photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-      //           attributes: {
-      //             info: {
-      //               teacher: [
-      //                 'گروه مؤلفین'
-      //               ],
-      //               shipping_method: [
-      //                 'آنلاین_مجازی'
-      //               ],
-      //               major: [
-      //                 'تجربی'
-      //               ],
-      //               services: [
-      //                 'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-      //               ],
-      //               download_date: null,
-      //               educational_system: [
-      //                 'نظام جدید'
-      //               ],
-      //               duration: null,
-      //               production_year: [
-      //                 '99-00'
-      //               ]
-      //             },
-      //             extra: null
-      //           },
-      //           redirect_code: null
-      //         },
-      //         {
-      //           price: {
-      //             discountDetail: {
-      //               productDiscount: 100,
-      //               bonDiscount: 0,
-      //               productDiscountAmount: 0
-      //             },
-      //             extraCost: 0,
-      //             base: 0,
-      //             discount: 0,
-      //             final: 0
-      //           },
-      //           id: 772,
-      //           redirect_url: null,
-      //           type: 1,
-      //           category: 'آزمون/سه آ',
-      //           title: 'آزمون المپیاد زیست سنجاب دهم',
-      //           is_free: 0,
-      //           url: {
-      //             web: 'http://office.alaa.tv:8080/product/772',
-      //             api: 'http://office.alaa.tv:8080/api/v2/product/772'
-      //           },
-      //           photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-      //           attributes: {
-      //             info: {
-      //               teacher: [
-      //                 'گروه مؤلفین'
-      //               ],
-      //               shipping_method: [
-      //                 'آنلاین_مجازی'
-      //               ],
-      //               major: [
-      //                 'تجربی'
-      //               ],
-      //               services: [
-      //                 'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-      //               ],
-      //               download_date: null,
-      //               educational_system: [
-      //                 'نظام جدید'
-      //               ],
-      //               duration: null,
-      //               production_year: [
-      //                 '99-00'
-      //               ]
-      //             },
-      //             extra: null
-      //           },
-      //           redirect_code: null
-      //         }],
-      //       grand: {
-      //         id: 772,
-      //         redirect_url: null,
-      //         type: 1,
-      //         category: 'آزمون/سه آ',
-      //         title: 'آزمون المپیاد زیست سنجاب دهم',
-      //         is_free: 0,
-      //         url: {
-      //           web: 'http://office.alaa.tv:8080/product/772',
-      //           api: 'http://office.alaa.tv:8080/api/v2/product/772'
-      //         },
-      //         photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-      //         attributes: {
-      //           info: {
-      //             teacher: [
-      //               'گروه مؤلفین'
-      //             ],
-      //             shipping_method: [
-      //               'آنلاین_مجازی'
-      //             ],
-      //             major: [
-      //               'تجربی'
-      //             ],
-      //             services: [
-      //               'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-      //             ],
-      //             download_date: null,
-      //             educational_system: [
-      //               'نظام جدید'
-      //             ],
-      //             duration: null,
-      //             production_year: [
-      //               '99-00'
-      //             ]
-      //           },
-      //           extra: null
-      //         },
-      //         redirect_code: null
-      //       },
-      //       price: {
-      //         discountDetail: {
-      //           productDiscount: 100,
-      //           bonDiscount: 0,
-      //           productDiscountAmount: 0
-      //         },
-      //         extraCost: 0,
-      //         base: 0,
-      //         discount: 0,
-      //         final: 0
-      //       },
-      //       photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-      //       extra_attributes: null
-      //     }
-      //   ],
-      //   coupon_info: null,
-      //   successful_transactions: null,
-      //   pending_transactions: null,
-      //   unpaid_transaction: null,
-      //   posting_info: null,
-      //   user: {
-      //     id: 219548,
-      //     first_name: 'علی',
-      //     last_name: 'اسماعیلی',
-      //     mobile: '09358745928',
-      //     national_code: '0014258269',
-      //     profile_completion: 77
-      //   },
-      //   created_at: '2022-07-25 04:26:11',
-      //   completed_at: '2022-07-25 08:56:11'
-      // },
-      currentOrder: new Order(),
-      detailsDialog: false,
-      hasUserOrdered: true,
-      firstRowPassed: false,
-      test: new Order()
-    }
-  },
-  created() {
-  },
-  computed: {
-    user() {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    },
-    getEntityApi() {
-      return API_ADDRESS.user.getOrderList(this.user.id)
-      // return API_ADDRESS.exam.base(1)
-    },
-    getCurrentOrderCompletedAt() {
-      return (CompletedAt) => {
-        return moment(this.currentOrder.completed_at, 'YYYY-M-D').format('jYYYY/jMM/jDD')
-      }
-    },
-    windowSize () {
-      if (this.$store.getters['AppLayout/windowSize'].x < 600) {
-        // console.log('q-table__grid-item-row')
-        return
-      }
-      return this.$store.getters['AppLayout/windowSize']
-    }
-  },
-  methods: {
-    showDetailsDialog(rowData) {
-      // console.log('rowData', rowData)
-      this.currentOrder = new Order({
-        id: 1801136,
+      currentOrder: new Order({
+        id: 1722713,
         discount: 0,
         customer_description: null,
-        price: 0,
-        paid_price: 0,
+        price: 24360,
+        paid_price: 24360,
         refund_price: 0,
         debt: 0,
         orderstatus: {
@@ -495,66 +213,563 @@ export default {
         },
         orderproducts: [
           {
-            id: 2268936,
+            id: 2303303,
             quantity: 1,
-            type: 2,
+            type: 1,
             product: {
-              id: 772,
+              id: 361,
               redirect_url: null,
               type: 1,
-              category: 'آزمون/سه آ',
-              title: 'آزمون المپیاد زیست سنجاب دهم',
+              category: 'جزوه',
+              title: 'جزوات حسابان یازدهم با تدریس محمد صادق ثابتی',
               is_free: 0,
               url: {
-                web: 'http://office.alaa.tv:8080/product/772',
-                api: 'http://office.alaa.tv:8080/api/v2/product/772'
+                web: 'http://office.alaa.tv:8080/product/361',
+                api: 'http://office.alaa.tv:8080/api/v2/product/361'
               },
-              photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
+              photo: 'https://nodes.alaatv.com/upload/images/product/pr9_20191010073218.jpg',
               attributes: {
                 info: {
                   teacher: [
-                    'گروه مؤلفین'
+                    'محمد صادق ثابتی'
                   ],
                   shipping_method: [
-                    'آنلاین_مجازی'
+                    'دانلودی'
                   ],
                   major: [
-                    'تجربی'
+                    'ریاضی'
                   ],
                   services: [
-                    'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
+                    'جزوه'
                   ],
-                  download_date: null,
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
                   educational_system: [
                     'نظام جدید'
                   ],
-                  duration: null,
+                  duration: [
+                    'تاکنون 50 صفحه'
+                  ],
                   production_year: [
-                    '99-00'
+                    '98-99'
                   ]
                 },
                 extra: null
               },
               redirect_code: null
             },
-            grand: null,
+            grand: {
+              id: 349,
+              redirect_url: null,
+              type: 3,
+              category: null,
+              title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/349',
+                api: 'http://office.alaa.tv:8080/api/v2/product/349'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'گروه آموزشی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی',
+                    'تجربی',
+                    'انسانی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 1110 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
             price: {
               discountDetail: {
-                productDiscount: 100,
+                productDiscount: 0,
                 bonDiscount: 0,
                 productDiscountAmount: 0
               },
               extraCost: 0,
-              base: 0,
+              base: 4872,
               discount: 0,
-              final: 0
+              final: 4872
             },
-            photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
+            photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+            extra_attributes: null
+          },
+          {
+            id: 2303304,
+            quantity: 1,
+            type: 1,
+            product: {
+              id: 363,
+              redirect_url: null,
+              type: 1,
+              category: 'جزوه',
+              title: 'جزوات نکته و تست حسابان کنکور با تدریس محمد صادق ثابتی',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/363',
+                api: 'http://office.alaa.tv:8080/api/v2/product/363'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/pr16_20191010073252.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'محمد صادق ثابتی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 126 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            grand: {
+              id: 349,
+              redirect_url: null,
+              type: 3,
+              category: null,
+              title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/349',
+                api: 'http://office.alaa.tv:8080/api/v2/product/349'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'گروه آموزشی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی',
+                    'تجربی',
+                    'انسانی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 1110 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            price: {
+              discountDetail: {
+                productDiscount: 0,
+                bonDiscount: 0,
+                productDiscountAmount: 0
+              },
+              extraCost: 0,
+              base: 4872,
+              discount: 0,
+              final: 4872
+            },
+            photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+            extra_attributes: null
+          },
+          {
+            id: 2303305,
+            quantity: 1,
+            type: 1,
+            product: {
+              id: 365,
+              redirect_url: null,
+              type: 1,
+              category: 'جزوه',
+              title: 'جزوات هندسه کامل کنکور با تدریس محمد صادق ثابتی',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/365',
+                api: 'http://office.alaa.tv:8080/api/v2/product/365'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/pr10_20191010073340.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'محمد صادق ثابتی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 45 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            grand: {
+              id: 349,
+              redirect_url: null,
+              type: 3,
+              category: null,
+              title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/349',
+                api: 'http://office.alaa.tv:8080/api/v2/product/349'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'گروه آموزشی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی',
+                    'تجربی',
+                    'انسانی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 1110 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            price: {
+              discountDetail: {
+                productDiscount: 0,
+                bonDiscount: 0,
+                productDiscountAmount: 0
+              },
+              extraCost: 0,
+              base: 4872,
+              discount: 0,
+              final: 4872
+            },
+            photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+            extra_attributes: null
+          },
+          {
+            id: 2303306,
+            quantity: 1,
+            type: 1,
+            product: {
+              id: 367,
+              redirect_url: null,
+              type: 1,
+              category: 'جزوه',
+              title: 'جزوات گسسته با تدریس محمد صادق ثابتی',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/367',
+                api: 'http://office.alaa.tv:8080/api/v2/product/367'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/pr11_20191010073417.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'محمد صادق ثابتی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 29 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            grand: {
+              id: 349,
+              redirect_url: null,
+              type: 3,
+              category: null,
+              title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/349',
+                api: 'http://office.alaa.tv:8080/api/v2/product/349'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'گروه آموزشی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی',
+                    'تجربی',
+                    'انسانی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 1110 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            price: {
+              discountDetail: {
+                productDiscount: 0,
+                bonDiscount: 0,
+                productDiscountAmount: 0
+              },
+              extraCost: 0,
+              base: 4872,
+              discount: 0,
+              final: 4872
+            },
+            photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+            extra_attributes: null
+          },
+          {
+            id: 2303307,
+            quantity: 1,
+            type: 1,
+            product: {
+              id: 369,
+              redirect_url: null,
+              type: 1,
+              category: 'جزوه',
+              title: 'جزوات زبان دهم با تدریس علی اکبر عزتی',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/369',
+                api: 'http://office.alaa.tv:8080/api/v2/product/369'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/pr12_20191010073500.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'عزتی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی',
+                    'تجربی',
+                    'انسانی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    '57 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            grand: {
+              id: 349,
+              redirect_url: null,
+              type: 3,
+              category: null,
+              title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/349',
+                api: 'http://office.alaa.tv:8080/api/v2/product/349'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'گروه آموزشی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی',
+                    'تجربی',
+                    'انسانی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 1110 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            price: {
+              discountDetail: {
+                productDiscount: 0,
+                bonDiscount: 0,
+                productDiscountAmount: 0
+              },
+              extraCost: 0,
+              base: 4872,
+              discount: 0,
+              final: 4872
+            },
+            photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
             extra_attributes: null
           }
         ],
         coupon_info: null,
-        successful_transactions: null,
+        successful_transactions: [
+          {
+            wallet_id: 218041,
+            order_id: 1722713,
+            cost: 24360,
+            transactionID: null,
+            trace_number: null,
+            refrence_number: null,
+            paycheck_number: null,
+            paymentmethod: {
+              name: 'wallet',
+              display_name: 'کیف پول',
+              id: 5
+            },
+            transactiongateway: null,
+            transactionstatus: {
+              name: 'موفق',
+              id: 3
+            },
+            created_at: '2022-09-03 13:33:55',
+            completed_at: '2022-09-03 18:03:55',
+            deadline_at: null
+          }
+        ],
         pending_transactions: null,
         unpaid_transaction: null,
         posting_info: null,
@@ -566,10 +781,626 @@ export default {
           national_code: '0014258269',
           profile_completion: 77
         },
-        created_at: '2022-07-25 04:26:11',
-        completed_at: '2022-07-25 08:56:11'
+        created_at: '2022-05-15 13:26:58',
+        completed_at: '2022-09-03 18:03:55'
+      }),
+      detailsDialog: false,
+      hasUserOrdered: true,
+      firstRowPassed: false
+    }
+  },
+  created() {
+  },
+  computed: {
+    user() {
+      if (this.$store.getters['Auth/user']) {
+        return this.$store.getters['Auth/user']
+      }
+      return new User()
+    },
+    getEntityApi() {
+      // return API_ADDRESS.user.getOrderList(this.user.id)
+      return API_ADDRESS.exam.base(1)
+    },
+    windowSize () {
+      if (this.$store.getters['AppLayout/windowSize'].x < 600) {
+        return
+      }
+      return this.$store.getters['AppLayout/windowSize']
+    }
+  },
+  methods: {
+    showDetailsDialog(rowData) {
+      // this.currentOrder = new Order(rowData)
+      this.currentOrder = new Order({
+        id: 1722713,
+        discount: 0,
+        customer_description: null,
+        price: 24360,
+        paid_price: 24360,
+        refund_price: 0,
+        debt: 0,
+        orderstatus: {
+          id: 2,
+          name: 'ثبت نهایی'
+        },
+        paymentstatus: {
+          id: 3,
+          name: 'پرداخت شده'
+        },
+        orderproducts: [
+          {
+            id: 2303303,
+            quantity: 1,
+            type: 1,
+            product: {
+              id: 361,
+              redirect_url: null,
+              type: 1,
+              category: 'جزوه',
+              title: 'جزوات حسابان یازدهم با تدریس محمد صادق ثابتی',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/361',
+                api: 'http://office.alaa.tv:8080/api/v2/product/361'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/pr9_20191010073218.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'محمد صادق ثابتی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 50 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            grand: {
+              id: 349,
+              redirect_url: null,
+              type: 3,
+              category: null,
+              title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/349',
+                api: 'http://office.alaa.tv:8080/api/v2/product/349'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'گروه آموزشی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی',
+                    'تجربی',
+                    'انسانی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 1110 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            price: {
+              discountDetail: {
+                productDiscount: 0,
+                bonDiscount: 0,
+                productDiscountAmount: 0
+              },
+              extraCost: 0,
+              base: 4872,
+              discount: 0,
+              final: 4872
+            },
+            photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+            extra_attributes: null
+          },
+          {
+            id: 2303304,
+            quantity: 1,
+            type: 1,
+            product: {
+              id: 363,
+              redirect_url: null,
+              type: 1,
+              category: 'جزوه',
+              title: 'جزوات نکته و تست حسابان کنکور با تدریس محمد صادق ثابتی',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/363',
+                api: 'http://office.alaa.tv:8080/api/v2/product/363'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/pr16_20191010073252.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'محمد صادق ثابتی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 126 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            grand: {
+              id: 349,
+              redirect_url: null,
+              type: 3,
+              category: null,
+              title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/349',
+                api: 'http://office.alaa.tv:8080/api/v2/product/349'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'گروه آموزشی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی',
+                    'تجربی',
+                    'انسانی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 1110 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            price: {
+              discountDetail: {
+                productDiscount: 0,
+                bonDiscount: 0,
+                productDiscountAmount: 0
+              },
+              extraCost: 0,
+              base: 4872,
+              discount: 0,
+              final: 4872
+            },
+            photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+            extra_attributes: null
+          },
+          {
+            id: 2303305,
+            quantity: 1,
+            type: 1,
+            product: {
+              id: 365,
+              redirect_url: null,
+              type: 1,
+              category: 'جزوه',
+              title: 'جزوات هندسه کامل کنکور با تدریس محمد صادق ثابتی',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/365',
+                api: 'http://office.alaa.tv:8080/api/v2/product/365'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/pr10_20191010073340.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'محمد صادق ثابتی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 45 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            grand: {
+              id: 349,
+              redirect_url: null,
+              type: 3,
+              category: null,
+              title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/349',
+                api: 'http://office.alaa.tv:8080/api/v2/product/349'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'گروه آموزشی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی',
+                    'تجربی',
+                    'انسانی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 1110 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            price: {
+              discountDetail: {
+                productDiscount: 0,
+                bonDiscount: 0,
+                productDiscountAmount: 0
+              },
+              extraCost: 0,
+              base: 4872,
+              discount: 0,
+              final: 4872
+            },
+            photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+            extra_attributes: null
+          },
+          {
+            id: 2303306,
+            quantity: 1,
+            type: 1,
+            product: {
+              id: 367,
+              redirect_url: null,
+              type: 1,
+              category: 'جزوه',
+              title: 'جزوات گسسته با تدریس محمد صادق ثابتی',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/367',
+                api: 'http://office.alaa.tv:8080/api/v2/product/367'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/pr11_20191010073417.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'محمد صادق ثابتی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 29 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            grand: {
+              id: 349,
+              redirect_url: null,
+              type: 3,
+              category: null,
+              title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/349',
+                api: 'http://office.alaa.tv:8080/api/v2/product/349'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'گروه آموزشی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی',
+                    'تجربی',
+                    'انسانی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 1110 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            price: {
+              discountDetail: {
+                productDiscount: 0,
+                bonDiscount: 0,
+                productDiscountAmount: 0
+              },
+              extraCost: 0,
+              base: 4872,
+              discount: 0,
+              final: 4872
+            },
+            photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+            extra_attributes: null
+          },
+          {
+            id: 2303307,
+            quantity: 1,
+            type: 1,
+            product: {
+              id: 369,
+              redirect_url: null,
+              type: 1,
+              category: 'جزوه',
+              title: 'جزوات زبان دهم با تدریس علی اکبر عزتی',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/369',
+                api: 'http://office.alaa.tv:8080/api/v2/product/369'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/pr12_20191010073500.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'عزتی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی',
+                    'تجربی',
+                    'انسانی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    '57 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            grand: {
+              id: 349,
+              redirect_url: null,
+              type: 3,
+              category: null,
+              title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
+              is_free: 0,
+              url: {
+                web: 'http://office.alaa.tv:8080/product/349',
+                api: 'http://office.alaa.tv:8080/api/v2/product/349'
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+              attributes: {
+                info: {
+                  teacher: [
+                    'گروه آموزشی'
+                  ],
+                  shipping_method: [
+                    'دانلودی'
+                  ],
+                  major: [
+                    'ریاضی',
+                    'تجربی',
+                    'انسانی'
+                  ],
+                  services: [
+                    'جزوه'
+                  ],
+                  download_date: [
+                    'از لحظه خرید'
+                  ],
+                  educational_system: [
+                    'نظام جدید'
+                  ],
+                  duration: [
+                    'تاکنون 1110 صفحه'
+                  ],
+                  production_year: [
+                    '98-99'
+                  ]
+                },
+                extra: null
+              },
+              redirect_code: null
+            },
+            price: {
+              discountDetail: {
+                productDiscount: 0,
+                bonDiscount: 0,
+                productDiscountAmount: 0
+              },
+              extraCost: 0,
+              base: 4872,
+              discount: 0,
+              final: 4872
+            },
+            photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
+            extra_attributes: null
+          }
+        ],
+        coupon_info: null,
+        successful_transactions: [
+          {
+            wallet_id: 218041,
+            order_id: 1722713,
+            cost: 24360,
+            transactionID: null,
+            trace_number: null,
+            refrence_number: null,
+            paycheck_number: null,
+            paymentmethod: {
+              name: 'wallet',
+              display_name: 'کیف پول',
+              id: 5
+            },
+            transactiongateway: null,
+            transactionstatus: {
+              name: 'موفق',
+              id: 3
+            },
+            created_at: '2022-09-03 13:33:55',
+            completed_at: '2022-09-03 18:03:55',
+            deadline_at: null
+          }
+        ],
+        pending_transactions: null,
+        unpaid_transaction: null,
+        posting_info: null,
+        user: {
+          id: 219548,
+          first_name: 'علی',
+          last_name: 'اسماعیلی',
+          mobile: '09358745928',
+          national_code: '0014258269',
+          profile_completion: 77
+        },
+        created_at: '2022-05-15 13:26:58',
+        completed_at: '2022-09-03 18:03:55'
       })
-      // this.currentOrder = rowData
       this.detailsDialog = true
     },
     setHasUserOrderedValue(rowData) {
