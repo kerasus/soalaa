@@ -12,6 +12,8 @@ class OrderProduct extends Model {
       { key: 'purchased_coupons' },
       { key: 'attributevalues' },
       { key: 'include_in_coupon' },
+      { key: 'extra_attributes' },
+      { key: 'photo' },
       { key: 'type' },
       {
         key: 'product',
