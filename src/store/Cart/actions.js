@@ -3,14 +3,14 @@ import { Cart } from 'src/models/Cart'
 import { axios } from 'src/boot/axios'
 import CookieCart from 'src/assets/js/CookieCart'
 
-export function addToCart (context, product) {
+export function addToCart (context, data) {
   const isUserLogin = !!this.getters['Auth/isUserLogin']
   const cart = context.getters.cart
 
   return new Promise((resolve, reject) => {
     if (isUserLogin) {
       axios
-        .post(API_ADDRESS.cart.orderproduct.add, { product_id: product.id })
+        .post(API_ADDRESS.cart.orderproduct.add, { product_id: data.product.id, products: data.products, attribute: data.attribute, seller: 2 })
         .then((response) => {
           return resolve(response)
         })
@@ -18,7 +18,8 @@ export function addToCart (context, product) {
           return reject(error)
         })
     } else {
-      cart.addToCart(product)
+      cart.addToCart(data.product)
+      context.commit('updateCart', cart)
       return resolve(true)
     }
   })
@@ -57,6 +58,19 @@ export function reviewCart (context, product) {
 
         context.commit('updateCart', cart)
 
+        return resolve(response)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
+}
+
+export function paymentCheckout (context) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(API_ADDRESS.cart.getPaymentRedirectEncryptedLink)
+      .then((response) => {
         return resolve(response)
       })
       .catch((error) => {
