@@ -14,8 +14,25 @@ class Coupon extends Model {
       {
         key: 'totalDiscount',
         default: 0
-      }
+      },
+      //  new for order's api :
+      { key: 'name' },
+      { key: 'code' },
+      { key: 'coupontype' },
+      { key: 'discount' },
+      { key: 'discounttype' }
     ])
+  }
+
+  getOrderDiscount (mode = 'percentage') {
+    let string = this.discount.toLocaleString('fa')
+    if (this.discounttype.name !== 'percentage' && mode === 'percentage') {
+      string += ' % '
+    }
+    if (mode === 'toman') {
+      string += ' تومان '
+    }
+    return string
   }
 }
 

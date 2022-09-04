@@ -52,6 +52,21 @@ class Order extends Model {
       (this[key] && typeof this[key].id === 'undefined')
     )
   }
+
+  getOrderDiscount (mode = 'percentage') {
+    if (!this.coupon_info.discount) {
+      return null
+    }
+    let string = this.coupon_info.discount.toLocaleString('fa')
+    if (this.coupon_info.discounttype.name !== 'percentage' && mode === 'percentage') {
+      string += ' % '
+    }
+    // if this.coupon_info.discounttype.name !== 'toman' && mode === 'toman'
+    if (mode === 'toman') {
+      string = Math.round((this.price * this.coupon_info.discount) / 100) + ' تومان '
+    }
+    return string
+  }
 }
 
 class OrderList extends Collection {
