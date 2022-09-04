@@ -58,14 +58,14 @@
           </div>
           <div>
             میزان تخفیف:
-            <span class="info-discount">({{ discountInPercent(order.discount, order.price) }}%)</span>
-            <span class="info-discount">({{ order.discount }}%)</span>
+            <span class="info-discount">({{ order.getOrderDiscount() }}%)</span>
+            <!--            <span class="info-discount">({{ order.discount }}%)</span>-->
             <!--              <span class="default-info paid">پرداخت شده</span>-->
-            <span class="default-info">{{ order.discount }} تومان</span>
+            <span class="default-info">{{ order.getOrderDiscount('toman') }}</span>
           </div>
           <div>
             مبلغ نهایی:
-            <span class="default-info">{{ order.paid_price }}</span>
+            <span class="default-info">{{ toman(order.paid_price, null) }} تومان</span>
           </div>
         </div>
       </q-card-section>
