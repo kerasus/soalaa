@@ -1,7 +1,7 @@
 <template>
   <div class="cart-view-widget">
     <div
-      v-for="order in orderList"
+      v-for="(order, i) in orderList"
       :key="order.id"
       class="cart-items"
     >
@@ -21,10 +21,11 @@
               </div>
 
               <q-btn
+                v-if="order.orderProductId"
                 unelevated
                 class="trash-button"
                 icon="isax:trash"
-                @click="changeDialogState(true, order.grand)"
+                @click="changeDialogState(true, order.orderProductId)"
               />
             </div>
 
@@ -38,7 +39,7 @@
                   class="info-icon"
                 />
                 <div class="info-value">
-                  {{ order.grand.attributes.info.teacher.join('، ') }}
+                  {{ order.grand.attributes.info?.teacher?.join('، ') }}
                 </div>
               </div>
 
@@ -48,7 +49,7 @@
                   class="info-icon"
                 />
                 <div class="info-value">
-                  رشته تحصیلی: {{ order.grand.attributes.info.major.join(' - ') }}
+                  رشته تحصیلی: {{ order.grand.attributes.info?.major?.join(' - ') }}
                 </div>
               </div>
 
@@ -58,7 +59,7 @@
                   class="info-icon"
                 />
                 <div class="info-value">
-                  {{ order.grand.attributes.info.production_year.join('، ') }}
+                  {{ order.grand.attributes.info?.production_year?.join('، ') }}
                 </div>
               </div>
             </div>
@@ -68,7 +69,7 @@
         <q-card-section class="card-actions">
           <div
             class="product-details"
-            :class="expanded ?'on-open-expansion': ''"
+            :class="expandedObject[i] ?'on-open-expansion': ''"
           >
             <div
               v-if="order.price"
@@ -92,10 +93,10 @@
 
             <div
               class="action-buttons"
-              :class="expanded ? '' : 'open-expansion'"
+              :class="expandedObject[i] ? '' : 'open-expansion'"
             >
               <a
-                v-if="!expanded"
+                v-if="!expandedObject[i]"
                 class="link"
                 :href="order.grand?.url?.web"
               >
@@ -103,11 +104,12 @@
               </a>
 
               <q-expansion-item
-                v-model="expanded"
+                v-if="order.order_product?.list.length > 0"
+                v-model="expandedObject[i]"
                 label="جزئیات محصول"
                 class="details-expansion"
-                :class="expanded ?'open-expansion-style': ''"
-                :header-class=" expanded ? 'hide-expansion-header' : ''"
+                :class="expandedObject[i] ?'open-expansion-style': ''"
+                :header-class=" expandedObject[i] ? 'hide-expansion-header' : ''"
               >
                 <q-card class="details-expansion-card">
                   <q-card-section class="details-expansion-card-section">
@@ -125,13 +127,13 @@
                           class="price"
                           :class="index !== 0 ? 'without-trash': ''"
                         >
-                          {{index}}
                           {{ orderProduct.price.toman('final') }}
                         </span>
                         <q-btn
                           unelevated
                           :class="index === 0 ? 'trash-button': 'hidden-trash-button'"
                           icon="isax:trash"
+                          @click="changeDialogState(true, orderProduct.id)"
                         />
                       </div>
                     </div>
@@ -149,7 +151,7 @@
                       label="جزئیات محصول"
                       dropdown-icon="isax:arrow-up-2"
                       flat
-                      @click="expanded = !expanded"
+                      @click="expandedObject[i] = !expandedObject[i]"
                     >
                     </q-btn-dropdown>
                   </q-card-section>
@@ -194,7 +196,7 @@
 
         <div
           class="surely-delete-button"
-          @click="removeItem(clickedItemToRemove)"
+          @click="removeItem(clickedItemIdToRemove)"
         >
           بله، مطمئن هستم
         </div>
@@ -205,6 +207,7 @@
 
 <script>
 import Widgets from 'components/PageBuilder/Widgets'
+import { Product } from 'src/models/Product'
 
 export default {
   name: 'cartView',
@@ -213,28 +216,34 @@ export default {
     return {
       dialogState: false,
       test: null,
-      expanded: false,
-      clickedItemToRemove: null
+      expandedObject: {},
+      clickedItemIdToRemove: null
     }
   },
+
   props: {
     getData: {
       type: Function
     }
   },
+
   created() {
     this.loading = true
   },
+
   computed: {
     cart() {
       return this.$store.getters['Cart/cart']
     },
+
     orderList () {
-      return this.$store.getters['Cart/cart'].items.list
+      return this.getOrderedList(this.cart.items.list)
     },
+
     windowSize() {
       return this.$store.getters['AppLayout/windowSize']
     },
+
     descLinkLabel() {
       if (this.windowSize.x > 1439) {
         return 'رفتن به صفحه محصول'
@@ -253,10 +262,23 @@ export default {
         })
     },
 
-    goToDescPage(ci) {
-      // TODO:
-      // do something with: ci.product.url.web
-      window.location.href = ci.product.url.web
+    getOrderedList (cartItems) {
+      if (!cartItems || cartItems.list?.length === 0) {
+        return
+      }
+      const customItems = []
+
+      cartItems.forEach((item, i) => {
+        if (item.grand.id) {
+          customItems.push(item)
+        } else if (!item.grand.id && item.order_product.list.length > 0) {
+          item.order_product.list.forEach(order => {
+            customItems.push({ grand: new Product(order.product), orderProductId: order.id })
+          })
+        }
+        this.expandedObject[i] = true
+      })
+      return customItems
     },
 
     descShow(ci) {
@@ -265,17 +287,22 @@ export default {
       window.location.href = ci.product.url.api
     },
 
-    removeItem(ci) {
+    removeItem(order) {
       this.$store.dispatch('loading/overlayLoading', true)
-      this.$store.dispatch('Cart/removeItemFromCart', ci.id).then(() => {
-        this.cartReview()
-        this.changeDialogState(false)
-      })
+      this.$store.dispatch('Cart/removeItemFromCart', order)
+        .then(() => {
+          this.cartReview()
+          this.$store.dispatch('loading/overlayLoading', false)
+          this.changeDialogState(false)
+        }).catch(() => {
+          this.changeDialogState(false)
+          this.$store.dispatch('loading/overlayLoading', false)
+        })
     },
 
-    changeDialogState (state, item) {
-      if (item) {
-        this.clickedItemToRemove = item
+    changeDialogState (state, itemId) {
+      if (itemId) {
+        this.clickedItemIdToRemove = itemId
       }
       this.dialogState = state
     }
