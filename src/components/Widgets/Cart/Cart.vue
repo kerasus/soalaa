@@ -1,10 +1,10 @@
 <template>
-  <!--  <div>-->
-  <!--    <q-btn-->
-  <!--      label="add to cart"-->
-  <!--      @click="add"-->
-  <!--    />-->
-  <!--  </div>-->
+  <div>
+    <q-btn
+      label="add to cart"
+      @click="add"
+    />
+  </div>
   <div
     v-if="count > 0"
     class="cart-count">
@@ -69,16 +69,24 @@ export default {
   },
 
   methods: {
-    // add () {
-    //   this.$store.dispatch('Cart/addToCart', { id: 747 }).then(() => {
-    //     this.cartReview()
-    //   })
-    // },
+    add () {
+      // console.log('1 cart', this.$store.getters['Cart/cart'])
+      // this.$store.getters['Cart/cart'].addToCart({ id: 489 })
+      // console.log('2 cart', this.$store.getters['Cart/cart'])
+      this.$store.dispatch('Cart/addToCart', {
+        product: { id: 449 },
+        products: [465]
+      })
+        .then(() => {
+          this.cartReview()
+        })
+    },
     cartReview() {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('Cart/reviewCart')
         .then((response) => {
           this.$store.dispatch('loading/overlayLoading', false)
+          console.log('cart', this.$store.getters['Cart/cart'])
         })
     }
   }

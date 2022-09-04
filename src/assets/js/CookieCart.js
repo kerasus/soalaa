@@ -13,9 +13,9 @@ export default class CookieCart {
   }
 
   static addToCartInCookie (cart) {
-    const cookieCart = cart.cartItems.list.map(item => {
+    const cookieCart = cart.items.list.map(item => {
       return {
-        product_id: item.product.id,
+        product_id: item.grand.id,
         attribute: [],
         extraAttribute: [],
         products: []
