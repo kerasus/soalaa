@@ -5,13 +5,18 @@
       :key="order.id"
       class="cart-items"
     >
-      <q-card class="cart-card">
+      <q-card
+        class="cart-card"
+        :class="order.order_product?.list.length > 0 ? '': 'cart'"
+      >
         <q-card-section class="card-section">
           <div class="order-image-section">
-            <q-img
-              :src="order.grand.photo"
-              class="order-image"
-            />
+            <div class="order-image-container">
+              <q-img
+                :src="order.grand.photo"
+                class="order-image"
+              />
+            </div>
           </div>
 
           <div class="product-text-info">
@@ -33,33 +38,42 @@
               v-if="order.grand && order.grand.attributes && order.grand.attributes.info"
               class="product-information"
             >
-              <div class="product-info">
+              <div
+                v-if="order.grand.attributes.info.teacher"
+                class="product-info"
+              >
                 <q-icon
                   name="isax:teacher"
                   class="info-icon"
                 />
                 <div class="info-value">
-                  {{ order.grand.attributes.info?.teacher?.join('، ') }}
+                  {{ order.grand.attributes.info.teacher.join('، ') }}
                 </div>
               </div>
 
-              <div class="product-info">
+              <div
+                v-if="order.grand.attributes.info.major"
+                class="product-info"
+              >
                 <q-icon
                   name="isax:book-1"
                   class="info-icon"
                 />
                 <div class="info-value">
-                  رشته تحصیلی: {{ order.grand.attributes.info?.major?.join(' - ') }}
+                  رشته تحصیلی: {{ order.grand.attributes.info.major.join(' - ') }}
                 </div>
               </div>
 
-              <div class="product-info">
+              <div
+                v-if="order.grand.attributes.info.production_year"
+                class="product-info"
+              >
                 <q-icon
                   name="isax:menu-board4"
                   class="info-icon"
                 />
                 <div class="info-value">
-                  {{ order.grand.attributes.info?.production_year?.join('، ') }}
+                  {{ order.grand.attributes.info.production_year.join('، ') }}
                 </div>
               </div>
             </div>
@@ -96,7 +110,7 @@
               :class="expandedObject[i] ? '' : 'open-expansion'"
             >
               <a
-                v-if="!expandedObject[i]"
+                v-if="!expandedObject[i] || !order.order_product"
                 class="link"
                 :href="order.grand?.url?.web"
               >
@@ -281,12 +295,6 @@ export default {
       return customItems
     },
 
-    descShow(ci) {
-      // TODO:
-      // do something with: ci.product.url.api
-      window.location.href = ci.product.url.api
-    },
-
     removeItem(order) {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('Cart/removeItemFromCart', order)
@@ -338,6 +346,13 @@ export default {
           border-radius: 8px;
           margin-bottom: 19px;
         }
+        &.cart {
+          padding-bottom: 20px;
+
+          @media screen and (max-width: 1439px) {
+            padding-bottom: 16px;
+          }
+        }
 
         .card-section {
           padding: 0;
@@ -355,10 +370,11 @@ export default {
               margin-right: 8px;
             }
 
-            .order-image {
+            .order-image-container {
               height: 144px;
               width: 144px;
               border-radius: 10px;
+              background: #F6F9FF;
 
               @media screen and (max-width: 1023px) {
                 width: 110px;
@@ -369,6 +385,23 @@ export default {
                 width: 72px;
                 height: 72px;
                 margin-top: 34px;
+              }
+
+              .order-image {
+                height: 144px;
+                width: 144px;
+                border-radius: 10px;
+
+                @media screen and (max-width: 1023px) {
+                  width: 110px;
+                  height: 110px;
+                }
+
+                @media screen and (max-width: 599px) {
+                  width: 72px;
+                  height: 72px;
+                  margin-top: 34px;
+                }
               }
             }
           }
@@ -587,20 +620,20 @@ export default {
                 font-size: 12px;
                 line-height: 19px;
                 color: #9690E4;
-                margin-right: 24px;
                 cursor: pointer;
                 text-decoration: none;
-
-                @media screen and (max-width: 1439px) {
-                  margin-right: 12px;
-                }
-
-                @media screen and (max-width: 1023px) {
-                  margin-right: 24px;
-                }
               }
 
               .details-expansion {
+                margin-left: 24px;
+
+                @media screen and (max-width: 1439px) {
+                  margin-left: 12px;
+                }
+
+                @media screen and (max-width: 1023px) {
+                  margin-left: 24px;
+                }
 
                 .details-button {
                   font-style: normal;
@@ -608,8 +641,19 @@ export default {
                   font-size: 12px;
                   line-height: 19px;
                   color: #65677F;
+                  margin-left: 24px;
 
-                  @media screen and (max-width: 599px) {}
+                  @media screen and (max-width: 1439px) {
+                    margin-left: 12px;
+                  }
+
+                  @media screen and (max-width: 1023px) {
+                    margin-left: 24px;
+                  }
+
+                  @media screen and (max-width: 599px) {
+                    margin-left: 40px;
+                  }
 
                   &:deep(.q-icon) {
                     font-size: 14px;
