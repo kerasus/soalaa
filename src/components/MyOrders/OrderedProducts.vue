@@ -181,7 +181,6 @@ export default {
   },
   created() {
     this.loading = true
-    console.log('orderedItem.order_product.list', this.orderedItem.order_product.list)
   },
   computed: {
     cartItems() {
