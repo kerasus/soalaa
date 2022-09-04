@@ -200,11 +200,14 @@
     <q-card-section class="question-section">
       <div v-if="finalApprovalMode"
            class="add-btn question-index">
-        <q-btn unelevated
-               color="primary"
-               class="question-item-button">{{ question.order }}</q-btn>
+        <div class="question-number">
+          {{ question.order }}
+        </div>
       </div>
-      <div :class="isLtrQuestion() ? 'question-icon order-last' : 'question-icon'" />
+      <div
+        v-else
+        :class="isLtrQuestion() ? 'question-icon order-last' : 'question-icon'"
+      />
       <div class="question">
         <question ref="questionComponent"
                   :question="question" />
@@ -755,10 +758,49 @@ export default {
   }
 
   .question-approved {
+    padding: 0;
     .approved-section {
       margin-right: 5px;
       height: 35px;
       padding: 0 20px;
+    }
+  }
+
+  .question-section {
+    display: flex;
+    .question-index {
+      position: relative;
+
+      .question-number {
+        position: absolute;
+        left: -40px;
+        width: 34px;
+        height: 36px;
+        background: var(--3a-Primary);
+        border-radius: 0 10px 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFFFFF;
+        font-size: 16px;
+
+        @media only screen and (max-width: 1023px) {
+          width: 26px;
+          height: 28px;
+        }
+      }
+    }
+
+  .question-icon {
+      margin: 7px 10px 0 10px;
+      width: 10px;
+      height: 10px;
+      background: #9690E4;
+      border-radius: 3px;
+    }
+
+    .question {
+      padding: 10px;
     }
   }
 
