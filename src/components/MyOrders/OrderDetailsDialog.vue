@@ -1,6 +1,8 @@
 <template>
-  <q-dialog v-model="modal"
-            class="order-details-dialog">
+  <q-dialog
+    v-model="modal"
+    class="order-details-dialog"
+  >
     <q-card class="order-details-card">
       <q-card-section class="dialog-header">
         <div>
@@ -57,7 +59,7 @@
           <div>
             میزان تخفیف:
             <span class="info-discount">({{ discountInPercent(order.discount, order.price) }}%)</span>
-            <span class="info-discount">({{ order. }}%)</span>
+            <span class="info-discount">({{ order.discount }}%)</span>
             <!--              <span class="default-info paid">پرداخت شده</span>-->
             <span class="default-info">{{ order.discount }} تومان</span>
           </div>
@@ -68,15 +70,15 @@
         </div>
       </q-card-section>
       <q-card-section
-        v-if="order.orderproducts && order.orderproducts.length > 0 "
+        v-if="order.orderItems.list && order.orderItems.list.length > 0 "
         class="products"
       >
         <div class="default-info paid">محصولات سفارش</div>
         <div
-          v-for="(product) in order.orderproducts"
-          :key="product.id"
+          v-for="(orderItem, index) in order.orderItems.list"
+          :key="index"
         >
-          <ordered-products :order="product" />
+          <ordered-products :ordered-item="orderItem" />
         </div>
       </q-card-section>
     </q-card>
@@ -154,15 +156,15 @@ export default {
     letter-spacing: -0.03em;
     color: #434765;
     width: 830px;
-    height: 640px;
+    //height: 640px;
     overflow-x: scroll;
     @media screen and (max-width: 1439px) {
       width: 664px;
-      height: 480px;
+      //height: 480px;
     }
     @media screen and (max-width: 1023px) {
       width: 540px;
-      height: 640px;
+      //height: 640px;
     }
 
     .dialog-header {
@@ -216,6 +218,22 @@ export default {
       text-align: left;
       letter-spacing: -0.03em;
       color: #434765;
+    }
+  }
+  .q-dialog__inner--minimized > div {
+    max-width: 830px;
+    max-height: 640px;
+  }
+  @media screen and (max-width: 1439px) {
+    .q-dialog__inner--minimized > div {
+      max-width: 664px;
+      max-height: 480px;
+    }
+  }
+  @media screen and (max-width: 1023px) {
+    .q-dialog__inner--minimized > div {
+      max-width: 540px;
+      max-height: 640px;
     }
   }
 }
