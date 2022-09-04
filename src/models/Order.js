@@ -3,8 +3,6 @@ import { User } from './User'
 import { Coupon } from './Coupon'
 // import {OrderProductList} from "src/models/OrderProduct";
 import { OrderItemCollection } from './OrderItem'
-// import { ProductList } from 'src/models/Product'
-import { OrderProductList } from 'src/models/OrderProduct'
 class Order extends Model {
   constructor (data) {
     super(data, [
@@ -61,13 +59,6 @@ class Order extends Model {
         }])
       }
     })
-  }
-
-  calculateDiscount (key) {
-    return (
-      (this[key] !== null && typeof this[key] === 'object' && typeof this[key].id !== 'undefined' && this[key].id !== null) ||
-      (this[key] && typeof this[key].id === 'undefined')
-    )
   }
 }
 
