@@ -35,52 +35,54 @@
         <div class="title">جزییات سفارش</div>
         <div></div>
       </q-card-section>
-      <q-card-section class="info">
-        <div class="info-box part1">
-          <div class="default-info paid">اطلاعات کلی</div>
-          <div>
-            شماره سفارش:
-            <span class="default-info">{{ order.id }}</span>
+      <div>
+        <q-card-section class="info">
+          <div class="info-box part1">
+            <div class="default-info paid">اطلاعات کلی</div>
+            <div>
+              شماره سفارش:
+              <span class="default-info">{{ order.id }}</span>
+            </div>
+            <div>
+              وضعیت پرداخت:
+              <span class="default-info">{{ order.paymentstatus.name }}</span>
+            </div>
+            <div>
+              تاریخ سفارش:
+              <span class="default-info">{{ getCurrentOrderCompletedAt(order.completed_at) }}</span>
+            </div>
           </div>
-          <div>
-            وضعیت پرداخت:
-            <span class="default-info">{{ order.paymentstatus.name }}</span>
+          <div class="info-box part2">
+            <div>
+              جمع مبلغ سفارش:
+              <span class="default-info">{{ toman(order.price, null) }} تومان</span>
+            </div>
+            <div>
+              میزان تخفیف:
+              <span class="info-discount">({{ order.getOrderDiscount() }}%)</span>
+              <!--            <span class="info-discount">({{ order.discount }}%)</span>-->
+              <!--              <span class="default-info paid">پرداخت شده</span>-->
+              <span class="default-info">{{ order.getOrderDiscount('toman') }}</span>
+            </div>
+            <div>
+              مبلغ نهایی:
+              <span class="default-info">{{ toman(order.paid_price, null) }} تومان</span>
+            </div>
           </div>
-          <div>
-            تاریخ سفارش:
-            <span class="default-info">{{ getCurrentOrderCompletedAt(order.completed_at) }}</span>
-          </div>
-        </div>
-        <div class="info-box part2">
-          <div>
-            جمع مبلغ سفارش:
-            <span class="default-info">{{ toman(order.price, null) }} تومان</span>
-          </div>
-          <div>
-            میزان تخفیف:
-            <span class="info-discount">({{ order.getOrderDiscount() }}%)</span>
-            <!--            <span class="info-discount">({{ order.discount }}%)</span>-->
-            <!--              <span class="default-info paid">پرداخت شده</span>-->
-            <span class="default-info">{{ order.getOrderDiscount('toman') }}</span>
-          </div>
-          <div>
-            مبلغ نهایی:
-            <span class="default-info">{{ toman(order.paid_price, null) }} تومان</span>
-          </div>
-        </div>
-      </q-card-section>
-      <q-card-section
-        v-if="order.orderItems.list && order.orderItems.list.length > 0 "
-        class="products"
-      >
-        <div class="default-info paid">محصولات سفارش</div>
-        <div
-          v-for="(orderItem, index) in order.orderItems.list"
-          :key="index"
+        </q-card-section>
+        <q-card-section
+          v-if="order.orderItems.list && order.orderItems.list.length > 0 "
+          class="products"
         >
-          <ordered-products :ordered-item="orderItem" />
-        </div>
-      </q-card-section>
+          <div class="default-info paid">محصولات سفارش</div>
+          <div
+            v-for="(orderItem, index) in order.orderItems.list"
+            :key="index"
+          >
+            <ordered-products :ordered-item="orderItem" />
+          </div>
+        </q-card-section>
+      </div>
     </q-card>
   </q-dialog>
 </template>
@@ -128,6 +130,9 @@ export default {
       return (discount, base) => {
         return Math.round(discount * 100 / base)
       }
+    },
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
     }
   },
   methods: {
@@ -166,7 +171,9 @@ export default {
       width: 540px;
       //height: 640px;
     }
-
+    @media screen and (max-width: 599px) {
+      width: 100%;
+    }
     .dialog-header {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;

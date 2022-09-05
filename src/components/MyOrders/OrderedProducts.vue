@@ -219,8 +219,13 @@ export default {
   background: #FFFFFF;
   border: 3px solid #E4E8EF;
   border-radius: 16px;
-  margin-top: 12px;
-
+  @media screen and (max-width: 599px) {
+    margin-top: 0px;
+    background: #F2F5F9 !important;
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
   &:deep(.q-btn .q-btn__content) {
     margin: 0;
   }
@@ -238,11 +243,9 @@ export default {
         border-radius: 12px;
       }
 
-      //@media screen and (max-width: 599px) {
-      //  padding: 12px;
-      //  border-radius: 8px;
-      //  margin-bottom: 19px;
-      //}
+      @media screen and (max-width: 599px) {
+        background: #F2F5F9 !important;
+      }
 
       .card-section {
         padding: 0;
