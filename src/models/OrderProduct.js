@@ -36,6 +36,10 @@ class OrderProductList extends Collection {
   model () {
     return OrderProduct
   }
+
+  hasProduct (productId) {
+    return !!this.list.find(order => order.product.id === productId)
+  }
 }
 
 export { OrderProduct, OrderProductList }
