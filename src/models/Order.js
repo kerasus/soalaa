@@ -47,6 +47,9 @@ class Order extends Model {
 
   setOrderItems () {
     const flatOrderProducts = this.inputData.orderproducts
+    if (!flatOrderProducts) {
+      return
+    }
     const orderProductsGrands = flatOrderProducts
       .filter((orderProductItem, index, array) => !!array.findIndex(item => item.grand?.id !== orderProductItem.grand?.id))
       .map(item => item.grand)

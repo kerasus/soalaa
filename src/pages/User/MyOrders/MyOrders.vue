@@ -830,140 +830,7 @@ export default {
       //   created_at: '2022-05-15 13:26:58',
       //   completed_at: '2022-09-03 18:03:55'
       // }),
-      currentOrder: new Order({
-        id: 416466,
-        discount: 0,
-        customer_description: null,
-        price: 7000,
-        paid_price: 7000,
-        refund_price: 0,
-        debt: 0,
-        orderstatus: {
-          id: 2,
-          name: 'ثبت نهایی'
-        },
-        paymentstatus: {
-          id: 3,
-          name: 'پرداخت شده'
-        },
-        orderproducts: [
-          {
-            id: 353571,
-            quantity: 1,
-            type: 1,
-            product: {
-              id: 294,
-              redirect_url: null,
-              type: 1,
-              category: 'VIP',
-              title: 'ال...ماس عربی دوازدهم کنکور',
-              is_free: 0,
-              url: {
-                web: 'http://office.alaa.tv:8080/product/294',
-                api: 'http://office.alaa.tv:8080/api/v2/product/294'
-              },
-              photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
-              attributes: {
-                info: {
-                  teacher: [
-                    'واحد تخته نگار آلاء'
-                  ],
-                  shipping_method: [
-                    'دانلودی'
-                  ],
-                  major: [
-                    'ریاضی',
-                    'تجربی',
-                    'انسانی'
-                  ],
-                  services: [
-                    'فیلم',
-                    'جزوه'
-                  ],
-                  download_date: [
-                    'از لحظه خرید'
-                  ],
-                  educational_system: [
-                    'نظام جدید'
-                  ],
-                  duration: [
-                    '2 ساعت'
-                  ],
-                  production_year: [
-                    '97-98'
-                  ]
-                },
-                extra: null
-              },
-              redirect_code: null
-            },
-            grand: null,
-            price: {
-              discountDetail: {
-                productDiscount: 0,
-                bonDiscount: 0,
-                productDiscountAmount: 0
-              },
-              extraCost: 0,
-              base: 14000,
-              discount: 0,
-              final: 14000
-            },
-            photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
-            extra_attributes: null
-          }
-        ],
-        coupon_info: {
-          name: 'طلایی',
-          code: 'talaee',
-          discount: 50,
-          coupontype: {
-            name: 'overall',
-            display_name: 'کلی'
-          },
-          discounttype: {
-            name: 'percentage',
-            display_name: 'درصد'
-          }
-        },
-        successful_transactions: [
-          {
-            wallet_id: 218041,
-            order_id: 416466,
-            cost: 7000,
-            transactionID: null,
-            trace_number: null,
-            refrence_number: null,
-            paycheck_number: null,
-            paymentmethod: {
-              name: 'wallet',
-              display_name: 'کیف پول',
-              id: 5
-            },
-            transactiongateway: null,
-            transactionstatus: {
-              name: 'موفق',
-              id: 3
-            },
-            created_at: '2019-06-24 14:27:38',
-            completed_at: '2019-06-24 18:57:38',
-            deadline_at: null
-          }
-        ],
-        pending_transactions: null,
-        unpaid_transaction: null,
-        posting_info: null,
-        user: {
-          id: 219548,
-          first_name: 'علی',
-          last_name: 'اسماعیلی',
-          mobile: '09358745928',
-          national_code: '0014258269',
-          profile_completion: 77
-        },
-        created_at: '2019-06-23 11:01:02',
-        completed_at: '2019-06-24 14:27:38'
-      }),
+      currentOrder: new Order(),
       detailsDialog: false,
       detailsCardToggle: {},
       hasUserOrdered: true,
@@ -994,280 +861,281 @@ export default {
   },
   methods: {
     showDetailsDialog(rowData) {
-      // this.currentOrder = new Order(rowData)
-      this.currentOrder = new Order({
-        id: 416466,
-        discount: 0,
-        customer_description: null,
-        price: 7000,
-        paid_price: 7000,
-        refund_price: 0,
-        debt: 0,
-        orderstatus: {
-          id: 2,
-          name: 'ثبت نهایی'
-        },
-        paymentstatus: {
-          id: 3,
-          name: 'پرداخت شده'
-        },
-        orderproducts: [
-          {
-            id: 353571,
-            quantity: 1,
-            type: 1,
-            product: {
-              id: 294,
-              redirect_url: null,
-              type: 1,
-              category: 'VIP',
-              title: 'ال...ماس عربی دوازدهم کنکور',
-              is_free: 0,
-              url: {
-                web: 'http://office.alaa.tv:8080/product/294',
-                api: 'http://office.alaa.tv:8080/api/v2/product/294'
-              },
-              photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
-              attributes: {
-                info: {
-                  teacher: [
-                    'واحد تخته نگار آلاء'
-                  ],
-                  shipping_method: [
-                    'دانلودی'
-                  ],
-                  major: [
-                    'ریاضی',
-                    'تجربی',
-                    'انسانی'
-                  ],
-                  services: [
-                    'فیلم',
-                    'جزوه'
-                  ],
-                  download_date: [
-                    'از لحظه خرید'
-                  ],
-                  educational_system: [
-                    'نظام جدید'
-                  ],
-                  duration: [
-                    '2 ساعت'
-                  ],
-                  production_year: [
-                    '97-98'
-                  ]
-                },
-                extra: null
-              },
-              redirect_code: null
-            },
-            grand: null,
-            price: {
-              discountDetail: {
-                productDiscount: 0,
-                bonDiscount: 0,
-                productDiscountAmount: 0
-              },
-              extraCost: 0,
-              base: 14000,
-              discount: 0,
-              final: 14000
-            },
-            photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
-            extra_attributes: null
-          }
-        ],
-        coupon_info: {
-          name: 'طلایی',
-          code: 'talaee',
-          discount: 50,
-          coupontype: {
-            name: 'overall',
-            display_name: 'کلی'
-          },
-          discounttype: {
-            name: 'percentage',
-            display_name: 'درصد'
-          }
-        },
-        successful_transactions: [
-          {
-            wallet_id: 218041,
-            order_id: 416466,
-            cost: 7000,
-            transactionID: null,
-            trace_number: null,
-            refrence_number: null,
-            paycheck_number: null,
-            paymentmethod: {
-              name: 'wallet',
-              display_name: 'کیف پول',
-              id: 5
-            },
-            transactiongateway: null,
-            transactionstatus: {
-              name: 'موفق',
-              id: 3
-            },
-            created_at: '2019-06-24 14:27:38',
-            completed_at: '2019-06-24 18:57:38',
-            deadline_at: null
-          }
-        ],
-        pending_transactions: null,
-        unpaid_transaction: null,
-        posting_info: null,
-        user: {
-          id: 219548,
-          first_name: 'علی',
-          last_name: 'اسماعیلی',
-          mobile: '09358745928',
-          national_code: '0014258269',
-          profile_completion: 77
-        },
-        created_at: '2019-06-23 11:01:02',
-        completed_at: '2019-06-24 14:27:38'
-      })
+      this.currentOrder = new Order(rowData)
+      // this.currentOrder = new Order({
+      //   id: 416466,
+      //   discount: 0,
+      //   customer_description: null,
+      //   price: 7000,
+      //   paid_price: 7000,
+      //   refund_price: 0,
+      //   debt: 0,
+      //   orderstatus: {
+      //     id: 2,
+      //     name: 'ثبت نهایی'
+      //   },
+      //   paymentstatus: {
+      //     id: 3,
+      //     name: 'پرداخت شده'
+      //   },
+      //   orderproducts: [
+      //     {
+      //       id: 353571,
+      //       quantity: 1,
+      //       type: 1,
+      //       product: {
+      //         id: 294,
+      //         redirect_url: null,
+      //         type: 1,
+      //         category: 'VIP',
+      //         title: 'ال...ماس عربی دوازدهم کنکور',
+      //         is_free: 0,
+      //         url: {
+      //           web: 'http://office.alaa.tv:8080/product/294',
+      //           api: 'http://office.alaa.tv:8080/api/v2/product/294'
+      //         },
+      //         photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
+      //         attributes: {
+      //           info: {
+      //             teacher: [
+      //               'واحد تخته نگار آلاء'
+      //             ],
+      //             shipping_method: [
+      //               'دانلودی'
+      //             ],
+      //             major: [
+      //               'ریاضی',
+      //               'تجربی',
+      //               'انسانی'
+      //             ],
+      //             services: [
+      //               'فیلم',
+      //               'جزوه'
+      //             ],
+      //             download_date: [
+      //               'از لحظه خرید'
+      //             ],
+      //             educational_system: [
+      //               'نظام جدید'
+      //             ],
+      //             duration: [
+      //               '2 ساعت'
+      //             ],
+      //             production_year: [
+      //               '97-98'
+      //             ]
+      //           },
+      //           extra: null
+      //         },
+      //         redirect_code: null
+      //       },
+      //       grand: null,
+      //       price: {
+      //         discountDetail: {
+      //           productDiscount: 0,
+      //           bonDiscount: 0,
+      //           productDiscountAmount: 0
+      //         },
+      //         extraCost: 0,
+      //         base: 14000,
+      //         discount: 0,
+      //         final: 14000
+      //       },
+      //       photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
+      //       extra_attributes: null
+      //     }
+      //   ],
+      //   coupon_info: {
+      //     name: 'طلایی',
+      //     code: 'talaee',
+      //     discount: 50,
+      //     coupontype: {
+      //       name: 'overall',
+      //       display_name: 'کلی'
+      //     },
+      //     discounttype: {
+      //       name: 'percentage',
+      //       display_name: 'درصد'
+      //     }
+      //   },
+      //   successful_transactions: [
+      //     {
+      //       wallet_id: 218041,
+      //       order_id: 416466,
+      //       cost: 7000,
+      //       transactionID: null,
+      //       trace_number: null,
+      //       refrence_number: null,
+      //       paycheck_number: null,
+      //       paymentmethod: {
+      //         name: 'wallet',
+      //         display_name: 'کیف پول',
+      //         id: 5
+      //       },
+      //       transactiongateway: null,
+      //       transactionstatus: {
+      //         name: 'موفق',
+      //         id: 3
+      //       },
+      //       created_at: '2019-06-24 14:27:38',
+      //       completed_at: '2019-06-24 18:57:38',
+      //       deadline_at: null
+      //     }
+      //   ],
+      //   pending_transactions: null,
+      //   unpaid_transaction: null,
+      //   posting_info: null,
+      //   user: {
+      //     id: 219548,
+      //     first_name: 'علی',
+      //     last_name: 'اسماعیلی',
+      //     mobile: '09358745928',
+      //     national_code: '0014258269',
+      //     profile_completion: 77
+      //   },
+      //   created_at: '2019-06-23 11:01:02',
+      //   completed_at: '2019-06-24 14:27:38'
+      // })
       this.detailsDialog = true
     },
     toggleDetailsCard(rowData) {
-      // this.currentOrder = new Order(rowData)
       if (!this.detailsCardToggle[rowData.id]) {
-        this.currentOrder = new Order({
-          id: 416466,
-          discount: 0,
-          customer_description: null,
-          price: 7000,
-          paid_price: 7000,
-          refund_price: 0,
-          debt: 0,
-          orderstatus: {
-            id: 2,
-            name: 'ثبت نهایی'
-          },
-          paymentstatus: {
-            id: 3,
-            name: 'پرداخت شده'
-          },
-          orderproducts: [
-            {
-              id: 353571,
-              quantity: 1,
-              type: 1,
-              product: {
-                id: 294,
-                redirect_url: null,
-                type: 1,
-                category: 'VIP',
-                title: 'ال...ماس عربی دوازدهم کنکور',
-                is_free: 0,
-                url: {
-                  web: 'http://office.alaa.tv:8080/product/294',
-                  api: 'http://office.alaa.tv:8080/api/v2/product/294'
-                },
-                photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
-                attributes: {
-                  info: {
-                    teacher: [
-                      'واحد تخته نگار آلاء'
-                    ],
-                    shipping_method: [
-                      'دانلودی'
-                    ],
-                    major: [
-                      'ریاضی',
-                      'تجربی',
-                      'انسانی'
-                    ],
-                    services: [
-                      'فیلم',
-                      'جزوه'
-                    ],
-                    download_date: [
-                      'از لحظه خرید'
-                    ],
-                    educational_system: [
-                      'نظام جدید'
-                    ],
-                    duration: [
-                      '2 ساعت'
-                    ],
-                    production_year: [
-                      '97-98'
-                    ]
-                  },
-                  extra: null
-                },
-                redirect_code: null
-              },
-              grand: null,
-              price: {
-                discountDetail: {
-                  productDiscount: 0,
-                  bonDiscount: 0,
-                  productDiscountAmount: 0
-                },
-                extraCost: 0,
-                base: 14000,
-                discount: 0,
-                final: 14000
-              },
-              photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
-              extra_attributes: null
-            }
-          ],
-          coupon_info: {
-            name: 'طلایی',
-            code: 'talaee',
-            discount: 50,
-            coupontype: {
-              name: 'overall',
-              display_name: 'کلی'
-            },
-            discounttype: {
-              name: 'percentage',
-              display_name: 'درصد'
-            }
-          },
-          successful_transactions: [
-            {
-              wallet_id: 218041,
-              order_id: 416466,
-              cost: 7000,
-              transactionID: null,
-              trace_number: null,
-              refrence_number: null,
-              paycheck_number: null,
-              paymentmethod: {
-                name: 'wallet',
-                display_name: 'کیف پول',
-                id: 5
-              },
-              transactiongateway: null,
-              transactionstatus: {
-                name: 'موفق',
-                id: 3
-              },
-              created_at: '2019-06-24 14:27:38',
-              completed_at: '2019-06-24 18:57:38',
-              deadline_at: null
-            }
-          ],
-          pending_transactions: null,
-          unpaid_transaction: null,
-          posting_info: null,
-          user: {
-            id: 219548,
-            first_name: 'علی',
-            last_name: 'اسماعیلی',
-            mobile: '09358745928',
-            national_code: '0014258269',
-            profile_completion: 77
-          },
-          created_at: '2019-06-23 11:01:02',
-          completed_at: '2019-06-24 14:27:38'
-        })
+        this.currentOrder = new Order(rowData)
+
+        // this.currentOrder = new Order({
+        //   id: 416466,
+        //   discount: 0,
+        //   customer_description: null,
+        //   price: 7000,
+        //   paid_price: 7000,
+        //   refund_price: 0,
+        //   debt: 0,
+        //   orderstatus: {
+        //     id: 2,
+        //     name: 'ثبت نهایی'
+        //   },
+        //   paymentstatus: {
+        //     id: 3,
+        //     name: 'پرداخت شده'
+        //   },
+        //   orderproducts: [
+        //     {
+        //       id: 353571,
+        //       quantity: 1,
+        //       type: 1,
+        //       product: {
+        //         id: 294,
+        //         redirect_url: null,
+        //         type: 1,
+        //         category: 'VIP',
+        //         title: 'ال...ماس عربی دوازدهم کنکور',
+        //         is_free: 0,
+        //         url: {
+        //           web: 'http://office.alaa.tv:8080/product/294',
+        //           api: 'http://office.alaa.tv:8080/api/v2/product/294'
+        //         },
+        //         photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
+        //         attributes: {
+        //           info: {
+        //             teacher: [
+        //               'واحد تخته نگار آلاء'
+        //             ],
+        //             shipping_method: [
+        //               'دانلودی'
+        //             ],
+        //             major: [
+        //               'ریاضی',
+        //               'تجربی',
+        //               'انسانی'
+        //             ],
+        //             services: [
+        //               'فیلم',
+        //               'جزوه'
+        //             ],
+        //             download_date: [
+        //               'از لحظه خرید'
+        //             ],
+        //             educational_system: [
+        //               'نظام جدید'
+        //             ],
+        //             duration: [
+        //               '2 ساعت'
+        //             ],
+        //             production_year: [
+        //               '97-98'
+        //             ]
+        //           },
+        //           extra: null
+        //         },
+        //         redirect_code: null
+        //       },
+        //       grand: null,
+        //       price: {
+        //         discountDetail: {
+        //           productDiscount: 0,
+        //           bonDiscount: 0,
+        //           productDiscountAmount: 0
+        //         },
+        //         extraCost: 0,
+        //         base: 14000,
+        //         discount: 0,
+        //         final: 14000
+        //       },
+        //       photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
+        //       extra_attributes: null
+        //     }
+        //   ],
+        //   coupon_info: {
+        //     name: 'طلایی',
+        //     code: 'talaee',
+        //     discount: 50,
+        //     coupontype: {
+        //       name: 'overall',
+        //       display_name: 'کلی'
+        //     },
+        //     discounttype: {
+        //       name: 'percentage',
+        //       display_name: 'درصد'
+        //     }
+        //   },
+        //   successful_transactions: [
+        //     {
+        //       wallet_id: 218041,
+        //       order_id: 416466,
+        //       cost: 7000,
+        //       transactionID: null,
+        //       trace_number: null,
+        //       refrence_number: null,
+        //       paycheck_number: null,
+        //       paymentmethod: {
+        //         name: 'wallet',
+        //         display_name: 'کیف پول',
+        //         id: 5
+        //       },
+        //       transactiongateway: null,
+        //       transactionstatus: {
+        //         name: 'موفق',
+        //         id: 3
+        //       },
+        //       created_at: '2019-06-24 14:27:38',
+        //       completed_at: '2019-06-24 18:57:38',
+        //       deadline_at: null
+        //     }
+        //   ],
+        //   pending_transactions: null,
+        //   unpaid_transaction: null,
+        //   posting_info: null,
+        //   user: {
+        //     id: 219548,
+        //     first_name: 'علی',
+        //     last_name: 'اسماعیلی',
+        //     mobile: '09358745928',
+        //     national_code: '0014258269',
+        //     profile_completion: 77
+        //   },
+        //   created_at: '2019-06-23 11:01:02',
+        //   completed_at: '2019-06-24 14:27:38'
+        // })
       }
       this.detailsCardToggle[rowData.id] = !this.detailsCardToggle[rowData.id]
     },
