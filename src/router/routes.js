@@ -137,6 +137,14 @@ const routes = [
         },
         children: [
           {
+            path: 'dashboard',
+            name: 'User.Dashboard',
+            component: () => import('pages/User/Dashboard/Dashboard'),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
             path: 'my-orders',
             name: 'User.MyOrders',
             component: () => import('pages/User/MyOrders/MyOrders'),
