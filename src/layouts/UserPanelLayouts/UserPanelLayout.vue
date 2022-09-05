@@ -30,6 +30,8 @@ export default {
 .user-panel-layout {
   max-width: 1362px;
   margin: auto;
+  padding-top: 30px;
+  background: #f4f6f9;
   @media screen and (max-width: 1439px) {
     max-width: 100%;
   }
