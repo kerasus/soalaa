@@ -89,40 +89,86 @@
         </q-td>
       </template>
       <template v-slot:table-item-cell="{inputData}">
-        <q-card>
-          <q-btn round
-                 flat
-                 dense
-                 size="md"
-                 @click="showDetailsDialog(inputData.props.row)">
-            <!--              <q-tooltip anchor="top middle"-->
-            <!--                         self="bottom middle">-->
-            <!--                مشاهده-->
-            <!--              </q-tooltip>-->
-            <svg width="24"
-                 height="24"
-                 viewBox="0 0 24 24"
-                 fill="none"
-                 xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12"
-                      cy="6"
-                      r="2"
-                      fill="#6D708B" />
-              <circle cx="12"
-                      cy="12"
-                      r="2"
-                      fill="#6D708B" />
-              <circle cx="12"
-                      cy="18"
-                      r="2"
-                      fill="#6D708B" />
-            </svg>
+        <q-card class="details-table-mobile">
+          <div class="details-info">
+            <div class="first-col">
+              <div class="order first-col-item">
+                شماره سفارش:
+                <span class="order-id">{{inputData.props.row.id}}</span>
+              </div>
+              <div class="first-col-item">وضعیت پرداخت:</div>
+              <div class="first-col-item">مبلغ:</div>
+              <div class="first-col-item">تاریخ سفارش:</div>
+            </div>
+            <div class="second-col">
+              <q-btn
+                round
+                flat
+                dense
+                size="md"
+                class="details-btn"
+                @click="toggleDetailsCard(inputData.props.row)"
+              >
+                جزییات
+                <!--              <q-tooltip anchor="top middle"-->
+                <!--                         self="bottom middle">-->
+                <!--                مشاهده-->
+                <!--              </q-tooltip>-->
+                <!--                dksjfhksd-->
+                <!--                <div v-if="!detailsCardToggle">-->
+                <!--                  جزییات-->
+                <!--                  <svg width="16"-->
+                <!--                       height="16"-->
+                <!--                       viewBox="0 0 16 16"-->
+                <!--                       fill="none"-->
+                <!--                       xmlns="http://www.w3.org/2000/svg">-->
+                <!--                    <path d="M8.00001 11.2C7.53335 11.2 7.06668 11.02 6.71335 10.6667L2.36668 6.31999C2.17335 6.12666 2.17335 5.80666 2.36668 5.61332C2.56001 5.41999 2.88001 5.41999 3.07335 5.61332L7.42001 9.95999C7.74001 10.28 8.26001 10.28 8.58001 9.95999L12.9267 5.61332C13.12 5.41999 13.44 5.41999 13.6333 5.61332C13.8267 5.80666 13.8267 6.12666 13.6333 6.31999L9.28668 10.6667C8.93335 11.02 8.46668 11.2 8.00001 11.2Z"-->
+                <!--                          fill="#8075DC" />-->
+                <!--                  </svg>-->
+                <!--                </div>-->
+                <!--                <div v-if="detailsCardToggle">-->
+                <!--                  جزییات-->
+                <!--                  <svg width="16"-->
+                <!--                       height="16"-->
+                <!--                       viewBox="0 0 16 16"-->
+                <!--                       fill="none"-->
+                <!--                       xmlns="http://www.w3.org/2000/svg">-->
+                <!--                    <path d="M8.00001 11.2C7.53335 11.2 7.06668 11.02 6.71335 10.6667L2.36668 6.31999C2.17335 6.12666 2.17335 5.80666 2.36668 5.61332C2.56001 5.41999 2.88001 5.41999 3.07335 5.61332L7.42001 9.95999C7.74001 10.28 8.26001 10.28 8.58001 9.95999L12.9267 5.61332C13.12 5.41999 13.44 5.41999 13.6333 5.61332C13.8267 5.80666 13.8267 6.12666 13.6333 6.31999L9.28668 10.6667C8.93335 11.02 8.46668 11.2 8.00001 11.2Z"-->
+                <!--                          fill="#8075DC" />-->
+                <!--                  </svg>-->
+                <!--                </div>-->
+              </q-btn>
+              <!--               :class="
+                  { 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
+                    'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
+                    'payment-installment' : inputData.props.row.paymentstatus.id
+                  }"-->
+              <div
 
-          </q-btn>
+              >
+                پرداخت نشده
+                <!--                {{inputData.props.row.paymentstatus.name}}-->
+              </div>
+              <div>
+                <!--                {{ toman(inputData.props.row.price) }}-->
+                {{ toman(inputData.props.row.price) }}
+              </div>
+              <div>
+                <!--                {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}-->
+                {{ getCurrentOrderCompletedAt('1401/09/25') }}
+              </div>
+            </div>
+          </div>
+          <order-details-card
+            v-if="windowSize.x < 599"
+            v-model:toggleValue="detailsCardToggle[inputData.props.row.id]"
+            :order="currentOrder"
+          />
         </q-card>
       </template>
     </entity-index>
     <order-details-dialog
+      v-if="windowSize.x > 600"
       v-model:dialogValue="detailsDialog"
       :order="currentOrder"
     />
@@ -133,12 +179,14 @@
 import { EntityIndex } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 import { User } from 'src/models/User'
-// import moment from 'moment-jalaali'
+import moment from 'moment-jalaali'
 import { Order } from 'src/models/Order'
 import OrderDetailsDialog from 'components/MyOrders/OrderDetailsDialog'
+import OrderDetailsCard from 'components/MyOrders/OrderDetailsCard'
 export default {
   name: 'MyOrders',
   components: {
+    OrderDetailsCard,
     OrderDetailsDialog,
     EntityIndex
   },
@@ -919,6 +967,7 @@ export default {
         completed_at: '2019-06-24 14:27:38'
       }),
       detailsDialog: false,
+      detailsCardToggle: {},
       hasUserOrdered: true,
       firstRowPassed: false
     }
@@ -937,10 +986,12 @@ export default {
       return API_ADDRESS.exam.base(1)
     },
     windowSize () {
-      if (this.$store.getters['AppLayout/windowSize'].x < 600) {
-        return
-      }
       return this.$store.getters['AppLayout/windowSize']
+    },
+    getCurrentOrderCompletedAt() {
+      return (CompletedAt) => {
+        return moment(CompletedAt, 'YYYY-M-D').format('jYYYY/jMM/jDD')
+      }
     }
   },
   methods: {
@@ -1082,6 +1133,146 @@ export default {
       })
       this.detailsDialog = true
     },
+    toggleDetailsCard(rowData) {
+      // this.currentOrder = new Order(rowData)
+      if (!this.detailsCardToggle[rowData.id]) {
+        this.currentOrder = new Order({
+          id: 416466,
+          discount: 0,
+          customer_description: null,
+          price: 7000,
+          paid_price: 7000,
+          refund_price: 0,
+          debt: 0,
+          orderstatus: {
+            id: 2,
+            name: 'ثبت نهایی'
+          },
+          paymentstatus: {
+            id: 3,
+            name: 'پرداخت شده'
+          },
+          orderproducts: [
+            {
+              id: 353571,
+              quantity: 1,
+              type: 1,
+              product: {
+                id: 294,
+                redirect_url: null,
+                type: 1,
+                category: 'VIP',
+                title: 'ال...ماس عربی دوازدهم کنکور',
+                is_free: 0,
+                url: {
+                  web: 'http://office.alaa.tv:8080/product/294',
+                  api: 'http://office.alaa.tv:8080/api/v2/product/294'
+                },
+                photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
+                attributes: {
+                  info: {
+                    teacher: [
+                      'واحد تخته نگار آلاء'
+                    ],
+                    shipping_method: [
+                      'دانلودی'
+                    ],
+                    major: [
+                      'ریاضی',
+                      'تجربی',
+                      'انسانی'
+                    ],
+                    services: [
+                      'فیلم',
+                      'جزوه'
+                    ],
+                    download_date: [
+                      'از لحظه خرید'
+                    ],
+                    educational_system: [
+                      'نظام جدید'
+                    ],
+                    duration: [
+                      '2 ساعت'
+                    ],
+                    production_year: [
+                      '97-98'
+                    ]
+                  },
+                  extra: null
+                },
+                redirect_code: null
+              },
+              grand: null,
+              price: {
+                discountDetail: {
+                  productDiscount: 0,
+                  bonDiscount: 0,
+                  productDiscountAmount: 0
+                },
+                extraCost: 0,
+                base: 14000,
+                discount: 0,
+                final: 14000
+              },
+              photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
+              extra_attributes: null
+            }
+          ],
+          coupon_info: {
+            name: 'طلایی',
+            code: 'talaee',
+            discount: 50,
+            coupontype: {
+              name: 'overall',
+              display_name: 'کلی'
+            },
+            discounttype: {
+              name: 'percentage',
+              display_name: 'درصد'
+            }
+          },
+          successful_transactions: [
+            {
+              wallet_id: 218041,
+              order_id: 416466,
+              cost: 7000,
+              transactionID: null,
+              trace_number: null,
+              refrence_number: null,
+              paycheck_number: null,
+              paymentmethod: {
+                name: 'wallet',
+                display_name: 'کیف پول',
+                id: 5
+              },
+              transactiongateway: null,
+              transactionstatus: {
+                name: 'موفق',
+                id: 3
+              },
+              created_at: '2019-06-24 14:27:38',
+              completed_at: '2019-06-24 18:57:38',
+              deadline_at: null
+            }
+          ],
+          pending_transactions: null,
+          unpaid_transaction: null,
+          posting_info: null,
+          user: {
+            id: 219548,
+            first_name: 'علی',
+            last_name: 'اسماعیلی',
+            mobile: '09358745928',
+            national_code: '0014258269',
+            profile_completion: 77
+          },
+          created_at: '2019-06-23 11:01:02',
+          completed_at: '2019-06-24 14:27:38'
+        })
+      }
+      this.detailsCardToggle[rowData.id] = !this.detailsCardToggle[rowData.id]
+    },
     setHasUserOrderedValue(rowData) {
       if (this.firstRowPassed) {
         return
@@ -1094,6 +1285,15 @@ export default {
     getRemoveMessage(row) {
       const title = row.title
       return 'آیا از حذف ' + title + ' اطمینان دارید؟'
+    },
+    toman (key = 500000, suffix) {
+      if (key) {
+        let string = key.toLocaleString('fa')
+        if (typeof suffix === 'undefined' || suffix) {
+          string += ' تومان '
+        }
+        return string
+      }
     }
   }
 }
@@ -1195,6 +1395,50 @@ export default {
     background: #FFFFFF;
     box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
     border-radius: 16px;
+  }
+
+  .details-table-mobile {
+      box-shadow: none;
+      border-radius: 0;
+    border-bottom: 1px solid #E4E8EF;
+
+    .details-info {
+      padding: 15px 20px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      text-align: left;
+      letter-spacing: -0.03em;
+      display: flex;
+      justify-content: space-between;
+      .first-col {
+        color: #6D708B;
+        div {
+          padding-top: 5px;
+          padding-bottom: 5px;
+        }
+        .order {
+          .order-id {
+            padding-left: 8px;
+          }
+        }
+      }
+      .second-col {
+        text-align: right;
+        div {
+          padding-top: 5px;
+          padding-bottom: 5px;
+        }
+        .details-btn {
+          color:#8075DC ;
+        }
+        //:deep(.q-btn) {
+        //  .q-btn__content {
+        //    margin: 0;
+        //  }
+        //}
+      }
+    }
   }
 }
 .empty-order-list {
