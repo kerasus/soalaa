@@ -7,7 +7,7 @@ node_modules
 .quasar
 /dist
 /src-ssr
-/src-pwa
+#/src-pwa
 
 # Cordova related directories and files
 /src-cordova/node_modules
