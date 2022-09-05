@@ -138,29 +138,27 @@
                 <!--                  </svg>-->
                 <!--                </div>-->
               </q-btn>
-              <!--               :class="
+              <div
+                :class="
                   { 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
                     'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
                     'payment-installment' : inputData.props.row.paymentstatus.id
-                  }"-->
-              <div
-
+                  }"
               >
-                پرداخت نشده
-                <!--                {{inputData.props.row.paymentstatus.name}}-->
+                <!--                پرداخت نشده-->
+                {{inputData.props.row.paymentstatus.name}}
               </div>
               <div>
-                <!--                {{ toman(inputData.props.row.price) }}-->
                 {{ toman(inputData.props.row.price) }}
               </div>
               <div>
-                <!--                {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}-->
-                {{ getCurrentOrderCompletedAt('1401/09/25') }}
+                {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}
+                <!--                {{ getCurrentOrderCompletedAt('1401/09/25') }}-->
               </div>
             </div>
           </div>
           <order-details-card
-            v-if="windowSize.x < 599"
+            v-if="windowSize.x < 600"
             v-model:toggleValue="detailsCardToggle[inputData.props.row.id]"
             :order="currentOrder"
           />
@@ -168,7 +166,7 @@
       </template>
     </entity-index>
     <order-details-dialog
-      v-if="windowSize.x > 600"
+      v-if="windowSize.x >= 600"
       v-model:dialogValue="detailsDialog"
       :order="currentOrder"
     />
@@ -202,29 +200,29 @@ export default {
             align: 'left',
             field: row => row.id
           },
-          // {
-          //   name: 'paymentstatus',
-          //   // name: 'payment_status',
-          //   required: true,
-          //   label: 'وضعیت ‌پرداخت',
-          //   align: 'left',
-          //   field: row => row.paymentstatus.name,
-          //   classes: row => row.paymentstatus.id === 1 ? 'payment-not-okay' : row.paymentstatus.id === 3 ? 'payment-okay' : row.paymentstatus.id === 4 ? 'payment-installment' : ''
-          // },
-          // {
-          //   name: 'price',
-          //   required: true,
-          //   label: 'مبلغ',
-          //   align: 'left',
-          //   field: row => row.price
-          // },
-          // {
-          //   name: 'completed_at',
-          //   required: true,
-          //   label: 'تاریخ سفارش',
-          //   align: 'left',
-          //   field: row => moment(row.completed_at, 'YYYY-M-D').format('jYYYY/jMM/jDD')
-          // },
+          {
+            name: 'paymentstatus',
+            // name: 'payment_status',
+            required: true,
+            label: 'وضعیت ‌پرداخت',
+            align: 'left',
+            field: row => row.paymentstatus.name,
+            classes: row => row.paymentstatus.id === 1 ? 'payment-not-okay' : row.paymentstatus.id === 3 ? 'payment-okay' : row.paymentstatus.id === 4 ? 'payment-installment' : ''
+          },
+          {
+            name: 'price',
+            required: true,
+            label: 'مبلغ',
+            align: 'left',
+            field: row => row.price
+          },
+          {
+            name: 'completed_at',
+            required: true,
+            label: 'تاریخ سفارش',
+            align: 'left',
+            field: row => moment(row.completed_at, 'YYYY-M-D').format('jYYYY/jMM/jDD')
+          },
           {
             name: 'details',
             required: true,
@@ -982,8 +980,8 @@ export default {
       return new User()
     },
     getEntityApi() {
-      // return API_ADDRESS.user.getOrderList(this.user.id)
-      return API_ADDRESS.exam.base(1)
+      return API_ADDRESS.user.getOrderList(this.user.id)
+      // return API_ADDRESS.exam.base(1)
     },
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']

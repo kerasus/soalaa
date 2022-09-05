@@ -215,6 +215,7 @@ export default {
 
       &.paid {
         padding-left: 0;
+        margin-bottom: 10px;
       }
     }
 

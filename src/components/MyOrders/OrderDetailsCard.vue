@@ -16,7 +16,6 @@
               :key="index"
             >
               <ordered-products :ordered-item="orderItem" />
-              <ordered-products :ordered-item="orderItem" />
             </div>
           </q-card-section>
         </div>
