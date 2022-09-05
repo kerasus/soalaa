@@ -44,7 +44,7 @@
     "videojs-brand": "^0.0.4",
     "videojs-hotkeys": "^0.2.27",
     "vue": "^3.2.37",
-    "vue-i18n": "^9.1.10",
+    "vue-i18n": "^9.2.2",
     "vue-upload-component": "^3.0.50",
     "vue3-carousel": "^0.1.46",
     "vue3-tiptap-katex": "^1.0.24",

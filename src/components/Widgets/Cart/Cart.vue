@@ -84,9 +84,9 @@ export default {
     cartReview() {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('Cart/reviewCart')
-        .then((response) => {
+        .then(() => {
           this.$store.dispatch('loading/overlayLoading', false)
-          console.log('cart', this.$store.getters['Cart/cart'])
+          // console.log('cart', this.$store.getters['Cart/cart'])
         })
     }
   }

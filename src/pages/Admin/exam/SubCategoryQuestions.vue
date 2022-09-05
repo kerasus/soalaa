@@ -272,7 +272,6 @@ export default {
       return this.$axios.get(API_ADDRESS.question.confirm(question.id))
     },
     scrollToQuestion () {
-      console.log('this.questionSearchNumber', this.questionSearchNumber)
       this.scrollTo(null, this.questionSearchNumber)
     },
     questionListHeight () {
