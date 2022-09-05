@@ -1,0 +1,31 @@
+.form-builder-toggle-button-col {
+  .q-btn-toggle {
+    width: 122px;
+    border-radius: 15px;
+    height: 32px;
+    box-shadow: none;
+    background-color: var(--3a-Neutral3);
+    justify-content: space-between;
+    .q-btn {
+      height: 32px;
+      width: 58px;
+      border-radius: 15px !important;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px !important;
+      line-height: 24px;
+      text-align: center;
+      .q-focus-helper {
+        background: transparent !important;
+      }
+      .q-btn__content {
+        margin: 0;
+      }
+
+    }
+  }
+}
+
+//q-btn q-btn-item non-selectable no-outline
+
+//q-btn q-btn-item non-selectable no-outline
