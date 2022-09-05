@@ -113,17 +113,24 @@ export default {
       this.player.src(this.sources.list)
     },
     onPlayerReady() {
-      this.player.on('timeupdate', () => {
-        const buffPerc = this.player.bufferedPercent()
-        // console.log(this.player.getMedia())
-        console.log(this.player.videoWidth())
-        console.log(this.player.videoHeight())
-        const progressPercentageByTime =
-          this.player.currentTime() /
-          (this.player.currentTime() + this.player.remainingTime())
-        console.log('progressPercentageByTime', progressPercentageByTime)
-        console.log('buffPerc', buffPerc)
-      })
+      // this.player.on('timeupdate', () => {
+      //   const buffPerc = this.player.bufferedPercent()
+      //   // console.log(this.player.getMedia())
+      //   console.log(this.player.videoWidth())
+      //   console.log(this.player.videoHeight())
+      //   // const progressPercentageByTime =
+      //   //   this.player.currentTime() /
+      //   //   (this.player.currentTime() + this.player.remainingTime())
+      //   // console.log('progressPercentageByTime', progressPercentageByTime)
+      //   console.log('buffPerc', buffPerc)
+      //   console.log('this.player.buffered.length', this.player.buffered.length)
+      //   console.log('this.player.buffered()', this.player.buffered())
+      // })
+      // this.player.on('loadeddata', (e) => {
+      //   console.log('loadeddata', e)
+      //   console.log('this.player', this.player)
+      //   console.log('this.player.buffered', this.player.buffered.length)
+      // })
     },
     setOptions() {
       this.setSources()
