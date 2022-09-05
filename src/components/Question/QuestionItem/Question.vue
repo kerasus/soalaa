@@ -5,7 +5,18 @@
     <q-skeleton type="text" width="50%" height="30px"/>
     <q-skeleton width="30%" height="200px" style="border-radius: 10px"/>
   </template> -->
-  <vue-katex :input="question.statement" />
+  <vue-katex
+    v-if="question.statement"
+    :input="question.statement"
+  />
+  <div v-else-if="question.statement_photo?.length>0">
+    <div
+      v-for="(photo, index) in question.statement_photo"
+      :key="index"
+    >
+      <q-img :src="photo" />
+    </div>
+  </div>
   <template v-if="question.loading">
     <div v-for="item in 4"
          :key="item"
@@ -19,7 +30,7 @@
                   height="25px" />
     </div>
   </template>
-  <template v-else>
+  <template v-else-if="question.choices.list">
     <QuestionChoice
       v-for="(choice , index) in question.choices.list"
       id="test"
@@ -31,6 +42,14 @@
       :choice="choice">
     </QuestionChoice>
   </template>
+  <div v-else-if="question.answer_photos?.length>0">
+    <div
+      v-for="(photo, index) in question.answer_photos"
+      :key="index"
+    >
+      <q-img :src="photo" />
+    </div>
+  </div>
 </template>
 
 <script>
