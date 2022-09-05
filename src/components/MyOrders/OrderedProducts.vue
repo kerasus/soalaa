@@ -224,7 +224,6 @@ export default {
     background: #F2F5F9 !important;
     border: none;
     border-radius: 10px;
-    margin-bottom: 10px;
   }
   &:deep(.q-btn .q-btn__content) {
     margin: 0;
