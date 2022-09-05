@@ -17,7 +17,7 @@
           flat
           :color="'primary'"
           label="رفتن به فروشگاه"
-          :to="{name:'landing1'}"
+          :to="{name:'Landing.3aExams'}"
         />
       </div>
     </div>
