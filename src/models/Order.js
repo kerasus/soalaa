@@ -3,6 +3,7 @@ import { User } from './User'
 import { Coupon } from './Coupon'
 import { OrderProductList } from 'src/models/OrderProduct'
 import { OrderItemCollection } from './OrderItem'
+
 class Order extends Model {
   constructor (data) {
     super(data, [
@@ -21,18 +22,9 @@ class Order extends Model {
       //   key: 'order_product',
       //   relatedModel: OrderItemCollection
       // },
-      {
-        key: 'orderproduct',
-        relatedModel: OrderItemCollection
-      },
-      {
-        key: 'orderstatus',
-        default: {}
-      },
-      {
-        key: 'paymentstatus',
-        default: {}
-      },
+      // { key: 'orderproducts' },
+      { key: 'orderstatus' },
+      { key: 'paymentstatus' },
       { key: 'successful_transactions' },
       { key: 'pending_transactions' },
       { key: 'unpaid_transaction' },
@@ -42,15 +34,32 @@ class Order extends Model {
         relatedModel: User
       },
       { key: 'created_at' },
-      { key: 'completed_at' }
+      { key: 'completed_at' },
+
+      {
+        key: 'orderItems',
+        relatedModel: OrderItemCollection
+      }
     ])
+
+    this.setOrderItems()
   }
 
-  checkInformationCompletionKey (key) {
-    return (
-      (this[key] !== null && typeof this[key] === 'object' && typeof this[key].id !== 'undefined' && this[key].id !== null) ||
-      (this[key] && typeof this[key].id === 'undefined')
-    )
+  setOrderItems () {
+    const flatOrderProducts = this.inputData.orderproducts
+    const orderProductsGrands = flatOrderProducts
+      .filter((orderProductItem, index, array) => !!array.findIndex(item => item.grand?.id !== orderProductItem.grand?.id))
+      .map(item => item.grand)
+
+    orderProductsGrands.forEach(grand => {
+      const orderProducts = flatOrderProducts.filter(flatOrderProduct => flatOrderProduct.grand?.id === grand?.id)
+      if (!this.orderItems.list.find(orderItem => orderItem.grand?.id === grand?.id)) {
+        this.orderItems.add(...[{
+          grand,
+          order_product: new OrderProductList(orderProducts)
+        }])
+      }
+    })
   }
 
   getOrderDiscount (mode = 'percentage') {
