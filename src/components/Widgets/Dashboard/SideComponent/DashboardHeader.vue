@@ -36,10 +36,10 @@
         ></q-btn>
       </div>
     </div>
-    <div class="box">
+    <div class="box orders">
       <div class="header exam-plus">
         <div class="title">سفارش‌های من‌</div>
-        <div class="md-hide">سفارش‌ها‌</div>
+        <div class="md-hide mobile-order-title">سفارش‌ها‌</div>
         <q-btn
           class="exam-plus-btn"
           icon="isax:arrow-left-2"
@@ -86,6 +86,12 @@ export default {
   text-align: left;
   letter-spacing: -0.03em;
   color: #434765;
+  .signed-exams {
+    margin-left: 0;
+  }
+  .orders {
+    margin-right: 0;
+  }
   @media screen and (max-width: 1023px) {
     grid-template-columns: 1fr;
   }
@@ -133,6 +139,11 @@ export default {
       justify-content: space-between;
       .title {
         @media screen and (max-width: 1023px) {
+          display: none;
+        }
+      }
+      .mobile-order-title {
+        @media screen and (min-width: 1024px) {
           display: none;
         }
       }

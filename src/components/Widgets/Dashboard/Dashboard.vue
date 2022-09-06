@@ -1,5 +1,6 @@
 <template>
   <dashboard-header />
+  <next-exam />
   <div class="board-container row">
     <upcoming-exams-calender class="col-12 col-md-8" />
     <subscription-status class="col-12 col-md-4" />
@@ -10,9 +11,10 @@
 import DashboardHeader from 'components/Widgets/Dashboard/SideComponent/DashboardHeader'
 import SubscriptionStatus from 'components/Widgets/Dashboard/SideComponent/SubscriptionStatus'
 import UpcomingExamsCalender from 'components/Widgets/Dashboard/SideComponent/UpcomingExamsCalender'
+import NextExam from 'components/Widgets/Dashboard/SideComponent/NextExam'
 export default {
   name: 'Dashboard',
-  components: { UpcomingExamsCalender, SubscriptionStatus, DashboardHeader }
+  components: { NextExam, UpcomingExamsCalender, SubscriptionStatus, DashboardHeader }
 }
 </script>
 
