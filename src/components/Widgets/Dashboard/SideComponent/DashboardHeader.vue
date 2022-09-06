@@ -91,6 +91,9 @@ export default {
   }
   .orders {
     margin-right: 0;
+    @media screen and (max-width: 1023px) {
+      margin-bottom: 0px !important;
+    }
   }
   @media screen and (max-width: 1023px) {
     grid-template-columns: 1fr;
