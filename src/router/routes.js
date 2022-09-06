@@ -148,7 +148,7 @@ const routes = [
             }
           },
           {
-            path: '/user_exam_list',
+            path: 'user_exam_list',
             name: 'User.Exam.List',
             component: () => import('pages/User/exam/List'),
             middleware: [
