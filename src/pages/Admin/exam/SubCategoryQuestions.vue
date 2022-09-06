@@ -78,7 +78,7 @@
               :questions-column="$refs.questionsColumn"
               :exam-id="$route.params.quizId"
               :sub-category="quizData.sub_categories"
-              :final-approval-mode="true"
+              :final-approval-mode="false"
               @detachQuestion="detachQuestion"
               @deleteQuestion="deleteQuestion"
               @copyIdToClipboard="copyIdToClipboard"
