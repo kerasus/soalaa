@@ -79,6 +79,7 @@
               :exam-id="$route.params.quizId"
               :sub-category="quizData.sub_categories"
               :final-approval-mode="false"
+              :show-question-number="true"
               @detachQuestion="detachQuestion"
               @deleteQuestion="deleteQuestion"
               @copyIdToClipboard="copyIdToClipboard"
