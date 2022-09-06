@@ -41,8 +41,11 @@
         class="q-mt-sm"
         indeterminate
       />
-      <div ref="contentInside"
-           class="content-inside">
+      <div
+        ref="contentInside"
+        class="content-inside"
+        :class="{ 'user-panel' : getTemplateLeftSideBarType === 'default' }"
+      >
         <q-dialog v-model="confirmDialogData.show"
                   persistent>
           <q-card class="q-pa-md q-pb-none">
@@ -195,8 +198,11 @@ export default {
 .content-inside {
   //overflow: auto;
 }
+.user-panel {
+  background: #F4F6F9;
+}
 .main-layout-header {
-  background-color: #f1f1f1;
+  background-color: #F4F6F9;
   display: flex;
   flex-direction: row;
   padding: 60px 100px 24px 76px;
@@ -258,10 +264,12 @@ export default {
 <style lang="scss">
 
 .main-layout-container {
-  background-color: #f1f1f1;
+  //background-color: #f1f1f1;
+  background-color: #F4F6F9;
 }
 
 .main-layout-left-drawer {
-  background-color: #f1f1f1;
+  //background-color: #f1f1f1;
+  background-color: #F4F6F9;
 }
 </style>

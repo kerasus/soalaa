@@ -342,7 +342,6 @@ export default {
 
       this.$store.dispatch('Cart/paymentCheckout')
         .then((response) => {
-          console.log('res', response)
           const anchor = document.createElement('a')
           anchor.href = response.data.data.url
           anchor.target = '_blank'

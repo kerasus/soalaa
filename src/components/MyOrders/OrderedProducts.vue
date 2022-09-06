@@ -5,17 +5,15 @@
     >
       <q-card class="cart-card">
         <q-card-section
-          v-if="order.grand"
+          v-if="orderedItem.grand.id"
           class="card-section"
         >
           <div
-            v-if="order.grand.photo"
+            v-if="orderedItem.grand.photo"
             class="order-image-section"
           >
-            <!--                          :src="order.grand.photo"-->
-            <!--            :src="'https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png'"-->
             <q-img
-              :src="order.grand.photo"
+              :src="orderedItem.grand.photo"
               class="order-image"
             />
           </div>
@@ -23,8 +21,7 @@
           <div class="product-text-info">
             <div class="order-item-header">
               <div class="title ellipsis">
-                {{ order.grand.title }}
-                <!--                آزمـون مرحله سوم سه‌آ-->
+                {{ orderedItem.grand.title }}
               </div>
             </div>
             <div
@@ -32,17 +29,16 @@
             >
               <div class="discount-part">
                 <div class="discount-percent">
-                  {{ discountInPercent(order.price.base, order.price.final) }}%
-                  <!--                  20%-->
+                  {{ orderedItem.grand.price.discountInPercent() }}%
                 </div>
 
                 <div class="base-price">
-                  {{ toman(order.price.base, null) }}
+                  {{ orderedItem.grand.price.toman('base', null) }}
                 </div>
               </div>
 
               <div class="final-part">
-                <div class="final-price">{{ toman(order.price.final, null) }}</div>
+                <div class="final-price">{{ orderedItem.grand.price.toman('final', null) }}</div>
                 <div class="toman">تومان</div>
               </div>
             </div>
@@ -54,13 +50,11 @@
           class="card-section"
         >
           <div
-            v-if="order.product.photo"
+            v-if="orderedItem.order_product.list[0].photo"
             class="order-image-section"
           >
-            <!--                          :src="order.grand.photo"-->
-            <!--            :src="'https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png'"-->
             <q-img
-              :src="order.product.photo"
+              :src="orderedItem.order_product.list[0].photo"
               class="order-image"
             />
           </div>
@@ -68,8 +62,7 @@
           <div class="product-text-info">
             <div class="order-item-header">
               <div class="title ellipsis">
-                {{ order.product.title }}
-                <!--                آزمـون مرحله سوم سه‌آ-->
+                {{ orderedItem.order_product.list[0].product.title }}
               </div>
             </div>
             <div
@@ -77,24 +70,25 @@
             >
               <div class="discount-part">
                 <div class="discount-percent">
-                  {{ discountInPercent(order.price.base, order.price.final) }}%
-                  <!--                  20%-->
+                  {{ orderedItem.order_product.list[0].price.discountInPercent() }}%
                 </div>
 
                 <div class="base-price">
-                  {{ toman(order.price.base, null) }}
+                  {{ orderedItem.order_product.list[0].price.toman('base', null) }}
                 </div>
               </div>
 
               <div class="final-part">
-                <div class="final-price">{{ toman(order.price.final, null) }}</div>
+                <div class="final-price">
+                  {{ orderedItem.order_product.list[0].price.toman('final', null) }}
+                </div>
                 <div class="toman">تومان</div>
               </div>
             </div>
           </div>
         </q-card-section>
         <q-card-section
-          v-if="order.grand"
+          v-if="orderedItem.grand.id"
           class="card-actions"
         >
           <div
@@ -116,21 +110,23 @@
                 <q-card class="details-expansion-card">
                   <q-card-section class="details-expansion-card-section">
                     <div
-                      v-for="(item, index) in order.product"
+                      v-for="(item, index) in orderedItem.order_product.list"
                       :key="index"
                       class="pamphlet"
                     >
-                      <div class="title ellipsis">
-                        {{ item.title }}
-                      </div>
+                      <template v-if="item && item.product">
+                        <div class="title ellipsis">
+                          {{ item.product.title }}
+                        </div>
 
-                      <div class="right-part">
-                        <span
-                          class="price"
-                        >
-                          {{ toman(item.price.final, null) }} تومان
-                        </span>
-                      </div>
+                        <div class="right-part">
+                          <span
+                            class="price"
+                          >
+                            {{ item.price.toman('final')  }} تومان
+                          </span>
+                        </div>
+                      </template>
                     </div>
                   </q-card-section>
 
@@ -157,7 +153,7 @@
 
 <script>
 import Widgets from 'components/PageBuilder/Widgets'
-// import { Order } from 'src/models/Order'
+import { OrderItem } from 'src/models/OrderItem'
 
 export default {
   name: 'OrderedProducts',
@@ -176,10 +172,10 @@ export default {
     //     return new Order()
     //   }
     // },
-    order: {
-      type: Object,
+    orderedItem: {
+      type: OrderItem,
       default() {
-        return {}
+        return new OrderItem()
       }
     }
   },
@@ -197,20 +193,20 @@ export default {
       return (discount, base) => {
         return Math.round(discount * 100 / base)
       }
-    },
-    toman () {
-      return (price, suffix) => {
-        if (price) {
-          let string = price.toLocaleString('fa')
-          if (typeof suffix === 'undefined' || suffix) {
-            string += ' تومان '
-          }
-
-          return string
-        }
-        return null
-      }
     }
+    // toman () {
+    //   return (price, suffix) => {
+    //     if (price) {
+    //       let string = price.toLocaleString('fa')
+    //       if (typeof suffix === 'undefined' || suffix) {
+    //         string += ' تومان '
+    //       }
+    //
+    //       return string
+    //     }
+    //     return null
+    //   }
+    // }
   },
 
   methods: {
@@ -223,8 +219,12 @@ export default {
   background: #FFFFFF;
   border: 3px solid #E4E8EF;
   border-radius: 16px;
-  margin-top: 12px;
-
+  @media screen and (max-width: 599px) {
+    margin-top: 0px;
+    background: #F2F5F9 !important;
+    border: none;
+    border-radius: 10px;
+  }
   &:deep(.q-btn .q-btn__content) {
     margin: 0;
   }
@@ -242,11 +242,9 @@ export default {
         border-radius: 12px;
       }
 
-      //@media screen and (max-width: 599px) {
-      //  padding: 12px;
-      //  border-radius: 8px;
-      //  margin-bottom: 19px;
-      //}
+      @media screen and (max-width: 599px) {
+        background: #F2F5F9 !important;
+      }
 
       .card-section {
         padding: 0;

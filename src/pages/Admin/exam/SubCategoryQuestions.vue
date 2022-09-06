@@ -171,7 +171,7 @@ export default {
   },
   methods: {
     printQuestions () {
-      const routeData = this.$router.resolve({ name: 'Admin.Exam.Lessons.PrintQuestions', params: { quizId: this.$route.params.quizId, lessonId: this.$route.params.lessonId } })
+      const routeData = this.$router.resolve({ name: 'Admin.Exam.Lessons.PrintQuestions', params: { quizId: this.$route.params.exam_id, lessonId: this.$route.params.subcategory_id } })
       window.open(routeData.href, '_blank')
     },
     detachQuestion (questionId) {
@@ -272,7 +272,6 @@ export default {
       return this.$axios.get(API_ADDRESS.question.confirm(question.id))
     },
     scrollToQuestion () {
-      console.log('this.questionSearchNumber', this.questionSearchNumber)
       this.scrollTo(null, this.questionSearchNumber)
     },
     questionListHeight () {
