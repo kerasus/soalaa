@@ -275,6 +275,14 @@ export default {
           line-height: 22px;
         }
       }
+      @media screen and (min-width: 1024px) {
+        .exam-create-btn {
+          display: none;
+        }
+        .exam-plus-btn {
+          display: none;
+        }
+      }
       .exam-create-btn {
         margin-left: 16px;
 
