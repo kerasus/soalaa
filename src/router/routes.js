@@ -89,12 +89,12 @@ const routes = [
     },
     children: [
       {
-        path: 'landing',
+        path: '',
         name: 'landing',
         component: () => import('layouts/LandingLayout'),
         children: [
           {
-            path: '3a_exams',
+            path: '',
             name: 'Landing.3aExams',
             component: () => import('pages/User/landing/landing')
           }
