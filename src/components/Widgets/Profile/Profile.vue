@@ -6,6 +6,7 @@
       <entity-crud-form-builder
         ref="EntityCrudFormBuilder"
         v-model:value="inputs"
+        :after-get-data="test"
       />
 
       <div class="card-actions">
@@ -17,6 +18,7 @@
 
         <div
           class="card-actions-button save-button"
+          @click="edit"
         >
           ذخیره
         </div>
@@ -27,6 +29,7 @@
 
 <script>
 import { EntityCrudFormBuilder } from 'quasar-crud'
+import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'Profile',
@@ -43,7 +46,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'نام', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'title', responseKey: 'data.title', label: '', col: 'col-12', placeholder: ' ' }
+            { type: 'input', name: 'first_name', responseKey: 'first_name', label: '', col: 'col-12', placeholder: '' }
           ]
         },
         {
@@ -52,7 +55,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'نام خانوادگی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'title', responseKey: 'data.title', label: '', col: 'col-12', placeholder: ' ' }
+            { type: 'input', name: 'first_name', responseKey: 'first_name', label: '', col: 'col-12', placeholder: ' ' }
           ]
         },
         {
@@ -61,7 +64,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'کدملی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'title', responseKey: 'data.title', label: '', col: 'col-12', placeholder: ' ' }
+            { type: 'input', name: 'national_code', responseKey: 'national_code', label: '', col: 'col-12', placeholder: ' ' }
           ]
         },
         {
@@ -70,7 +73,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'جنسیت', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'title', responseKey: 'data.title', label: '', col: 'col-12', placeholder: ' ' }
+            { type: 'input', name: 'gender.id', responseKey: 'gender.id', label: '', col: 'col-12', placeholder: ' ' }
           ]
         },
         {
@@ -79,7 +82,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'شماره موبایل', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'title', responseKey: 'data.title', label: '', col: 'col-12', placeholder: ' ' }
+            { type: 'input', name: 'mobile', responseKey: 'mobile', label: '', col: 'col-12', placeholder: ' ' }
           ]
         },
         {
@@ -88,7 +91,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'ایمیل', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'title', responseKey: 'data.title', label: '', col: 'col-12', placeholder: ' ' }
+            { type: 'input', name: 'email', responseKey: 'email', label: '', col: 'col-12', placeholder: ' ' }
           ]
         },
         {
@@ -106,7 +109,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'رشته تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'major_type', responseKey: 'data.major_type', col: 'col-12' }
+            { type: 'select', name: 'major', responseKey: 'major.name', options: [{ label: 'ریاضی', value: '1' }, { label: 'تجربی', value: '2' }], col: 'col-12' }
           ]
         },
         {
@@ -115,7 +118,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'پایه تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'major_type', responseKey: 'data.major_type', col: 'col-12' }
+            { type: 'select', name: 'grade.id', responseKey: 'grade.name', col: 'col-12' }
           ]
         },
         {
@@ -124,7 +127,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'استان', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'major_type', responseKey: 'data.major_type', col: 'col-12' }
+            { type: 'select', name: 'province', responseKey: 'province', col: 'col-12' }
           ]
         },
         {
@@ -133,7 +136,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'شهر', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'major_type', responseKey: 'data.major_type', col: 'col-12' }
+            { type: 'select', name: 'city', responseKey: 'city', col: 'col-12' }
           ]
         },
         {
@@ -142,11 +145,53 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'مدرسه', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'title', responseKey: 'data.title', label: '', col: 'col-12', placeholder: ' ' }
+            { type: 'input', name: 'school', responseKey: 'school', label: '', col: 'col-12', placeholder: ' ' }
           ]
         }
 
       ]
+    }
+  },
+
+  mounted() {
+    this.$axios.get(API_ADDRESS.user.formData)
+      .then((resp) => {
+        console.log('getUserFormData res :', resp)
+        // this.genders = resp.data.data.genders
+        // this.provinces = resp.data.data.provinces
+        // this.cities = resp.data.data.cities
+      })
+      .catch((err) => {
+        console.log('err:', err)
+      })
+    this.setData()
+  },
+
+  computed: {
+    user () {
+      return this.$store.getters['Auth/user']
+    }
+  },
+
+  methods: {
+    edit () {
+      this.$axios.get(API_ADDRESS.user.formData)
+        .then((resp) => {
+          console.log('getUserFormData res :', resp)
+          this.genders = resp.data.data.genders
+          this.provinces = resp.data.data.provinces
+          this.cities = resp.data.data.cities
+        })
+        .catch((err) => {
+          console.log(err)
+        }
+        )
+    },
+    test () {
+      console.log('hi')
+    },
+    setData () {
+      this.$refs.EntityCrudFormBuilder.loadInputData(this.user, this.inputs)
     }
   }
 }
@@ -239,6 +284,10 @@ export default {
       @media only screen and (max-width: 599px) {
         margin: 0 0 16px 0;
       }
+
+      .q-field__append {
+        padding: 0;
+      }
     }
 
     &:deep(.q-field--focused .q-field__control) {
@@ -249,10 +298,17 @@ export default {
     }
 
     &:deep(.q-field .q-field__control) {
-      //width: 307px;
       height: 40px;
       background: #F2F5F9;
       border-radius: 8px;
+    }
+
+    &:deep(.q-field__native) {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      color: #6D708B;
     }
 
     .card-actions {
