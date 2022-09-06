@@ -34,8 +34,6 @@ export default {
                   }
                 ],
                 options: {
-                  boxed: true,
-                  boxedWidth: 1362,
                   style: {}
                 }
               }
