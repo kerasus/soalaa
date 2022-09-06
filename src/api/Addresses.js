@@ -23,7 +23,11 @@ const API_ADDRESS = {
       verify: authServer + '/mobile/verify'
     },
     formData: authServer + '/megaroute/getUserFormData',
-    show_user: authServer + '/getUserFor3a'
+    show_user: authServer + '/getUserFor3a',
+    getOrderList (id) {
+      // return authServer + '/user/' + id + '/orders?seller=2'
+      return authServer + '/user/' + id + '/orders?seller=1'
+    }
   },
   set: {
     base: authServer + '/set'
@@ -253,9 +257,10 @@ const API_ADDRESS = {
   cart: {
     orderproduct: {
       add: apiV2Server + '/orderproduct',
-      delete (id) { return apiV2Server + '/orderproduct/' + id }
+      delete (productId) { return apiV2Server + '/orderproduct/' + productId }
     },
-    review: apiV2Server + '/checkout/review'
+    review: apiV2Server + '/checkout/review?seller=2',
+    getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2'
   }
 }
 export default API_ADDRESS

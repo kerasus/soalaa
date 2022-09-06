@@ -12,6 +12,8 @@ class OrderProduct extends Model {
       { key: 'purchased_coupons' },
       { key: 'attributevalues' },
       { key: 'include_in_coupon' },
+      { key: 'extra_attributes' },
+      { key: 'photo' },
       { key: 'type' },
       {
         key: 'product',
@@ -35,6 +37,10 @@ class OrderProduct extends Model {
 class OrderProductList extends Collection {
   model () {
     return OrderProduct
+  }
+
+  hasProduct (productId) {
+    return !!this.list.find(order => order.product.id === productId)
   }
 }
 

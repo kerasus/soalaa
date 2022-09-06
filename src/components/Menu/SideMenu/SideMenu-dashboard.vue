@@ -147,14 +147,14 @@ export default {
     return {
       clickedItem: null,
       titlesList: [
-        {
-          title: 'داشبورد',
-          icon: 'isax:home',
-          routeName: 'dashboard',
-          permission: 'all',
-          active: false,
-          children: []
-        },
+        // {
+        //   title: 'داشبورد',
+        //   icon: 'isax:home',
+        //   routeName: 'dashboard',
+        //   permission: 'all',
+        //   active: false,
+        //   children: []
+        // },
         {
           title: 'سوال',
           icon: 'isax:bank',

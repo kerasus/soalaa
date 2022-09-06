@@ -78,6 +78,7 @@
               :questions-column="$refs.questionsColumn"
               :exam-id="$route.params.quizId"
               :sub-category="quizData.sub_categories"
+              :final-approval-mode="true"
               @detachQuestion="detachQuestion"
               @deleteQuestion="deleteQuestion"
               @copyIdToClipboard="copyIdToClipboard"
@@ -170,7 +171,7 @@ export default {
   },
   methods: {
     printQuestions () {
-      const routeData = this.$router.resolve({ name: 'Admin.Exam.Lessons.PrintQuestions', params: { quizId: this.$route.params.quizId, lessonId: this.$route.params.lessonId } })
+      const routeData = this.$router.resolve({ name: 'Admin.Exam.Lessons.PrintQuestions', params: { quizId: this.$route.params.exam_id, lessonId: this.$route.params.subcategory_id } })
       window.open(routeData.href, '_blank')
     },
     detachQuestion (questionId) {
@@ -320,20 +321,20 @@ export default {
         })
     },
     scrollTo (questionId, questionNumber) {
-      // let questionIndex
-      // if (questionId) {
-      //   questionIndex = this.getQuestionIndexById(questionId)
-      // } else {
-      //   // questionIndex = questionNumber - this.firstQuestionOrder
-      //   questionIndex = questionNumber
-      // }
-      // this.$refs.scroller.scrollTo(questionIndex, 'start-force')
-      // for (let i = 1; i < 4; i++) {
-      //   setTimeout(() => {
-      //     this.$refs.scroller.scrollTo(questionIndex)
-      //   },
-      //   333 * i)
-      // }
+      let questionIndex
+      if (questionId) {
+        questionIndex = this.getQuestionIndexById(questionId)
+      } else {
+        // questionIndex = questionNumber - this.firstQuestionOrder
+        questionIndex = questionNumber
+      }
+      this.$refs.scroller.scrollTo(questionIndex, 'start-force')
+      for (let i = 1; i < 4; i++) {
+        setTimeout(() => {
+          this.$refs.scroller.scrollTo(questionIndex)
+        },
+        333 * i)
+      }
     },
     choiceClicked (questionId) {
       this.scrollTo(questionId)

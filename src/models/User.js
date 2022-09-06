@@ -83,6 +83,8 @@ class User extends Model {
     return [
       'first_name',
       'last_name',
+      'national_code',
+      'profile_completion',
       'major',
       'city',
       // 'school',

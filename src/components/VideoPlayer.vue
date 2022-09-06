@@ -1,4 +1,3 @@
-
 <template>
   <div class="flex justify-center full-width video-js-style">
     <video
@@ -26,7 +25,6 @@ require('@silvermine/videojs-quality-selector/dist/css/quality-selector.css')
 
 export default {
   name: 'VideoPlayer',
-  mixins: [],
   props: {
     sources: {
       type: PlayerSourceList,
@@ -84,17 +82,13 @@ export default {
   },
   mounted() {
     this.initPlayer()
-    const video = this.$refs.videoPlayer
-    if (video) {
-      // console.log('video :', video)
-      video.addEventListener('progress', (event) => {
-        // console.log('event : ', event)
-        // console.log('video', video)
-        // console.log('video.srcObject', video.srcObject)
-        // console.log('video.buffered :', video.buffered)
-        // video.srcObject
-        // video.buffered
-      })
+  },
+  computed: {
+    calcTheHeight() {
+      return '100%'
+    },
+    calcTheWidth() {
+      return '100%'
     }
   },
   beforeUnmount() {

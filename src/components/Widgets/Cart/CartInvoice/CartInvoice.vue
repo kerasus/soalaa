@@ -329,12 +329,27 @@ export default {
   },
 
   methods: {
-    payment() {
-      const gatewayRedirectAddress = this.cart.redirect_to_gateway
+    cartReview() {
+      this.$store.commit('loading/loading', true)
+      this.$store.dispatch('Cart/reviewCart')
+        .then(() => {
+          this.$store.dispatch('loading/overlayLoading', false)
+        })
+    },
 
-      if (gatewayRedirectAddress) {
-        window.location.href = gatewayRedirectAddress
-      }
+    payment() {
+      this.$store.commit('loading/loading', true)
+
+      this.$store.dispatch('Cart/paymentCheckout')
+        .then((response) => {
+          const anchor = document.createElement('a')
+          anchor.href = response.data.data.url
+          anchor.target = '_blank'
+          anchor.click()
+          this.$store.commit('loading/loading', false)
+        }).catch(() => {
+          this.$store.commit('loading/loading', false)
+        })
     },
 
     login() {

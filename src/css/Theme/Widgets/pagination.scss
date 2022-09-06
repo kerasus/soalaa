@@ -1,0 +1,55 @@
+.q-pagination {
+  .q-btn--flat {
+    background: #FFFFFF;
+    border-radius: 12px;
+    &:first-child {
+      box-shadow: none !important;
+      background: none;
+    }
+    &:last-child {
+      box-shadow: none !important;
+      background: none;
+    }
+  }
+
+  .justify-center {
+    button {
+      background: #FFFFFF !important;
+      border-radius: 12px;
+    }
+  }
+
+  button {
+    &.q-btn--standard {
+      background: #9690E4 !important;
+      color: #FFFFFF !important;
+      box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+      border-radius: 12px;
+    }
+    &:nth-child(2){
+      background: #FFFFFF;
+      border-radius: 12px;
+    }
+  }
+
+  .disabled {
+    background: #9690E4;
+    color: #FFFFFF !important;
+    box-shadow: none;
+    border-radius: 12px;
+    &:first-child {
+      box-shadow: none !important;
+      background: none;
+    }
+  }
+
+  .q-btn {
+    color: #6D708B !important;
+    width: 40px;
+    height: 40px;
+    padding: 0 !important;
+    margin-left: 4px;
+    margin-right: 4px;
+
+  }
+}

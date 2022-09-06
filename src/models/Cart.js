@@ -1,7 +1,8 @@
 import { Model, Collection } from 'js-abstract-model'
 import Price from './Price'
+import { Product } from 'src/models/Product'
 import { Coupon } from './Coupon'
-import { CartItem, CartItemList } from './CartItem'
+import { CartItemList } from './CartItem'
 class Cart extends Model {
   constructor (data) {
     super(data, [
@@ -28,17 +29,26 @@ class Cart extends Model {
     ])
   }
 
-  addToCart (product) {
-    if (this.items.list.find(item => item.grand.id === product.id)) {
-      // ToDo
-      // if (canIncreaseQuantity) {
-      //     this.cartItems.list.find(item => item.product.id === product.id).quantity++
-      // }
+  isExistInCart (productId) {
+    return this.items.hasProduct(productId)
+  }
+
+  addToCart (data) {
+    const isSelectableProduct = !!data.products
+
+    if (isSelectableProduct) {
+      const grand = data.product
+      const cartItemThatHasGrand = this.items.getCartItemByGrand(grand.id)
+      cartItemThatHasGrand.addOrderProducts(data.products.map(product => new Product({ id: product })))
     } else {
-      this.items.list.push(new CartItem({ product }))
+      const product = data.product
+      if (this.items.hasProduct(product.id)) {
+        return
+      }
+      this.items.addOrderProducts([new Product(product)])
     }
+
     this.changeCartItems()
-    return this.items.list.find(item => item.grand.id === product.id).quantity
   }
 
   removeItem (cartId) {
