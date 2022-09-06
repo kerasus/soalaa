@@ -57,6 +57,12 @@ const API_ADDRESS = {
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=reference_type&with_pagination=true'
     },
+    questionTarget: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/option',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=targets_type&with_pagination=true'
+    },
     majors: {
       show: lumenServer + '/option/',
       edit: lumenServer + '/option',

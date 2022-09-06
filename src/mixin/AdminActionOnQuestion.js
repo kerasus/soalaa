@@ -21,7 +21,8 @@ const AdminActionOnQuestion = {
       lessonsList: null,
       majorList: null,
       authorshipDatesList: null,
-      questionAuthorsList: null
+      questionAuthorsList: null,
+      questionTargetList: null
     }
   },
   computed: {
@@ -428,6 +429,12 @@ const AdminActionOnQuestion = {
       this.$axios.get(API_ADDRESS.option.base + '?type=reference_type')
         .then((response) => {
           this.questionAuthorsList = response.data.data
+        })
+    },
+    loadQuestionTargets () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=targets_type')
+        .then((response) => {
+          this.questionTargetList = response.data.data
         })
     },
     loadAuthorshipDates () {
