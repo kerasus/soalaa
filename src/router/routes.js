@@ -97,6 +97,11 @@ const routes = [
     },
     children: [
       {
+        path: '',
+        name: 'HomePage',
+        component: () => import('pages/User/landing/landing')
+      },
+      {
         path: 'landing',
         name: 'landing',
         component: () => import('layouts/LandingLayout'),
