@@ -84,6 +84,7 @@
         :major-list="majorList"
         :authorship-dates-list="authorshipDatesList"
         :question-authors-list="questionAuthorsList"
+        :question-target-list="questionTargetList"
         buffer
         @gradeSelected="getLessonsList"
         @groupSelected="getLessonsList"
@@ -158,6 +159,7 @@ export default {
     this.getPageReady()
     this.getGradesList()
     this.loadQuestionAuthors()
+    this.loadQuestionTargets()
     this.loadAuthorshipDates()
     this.loadMajorList()
   },

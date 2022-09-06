@@ -48,6 +48,14 @@ const entityCrudRouteConfigs = [
 
   },
   {
+    path: 'QuestionTarget',
+    baseRouteName: 'Admin.QuestionTarget',
+    componentPath: 'pages/Admin/QuestionTarget.vue',
+    breadcrumbs: { title: 'اهداف سوال' },
+    permissions: ['optionIndex', 'optionStore', 'optionShow', 'optionUpdate']
+
+  },
+  {
     path: 'majors',
     baseRouteName: 'Admin.Majors',
     componentPath: 'pages/Admin/Majors',
@@ -88,6 +96,11 @@ const routes = [
       layoutPageContainerCustomClass: 'main-layout-container'
     },
     children: [
+      {
+        path: '',
+        name: 'HomePage',
+        component: () => import('pages/User/landing/landing')
+      },
       {
         path: 'landing',
         name: 'landing',
