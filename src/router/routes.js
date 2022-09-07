@@ -524,6 +524,10 @@ const routes = [
         meta: {
           middlewares: [
             Permissions.hasPermission('examStore')]
+        },
+        layoutConfig: {
+          layoutHeaderVisible: false,
+          layoutLeftDrawerVisible: false
         }
       }
 
