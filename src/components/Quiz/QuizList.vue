@@ -70,11 +70,11 @@
                 نوع آزمون
               </div>
               <div class="quiz-list-header-col"
-                   :class="quizType === 'myTest' ? 'col-3' : 'col-3'">
+                   :class="quizType === 'myTest' ? 'col-2' : 'col-3'">
                 شروع آزمون
               </div>
               <div class="quiz-list-header-col"
-                   :class="quizType === 'myTest' ? 'col-2' : 'col-3'">
+                   :class="quizType === 'myTest' ? 'col-3' : 'col-3'">
                 عملیات
               </div>
             </div>
@@ -95,18 +95,24 @@
                 تست
               </div>
               <div class="quiz-list-item-schedule"
-                   :class="quizType === 'myTest' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
+                   :class="quizType === 'myTest' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
               >
                 1400/02/11 ,08:30
               </div>
               <div class="quiz-list-item-action"
-                   :class="quizType === 'myTest' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
+                   :class="quizType === 'myTest' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
               >
                 <q-btn
                   class="quiz-action-btn"
                   :class="item % 2 == 1 ? 'enroll' : 'result'"
                   :label="item % 2 == 1 ? 'شرکت در آزمون' : 'مشاهده نتایج'"
                   @click="onClick" />
+                <q-btn v-if="quizType === 'myTest'"
+                       color="dark"
+                       class="quiz-action-download"
+                       flat
+                       icon="isax:import"
+                       @click="onClick" />
               </div>
             </div>
           </q-item-section>
@@ -483,6 +489,14 @@ export default defineComponent({
                   align-items: center;
                   width: 252px;
                   height: 40px;
+                }
+              }
+
+              .quiz-action-download {
+                margin-left: 45px;
+
+                @media only screen and (max-width: 600px){
+                  margin-left: 32px;
                 }
               }
             }
