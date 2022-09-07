@@ -5,7 +5,8 @@
   >
     <!--    ToDo : add confirm-dialog-->
     <!--    <vue-confirm-dialog />-->
-    <div class="fit row wrap justify-center items-start content-start"
+    <div v-if="true"
+         class="fit row wrap justify-center items-start content-start"
     >
       <div class="col col-12 examList-container">
         <!-- TODO:
@@ -46,6 +47,23 @@
             </q-tab-panels>
           </div>
         </div>
+      </div>
+    </div>
+    <div v-else
+         class="row">
+      <div class="col-12 flex column flex-center">
+        <img class="no-item"
+             src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_azmuns.png"
+             alt="no-item">
+        <div class="no-item-title">
+          شما آزمون ساخته شده ای ندارید
+        </div>
+        <a class="new-link">
+          ثبت نام در آزمون
+        </a>
+        <a class="new-link">
+          ساخت آزمون جدید
+        </a>
       </div>
     </div>
   </div>
@@ -121,4 +139,44 @@ export default defineComponent({
       padding: 16px 0;
     }
 }
+
+.no-item {
+    width: 290px;
+    height: 290px;
+    margin: 160px 0 30px 0;
+
+    @media only screen and (max-width: 390px){
+      width: 230px;
+      height: 230px;
+      margin: 100px 0 30px 0;
+
+    }
+  }
+  .no-item-title {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 34px;
+    text-align: center;
+    color: #6D708B;
+
+    @media only screen and (max-width: 600px){
+      font-size: 20px;
+      line-height: 31px;
+    }
+    @media only screen and (max-width: 390px){
+      font-size: 18px;
+      line-height: 28px;
+    }
+  }
+  .new-link {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+    text-align: center;
+    color: #8075DC;
+    text-transform: none;
+    margin-top: 12px;
+  }
 </style>
