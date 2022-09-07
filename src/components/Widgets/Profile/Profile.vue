@@ -6,7 +6,6 @@
       <entity-crud-form-builder
         ref="EntityCrudFormBuilder"
         v-model:value="inputs"
-        :after-get-data="test"
       />
 
       <div class="card-actions">
@@ -73,7 +72,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'جنسیت', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'gender.id', responseKey: 'gender.id', label: '', col: 'col-12', placeholder: ' ' }
+            { type: 'select', name: 'gender', responseKey: 'gender', label: '', col: 'col-12', placeholder: ' ' }
           ]
         },
         {
@@ -145,35 +144,91 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'مدرسه', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'school', responseKey: 'school', label: '', col: 'col-12', placeholder: ' ' }
+            { type: 'input', name: 'school', responseKey: 'school', label: '', options: {}, col: 'col-12', placeholder: ' ' }
           ]
         }
 
-      ]
+      ],
+      genders: null,
+      provinces: null,
+      cities: null
     }
   },
 
   mounted() {
-    this.$axios.get(API_ADDRESS.user.formData)
-      .then((resp) => {
-        console.log('getUserFormData res :', resp)
-        // this.genders = resp.data.data.genders
-        // this.provinces = resp.data.data.provinces
-        // this.cities = resp.data.data.cities
-      })
-      .catch((err) => {
-        console.log('err:', err)
-      })
-    this.setData()
+    this.onLoadPage()
   },
 
   computed: {
     user () {
       return this.$store.getters['Auth/user']
     }
+    // genderList () {
+    //   return this.genders.map(gender => {
+    //     return {
+    //       label = gender.title,
+    //       value = gender.id
+    //     } })
+    // }
   },
 
   methods: {
+    onLoadPage () {
+      this.getFormData()
+        .then(() => {
+          this.setInputsInitData()
+        })
+    },
+
+    getFormData () {
+      return new Promise((resolve, reject) => {
+        this.$axios.get(API_ADDRESS.user.formData)
+          .then((response) => {
+            this.genders = response.data.data.genders
+            this.provinces = response.data.data.provinces
+            this.cities = response.data.data.cities
+            return resolve(true)
+          })
+          .catch(() => {
+            reject(true)
+          })
+      })
+    },
+
+    setInputsInitData () {
+      this.$refs.EntityCrudFormBuilder.loadInputData(this.user, this.inputs)
+      this.setInputOption(this.inputs, 'gender', this.genders)
+    },
+
+    setInputOption (inputList, inputName, optionList) {
+      inputList.forEach(input => {
+        if (input.name === inputName) {
+          console.log('input1', input)
+          input.options = optionList
+          console.log('input2', input)
+          return
+        }
+        if (input.type === 'formBuilder' && input.value.length > 0) {
+          this.setInputOption(input.value, inputName, optionList)
+        }
+      })
+      // const input = this.findInput(inputList, inputName)
+      // console.log('in', input)
+      // input.options = optionList
+    },
+
+    findInput (inputList, inputName) {
+      inputList.forEach(input => {
+        if (input.name === inputName) {
+          console.log('input', input)
+          return input
+        }
+        if (input.type === 'formBuilder' && input.value.length > 0) {
+          this.findInput(input.value, inputName)
+        }
+      })
+    },
+
     edit () {
       this.$axios.get(API_ADDRESS.user.formData)
         .then((resp) => {
@@ -186,13 +241,8 @@ export default {
           console.log(err)
         }
         )
-    },
-    test () {
-      console.log('hi')
-    },
-    setData () {
-      this.$refs.EntityCrudFormBuilder.loadInputData(this.user, this.inputs)
     }
+
   }
 }
 </script>
