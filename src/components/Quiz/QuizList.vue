@@ -1,5 +1,6 @@
 <template>
-  <div class="quiz-list-container">
+  <div v-if="true"
+       class="quiz-list-container">
     <div class="row">
       <div class="col-6">
         <div class="search-bar">
@@ -118,6 +119,20 @@
           </q-item-section>
         </q-item>
       </q-list>
+    </div>
+  </div>
+  <div v-else
+       class="row">
+    <div class="col-12 flex column flex-center">
+      <img class="no-item"
+           src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_azmuns.png"
+           alt="no-item">
+      <div class="no-item-title">
+        شما آزمون ساخته شده ای ندارید
+      </div>
+      <a class="new-link">
+        ساخت آزمون جدید
+      </a>
     </div>
   </div>
 </template>
@@ -283,7 +298,6 @@ export default defineComponent({
       window.open(bookletUrl, '_blank').focus()
     },
     setFilter() {
-      console.log(this.$refs.filterForm.inputData)
     },
     toggleFilter() {
       this.filterBar = !this.filterBar
@@ -527,5 +541,43 @@ export default defineComponent({
         }
       }
     }
+  }
+
+  .no-item {
+    width: 230px;
+    height: 230px;
+    margin: 30px 0;
+
+    @media only screen and (max-width: 390px){
+      width: 230px;
+      height: 230px;
+    }
+  }
+  .no-item-title {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 34px;
+    text-align: center;
+    color: #6D708B;
+
+    @media only screen and (max-width: 600px){
+      font-size: 20px;
+      line-height: 31px;
+    }
+    @media only screen and (max-width: 390px){
+      font-size: 18px;
+      line-height: 28px;
+    }
+  }
+  .new-link {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+    text-align: center;
+    color: #8075DC;
+    text-transform: none;
+    margin-top: 12px;
   }
 </style>
