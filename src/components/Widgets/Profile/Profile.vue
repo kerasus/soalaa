@@ -72,7 +72,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'جنسیت', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'gender', responseKey: 'gender', label: '', col: 'col-12', placeholder: ' ' }
+            { type: 'select', name: 'gender', responseKey: 'gender.title', label: '', col: 'col-12', placeholder: '' }
           ]
         },
         {
@@ -197,50 +197,36 @@ export default {
 
     setInputsInitData () {
       this.$refs.EntityCrudFormBuilder.loadInputData(this.user, this.inputs)
-      this.setInputOption(this.inputs, 'gender', this.genders)
+      this.setInputOption(this.inputs, 'gender', this.customizedGenderList())
     },
 
     setInputOption (inputList, inputName, optionList) {
       inputList.forEach(input => {
         if (input.name === inputName) {
-          console.log('input1', input)
           input.options = optionList
-          console.log('input2', input)
           return
         }
         if (input.type === 'formBuilder' && input.value.length > 0) {
           this.setInputOption(input.value, inputName, optionList)
         }
       })
-      // const input = this.findInput(inputList, inputName)
-      // console.log('in', input)
-      // input.options = optionList
     },
 
-    findInput (inputList, inputName) {
-      inputList.forEach(input => {
-        if (input.name === inputName) {
-          console.log('input', input)
-          return input
-        }
-        if (input.type === 'formBuilder' && input.value.length > 0) {
-          this.findInput(input.value, inputName)
-        }
+    customizedGenderList () {
+      const newGenderList = []
+      this.genders.forEach(gender => {
+        newGenderList.push({
+          label: gender.title,
+          value: gender.id
+        })
       })
+      return newGenderList
     },
 
     edit () {
-      this.$axios.get(API_ADDRESS.user.formData)
-        .then((resp) => {
-          console.log('getUserFormData res :', resp)
-          this.genders = resp.data.data.genders
-          this.provinces = resp.data.data.provinces
-          this.cities = resp.data.data.cities
-        })
-        .catch((err) => {
-          console.log(err)
-        }
-        )
+      this.$axios.put(API_ADDRESS.user.base)
+        .then((resp) => {})
+        .catch(() => {})
     }
 
   }
