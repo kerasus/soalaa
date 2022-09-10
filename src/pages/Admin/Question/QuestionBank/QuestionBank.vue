@@ -65,6 +65,7 @@ export default {
   components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data () {
     return {
+      filterData: null,
       checkBox: false,
       filterQuestions: {
         major_type: [],
@@ -126,8 +127,8 @@ export default {
   methods: {
     onFilter (filterData) {
       this.$emit('onFilter', filterData)
-      const filters = this.getFiltersForRequest(filterData)
-      this.getQuestionData(1, filters)
+      this.filterData = this.getFiltersForRequest(filterData)
+      this.getQuestionData(1, this.filterData)
     },
     RemoveChoice (title) {
       const target = this.selectedQuestions.filter(question => question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
@@ -185,7 +186,7 @@ export default {
     },
 
     updatePage (page) {
-      this.getQuestionData(page)
+      this.getQuestionData(page, this.filterData)
     },
     deleteFilterItem (filter) {
       // this.$refs.filter.setTicked('tree', filter.id, false)
