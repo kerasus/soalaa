@@ -281,7 +281,8 @@
                  color="primary"
                  icon="isax:edit-2"
                  class="question-item-button"
-                 @click="redirectToEditPage" />
+                 :to="redirectToEditPage"
+          />
         </div>
       </div>
       <div class="rate-report-comment-answer">
@@ -529,6 +530,14 @@ export default {
   computed: {
     trueChoice () {
       return this.question.choices.getSelected()
+    },
+    redirectToEditPage () {
+      return {
+        name: 'Admin.Question.Edit',
+        params: {
+          question_id: this.question.id
+        }
+      }
     }
   },
   methods: {
@@ -548,14 +557,6 @@ export default {
       }
       const persianRegex = /[\u0600-\u06FF]/
       return !string.match(persianRegex)
-    },
-    redirectToEditPage () {
-      this.$router.push({
-        name: 'Admin.Question.Edit',
-        params: {
-          question_id: this.question.id
-        }
-      })
     },
     selectQuestion () {
       this.$emit('checkSelect', this.question)
