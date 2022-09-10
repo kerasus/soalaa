@@ -140,7 +140,7 @@
               >
                 <div class="bank-icon-container">
                   <q-img
-                    src="https://alaatv.com/acm/extra/payment/gateway/parsian-logo.png"
+                    src="https://nodes.alaatv.com/aaa/landing/Banklogos/saman.png"
                     class="bank-icon"
                   />
                 </div>
