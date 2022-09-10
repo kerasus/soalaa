@@ -53,6 +53,21 @@
         @attach="emitAttachExam"
         @detach="emitDetachExam"
       />
+      <div class="detail-box col-3"
+           style="padding-right:0;">
+        <div class="detail-box-title">هدف سوال</div>
+        <q-select
+          v-model="questionTargets"
+          borderless
+          option-value="id"
+          option-label="value"
+          use-input
+          use-chips
+          multiple
+          :options="questionTargetList"
+          :disable="!editable"
+        />
+      </div>
       <div class="detail-box detail-box-first col-3">
         <div class="detail-box-title">پایه تحصیلی</div>
         <q-select
@@ -79,7 +94,7 @@
           :disable="!editable"
         />
       </div>
-      <div class="detail-box col-6">
+      <div class="detail-box col-3">
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
           <div class="input-box">
@@ -186,6 +201,12 @@ export default {
         return []
       }
     },
+    questionTargetList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
     authorshipDatesList: {
       type: Array,
       default () {
@@ -217,6 +238,7 @@ export default {
     return {
       dialogValue: false,
       questionAuthor: null,
+      questionTargets: null,
       authorshipDate: null,
       questionLevel: null,
       grade: '',
@@ -273,6 +295,7 @@ export default {
     loadQuestionDataFromResponse () {
       this.authorshipDate = this.question.years
       this.questionAuthor = this.question.reference
+      this.questionTargets = this.question.targets
       this.majors = this.question.majors
       this.questionLevel = this.question.level.toString()
       if (this.question.tags.list[0]) {
@@ -347,6 +370,7 @@ export default {
       this.question.majors = (this.majors) ? this.majors.map(item => item.id) : []
       this.question.years = (this.authorshipDate) ? this.authorshipDate.map(item => item.id) : []
       this.question.reference = (this.questionAuthor) ? this.questionAuthor.map(item => item.id) : []
+      this.question.targets = (this.questionTargets) ? this.questionTargets.map(item => item.id) : []
       this.question.level = this.questionLevel
       this.question.tags = new TreeNodeList(this.lastSelectedNodes)
 
