@@ -185,6 +185,7 @@ export default {
             { displayName: 'مرجع سوال', routeName: 'Admin.QuestionAuthors.Index', active: false },
             // { displayName: 'معلفان سوال', routeName: 'Admin.QuestionAuthors.Index', active: false },
             { displayName: 'تاریخ تالیف', routeName: 'Admin.AuthorshipDates.Index', active: false },
+            { displayName: 'اهداف', routeName: 'Admin.QuestionTarget.Index', active: false },
             { displayName: 'رشته تحصیلی', routeName: 'Admin.Majors.Index', active: false }
           ]
         },

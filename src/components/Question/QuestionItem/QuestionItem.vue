@@ -198,7 +198,7 @@
     </q-card-section>
 
     <q-card-section class="question-section">
-      <div v-if="finalApprovalMode"
+      <div v-if="finalApprovalMode || showQuestionNumber"
            class="add-btn question-index">
         <div class="question-number">
           {{ question.order }}
@@ -437,6 +437,10 @@ export default {
       default: ''
     },
     finalApprovalMode: {
+      type: Boolean,
+      default: false
+    },
+    showQuestionNumber: {
       type: Boolean,
       default: false
     }

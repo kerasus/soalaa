@@ -2,6 +2,7 @@ import API_ADDRESS from 'src/api/Addresses'
 import { Cart } from 'src/models/Cart'
 import { axios } from 'src/boot/axios'
 import CookieCart from 'src/assets/js/CookieCart'
+import { Notify } from 'quasar'
 
 export function addToCart (context, data) {
   const isUserLogin = !!this.getters['Auth/isUserLogin']
@@ -12,6 +13,14 @@ export function addToCart (context, data) {
       axios
         .post(API_ADDRESS.cart.orderproduct.add, { product_id: data.product.id, products: data.products, attribute: data.attribute, seller: 2 })
         .then((response) => {
+          Notify.create({
+            type: 'positive',
+            color: 'positive',
+            timeout: 5000,
+            position: 'top',
+            message: 'محصول به سبد خرید اضافه شد.',
+            icon: 'report_problem'
+          })
           return resolve(response)
         })
         .catch((error) => {
@@ -87,6 +96,14 @@ export function removeItemFromCart (context, productId) {
       axios
         .delete(API_ADDRESS.cart.orderproduct.delete(productId))
         .then((response) => {
+          Notify.create({
+            type: 'negative',
+            color: 'negative',
+            timeout: 5000,
+            position: 'top',
+            message: 'محصول از سبد خرید حذف شد.',
+            icon: 'report_problem'
+          })
           return resolve(response)
         })
         .catch((error) => {
