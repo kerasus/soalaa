@@ -1,49 +1,29 @@
 <template>
-  <span>
+  <span class="topic-component">
     <topic
       v-if="topic.parentTopic"
       :topic="topic.parentTopic"
     />
-    <v-chip
-      dark
-      color="purple lighten-1"
+    <q-chip
+      text-color="white"
+      color="purple-5"
     >
       {{ topic.name }}
-    </v-chip>
+    </q-chip>
   </span>
 </template>
 
 <script>
-  import topic from '@/components/Question/topic'
-
-  export default {
-    name: 'Topic',
-    components: {
-      topic
-    },
-    props: ['topic'],
-    computed: {
-      majorName () {
-        if (this.topic.module && this.topic.module.major) {
-          return this.topic.module.major.name
-        }
-        return ''
-      },
-      gradeName () {
-        if (this.topic.module && this.topic.module.grade) {
-          return this.topic.module.grade.name
-        }
-        return ''
-      }
-    },
-    methods: {
-      isLastParent () {
-        return !!topic.parentTopic
-      }
-    }
-  }
+export default {
+  name: 'Topic',
+  props: ['topic']
+}
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.topic-component{
+  .q-chip{
+    margin: 0;
+  }
+}
 </style>

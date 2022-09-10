@@ -1,17 +1,33 @@
 <template>
   <div
     class="html-katex"
+    style="overflow: hidden"
     :dir="!isLtrString ? 'rtl' : 'ltr'"
-    v-html="localInput"
+    v-html="computedKatex"
   />
 </template>
 
 <script>
-import 'katex/dist/katex.min.css'
 import katex from 'katex'
+import 'katex/dist/katex.min.css'
+
+// import { createApp } from 'vue'
+// const app = createApp({})
+// import VueKatex from 'vue-katex'
+// import 'katex/dist/katex.min.css'
+// app.use(VueKatex, {
+//   globalOptions: {
+//     delimiters: [
+//       { left: '$$', right: '$$', display: true },
+//       { left: '\\[', right: '\\]', display: true },
+//       { left: '$', right: '$', display: false },
+//       { left: '\\(', right: '\\)', display: false }
+//     ]
+//   }
+// })
 
 export default {
-  name: "VueKatex",
+  name: 'VueKatex',
   props: {
     input: {
       type: String,
@@ -20,12 +36,11 @@ export default {
     ltr: {
       type: Boolean,
       default: null
-    },
+    }
   },
   data () {
     return {
-      rtl: true,
-      localInput: ''
+      rtl: true
     }
   },
   computed: {
@@ -33,7 +48,7 @@ export default {
       if (this.ltr !== null) {
         return this.ltr
       }
-      let string = this.localInput
+      const string = this.input
       if (!string) {
         return false
       }
@@ -42,10 +57,25 @@ export default {
       const persianRegex = /[\u0600-\u06FF]/
       return !string.match(persianRegex)
     },
-  },
-  watch: {
-    input (newVal) {
-      this.loadLocalInput(newVal)
+    computedKatex () {
+      let string = this.input
+      string = string.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&')
+      const regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms
+      string = string.replace(regex, (match) => {
+        let finalMatch
+        if (match.includes('$$')) {
+          finalMatch = match.slice(2, -2)
+        } else if (match.includes('$')) {
+          finalMatch = match.slice(1, -1)
+        } else {
+          finalMatch = match.slice(2, -2)
+        }
+        return katex.renderToString(finalMatch, {
+          throwOnError: false,
+          strict: 'warn'
+        })
+      })
+      return string
     }
   },
   mounted () {
@@ -56,161 +86,27 @@ export default {
     }, 1000)
   },
   created () {
-    if (this.input === null || typeof this.input === 'undefined') {
-      this.loadLocalInput('this.input')
-    } else {
-      this.loadLocalInput(this.input)
-    }
-  },
-  methods: {
-    loadLocalInput (newVal) {
-      this.localInput = newVal
-      this.prepareForKatex()
-    },
-    prepareForKatex () {
-      let regex = /(\${1}((?!\$).)+?\${1})|(\${2}((?!\$).)+?\${2})|(\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])/gms;
-      this.localInput = this.localInput.replace(regex, (match) => {
-        return ' ' + match + ' '
-      })
-      this.localInput = this.localInput.replaceAll('\\[ ', '\\[')
-      this.localInput = this.localInput.replaceAll(' \\]', ' \\]')
-      this.localInput = this.localInput.replaceAll(' $', '$')
-      this.localInput = this.localInput.replaceAll('$ ', '$')
-      this.localInput = this.localInput.replaceAll('\\colon ', ':')
-      this.localInput = this.localInput.replace(regex, (match) => {
-        let finalMatch
-        if (match.includes('$$')) {
-          finalMatch = match.slice(2, -2)
-        } else if (match.includes('$')) {
-          finalMatch = match.slice(1, -1)
-        } else {
-          finalMatch = match.slice(2, -2)
-        }
-        finalMatch = finalMatch.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&').replaceAll('&nbsp;', ' ')
-        return katex.renderToString(finalMatch, {
-          throwOnError: false,
-          safe: true,
-          trust: true
-        })
-      })
-    }
+    // this.rtl = !this.isLtrString(this.input)
   }
 }
 </script>
 
-<style lang="scss">
-.html-katex .accent {
-  background-color: unset !important;
-  border-color: unset !important;
-}
-
-.html-katex .overline {
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  letter-spacing: inherit !important;
-  line-height: inherit !important;
-  text-transform: unset !important;
-  font-family: inherit !important;
-}
-
-  .katex * {
-    font-family: KaTeX_Main;
-  }
-
-  #mathfield .ML__cmr,
-  .katex .mtight {
-    font-family: IRANSans;
-  }
-
-  .html-katex {
-    width: 100%;
-    display: grid;
-
-    .katex {
-      direction: ltr;
-      .katex-html {
-        .accent {
-          background-color: transparent !important;
-          border-color: transparent !important;
-        }
-        .overline {
-          font-size: inherit !important;
-          font-weight: inherit !important;
-          letter-spacing: inherit !important;
-          line-height: inherit !important;
-          text-transform: inherit !important;
-          font-family: inherit !important;
-        }
-      }
-    }
-
-    table {
-      border-collapse: collapse;
-      table-layout: fixed;
-      width: auto;
-      margin: 0;
-      overflow: hidden;
-
-      td,
-      th {
-        min-width: 1em;
-        border: 2px solid #ced4da;
-        padding: 3px 5px;
-        vertical-align: top;
-        box-sizing: border-box;
-        position: relative;
-
-        > * {
-          margin-bottom: 0;
-        }
-      }
-
-      th {
-        font-weight: bold;
-        text-align: left;
-        background-color: #f1f3f5;
-      }
-    }
-  }
-  .beit {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
-  }
-
-  .beit .mesra {
-    position: relative;
-    width: 100%;
-    min-height: 1px;
-    padding-right: 15px;
-    padding-left: 15px;
-    -ms-flex-preferred-size: 0;
-    flex-basis: 0;
-    -webkit-box-flex: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    max-width: 100%;
-    white-space: nowrap;
-  }
-
-  @media only screen and (max-width: 500px) {
-    .beit {
-      flex-direction: column;
-    }
-    .beit .mesra {
-      white-space: normal;
-      flex-basis: auto;
-    }
-  }
-</style>
-
 <style scoped lang="scss">
+// ToDo: check this styles in scoped style tag
+#mathfield .ML__cmr,
+.katex .mtight {
+  font-family: IRANSans;
+}
 
 .html-katex {
+  width: 100%;
+
+  .katex {
+    /*rtl:ignore*/
+    direction: ltr !important;
+    /*rtl:ignore*/
+  }
+
   table {
     border-collapse: collapse;
     table-layout: fixed;
@@ -237,7 +133,75 @@ export default {
       text-align: left;
       background-color: #f1f3f5;
     }
+  }
+}
+.beit {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
 
+.beit .mesra {
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+  -ms-flex-preferred-size: 0;
+  flex-basis: 0;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+@media only screen and (max-width: 500px) {
+  .beit {
+    flex-direction: column;
+  }
+  .beit .mesra {
+    white-space: normal;
+    flex-basis: auto;
+  }
+}
+.html-katex > p {
+  direction: inherit;
+}
+
+.html-katex > p:first-child {
+  display: inline-block;
+}
+// check top styles in scoped style tag
+
+.html-katex {
+  table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    td,
+    th {
+      min-width: 1em;
+      border: 2px solid #ced4da;
+      padding: 3px 5px;
+      vertical-align: top;
+      box-sizing: border-box;
+      position: relative;
+      > * {
+        margin-bottom: 0;
+      }
+    }
+    th {
+      font-weight: bold;
+      text-align: left;
+      background-color: #f1f3f5;
+    }
     .selectedCell:after {
       z-index: 2;
       position: absolute;
@@ -249,7 +213,6 @@ export default {
       background: rgba(200, 200, 255, 0.4);
       pointer-events: none;
     }
-
     .column-resize-handle {
       position: absolute;
       right: -2px;
@@ -260,11 +223,5 @@ export default {
       pointer-events: none;
     }
   }
-}
-</style>
-
-<style>
-.html-katex > p:first-child {
-  display: inline-block;
 }
 </style>
