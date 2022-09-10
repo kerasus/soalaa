@@ -150,6 +150,7 @@
                   label="بانک سامان"
                   checked-icon="radio_button_checked"
                   unchecked-icon="radio_button_unchecked"
+                  :class="{'checked-check-box': selectedBank}"
                 />
               </div>
             </div>
@@ -673,8 +674,12 @@ export default {
                 border-radius: 8px;
                 padding: 8px;
                 cursor: pointer;
-                &:deep(.q-checkbox) {
-                  width: 20px;
+
+                .checked-check-box {
+                  &:deep(.q-icon) {
+                    color: #FFB74D;
+
+                  }
                 }
 
                 &:deep(.q-checkbox__inner  ) {
