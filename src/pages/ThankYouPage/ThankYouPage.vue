@@ -8,7 +8,7 @@
 
     <div class="tracking-code-container">
       <span class="tracking-code-title">کد پیگیری:</span>
-      <span class="tracking-code">{{12345}}</span>
+      <span class="tracking-code">{{ trackingCode }}</span>
     </div>
     <router-link
       :to="{name: 'dashboard'}"
