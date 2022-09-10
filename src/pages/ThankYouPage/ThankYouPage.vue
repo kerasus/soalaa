@@ -6,9 +6,9 @@
 
     <div class="title">ثبت نام شما با موفقیت انجام شد</div>
 
-    <div class="issue-tracking">
-      <span class="issue-tracking-code-title">کد پیگیری:</span>
-      <span class="issue-tracking-code">{{12345}}</span>
+    <div class="tracking-code-container">
+      <span class="tracking-code-title">کد پیگیری:</span>
+      <span class="tracking-code">{{12345}}</span>
     </div>
     <router-link
       :to="{name: 'dashboard'}"
@@ -26,6 +26,9 @@ export default {
     return {}
   },
   computed: {
+    trackingCode () {
+      return this.$route.params.orderId
+    }
   },
   methods: {}
 }
@@ -56,17 +59,17 @@ export default {
     letter-spacing: -0.03em;
   }
 
-  .issue-tracking {
+  .tracking-code-container {
     font-style: normal;
     font-size: 18px;
     line-height: 28px;
     letter-spacing: -0.03em;
     color: #6D708B;
-    .issue-tracking-code-title {
+    .tracking-code-title {
       font-weight: 400;
       margin-right: 109px;
     }
-    .issue-tracking-code {
+    .tracking-code {
       font-weight: 600;
     }
   }
@@ -95,8 +98,8 @@ export default {
       line-height: 34px;
       margin-top: 53px;
     }
-    .issue-tracking {
-      .issue-tracking-code-title {
+    .tracking-code-container {
+      .tracking-code-title {
         margin-right: 83px;
       }
     }
@@ -130,9 +133,9 @@ export default {
       line-height: 28px;
       margin-top: 40px;
     }
-    .issue-tracking {
+    .tracking-code-container {
       font-size: 14px;
-      .issue-tracking-code-title {
+      .tracking-code-title {
         margin-right: 77px;
       }
     }

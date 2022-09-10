@@ -529,6 +529,19 @@ const routes = [
           layoutHeaderVisible: false,
           layoutLeftDrawerVisible: false
         }
+      },
+      {
+        path: '/order/:orderId/thankYou',
+        name: 'thankYouPage',
+        component: () => import('pages/ThankYouPage/ThankYouPage'),
+        meta: {
+          middlewares: [
+            Permissions.hasPermission('examStore')]
+        },
+        layoutConfig: {
+          layoutHeaderVisible: false,
+          layoutLeftDrawerVisible: false
+        }
       }
 
     ]
