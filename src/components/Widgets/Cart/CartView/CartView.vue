@@ -109,13 +109,15 @@
               class="action-buttons"
               :class="expandedObject[i] ? '' : 'open-expansion'"
             >
-              <a
-                v-if="!expandedObject[i] || !order.order_product"
-                class="link"
-                :href="order.grand?.url?.web"
-              >
-                {{ descLinkLabel }}
-              </a>
+              <span v-if="!expandedObject[i] || !order.order_product">
+                <a
+                  v-if="order.grand && order.grand.url && order.grand.url.web"
+                  class="link"
+                  :href="order.grand?.url?.web"
+                >
+                  {{ descLinkLabel }}
+                </a>
+              </span>
 
               <q-expansion-item
                 v-if="order.order_product?.list.length > 0"
@@ -155,6 +157,7 @@
 
                   <q-card-section class="details-expansion-actions">
                     <a
+                      v-if="order.grand && order.grand.url && order.grand.url.web"
                       class="link expansion-link"
                       :href="order.grand?.url?.web"
                     >
