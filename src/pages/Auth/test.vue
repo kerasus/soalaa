@@ -60,7 +60,7 @@ export default {
   mounted () {
     const video = this.$refs.videoPlayer
     if (video) {
-      console.log('hasta')
+      // console.log('hasta')
     }
     // console.log('debug mounted')
   },

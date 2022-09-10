@@ -237,7 +237,7 @@
                        class="sub-btn"
                        :class="{'active': selectPackMode}"
                        :disable="!selectPackMode"
-                       @click="showMessageDialog"
+                       @click="addToCart"
                 >
                   <span class="sub-btn-text">
                     ثبت‌نام
@@ -1428,7 +1428,7 @@ export default {
   },
   methods: {
     async addToCart() {
-      console.log(this.selectedProductId)
+      // console.log('addToCart :', this.selectedProductId)
       try {
         await this.$store.dispatch('Cart/addToCart', this.selectedProductId)
         this.$router.push({ name: 'cart' })
@@ -1488,7 +1488,7 @@ export default {
         const productList = await this.callProductApi()
         this.adaptData(productList.data.data)
       } catch (e) {
-        console.log(e)
+        // console.log(e)
       }
     },
     callProductApi() {

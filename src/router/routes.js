@@ -517,8 +517,8 @@ const routes = [
         name: 'cart',
         component: () => import('pages/Cart/Cart'),
         meta: {
-          middlewares: [
-            Permissions.hasPermission('examStore')]
+          // middlewares: [
+          //   Permissions.hasPermission('examStore')]
         }
       }
 
