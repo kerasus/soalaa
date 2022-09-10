@@ -45,7 +45,10 @@
           </div>
         </div>
 
-        <div class="purchase-profit price-section">
+        <div
+          v-if="discountInPercent"
+          class="purchase-profit price-section"
+        >
           <div class="title">سود شما از خرید</div>
           <div
             v-if="loading"
@@ -68,26 +71,26 @@
         <q-separator class="invoice-separator" />
       </q-card-section>
 
-      <q-card-section class="invoice-coupon-section invoice-cart-section">
-        <div class="enter-coupon-code">
-          <div class="title">کد تخفیف:</div>
+      <!--      <q-card-section class="invoice-coupon-section invoice-cart-section">-->
+      <!--        <div class="enter-coupon-code">-->
+      <!--          <div class="title">کد تخفیف:</div>-->
 
-          <q-input
-            v-model="couponValue"
-            type="text"
-            label="کد تخفیف خود را وارد کنید"
-            class="coupon-input"
-            outlined
-          >
-            <template v-slot:append>
-              <q-btn label="ثبت"
-                     flat />
-            </template>
-          </q-input>
-        </div>
+      <!--          <q-input-->
+      <!--            v-model="couponValue"-->
+      <!--            type="text"-->
+      <!--            label="کد تخفیف خود را وارد کنید"-->
+      <!--            class="coupon-input"-->
+      <!--            outlined-->
+      <!--          >-->
+      <!--            <template v-slot:append>-->
+      <!--              <q-btn label="ثبت"-->
+      <!--                     flat />-->
+      <!--            </template>-->
+      <!--          </q-input>-->
+      <!--        </div>-->
 
-        <q-separator class="invoice-separator" />
-      </q-card-section>
+      <!--        <q-separator class="invoice-separator" />-->
+      <!--      </q-card-section>-->
 
       <q-card-section class="payment-section invoice-cart-section">
         <div class="final-price price-section">
@@ -131,58 +134,43 @@
             class="banks-gateway-list row"
           >
             <div class="bank-gateway-container col-lg-6  col-md-12 col-sm-6 col-xs-12">
-              <div class="bank-gateway">
+              <div
+                class="bank-gateway"
+                @click="clickOnGateway"
+              >
                 <div class="bank-icon-container">
                   <q-img
-                    src="https://alaatv.com/acm/extra/payment/gateway/parsian-logo.png"
+                    src="https://nodes.alaatv.com/aaa/landing/Banklogos/saman.png"
                     class="bank-icon"
                   />
                 </div>
-
-                <q-radio
+                <q-checkbox
                   v-model="selectedBank"
-                  val="2"
                   dir="ltr"
                   label="بانک سامان"
-                  class="select-bank-radio-button"
-                />
-              </div>
-            </div>
-
-            <div class="bank-gateway-container col-lg-6  col-md-12 col-sm-6 col-xs-12">
-              <div class="bank-gateway">
-                <div class="bank-icon-container">
-                  <q-img
-                    src="https://alaatv.com/acm/extra/payment/gateway/parsian-logo.png"
-                    class="bank-icon"
-                  />
-                </div>
-                <q-radio
-                  v-model="selectedBank"
-                  val="1"
-                  dir="ltr"
-                  label="بانک سامان"
-                  class="select-bank-radio-button"
+                  checked-icon="radio_button_checked"
+                  unchecked-icon="radio_button_unchecked"
                 />
               </div>
             </div>
           </div>
 
-          <div class="payment-description">
-            <p class="title">توضیحات</p>
+          <!--          <div class="payment-description">-->
+          <!--            <p class="title">توضیحات</p>-->
 
-            <q-input
-              v-model="shoppingDescribtion"
-              type="text"
-              label="اگر توضیحی درباره ی محصول دارید اینجا بنویسید"
-              class="payment-description-input"
-              outlined
-            />
-          </div>
+          <!--            <q-input-->
+          <!--              v-model="shoppingDescribtion"-->
+          <!--              type="text"-->
+          <!--              label="اگر توضیحی درباره ی محصول دارید اینجا بنویسید"-->
+          <!--              class="payment-description-input"-->
+          <!--              outlined-->
+          <!--            />-->
+          <!--          </div>-->
 
           <div class="payment-button-container payment-button-container-desktop">
             <div
               class="payment-button payment-button-desktop-view"
+              :class="{ 'payment-button-disable': !selectedBank}"
               @click="payment"
             >
               پرداخت و ثبت نهایی
@@ -290,7 +278,7 @@ export default {
         password: '',
         mobile: ''
       },
-      selectedBank: null,
+      selectedBank: false,
       shoppingDescribtion: '',
       loading: false
     }
@@ -338,6 +326,9 @@ export default {
     },
 
     payment() {
+      if (!this.selectedBank) {
+        return
+      }
       this.$store.commit('loading/loading', true)
 
       this.$store.dispatch('Cart/paymentCheckout')
@@ -363,8 +354,11 @@ export default {
 
     getPriceFormat(priceKey) {
       return this.cart.price.toman(priceKey, null)
-    }
+    },
 
+    clickOnGateway() {
+      this.selectedBank = !this.selectedBank
+    }
   }
 }
 </script>
@@ -679,6 +673,25 @@ export default {
                 border-radius: 8px;
                 padding: 8px;
                 cursor: pointer;
+                &:deep(.q-checkbox) {
+                  width: 20px;
+                }
+
+                &:deep(.q-checkbox__inner  ) {
+                  width: 20px;
+                }
+                &:deep(.q-checkbox__icon-container ) {
+                  width: 20px;
+                }
+
+                &:deep(.q-checkbox__label) {
+                  font-style: normal;
+                  font-weight: 400;
+                  font-size: 11px;
+                  line-height: 19px;
+                  letter-spacing: -0.05em;
+                  color: #23263B;
+                }
 
                 @media screen and (max-width: 1439px) {
                   width: 100%;
@@ -713,14 +726,6 @@ export default {
                     color: #FFB74D;
                   }
 
-                  &:deep(.q-radio__label) {
-                    font-style: normal;
-                    font-weight: 400;
-                    font-size: 11px;
-                    line-height: 19px;
-                    letter-spacing: -0.05em;
-                    color: #23263B;
-                  }
                 }
               }
             }
@@ -916,6 +921,11 @@ export default {
       color: #FFFFFF;
       cursor: pointer;
       width: 100%;
+
+      &.payment-button-disable {
+        opacity: 0.5;
+        cursor: default;
+      }
 
       @media screen and (max-width: 599px) {
         width: 104px;

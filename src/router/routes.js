@@ -98,6 +98,11 @@ const routes = [
     children: [
       {
         path: '',
+        name: 'HomePage',
+        component: () => import('pages/User/landing/landing')
+      },
+      {
+        path: 'landing',
         name: 'landing',
         component: () => import('layouts/LandingLayout'),
         children: [
@@ -516,9 +521,26 @@ const routes = [
         path: '/cart',
         name: 'cart',
         component: () => import('pages/Cart/Cart'),
-        meta: {
-          // middlewares: [
-          //   Permissions.hasPermission('examStore')]
+        // meta: {
+        //   middlewares: [
+        //     Permissions.hasPermission('examStore')]
+        // },
+        layoutConfig: {
+          layoutHeaderVisible: false,
+          layoutLeftDrawerVisible: false
+        }
+      },
+      {
+        path: '/order/:orderId/thankYou',
+        name: 'thankYouPage',
+        component: () => import('pages/ThankYouPage/ThankYouPage'),
+        // meta: {
+        //   middlewares: [
+        //     Permissions.hasPermission('examStore')]
+        // },
+        layoutConfig: {
+          layoutHeaderVisible: false,
+          layoutLeftDrawerVisible: false
         }
       }
 
