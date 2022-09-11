@@ -97,8 +97,8 @@ export function removeItemFromCart (context, productId) {
         .delete(API_ADDRESS.cart.orderproduct.delete(productId))
         .then((response) => {
           Notify.create({
-            type: 'negative',
-            color: 'negative',
+            type: 'positive',
+            color: 'positive',
             timeout: 5000,
             position: 'top',
             message: 'محصول از سبد خرید حذف شد.',
