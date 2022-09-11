@@ -82,7 +82,8 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between
+  justify-content: space-between;
+  background-color: #f1f1f1;
 }
 </style>
 <style lang="scss">

@@ -1431,6 +1431,7 @@ export default {
       // console.log('addToCart :', this.selectedProductId)
       try {
         await this.$store.dispatch('Cart/addToCart', this.selectedProductId)
+        // uninstall and install router :)
         this.$router.push({ name: 'cart' })
       } catch (e) {
       }
@@ -1473,7 +1474,8 @@ export default {
           return
         }
         const packProduct = absGrand.grandsChildren[0]
-        this.tabPages[targetIndex].productBandles[bundleIndex].id = packProduct.id
+        this.tabPages[targetIndex].productBandles[bundleIndex].id = absGrand.id
+        this.tabPages[targetIndex].productBandles[bundleIndex].allId = packProduct.id
         this.tabPages[targetIndex].productBandles[bundleIndex].packUnitPrices = packProduct.children[0].price.base
         this.tabPages[targetIndex].productBandles[bundleIndex].packFinalPrices = packProduct.price.final
         this.tabPages[targetIndex].productBandles[bundleIndex].packBasePrices = packProduct.price.base
@@ -1504,8 +1506,8 @@ export default {
       this.selectedGrade = this.currentGrades[0]
       this.$nextTick(() => {
         this.selectedProductId = {
-          product: { id: this.currentBandle.id }
-          // product_id: this.currentBandle.id
+          product: { id: this.currentBandle.id },
+          products: [this.currentBandle.allId]
         }
       })
     },
