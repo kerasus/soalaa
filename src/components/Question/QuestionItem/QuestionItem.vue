@@ -241,7 +241,8 @@
           <div v-if="true"
                class=" answer-description-video">
             <div class="video">
-              <video-player />
+              <!--              ToDo : uncomment this when backend give you a valid key-->
+              <!--              <video-player />-->
             </div>
             <div class="title text-center">
               پاسخنامه ویدیویی - محمد امین نباخته
@@ -406,12 +407,16 @@
 <script>
 import VueKatex from 'src/components/VueKatex'
 import question from './Question'
-import VideoPlayer from 'src/components/VideoPlayer'
+// import VideoPlayer from 'src/components/VideoPlayer'
 import { Question } from 'src/models/Question'
 
 export default {
   name: 'QuestionItem',
-  components: { VueKatex, question, VideoPlayer },
+  components: {
+    VueKatex,
+    question
+    // VideoPlayer
+  },
   props: {
     question: {
       type: Question,
