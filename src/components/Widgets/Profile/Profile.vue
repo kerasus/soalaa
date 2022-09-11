@@ -99,7 +99,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'نوع کاربری', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'title', responseKey: 'data.title', label: '', col: 'col-12', placeholder: ' ' }
+            { type: 'input', value: 'دانش آموز', col: 'col-12', placeholder: ' ', disable: true }
           ]
         },
         {
@@ -108,7 +108,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'رشته تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'major', responseKey: 'major.name', options: [{ label: 'ریاضی', value: '1' }, { label: 'تجربی', value: '2' }], col: 'col-12' }
+            { type: 'select', name: 'major', responseKey: 'major.title', col: 'col-12' }
           ]
         },
         {
@@ -117,7 +117,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'پایه تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'grade.id', responseKey: 'grade.name', col: 'col-12' }
+            { type: 'select', name: 'grade', responseKey: 'grade.title', col: 'col-12' }
           ]
         },
         {
@@ -126,7 +126,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'استان', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'province', responseKey: 'province', col: 'col-12' }
+            { type: 'select', name: 'province', responseKey: 'province.title', col: 'col-12' }
           ]
         },
         {
@@ -135,7 +135,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'شهر', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'city', responseKey: 'city', col: 'col-12' }
+            { type: 'select', name: 'city', responseKey: 'city.title', placeholder: 'city.title', col: 'col-12' }
           ]
         },
         {
@@ -151,7 +151,9 @@ export default {
       ],
       genders: null,
       provinces: null,
-      cities: null
+      cities: null,
+      majors: null,
+      grades: null
     }
   },
 
@@ -187,6 +189,8 @@ export default {
             this.genders = response.data.data.genders
             this.provinces = response.data.data.provinces
             this.cities = response.data.data.cities
+            this.majors = response.data.data.majors
+            this.grades = response.data.data.grades
             return resolve(true)
           })
           .catch(() => {
@@ -197,30 +201,39 @@ export default {
 
     setInputsInitData () {
       this.$refs.EntityCrudFormBuilder.loadInputData(this.user, this.inputs)
-      this.setInputOption(this.inputs, 'gender', this.customizedGenderList())
+      this.setInputOption(this.inputs, 'gender', this.customizedOptionList(this.genders))
+      this.setInputOption(this.inputs, 'province', this.customizedOptionList(this.provinces))
+      this.setInputOption(this.inputs, 'city', this.customizedOptionList(this.cities))
+      this.setInputOption(this.inputs, 'major', this.customizedOptionList(this.majors))
+      this.setInputOption(this.inputs, 'grade', this.customizedOptionList(this.grades))
     },
 
     setInputOption (inputList, inputName, optionList) {
       inputList.forEach(input => {
+        if (input.type === 'select') {
+          input.options.push({ lable: 'انخاب کنید', value: 'select' })
+        }
+
         if (input.name === inputName) {
           input.options = optionList
           return
         }
+
         if (input.type === 'formBuilder' && input.value.length > 0) {
           this.setInputOption(input.value, inputName, optionList)
         }
       })
     },
 
-    customizedGenderList () {
-      const newGenderList = []
-      this.genders.forEach(gender => {
-        newGenderList.push({
-          label: gender.title,
-          value: gender.id
+    customizedOptionList (currentList) {
+      const newOptionList = []
+      currentList.forEach(option => {
+        newOptionList.push({
+          label: option.title,
+          value: option.id
         })
       })
-      return newGenderList
+      return newOptionList
     },
 
     edit () {
