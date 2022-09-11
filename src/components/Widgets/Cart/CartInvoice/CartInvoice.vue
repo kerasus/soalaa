@@ -248,6 +248,7 @@
       </div>
       <div
         class="payment-button payment-button-mobile-view"
+        :class="{ 'payment-button-disable': !selectedBank}"
         @click="payment"
       >
         پرداخت
@@ -334,10 +335,7 @@ export default {
 
       this.$store.dispatch('Cart/paymentCheckout')
         .then((response) => {
-          const anchor = document.createElement('a')
-          anchor.href = response.data.data.url
-          anchor.target = '_blank'
-          anchor.click()
+          window.open(response.data.data.url, { target: '_blank' })
           this.$store.commit('loading/loading', false)
         }).catch(() => {
           this.$store.commit('loading/loading', false)
@@ -370,6 +368,9 @@ export default {
 
   @media screen and (max-width: 1023px) {
     margin-left: 0;
+  }
+  @media screen and (max-width: 599px) {
+    margin-bottom: 70px;
   }
 
   .invoice-cart {
