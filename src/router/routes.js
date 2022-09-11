@@ -107,7 +107,7 @@ const routes = [
         component: () => import('layouts/LandingLayout'),
         children: [
           {
-            path: '3a_exams',
+            path: '',
             name: 'Landing.3aExams',
             component: () => import('pages/User/landing/landing')
           }
@@ -521,9 +521,26 @@ const routes = [
         path: '/cart',
         name: 'cart',
         component: () => import('pages/Cart/Cart'),
-        meta: {
-          middlewares: [
-            Permissions.hasPermission('examStore')]
+        // meta: {
+        //   middlewares: [
+        //     Permissions.hasPermission('examStore')]
+        // },
+        layoutConfig: {
+          layoutHeaderVisible: false,
+          layoutLeftDrawerVisible: false
+        }
+      },
+      {
+        path: '/order/:orderId/thankYou',
+        name: 'thankYouPage',
+        component: () => import('pages/ThankYouPage/ThankYouPage'),
+        // meta: {
+        //   middlewares: [
+        //     Permissions.hasPermission('examStore')]
+        // },
+        layoutConfig: {
+          layoutHeaderVisible: false,
+          layoutLeftDrawerVisible: false
         }
       }
 
