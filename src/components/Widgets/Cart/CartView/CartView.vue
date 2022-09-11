@@ -109,13 +109,15 @@
               class="action-buttons"
               :class="expandedObject[i] ? '' : 'open-expansion'"
             >
-              <a
-                v-if="!expandedObject[i] || !order.order_product"
-                class="link"
-                :href="order.grand?.url?.web"
-              >
-                {{ descLinkLabel }}
-              </a>
+              <span v-if="!expandedObject[i] || !order.order_product">
+                <a
+                  v-if="order.grand && order.grand.url && order.grand.url.web"
+                  class="link"
+                  :href="order.grand?.url?.web"
+                >
+                  {{ descLinkLabel }}
+                </a>
+              </span>
 
               <q-expansion-item
                 v-if="order.order_product?.list.length > 0"
@@ -155,6 +157,7 @@
 
                   <q-card-section class="details-expansion-actions">
                     <a
+                      v-if="order.grand && order.grand.url && order.grand.url.web"
                       class="link expansion-link"
                       :href="order.grand?.url?.web"
                     >
@@ -400,7 +403,6 @@ export default {
               @media screen and (max-width: 599px) {
                 width: 72px;
                 height: 72px;
-                margin-top: 34px;
               }
             }
           }
@@ -532,6 +534,7 @@ export default {
 
           &.on-open-expansion {
             flex-direction: column;
+            margin-top: 0;
           }
 
           .price-container {
@@ -623,6 +626,19 @@ export default {
               color: #9690E4;
               cursor: pointer;
               text-decoration: none;
+              margin-right: 24px;
+
+              @media screen and (max-width: 1439px) {
+                margin-right: 12px;
+              }
+
+              @media screen and (max-width: 1023px) {
+                margin-right: 24px;
+              }
+
+              @media screen and (max-width: 599px) {
+                margin-right: 40px;
+              }
             }
 
             .details-expansion {
@@ -633,7 +649,7 @@ export default {
               }
 
               @media screen and (max-width: 1023px) {
-                margin-left: 24px;
+                margin-left: 0;
               }
 
               .details-button {
@@ -642,19 +658,6 @@ export default {
                 font-size: 12px;
                 line-height: 19px;
                 color: #65677F;
-                margin-left: 24px;
-
-                @media screen and (max-width: 1439px) {
-                  margin-left: 12px;
-                }
-
-                @media screen and (max-width: 1023px) {
-                  margin-left: 24px;
-                }
-
-                @media screen and (max-width: 599px) {
-                  margin-left: 40px;
-                }
 
                 &:deep(.q-icon) {
                   font-size: 14px;
