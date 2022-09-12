@@ -150,6 +150,14 @@ const routes = [
         },
         children: [
           {
+            path: 'dashboard',
+            name: 'User.Dashboard',
+            component: () => import('pages/User/Dashboard/Dashboard'),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
             path: 'my-orders',
             name: 'User.MyOrders',
             component: () => import('pages/User/MyOrders/MyOrders'),
@@ -161,7 +169,7 @@ const routes = [
             }
           },
           {
-            path: '/user_exam_list',
+            path: 'user_exam_list',
             name: 'User.Exam.List',
             component: () => import('pages/User/exam/List'),
             middleware: [
