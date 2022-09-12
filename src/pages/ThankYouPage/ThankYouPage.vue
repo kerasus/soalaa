@@ -1,45 +1,91 @@
 <template>
   <div class="cart-container">
     <div class="cart-image">
-      <q-img src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/thankyou_page.png" />
+      <q-img
+        v-if="hasPaid"
+        src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/thankyou_page.png"
+      />
+      <q-icon
+        v-else
+        name="error"
+        color="red"
+      />
     </div>
 
-    <div class="title">ثبت نام شما با موفقیت انجام شد</div>
-
-    <div class="tracking-code-container">
-      <span class="tracking-code-title">کد پیگیری:</span>
-      <span class="tracking-code">{{ trackingCode }}</span>
+    <div
+      v-if="hasPaid"
+      class="title"
+    >
+      ثبت نام شما با موفقیت انجام شد
     </div>
+    <div
+      v-else
+      class="title"
+    >
+      متاسفانه پرداخت انجام نشد :(
+    </div>
+    <!--    <div class="tracking-code-container">-->
+    <!--      <span class="tracking-code-title">کد پیگیری:</span>-->
+    <!--      <span class="tracking-code">{{ trackingCode }}</span>-->
+    <!--    </div>-->
     <router-link
+      v-if="hasPaid"
       :to="{name: 'dashboard'}"
-      class="go-to-exams"
+      class="redirect-element"
     >
       مشاهده آزمون در پنل کاربری
+    </router-link>
+    <router-link
+      v-else
+      :to="{name: 'HomePage'}"
+      class="redirect-element"
+    >
+      بازگشت به فروشگاه
     </router-link>
   </div>
 </template>
 
 <script>
+import API_ADDRESS from 'src/api/Addresses'
+
 export default {
   name: 'ThankYouPage',
   data() {
-    return {}
+    return {
+      hasPaid: false
+    }
+  },
+  mounted () {
+    this.onLoadPage()
   },
   computed: {
-    trackingCode () {
+    orderId () {
       return this.$route.params.orderId
     }
   },
-  methods: {}
+  methods: {
+    onLoadPage () {
+      this.axios.get(API_ADDRESS.cart.orderWithTransaction(this.orderId))
+        .then((response) => {
+          const paymentStatus = response.data.data.paymentstatus
+
+          this.hasPaid = paymentStatus.id !== 1
+        })
+    }
+  }
 }
 </script>
 
 <style scoped lang="scss">
 .cart-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   opacity: 0.7;
   width: 245px;
   height: 245px;
   margin-top: 223px;
+  font-size: 200px;
 }
 .cart-container {
   display: flex;
@@ -74,7 +120,7 @@ export default {
     }
   }
 
-  .go-to-exams {
+  .redirect-element {
     font-style: normal;
     font-weight: 600;
     font-size: 18px;
@@ -104,7 +150,7 @@ export default {
       }
     }
 
-    .go-to-exams {
+    .redirect-element {
       margin-top: 16px;
     }
   }
@@ -126,6 +172,7 @@ export default {
     width: 168px;
     height: 168px;
     margin-top: 101px;
+    font-size: 150px;
   }
   .cart-container {
     .title {
@@ -140,7 +187,7 @@ export default {
       }
     }
 
-    .go-to-exams {
+    .redirect-element {
       font-size: 14px;
       line-height: 22px;
     }
