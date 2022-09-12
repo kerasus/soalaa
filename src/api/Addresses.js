@@ -272,7 +272,8 @@ const API_ADDRESS = {
       delete (productId) { return apiV2Server + '/orderproduct/' + productId }
     },
     review: apiV2Server + '/checkout/review?seller=2',
-    getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2'
+    getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2',
+    orderWithTransaction (orderId) { return apiV2Server + '/orderWithTransaction/' + orderId }
   }
 }
 export default API_ADDRESS
