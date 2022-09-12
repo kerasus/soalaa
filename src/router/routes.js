@@ -123,7 +123,7 @@ const routes = [
           // layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
           // layoutPageContainerCustomClass: 'main-layout-container'
         },
-        component: () => import('pages/User/landing/landing')
+        component: () => import('pages/HomePage')
       },
       {
         path: 'landing',
