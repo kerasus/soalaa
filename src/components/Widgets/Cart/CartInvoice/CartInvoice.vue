@@ -335,7 +335,7 @@ export default {
 
       this.$store.dispatch('Cart/paymentCheckout')
         .then((response) => {
-          window.open(response.data.data.url, { target: '_blank' })
+          window.open(response.data.data.url, '_self')
           this.$store.commit('loading/loading', false)
         }).catch(() => {
           this.$store.commit('loading/loading', false)
