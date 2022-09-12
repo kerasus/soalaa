@@ -99,7 +99,7 @@ const routes = [
       {
         path: '',
         name: 'HomePage',
-        component: () => import('pages/User/landing/landing')
+        component: () => import('pages/HomePage')
       },
       {
         path: 'landing',
