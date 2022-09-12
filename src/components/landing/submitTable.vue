@@ -106,7 +106,9 @@
                 <div class="flex items-center justify-center">
                   <div v-if="item.selected">
                     <div
-                      class="flex items-center justify-center svg">
+                      class="flex items-center justify-center svg cursor"
+                      @click="onSelectedExam(item, index)">
+
                       <svg
                         viewBox="0 0 21 20"
                         fill="none"
@@ -120,7 +122,7 @@
                   </div>
                   <div  v-else
                         class="empty-circle"
-                        @click="selectExam(index)"></div>
+                        @click="onSelectedExam(item, index)"></div>
                 </div>
               </td>
               <td class="custom-border"
@@ -1423,7 +1425,6 @@ export default {
     },
     selectiveRegister() {
       return this.activeTab.selective
-      // return false
     }
   },
   methods: {
@@ -1436,12 +1437,18 @@ export default {
       } catch (e) {
       }
     },
+
+    deSelectExam(examIndex) {
+      this.currentBandle.exams.forEach((exam, index) => {
+        if (index <= examIndex) {
+          exam.selected = false
+          this.selectedProductId.products = this.selectedProductId.products.filter(id => id !== exam.id)
+        }
+      })
+    },
+
     selectExam(examIndex) {
-      this.selectPackMode = false
-      this.selectedProductId = {
-        product: { id: this.currentBandle.id },
-        products: []
-      }
+      this.selectedProductId.products = []
       this.currentBandle.exams.forEach((exam, index) => {
         // exam.selected = index >= examIndex
         if (index >= examIndex) {
@@ -1449,6 +1456,12 @@ export default {
           this.selectedProductId.products.push(exam.id)
         }
       })
+    },
+
+    onSelectedExam(item, examIndex) {
+      this.selectPackMode = false
+      this.selectedProductId.product = { id: this.currentBandle.id }
+      item.selected ? this.deSelectExam(examIndex) : this.selectExam(examIndex)
     },
 
     showMessageDialog () {
@@ -1539,6 +1552,9 @@ export default {
     background: #FFFFFF;
     box-shadow: 0 4px 16px 2px rgba(40, 40, 40, 0.08);
     border-radius: 24px;
+    .cursor{
+      cursor: pointer;
+    }
     &:deep(.q-btn) {
       .q-btn__content {
         margin: 0;
