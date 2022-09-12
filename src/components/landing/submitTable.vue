@@ -58,7 +58,9 @@
               hide-bottom-space
               dense
               :options="currentGrades"
-              class="dropdown-btn first q-mr-md">
+              class="dropdown-btn first q-mr-md"
+              @update:model-value="onUpdateSelectedExams"
+            >
               <template v-slot:selected>
                 <span class="custom-label-prefix"> پایه تحصیلی: </span>
                 {{ selectedGrade }}
@@ -73,6 +75,7 @@
                       dense
                       :options="currentMajors"
                       class="select-2 dropdown-btn"
+                      @update:model-value="onUpdateSelectedExams"
             >
               <template v-slot:selected>
                 <span class="custom-label-prefix"> رشته تحصیلی: </span>
@@ -187,7 +190,7 @@
                     قیمت تک مرحله
                   </span>
                   <br>
-                  <span class="price">{{currentBandle?.singleUnitPrices}}</span>
+                  <span class="price">{{currentBandle?.singleUnitPrices.toLocaleString()}}</span>
                   <span class="price">تومان</span>
                 </div>
               </div>
@@ -218,7 +221,7 @@
                     قیمت تک مرحله
                   </span>
                   <br>
-                  <span class="price">{{currentBandle?.packUnitPrices}} </span>
+                  <span class="price">{{ singlePriceOnPackMode }} </span>
                   <span class="price">تومان</span>
                 </div>
               </div>
@@ -228,11 +231,11 @@
                 </div>
                 <div class="exam-price-box">
                   <span class="discount-tag"> تخفیف٪</span>
-                  <span class="main-price"> {{ currentBandle?.packBasePrices }}</span>
+                  <span class="main-price"> {{ currentBandle?.packBasePrices.toLocaleString() }}</span>
                   <span class="main-price"> تومان</span>
                 </div>
                 <div class="final-price-box">
-                  <span> {{ currentBandle?.packFinalPrices }}</span>
+                  <span> {{ currentBandle?.packFinalPrices.toLocaleString() }}</span>
                   <span>تومان</span>
                 </div>
                 <q-btn unelevated
@@ -1399,9 +1402,13 @@ export default {
     this.initPageData()
   },
   computed: {
+    singlePriceOnPackMode() {
+      const price = (this.currentBandle.packFinalPrices) / (this.currentBandle.exams.length)
+      return price.toLocaleString()
+    },
     finalPriceInSingleMode() {
       const price = (this.currentBandle.exams.filter(item => item.selected).length) * (this.currentBandle.singleUnitPrices)
-      return price.toLocaleString('fa')
+      return price.toLocaleString()
     },
     currentBandle() {
       // return this.activeTab.productBandles.filter(item => (this.selectedMajor ? item.major_id === this.selectedMajor : true) && (this.selectedGrade ? item.grade_id === this.selectedGrade : true))[0]
@@ -1445,6 +1452,10 @@ export default {
           this.selectedProductId.products = this.selectedProductId.products.filter(id => id !== exam.id)
         }
       })
+      if (this.selectedProductId.products.length === 0) {
+        this.selectPackMode = true
+        this.onUpdateSelectedExams()
+      }
     },
 
     selectExam(examIndex) {
@@ -1464,15 +1475,26 @@ export default {
       item.selected ? this.deSelectExam(examIndex) : this.selectExam(examIndex)
     },
 
+    onUpdateSelectedExams() {
+      this.selectedProductId = {
+        product: {
+          id: this.currentBandle.id
+        },
+        products: [this.currentBandle.allId]
+      }
+    },
+
     showMessageDialog () {
       this.messageDialog = true
     },
+
     async initPageData() {
       await this.getProducts()
       this.setFirstExamActive()
       this.setFirstMajorsGradesSelected()
       this.loading = false
     },
+
     adaptData(data) {
       data.forEach(absGrand => {
         const sal = absGrand.attributes.info.sal[0]
@@ -1498,6 +1520,7 @@ export default {
         this.tabPages[targetIndex].productBandles[bundleIndex].singleFinalPrices = packProduct.children[0].price.final
       })
     },
+
     async getProducts() {
       try {
         const productList = await this.callProductApi()
@@ -1506,13 +1529,16 @@ export default {
         // console.log(e)
       }
     },
+
     callProductApi() {
       return this.$axios.get(API_ADDRESS.product.landing.sea.all)
     },
+
     updateActiveTab(exam) {
       this.activeTab = exam
       this.setFirstMajorsGradesSelected()
     },
+
     setFirstMajorsGradesSelected() {
       this.selectPackMode = true
       this.selectedMajor = this.currentMajors[0]
@@ -1524,8 +1550,10 @@ export default {
         }
       })
     },
+
     onResize(data) {
     },
+
     setFirstExamActive() {
       this.activeTab = this.tabPages[0]
     }
