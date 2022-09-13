@@ -1,6 +1,9 @@
 <template>
   <div class="row user-panel-layout">
-    <user-side-bar class="user-side-bar col-xl-3 col-lg-3 col-md-3" />
+    <user-side-bar
+      v-if="getTemplateLeftSideBarType === 'default' && getLayoutLeftDrawerVisibility"
+      class="user-side-bar col-xl-3 col-lg-3 col-md-3"
+    />
     <div class="col-xl-9 col-lg-9 col-md-9 col-12 user-panel-content">
       <Router :include="keepAliveComponents" />
     </div>
@@ -11,12 +14,21 @@
 import UserSideBar from 'layouts/UserPanelLayouts/UserSideBar'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 import Router from 'src/router/Router'
+
 export default {
   name: 'UserPanelLayout',
   components: { UserSideBar, Router },
   data () {
     return {
       keepAliveComponents: KeepAliveComponents
+    }
+  },
+  computed: {
+    getTemplateLeftSideBarType() {
+      return this.$store.getters['AppLayout/templateLeftSideBarType']
+    },
+    getLayoutLeftDrawerVisibility () {
+      return this.$store.getters['AppLayout/layoutLeftDrawerVisible']
     }
   },
   created () {
@@ -32,6 +44,7 @@ export default {
   margin: auto;
   padding-top: 30px;
   background: #f4f6f9;
+  justify-content: center;
   @media screen and (max-width: 1439px) {
     max-width: 100%;
   }
