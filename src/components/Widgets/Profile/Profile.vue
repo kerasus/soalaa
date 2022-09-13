@@ -54,7 +54,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'نام خانوادگی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'first_name', responseKey: 'first_name', label: '', col: 'col-12', placeholder: ' ' }
+            { type: 'input', name: 'last_name', responseKey: 'last_name', label: '', col: 'col-12', placeholder: ' ' }
           ]
         },
         {
@@ -135,7 +135,7 @@ export default {
           col: 'col-12 col-md-4 col-sm-6',
           value: [
             { type: 'separator', label: 'شهر', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'city', responseKey: 'city.title', placeholder: 'city.title', col: 'col-12' }
+            { type: 'select', name: 'city', responseKey: 'city.title', col: 'col-12' }
           ]
         },
         {
@@ -149,6 +149,7 @@ export default {
         }
 
       ],
+      find: null,
       genders: null,
       provinces: null,
       cities: null,
@@ -164,14 +165,20 @@ export default {
   computed: {
     user () {
       return this.$store.getters['Auth/user']
+    },
+
+    provinceInputValue () {
+      return this.findInput(this.inputs, 'province').value
     }
-    // genderList () {
-    //   return this.genders.map(gender => {
-    //     return {
-    //       label = gender.title,
-    //       value = gender.id
-    //     } })
-    // }
+  },
+
+  watch: {
+    provinceInputValue (newValue) {
+      if (!newValue) {
+        this.findInput(this.inputs, 'province').value = this.findInput(this.inputs, 'province').options[0]
+      }
+      this.setCityInputOptions(this.getCitiesOfProvince(typeof this.provinceInputValue === 'object' ? this.provinceInputValue.value : this.provinceInputValue))
+    }
   },
 
   methods: {
@@ -201,28 +208,14 @@ export default {
 
     setInputsInitData () {
       this.$refs.EntityCrudFormBuilder.loadInputData(this.user, this.inputs)
-      this.setInputOption(this.inputs, 'gender', this.customizedOptionList(this.genders))
-      this.setInputOption(this.inputs, 'province', this.customizedOptionList(this.provinces))
-      this.setInputOption(this.inputs, 'city', this.customizedOptionList(this.cities))
-      this.setInputOption(this.inputs, 'major', this.customizedOptionList(this.majors))
-      this.setInputOption(this.inputs, 'grade', this.customizedOptionList(this.grades))
+      this.setInputOption('gender', this.customizedOptionList(this.genders))
+      this.setInputOption('province', this.customizedOptionList(this.provinces))
+      this.setInputOption('major', this.customizedOptionList(this.majors))
+      this.setInputOption('grade', this.customizedOptionList(this.grades))
     },
 
-    setInputOption (inputList, inputName, optionList) {
-      inputList.forEach(input => {
-        if (input.type === 'select') {
-          input.options.push({ lable: 'انخاب کنید', value: 'select' })
-        }
-
-        if (input.name === inputName) {
-          input.options = optionList
-          return
-        }
-
-        if (input.type === 'formBuilder' && input.value.length > 0) {
-          this.setInputOption(input.value, inputName, optionList)
-        }
-      })
+    setInputOption (inputName, optionList) {
+      this.findInput(this.inputs, inputName).options = optionList
     },
 
     customizedOptionList (currentList) {
@@ -236,10 +229,40 @@ export default {
       return newOptionList
     },
 
+    findInput (inputList, inputName) {
+      inputList.forEach(input => {
+        const findingInput = inputList.find(input => input.name === inputName)
+
+        if (findingInput) {
+          this.find = findingInput
+        } else if (input.type === 'formBuilder' && input.value.length > 0) {
+          this.findInput(input.value, inputName)
+        }
+      })
+      return this.find
+    },
+
+    getCitiesOfProvince(provinceId) {
+      return this.cities.filter(city => city.province.id === provinceId)
+    },
+
+    setCityInputOptions (cityList) {
+      this.setInputOption('city', this.customizedOptionList(cityList))
+      this.setCityInputValue()
+    },
+
+    setCityInputValue () {
+      this.findInput(this.inputs, 'city').value = this.findInput(this.inputs, 'city').options[0]
+    },
+
     edit () {
-      this.$axios.put(API_ADDRESS.user.base)
-        .then((resp) => {})
-        .catch(() => {})
+      this.$axios.put(API_ADDRESS.user.edit(this.user.id))
+        .then((resp) => {
+          console.log(resp)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
 
   }
