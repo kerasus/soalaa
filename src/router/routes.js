@@ -173,7 +173,11 @@ const routes = [
           {
             path: 'profile',
             name: 'profile',
-            component: () => import('pages/User/profile/profile')
+            component: () => import('pages/User/profile/profile'),
+            layoutConfig: {
+              layoutLeftDrawerVisible: true
+              // layoutLeftSideBarType: 'default'
+            }
           },
           {
             path: 'my-orders',
