@@ -25,8 +25,8 @@ const API_ADDRESS = {
     formData: authServer + '/megaroute/getUserFormData',
     show_user: authServer + '/getUserFor3a',
     getOrderList (id) {
-      // return authServer + '/user/' + id + '/orders?seller=2'
-      return authServer + '/user/' + id + '/orders?seller=1'
+      return authServer + '/user/' + id + '/orders?seller=2'
+      // return authServer + '/user/' + id + '/orders?seller=1'
     }
   },
   set: {
@@ -258,13 +258,22 @@ const API_ADDRESS = {
       return lumenServer + '/id/soalaQestion/' + questionId
     }
   },
+  product: {
+    landing: {
+      sea: {
+        all: authServer + '/product/soalaa/all'
+      }
+    }
+
+  },
   cart: {
     orderproduct: {
       add: apiV2Server + '/orderproduct',
       delete (productId) { return apiV2Server + '/orderproduct/' + productId }
     },
     review: apiV2Server + '/checkout/review?seller=2',
-    getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2'
+    getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2',
+    orderWithTransaction (orderId) { return apiV2Server + '/orderWithTransaction/' + orderId }
   }
 }
 export default API_ADDRESS

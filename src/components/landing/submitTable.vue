@@ -3,7 +3,13 @@
     <div class="table-section-title">
       ثبت‌نام آزمون
     </div>
-    <div class="submit-table">
+    <div v-if="loading">
+      <q-linear-progress indeterminate
+                         color="warning"
+                         class="q-mt-sm" />
+    </div>
+    <div v-else
+         class="submit-table">
       <div class="exams-box">
         <div class="tabs">
           <q-btn v-for="exam in tabPages"
@@ -27,7 +33,7 @@
             dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
             hide-bottom-space
             dense
-            color="grey-10"
+            color="amber-14"
             borderless
             rounded
             option-label="title"
@@ -44,33 +50,36 @@
         <div class="table-parent">
           <div class="major-grade-btn">
             <q-select
-              v-if="currentGrades.length>0"
+              v-if="currentGrades?.length > 1"
               v-model="selectedGrade"
               borderless
-              option-label="title"
+              color="amber-14"
               dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
               hide-bottom-space
               dense
               :options="currentGrades"
-              class="dropdown-btn first q-mr-md">
+              class="dropdown-btn first q-mr-md"
+              @update:model-value="onUpdateSelectedExams"
+            >
               <template v-slot:selected>
-                <span class="custom-label-prefix"> مقطع تحصیلی: </span>
-                {{ selectedGrade.title }}
+                <span class="custom-label-prefix"> پایه تحصیلی: </span>
+                {{ selectedGrade }}
               </template>
             </q-select>
-            <q-select v-if="currentMajors.length >0"
+            <q-select v-if="currentMajors?.length > 1"
                       v-model="selectedMajor"
                       borderless
+                      color="amber-14"
                       dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
                       hide-bottom-space
                       dense
                       :options="currentMajors"
-                      option-label="title"
                       class="select-2 dropdown-btn"
+                      @update:model-value="onUpdateSelectedExams"
             >
               <template v-slot:selected>
                 <span class="custom-label-prefix"> رشته تحصیلی: </span>
-                {{ selectedMajor.title }}
+                {{ selectedMajor }}
               </template>
             </q-select>
           </div>
@@ -86,23 +95,42 @@
                   :class="selectiveRegister? '':''">ثبت‌نام کامل
               </th>
             </tr>
-            <tr v-for="item in dataTable"
+            <tr v-for="(item , index) in currentBandle?.exams"
                 :key="item">
               <td class="number custom-border"
-                  :class="{'number-selective': selectiveRegister}">{{ item.number }}</td>
+                  :class="{'number-selective': selectiveRegister}">{{ index + 1}}</td>
               <td class="date custom-border"
-                  :class="{'date-selective': selectiveRegister}">{{ item.date }}</td>
+                  :class="{'date-selective': selectiveRegister}">{{ item.attributes.info.examDate[0] }}</td>
               <td class="title custom-border"
                   :class="{ 'title-selective-mod': selectiveRegister}"
-              >{{ item.title }}</td>
+              >{{ item.short_title }}</td>
               <td v-if="selectiveRegister"
                   class="submitStatus-selective-mode custom-border">
                 <div class="flex items-center justify-center">
-                  <div class="empty-circle"></div>
+                  <div v-if="item.selected">
+                    <div
+                      class="flex items-center justify-center svg cursor"
+                      @click="onSelectedExam(item, index)">
+
+                      <svg
+                        viewBox="0 0 21 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10.5 20C16.0228 20 20.5 15.5228 20.5 10C20.5 4.47715 16.0228 0 10.5 0C4.97715 0 0.5 4.47715 0.5 10C0.5 15.5228 4.97715 20 10.5 20ZM16.0588 7.50027C16.3351 7.19167 16.3089 6.71752 16.0003 6.44123C15.6917 6.16493 15.2175 6.19113 14.9412 6.49973L11.5721 10.2629C10.8894 11.0254 10.4296 11.5363 10.0365 11.8667C9.66207 12.1814 9.44213 12.25 9.25 12.25C9.05787 12.25 8.83794 12.1814 8.46348 11.8667C8.0704 11.5363 7.61064 11.0254 6.92794 10.2629L6.05877 9.29209C5.78248 8.98349 5.30833 8.9573 4.99973 9.23359C4.69113 9.50988 4.66493 9.98403 4.94123 10.2926L5.84753 11.3049C6.48338 12.0152 7.01374 12.6076 7.49835 13.0149C8.01099 13.4458 8.56393 13.75 9.25 13.75C9.93607 13.75 10.489 13.4458 11.0016 13.0149C11.4863 12.6076 12.0166 12.0152 12.6525 11.3049L16.0588 7.50027Z"
+                              fill="#2DBB33" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div  v-else
+                        class="empty-circle"
+                        @click="onSelectedExam(item, index)"></div>
                 </div>
               </td>
               <td class="custom-border"
                   :class="selectiveRegister ? 'submitStatus-selective-mode ': 'submitStatus' ">
+
                 <div
                   class="flex items-center justify-center svg">
                   <svg
@@ -131,23 +159,26 @@
                   <div class="text-style">
                     برای دانلود برنامه آزمون روی دکمه زیر کلیک کنید.
                   </div>
-                  <q-btn class="download-btn">
-                    <div class="svg">
-                      <svg width="18"
-                           height="19"
-                           viewBox="0 0 18 19"
-                           fill="none"
-                           xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              d="M9.75 1C9.75 0.585786 9.41421 0.25 9 0.25C8.58579 0.25 8.25 0.585786 8.25 1V7H6C5.07099 7 4.60649 7 4.21783 7.06156C2.07837 7.40042 0.400416 9.07837 0.0615583 11.2178C0 11.6065 0 12.071 0 13C0 13.929 0 14.3935 0.0615583 14.7822C0.400416 16.9216 2.07837 18.5996 4.21783 18.9384C4.60649 19 5.07099 19 6 19H12C12.929 19 13.3935 19 13.7822 18.9384C15.9216 18.5996 17.5996 16.9216 17.9384 14.7822C18 14.3935 18 13.929 18 13C18 12.071 18 11.6065 17.9384 11.2178C17.5996 9.07837 15.9216 7.40042 13.7822 7.06156C13.3935 7 12.929 7 12 7H9.75V1ZM9.75 7H8.25V13.8105C7.92734 13.483 7.54375 13.001 6.98553 12.297L5.58768 10.534C5.33034 10.2095 4.8586 10.155 4.53403 10.4123C4.20946 10.6697 4.15497 11.1414 4.41232 11.466L5.83857 13.2648C6.37175 13.9373 6.81172 14.4922 7.20551 14.8875C7.60963 15.2932 8.05816 15.6294 8.63133 15.7208C8.75344 15.7402 8.87661 15.75 9 15.75C9.12339 15.75 9.24656 15.7402 9.36867 15.7208C9.94184 15.6294 10.3904 15.2932 10.7945 14.8875C11.1883 14.4922 11.6283 13.9372 12.1614 13.2648L13.5877 11.466C13.845 11.1414 13.7905 10.6697 13.466 10.4123C13.1414 10.155 12.6697 10.2095 12.4123 10.534L11.0145 12.297C10.4563 13.001 10.0727 13.483 9.75 13.8105V7Z"
-                              fill="#2A2A2A" />
-                      </svg>
-                    </div>
-                    <span>
-                      دانلود برنامه آزمون‌
-                    </span>
-                  </q-btn>
+                  <a target="_blank"
+                     :href="currentBandle?.pdfLink">
+                    <q-btn class="download-btn">
+                      <div class="svg">
+                        <svg width="18"
+                             height="19"
+                             viewBox="0 0 18 19"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M9.75 1C9.75 0.585786 9.41421 0.25 9 0.25C8.58579 0.25 8.25 0.585786 8.25 1V7H6C5.07099 7 4.60649 7 4.21783 7.06156C2.07837 7.40042 0.400416 9.07837 0.0615583 11.2178C0 11.6065 0 12.071 0 13C0 13.929 0 14.3935 0.0615583 14.7822C0.400416 16.9216 2.07837 18.5996 4.21783 18.9384C4.60649 19 5.07099 19 6 19H12C12.929 19 13.3935 19 13.7822 18.9384C15.9216 18.5996 17.5996 16.9216 17.9384 14.7822C18 14.3935 18 13.929 18 13C18 12.071 18 11.6065 17.9384 11.2178C17.5996 9.07837 15.9216 7.40042 13.7822 7.06156C13.3935 7 12.929 7 12 7H9.75V1ZM9.75 7H8.25V13.8105C7.92734 13.483 7.54375 13.001 6.98553 12.297L5.58768 10.534C5.33034 10.2095 4.8586 10.155 4.53403 10.4123C4.20946 10.6697 4.15497 11.1414 4.41232 11.466L5.83857 13.2648C6.37175 13.9373 6.81172 14.4922 7.20551 14.8875C7.60963 15.2932 8.05816 15.6294 8.63133 15.7208C8.75344 15.7402 8.87661 15.75 9 15.75C9.12339 15.75 9.24656 15.7402 9.36867 15.7208C9.94184 15.6294 10.3904 15.2932 10.7945 14.8875C11.1883 14.4922 11.6283 13.9372 12.1614 13.2648L13.5877 11.466C13.845 11.1414 13.7905 10.6697 13.466 10.4123C13.1414 10.155 12.6697 10.2095 12.4123 10.534L11.0145 12.297C10.4563 13.001 10.0727 13.483 9.75 13.8105V7Z"
+                                fill="#2A2A2A" />
+                        </svg>
+                      </div>
+                      <span>
+                        دانلود برنامه آزمون‌
+                      </span>
+                    </q-btn>
+                  </a>
                 </div>
               </div>
             </div>
@@ -159,7 +190,7 @@
                     قیمت تک مرحله
                   </span>
                   <br>
-                  <span class="price">{{activeTab.prices[0].unit.unit_price}}</span>
+                  <span class="price">{{currentBandle?.singleUnitPrices.toLocaleString()}}</span>
                   <span class="price">تومان</span>
                 </div>
               </div>
@@ -168,11 +199,14 @@
                   قیمت آزمون کامل
                 </div>
                 <div class="final-price-box">
-                  <span>۱۱۰٫۰۰۰</span>
+                  <span>{{ finalPriceInSingleMode }}</span>
                   <span>تومان</span>
                 </div>
                 <q-btn unelevated
-                       class="sub-btn">
+                       class="sub-btn"
+                       :class="{'active': !selectPackMode}"
+                       :disable="selectPackMode"
+                       @click="addToCart">
                   <span class="sub-btn-text">
                     ثبت‌نام
                   </span>
@@ -187,7 +221,7 @@
                     قیمت تک مرحله
                   </span>
                   <br>
-                  <span class="price">{{activeTab.prices[0].pack.unit_price}} </span>
+                  <span class="price">{{ singlePriceOnPackMode }} </span>
                   <span class="price">تومان</span>
                 </div>
               </div>
@@ -197,16 +231,18 @@
                 </div>
                 <div class="exam-price-box">
                   <span class="discount-tag"> تخفیف٪</span>
-                  <span class="main-price"> {{ activeTab.prices[0].pack.basePrice }}</span>
+                  <span class="main-price"> {{ currentBandle?.packBasePrices.toLocaleString() }}</span>
                   <span class="main-price"> تومان</span>
                 </div>
                 <div class="final-price-box">
-                  <span> {{activeTab.prices[0].pack.finalPrice }}</span>
+                  <span> {{ currentBandle?.packFinalPrices.toLocaleString() }}</span>
                   <span>تومان</span>
                 </div>
                 <q-btn unelevated
                        class="sub-btn"
-                       @click="showMessageDialog"
+                       :class="{'active': selectPackMode}"
+                       :disable="!selectPackMode"
+                       @click="addToCart"
                 >
                   <span class="sub-btn-text">
                     ثبت‌نام
@@ -243,6 +279,7 @@
 
 <script>
 // import tableComponent from 'src/components/landing/table'
+import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'submitTable',
   components: {
@@ -250,17 +287,19 @@ export default {
   },
   data: () => ({
     messageDialog: false,
+    selectPackMode: true,
     data: [],
+    loading: true,
     activeTab: {},
-    selectedGrade: {},
-    selectedMajor: {},
+    selectedGrade: '',
+    selectedMajor: '',
     tabPages: [
       {
         id: 0,
         title: 'آزمون سه‌آ ویژه کنکور 1402',
         description: ' سه آ برای کنکوری ها شامل 10 مرحله آزمون جزئی و جامع است که برای داوطلب کنکور تعداد بسیار متناسبی است. با پیشروی طبق برنامه آزمون های سه آ، هر یک از مطالب پایه و دوازدهم حداقل دوبار در آزمون های جزئی تکرار می شوند. برنامه ریزی دقیق، سوالات استاندارد، کارنامه آنی و حل ویدیویی مهم ترین ویژگی های آزمون های سه آ است. در جدول پایین "(ج)" و "(ب)" به ترتیب نمایش اختصاری کلمه "جمع بندی" و "بخشی از" می‌باشد.',
-        majors: [{ id: 0, title: 'ریاضی' }, { id: 1, title: 'تجربی' }, { id: 2, title: 'انسانی' }],
-        grades: [],
+        majors: ['ریاضی', 'تجربی', 'انسانی'],
+        grades: ['دوازدهم'],
         exams: [
           {
             id: 0,
@@ -565,6 +604,7 @@ export default {
             selective: true
           }
         ],
+        submitMode: 'pack',
         prices: [
           {
             major_id: 0,
@@ -580,15 +620,55 @@ export default {
             }
           }
         ],
-        producBandle: [],
+        productBandles: [
+          {
+            major_id: 'ریاضی',
+            grade_id: 'دوازدهم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh12%28konkur%29/12R.pdf',
+            exams: []
+          },
+          {
+            major_id: 'تجربی',
+            grade_id: 'دوازدهم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh12%28konkur%29/12T.pdf'
+          },
+          {
+            major_id: 'انسانی',
+            grade_id: 'دوازدهم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh12%28konkur%29/12E.pdf'
+          }
+        ],
         selective: true
       },
       {
         id: 1,
         title: 'آزمون سه‌آ ویژه دهم و یازدهم',
         description: ' دانش آموزان پایه دهم و یازدهم برای آشنایی هرچه بیشتر با فضای آزمون های تستی و کنکور لازم است میزان توانایی خود را در آزمون های تستی بسنجند. آزمون های سه آ در این پایه ها در زمان هایی قرارداده شده است که با برنامه آزمون های تشریحی و نهایی بیشترین مطابقت را داشته باشد.',
-        majors: [{ id: 0, title: 'ریاضی' }, { id: 1, title: 'تجربی' }, { id: 2, title: 'انسانی' }],
-        grades: [{ id: 0, title: 'دهم' }, { id: 1, title: 'یازدهم' }],
+
+        majors: ['ریاضی', 'تجربی', 'انسانی'],
+        grades: ['دهم', 'یازدهم'],
+
         exams: [
           {
             id: 0,
@@ -837,6 +917,7 @@ export default {
           }
 
         ],
+        submitMode: 'pack',
         prices: [
           {
             major_id: 0,
@@ -850,14 +931,89 @@ export default {
             }
           }
         ],
-        selective: false
+        selective: false,
+        productBandles: [
+          {
+            major_id: 'ریاضی',
+            grade_id: 'یازدهم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/11R.pdf'
+          },
+          {
+            major_id: 'ریاضی',
+            grade_id: 'دهم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/10R.pdf'
+          },
+          {
+            major_id: 'انسانی',
+            grade_id: 'دهم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/10E.pdf'
+          },
+          {
+            major_id: 'تجربی',
+            grade_id: 'دهم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/10T.pdf'
+          },
+          {
+            major_id: 'انسانی',
+            grade_id: 'یازدهم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/11E.pdf'
+          },
+          {
+            major_id: 'تجربی',
+            grade_id: 'یازدهم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/11T.pdf'
+          }
+        ]
       },
       {
         id: 2,
         description: 'دانش آموزان پایه هفتم،‌هشتم و نهم برای آشنایی هرچه بیشتر با فضای آزمون های تستی و کنکور لازم است میزان توانایی خود را در آزمون های تستی بسنجند. آزمون های سه آ در این پایه ها در زمان هایی قرارداده شده است که با برنامه آزمون های تشریحی بیشترین مطابقت را داشته باشد',
-        majors: [],
-        title: ' آزمون سه‌آ ویژه هفتم، هشتم و نهم',
-        grades: [{ id: 2, title: 'نهم' }, { id: 0, title: 'دهم' }, { id: 1, title: 'یازدهم' }],
+        majors: ['عمومی'],
+        grades: ['نهم', 'هشتم', 'هفتم'],
+        submitMode: 'pack',
+        title: 'آزمون سه‌آ ویژه هفتم، هشتم و نهم',
         exams: [
           {
             id: 0,
@@ -995,23 +1151,62 @@ export default {
             }
           }
         ],
-        selective: false
+        selective: false,
+        productBandles: [{
+          major_id: 'عمومی',
+          grade_id: 'هفتم',
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/7P.pdf'
+        },
+        {
+          major_id: 'عمومی',
+          grade_id: 'نهم',
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/9P.pdf'
+        },
+        {
+          major_id: 'عمومی',
+          grade_id: 'هشتم',
+          id: '',
+          packUnitPrices: '',
+          packFinalPrices: '',
+          packBasePrices: '',
+          singleUnitPrices: '',
+          singleFinalPrices: '',
+          selectedProductIds: [],
+          pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/8P.pdf'
+        }
+        ]
       },
       {
         id: 3,
         description: [
           {
-            id: 3,
+            grade: 'ششم - تیزهوشان',
             text: 'در آزمون تیزهوشان ششم به هفتم سنجش براساس هوش، خلاقیت و استعداد تحلیلی صورت می گیرد. بنابراین آزمون های سه آ در قالب 7 مرحله به صورت کاملا مشابه با آزمون تیزهوشان از مباحث هوش، خلاقیت و استعداد تحلیلی برگزار می شود. در جدول پایین "(ج)" نمایش اختصاری کلمه "جمع بندی" می‌باشد.'
           },
           {
-            id: 2,
+            grade: 'نهم - تیزهوشان',
             text: 'در آزمون تیزهوشان نهم به دهم سنجش براساس استعداد تحصیلی و تحلیلی صورت می گیرد. بنابراین آزمون های سه آ در قالب 5 مرحله جزئی و 2 آزمون شبیه ساز آزمون تیزهوشان برگزار می شود که در آن سوالات استعداد تحلیلی همواره قرار دارند و سوالات استعداد تحصیلی براساس پیشروی دروس برنامه ریزی شده اند. در جدول پایین "(ج)" و "(ب)" به ترتیب نمایش اختصاری کلمه "جمع بندی" و "بخشی از" می‌باشد.'
           }
         ],
-        majors: [],
+        majors: ['عمومی'],
+        grades: ['نهم - تیزهوشان', 'ششم - تیزهوشان'],
+        submitMode: 'pack',
         title: 'آزمون سه‌آ ویژه قبولی تیزهوشان',
-        grades: [{ id: 2, title: 'نهم' }, { id: 3, title: 'ششم' }],
+
         exams: [
           {
             id: 0,
@@ -1170,16 +1365,58 @@ export default {
             }
           }
         ],
-        selective: true
+        selective: true,
+        productBandles: [
+          {
+            major_id: 'عمومی',
+            grade_id: 'ششم - تیزهوشان',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/tizhoushan/6Z.pdf'
+          },
+          {
+            major_id: 'عمومی',
+            grade_id: 'نهم - تیزهوشان',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/tizhoushan/9Z.pdf'
+          }]
       }
-    ]
+    ],
+    selectedProductId: {
+      product: {},
+      products: []
+    }
   }),
   created() {
     this.initPageData()
   },
   computed: {
-    dataTable() {
-      return this.activeTab.exams.filter(item => ((this.activeTab.majors.length > 0 ? item.major_id === this.selectedMajor.id : true) && (this.activeTab.grades.length > 0 ? item.grade_id === this.selectedGrade.id : true)))
+    singlePriceOnPackMode() {
+      const price = (this.currentBandle.packFinalPrices) / (this.currentBandle.exams.length)
+      return price.toLocaleString()
+    },
+    finalPriceInSingleMode() {
+      const price = (this.currentBandle.exams.filter(item => item.selected).length) * (this.currentBandle.singleUnitPrices)
+      return price.toLocaleString()
+    },
+    currentBandle() {
+      // return this.activeTab.productBandles.filter(item => (this.selectedMajor ? item.major_id === this.selectedMajor : true) && (this.selectedGrade ? item.grade_id === this.selectedGrade : true))[0]
+      return this.activeTab.productBandles.filter(item => {
+        // console.log('item.major_id', item.major_id, '-', this.selectedMajor)
+        // console.log('item.grade_id', item.grade_id, '-', this.selectedGrade)
+        return (this.selectedMajor ? item.major_id === this.selectedMajor : true) && (this.selectedGrade ? item.grade_id === this.selectedGrade : true)
+      })[0]
     },
     currentMajors() {
       return this.activeTab.majors
@@ -1191,37 +1428,132 @@ export default {
       if (this.activeTab.id !== 3) {
         return this.activeTab.description
       }
-      // return this.activeTab.description[this.selectedGrade.id].text
-      return ''
+      return this.activeTab.description.find(item => item.grade === this.selectedGrade).text
     },
     selectiveRegister() {
-      // return this.activeTab.selective
-      return false
+      return this.activeTab.selective
     }
   },
   methods: {
+    async addToCart() {
+      // console.log('addToCart :', this.selectedProductId)
+      try {
+        await this.$store.dispatch('Cart/addToCart', this.selectedProductId)
+        // uninstall and install router :)
+        this.$router.push({ name: 'cart' })
+      } catch (e) {
+      }
+    },
+
+    deSelectExam(examIndex) {
+      this.currentBandle.exams.forEach((exam, index) => {
+        if (index <= examIndex) {
+          exam.selected = false
+          this.selectedProductId.products = this.selectedProductId.products.filter(id => id !== exam.id)
+        }
+      })
+      if (this.selectedProductId.products.length === 0) {
+        this.selectPackMode = true
+        this.onUpdateSelectedExams()
+      }
+    },
+
+    selectExam(examIndex) {
+      this.selectedProductId.products = []
+      this.currentBandle.exams.forEach((exam, index) => {
+        // exam.selected = index >= examIndex
+        if (index >= examIndex) {
+          exam.selected = true
+          this.selectedProductId.products.push(exam.id)
+        }
+      })
+    },
+
+    onSelectedExam(item, examIndex) {
+      this.selectPackMode = false
+      this.selectedProductId.product = { id: this.currentBandle.id }
+      item.selected ? this.deSelectExam(examIndex) : this.selectExam(examIndex)
+    },
+
+    onUpdateSelectedExams() {
+      this.selectedProductId = {
+        product: {
+          id: this.currentBandle.id
+        },
+        products: [this.currentBandle.allId]
+      }
+    },
+
     showMessageDialog () {
       this.messageDialog = true
     },
-    initPageData() {
+
+    async initPageData() {
+      await this.getProducts()
       this.setFirstExamActive()
       this.setFirstMajorsGradesSelected()
+      this.loading = false
     },
+
+    adaptData(data) {
+      data.forEach(absGrand => {
+        const sal = absGrand.attributes.info.sal[0]
+        const major = absGrand.attributes.info.major[0]
+        // console.log('sal', sal, 'major :', major)
+        const targetIndex = this.tabPages.findIndex(item => item.grades.includes(sal))
+        if (targetIndex === -1) {
+          return
+        }
+        const bundleIndex = this.tabPages[targetIndex].productBandles.findIndex(item => item.major_id === major && item.grade_id === sal)
+        if (bundleIndex === -1) {
+          return
+        }
+        const packProduct = absGrand.grandsChildren[0]
+        this.tabPages[targetIndex].productBandles[bundleIndex].id = absGrand.id
+        this.tabPages[targetIndex].productBandles[bundleIndex].allId = packProduct.id
+        this.tabPages[targetIndex].productBandles[bundleIndex].packUnitPrices = packProduct.children[0].price.base
+        this.tabPages[targetIndex].productBandles[bundleIndex].packFinalPrices = packProduct.price.final
+        this.tabPages[targetIndex].productBandles[bundleIndex].packBasePrices = packProduct.price.base
+        this.tabPages[targetIndex].productBandles[bundleIndex].packDiscound = packProduct.price.discount
+        this.tabPages[targetIndex].productBandles[bundleIndex].exams = packProduct.children
+        this.tabPages[targetIndex].productBandles[bundleIndex].singleUnitPrices = packProduct.children[0].price.base
+        this.tabPages[targetIndex].productBandles[bundleIndex].singleFinalPrices = packProduct.children[0].price.final
+      })
+    },
+
+    async getProducts() {
+      try {
+        const productList = await this.callProductApi()
+        this.adaptData(productList.data.data)
+      } catch (e) {
+        // console.log(e)
+      }
+    },
+
+    callProductApi() {
+      return this.$axios.get(API_ADDRESS.product.landing.sea.all)
+    },
+
     updateActiveTab(exam) {
       this.activeTab = exam
       this.setFirstMajorsGradesSelected()
     },
-    setFirstMajorsGradesSelected() {
-      if (this.currentMajors.length > 0) {
-        this.selectedMajor = this.currentMajors[0]
-      }
 
-      if (this.currentGrades.length > 0) {
-        this.selectedGrade = this.currentGrades[0]
-      }
+    setFirstMajorsGradesSelected() {
+      this.selectPackMode = true
+      this.selectedMajor = this.currentMajors[0]
+      this.selectedGrade = this.currentGrades[0]
+      this.$nextTick(() => {
+        this.selectedProductId = {
+          product: { id: this.currentBandle.id },
+          products: [this.currentBandle.allId]
+        }
+      })
     },
+
     onResize(data) {
     },
+
     setFirstExamActive() {
       this.activeTab = this.tabPages[0]
     }
@@ -1248,6 +1580,9 @@ export default {
     background: #FFFFFF;
     box-shadow: 0 4px 16px 2px rgba(40, 40, 40, 0.08);
     border-radius: 24px;
+    .cursor{
+      cursor: pointer;
+    }
     &:deep(.q-btn) {
       .q-btn__content {
         margin: 0;
@@ -1373,6 +1708,9 @@ export default {
             .download-box {
               align-self: center;
               text-align: center;
+              a{
+                color: #232323;
+              }
 
               .text-style {
                 font-style: normal;
@@ -1390,6 +1728,12 @@ export default {
                 background: #FFF2CB;
                 border: 2px solid #2A2A2A;
                 border-radius: 24px;
+                span{
+                    font-weight: 700;
+                    font-size: 12px;
+                    line-height: 16px;
+                    margin-left: 11px;
+                  }
               }
 
             }
@@ -1475,8 +1819,13 @@ export default {
             .sub-btn {
               width: calc(100% - 32px);
               height: 48px;
-              background: #FFBD07;
+              background: #FFF0C1;
+              border: 2px solid #FFBD07;
               border-radius: 24px;
+              &.active{
+                background: #FFBD07;
+                border: none;
+              }
 
               .sub-btn-text {
                 font-style: normal;
@@ -1629,11 +1978,11 @@ export default {
                 }
 
                 .download-btn {
-                  width: 150px;
-                  height: 40px;
-                  background: #FFF2CB;
-                  border: 2px solid #2A2A2A;
-                  border-radius: 24px;
+                  span{
+                    font-size: 14px;
+                    line-height: 16px;
+                    margin-left: 11px;
+                  }
                 }
 
               }
@@ -1710,6 +2059,10 @@ export default {
                 .download-btn {
                   width: 142px;
                   height: 32px;
+                  span{
+                    font-size: 10px;
+                    line-height: 16px;
+                  }
                 }
 
               }
@@ -1905,9 +2258,6 @@ export default {
                 .download-btn{
                   width: 130px;
                   height: 32px;
-                  span{
-                    font-size: 12px;
-                  }
                 }
               }
             }
@@ -2191,7 +2541,7 @@ export default {
                   border-width: 1px;
 
                   span {
-                    font-size: 12px;
+                    margin-left: 9px;
                   }
                 }
 

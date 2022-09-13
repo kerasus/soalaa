@@ -4,7 +4,12 @@
       <q-img src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_cart.png" />
     </div>
     <div class="title">سبد خرید شما خالی است!</div>
-    <div class="back">بازگشت به فروشگاه</div>
+    <router-link
+      :to="{name: 'HomePage'}"
+      class="back"
+    >
+      بازگشت به فروشگاه
+    </router-link>
   </div>
 </template>
 
@@ -51,6 +56,7 @@ export default {
     text-align: center;
     color: #8075DC;
     margin-top: 12px;
+    text-decoration: none;
   }
 }
 
