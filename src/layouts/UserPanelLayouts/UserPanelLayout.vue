@@ -25,7 +25,6 @@ export default {
   },
   computed: {
     getTemplateLeftSideBarType() {
-      console.log('this.$store.getters[\'AppLayout/templateLeftSideBarType\']', this.$store.getters['AppLayout/templateLeftSideBarType'])
       return this.$store.getters['AppLayout/templateLeftSideBarType']
     },
     // layoutLeftDrawerVisible
