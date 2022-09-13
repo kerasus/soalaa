@@ -1,5 +1,5 @@
-<template>
-  <page-builder
+
+ <page-builder
     :sections="sections"
     :options="options"
     :containerFullHeight="calculateHeightStyle"
@@ -48,6 +48,7 @@ export default {
     this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
     this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
   },
+
   computed: {
     calculateHeightStyle() {
       return this.$store.getters['AppLayout/calculateContainerFullHeight']
@@ -86,4 +87,5 @@ export default {
 
   }
 }
+
 </style>

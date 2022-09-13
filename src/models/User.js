@@ -14,6 +14,7 @@ class User extends Model {
       { key: 'first_name' },
       { key: 'last_name' },
       { key: 'full_name' },
+      { key: 'national_code' },
       { key: 'mobile' },
       { key: 'city' },
       { key: 'province' },

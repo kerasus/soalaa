@@ -123,9 +123,6 @@ const routes = [
           layoutHeaderType: 'panel',
           layoutLeftDrawerVisible: true,
           layoutLeftSideBarType: 'panel'
-        },
-        meta: {
-          middlewares: [auth]
         }
       },
       {
@@ -134,7 +131,7 @@ const routes = [
         component: () => import('pages/Auth/Login.vue')
       },
       {
-        path: 'user',
+        path: '/user',
         name: 'User',
         component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
         layoutConfig: {
@@ -150,11 +147,21 @@ const routes = [
         },
         children: [
           {
+
+            path: 'profile',
+            name: 'profile',
+            component: () => import('pages/User/profile/profile'),
+            layoutConfig: {
+              layoutLeftDrawerVisible: true
+  }
+          },
+          {
             path: 'dashboard',
             name: 'User.Dashboard',
             component: () => import('pages/User/Dashboard/Dashboard'),
             meta: {
               middlewares: [auth]
+
             }
           },
           {
