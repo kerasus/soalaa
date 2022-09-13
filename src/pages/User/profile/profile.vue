@@ -43,7 +43,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.profile-page {
-  margin-top: 40px;
-}
 </style>
