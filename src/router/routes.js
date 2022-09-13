@@ -147,12 +147,21 @@ const routes = [
         },
         children: [
           {
+
             path: 'profile',
             name: 'profile',
             component: () => import('pages/User/profile/profile'),
             layoutConfig: {
               layoutLeftDrawerVisible: true
-              // layoutLeftSideBarType: 'default'
+  }
+          },
+          {
+            path: 'dashboard',
+            name: 'User.Dashboard',
+            component: () => import('pages/User/Dashboard/Dashboard'),
+            meta: {
+              middlewares: [auth]
+
             }
           },
           {
