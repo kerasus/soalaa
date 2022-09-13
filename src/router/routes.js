@@ -141,8 +141,9 @@ const routes = [
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
           layoutLeftDrawerVisible: false,
+          layoutLeftDrawer: false,
           layoutLeftSideBarType: 'default',
-          layoutLeftDrawerOverlay: true
+          layoutLeftDrawerOverlay: false
         },
         meta: {
           middlewares: [auth]
