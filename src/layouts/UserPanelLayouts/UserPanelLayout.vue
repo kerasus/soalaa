@@ -29,9 +29,18 @@ export default {
     },
     getLayoutLeftDrawerVisibility () {
       return this.$store.getters['AppLayout/layoutLeftDrawerVisible']
+    },
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
     }
   },
   created () {
+    if (this.windowSize.x < 1024) {
+      this.$store.dispatch('AppLayout/updateTemplateLayout', {
+        layoutLeftDrawerVisible: false,
+        layoutLeftDrawer: true
+      })
+    }
   },
   methods: {
   }
