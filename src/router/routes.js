@@ -135,7 +135,6 @@ const routes = [
         name: 'User',
         component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
         layoutConfig: {
-          name: 'User.MyOrders',
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
           layoutLeftDrawerVisible: false,
