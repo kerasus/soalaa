@@ -65,12 +65,11 @@ export default {
   },
   methods: {
     onLoadPage () {
-      this.axios.get(API_ADDRESS.cart.orderWithTransaction(this.orderId))
+      this.$axios.get(API_ADDRESS.cart.orderWithTransaction(this.orderId))
         .then((response) => {
-          console.log('response', response)
           const paymentStatus = response.data.data.paymentstatus
 
-          if (paymentStatus.id === 3 || !paymentStatus?.id) {
+          if (paymentStatus.id === 3) {
             this.hasPaid = true
           } else if (paymentStatus.id === 1) {
             this.hasPaid = false
