@@ -5,6 +5,7 @@
     <div class="choosing-3a-reason-container">
       <div class="choosing-3a-reason ">
         <div class="reason-header">
+          <div class="yellow-bg"></div>
           <span class="badge">1</span>
           <q-img class="reason-image"
                  :src="reasons[0].src"
@@ -20,6 +21,7 @@
 
       <div class="choosing-3a-reason ">
         <div class="reason-header">
+          <div class="yellow-bg"></div>
           <span class="badge">2</span>
           <q-img class="reason-image"
                  :src="reasons[1].src"
@@ -35,6 +37,7 @@
 
       <div class="choosing-3a-reason ">
         <div class="reason-header">
+          <div class="yellow-bg"></div>
           <span class="badge">3</span>
           <q-img class="reason-image"
                  :src="reasons[2].src"
@@ -50,6 +53,7 @@
 
       <div class="choosing-3a-reason ">
         <div class="reason-header">
+          <div class="yellow-bg"></div>
           <span class="badge">4</span>
           <q-img class="reason-image"
                  :src="reasons[3].src"
@@ -65,6 +69,7 @@
 
       <div class="choosing-3a-reason ">
         <div class="reason-header">
+          <div class="yellow-bg"></div>
           <span class="badge">5</span>
           <q-img class="reason-image"
                  :src="reasons[4].src"
@@ -180,7 +185,7 @@ export default {
 
 <style lang="scss" scoped>
 .why-3a-section {
-  padding-bottom: 108px;
+  padding-bottom: 45px;
 
   @media only screen and (max-width: 1439px) {
     padding-bottom: 76px;
@@ -231,7 +236,6 @@ export default {
       height: 357px;
       padding: 4px;
       margin: 0 15px 40px 15px;
-
       @media only screen and (max-width: 1439px) {
         width: 280px;
         height: 412px;
@@ -254,14 +258,23 @@ export default {
       }
 
       .reason-header {
-        background: #EEB000;
-        height: 156px;
-        border-radius: 22px;
         display: flex;
         justify-content: center;
         position: relative;
+        .yellow-bg{
+          width: 100%;
+          background: #EEB000;
+          height: 156px;
+          border-radius: 22px;
+          position: absolute;
+          top: 0;
+          z-index: 2;
+          @media only screen and (max-width: 599px) {
+            height: 127px;
+          }
+        }
         @media only screen and (max-width: 599px) {
-          height: 127px;
+          //height: 127px;
         }
         .badge {
           position: absolute;
@@ -278,18 +291,36 @@ export default {
           font-size: 24px;
           line-height: 42px;
           text-align: center;
+          z-index: 4;
         }
         .reason-image {
-          position: absolute;
+          z-index: 3;
         }
       }
 
       .reason-body {
-        padding: 30px 20px 20px 20px ;
-
-        @media only screen and (max-width: 768px) {
-          padding: 8px 20px 20px 20px ;
+        padding: 0 20px;
+        bottom: 20px;
+        z-index: 0;
+        padding-top: 15px;
+        //white-space:;
+        @media only screen and (max-width: 1439px) {
+          padding: 0 15px;
+          padding-top: 35px;
+          top:195px
         }
+        @media only screen and (max-width: 1023px) {
+          padding: 8px 15px 15px 12px ;
+          top: 168px;
+        }
+        @media only screen and (max-width: 768px) {
+          padding: 0 12px;
+          top: 150px;
+        }
+        //@media only screen and (max-width: 599px) {
+        //  padding: 0 12px;
+        //
+        //}
 
         .reason-title {
           font-style: normal;
@@ -299,7 +330,7 @@ export default {
           color: #232323;
           margin-bottom: 8px;
           @media only screen and (max-width: 768px) {
-            font-size: 18px;
+            font-size: 12px;
           }
           @media only screen and (max-width: 599px) {
             text-align: center;
@@ -314,6 +345,7 @@ export default {
           color: #1E1E1E;
           @media only screen and (max-width: 768px) {
             font-size: 12px;
+            line-height: 18px;
           }
           @media only screen and (max-width: 599px) {
             text-align: center;
