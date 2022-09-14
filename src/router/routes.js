@@ -99,7 +99,13 @@ const routes = [
       {
         path: '',
         name: 'HomePage',
-        component: () => import('pages/HomePage')
+        component: () => import('pages/HomePage'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false
+        }
+
       },
       {
         path: 'landing',
