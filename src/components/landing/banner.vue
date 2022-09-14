@@ -1,16 +1,19 @@
 <template>
   <div>
     <div class="banner-section">
-      <q-img class="extra-large"
-             src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/seA _Desktop.png"></q-img>
-      <q-img class="large"
-             src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Desktop_HD.png"></q-img>
-      <q-img class="medium"
-             src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Tablet_(Medium).png"></q-img>
-      <q-img class="small"
-             src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Tablet_(Small).png"></q-img>
-      <q-img  class="extra-small"
-              src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Mobile_(Extra_small).png"></q-img>
+      <a href="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Binder1.pdf"
+         target="_blank">
+        <q-img class="extra-large"
+               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/seA_Desktop.png"></q-img>
+        <q-img class="large"
+               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Desktop_HD.png"></q-img>
+        <q-img class="medium"
+               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Tablet_(Medium).png"></q-img>
+        <q-img class="small"
+               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Tablet_(Small).png"></q-img>
+        <q-img  class="extra-small"
+                src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Mobile_(Extra_small).png"></q-img>
+      </a>
     </div>
   </div>
 </template>
