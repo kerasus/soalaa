@@ -294,7 +294,7 @@ export default {
     },
 
     totalFinalPrice() {
-      return this.getPriceFormat('final')
+      return this.getPriceFormat('final') ? this.getPriceFormat('final') : 0
     },
 
     totalBasePrice() {
