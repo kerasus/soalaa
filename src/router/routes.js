@@ -147,13 +147,12 @@ const routes = [
         },
         children: [
           {
-
             path: 'profile',
             name: 'profile',
             component: () => import('pages/User/profile/profile'),
             layoutConfig: {
               layoutLeftDrawerVisible: true
-  }
+            }
           },
           {
             path: 'dashboard',
