@@ -46,18 +46,59 @@
              :label="tab.key"
       />
     </q-tabs>
-    yuyu :  {{activeTab}}
     <q-tab-panels v-model="activeTab"
                   animated
                   class="tab-content">
       <q-tab-panel v-for="(tabData, index) in pageData.tabs"
                    :key="index"
+                   class="q-pa-none flex"
                    :name="index">
-        <div class="text-h6">Alarms</div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        <div class="content-box">
+          <div class="title"> {{tabData.key}}</div>
+          <div class="description">{{tabData.value}}</div>
+          <div v-if="tabData.link"
+               class="more-detail text-right">
+            <q-btn
+              flat
+              :to="tabData.link"
+              style="color: #8075DC"
+              class="btn"
+              icon-right="west"
+              label="اطلاعات بیشتر" />
+          </div>
+        </div>
+        <div class="img-box">
+          <q-img class="img"
+                 :src="tabData.image" />
+        </div>
       </q-tab-panel>
     </q-tab-panels>
 
+  </div>
+  <q-skeleton v-if="loading"
+              class="full-width slider-loading"
+              height="520px" />
+  <div v-else
+       class="bank-soalaa">
+    <div class="content">
+      <div class="title">
+        بانک سوالا
+      </div>
+      <div class="sub-title">
+        {{pageData.bank_soala.title}}
+      </div>
+      <div v-for="(item, index) in pageData.bank_soala.value"
+           :key="index"
+           class="soalaa-item">
+        <q-icon size="7px"
+                name="circle" />
+        {{item}}
+      </div>
+    </div>
+    <div class="img-box bg-indigo-3">
+      <!--      <q-img class="img"-->
+      <!--             :srs="pageData.bank_soala.image"></q-img>-->
+    </div>
   </div>
 
 </template>
@@ -150,13 +191,14 @@ export default {
   margin-bottom: 32px;
 }
 .tab-container{
-  margin-bottom: 100px;
+  margin-bottom: 80px;
   .active-container{
     color: #9690E4;
   }
   .tab-style{
     width: 202px;
-    margin: 0 15px;
+    margin: 0 15px 24px 15px;
+    height: 60px;
     &:deep(.q-tab__label){
       font-style: normal;
       font-weight: 700;
@@ -171,7 +213,98 @@ export default {
     background: rgba(228, 232, 239, .6);
     border-radius: 20px;
     padding: 40px 80px;
+    .content-box{
+      margin-right: 40px;
+      .title{
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 37px;
+        letter-spacing: -0.03em;
+        color: #434765;
+        margin-bottom: 24px;
+      }
+      .description{
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 28px;
+        text-align: justify;
+        letter-spacing: -0.03em;
+        color: #434765;
+        margin-bottom: 31px;
+        width: 586px;
+      }
+      .more-detail{
 
+        .btn{
+          color: #8075DC;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 18px;
+          line-height: 28px;
+          letter-spacing: -0.03em;
+        }
+      }
+    }
+    .img-box{
+      width:576px;
+      height: 360px;
+      border-radius: 20px;
+      .img{
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+      }
+    }
+
+  }
+}
+.bank-soalaa{
+  padding: 40px 120px;
+  background: #FFFFFF;
+  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+  border-radius: 24px;
+  .content{
+    margin-right: 135px;
+    width: 587px;
+    .title{
+      font-style: normal;
+      font-weight: 800;
+      font-size: 40px;
+      line-height: 62px;
+      color: #8075DC;
+      margin-bottom: 10px;
+    }
+    .sub-title{
+      font-style: normal;
+      font-weight: 600;
+      font-size: 22px;
+      line-height: 34px;
+      letter-spacing: -0.03em;
+      color: #6D708B;
+      margin-bottom: 10px;
+
+    }
+    .soalaa-item{
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 25px;
+      letter-spacing: -0.03em;
+      color: #6D708B;
+      margin-bottom: 6px;
+      .badge{
+        background: #6D708B;
+      }
+    }
+    .img-box{
+      width: 400px;
+      height: 400px;
+      .img{
+        width: 100%;
+        height: 100%;
+      }
+    }
   }
 }
 </style>
