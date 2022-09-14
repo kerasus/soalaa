@@ -1,61 +1,39 @@
 <template>
   <div class="steps row">
-
-    <div
-      class="exam-info col-5 flex items-center step"
-      :class="{ 'current-step' : this.currentStep === 'createPage' }"
-      @click="changeCurrentStep('createPage')"
-    >
-      <q-icon
-        name="isax:edit"
-        class="icon"
-      />
+    <div class="steps-box col-12 row no-padding items-center">
       <div
-        class="exam-info-title title "
-        :class="{ 'hidden-mobile' : this.currentStep !== 'createPage' }">
-        اطلاعات آزمون
+        class="exam-info col-5 flex items-center step"
+        :class="{ 'current-step' : this.currentStep === 'createPage' }"
+        @click="changeCurrentStep('createPage')"
+      >
+        <q-icon name="isax:edit"
+                class="icon" />
+        <div class="exam-info-title title "
+             :class="{ 'hidden-mobile' : this.currentStep !== 'createPage' }">اطلاعات آزمون</div>
+        <div class="line"
+             :class="{ 'border-mobile' : this.currentStep !== 'createPage' }" />
       </div>
       <div
-        class="line"
-        :class="{ 'border-mobile' : this.currentStep !== 'createPage' }"
-      />
-    </div>
-
-    <div
-      class="choose-questions col-5 flex items-center step"
-      :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }"
-      @click="changeCurrentStep('chooseQuestion')"
-    >
-      <q-icon
-        name="isax:task-square"
-        class="icon"
-      />
-      <div
-        class="choose-questions-title title"
-        :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }"
+        class="choose-questions col-5 flex items-center step"
+        :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }"
+        @click="changeCurrentStep('chooseQuestion')"
       >
-        انتخاب سوال
+        <q-icon name="isax:task-square"
+                class="icon" />
+        <div class="choose-questions-title title"
+             :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }">انتخاب سوال</div>
+        <div class="line"
+             :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion' }" />
       </div>
       <div
-        class="line"
-        :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion' }"
-      />
-    </div>
-
-    <div
-      class="final-approval col-2 flex items-center step"
-      :class="{ 'current-step' : this.currentStep === 'finalApproval' }"
-      @click="changeCurrentStep('finalApproval')"
-    >
-      <q-icon
-        name="isax:tick-square"
-        class="icon"
-      />
-      <div
-        class="final-approval-title"
-        :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }"
+        class="final-approval col-2 flex items-center step"
+        :class="{ 'current-step' : this.currentStep === 'finalApproval' }"
+        @click="changeCurrentStep('finalApproval')"
       >
-        تایید نهایی
+        <q-icon name="isax:tick-square"
+                class="icon" />
+        <div class="final-approval-title"
+             :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }">تایید نهایی</div>
       </div>
     </div>
   </div>
@@ -91,30 +69,6 @@ export default {
         this.$emit('update:currentComponent', value)
       }
     }
-  },
-  data () {
-    return {
-      stepList: [
-        {
-          stepName: 'createPage',
-          icon: 'isax:edit',
-          title: 'اطلاعات آزمون',
-          separator: true
-        },
-        {
-          stepName: 'createPage',
-          icon: 'isax:task-square',
-          title: 'انتخاب سوال',
-          separator: true
-        },
-        {
-          stepName: 'finalApproval',
-          icon: 'isax:tick-square',
-          title: 'تایید نهایی',
-          separator: false
-        }
-      ]
-    }
   }
 }
 </script>
@@ -128,17 +82,21 @@ export default {
   line-height: 28px;
   color: #DEDEDE;
   border-radius: 20px;
-  background: #FFFFFF;
-  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
   .step {
     cursor: pointer;
   }
-  .icon {
-    font-size: 22px;
-    margin-right: 10px;
-  }
-  .title{
-    margin-right: 16px;
+  .steps-box {
+    background: #FFFFFF;
+    box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
+    padding-left: 62px !important;
+    border-radius: 20px;
+    .icon {
+      font-size: 22px;
+      margin-right: 10px;
+    }
+    .title{
+      margin-right: 16px;
+    }
   }
   .line {
     border: 1.5px solid #DEDEDE;
