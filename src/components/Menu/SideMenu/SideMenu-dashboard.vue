@@ -204,7 +204,7 @@ export default {
           title: 'سفارش‌ های من',
           icon: 'isax:clipboard-text',
           routeName: 'User.MyOrders',
-          permission: 'examStore',
+          permission: 'all',
           active: false,
           children: []
         },
