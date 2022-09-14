@@ -138,12 +138,12 @@ const routes = [
         name: 'User',
         component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
         layoutConfig: {
-          name: 'User.MyOrders',
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
-          layoutLeftDrawerVisible: false,
+          layoutLeftDrawerVisible: true,
+          layoutLeftDrawer: false,
           layoutLeftSideBarType: 'default',
-          layoutLeftDrawerOverlay: true
+          layoutLeftDrawerOverlay: false
         },
         meta: {
           middlewares: [auth]
@@ -153,12 +153,7 @@ const routes = [
             path: 'my-orders',
             name: 'User.MyOrders',
             component: () => import('pages/User/MyOrders/MyOrders'),
-            breadcrumbs: { title: 'سفارش های من' },
-            meta: {
-              middlewares: [
-                Permissions.hasPermission('examStore')
-              ]
-            }
+            breadcrumbs: { title: 'سفارش های من' }
           },
           {
             path: '/user_exam_list',
