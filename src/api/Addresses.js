@@ -313,6 +313,9 @@ const API_ADDRESS = {
     landing: lumenServer + 'subscribe/landing',
     list: lumenServer + 'subscribe/user',
     register: (userId) => lumenServer + `/subscribe/user/${userId}`
+  },
+  homePage: {
+    base: lumenServer + '/homepage'
   }
 }
 export default API_ADDRESS
