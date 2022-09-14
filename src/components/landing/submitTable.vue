@@ -239,10 +239,8 @@
                   <span>تومان</span>
                 </div>
                 <q-btn unelevated
-                       class="sub-btn"
-                       :class="{'active': selectPackMode}"
-                       :disable="!selectPackMode"
-                       @click="addToCart"
+                       class="sub-btn active"
+                       @click="addPackProductToCart"
                 >
                   <span class="sub-btn-text">
                     ثبت‌نام
@@ -1443,6 +1441,16 @@ export default {
         this.$router.push({ name: 'cart' })
       } catch (e) {
       }
+    },
+
+    addPackProductToCart() {
+      this.selectedProductId = {
+        product: {
+          id: this.currentBandle.id
+        },
+        products: [this.currentBandle.allId]
+      }
+      this.addToCart()
     },
 
     deSelectExam(examIndex) {
