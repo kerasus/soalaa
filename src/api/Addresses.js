@@ -308,6 +308,11 @@ const API_ADDRESS = {
         authServer + '/ticketMessage/' + ticketId + '/report'
     },
     ticketRate: (ticketId) => authServer + '/ticket/' + ticketId + '/rate'
+  },
+  subscription: {
+    landing: lumenServer + 'subscribe/landing',
+    list: lumenServer + 'subscribe/user',
+    register: (userId) => lumenServer + `/subscribe/user/${userId}`
   }
 }
 export default API_ADDRESS
