@@ -160,7 +160,7 @@
           <!--            <p class="title">توضیحات</p>-->
 
           <!--            <q-input-->
-          <!--              v-model="shoppingDescribtion"-->
+          <!--              v-model="shoppingDescription"-->
           <!--              type="text"-->
           <!--              label="اگر توضیحی درباره ی محصول دارید اینجا بنویسید"-->
           <!--              class="payment-description-input"-->
@@ -275,13 +275,12 @@ export default {
   data() {
     return {
       couponValue: null,
-      shoppingDescription: null,
       userEnteredLoginInfo: {
         password: '',
         mobile: ''
       },
-      selectedBank: false,
-      shoppingDescribtion: '',
+      selectedBank: true,
+      shoppingDescription: '',
       loading: false
     }
   },
