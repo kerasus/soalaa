@@ -131,7 +131,19 @@ const routes = [
         component: () => import('pages/Auth/Login.vue')
       },
       {
-        path: '/user',
+        path: 'subscription',
+        name: 'subscription',
+        component: () => import('pages/User/Subscription'),
+        breadcrumbs: { title: 'ساخت آزمون' },
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false,
+          layoutLeftSideBarType: 'default'
+        }
+      },
+      {
+        path: 'user',
         name: 'User',
         component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
         layoutConfig: {
@@ -153,12 +165,18 @@ const routes = [
             component: () => import('pages/User/profile/profile'),
             layoutConfig: {
               layoutLeftDrawerVisible: true
-  }
+            }
           },
           {
             path: 'dashboard',
             name: 'User.Dashboard',
             component: () => import('pages/User/Dashboard/Dashboard'),
+            layoutConfig: {
+              layoutHeaderVisible: true,
+              layoutHeaderType: 'default',
+              layoutLeftDrawerVisible: true,
+              layoutLeftSideBarType: 'default'
+            },
             meta: {
               middlewares: [auth]
 
@@ -179,6 +197,12 @@ const routes = [
             path: 'user_exam_list',
             name: 'User.Exam.List',
             component: () => import('pages/User/exam/List'),
+            layoutConfig: {
+              layoutHeaderVisible: true,
+              layoutHeaderType: 'default',
+              layoutLeftDrawerVisible: true,
+              layoutLeftSideBarType: 'default'
+            },
             middleware: [
               Permissions.hasPermission('examStore')
             ]

@@ -275,6 +275,11 @@ const API_ADDRESS = {
     review: apiV2Server + '/checkout/review?seller=2',
     getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2',
     orderWithTransaction (orderId) { return apiV2Server + '/orderWithTransaction/' + orderId }
+  },
+  subscription: {
+    landing: lumenServer + 'subscribe/landing',
+    list: lumenServer + 'subscribe/user',
+    register: (userId) => lumenServer + `/subscribe/user/${userId}`
   }
 }
 export default API_ADDRESS
