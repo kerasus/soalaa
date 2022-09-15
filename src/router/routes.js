@@ -192,6 +192,14 @@ const routes = [
             }
           },
           {
+            path: 'exam/create',
+            name: 'user-creat-exam',
+            component: () => import('components/CommonComponents/Exam/Create/TabPanel/TabPanel'),
+            layoutConfig: {
+              layoutLeftDrawerVisible: false
+            }
+          },
+          {
             path: 'dashboard',
             name: 'User.Dashboard',
             component: () => import('pages/User/Dashboard/Dashboard'),
