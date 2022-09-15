@@ -79,7 +79,7 @@
               class="full-width slider-loading"
               height="520px" />
   <div v-else
-       class="bank-soalaa">
+       class="bank-soalaa flex">
     <div class="content">
       <div class="title">
         بانک سوالا
@@ -95,10 +95,16 @@
         {{item}}
       </div>
     </div>
-    <div class="img-box bg-pink">
-      l
-      <!--      <q-img class="img"-->
-      <!--             :srs="pageData.bank_soala.image"></q-img>-->
+    <div class="img-box">
+      <q-img
+        class="img"
+        :srs="pageData.bank_soala.image" />
+    </div>
+  </div>
+  <div class="sub-mit-box flex justify-between">
+    <div class="info">با ورود و یا ثبت نام در سوالا میتوانید محتوای شخصی سازی شده و مربوط به خود را دنبال کنید</div>
+    <div class="action-box">
+
     </div>
   </div>
 
@@ -265,6 +271,7 @@ export default {
   background: #FFFFFF;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
   border-radius: 24px;
+  margin-bottom: 80px;
   .content{
     margin-right: 135px;
     width: 587px;
@@ -307,6 +314,19 @@ export default {
       width: 100%;
       height: 100%;
     }
+  }
+}
+.sub-mit-box{
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 30px 80px;
+  .info{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: -0.03em;
+    color: #000000;
   }
 }
 </style>
