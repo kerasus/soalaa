@@ -25,25 +25,25 @@
           </div>
         </div>
 
-        <div class="wallet-credit price-section">
-          <div class="title">استفاده از کیف پول</div>
-          <div
-            v-if="loading"
-            class="loading-spinner"
-          >
-            <q-spinner-tail
-              color="orange"
-              size="2em"
-            />
-          </div>
-          <div
-            v-else
-            class="price"
-          >
-            {{ amountUsingWallet}}
-            <span class="iran-money-unit">تومان</span>
-          </div>
-        </div>
+        <!--        <div class="wallet-credit price-section">-->
+        <!--          <div class="title">استفاده از کیف پول</div>-->
+        <!--          <div-->
+        <!--            v-if="loading"-->
+        <!--            class="loading-spinner"-->
+        <!--          >-->
+        <!--            <q-spinner-tail-->
+        <!--              color="orange"-->
+        <!--              size="2em"-->
+        <!--            />-->
+        <!--          </div>-->
+        <!--          <div-->
+        <!--            v-else-->
+        <!--            class="price"-->
+        <!--          >-->
+        <!--            {{ amountUsingWallet}}-->
+        <!--            <span class="iran-money-unit">تومان</span>-->
+        <!--          </div>-->
+        <!--        </div>-->
 
         <div
           v-if="discountInPercent"
