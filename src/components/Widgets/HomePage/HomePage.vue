@@ -95,7 +95,8 @@
         {{item}}
       </div>
     </div>
-    <div class="img-box bg-indigo-3">
+    <div class="img-box bg-pink">
+      l
       <!--      <q-img class="img"-->
       <!--             :srs="pageData.bank_soala.image"></q-img>-->
     </div>
@@ -296,14 +297,15 @@ export default {
       .badge{
         background: #6D708B;
       }
+
     }
-    .img-box{
-      width: 400px;
-      height: 400px;
-      .img{
-        width: 100%;
-        height: 100%;
-      }
+  }
+  .img-box{
+    width: 400px;
+    height: 400px;
+    .img{
+      width: 100%;
+      height: 100%;
     }
   }
 }
