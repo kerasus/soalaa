@@ -95,7 +95,7 @@
                   :class="selectiveRegister? '':''">ثبت‌نام کامل
               </th>
             </tr>
-            <tr v-for="(item , index) in currentBandle?.exams"
+            <tr v-for="(item , index) in currentBundle?.exams"
                 :key="item">
               <td class="number custom-border"
                   :class="{'number-selective': selectiveRegister}">{{ index + 1}}</td>
@@ -160,7 +160,7 @@
                     برای دانلود برنامه آزمون روی دکمه زیر کلیک کنید.
                   </div>
                   <a target="_blank"
-                     :href="currentBandle?.pdfLink">
+                     :href="currentBundle?.pdfLink">
                     <q-btn class="download-btn">
                       <div class="svg">
                         <svg width="18"
@@ -190,7 +190,7 @@
                     قیمت تک مرحله
                   </span>
                   <br>
-                  <span class="price">{{currentBandle?.singleUnitPrices.toLocaleString()}}</span>
+                  <span class="price">{{currentBundle?.singleUnitPrices.toLocaleString()}}</span>
                   <span class="price">تومان</span>
                 </div>
               </div>
@@ -231,18 +231,16 @@
                 </div>
                 <div class="exam-price-box">
                   <span class="discount-tag"> تخفیف٪</span>
-                  <span class="main-price"> {{ currentBandle?.packBasePrices.toLocaleString() }}</span>
+                  <span class="main-price"> {{ currentBundle?.packBasePrices.toLocaleString() }}</span>
                   <span class="main-price"> تومان</span>
                 </div>
                 <div class="final-price-box">
-                  <span> {{ currentBandle?.packFinalPrices.toLocaleString() }}</span>
+                  <span> {{ currentBundle?.packFinalPrices.toLocaleString() }}</span>
                   <span>تومان</span>
                 </div>
                 <q-btn unelevated
-                       class="sub-btn"
-                       :class="{'active': selectPackMode}"
-                       :disable="!selectPackMode"
-                       @click="addToCart"
+                       class="sub-btn active"
+                       @click="addPackProductToCart"
                 >
                   <span class="sub-btn-text">
                     ثبت‌نام
@@ -1403,14 +1401,14 @@ export default {
   },
   computed: {
     singlePriceOnPackMode() {
-      const price = (this.currentBandle.packFinalPrices) / (this.currentBandle.exams.length)
+      const price = (this.currentBundle.packFinalPrices) / (this.currentBundle.exams.length)
       return price.toLocaleString()
     },
     finalPriceInSingleMode() {
-      const price = (this.currentBandle.exams.filter(item => item.selected).length) * (this.currentBandle.singleUnitPrices)
+      const price = (this.currentBundle.exams.filter(item => item.selected).length) * (this.currentBundle.singleUnitPrices)
       return price.toLocaleString()
     },
-    currentBandle() {
+    currentBundle() {
       // return this.activeTab.productBandles.filter(item => (this.selectedMajor ? item.major_id === this.selectedMajor : true) && (this.selectedGrade ? item.grade_id === this.selectedGrade : true))[0]
       return this.activeTab.productBandles.filter(item => {
         // console.log('item.major_id', item.major_id, '-', this.selectedMajor)
@@ -1445,8 +1443,18 @@ export default {
       }
     },
 
+    addPackProductToCart() {
+      this.selectedProductId = {
+        product: {
+          id: this.currentBundle.id
+        },
+        products: [this.currentBundle.allId]
+      }
+      this.addToCart()
+    },
+
     deSelectExam(examIndex) {
-      this.currentBandle.exams.forEach((exam, index) => {
+      this.currentBundle.exams.forEach((exam, index) => {
         if (index <= examIndex) {
           exam.selected = false
           this.selectedProductId.products = this.selectedProductId.products.filter(id => id !== exam.id)
@@ -1460,7 +1468,7 @@ export default {
 
     selectExam(examIndex) {
       this.selectedProductId.products = []
-      this.currentBandle.exams.forEach((exam, index) => {
+      this.currentBundle.exams.forEach((exam, index) => {
         // exam.selected = index >= examIndex
         if (index >= examIndex) {
           exam.selected = true
@@ -1471,16 +1479,16 @@ export default {
 
     onSelectedExam(item, examIndex) {
       this.selectPackMode = false
-      this.selectedProductId.product = { id: this.currentBandle.id }
+      this.selectedProductId.product = { id: this.currentBundle.id }
       item.selected ? this.deSelectExam(examIndex) : this.selectExam(examIndex)
     },
 
     onUpdateSelectedExams() {
       this.selectedProductId = {
         product: {
-          id: this.currentBandle.id
+          id: this.currentBundle.id
         },
-        products: [this.currentBandle.allId]
+        products: [this.currentBundle.allId]
       }
     },
 
@@ -1545,8 +1553,8 @@ export default {
       this.selectedGrade = this.currentGrades[0]
       this.$nextTick(() => {
         this.selectedProductId = {
-          product: { id: this.currentBandle.id },
-          products: [this.currentBandle.allId]
+          product: { id: this.currentBundle.id },
+          products: [this.currentBundle.allId]
         }
       })
     },
