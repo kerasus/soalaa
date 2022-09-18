@@ -10,6 +10,7 @@
 <script>
 import 'katex/dist/katex.min.css'
 import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
+import katex from 'katex'
 
 // import { createApp } from 'vue'
 // const app = createApp({})
@@ -57,19 +58,30 @@ export default {
       const persianRegex = /[\u0600-\u06FF]/
       return !string.match(persianRegex)
     },
-    // computedKatex () {
-    //   const string = this.input
-    //   const purifiedKatex = mixinConvertToTiptap.methods.convertKatex(string)
-    //   return katex.renderToString(purifiedKatex, {
-    //     throwOnError: false,
-    //     safe: true,
-    //     trust: true
-    //   })
-    // }
     computedKatex () {
-      // purified katex
-      return mixinConvertToTiptap.methods.convertKatex(this.input)
+      let string = this.input
+      string = mixinConvertToTiptap.methods.convertKatex(string)
+      const regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms
+      string = string.replace(regex, (match) => {
+        let finalMatch
+        if (match.includes('$$')) {
+          finalMatch = match.slice(2, -2)
+        } else if (match.includes('$')) {
+          finalMatch = match.slice(1, -1)
+        } else {
+          finalMatch = match.slice(2, -2)
+        }
+        return katex.renderToString(finalMatch, {
+          throwOnError: false,
+          strict: 'warn'
+        })
+      })
+      return string
     }
+    // computedKatex () {
+    //   // purified katex
+    //   return mixinConvertToTiptap.methods.convertKatex(this.input)
+    // }
   },
   mounted () {
     setTimeout(() => {
