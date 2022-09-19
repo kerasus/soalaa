@@ -102,9 +102,9 @@ export default {
       }
       let redirectTo = window.localStorage.getItem('redirectTo')
       if (!redirectTo) {
-        redirectTo = 'dashboard'
+        redirectTo = '/'
       }
-      this.$router.push({ name: redirectTo })
+      this.$router.push({ path: redirectTo })
     },
 
     handleErr (err) {

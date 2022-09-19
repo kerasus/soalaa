@@ -48,6 +48,14 @@ const entityCrudRouteConfigs = [
 
   },
   {
+    path: 'QuestionTarget',
+    baseRouteName: 'Admin.QuestionTarget',
+    componentPath: 'pages/Admin/QuestionTarget.vue',
+    breadcrumbs: { title: 'اهداف سوال' },
+    permissions: ['optionIndex', 'optionStore', 'optionShow', 'optionUpdate']
+
+  },
+  {
     path: 'majors',
     baseRouteName: 'Admin.Majors',
     componentPath: 'pages/Admin/Majors',
@@ -89,12 +97,23 @@ const routes = [
     },
     children: [
       {
+        path: '',
+        name: 'HomePage',
+        component: () => import('pages/HomePage'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false
+        }
+
+      },
+      {
         path: 'landing',
         name: 'landing',
         component: () => import('layouts/LandingLayout'),
         children: [
           {
-            path: '3a_exams',
+            path: '',
             name: 'Landing.3aExams',
             component: () => import('pages/User/landing/landing')
           }
@@ -136,6 +155,14 @@ const routes = [
           middlewares: [auth]
         },
         children: [
+          {
+            path: 'dashboard',
+            name: 'User.Dashboard',
+            component: () => import('pages/User/Dashboard/Dashboard'),
+            meta: {
+              middlewares: [auth]
+            }
+          },
           {
             path: 'my-orders',
             name: 'User.MyOrders',
@@ -508,9 +535,26 @@ const routes = [
         path: '/cart',
         name: 'cart',
         component: () => import('pages/Cart/Cart'),
-        meta: {
-          middlewares: [
-            Permissions.hasPermission('examStore')]
+        // meta: {
+        //   middlewares: [
+        //     Permissions.hasPermission('examStore')]
+        // },
+        layoutConfig: {
+          layoutHeaderVisible: false,
+          layoutLeftDrawerVisible: false
+        }
+      },
+      {
+        path: '/order/:orderId/thankYou',
+        name: 'thankYouPage',
+        component: () => import('pages/ThankYouPage/ThankYouPage'),
+        // meta: {
+        //   middlewares: [
+        //     Permissions.hasPermission('examStore')]
+        // },
+        layoutConfig: {
+          layoutHeaderVisible: false,
+          layoutLeftDrawerVisible: false
         }
       }
 

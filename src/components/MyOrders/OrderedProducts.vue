@@ -20,7 +20,7 @@
 
           <div class="product-text-info">
             <div class="order-item-header">
-              <div class="title ellipsis">
+              <div class="title">
                 {{ orderedItem.grand.title }}
               </div>
             </div>
@@ -61,7 +61,7 @@
 
           <div class="product-text-info">
             <div class="order-item-header">
-              <div class="title ellipsis">
+              <div class="title">
                 {{ orderedItem.order_product.list[0].product.title }}
               </div>
             </div>
@@ -115,7 +115,7 @@
                       class="pamphlet"
                     >
                       <template v-if="item && item.product">
-                        <div class="title ellipsis">
+                        <div class="title">
                           {{ item.product.title }}
                         </div>
 
@@ -219,6 +219,7 @@ export default {
   background: #FFFFFF;
   border: 3px solid #E4E8EF;
   border-radius: 16px;
+  margin-bottom: 10px;
   @media screen and (max-width: 599px) {
     margin-top: 0px;
     background: #F2F5F9 !important;
