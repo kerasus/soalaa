@@ -50,7 +50,7 @@ export default {
     margin-bottom: 40px;
   }
   @media  screen and (max-width: 599px){
-
+    border-radius: 12px;
   }
   .info{
     font-style: normal;

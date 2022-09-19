@@ -119,7 +119,7 @@ export default {
   }
   @media screen and (max-width: 599px){
     padding: 20px 16px;
-
+    border-radius: 16px;
   }
   .content{
     margin-right: 135px;
@@ -180,12 +180,14 @@ export default {
       color: #6D708B;
       margin-bottom: 6px;
       display: flex;
+      @media screen and (max-width: 599px) {
+        font-size: 14px;
+        line-height: 22px;
+      }
       .badge{
         margin: 10px 5px 0;
         width: 7px
-
       }
-
     }
     .more-details{
       .btn{
