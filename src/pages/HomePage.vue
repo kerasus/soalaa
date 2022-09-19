@@ -21,7 +21,7 @@ export default {
                 {
                   widgets: [
                     {
-                      name: 'home-page'
+                      name: 'slider'
                     }
                   ]
                 }
@@ -32,6 +32,83 @@ export default {
                 style: {
                   marginTop: '10px'
                 }
+              }
+            },
+            {
+              cols: [
+                {
+                  widgets: [
+                    {
+                      name: 'tabPanel'
+                    }
+                  ]
+                }
+              ],
+              options: {
+                boxed: true,
+                boxedWidth: 1362,
+                style: {
+                  marginTop: '10px'
+                }
+              }
+            },
+            {
+              cols: [
+                {
+                  widgets: [
+                    {
+                      name: 'feature-box',
+                      data: {
+                        responseKey: 'bank_soala',
+                        title: 'بانک سوالا'
+                      }
+                    }
+                  ],
+                  options: {
+                    className: 'mitra'
+                  }
+                }
+              ],
+              options: {
+                boxed: true,
+                boxedWidth: 1362
+              }
+            },
+            {
+              cols: [
+                {
+                  widgets: [
+                    {
+                      name: 'go-login'
+                    }
+                  ]
+                }
+              ],
+              options: {
+                boxed: true,
+                boxedWidth: 1362
+              }
+            },
+            {
+              cols: [
+                {
+                  widgets: [
+                    {
+                      name: 'feature-box',
+                      data: {
+                        responseKey: '3a_azmon',
+                        title: 'آزمون‌های سه‌آ'
+                      }
+                    }
+                  ],
+                  options: {
+                    className: 'yellow-title'
+                  }
+                }
+              ],
+              options: {
+                boxed: true,
+                boxedWidth: 1362
               }
             }
           ]
