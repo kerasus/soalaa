@@ -140,7 +140,7 @@ const routes = [
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
-          layoutLeftDrawerVisible: false,
+          layoutLeftDrawerVisible: true,
           layoutLeftDrawer: false,
           layoutLeftSideBarType: 'default',
           layoutLeftDrawerOverlay: false
@@ -153,12 +153,7 @@ const routes = [
             path: 'my-orders',
             name: 'User.MyOrders',
             component: () => import('pages/User/MyOrders/MyOrders'),
-            breadcrumbs: { title: 'سفارش های من' },
-            meta: {
-              middlewares: [
-                Permissions.hasPermission('examStore')
-              ]
-            }
+            breadcrumbs: { title: 'سفارش های من' }
           },
           {
             path: '/user_exam_list',

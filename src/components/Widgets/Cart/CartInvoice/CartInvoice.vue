@@ -25,25 +25,25 @@
           </div>
         </div>
 
-        <div class="wallet-credit price-section">
-          <div class="title">استفاده از کیف پول</div>
-          <div
-            v-if="loading"
-            class="loading-spinner"
-          >
-            <q-spinner-tail
-              color="orange"
-              size="2em"
-            />
-          </div>
-          <div
-            v-else
-            class="price"
-          >
-            {{ amountUsingWallet}}
-            <span class="iran-money-unit">تومان</span>
-          </div>
-        </div>
+        <!--        <div class="wallet-credit price-section">-->
+        <!--          <div class="title">استفاده از کیف پول</div>-->
+        <!--          <div-->
+        <!--            v-if="loading"-->
+        <!--            class="loading-spinner"-->
+        <!--          >-->
+        <!--            <q-spinner-tail-->
+        <!--              color="orange"-->
+        <!--              size="2em"-->
+        <!--            />-->
+        <!--          </div>-->
+        <!--          <div-->
+        <!--            v-else-->
+        <!--            class="price"-->
+        <!--          >-->
+        <!--            {{ amountUsingWallet}}-->
+        <!--            <span class="iran-money-unit">تومان</span>-->
+        <!--          </div>-->
+        <!--        </div>-->
 
         <div
           v-if="discountInPercent"
@@ -160,7 +160,7 @@
           <!--            <p class="title">توضیحات</p>-->
 
           <!--            <q-input-->
-          <!--              v-model="shoppingDescribtion"-->
+          <!--              v-model="shoppingDescription"-->
           <!--              type="text"-->
           <!--              label="اگر توضیحی درباره ی محصول دارید اینجا بنویسید"-->
           <!--              class="payment-description-input"-->
@@ -275,13 +275,12 @@ export default {
   data() {
     return {
       couponValue: null,
-      shoppingDescription: null,
       userEnteredLoginInfo: {
         password: '',
         mobile: ''
       },
-      selectedBank: false,
-      shoppingDescribtion: '',
+      selectedBank: true,
+      shoppingDescription: '',
       loading: false
     }
   },
@@ -294,7 +293,7 @@ export default {
     },
 
     totalFinalPrice() {
-      return this.getPriceFormat('final')
+      return this.getPriceFormat('final') ? this.getPriceFormat('final') : 0
     },
 
     totalBasePrice() {
