@@ -46,14 +46,15 @@
     "vue": "^3.2.37",
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.0.13",
+    "vue-tiptap-katex-core": "^1.0.28",
     "vue-upload-component": "^3.0.50",
-    "vue3-tiptap-katex": "^1.0.24",
+    "vue3-tiptap-katex": "^1.0.26",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.9",
     "@quasar/app-webpack": "^3.5.9",
-    "eslint": "^8.21.0",
+    "eslint": "^8.23.1",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
