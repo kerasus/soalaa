@@ -107,7 +107,7 @@ const routes = [
         component: () => import('layouts/LandingLayout'),
         children: [
           {
-            path: '3a_exams',
+            path: '',
             name: 'Landing.3aExams',
             component: () => import('pages/User/landing/landing')
           }
@@ -138,12 +138,12 @@ const routes = [
         name: 'User',
         component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
         layoutConfig: {
-          name: 'User.MyOrders',
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
-          layoutLeftDrawerVisible: false,
+          layoutLeftDrawerVisible: true,
+          layoutLeftDrawer: false,
           layoutLeftSideBarType: 'default',
-          layoutLeftDrawerOverlay: true
+          layoutLeftDrawerOverlay: false
         },
         meta: {
           middlewares: [auth]
@@ -153,20 +153,12 @@ const routes = [
             path: 'my-orders',
             name: 'User.MyOrders',
             component: () => import('pages/User/MyOrders/MyOrders'),
-            breadcrumbs: { title: 'سفارش های من' },
-            meta: {
-              middlewares: [
-                Permissions.hasPermission('examStore')
-              ]
-            }
+            breadcrumbs: { title: 'سفارش های من' }
           },
           {
-            path: '/user_exam_list',
+            path: 'user_exam_list',
             name: 'User.Exam.List',
-            component: () => import('pages/User/exam/List'),
-            middleware: [
-              Permissions.hasPermission('examStore')
-            ]
+            component: () => import('pages/User/exam/List')
           }
         ]
       },
@@ -521,9 +513,26 @@ const routes = [
         path: '/cart',
         name: 'cart',
         component: () => import('pages/Cart/Cart'),
-        meta: {
-          middlewares: [
-            Permissions.hasPermission('examStore')]
+        // meta: {
+        //   middlewares: [
+        //     Permissions.hasPermission('examStore')]
+        // },
+        layoutConfig: {
+          layoutHeaderVisible: false,
+          layoutLeftDrawerVisible: false
+        }
+      },
+      {
+        path: '/order/:orderId/thankYou',
+        name: 'thankYouPage',
+        component: () => import('pages/ThankYouPage/ThankYouPage'),
+        // meta: {
+        //   middlewares: [
+        //     Permissions.hasPermission('examStore')]
+        // },
+        layoutConfig: {
+          layoutHeaderVisible: false,
+          layoutLeftDrawerVisible: false
         }
       }
 

@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <q-btn
-      label="add to cart"
-      @click="add"
-    />
-  </div>
+  <!--  <div>-->
+  <!--    <q-btn-->
+  <!--      label="add to cart"-->
+  <!--      @click="add"-->
+  <!--    />-->
+  <!--  </div>-->
   <div
     v-if="count > 0"
     class="cart-count">
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+// import API_ADDRESS from 'src/api/Addresses'
 import cartInvoice from 'components/Widgets/Cart/CartInvoice/CartInvoice'
 import cartView from 'components/Widgets/Cart/CartView/CartView'
 import cartEmpty from 'components/Widgets/Cart/CartEmpty/CartEmpty'
@@ -59,6 +60,10 @@ export default {
   },
 
   created () {
+    // this.$axios.get(API_ADDRESS.cart.product)
+    //   .then((res) => {
+    //     console.log(res)
+    //   })
     this.cartReview()
   },
 
@@ -74,8 +79,8 @@ export default {
       // this.$store.getters['Cart/cart'].addToCart({ id: 489 })
       // console.log('2 cart', this.$store.getters['Cart/cart'])
       this.$store.dispatch('Cart/addToCart', {
-        product: { id: 449 },
-        products: [465]
+        product: { id: 901 },
+        products: [903]
       })
         .then(() => {
           this.cartReview()
