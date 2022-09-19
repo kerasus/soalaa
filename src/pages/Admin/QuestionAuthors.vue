@@ -128,8 +128,8 @@ export default {
         { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true }
       ],
       createInputs: [
-        { type: 'file', name: 'image', label: 'تصویر', col: 'col-md-3', placeholder: ' ', filled: true },
-        // { type: 'hidden', name: 'type', value: 'reference_type', label: '', col: 'col-12' },
+        // { type: 'file', name: 'image', label: 'تصویر', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'hidden', name: 'type', value: 'reference_type', label: '', col: 'col-12' },
         { type: 'input', name: 'value', label: 'عنوان', col: 'col-md-3', placeholder: ' ', filled: true }
       ],
       editInputs: [],
