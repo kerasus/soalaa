@@ -17,7 +17,7 @@
     @mouseenter="autoplay = false"
     @mouseleave="autoplay = false"
   >
-    <q-carousel-slide v-for="(pic, index) in pageData.slider "
+    <q-carousel-slide v-for="(pic, index) in pageData.slider"
                       :key="index"
                       :name="index"
                       :img-src="pic" />
@@ -219,6 +219,15 @@ export default {
   border-radius: 30px;
   height: 520px;
   margin: 40px 0;
+  @media screen and (max-width: 1439px){
+    height: 364px;
+  }
+  @media screen and (max-width: 1023px){
+
+  }
+  @media screen and (max-width: 599px){
+
+  }
   &:deep(.q-carousel__navigation-inner){
     .q-btn{
       margin: 0;
@@ -235,15 +244,6 @@ export default {
         font-size: 15px;
       }
     }
-  }
-  @media screen and (max-width: 1439px){
-    height: 364px;
-  }
-  @media screen and (max-width: 1023px){
-    height: 360px;
-  }
-  @media screen and (max-width: 599px){
-    height: 360px;
   }
 }
 .content{
@@ -343,7 +343,6 @@ export default {
         width: 586px;
       }
       .more-detail{
-
         .btn{
           color: #8075DC;
           font-style: normal;
@@ -353,6 +352,9 @@ export default {
           letter-spacing: -0.03em;
           &:deep(.q-icon){
             font-size: 22px;
+          }
+          &:deep(.q-btn__content){
+            margin: 0!important;
           }
         }
       }
