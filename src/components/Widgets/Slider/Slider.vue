@@ -82,21 +82,68 @@ export default {
   @media screen and (max-width: 1439px){
     height: 364px;
     margin: 30px 0;
+    border-radius: 20px;
+    &:deep(.q-carousel__next-arrow--horizontal){
+        display: none;
+    }
+    &:deep(.q-carousel__prev-arrow--horizontal){
+        display: none;
+    }
   }
   @media screen and (max-width: 1023px){
-
+    border-radius: 16px;
   }
   @media screen and (max-width: 599px){
     margin: 16px 0;
   }
-  &:deep(.q-carousel__navigation-inner){
-    .q-btn{
-      margin: 0;
-      padding: 0;
-      .q-spinner{
-        font-size: 10px;
-      }
 
+  &:deep(.q-carousel__navigation-inner){
+    .q-btn__content{
+      margin: 0;
+    }
+    .q-btn{
+      width: 8px !important;
+      height: 8px !important;
+      min-width: 8px !important;
+      min-height: 8px !important;
+      margin: 0 2px;
+      padding: 0;
+      i{
+        font-size: 8px;
+      }
+      @media screen and (max-width: 599px){
+        width: 4px !important;
+        height: 4px !important;
+        min-width: 4px !important;
+        min-height: 4px !important;
+        margin: 0 2px;
+        padding: 0;
+        i{
+          font-size: 4px;
+        }
+      }
+    }
+    .q-carousel__navigation-icon--active{
+      width: 12px !important;
+      height: 12px !important;
+      min-width: 12px !important;
+      min-height: 12px !important;
+      margin: 0 2px;
+      padding: 0;
+      i{
+        font-size: 12px;
+      }
+      @media screen and (max-width: 599px){
+        width: 8px !important;
+        height: 8px !important;
+        min-width: 8px !important;
+        min-height: 8px !important;
+        margin: 0 2px;
+        padding: 0;
+        i{
+          font-size: 8px;
+        }
+      }
     }
   }
   &:deep(.q-carousel__navigation-icon--active){
