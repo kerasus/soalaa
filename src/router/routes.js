@@ -194,7 +194,7 @@ const routes = [
           {
             path: 'exam/create',
             name: 'user-creat-exam',
-            component: () => import('components/CommonComponents/Exam/Create/TabPanel/TabPanel'),
+            component: () => import('pages/User/exam/Create/Create'),
             layoutConfig: {
               layoutLeftDrawerVisible: false
             }
