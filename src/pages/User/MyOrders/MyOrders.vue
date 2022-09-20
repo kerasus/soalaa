@@ -40,10 +40,17 @@
 
     >
       <template v-slot:before-index-table="">
-        <div class="row items-center">
+        <div class="row items-center search-box">
           <div class="col-lg-4 col-xl-4 col-md-6 col-xs-9 text-left">
-            <form-builder class="search-input"
-                          :value="searchInputs" />
+            <q-input
+              filled
+              class="search-input bg-white"
+              :model-value="searchInput">
+              <template v-slot:append>
+                <q-icon name="isax:search-normal-1"
+                        class="search-icon" />
+              </template>
+            </q-input>
           </div>
           <div class="col-lg-8 col-xl-8 col-md-6 col-xs-3 text-right">
             <q-btn
@@ -63,15 +70,7 @@
         >
           <div class="row filter-items">
             <div class="col-lg-10 col-xs-12">
-              <div class="row">
-                <div class="col-lg-4 col-xs-12 select-input">
-                  <form-builder
-                    :value="filterInputs[0].selectInput" />
-                </div>
-                <div class="col-lg-8 col-xs-12 filter-inputs">
-                  <form-builder :value="filterInputs[0].dateInputs" />
-                </div>
-              </div>
+              <form-builder :value="filterInputs" />
             </div>
             <div class="action-btn col-lg-2 flex col-xs-12 items-end q-pb-md justify-end">
               <q-btn icon="isax:rotate-left"
@@ -217,27 +216,17 @@ export default {
     return {
       filterExpanded: true,
       inputs: [
-        { type: 'hidden', name: 'paymentStatuses', responseKey: 'paymentStatuses', col: 'col-12 col-lg-12 col-sm-6' },
+        { type: 'hidden', name: 'paymentStatuses', class: 'hhhhhhhhh', responseKey: 'paymentStatuses', col: 'col-12 col-lg-12 col-sm-6' },
         { type: 'hidden', name: 'since', responseKey: 'since', col: 'col-12 col-lg-12 col-sm-6' },
         { type: 'hidden', name: 'till', responseKey: 'till', col: 'col-12 col-lg-12 col-sm-6' },
         { type: 'hidden', name: 'search', responseKey: 'search', col: 'col-12 col-lg-12 col-sm-6' }
       ],
       filterInputs: [
-        {
-          selectInput: [
-            { type: 'separator', label: 'وضعیت پرداخت', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'paymentStatuses', responseKey: 'paymentStatuses', col: 'col-12 col-lg-12 col-sm-6' }
-          ],
-          dateInputs: [
-            { type: 'separator', label: 'تاریخ سفارش', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'date', name: 'since', responseKey: 'since', col: 'col-sm-6 col-xs-12' },
-            { type: 'date', name: 'till', responseKey: 'till', col: 'col-sm-6 col-xs-12' }
-          ]
-        }
+        { type: 'select', name: 'paymentStatuses', dropdownIcon: 'isax:arrow-down-1', responseKey: 'paymentStatuses', label: 'وضعیت پرداخت', placeholder: ' ', col: 'filter-option col-sm-6 col-xs-12' },
+        { type: 'date', name: 'since', responseKey: 'since', label: 'تاریخ سفارش', class: 'since', placeholder: ' از', col: 'since col-lg-3 col-sm-6 col-xs-12' },
+        { type: 'date', name: 'till', label: ' ', placeholder: 'تا', responseKey: 'till', col: 'till col-lg-3 col-sm-6 col-xs-12' }
       ],
-      searchInputs: [
-        { type: 'input', name: 'title', icon: 'search', responseKey: 'data.title', label: '', col: 'col-12', placeholder: ' جستجو...' }
-      ],
+      searchInput: '',
       table: {
         columns: [
           {
@@ -360,9 +349,18 @@ export default {
 .gray-bg{
   background: #E4E8EF;
 }
+.search-box{
+  margin-bottom: 20px;
+  @media  screen and (max-width: 599px){
+      margin-bottom: 20px;
+  }
+}
 .expand-filter{
   &:deep(.q-item-type){
     display: none;
+  }
+  .filter-option{
+
   }
   .filter-items{
     font-weight: 400!important;
@@ -372,6 +370,35 @@ export default {
     color: #434765;
     margin-bottom: 15px;
     position: relative;
+    &:deep(.filter-option){
+      .outsideLabel{
+        padding-bottom: 8px;
+      }
+      @media screen and (max-width: 1439px) {
+        order: 3;
+      }
+      @media screen and (max-width: 599px) {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+    &:deep(.till){
+      padding-top: 40px;
+      @media screen and (max-width: 599px) {
+        padding: 1px;
+      }
+    }
+    &:deep(.since){
+      .outsideLabel{
+        padding-bottom: 8px;
+      }
+      @media screen and (max-width: 599px) {
+        padding: 1px 1px 8px;
+      }
+      @media screen and (max-width: 1439px) {
+
+      }
+    }
     .action-btn{
       @media screen and (max-width: 1439px) {
         position: absolute;
@@ -383,9 +410,7 @@ export default {
       }
     }
     .select-input{
-      @media screen and (max-width: 1439px) {
-          order: 2;
-      }
+
     }
     .filter-inputs{
       @media screen and (max-width: 1439px) {
@@ -406,16 +431,24 @@ export default {
   }
 }
 .search-input{
-  width: 330px;
-  height: 40px;
-  border-radius: 8px;
-  border: none;
+  background-color: white;
+  //border-radius: 8px;
+  //border: none;
+  &:deep(.q-field__append){
+    .q-icon{
+      color: #6D708B;
+      cursor: pointer;
+    }
+  }
+  .search-icon{
+
+  }
   &:deep(.q-field__control){
-    border-radius: 8px;
-    border: none;
+    //q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input
+    background-color: white;
   }
   &:deep(.q-field__append){
-    color: #6D708B;
+
   }
 }
 .my-orders-list {
