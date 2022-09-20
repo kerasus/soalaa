@@ -8,8 +8,9 @@
 </template>
 
 <script>
-import katex from 'katex'
 import 'katex/dist/katex.min.css'
+import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
+import katex from 'katex'
 
 // import { createApp } from 'vue'
 // const app = createApp({})
@@ -59,7 +60,7 @@ export default {
     },
     computedKatex () {
       let string = this.input
-      string = string.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&')
+      string = mixinConvertToTiptap.methods.convertKatex(string)
       const regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms
       string = string.replace(regex, (match) => {
         let finalMatch
@@ -77,6 +78,10 @@ export default {
       })
       return string
     }
+    // computedKatex () {
+    //   // purified katex
+    //   return mixinConvertToTiptap.methods.convertKatex(this.input)
+    // }
   },
   mounted () {
     setTimeout(() => {
