@@ -1,7 +1,7 @@
 <template>
-  <div class="row  justify-center">
-    <div class="col-8 q-mb-xl">
-      <entity-edit
+  <div class="row justify-center">
+    <div class="col-12 q-mb-xl">
+      <entity-show
         ref="entityEdit"
         v-model:value="inputs"
         :show-save-button="false"
@@ -9,7 +9,7 @@
         :api="api"
         :entity-id-key="entityIdKey"
         :entity-param-key="entityParamKey"
-        :show-route-name="indexRouteName"
+        :index-route-name="indexRouteName"
         :after-load-input-data="checkLoadInputData"
       >
         <template #before-form-builder>
@@ -76,7 +76,7 @@
             :ticket-id="searchForInputVal('id')"
             class="q-ml-lg q-mt-lg" />
         </template>
-      </entity-edit>
+      </entity-show>
       <messages v-for="item in userMessageArray"
                 :key="item"
                 :is-user-admin="isUserAdmin"
@@ -110,8 +110,6 @@
             >
               <q-tab name="events"
                      label="رویداد ها" />
-              <q-tab name="otherTickets"
-                     label="تیکت های دیگر کاربر" />
             </q-tabs>
           </div>
           <q-tab-panels v-model="panel"
@@ -119,21 +117,6 @@
                         animated>
             <q-tab-panel name="events">
               <log-list :log-array="searchForInputVal('logs')" />
-            </q-tab-panel>
-            <q-tab-panel name="otherTickets">
-              <template v-for="ticket in searchForInputVal('otherTickets')"
-                        :key="ticket">
-                <div class="other-ticket">
-                  <div class="right-side-squere"></div>
-                  <div>
-                    <q-btn class="link-btn"
-                           :href="'/ticket/' + ticket.id"
-                           dense
-                           flat>{{ticket.title}}</q-btn>
-                    <div class="time">{{convertToShamsi(ticket.created_at, 'time')}}</div>
-                  </div>
-                </div>
-              </template>
             </q-tab-panel>
           </q-tab-panels>
         </q-scroll-area>
@@ -156,7 +139,7 @@
 </template>
 
 <script>
-import { EntityEdit } from 'quasar-crud'
+import { EntityShow } from 'quasar-crud'
 import Messages from 'components/Ticket/Messages'
 import TicketRate from 'components/Ticket/TicketRate'
 import LogList from 'components/Ticket/LogList'
@@ -170,7 +153,7 @@ import { mixinDateOptions } from 'src/mixin/Mixins'
 export default {
   name: 'Show',
   mixins: [mixinDateOptions],
-  components: { EntityEdit, Messages, LogList, UserOrderList, TicketRate, SendMessageInput, Drawer },
+  components: { EntityShow, Messages, LogList, UserOrderList, TicketRate, SendMessageInput, Drawer },
   data () {
     return {
       isUserAdmin: false,
@@ -250,16 +233,19 @@ export default {
         }
       ],
       inputs: [
-        { type: 'input', name: 'title', responseKey: 'ticket.title', label: 'عنوان', col: 'col-md-4', disable: true },
-        { type: 'input', name: 'first_name', responseKey: 'ticket.user.first_name', label: 'نام', col: 'col-md-4', disable: true },
-        { type: 'input', name: 'last_name', responseKey: 'ticket.user.last_name', label: 'نام خانوادگی', col: 'col-md-4', disable: true },
-        { type: 'input', name: 'priority', responseKey: 'ticket.priority.title', label: 'اولویت', col: 'col-md-4', disable: true },
-        { type: 'select', name: 'department', options: [], optionLabel: 'title', optionValue: 'id', responseKey: 'ticket.department.id', label: 'گروه', col: 'col-md-4' },
-        { type: 'select', name: 'status', options: [], optionLabel: 'title', optionValue: 'id', responseKey: 'ticket.status.id', label: 'وضعیت', col: 'col-md-4' },
+        { type: 'input', name: 'title', responseKey: 'ticket.title', label: 'عنوان', col: 'col-md-12', disable: true },
+
+        { type: 'input', name: 'first_name', responseKey: 'ticket.user.first_name', label: 'نام', col: 'col-md-3', disable: true },
+        { type: 'input', name: 'last_name', responseKey: 'ticket.user.last_name', label: 'نام خانوادگی', col: 'col-md-3', disable: true },
+        { type: 'input', name: 'national_code', responseKey: 'ticket.user.national_code', label: 'کد ملی', col: 'col-md-3', disable: true },
+        { type: 'input', name: 'major', responseKey: 'ticket.user.major.name', label: 'رشته', col: 'col-md-3', disable: true },
+
         { type: 'dateTime', name: 'created_at', responseKey: 'ticket.created_at', label: 'تاریخ ایجاد', col: 'col-md-4', disable: true },
-        { type: 'input', name: 'national_code', responseKey: 'ticket.user.national_code', label: 'کد ملی', col: 'col-md-4', disable: true },
-        { type: 'input', name: 'major', responseKey: 'ticket.user.major.name', label: 'رشته', col: 'col-md-4', disable: true },
-        { type: 'dateTime', name: 'created_at', responseKey: 'ticket.updated_at', abc: true, label: 'تاریخ بروز آوری:', col: 'col-md-4', disable: true },
+        { type: 'input', name: 'priority', responseKey: 'ticket.priority.title', label: 'اولویت', col: 'col-md-4', disable: true },
+        // { type: 'select', name: 'department', options: [], optionLabel: 'title', optionValue: 'id', responseKey: 'ticket.department.id', label: 'گروه', col: 'col-md-4' },
+        { type: 'select', name: 'status', options: [], optionLabel: 'title', optionValue: 'id', responseKey: 'ticket.status.id', label: 'وضعیت', col: 'col-md-4' },
+
+        // { type: 'dateTime', name: 'created_at', responseKey: 'ticket.updated_at', abc: true, label: 'تاریخ بروز آوری:', col: 'col-md-4', disable: true },
         { type: 'hidden', name: 'id', responseKey: 'ticket.id', label: 'id' },
         { type: 'hidden', name: 'department_title', responseKey: 'ticket.department.title' },
         { type: 'hidden', name: 'messages', responseKey: 'ticket.messages', label: '' },
@@ -268,146 +254,14 @@ export default {
         { type: 'hidden', name: 'userId', responseKey: 'ticket.user.id', label: '' },
         { type: 'hidden', name: 'otherTickets', responseKey: 'other_tickets', label: '' },
         { type: 'hidden', name: 'priority-id', responseKey: 'ticket.priority.id' },
-        { type: 'hidden', name: 'rate', responseKey: 'ticket.rate' },
-        {
-          isAdmin: true,
-          type: 'entity',
-          name: 'management',
-          selectionMode: 'single',
-          label: 'انتخاب کاربر',
-          buttonColor: 'blue',
-          buttonTextColor: 'white',
-          buttonBadgeColor: 'primary',
-          indexConfig: {
-            apiAddress: 'https://reqres.in/api/users',
-            tableTitle: 'لیست کاربران',
-            showTableItemsRouteName: 'User.BlockManagement.Show',
-            tableKeys: {
-              data: 'data',
-              total: 'total',
-              currentPage: 'page',
-              perPage: 'per_page',
-              pageKey: 'page'
-            },
-            table: {
-              columns: [
-                {
-                  name: 'id',
-                  required: true,
-                  label: '#',
-                  align: 'left',
-                  field: row => row.id
-                },
-                {
-                  name: 'first_name',
-                  required: true,
-                  label: 'نام',
-                  align: 'left',
-                  field: row => row.first_name
-                },
-                {
-                  name: 'last_name',
-                  required: true,
-                  label: 'نام خانوادگی',
-                  align: 'left',
-                  field: row => row.last_name
-                },
-                {
-                  name: 'role',
-                  required: true,
-                  label: 'نقش',
-                  align: 'left',
-                  field: row => row.email
-                }
-              ],
-              data: []
-            },
-            inputs: [
-              { type: 'input', name: 'mobile', value: null, label: 'شماره تلفن', col: 'col-md-6' },
-              { type: 'input', name: 'national_code', value: null, label: 'کدملی', col: 'col-md-6' },
-              { type: 'hidden', name: 'role', value: 123, label: 'نقش', col: 'col-md-3' }
-            ],
-            itemIdentifyKey: 'mobile',
-            itemIndicatorKey: 'mobile'
-          },
-          value: [],
-          responseKey: '',
-          selected: [],
-          col: 'col-md-4'
-        },
-        {
-          isAdmin: true,
-          type: 'entity',
-          name: 'management',
-          selectionMode: 'multiple',
-          label: 'انتخاب اپراتورها',
-          buttonColor: 'blue',
-          buttonTextColor: 'white',
-          buttonBadgeColor: 'primary',
-          indexConfig: {
-            apiAddress: 'https://reqres.in/api/users',
-            tableTitle: 'لیست کاربران',
-            showTableItemsRouteName: 'User.BlockManagement.Show',
-            tableKeys: {
-              data: 'data',
-              total: 'total',
-              currentPage: 'page',
-              perPage: 'per_page',
-              pageKey: 'page'
-            },
-            table: {
-              columns: [
-                {
-                  name: 'id',
-                  required: true,
-                  label: '#',
-                  align: 'left',
-                  field: row => row.id
-                },
-                {
-                  name: 'first_name',
-                  required: true,
-                  label: 'نام',
-                  align: 'left',
-                  field: row => row.first_name
-                },
-                {
-                  name: 'last_name',
-                  required: true,
-                  label: 'نام خانوادگی',
-                  align: 'left',
-                  field: row => row.last_name
-                },
-                {
-                  name: 'role',
-                  required: true,
-                  label: 'نقش',
-                  align: 'left',
-                  field: row => row.email
-                }
-              ],
-              data: []
-            },
-            inputs: [
-              { type: 'input', name: 'mobile', value: null, label: 'شماره تلفن', col: 'col-md-6' },
-              { type: 'input', name: 'national_code', value: null, label: 'کدملی', col: 'col-md-6' },
-              { type: 'hidden', name: 'role', value: 123, label: 'نقش', col: 'col-md-3' }
-            ],
-            itemIdentifyKey: 'mobile',
-            itemIndicatorKey: 'mobile'
-          },
-          value: [],
-          responseKey: '',
-          selected: [],
-          col: 'col-md-12'
-        }
+        { type: 'hidden', name: 'rate', responseKey: 'ticket.rate' }
       ]
     }
   },
   methods: {
     initPageData () {
       this.api += '/' + this.$route.params.id
-      this.getInput('department').options = this.departments
+      // this.getInput('department').options = this.departments
       this.getInput('status').options = this.status
     },
     getInput (inputName) {
