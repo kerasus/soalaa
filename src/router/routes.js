@@ -462,6 +462,32 @@ const routes = [
             component: () => import('pages/Admin/KnowledgeTree/index'),
             breadcrumbs: { title: 'درخت دانش' }
           },
+
+          {
+            path: 'ticket',
+            component: () => import('layouts/bareLayout.vue'),
+            meta: {
+              middlewares: [auth]
+            },
+            name: 'Admin.Ticket',
+            children: [
+              {
+                path: 'ticket',
+                name: 'Admin.Ticket.Index',
+                component: () => import('pages/Admin/Ticket/Index.vue')
+              },
+              {
+                path: 'ticket/:id',
+                name: 'Admin.Ticket.Show',
+                component: () => import('pages/Admin/Ticket/Show.vue')
+              },
+              {
+                path: 'ticket/Create',
+                name: 'Admin.Ticket.Create',
+                component: () => import('pages/Admin/Ticket/Create.vue')
+              }
+            ]
+          },
           { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings'), breadcrumbs: { title: 'تنظیمات' } }
         ]
       },
