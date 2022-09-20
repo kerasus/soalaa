@@ -1,8 +1,6 @@
 <template>
   <div class="SendMessageInput">
-
-    <div class="input-group"
-    >
+    <div class="input-group">
       <div v-show="canShowMic"
            class="input-group-prepend">
         <q-btn
@@ -99,28 +97,23 @@
 
         </q-dialog>
       </div>
-
-      <div
-        v-show="canShowSendBtn"
-        class="input-group-append"
-        :class="[(true) ? 'adminSend' : '']">
-        <q-btn
-          size="12px"
-          class="btn  actionBtn sendBtn BtnSuccess"
-          :loading="sendLoading"
-          icon="isax:send-1"
-          @click="emitData(false)"
+      <div v-show="canShowSendBtn"
+           class="input-group-append"
+           :class="[showSendPrivate ? 'adminSend' : '']">
+        <q-btn size="12px"
+               class="btn actionBtn sendBtn BtnSuccess"
+               :loading="sendLoading"
+               icon="isax:send-1"
+               @click="emitData(false)"
         />
-        <q-btn
-          v-if="true"
-          size="12px"
-          class="btn  actionBtn sendBtn BtnWarning"
-          :loading="sendLoading"
-          icon="isax:directbox-send"
-          @click="emitData(true)"
+        <q-btn v-if="showSendPrivate"
+               size="12px"
+               class="btn actionBtn sendBtn BtnWarning"
+               :loading="sendLoading"
+               icon="isax:directbox-send"
+               @click="emitData(true)"
         />
       </div>
-
       <av-waveform
         v-if="recordedVoice !== null"
         v-show="showVoicePlayer"
@@ -132,7 +125,6 @@
         :canv-width="1285"
         :canv-height="64"
       ></av-waveform>
-
       <av-media
         v-show="showVoiceVisualizer"
         class="voiceVisualizer"
@@ -142,7 +134,6 @@
         :canv-width="1285"
         :canv-height="64"
       />
-
       <q-input
         v-show="canShowTextarea"
         v-model="newMessage.text"
@@ -150,7 +141,6 @@
         class="newMessageText"
         placeholder="متن پیام ...">
       </q-input>
-
       <div
         v-if="recordedVoice !== null"
         v-show="showVoicePlayer"
@@ -168,8 +158,8 @@
           class="btn  actionBtn"
           icon="isax:pause"
           @click="pauseRecordedVoice" />
-      </div>
 
+      </div>
       <div
         v-if="recordedVoice !== null"
         v-show="showVoicePlayer"
@@ -191,64 +181,14 @@ import AvMedia from 'vue-audio-visual/src/components/AvMedia'
 import { Cropper } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css'
 
-const longpress = {
-  created (el, binding, vNode) {
-    if (typeof binding.value !== 'function') {
-      const compName = vNode.context.name
-      let warn = `[longpress:] provided expression '${binding.expression}' is not a function, but has to be`
-      if (compName) {
-        warn += `Found in component '${compName}' `
-      }
-
-      console.error(warn)
-    }
-
-    // Define variable
-    let pressTimer = null
-
-    const start = (e) => {
-      if (e.type === 'click' && e.button !== 0) {
-        return
-      }
-
-      handler('longpress-start')
-
-      if (pressTimer === null) {
-        pressTimer = setTimeout(() => {
-          // Run function
-          handler('longpress-holding')
-        }, 1)
-      }
-    }
-
-    const cancel = (e) => {
-      if (pressTimer !== null) {
-        clearTimeout(pressTimer)
-        pressTimer = null
-        handler('longpress-left')
-      }
-    }
-
-    // Run
-    const handler = (e) => {
-      binding.value(e)
-    }
-
-    // Add Event listeners
-    el.addEventListener('mousedown', start)
-    el.addEventListener('touchstart', start)
-    // Cancel timeouts if these events happen
-    el.addEventListener('click', cancel)
-    el.addEventListener('mouseout', cancel)
-    el.addEventListener('touchend', cancel)
-    el.addEventListener('touchcancel', cancel)
-  }
-}
-
 export default {
   name: 'SendMessageInput',
   props: {
     sendLoading: {
+      type: Boolean,
+      default: false
+    },
+    showSendPrivate: {
       type: Boolean,
       default: false
     }
@@ -258,7 +198,7 @@ export default {
     Cropper,
     AvMedia
   },
-  data () {
+  data() {
     return {
       imgURL: '',
       resultURL: '',
@@ -292,7 +232,7 @@ export default {
   },
   watch: {
     imgURL: {
-      handler (newValue) {
+      handler(newValue) {
         if (newValue) {
           this.showModalStatus = true
           this.userPicClipped = false
@@ -301,43 +241,43 @@ export default {
       }
     },
     resultURL: {
-      handler (val) {
+      handler(val) {
         this.userPicClipped = true
         if (val) this.userPicSelected = true
       }
     },
     sendLoading: {
-      handler (newVal) {
+      handler(newVal) {
         this.Loading = newVal
       }
     }
   },
   computed: {
-    isAdmin () {
+    isAdmin() {
       return this.$store.getters.appProps.isAdmin
     },
-    canShowSendBtn () {
+    canShowSendBtn() {
       return (this.newMessage.text.length > 0 || this.showVoicePlayer)
     },
-    canShowTextarea () {
+    canShowTextarea() {
       return (this.newMessage.text.length > 0) || (this.canShowMic && this.canShowSelectPic)
     },
-    canShowMic () {
+    canShowMic() {
       return (this.newMessage.text.length === 0 && !this.userPicSelected && !this.recordedVoice)
     },
-    canShowSelectPic () {
+    canShowSelectPic() {
       return (this.newMessage.text.length === 0 && this.mediaRecorder === null)
     },
-    canShowPlayerForRecordedVoice () {
+    canShowPlayerForRecordedVoice() {
       return (this.newMessage.text.length === 0 && !this.userPicSelected && this.mediaRecorder !== null && this.mediaRecorder.state === 'inactive')
     },
-    canShowImageTools () {
+    canShowImageTools() {
       return !this.userPicClipped && this.userPicSelected
     }
   },
   methods: {
 
-    recordVoice (status) {
+    recordVoice(status) {
       if (status === 'longpress-start') {
         this.recordStart()
       } else if (status === 'longpress-left') {
@@ -345,7 +285,7 @@ export default {
       }
     },
 
-    recordStart () {
+    recordStart() {
       if (!navigator.mediaDevices) {
         this.$q.notify({
           message: 'مرورگر شما ضبط صدا را پشتیبانی نمی کند.'
@@ -398,7 +338,7 @@ export default {
         .then(onSuccess, onError)
     },
 
-    recordStop () {
+    recordStop() {
       if (this.mediaRecorder) {
         this.mediaRecorder.stop()
       }
@@ -408,7 +348,7 @@ export default {
       this.audioPlayerLastPlayedTime = 0
     },
 
-    playRecordedVoice () {
+    playRecordedVoice() {
       const audioPlayer = this.$refs.playAudio.audio,
         that = this
       audioPlayer.src = this.recordedVoice
@@ -422,18 +362,18 @@ export default {
       this.showVoicePlayerIsPlaying = true
     },
 
-    pauseRecordedVoice () {
+    pauseRecordedVoice() {
       const audioPlayer = this.$refs.playAudio.audio
       audioPlayer.pause()
       this.audioPlayerLastPlayedTime = audioPlayer.currentTime
       this.showVoicePlayerIsPlaying = false
     },
 
-    getFile () {
+    getFile() {
       this.$refs.myFileInput.click()
     },
 
-    loadImage (event) {
+    loadImage(event) {
       const { files } = event.target
       if (files && files[0]) {
         if (this.imgURL) {
@@ -448,16 +388,16 @@ export default {
       }
     },
 
-    change ({ canvas }) {
+    change({ canvas }) {
       this.resultURL = canvas.toDataURL('image/jpeg', 0.3)
     },
 
-    rotate () {
+    rotate() {
       this.$refs.cropper.rotate(this.rotateAngle - this.oldRotateAngle)
       this.oldRotateAngle = this.rotateAngle
     },
 
-    clearMessage () {
+    clearMessage() {
       this.newMessage.text = ''
       this.imgURL = ''
       this.resultURL = ''
@@ -471,7 +411,7 @@ export default {
       this.recordedVoiceBlob = null
     },
 
-    emitData (isPrivate) {
+    emitData(isPrivate) {
       this.$emit('creatTicket', {
         isPrivate,
         resultURL: this.resultURL,
@@ -483,7 +423,59 @@ export default {
 
   },
   directives: {
-    longpress
+    longpress: {
+      created(el, binding, vNode) {
+        if (typeof binding.value !== 'function') {
+          const compName = vNode.context.name
+          let warn = `[longpress:] provided expression '${binding.expression}' is not a function, but has to be`
+          if (compName) {
+            warn += `Found in component '${compName}' `
+          }
+
+          console.error(warn)
+        }
+
+        // Define variable
+        let pressTimer = null
+
+        const start = (e) => {
+          if (e.type === 'click' && e.button !== 0) {
+            return
+          }
+
+          handler('longpress-start')
+
+          if (pressTimer === null) {
+            pressTimer = setTimeout(() => {
+              // Run function
+              handler('longpress-holding')
+            }, 1)
+          }
+        }
+
+        const cancel = (e) => {
+          if (pressTimer !== null) {
+            clearTimeout(pressTimer)
+            pressTimer = null
+            handler('longpress-left')
+          }
+        }
+
+        // Run
+        const handler = (e) => {
+          binding.value(e)
+        }
+
+        // Add Event listeners
+        el.addEventListener('mousedown', start)
+        el.addEventListener('touchstart', start)
+        // Cancel timeouts if these events happen
+        el.addEventListener('click', cancel)
+        el.addEventListener('mouseout', cancel)
+        el.addEventListener('touchend', cancel)
+        el.addEventListener('touchcancel', cancel)
+      }
+    }
   }
 }
 </script>

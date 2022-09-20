@@ -263,8 +263,17 @@ const API_ADDRESS = {
       sea: {
         all: authServer + '/product/soalaa/all'
       }
-    }
+    },
 
+    edit: {
+      base: apiV2Server + '/admin/product'
+    },
+    index: {
+      base: apiV2Server + '/admin/product'
+    },
+    show: {
+      base: apiV2Server + '/product'
+    }
   },
   cart: {
     orderproduct: {
@@ -274,6 +283,24 @@ const API_ADDRESS = {
     review: apiV2Server + '/checkout/review?seller=2',
     getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2',
     orderWithTransaction (orderId) { return apiV2Server + '/orderWithTransaction/' + orderId }
+  },
+  ticket: {
+    create: {
+      base: authServer + '/ticket'
+    },
+    index: {
+      base: authServer + '/ticket'
+    },
+    show: {
+      base: authServer + '/ticket',
+      statusNotice: (ticketId) =>
+        authServer + '/ticket/' + ticketId + '/sendTicketStatusNotice',
+      batchExtend: authServer + '/orderproduct/batchExtend',
+      ticketMessage: authServer + '/ticketMessage',
+      reportMessage: (ticketId) =>
+        authServer + '/ticketMessage/' + ticketId + '/report'
+    },
+    ticketRate: (ticketId) => authServer + '/ticket/' + ticketId + '/rate'
   }
 }
 export default API_ADDRESS

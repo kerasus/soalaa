@@ -159,6 +159,31 @@ const routes = [
             path: 'user_exam_list',
             name: 'User.Exam.List',
             component: () => import('pages/User/exam/List')
+          },
+          {
+            path: 'ticket',
+            component: () => import('layouts/bareLayout.vue'),
+            meta: {
+              middlewares: [auth]
+            },
+            name: 'User.Ticket',
+            children: [
+              {
+                path: '',
+                name: 'User.Ticket.Index',
+                component: () => import('pages/User/Ticket/Index.vue')
+              },
+              {
+                path: ':id',
+                name: 'User.Ticket.Show',
+                component: () => import('pages/User/Ticket/Show.vue')
+              },
+              {
+                path: 'create',
+                name: 'User.Ticket.Create',
+                component: () => import('pages/User/Ticket/Create.vue')
+              }
+            ]
           }
         ]
       },
@@ -472,17 +497,17 @@ const routes = [
             name: 'Admin.Ticket',
             children: [
               {
-                path: 'ticket',
+                path: '',
                 name: 'Admin.Ticket.Index',
                 component: () => import('pages/Admin/Ticket/Index.vue')
               },
               {
-                path: 'ticket/:id',
+                path: ':id',
                 name: 'Admin.Ticket.Show',
                 component: () => import('pages/Admin/Ticket/Show.vue')
               },
               {
-                path: 'ticket/Create',
+                path: 'create',
                 name: 'Admin.Ticket.Create',
                 component: () => import('pages/Admin/Ticket/Create.vue')
               }

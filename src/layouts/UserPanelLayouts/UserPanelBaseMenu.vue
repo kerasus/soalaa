@@ -122,6 +122,14 @@ export default {
           permission: 'all',
           active: false,
           children: []
+        },
+        {
+          title: 'تیکت',
+          icon: 'isax:clipboard-text',
+          routeName: 'User.Ticket.Index',
+          permission: 'all',
+          active: false,
+          children: []
         }
         // {
         //   title: 'تنظیمات',
