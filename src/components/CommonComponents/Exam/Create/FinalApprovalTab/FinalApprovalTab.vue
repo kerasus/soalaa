@@ -110,7 +110,7 @@
 
 <script>
 import { Question, QuestionList } from 'src/models/Question'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
+import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem'
 import { Exam } from 'src/models/Exam'
 
 export default {
