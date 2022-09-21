@@ -292,6 +292,27 @@ const API_ADDRESS = {
     landing: lumenServer + 'subscribe/landing',
     list: lumenServer + 'subscribe/user',
     register: (userId) => lumenServer + `/subscribe/user/${userId}`
+  },
+  homePage: {
+    base: lumenServer + '/homepage'
+  },
+  ticket: {
+    create: {
+      base: authServer + '/ticket'
+    },
+    index: {
+      base: authServer + '/ticket'
+    },
+    show: {
+      base: authServer + '/ticket',
+      statusNotice: (ticketId) =>
+        authServer + '/ticket/' + ticketId + '/sendTicketStatusNotice',
+      batchExtend: authServer + '/orderproduct/batchExtend',
+      ticketMessage: authServer + '/ticketMessage',
+      reportMessage: (ticketId) =>
+        authServer + '/ticketMessage/' + ticketId + '/report'
+    },
+    ticketRate: (ticketId) => authServer + '/ticket/' + ticketId + '/rate'
   }
 }
 export default API_ADDRESS
