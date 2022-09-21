@@ -29,9 +29,9 @@
               تومان
             </div>
             <ul class="package-item-feature-list">
-              <li class="package-item-feature-item">امکان ساخت {{item.abilities.exam}} آزمون شخصی</li>
-              <li class="package-item-feature-item">قابلیت دانلود PDF تا {{item.abilities.pdf_questions}} سوال</li>
-              <li class="package-item-feature-item">{{ item.abilities.grades_covered === 'all' ? 'پوشش تمام دروس هفتم تا دوازدهم' : item.abilities.grades_covered }}</li>
+              <li class="package-item-feature-item">{{item.abilities.exam}}</li>
+              <li class="package-item-feature-item">{{item.abilities.pdf_questions}}</li>
+              <li class="package-item-feature-item">{{ item.abilities.grades_covered }}</li>
             </ul>
             <q-btn class="package-item-action-btn"
                    label="شروع کنید"
