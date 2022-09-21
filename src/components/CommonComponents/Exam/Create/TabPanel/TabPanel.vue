@@ -12,13 +12,21 @@
         animated
       >
         <q-tab-panel name="createPage">
-          <exam-info-tab ref="createExam" />
+          <exam-info-tab
+            ref="createExam"
+            v-model:currentTab="currentTab"
+            :inputs="examInfoInputs"
+            @nextTab="goToNextStep"
+            @lastTab="goToLastStep"
+          />
         </q-tab-panel>
 
         <q-tab-panel name="chooseQuestion">
           <exam-selection-tab
             v-model="exam.questions.list"
             @onFilter="onFilter"
+            @nextTab="goToNextStep"
+            @lastTab="goToLastStep"
             @addQuestionToExam="addQuestionToExam"
             @deleteQuestionFromExam="deleteQuestionFromExam"
           />
@@ -32,29 +40,6 @@
           />
         </q-tab-panel>
       </q-tab-panels>
-      <div class="btn-box flex justify-end items-center">
-        <q-btn
-          unelevated
-          color="white"
-          text-color="black"
-          class="q-mr-xl btn-md"
-          :icon="'isax:arrow-right-3'"
-          style="margin-right: 18px;"
-          @click="goToLastStep"
-        >
-          بازگشت
-        </q-btn>
-        <q-btn
-          unelevated
-          color="primary"
-          class="q-mr-xl btn-md"
-          style="margin-right: 18px;"
-          :icon-right="'isax:arrow-left-2'"
-          @click="goToNextStep"
-        >
-          مرحله بعد
-        </q-btn>
-      </div>
       <q-dialog v-model="examConfirmedDialog">
         <q-card flat
                 class="report-problem-dialog">
@@ -103,6 +88,16 @@ export default {
     ExamInfoTab,
     Steps
   },
+  props: {
+    examInfoInputs: {
+      type: Object,
+      default: () => {}
+    },
+    userRule: {
+      type: String
+    }
+  },
+
   data () {
     return {
       exam: new Exam(),
@@ -113,11 +108,13 @@ export default {
       accept: false
     }
   },
+
   provide () {
     return {
       providedExam: computed(() => this.exam)
     }
   },
+
   methods: {
     onFilter (filterData) {
       // console.log('filterData', filterData)
@@ -146,10 +143,12 @@ export default {
     isFinalStep (tab) {
       return this.allTabs.indexOf(tab) === this.allTabs.length - 1
     },
+
     changeTab (tab) {
       this.updateExamData()
       if (this.accept) { this.currentTab = tab }
     },
+
     goToLastStep () {
       this.updateExamData()
       this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
@@ -243,16 +242,8 @@ export default {
         this.showMessagesInNotify(messages)
       }
     }
-  },
-  watch: {
-    /* create: {
-      handler (val) {
-        console.log(val)
-      },
-      deep: true
-    } */
-  },
-  computed: {}
+  }
+
 }
 </script>
 
@@ -261,29 +252,29 @@ export default {
 .create-exam-panel {
   display: flex;
   .exam-create-panel {
-    width: 1416px;
-    margin: auto;
-    .q-tab-panel {
-      padding: 32px 0 0 0;
+    &:deep(.q-tab-panels) {
+      background: transparent;
+      padding: 30px 0 0 0;
+
+      .q-tab-panel {
+        padding: 0;
+      }
     }
     @media screen and (max-width: 1919px) {
       width: 100%;
       .q-tab-panel {
-        padding: 32px 30px 0 0;
+        padding: 0;
       }
     }
     @media screen and (max-width: 1439px) {
-      .q-tab-panel {
-        padding: 30px 30px 0 30px !important;
-      }
+      //.q-tab-panel {
+      //  padding: 30px 30px 0 30px !important;
+      //}
     }
     @media screen and (max-width: 599px) {
       .q-tab-panel {
-        padding: 16px 16px 0 16px !important;
+        //padding: 16px 16px 0 16px !important;
       }
-    }
-    .btn-box {
-      margin-bottom: 30px;
     }
     .report-problem-dialog {
       position: relative;
