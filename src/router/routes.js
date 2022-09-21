@@ -74,9 +74,9 @@ const routes = [
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     layoutConfig: {
       layoutHeaderVisible: true,
-      layoutHeaderType: 'panel',
+      layoutHeaderType: 'default',
       layoutLeftDrawerVisible: true,
-      layoutLeftSideBarType: 'panel',
+      layoutLeftSideBarType: 'default',
       layoutView: 'lHh Lpr lFf',
       layoutHeader: true,
       layoutHeaderReveal: false,
@@ -218,10 +218,7 @@ const routes = [
             name: 'User.Exam.List',
             component: () => import('pages/User/exam/List'),
             layoutConfig: {
-              layoutHeaderVisible: true,
-              layoutHeaderType: 'default',
-              layoutLeftDrawerVisible: true,
-              layoutLeftSideBarType: 'default'
+              layoutHeaderVisible: true
             },
             middleware: [
               Permissions.hasPermission('examStore')

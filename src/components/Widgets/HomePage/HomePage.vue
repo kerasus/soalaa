@@ -200,7 +200,6 @@ export default {
         const response = await this.getData(API_ADDRESS.homePage.base)
         this.pageData = response.data.data
         // this.pageData = await this.call(API_ADDRESS.homePage.base)
-        console.log(this.pageData)
         this.loading = false
       } catch (e) {
         this.loading = false
