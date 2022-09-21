@@ -266,8 +266,17 @@ const API_ADDRESS = {
       sea: {
         all: authServer + '/product/soalaa/all'
       }
-    }
+    },
 
+    edit: {
+      base: apiV2Server + '/admin/product'
+    },
+    index: {
+      base: apiV2Server + '/admin/product'
+    },
+    show: {
+      base: apiV2Server + '/product'
+    }
   },
   cart: {
     orderproduct: {
@@ -280,6 +289,24 @@ const API_ADDRESS = {
   },
   homePage: {
     base: lumenServer + '/homepage'
+  },
+  ticket: {
+    create: {
+      base: authServer + '/ticket'
+    },
+    index: {
+      base: authServer + '/ticket'
+    },
+    show: {
+      base: authServer + '/ticket',
+      statusNotice: (ticketId) =>
+        authServer + '/ticket/' + ticketId + '/sendTicketStatusNotice',
+      batchExtend: authServer + '/orderproduct/batchExtend',
+      ticketMessage: authServer + '/ticketMessage',
+      reportMessage: (ticketId) =>
+        authServer + '/ticketMessage/' + ticketId + '/report'
+    },
+    ticketRate: (ticketId) => authServer + '/ticket/' + ticketId + '/rate'
   }
 }
 export default API_ADDRESS

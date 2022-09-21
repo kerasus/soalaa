@@ -58,7 +58,9 @@
               hide-bottom-space
               dense
               :options="currentGrades"
-              class="dropdown-btn first q-mr-md">
+              class="dropdown-btn first q-mr-md"
+              @update:model-value="onUpdateSelectedExams"
+            >
               <template v-slot:selected>
                 <span class="custom-label-prefix"> پایه تحصیلی: </span>
                 {{ selectedGrade }}
@@ -73,6 +75,7 @@
                       dense
                       :options="currentMajors"
                       class="select-2 dropdown-btn"
+                      @update:model-value="onUpdateSelectedExams"
             >
               <template v-slot:selected>
                 <span class="custom-label-prefix"> رشته تحصیلی: </span>
@@ -92,7 +95,7 @@
                   :class="selectiveRegister? '':''">ثبت‌نام کامل
               </th>
             </tr>
-            <tr v-for="(item , index) in currentBandle?.exams"
+            <tr v-for="(item , index) in currentBundle?.exams"
                 :key="item">
               <td class="number custom-border"
                   :class="{'number-selective': selectiveRegister}">{{ index + 1}}</td>
@@ -157,7 +160,7 @@
                     برای دانلود برنامه آزمون روی دکمه زیر کلیک کنید.
                   </div>
                   <a target="_blank"
-                     :href="currentBandle?.pdfLink">
+                     :href="currentBundle?.pdfLink">
                     <q-btn class="download-btn">
                       <div class="svg">
                         <svg width="18"
@@ -187,7 +190,7 @@
                     قیمت تک مرحله
                   </span>
                   <br>
-                  <span class="price">{{currentBandle?.singleUnitPrices}}</span>
+                  <span class="price">{{currentBundle?.singleUnitPrices.toLocaleString()}}</span>
                   <span class="price">تومان</span>
                 </div>
               </div>
@@ -218,7 +221,7 @@
                     قیمت تک مرحله
                   </span>
                   <br>
-                  <span class="price">{{currentBandle?.packUnitPrices}} </span>
+                  <span class="price">{{ singlePriceOnPackMode }} </span>
                   <span class="price">تومان</span>
                 </div>
               </div>
@@ -228,18 +231,16 @@
                 </div>
                 <div class="exam-price-box">
                   <span class="discount-tag"> تخفیف٪</span>
-                  <span class="main-price"> {{ currentBandle?.packBasePrices }}</span>
+                  <span class="main-price"> {{ currentBundle?.packBasePrices.toLocaleString() }}</span>
                   <span class="main-price"> تومان</span>
                 </div>
                 <div class="final-price-box">
-                  <span> {{ currentBandle?.packFinalPrices }}</span>
+                  <span> {{ currentBundle?.packFinalPrices.toLocaleString() }}</span>
                   <span>تومان</span>
                 </div>
                 <q-btn unelevated
-                       class="sub-btn"
-                       :class="{'active': selectPackMode}"
-                       :disable="!selectPackMode"
-                       @click="addToCart"
+                       class="sub-btn active"
+                       @click="addPackProductToCart"
                 >
                   <span class="sub-btn-text">
                     ثبت‌نام
@@ -1399,11 +1400,15 @@ export default {
     this.initPageData()
   },
   computed: {
-    finalPriceInSingleMode() {
-      const price = (this.currentBandle.exams.filter(item => item.selected).length) * (this.currentBandle.singleUnitPrices)
-      return price.toLocaleString('fa')
+    singlePriceOnPackMode() {
+      const price = (this.currentBundle.packFinalPrices) / (this.currentBundle.exams.length)
+      return price.toLocaleString()
     },
-    currentBandle() {
+    finalPriceInSingleMode() {
+      const price = (this.currentBundle.exams.filter(item => item.selected).length) * (this.currentBundle.singleUnitPrices)
+      return price.toLocaleString()
+    },
+    currentBundle() {
       // return this.activeTab.productBandles.filter(item => (this.selectedMajor ? item.major_id === this.selectedMajor : true) && (this.selectedGrade ? item.grade_id === this.selectedGrade : true))[0]
       return this.activeTab.productBandles.filter(item => {
         // console.log('item.major_id', item.major_id, '-', this.selectedMajor)
@@ -1438,18 +1443,32 @@ export default {
       }
     },
 
+    addPackProductToCart() {
+      this.selectedProductId = {
+        product: {
+          id: this.currentBundle.id
+        },
+        products: [this.currentBundle.allId]
+      }
+      this.addToCart()
+    },
+
     deSelectExam(examIndex) {
-      this.currentBandle.exams.forEach((exam, index) => {
+      this.currentBundle.exams.forEach((exam, index) => {
         if (index <= examIndex) {
           exam.selected = false
           this.selectedProductId.products = this.selectedProductId.products.filter(id => id !== exam.id)
         }
       })
+      if (this.selectedProductId.products.length === 0) {
+        this.selectPackMode = true
+        this.onUpdateSelectedExams()
+      }
     },
 
     selectExam(examIndex) {
       this.selectedProductId.products = []
-      this.currentBandle.exams.forEach((exam, index) => {
+      this.currentBundle.exams.forEach((exam, index) => {
         // exam.selected = index >= examIndex
         if (index >= examIndex) {
           exam.selected = true
@@ -1460,19 +1479,30 @@ export default {
 
     onSelectedExam(item, examIndex) {
       this.selectPackMode = false
-      this.selectedProductId.product = { id: this.currentBandle.id }
+      this.selectedProductId.product = { id: this.currentBundle.id }
       item.selected ? this.deSelectExam(examIndex) : this.selectExam(examIndex)
+    },
+
+    onUpdateSelectedExams() {
+      this.selectedProductId = {
+        product: {
+          id: this.currentBundle.id
+        },
+        products: [this.currentBundle.allId]
+      }
     },
 
     showMessageDialog () {
       this.messageDialog = true
     },
+
     async initPageData() {
       await this.getProducts()
       this.setFirstExamActive()
       this.setFirstMajorsGradesSelected()
       this.loading = false
     },
+
     adaptData(data) {
       data.forEach(absGrand => {
         const sal = absGrand.attributes.info.sal[0]
@@ -1498,6 +1528,7 @@ export default {
         this.tabPages[targetIndex].productBandles[bundleIndex].singleFinalPrices = packProduct.children[0].price.final
       })
     },
+
     async getProducts() {
       try {
         const productList = await this.callProductApi()
@@ -1506,26 +1537,31 @@ export default {
         // console.log(e)
       }
     },
+
     callProductApi() {
       return this.$axios.get(API_ADDRESS.product.landing.sea.all)
     },
+
     updateActiveTab(exam) {
       this.activeTab = exam
       this.setFirstMajorsGradesSelected()
     },
+
     setFirstMajorsGradesSelected() {
       this.selectPackMode = true
       this.selectedMajor = this.currentMajors[0]
       this.selectedGrade = this.currentGrades[0]
       this.$nextTick(() => {
         this.selectedProductId = {
-          product: { id: this.currentBandle.id },
-          products: [this.currentBandle.allId]
+          product: { id: this.currentBundle.id },
+          products: [this.currentBundle.allId]
         }
       })
     },
+
     onResize(data) {
     },
+
     setFirstExamActive() {
       this.activeTab = this.tabPages[0]
     }
