@@ -10,7 +10,7 @@
 import PageBuilder from 'src/components/PageBuilder/PageBuilder'
 
 export default {
-  name: 'List',
+  name: 'Subscription',
   components: {
     PageBuilder
   },
@@ -25,7 +25,45 @@ export default {
                   {
                     widgets: [
                       {
-                        name: 'Quiz'
+                        name: 'SubscriptionPackagesSection'
+                      }
+                    ]
+                  }
+                ],
+                options: {
+                  boxed: false,
+                  boxedWidth: 1362,
+                  style: {}
+                }
+              },
+              {
+                cols: [
+                  {
+                    widgets: [
+                      {
+                        name: 'SubscriptionBanner'
+                      }
+                    ]
+                  }
+                ],
+                options: {
+                  boxed: false,
+                  style: {}
+                }
+              }
+            ]
+          },
+          options: {}
+        },
+        {
+          data: {
+            rows: [
+              {
+                cols: [
+                  {
+                    widgets: [
+                      {
+                        name: 'FAQ'
                       }
                     ]
                   }
@@ -53,34 +91,5 @@ export default {
 </script>
 
 <style lang="scss">
-.test-tabs {
-  color: #8A8CA6;
-
-  &:deep(.q-tab__indicator) {
-    width: 100%;
-    height: 6px;
-    border-radius: 6px 6px 0 0;
-  }
-
-  &:deep(.q-tab) {
-    color: var(--3a-TextSecondary);
-    padding: 0;
-  }
-
-  &:deep(.q-tab__content) {
-    padding: 0 24px;
-  }
-
-  &:deep(.q-tab__label) {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 25px;
-    text-align: center;
-    letter-spacing: -0.03em;
-    color: #FFA117;
-
-  }
-}
 
 </style>
