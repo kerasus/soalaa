@@ -74,9 +74,9 @@ const routes = [
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     layoutConfig: {
       layoutHeaderVisible: true,
-      layoutHeaderType: 'panel',
+      layoutHeaderType: 'default',
       layoutLeftDrawerVisible: true,
-      layoutLeftSideBarType: 'panel',
+      layoutLeftSideBarType: 'default',
       layoutView: 'lHh Lpr lFf',
       layoutHeader: true,
       layoutHeaderReveal: false,
@@ -205,13 +205,35 @@ const routes = [
             name: 'User.Exam.List',
             component: () => import('pages/User/exam/List'),
             layoutConfig: {
-              layoutHeaderVisible: true,
-              layoutHeaderType: 'default',
-              layoutLeftDrawerVisible: true,
-              layoutLeftSideBarType: 'default'
+              layoutHeaderVisible: true
             },
             middleware: [
               Permissions.hasPermission('examStore')
+            ]
+          },
+          {
+            path: 'ticket',
+            component: () => import('layouts/bareLayout.vue'),
+            meta: {
+              middlewares: [auth]
+            },
+            name: 'User.Ticket',
+            children: [
+              {
+                path: '',
+                name: 'User.Ticket.Index',
+                component: () => import('pages/User/Ticket/Index.vue')
+              },
+              {
+                path: ':id',
+                name: 'User.Ticket.Show',
+                component: () => import('pages/User/Ticket/Show.vue')
+              },
+              {
+                path: 'create',
+                name: 'User.Ticket.Create',
+                component: () => import('pages/User/Ticket/Create.vue')
+              }
             ]
           }
         ]
