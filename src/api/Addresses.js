@@ -28,6 +28,9 @@ const API_ADDRESS = {
     getOrderList (id) {
       return authServer + '/user/' + id + '/orders?seller=2'
       // return authServer + '/user/' + id + '/orders?seller=1'
+    },
+    orders: {
+      status: lumenServer + '/orders/status'
     }
   },
   set: {
@@ -264,8 +267,17 @@ const API_ADDRESS = {
       sea: {
         all: authServer + '/product/soalaa/all'
       }
-    }
+    },
 
+    edit: {
+      base: apiV2Server + '/admin/product'
+    },
+    index: {
+      base: apiV2Server + '/admin/product'
+    },
+    show: {
+      base: apiV2Server + '/product'
+    }
   },
   cart: {
     orderproduct: {

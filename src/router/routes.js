@@ -87,7 +87,7 @@ const routes = [
       layoutLeftDrawerElevated: false,
       layoutLeftDrawerBordered: false,
       layoutLeftDrawerWidth: 325,
-      layoutLeftDrawerBehavior: 'panel',
+      layoutLeftDrawerBehavior: 'default',
       layoutPageContainer: true,
       layoutRightDrawer: false,
       layoutFooter: false,
@@ -99,7 +99,13 @@ const routes = [
       {
         path: '',
         name: 'HomePage',
-        component: () => import('pages/User/landing/landing')
+        component: () => import('pages/HomePage'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false
+        }
+
       },
       {
         path: 'landing',
@@ -147,12 +153,12 @@ const routes = [
         name: 'User',
         component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
         layoutConfig: {
+          name: 'User.MyOrders',
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
-          layoutLeftDrawerVisible: true,
-          layoutLeftDrawer: false,
+          layoutLeftDrawerVisible: false,
           layoutLeftSideBarType: 'default',
-          layoutLeftDrawerOverlay: false
+          layoutLeftDrawerOverlay: true
         },
         meta: {
           middlewares: [auth]
@@ -186,7 +192,12 @@ const routes = [
             path: 'my-orders',
             name: 'User.MyOrders',
             component: () => import('pages/User/MyOrders/MyOrders'),
-            breadcrumbs: { title: 'سفارش های من' }
+            breadcrumbs: { title: 'سفارش های من' },
+            meta: {
+              middlewares: [
+                Permissions.hasPermission('examStore')
+              ]
+            }
           },
           {
             path: 'user_exam_list',

@@ -101,7 +101,13 @@
             >
               <!--              question.reference[0].photos-->
               <q-avatar
-                v-if="!question.reference[0].photos"
+                v-if="question.reference[0] && question.reference[0].image"
+                size="36px"
+              >
+                <img :src="question.reference[0].image">
+              </q-avatar>
+              <q-avatar
+                v-else
                 size="36px"
               >
                 <svg xmlns="http://www.w3.org/2000/svg"
