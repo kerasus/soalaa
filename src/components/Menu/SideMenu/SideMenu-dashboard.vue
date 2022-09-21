@@ -201,10 +201,18 @@ export default {
           ]
         },
         {
+          title: 'تیکت',
+          icon: 'isax:clipboard-text',
+          routeName: 'Admin.Ticket.Index',
+          permission: 'examStore',
+          active: false,
+          children: []
+        },
+        {
           title: 'سفارش‌ های من',
           icon: 'isax:clipboard-text',
           routeName: 'User.MyOrders',
-          permission: 'examStore',
+          permission: 'all',
           active: false,
           children: []
         },

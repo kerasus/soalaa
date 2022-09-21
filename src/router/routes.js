@@ -87,7 +87,7 @@ const routes = [
       layoutLeftDrawerElevated: false,
       layoutLeftDrawerBordered: false,
       layoutLeftDrawerWidth: 325,
-      layoutLeftDrawerBehavior: 'panel',
+      layoutLeftDrawerBehavior: 'default',
       layoutPageContainer: true,
       layoutRightDrawer: false,
       layoutFooter: false,

@@ -1,12 +1,30 @@
 <template>
   <div class="question-bank-pagination q-pa-lg flex flex-center">
+
+    <!--    <div class="search-box">-->
+    <!--      <q-btn-->
+    <!--        unelevated-->
+    <!--        color="primary"-->
+    <!--        icon="isax:search-normal"-->
+    <!--        class="question-item-button"-->
+    <!--        @click="goToPage"-->
+    <!--      />-->
+    <!--      <q-input-->
+    <!--        v-model="pageToGoTo"-->
+    <!--        class="search-input"-->
+    <!--        :rules="[val => !isNaN(val) || 'لطفا عدد وارد کنید']"-->
+    <!--        dense-->
+    <!--      />-->
+    <!--    </div>-->
     {{ this.checkedStyle }}
     <q-pagination
+      ref="pagination"
       v-model="checkedStyle"
+      input
       direction-links
       color="black"
       :max="meta.last_page"
-      :max-pages="7"
+      :max-pages="10"
       :disable="disable"
       @update:model-value="updatePage"
     />
@@ -40,12 +58,16 @@ export default {
   data() {
     return {
       checkedStyle: 1,
-      disableValue: false
+      disableValue: false,
+      pageToGoTo: ''
     }
   },
   methods: {
     updatePage(val) {
       this.$emit('updateCurrentPage', val)
+    },
+    goToPage () {
+      this.$refs.pagination.set(this.pageToGoTo)
     }
   }
 
@@ -62,5 +84,23 @@ export default {
     border-radius: 12px;
     margin-right: 3px;
   }
+   .question-item-button {
+    width: 40px;
+    height: 40px;
+    box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+    border-radius: 13px;
+    margin-right: 10px;
+  }
+  .search-box{
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    .search-input{
+      width: 100px;
+      height: 40px;
+    }
+  }
+
 }
 </style>

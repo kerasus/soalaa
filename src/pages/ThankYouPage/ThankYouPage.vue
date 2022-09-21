@@ -55,7 +55,7 @@ export default {
       hasPaid: false
     }
   },
-  mounted () {
+  created () {
     this.onLoadPage()
   },
   computed: {
@@ -65,11 +65,15 @@ export default {
   },
   methods: {
     onLoadPage () {
-      this.axios.get(API_ADDRESS.cart.orderWithTransaction(this.orderId))
+      this.$axios.get(API_ADDRESS.cart.orderWithTransaction(this.orderId))
         .then((response) => {
           const paymentStatus = response.data.data.paymentstatus
 
-          this.hasPaid = paymentStatus.id !== 1
+          if (paymentStatus.id === 3) {
+            this.hasPaid = true
+          } else if (paymentStatus.id === 1) {
+            this.hasPaid = false
+          }
         })
     }
   }
