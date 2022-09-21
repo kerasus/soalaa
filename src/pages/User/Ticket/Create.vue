@@ -43,11 +43,10 @@
     </entity-create>
     <q-separator class="q-my-md" />
     <div>
-      <SendMessageInput
-        ref="SendMessageInput"
-        :send-loading="sendLoading"
-        :show-send-private="false"
-        @creatTicket="sendTicket"
+      <send-message-input ref="SendMessageInput"
+                          :send-loading="sendLoading"
+                          :show-send-private="false"
+                          @creatTicket="sendTicket"
       />
     </div>
   </div>

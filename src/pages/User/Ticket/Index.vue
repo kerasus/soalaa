@@ -9,7 +9,7 @@
       :create-route-name="'User.Ticket.Create'"
       :show-expand-button="false"
     >
-      <template v-slot:table-cell="{inputData, showConfirmRemoveDialog}">
+      <template v-slot:table-cell="{inputData}">
         <q-td :props="inputData.props">
           <template v-if="inputData.props.col.name === 'status'">
             <q-chip :color="checkStatusColor(inputData.props.row.status.id)"
@@ -31,18 +31,6 @@
                    :to="{name:'User.Ticket.Show', params: {id: inputData.props.row.id}}">
               <q-tooltip>
                 مشاهده
-              </q-tooltip>
-            </q-btn>
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="negative"
-                   icon="delete"
-                   class="q-ml-md"
-                   @click="showConfirmRemoveDialog(inputData.props.row, 'id', 'آیا از حذف تیکت اطمینان دارید ؟')">
-              <q-tooltip>
-                حذف
               </q-tooltip>
             </q-btn>
           </template>
@@ -116,13 +104,13 @@ export default {
             align: 'left',
             field: row => row.created_at
           },
-          {
-            name: 'updated_at',
-            required: true,
-            label: 'آخرین بروزرسانی',
-            align: 'left',
-            field: row => row.updated_at
-          },
+          // {
+          //   name: 'updated_at',
+          //   required: true,
+          //   label: 'آخرین بروزرسانی',
+          //   align: 'left',
+          //   field: row => row.updated_at
+          // },
           {
             name: 'department',
             required: true,
@@ -130,13 +118,13 @@ export default {
             align: 'left',
             field: row => row.department.title
           },
-          {
-            name: 'answerd_by',
-            required: true,
-            label: 'اخرین پاسخگو',
-            align: 'left',
-            field: ''
-          },
+          // {
+          //   name: 'answerd_by',
+          //   required: true,
+          //   label: 'اخرین پاسخگو',
+          //   align: 'left',
+          //   field: ''
+          // },
           {
             name: 'priority',
             required: true,

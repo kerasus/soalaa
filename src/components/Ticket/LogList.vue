@@ -46,8 +46,7 @@ export default {
   },
   data () {
     return {
-      departmentStatus: [],
-      statusColor: ''
+      departmentStatus: []
     }
   },
   methods: {
@@ -70,18 +69,17 @@ export default {
           color: '#34bfa3'
         }
       ]
-    }
-  },
-  computed: {
-    getMainColor () {
-      return (obj) => {
-        this.departmentStatus.forEach(item => {
-          if (obj.action === item.title) {
-            this.statusColor = item.color
-          }
-        })
-        return this.statusColor
+    },
+    getMainColor (obj) {
+      if (!obj.action) {
+        return 'red'
       }
+      const status = this.departmentStatus.find(item => item.title === obj.action)
+      if (!status || !status.color) {
+        return 'red'
+      }
+
+      return status.color
     }
   },
   created() {

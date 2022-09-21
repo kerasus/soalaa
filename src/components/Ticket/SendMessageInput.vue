@@ -28,43 +28,39 @@
           />
         </q-btn>
 
-        <q-dialog
-          v-model="showModalStatus"
-          persistent
-          class="imageModal"
-          @close="clearMessage"
+        <q-dialog v-model="showModalStatus"
+                  persistent
+                  class="imageModal"
+                  @close="clearMessage"
         >
-          <q-card>
+          <q-card style="width: 500px;">
             <div>
-              <cropper
-                ref="cropper"
-                class="cropper"
-                :src="imgURL"
-                :canvas="{
-                  minHeight: 0,
-                  minWidth: 0,
-                  maxHeight: 2048,
-                  maxWidth: 2048,
-                }"
-                @change="change"
+              <cropper ref="cropper"
+                       class="cropper"
+                       :src="imgURL"
+                       :canvas="{
+                         minHeight: 0,
+                         minWidth: 0,
+                         maxHeight: 2048,
+                         maxWidth: 2048,
+                       }"
+                       @change="change"
               />
 
               <div class="slider_box">
-                <q-btn
-                  class="cancel-pic"
-                  label="حذف"
-                  @click="clearMessage"
+                <q-btn class="cancel-pic"
+                       label="حذف"
+                       @click="clearMessage"
                 />
                 <div class="angle-slider">
                   <p class="title">میزان چرخش:</p>
-                  <input
-                    id="slider"
-                    v-model="rotateAngle"
-                    class="angle_slider"
-                    type="range"
-                    min="0"
-                    max="360"
-                    @change="rotate"
+                  <input id="slider"
+                         v-model="rotateAngle"
+                         class="angle_slider"
+                         type="range"
+                         min="0"
+                         max="360"
+                         @change="rotate"
                   />
                 </div>
               </div>
@@ -324,13 +320,11 @@ export default {
         }
       }
 
-      const onError = function (err) {
+      const onError = (err) => {
         console.error(err.name + ': ' + err.message)
-        this.$notify({
-          group: 'notifs',
-          title: 'توجه!',
-          text: 'مرورگر شما اجازه دسترسی به میکروفون را ندارد' + err.message,
-          type: 'error'
+        this.$q.notify({
+          message: 'مرورگر شما اجازه دسترسی به میکروفون را ندارد',
+          type: 'negative'
         })
       }
 

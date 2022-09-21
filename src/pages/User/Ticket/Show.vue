@@ -11,6 +11,7 @@
         :entity-param-key="entityParamKey"
         :index-route-name="indexRouteName"
         :after-load-input-data="checkLoadInputData"
+        :show-edit-button="false"
       >
         <template #before-form-builder>
           <div class="flex justify-around">
@@ -32,44 +33,8 @@
               </q-tooltip>
             </q-btn>
           </div>
-          <div v-if="isUserAdmin"
-               class="row q-mt-lg">
-            <div class="col-4 q-px-lg">
-              <q-btn unelevated
-                     class="full-width"
-                     icon="isax:user"
-                     :to="'/user/'+this.searchForInputVal('userId')+'/edit'"
-                     target="_blank"
-                     color="blue">
-                <q-tooltip>ویرایش اطلاعات کاربر</q-tooltip>
-              </q-btn>
-            </div>
-            <div class="col-4 q-px-lg">
-              <q-btn unelevated
-                     class="full-width"
-                     icon="isax:edit"
-                     color="blue"
-                     @click="saveChanges">
-                <q-tooltip>ویرایش اطلاعات تیکت</q-tooltip>
-              </q-btn>
-            </div>
-            <div class="col-4 q-px-lg">
-              <q-btn unelevated
-                     class="full-width"
-                     icon="isax:sms"
-                     color="blue"
-                     @click="sendTicketStatusNotice(this.searchForInputVal('id'))"
-              >
-                <q-tooltip>ارسال پیامک اگاه سازی تغییر وضعیت</q-tooltip>
-              </q-btn>
-            </div>
-          </div>
         </template>
         <template #after-form-builder>
-          <div v-if="isUserAdmin">
-            <q-btn unelevated
-                   color="blue">ویرایش اپراتورها</q-btn>
-          </div>
           <ticket-rate
             v-if="!isUserAdmin"
             :rate="searchForInputVal('rate')"
@@ -80,18 +45,20 @@
       <messages v-for="item in userMessageArray"
                 :key="item"
                 :is-user-admin="isUserAdmin"
-                :data="item" />
-      <SendMessageInput
-        ref="SendMessageInput"
-        :send-loading="sendMessageLoading"
-        @sendText="sendMessageText"
-        @sendImage="sendMessageImage"
-        @sendVoice="sendMessageVoice"
+                :data="item"
       />
-      <drawer
-        :is-open="logDrawer"
-        max-width="310px"
-        side="left"
+      <send-message-input ref="SendMessageInput"
+                          :send-loading="sendMessageLoading"
+                          :show-send-private="false"
+                          class="SendMessageInput"
+                          @sendText="sendMessageText"
+                          @sendImage="sendMessageImage"
+                          @sendVoice="sendMessageVoice"
+                          @creatTicket="sendTicket"
+      />
+      <drawer :is-open="logDrawer"
+              max-width="310px"
+              side="left"
       >
         <q-scroll-area class="fit">
           <q-btn icon="mdi-close"
@@ -116,14 +83,13 @@
                         class="tab-panels"
                         animated>
             <q-tab-panel name="events">
-              <log-list :log-array="searchForInputVal('logs')" />
+              <log-list :log-array="ticketLogs" />
             </q-tab-panel>
           </q-tab-panels>
         </q-scroll-area>
       </drawer>
-      <drawer
-        :is-open="orderDrawer"
-        max-width="1016px"
+      <drawer :is-open="orderDrawer"
+              max-width="1016px"
       >
         <q-scroll-area class="fit">
           <q-btn icon="mdi-close"
@@ -148,11 +114,11 @@ import UserOrderList from 'components/Ticket/userOrderList'
 import API_ADDRESS from 'src/api/Addresses'
 import { CartItemList } from 'src/models/CartItem'
 import SendMessageInput from 'components/Ticket/SendMessageInput'
-import { mixinDateOptions } from 'src/mixin/Mixins'
+import { mixinDateOptions, mixinTicket } from 'src/mixin/Mixins'
 
 export default {
   name: 'Show',
-  mixins: [mixinDateOptions],
+  mixins: [mixinDateOptions, mixinTicket],
   components: { EntityShow, Messages, LogList, UserOrderList, TicketRate, SendMessageInput, Drawer },
   data () {
     return {
@@ -258,6 +224,15 @@ export default {
       ]
     }
   },
+  computed: {
+    ticketLogs () {
+      const logs = this.searchForInputVal('logs')
+      if (!logs) {
+        return []
+      }
+      return logs
+    }
+  },
   methods: {
     initPageData () {
       this.api += '/' + this.$route.params.id
@@ -270,7 +245,21 @@ export default {
     filterDataForUserRole () {
       this.inputs = this.inputs.filter(input => !input.isAdmin)
     },
+    sendTicket (data) {
+      console.log('sendTicket', data)
+      const sendMessageData = {
+        body: data.body,
+        isPrivate: data.isPrivate,
+        voice: data.voice,
+        loading: data.loading
+      }
+      if (data.resultURL) {
+        sendMessageData.photo = this.createBlob(data.resultURL)
+      }
+      this.sendMessage(sendMessageData)
+    },
     sendMessageText (data) {
+      console.log('sendMessageText')
       this.sendMessage({
         body: data.body,
         isPrivate: data.isPrivate,
@@ -279,6 +268,7 @@ export default {
     },
 
     sendMessageImage (data) {
+      console.log('sendMessageImage')
       this.sendMessage({
         body: data.caption,
         isPrivate: data.isPrivate,
@@ -288,6 +278,7 @@ export default {
     },
 
     sendMessageVoice (data) {
+      console.log('sendMessageVoice')
       this.sendMessage({
         voice: data.voice,
         isPrivate: data.isPrivate,
@@ -348,7 +339,9 @@ export default {
     },
     searchForInputVal (name) {
       const input = this.inputs.find(input => input.name === name)
-      if (input) return input.value
+      if (input) {
+        return input.value
+      }
       return false
     },
     openShopLogList () {
@@ -392,6 +385,10 @@ export default {
 </script>
 
 <style scoped>
+.SendMessageInput {
+  position: sticky;
+  bottom: 20px;
+}
 .tab-panels{
   background: rgb(250, 250, 250);
 }
