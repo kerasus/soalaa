@@ -1,5 +1,6 @@
 <template>
   <div style="display: none"> {{windowSize}}</div>
+  rg{{hasUserOrdered}}
   <div
     v-if="!hasUserOrdered"
   >
@@ -28,6 +29,7 @@
   >
     <div class="title">سفارش های من</div>
     <entity-index
+      ref="orderList"
       v-model:value="inputs"
       class="orders-list-entity-index"
       title="سفارش های من"
@@ -37,18 +39,18 @@
       :default-layout="false"
       :table-grid-size="$q.screen.lt.sm"
       :create-route-name="'Admin.Exam.Create'"
-
     >
       <template v-slot:before-index-table="">
         <div class="row items-center search-box">
           <div class="col-lg-4 col-xl-4 col-md-6 col-xs-9 text-left">
             <q-input
+              v-model="searchInput"
               filled
-              class="search-input bg-white"
-              :model-value="searchInput">
+              class="search-input bg-white">
               <template v-slot:append>
                 <q-icon name="isax:search-normal-1"
-                        class="search-icon" />
+                        class="search-icon"
+                        @click="searchInData" />
               </template>
             </q-input>
           </div>
@@ -69,18 +71,23 @@
           caption="John Doe"
         >
           <div class="row filter-items">
-            <div class="col-lg-10 col-xs-12">
-              <form-builder :value="filterInputs" />
+            <!--            col-lg-10 col-xs-12-->
+            <div class="col-12">
+              <form-builder ref="filterSlot"
+                            :value="filterInputs" />
             </div>
-            <div class="action-btn col-lg-2 flex col-xs-12 items-end q-pb-md justify-end">
+            <div v-if="false"
+                 class="action-btn col-lg-2 flex col-xs-12 items-end q-pb-md justify-end">
               <q-btn icon="isax:rotate-left"
                      class="reload-icon bg-white"
-                     unelevated  />
+                     unelevated
+                     @click="resetData"  />
               <q-btn unelevated
                      class="filter-btn"
                      color="primary"
                      padding="1px 23px"
-                     label="اعمال" />
+                     label="اعمال"
+                     @click="filterTable" />
             </div>
           </div>
         </q-expansion-item>
@@ -203,6 +210,7 @@ import { Order } from 'src/models/Order'
 import OrderDetailsDialog from 'components/MyOrders/OrderDetailsDialog'
 import OrderDetailsCard from 'components/MyOrders/OrderDetailsCard'
 import { FormBuilder } from 'quasar-form-builder'
+import ActionBtn from 'pages/User/MyOrders/actionBtn'
 export default {
   name: 'MyOrders',
   components: {
@@ -216,15 +224,16 @@ export default {
     return {
       filterExpanded: true,
       inputs: [
-        { type: 'hidden', name: 'paymentStatuses', class: 'hhhhhhhhh', responseKey: 'paymentStatuses', col: 'col-12 col-lg-12 col-sm-6' },
+        { type: 'hidden', name: 'paymentStatuses', class: '', responseKey: 'paymentStatuses', col: 'col-12 col-lg-12 col-sm-6' },
         { type: 'hidden', name: 'since', responseKey: 'since', col: 'col-12 col-lg-12 col-sm-6' },
         { type: 'hidden', name: 'till', responseKey: 'till', col: 'col-12 col-lg-12 col-sm-6' },
         { type: 'hidden', name: 'search', responseKey: 'search', col: 'col-12 col-lg-12 col-sm-6' }
       ],
       filterInputs: [
-        { type: 'select', name: 'paymentStatuses', dropdownIcon: 'isax:arrow-down-1', responseKey: 'paymentStatuses', label: 'وضعیت پرداخت', placeholder: ' ', col: 'filter-option col-sm-6 col-xs-12' },
-        { type: 'date', name: 'since', responseKey: 'since', label: 'تاریخ سفارش', class: 'since', placeholder: ' از', col: 'since col-lg-3 col-sm-6 col-xs-12' },
-        { type: 'date', name: 'till', label: ' ', placeholder: 'تا', responseKey: 'till', col: 'till col-lg-3 col-sm-6 col-xs-12' }
+        { type: 'select', name: 'paymentStatuses', dropdownIcon: 'isax:arrow-down-1', optionValue: 'id', optionLabel: 'title', responseKey: 'paymentStatuses', label: 'وضعیت پرداخت', placeholder: ' ', col: 'filter-option col-sm-6 col-lg-4 col-xs-12' },
+        { type: 'date', name: 'since', responseKey: 'since', label: 'تاریخ سفارش', class: 'since', placeholder: ' از', calendarIcon: 'isax filter', col: 'since col-lg-3 col-sm-6 col-xs-12' },
+        { type: 'date', name: 'till', label: ' ', placeholder: 'تا', responseKey: 'till', class: '', col: 'till col-lg-3 col-sm-6 col-xs-12' },
+        { type: ActionBtn, name: '', label: ' ', placeholder: 'تا', responseKey: 'till', class: '', col: 'till col-lg-2 col-sm-6 col-xs-12' }
       ],
       searchInput: '',
       table: {
@@ -284,6 +293,21 @@ export default {
     }
   },
   created() {
+    this.getPaymentStatus()
+  },
+  watch: {
+    till(value) {
+      this.updateInputsValue('till', value)
+    },
+    since(value) {
+      this.updateInputsValue('since', value)
+    },
+    paymentStatus (value) {
+      this.updateInputsValue('paymentStatuses', value)
+    },
+    searchInput(value) {
+      this.updateInputsValue('search', value)
+    }
   },
   computed: {
     user() {
@@ -292,9 +316,17 @@ export default {
       }
       return new User()
     },
+    paymentStatus() {
+      return this.getInput('filterInputs', 'paymentStatuses').value
+    },
+    since() {
+      return this.getInput('filterInputs', 'since').value
+    },
+    till() {
+      return this.getInput('filterInputs', 'till').value
+    },
     getEntityApi() {
       return API_ADDRESS.user.getOrderList(this.user.id)
-      // return API_ADDRESS.exam.base(1)
     },
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']
@@ -306,6 +338,34 @@ export default {
     }
   },
   methods: {
+    searchInData() {
+
+    },
+    updateInputsValue(name, newValue) {
+      const input = this.getInput('inputs', name)
+      input.value = newValue
+    },
+    getInput(src, name) {
+      return this[src].find(item => item.name === name)
+    },
+    async getPaymentStatus() {
+      const response = await this.$axios.get(API_ADDRESS.user.orders.status)
+      this.getInput('filterInputs', 'paymentStatuses').options = response.data.data
+    },
+    filterTable() {
+      if (!this.$refs.filterSlot) {
+        return
+      }
+      const inputsData = this.$refs.filterSlot.getValues()
+      console.log('inputsData :', inputsData)
+    },
+    resetData() {
+      if (!this.$refs.orderList) {
+        return
+      }
+
+      this.$refs.orderList.clearData()
+    },
     showDetailsDialog(rowData) {
       this.currentOrder = new Order(rowData)
       this.detailsDialog = true
@@ -323,7 +383,7 @@ export default {
       if (rowData.id) {
         this.hasUserOrdered = true
       }
-      this.firstRowPassed = true
+      this.firstRowPassed = false
     },
     getRemoveMessage(row) {
       const title = row.title
@@ -391,6 +451,11 @@ export default {
     &:deep(.since){
       .outsideLabel{
         padding-bottom: 8px;
+      }
+      &:deep(.q-icon){
+        &::before{
+          content: '';
+        }
       }
       @media screen and (max-width: 599px) {
         padding: 1px 1px 8px;

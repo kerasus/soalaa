@@ -28,6 +28,9 @@ const API_ADDRESS = {
     getOrderList (id) {
       return authServer + '/user/' + id + '/orders?seller=2'
       // return authServer + '/user/' + id + '/orders?seller=1'
+    },
+    orders: {
+      status: lumenServer + '/orders/status'
     }
   },
   set: {
