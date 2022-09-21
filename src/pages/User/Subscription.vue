@@ -16,9 +16,6 @@ export default {
   },
   data() {
     return {
-      test: {
-        t: 'hi'
-      },
       sections: [
         {
           data: {
