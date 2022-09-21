@@ -1,6 +1,5 @@
 <template>
   <div style="display: none"> {{windowSize}}</div>
-  rg{{hasUserOrdered}}
   <div
     v-if="!hasUserOrdered"
   >
@@ -353,11 +352,10 @@ export default {
       this.getInput('filterInputs', 'paymentStatuses').options = response.data.data
     },
     filterTable() {
-      if (!this.$refs.filterSlot) {
-        return
-      }
-      const inputsData = this.$refs.filterSlot.getValues()
-      console.log('inputsData :', inputsData)
+      // if (!this.$refs.filterSlot) {
+      //   return
+      // }
+      // const inputsData = this.$refs.filterSlot.getValues()
     },
     resetData() {
       if (!this.$refs.orderList) {
