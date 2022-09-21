@@ -246,7 +246,6 @@ export default {
       this.inputs = this.inputs.filter(input => !input.isAdmin)
     },
     sendTicket (data) {
-      console.log('sendTicket', data)
       const sendMessageData = {
         body: data.body,
         isPrivate: data.isPrivate,
@@ -259,7 +258,6 @@ export default {
       this.sendMessage(sendMessageData)
     },
     sendMessageText (data) {
-      console.log('sendMessageText')
       this.sendMessage({
         body: data.body,
         isPrivate: data.isPrivate,
@@ -268,7 +266,6 @@ export default {
     },
 
     sendMessageImage (data) {
-      console.log('sendMessageImage')
       this.sendMessage({
         body: data.caption,
         isPrivate: data.isPrivate,
@@ -278,7 +275,6 @@ export default {
     },
 
     sendMessageVoice (data) {
-      console.log('sendMessageVoice')
       this.sendMessage({
         voice: data.voice,
         isPrivate: data.isPrivate,
@@ -316,9 +312,8 @@ export default {
           })
           this.sendLoading = false
         })
-        .catch(e => {
+        .catch(() => {
           this.sendLoading = false
-          // console.log(e)
         })
     },
     saveChanges () {

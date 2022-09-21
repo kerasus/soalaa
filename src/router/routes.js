@@ -87,7 +87,7 @@ const routes = [
       layoutLeftDrawerElevated: false,
       layoutLeftDrawerBordered: false,
       layoutLeftDrawerWidth: 325,
-      layoutLeftDrawerBehavior: 'panel',
+      layoutLeftDrawerBehavior: 'default',
       layoutPageContainer: true,
       layoutRightDrawer: false,
       layoutFooter: false,
@@ -99,6 +99,30 @@ const routes = [
       {
         path: '',
         name: 'HomePage',
+        layoutConfig: {
+          layoutHeader: false,
+          layoutHeaderVisible: false
+          // layoutHeaderType: 'panel',
+          // layoutLeftDrawerVisible: true,
+          // layoutLeftSideBarType: 'panel',
+          // layoutView: 'lHh Lpr lFf',
+          // layoutHeader: true,
+          // layoutHeaderReveal: false,
+          // layoutHeaderElevated: false,
+          // layoutHeaderBordered: false,
+          // layoutLeftDrawer: true,
+          // layoutLeftDrawerOverlay: false,
+          // layoutLeftDrawerElevated: false,
+          // layoutLeftDrawerBordered: false,
+          // layoutLeftDrawerWidth: 325,
+          // layoutLeftDrawerBehavior: 'default',
+          // layoutPageContainer: true,
+          // layoutRightDrawer: false,
+          // layoutFooter: false,
+          // layoutHeaderCustomClass: '',
+          // layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
+          // layoutPageContainerCustomClass: 'main-layout-container'
+        },
         component: () => import('pages/User/landing/landing')
       },
       {
