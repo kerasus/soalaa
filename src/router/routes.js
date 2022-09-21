@@ -129,6 +129,7 @@ const routes = [
           layoutHeaderType: 'panel',
           layoutLeftDrawerVisible: true,
           layoutLeftSideBarType: 'panel'
+
         }
       },
       {
