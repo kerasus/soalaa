@@ -60,7 +60,7 @@ export default {
     },
     computedKatex () {
       let string = this.input
-      string = mixinConvertToTiptap.methods.convertKatex(string)
+      string = mixinConvertToTiptap.methods.convertToTiptap(string)
       const regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms
       string = string.replace(regex, (match) => {
         let finalMatch
