@@ -101,7 +101,13 @@
             >
               <!--              question.reference[0].photos-->
               <q-avatar
-                v-if="!question.reference[0].photos"
+                v-if="question.reference[0] && question.reference[0].image"
+                size="36px"
+              >
+                <img :src="question.reference[0].image">
+              </q-avatar>
+              <q-avatar
+                v-else
                 size="36px"
               >
                 <svg xmlns="http://www.w3.org/2000/svg"
@@ -198,7 +204,7 @@
     </q-card-section>
 
     <q-card-section class="question-section">
-      <div v-if="finalApprovalMode"
+      <div v-if="finalApprovalMode || showQuestionNumber"
            class="add-btn question-index">
         <div class="question-number">
           {{ question.order }}
@@ -241,7 +247,8 @@
           <div v-if="true"
                class=" answer-description-video">
             <div class="video">
-              <video-player />
+              <!--              ToDo : uncomment this when backend give you a valid key-->
+              <!--              <video-player />-->
             </div>
             <div class="title text-center">
               پاسخنامه ویدیویی - محمد امین نباخته
@@ -281,7 +288,8 @@
                  color="primary"
                  icon="isax:edit-2"
                  class="question-item-button"
-                 @click="redirectToEditPage" />
+                 :to="redirectToEditPage"
+          />
         </div>
       </div>
       <div class="rate-report-comment-answer">
@@ -405,12 +413,16 @@
 <script>
 import VueKatex from 'src/components/VueKatex'
 import question from './Question'
-import VideoPlayer from 'src/components/VideoPlayer'
+// import VideoPlayer from 'src/components/VideoPlayer'
 import { Question } from 'src/models/Question'
 
 export default {
   name: 'QuestionItem',
-  components: { VueKatex, question, VideoPlayer },
+  components: {
+    VueKatex,
+    question
+    // VideoPlayer
+  },
   props: {
     question: {
       type: Question,
@@ -437,6 +449,10 @@ export default {
       default: ''
     },
     finalApprovalMode: {
+      type: Boolean,
+      default: false
+    },
+    showQuestionNumber: {
       type: Boolean,
       default: false
     }
@@ -525,6 +541,14 @@ export default {
   computed: {
     trueChoice () {
       return this.question.choices.getSelected()
+    },
+    redirectToEditPage () {
+      return {
+        name: 'Admin.Question.Edit',
+        params: {
+          question_id: this.question.id
+        }
+      }
     }
   },
   methods: {
@@ -544,14 +568,6 @@ export default {
       }
       const persianRegex = /[\u0600-\u06FF]/
       return !string.match(persianRegex)
-    },
-    redirectToEditPage () {
-      this.$router.push({
-        name: 'Admin.Question.Edit',
-        params: {
-          question_id: this.question.id
-        }
-      })
     },
     selectQuestion () {
       this.$emit('checkSelect', this.question)

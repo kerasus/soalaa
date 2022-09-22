@@ -1,5 +1,3 @@
-<!--       -----------------------ToDO => change last v-else-ifs ------------------------ -->
-
 <template>
   <quasar-template-builder @onResize="resize">
     <template #header>
@@ -42,7 +40,9 @@
         indeterminate
       />
       <div ref="contentInside"
-           class="content-inside">
+           class="content-inside"
+           :class="{ 'user-panel' : getTemplateLeftSideBarType === 'default' }"
+      >
         <q-dialog v-model="confirmDialogData.show"
                   persistent>
           <q-card class="q-pa-md q-pb-none">
@@ -76,24 +76,43 @@
 </template>
 
 <script>
+
+import { defineAsyncComponent } from 'vue'
 import { QuasarTemplateBuilder } from 'quasar-template-builder'
-import templateHeader from 'components/Headers/templateHeader'
-import onlineQuizTemplateHeader from 'components/Headers/onlineQuizTemplateHeader'
-import UserTemplateHeader from 'components/Headers/userTemplateHeader'
-import { ref } from 'vue'
-import Router from 'src/router/Router'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
-import Auth from 'components/Auth'
-import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
-import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
-import UserSideBar from 'layouts/UserPanelLayouts/UserSideBar'
+// import templateHeader from 'components/Headers/templateHeader'
+// import onlineQuizTemplateHeader from 'components/Headers/onlineQuizTemplateHeader'
+// import UserTemplateHeader from 'components/Headers/userTemplateHeader'
+// import Router from 'src/router/Router'
+// import Auth from 'components/Auth'
+// import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
+// import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
+// import UserSideBar from 'layouts/UserPanelLayouts/UserSideBar'
 
 export default {
-  components: { UserSideBar, Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader, UserTemplateHeader, Auth },
+  components: {
+    QuasarTemplateBuilder,
+    UserSideBar: defineAsyncComponent(() => import('layouts/UserPanelLayouts/UserSideBar')),
+    sideMenuMapOfQuestions: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu_MapOfQuestions')),
+    SideMenuDashboard: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu-dashboard')),
+    Router: defineAsyncComponent(() => import('src/router/Router')),
+    templateHeader: defineAsyncComponent(() => import('components/Headers/templateHeader')),
+    onlineQuizTemplateHeader: defineAsyncComponent(() => import('components/Headers/onlineQuizTemplateHeader')),
+    UserTemplateHeader: defineAsyncComponent(() => import('components/Headers/userTemplateHeader')),
+    Auth: defineAsyncComponent(() => import('components/Auth'))
+
+    // UserSideBar,
+    // Router,
+    // SideMenuDashboard,
+    // sideMenuMapOfQuestions,
+    // templateHeader,
+    // onlineQuizTemplateHeader,
+    // UserTemplateHeader,
+    // Auth
+  },
   data () {
     return {
-      keepAliveComponents: KeepAliveComponents,
-      contentInside: ref(0)
+      keepAliveComponents: KeepAliveComponents
     }
   },
   computed: {
@@ -195,8 +214,11 @@ export default {
 .content-inside {
   //overflow: auto;
 }
+.user-panel {
+  background: #F4F6F9;
+}
 .main-layout-header {
-  background-color: #f1f1f1;
+  background-color: #F4F6F9;
   display: flex;
   flex-direction: row;
   padding: 60px 100px 24px 76px;
@@ -258,10 +280,12 @@ export default {
 <style lang="scss">
 
 .main-layout-container {
-  background-color: #f1f1f1;
+  //background-color: #f1f1f1;
+  background-color: #F4F6F9;
 }
 
 .main-layout-left-drawer {
-  background-color: #f1f1f1;
+  //background-color: #f1f1f1;
+  background-color: #F4F6F9;
 }
 </style>

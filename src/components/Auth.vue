@@ -100,11 +100,11 @@ export default {
         })
         return
       }
-      let redirectTo = window.localStorage.getItem('redirectTo')
-      if (!redirectTo) {
-        redirectTo = 'dashboard'
+      let routeNameToRedirect = window.localStorage.getItem('redirectTo') || window.localStorage.getItem('routeNameToRedirect')
+      if (!routeNameToRedirect || routeNameToRedirect === 'login') {
+        routeNameToRedirect = ''
       }
-      this.$router.push({ name: redirectTo })
+      this.$router.push({ name: routeNameToRedirect })
     },
 
     handleErr (err) {

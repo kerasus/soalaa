@@ -108,7 +108,7 @@ const AxiosHooks = (function () {
     store.dispatch('Auth/logOut')
 
     const loginRouteName = 'login'
-    if (router.history.current.name === loginRouteName) {
+    if (router?.history?.current.name === loginRouteName) {
       return
     }
 

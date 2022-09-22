@@ -78,7 +78,8 @@
               :questions-column="$refs.questionsColumn"
               :exam-id="$route.params.quizId"
               :sub-category="quizData.sub_categories"
-              :final-approval-mode="true"
+              :final-approval-mode="false"
+              :show-question-number="true"
               @detachQuestion="detachQuestion"
               @deleteQuestion="deleteQuestion"
               @copyIdToClipboard="copyIdToClipboard"
@@ -272,7 +273,6 @@ export default {
       return this.$axios.get(API_ADDRESS.question.confirm(question.id))
     },
     scrollToQuestion () {
-      console.log('this.questionSearchNumber', this.questionSearchNumber)
       this.scrollTo(null, this.questionSearchNumber)
     },
     questionListHeight () {
@@ -293,7 +293,11 @@ export default {
           this.firstQuestionOrder = response.data.data[0].order
           this.loadSubCategories(response, reload)
         } else {
-          this.$router.push({ name: 'onlineQuiz.exams' })
+          // this.$router.push({ name: 'Admin.Exam.Index' })
+          this.$q.notify({
+            type: 'negative',
+            message: 'دیتای مورد نظر یافت نشد'
+          })
         }
       } catch (e) {
         console.error('err ', e)

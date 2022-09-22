@@ -18,6 +18,7 @@ const API_ADDRESS = {
   },
   user: {
     base: authServer + '/user',
+    edit (userId) { return authServer + '/user/' + userId },
     mobile: {
       resend: authServer + '/mobile/resend',
       verify: authServer + '/mobile/verify'
@@ -25,8 +26,13 @@ const API_ADDRESS = {
     formData: authServer + '/megaroute/getUserFormData',
     show_user: authServer + '/getUserFor3a',
     getOrderList (id) {
-      return authServer + '/user/' + id + '/orders'
-    }
+      return authServer + '/user/' + id + '/orders?seller=2'
+      // return authServer + '/user/' + id + '/orders?seller=1'
+    },
+    orders: {
+      status: lumenServer + '/orders/status'
+    },
+    statistics: lumenServer + 'user/dashboard/statistics'
   },
   set: {
     base: authServer + '/set'
@@ -56,6 +62,12 @@ const API_ADDRESS = {
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=reference_type&with_pagination=true'
     },
+    questionTarget: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/option',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=targets_type&with_pagination=true'
+    },
     majors: {
       show: lumenServer + '/option/',
       edit: lumenServer + '/option',
@@ -75,6 +87,9 @@ const API_ADDRESS = {
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
     analysisVideo: lumenServer + '/exam-question/attach/sub-category',
+    userExamList(start, end) {
+      return lumenServer + '/examAndUser' + '?start_at_from=' + start + '&start_at_till=' + end
+    },
     getAnalysisVideo (examId) {
       return lumenServer + '/exam-question/videos/' + examId
     },
@@ -133,14 +148,15 @@ const API_ADDRESS = {
       page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
     },
     index (filters, page) {
+      let newFilter = (filters) ? JSON.parse(JSON.stringify(filters)) : {}
       function setQueryParams (paramKey) {
-        if (!filters) {
-          filters = {}
+        if (!newFilter) {
+          newFilter = {}
         }
-        filters[paramKey] = (typeof filters[paramKey] !== 'undefined') ? filters[paramKey] : []
-        filters[paramKey] = filters[paramKey].join('&' + paramKey + '[]=')
-        if (filters[paramKey]) {
-          filters[paramKey] = '&' + paramKey + '[]=' + filters[paramKey]
+        newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
+        newFilter[paramKey] = newFilter[paramKey].join('&' + paramKey + '[]=')
+        if (newFilter[paramKey]) {
+          newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
         }
       }
       setQueryParams('statuses')
@@ -159,8 +175,8 @@ const API_ADDRESS = {
       let queryParam = page
       // const examQuesry = '&exam=0'
       // queryParam += examQuesry
-      Object.keys(filters).forEach(filterKey => {
-        queryParam += filters[filterKey]
+      Object.keys(newFilter).forEach(filterKey => {
+        queryParam += newFilter[filterKey]
       })
       if (queryParam.length > 0) {
         queryParam = queryParam.substr(1)
@@ -250,13 +266,57 @@ const API_ADDRESS = {
       return lumenServer + '/id/soalaQestion/' + questionId
     }
   },
+  product: {
+    landing: {
+      sea: {
+        all: authServer + '/product/soalaa/all'
+      }
+    },
+
+    edit: {
+      base: apiV2Server + '/admin/product'
+    },
+    index: {
+      base: apiV2Server + '/admin/product'
+    },
+    show: {
+      base: apiV2Server + '/product'
+    }
+  },
   cart: {
     orderproduct: {
       add: apiV2Server + '/orderproduct',
       delete (productId) { return apiV2Server + '/orderproduct/' + productId }
     },
     review: apiV2Server + '/checkout/review?seller=2',
-    getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2'
+    getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2',
+    orderWithTransaction (orderId) { return apiV2Server + '/orderWithTransaction/' + orderId }
+  },
+  subscription: {
+    landing: lumenServer + 'subscribe/landing',
+    list: lumenServer + 'subscribe/user',
+    register: (userId) => lumenServer + `/subscribe/user/${userId}`
+  },
+  homePage: {
+    base: lumenServer + '/homepage'
+  },
+  ticket: {
+    create: {
+      base: authServer + '/ticket'
+    },
+    index: {
+      base: authServer + '/ticket'
+    },
+    show: {
+      base: authServer + '/ticket',
+      statusNotice: (ticketId) =>
+        authServer + '/ticket/' + ticketId + '/sendTicketStatusNotice',
+      batchExtend: authServer + '/orderproduct/batchExtend',
+      ticketMessage: authServer + '/ticketMessage',
+      reportMessage: (ticketId) =>
+        authServer + '/ticketMessage/' + ticketId + '/report'
+    },
+    ticketRate: (ticketId) => authServer + '/ticket/' + ticketId + '/rate'
   }
 }
 export default API_ADDRESS

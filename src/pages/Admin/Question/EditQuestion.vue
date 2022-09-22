@@ -54,6 +54,7 @@
           :major-list="majorList"
           :authorship-dates-list="authorshipDatesList"
           :question-authors-list="questionAuthorsList"
+          :question-target-list="questionTargetList"
           @gradeSelected="getLessonsList"
           @groupSelected="getLessonsList"
           @attach="attachExam"
@@ -144,6 +145,7 @@ export default {
     this.getQuestionStatus()
     this.getGradesList()
     this.loadQuestionAuthors()
+    this.loadQuestionTargets()
     this.loadAuthorshipDates()
     this.loadMajorList()
   },

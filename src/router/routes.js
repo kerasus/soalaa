@@ -48,6 +48,14 @@ const entityCrudRouteConfigs = [
 
   },
   {
+    path: 'QuestionTarget',
+    baseRouteName: 'Admin.QuestionTarget',
+    componentPath: 'pages/Admin/QuestionTarget.vue',
+    breadcrumbs: { title: 'اهداف سوال' },
+    permissions: ['optionIndex', 'optionStore', 'optionShow', 'optionUpdate']
+
+  },
+  {
     path: 'majors',
     baseRouteName: 'Admin.Majors',
     componentPath: 'pages/Admin/Majors',
@@ -66,9 +74,9 @@ const routes = [
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     layoutConfig: {
       layoutHeaderVisible: true,
-      layoutHeaderType: 'panel',
+      layoutHeaderType: 'default',
       layoutLeftDrawerVisible: true,
-      layoutLeftSideBarType: 'panel',
+      layoutLeftSideBarType: 'default',
       layoutView: 'lHh Lpr lFf',
       layoutHeader: true,
       layoutHeaderReveal: false,
@@ -79,7 +87,7 @@ const routes = [
       layoutLeftDrawerElevated: false,
       layoutLeftDrawerBordered: false,
       layoutLeftDrawerWidth: 325,
-      layoutLeftDrawerBehavior: 'panel',
+      layoutLeftDrawerBehavior: 'default',
       layoutPageContainer: true,
       layoutRightDrawer: false,
       layoutFooter: false,
@@ -90,12 +98,23 @@ const routes = [
     children: [
       {
         path: '',
+        name: 'HomePage',
+        component: () => import('pages/HomePage'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false
+        }
+
+      },
+      {
+        path: 'landing',
         name: 'landing',
         component: () => import('layouts/LandingLayout'),
         children: [
           {
             path: '',
-            name: 'landing1',
+            name: 'Landing.3aExams',
             component: () => import('pages/User/landing/landing')
           }
         ]
@@ -110,15 +129,25 @@ const routes = [
           layoutHeaderType: 'panel',
           layoutLeftDrawerVisible: true,
           layoutLeftSideBarType: 'panel'
-        },
-        meta: {
-          middlewares: [auth]
+
         }
       },
       {
         path: 'login',
         name: 'login',
         component: () => import('pages/Auth/Login.vue')
+      },
+      {
+        path: 'subscription',
+        name: 'subscription',
+        component: () => import('pages/User/Subscription'),
+        breadcrumbs: { title: 'ساخت آزمون' },
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false,
+          layoutLeftSideBarType: 'default'
+        }
       },
       {
         path: 'user',
@@ -137,11 +166,25 @@ const routes = [
         },
         children: [
           {
+
+            path: 'profile',
+            name: 'profile',
+            component: () => import('pages/User/profile/profile'),
+            layoutConfig: {
+              layoutLeftDrawerVisible: true
+            }
+          },
+          {
             path: 'dashboard',
             name: 'User.Dashboard',
             component: () => import('pages/User/Dashboard/Dashboard'),
+            layoutConfig: {
+              layoutHeaderVisible: true,
+              layoutLeftDrawerVisible: false
+            },
             meta: {
               middlewares: [auth]
+
             }
           },
           {
@@ -156,11 +199,39 @@ const routes = [
             }
           },
           {
-            path: '/user_exam_list',
+            path: 'user_exam_list',
             name: 'User.Exam.List',
             component: () => import('pages/User/exam/List'),
+            layoutConfig: {
+              layoutHeaderVisible: true
+            },
             middleware: [
               Permissions.hasPermission('examStore')
+            ]
+          },
+          {
+            path: 'ticket',
+            component: () => import('layouts/bareLayout.vue'),
+            meta: {
+              middlewares: [auth]
+            },
+            name: 'User.Ticket',
+            children: [
+              {
+                path: '',
+                name: 'User.Ticket.Index',
+                component: () => import('pages/User/Ticket/Index.vue')
+              },
+              {
+                path: ':id',
+                name: 'User.Ticket.Show',
+                component: () => import('pages/User/Ticket/Show.vue')
+              },
+              {
+                path: 'create',
+                name: 'User.Ticket.Create',
+                component: () => import('pages/User/Ticket/Create.vue')
+              }
             ]
           }
         ]
@@ -516,9 +587,26 @@ const routes = [
         path: '/cart',
         name: 'cart',
         component: () => import('pages/Cart/Cart'),
-        meta: {
-          middlewares: [
-            Permissions.hasPermission('examStore')]
+        // meta: {
+        //   middlewares: [
+        //     Permissions.hasPermission('examStore')]
+        // },
+        layoutConfig: {
+          layoutHeaderVisible: false,
+          layoutLeftDrawerVisible: false
+        }
+      },
+      {
+        path: '/order/:orderId/thankYou',
+        name: 'thankYouPage',
+        component: () => import('pages/ThankYouPage/ThankYouPage'),
+        // meta: {
+        //   middlewares: [
+        //     Permissions.hasPermission('examStore')]
+        // },
+        layoutConfig: {
+          layoutHeaderVisible: false,
+          layoutLeftDrawerVisible: false
         }
       }
 

@@ -17,7 +17,7 @@
           flat
           :color="'primary'"
           label="رفتن به فروشگاه"
-          :to="{name:'landing1'}"
+          :to="{name:'Landing.3aExams'}"
         />
       </div>
     </div>
@@ -27,47 +27,111 @@
     class="my-orders-list"
   >
     <div class="title">سفارش های من</div>
-    <!--          :api="getEntityApi"-->
     <entity-index
+      ref="orderList"
+      v-model:value="inputs"
       class="orders-list-entity-index"
       title="سفارش های من"
       :api="getEntityApi"
       :table="table"
       :table-keys="tableKeys"
       :default-layout="false"
+      :table-grid-size="$q.screen.lt.sm"
       :create-route-name="'Admin.Exam.Create'"
     >
+      <template v-slot:before-index-table="">
+        <div class="row items-center search-box">
+          <div class="col-lg-4 col-xl-4 col-md-6 col-xs-9 text-left">
+            <q-input
+              v-model="searchInput"
+              filled
+              class="search-input bg-white">
+              <template v-slot:append>
+                <q-icon name="isax:search-normal-1"
+                        class="search-icon"
+                        @click="searchInData" />
+              </template>
+            </q-input>
+          </div>
+          <div class="col-lg-8 col-xl-8 col-md-6 col-xs-3 text-right">
+            <q-btn
+              unelevated
+              class="filter-toggle"
+              :class="filterExpanded? 'gray-bg': 'bg-white'"
+              icon="isax:filter"
+              @click="filterExpanded = !filterExpanded" />
+          </div>
+        </div>
+        <q-expansion-item
+          v-model="filterExpanded"
+          icon="perm_identity"
+          class="expand-filter"
+          label="Account settings"
+          caption="John Doe"
+        >
+          <div class="row filter-items">
+            <!--            col-lg-10 col-xs-12-->
+            <div class="col-12">
+              <form-builder ref="filterSlot"
+                            :value="filterInputs" />
+            </div>
+            <div v-if="false"
+                 class="action-btn col-lg-2 flex col-xs-12 items-end q-pb-md justify-end">
+              <q-btn icon="isax:rotate-left"
+                     class="reload-icon bg-white"
+                     unelevated
+                     @click="resetData"  />
+              <q-btn unelevated
+                     class="filter-btn"
+                     color="primary"
+                     padding="1px 23px"
+                     label="اعمال"
+                     @click="filterTable" />
+            </div>
+          </div>
+        </q-expansion-item>
+      </template>
       <template #table-cell="{inputData}">
         <q-td :props="inputData.props">
           {{setHasUserOrderedValue(inputData.props.row)}}
 
           <template v-if="inputData.props.col.name === 'details'">
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   @click="showDetailsDialog(inputData.props.row)">
+            <q-btn
+              round
+              flat
+              dense
+              size="md"
+              @click="showDetailsDialog(inputData.props.row)"
+            >
               <!--              <q-tooltip anchor="top middle"-->
               <!--                         self="bottom middle">-->
               <!--                مشاهده-->
               <!--              </q-tooltip>-->
-              <svg width="24"
-                   height="24"
-                   viewBox="0 0 24 24"
-                   fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12"
-                        cy="6"
-                        r="2"
-                        fill="#6D708B" />
-                <circle cx="12"
-                        cy="12"
-                        r="2"
-                        fill="#6D708B" />
-                <circle cx="12"
-                        cy="18"
-                        r="2"
-                        fill="#6D708B" />
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="6"
+                  r="2"
+                  fill="#6D708B"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="2"
+                  fill="#6D708B"
+                />
+                <circle
+                  cx="12"
+                  cy="18"
+                  r="2"
+                  fill="#6D708B"
+                />
               </svg>
 
             </q-btn>
@@ -78,112 +142,99 @@
           </template>
         </q-td>
       </template>
+      <template v-slot:table-item-cell="{inputData}">
+        <q-card class="details-table-mobile">
+          <div class="details-info">
+            <div class="first-col">
+              <div class="order first-col-item">
+                شماره سفارش:
+                <span class="order-id">{{inputData.props.row.id}}</span>
+              </div>
+              <div class="first-col-item">وضعیت پرداخت:</div>
+              <div class="first-col-item">مبلغ:</div>
+              <div class="first-col-item">تاریخ سفارش:</div>
+            </div>
+            <div class="second-col">
+              <q-btn
+                round
+                flat
+                dense
+                size="md"
+                class="details-btn"
+                @click="toggleDetailsCard(inputData.props.row)"
+              >
+                جزییات
+              </q-btn>
+              <div
+                :class="
+                  { 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
+                    'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
+                    'payment-installment' : inputData.props.row.paymentstatus.id
+                  }"
+              >
+                <!--                پرداخت نشده-->
+                {{inputData.props.row.paymentstatus.name}}
+              </div>
+              <div>
+                {{ toman(inputData.props.row.price) }}
+              </div>
+              <div>
+                {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}
+                <!--                {{ getCurrentOrderCompletedAt('1401/09/25') }}-->
+              </div>
+            </div>
+          </div>
+          <order-details-card
+            v-if="windowSize.x < 600"
+            v-model:toggleValue="detailsCardToggle[inputData.props.row.id]"
+            :order="currentOrder"
+          />
+        </q-card>
+      </template>
     </entity-index>
-    <q-dialog v-model="detailsDialog">
-      <q-card class="order-details-dialog">
-        <q-card-section class="dialog-header">
-          <div>
-            <q-btn
-              round
-              flat
-              dense
-              size="md"
-              @click="detailsDialog = false"
-            >
-              <svg width="24"
-                   height="24"
-                   viewBox="0 0 24 24"
-                   fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 16L16 8"
-                      stroke="#65677F"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round" />
-                <path d="M16 16L8 8"
-                      stroke="#65677F"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round" />
-              </svg>
-
-            </q-btn>
-          </div>
-          <div class="title">جزییات سفارش</div>
-          <div></div>
-        </q-card-section>
-        <q-card-section class="info">
-          <div class="info-box part1">
-            <div class="default-info paid">اطلاعات کلی</div>
-            <div>
-              شماره سفارش:
-              <span class="default-info">{{ currentOrder.id }}</span>
-            </div>
-            <div>
-              وضعیت پرداخت:
-              <span class="default-info">{{ currentOrder.paymentstatus.name }}</span>
-            </div>
-            <div>
-              تاریخ سفارش:
-              <span class="default-info">{{ getCurrentOrderCompletedAt(currentOrder.completed_at) }}</span>
-            </div>
-          </div>
-          <div class="info-box part2">
-            <div>
-              جمع مبلغ سفارش:
-              <span class="default-info">{{ currentOrder.price }} تومان</span>
-            </div>
-            <div>
-              میزان تخفیف:
-              <span class="info-discount">({{ discountInPercent(currentOrder.discount, currentOrder.price) }}%)</span>
-              <!--              <span class="default-info paid">پرداخت شده</span>-->
-              <span class="default-info">{{ currentOrder.discount }} تومان</span>
-            </div>
-            <div>
-              مبلغ نهایی:
-              <span class="default-info">{{ currentOrder.paid_price }}</span>
-            </div>
-          </div>
-        </q-card-section>
-        <q-card-section
-          v-if="currentOrder.orderproducts && currentOrder.orderproducts.length > 0 "
-          class="products"
-        >
-          <div class="default-info paid">محصولات سفارش</div>
-          <div
-            v-for="(product) in currentOrder.orderproducts"
-            :key="product.id"
-          >
-            <ordered-products :order="product" />
-          </div>
-          <!--          -->
-          <!--          <ordered-products />-->
-          <!--          <ordered-products />-->
-          <!--          <ordered-products />-->
-          <!--          <ordered-products />-->
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+    <order-details-dialog
+      v-if="windowSize.x >= 600"
+      v-model:dialogValue="detailsDialog"
+      :order="currentOrder"
+    />
   </div>
 </template>
 
 <script>
 import { EntityIndex } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
-import OrderedProducts from 'components/MyOrders/OrderedProducts'
 import { User } from 'src/models/User'
 import moment from 'moment-jalaali'
-// import { Order } from 'src/models/Order'
-// import { Question } from 'src/models/Question'
+import { Order } from 'src/models/Order'
+import OrderDetailsDialog from 'components/MyOrders/OrderDetailsDialog'
+import OrderDetailsCard from 'components/MyOrders/OrderDetailsCard'
+import { FormBuilder } from 'quasar-form-builder'
+import ActionBtn from 'pages/User/MyOrders/actionBtn'
 export default {
   name: 'MyOrders',
   components: {
-    OrderedProducts,
+    OrderDetailsCard,
+    FormBuilder,
+    OrderDetailsDialog,
     EntityIndex
   },
+
   data() {
     return {
-      expanded: false,
+      filterExpanded: true,
+      inputs: [
+        { type: 'hidden', name: 'paymentStatuses', class: '', responseKey: 'paymentStatuses', col: 'col-12 col-lg-12 col-sm-6' },
+        { type: 'hidden', name: 'since', responseKey: 'since', col: 'col-12 col-lg-12 col-sm-6' },
+        { type: 'hidden', name: 'till', responseKey: 'till', col: 'col-12 col-lg-12 col-sm-6' },
+        { type: 'hidden', name: 'search', responseKey: 'search', col: 'col-12 col-lg-12 col-sm-6' }
+      ],
+      filterInputs: [
+        { type: 'select', name: 'paymentStatuses', dropdownIcon: 'isax:arrow-down-1', optionValue: 'id', optionLabel: 'title', responseKey: 'paymentStatuses', label: 'وضعیت پرداخت', placeholder: ' ', col: 'filter-option col-sm-6 col-lg-4 col-xs-12' },
+        { type: 'date', name: 'since', responseKey: 'since', label: 'تاریخ سفارش', class: 'since', placeholder: ' از', calendarIcon: 'isax filter', col: 'since col-lg-3 col-sm-6 col-xs-12' },
+        { type: 'date', name: 'till', label: ' ', placeholder: 'تا', responseKey: 'till', class: '', col: 'till col-lg-3 col-sm-6 col-xs-12' },
+        { type: ActionBtn, name: '', label: ' ', placeholder: 'تا', responseKey: 'till', class: '', col: 'till col-lg-2 col-sm-6 col-xs-12' }
+      ],
+      searchInput: '',
       table: {
         columns: [
           {
@@ -233,256 +284,29 @@ export default {
         perPage: 'meta.per_page',
         pageKey: 'page'
       },
-      // currentOrder: new Order(),
-      // currentOrder: null,
-      currentOrder: {
-        id: 1801136,
-        discount: 0,
-        customer_description: null,
-        price: 0,
-        paid_price: 0,
-        refund_price: 0,
-        debt: 0,
-        orderstatus: {
-          id: 2,
-          name: 'ثبت نهایی'
-        },
-        paymentstatus: {
-          id: 3,
-          name: 'پرداخت شده'
-        },
-        orderproducts: [
-          {
-            id: 2268936,
-            quantity: 1,
-            type: 2,
-            product: [
-              {
-                price: {
-                  discountDetail: {
-                    productDiscount: 100,
-                    bonDiscount: 0,
-                    productDiscountAmount: 0
-                  },
-                  extraCost: 0,
-                  base: 0,
-                  discount: 0,
-                  final: 0
-                },
-                id: 772,
-                redirect_url: null,
-                type: 1,
-                category: 'آزمون/سه آ',
-                title: 'آزمون المپیاد زیست سنجاب دهم',
-                is_free: 0,
-                url: {
-                  web: 'http://office.alaa.tv:8080/product/772',
-                  api: 'http://office.alaa.tv:8080/api/v2/product/772'
-                },
-                photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-                attributes: {
-                  info: {
-                    teacher: [
-                      'گروه مؤلفین'
-                    ],
-                    shipping_method: [
-                      'آنلاین_مجازی'
-                    ],
-                    major: [
-                      'تجربی'
-                    ],
-                    services: [
-                      'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-                    ],
-                    download_date: null,
-                    educational_system: [
-                      'نظام جدید'
-                    ],
-                    duration: null,
-                    production_year: [
-                      '99-00'
-                    ]
-                  },
-                  extra: null
-                },
-                redirect_code: null
-              },
-              {
-                price: {
-                  discountDetail: {
-                    productDiscount: 100,
-                    bonDiscount: 0,
-                    productDiscountAmount: 0
-                  },
-                  extraCost: 0,
-                  base: 0,
-                  discount: 0,
-                  final: 0
-                },
-                id: 772,
-                redirect_url: null,
-                type: 1,
-                category: 'آزمون/سه آ',
-                title: 'آزمون المپیاد زیست سنجاب دهم',
-                is_free: 0,
-                url: {
-                  web: 'http://office.alaa.tv:8080/product/772',
-                  api: 'http://office.alaa.tv:8080/api/v2/product/772'
-                },
-                photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-                attributes: {
-                  info: {
-                    teacher: [
-                      'گروه مؤلفین'
-                    ],
-                    shipping_method: [
-                      'آنلاین_مجازی'
-                    ],
-                    major: [
-                      'تجربی'
-                    ],
-                    services: [
-                      'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-                    ],
-                    download_date: null,
-                    educational_system: [
-                      'نظام جدید'
-                    ],
-                    duration: null,
-                    production_year: [
-                      '99-00'
-                    ]
-                  },
-                  extra: null
-                },
-                redirect_code: null
-              },
-              {
-                price: {
-                  discountDetail: {
-                    productDiscount: 100,
-                    bonDiscount: 0,
-                    productDiscountAmount: 0
-                  },
-                  extraCost: 0,
-                  base: 0,
-                  discount: 0,
-                  final: 0
-                },
-                id: 772,
-                redirect_url: null,
-                type: 1,
-                category: 'آزمون/سه آ',
-                title: 'آزمون المپیاد زیست سنجاب دهم',
-                is_free: 0,
-                url: {
-                  web: 'http://office.alaa.tv:8080/product/772',
-                  api: 'http://office.alaa.tv:8080/api/v2/product/772'
-                },
-                photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-                attributes: {
-                  info: {
-                    teacher: [
-                      'گروه مؤلفین'
-                    ],
-                    shipping_method: [
-                      'آنلاین_مجازی'
-                    ],
-                    major: [
-                      'تجربی'
-                    ],
-                    services: [
-                      'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-                    ],
-                    download_date: null,
-                    educational_system: [
-                      'نظام جدید'
-                    ],
-                    duration: null,
-                    production_year: [
-                      '99-00'
-                    ]
-                  },
-                  extra: null
-                },
-                redirect_code: null
-              }],
-            grand: {
-              id: 772,
-              redirect_url: null,
-              type: 1,
-              category: 'آزمون/سه آ',
-              title: 'آزمون المپیاد زیست سنجاب دهم',
-              is_free: 0,
-              url: {
-                web: 'http://office.alaa.tv:8080/product/772',
-                api: 'http://office.alaa.tv:8080/api/v2/product/772'
-              },
-              photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-              attributes: {
-                info: {
-                  teacher: [
-                    'گروه مؤلفین'
-                  ],
-                  shipping_method: [
-                    'آنلاین_مجازی'
-                  ],
-                  major: [
-                    'تجربی'
-                  ],
-                  services: [
-                    'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-                  ],
-                  download_date: null,
-                  educational_system: [
-                    'نظام جدید'
-                  ],
-                  duration: null,
-                  production_year: [
-                    '99-00'
-                  ]
-                },
-                extra: null
-              },
-              redirect_code: null
-            },
-            price: {
-              discountDetail: {
-                productDiscount: 100,
-                bonDiscount: 0,
-                productDiscountAmount: 0
-              },
-              extraCost: 0,
-              base: 0,
-              discount: 0,
-              final: 0
-            },
-            photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-            extra_attributes: null
-          }
-        ],
-        coupon_info: null,
-        successful_transactions: null,
-        pending_transactions: null,
-        unpaid_transaction: null,
-        posting_info: null,
-        user: {
-          id: 219548,
-          first_name: 'علی',
-          last_name: 'اسماعیلی',
-          mobile: '09358745928',
-          national_code: '0014258269',
-          profile_completion: 77
-        },
-        created_at: '2022-07-25 04:26:11',
-        completed_at: '2022-07-25 08:56:11'
-      },
+      currentOrder: new Order(),
       detailsDialog: false,
+      detailsCardToggle: {},
       hasUserOrdered: true,
       firstRowPassed: false
     }
   },
   created() {
+    this.getPaymentStatus()
+  },
+  watch: {
+    till(value) {
+      this.updateInputsValue('till', value)
+    },
+    since(value) {
+      this.updateInputsValue('since', value)
+    },
+    paymentStatus (value) {
+      this.updateInputsValue('paymentStatuses', value)
+    },
+    searchInput(value) {
+      this.updateInputsValue('search', value)
+    }
   },
   computed: {
     user() {
@@ -491,125 +315,64 @@ export default {
       }
       return new User()
     },
+    paymentStatus() {
+      return this.getInput('filterInputs', 'paymentStatuses').value
+    },
+    since() {
+      return this.getInput('filterInputs', 'since').value
+    },
+    till() {
+      return this.getInput('filterInputs', 'till').value
+    },
     getEntityApi() {
       return API_ADDRESS.user.getOrderList(this.user.id)
     },
-    getCurrentOrderCompletedAt() {
-      return (CompletedAt) => {
-        return moment(this.currentOrder.completed_at, 'YYYY-M-D').format('jYYYY/jMM/jDD')
-      }
-    },
     windowSize () {
-      if (this.$store.getters['AppLayout/windowSize'].x < 600) {
-        // console.log('q-table__grid-item-row')
-        return
-      }
       return this.$store.getters['AppLayout/windowSize']
     },
-    discountInPercent() {
-      return (discount, base) => {
-        return Math.round(discount * 100 / base)
+    getCurrentOrderCompletedAt() {
+      return (CompletedAt) => {
+        return moment(CompletedAt, 'YYYY-M-D').format('jYYYY/jMM/jDD')
       }
     }
   },
   methods: {
-    showDetailsDialog(rowData) {
-      // console.log('rowData', rowData)
-      // this.currentOrder = new Order(rowData)
-      // this.currentOrder = rowData
-      this.currentOrder = {
-        id: 1801136,
-        discount: 0,
-        customer_description: null,
-        price: 0,
-        paid_price: 0,
-        refund_price: 0,
-        debt: 0,
-        orderstatus: {
-          id: 2,
-          name: 'ثبت نهایی'
-        },
-        paymentstatus: {
-          id: 3,
-          name: 'پرداخت شده'
-        },
-        orderproducts: [
-          {
-            id: 2268936,
-            quantity: 1,
-            type: 2,
-            product: {
-              id: 772,
-              redirect_url: null,
-              type: 1,
-              category: 'آزمون/سه آ',
-              title: 'آزمون المپیاد زیست سنجاب دهم',
-              is_free: 0,
-              url: {
-                web: 'http://office.alaa.tv:8080/product/772',
-                api: 'http://office.alaa.tv:8080/api/v2/product/772'
-              },
-              photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-              attributes: {
-                info: {
-                  teacher: [
-                    'گروه مؤلفین'
-                  ],
-                  shipping_method: [
-                    'آنلاین_مجازی'
-                  ],
-                  major: [
-                    'تجربی'
-                  ],
-                  services: [
-                    'آزمون آنلاین/پاسخنامه تصویری/ابر کارنامه/پاسخنامه تشریحی'
-                  ],
-                  download_date: null,
-                  educational_system: [
-                    'نظام جدید'
-                  ],
-                  duration: null,
-                  production_year: [
-                    '99-00'
-                  ]
-                },
-                extra: null
-              },
-              redirect_code: null
-            },
-            grand: null,
-            price: {
-              discountDetail: {
-                productDiscount: 100,
-                bonDiscount: 0,
-                productDiscountAmount: 0
-              },
-              extraCost: 0,
-              base: 0,
-              discount: 0,
-              final: 0
-            },
-            photo: 'https://nodes.alaatv.com/upload/images/product/photo_2022-07-24_14-03-45_20220724093523.jpg',
-            extra_attributes: null
-          }
-        ],
-        coupon_info: null,
-        successful_transactions: null,
-        pending_transactions: null,
-        unpaid_transaction: null,
-        posting_info: null,
-        user: {
-          id: 219548,
-          first_name: 'علی',
-          last_name: 'اسماعیلی',
-          mobile: '09358745928',
-          national_code: '0014258269',
-          profile_completion: 77
-        },
-        created_at: '2022-07-25 04:26:11',
-        completed_at: '2022-07-25 08:56:11'
+    searchInData() {
+
+    },
+    updateInputsValue(name, newValue) {
+      const input = this.getInput('inputs', name)
+      input.value = newValue
+    },
+    getInput(src, name) {
+      return this[src].find(item => item.name === name)
+    },
+    async getPaymentStatus() {
+      const response = await this.$axios.get(API_ADDRESS.user.orders.status)
+      this.getInput('filterInputs', 'paymentStatuses').options = response.data.data
+    },
+    filterTable() {
+      // if (!this.$refs.filterSlot) {
+      //   return
+      // }
+      // const inputsData = this.$refs.filterSlot.getValues()
+    },
+    resetData() {
+      if (!this.$refs.orderList) {
+        return
       }
+
+      this.$refs.orderList.clearData()
+    },
+    showDetailsDialog(rowData) {
+      this.currentOrder = new Order(rowData)
       this.detailsDialog = true
+    },
+    toggleDetailsCard(rowData) {
+      if (!this.detailsCardToggle[rowData.id]) {
+        this.currentOrder = new Order(rowData)
+      }
+      this.detailsCardToggle[rowData.id] = !this.detailsCardToggle[rowData.id]
     },
     setHasUserOrderedValue(rowData) {
       if (this.firstRowPassed) {
@@ -618,17 +381,139 @@ export default {
       if (rowData.id) {
         this.hasUserOrdered = true
       }
-      this.firstRowPassed = true
+      this.firstRowPassed = false
     },
     getRemoveMessage(row) {
       const title = row.title
       return 'آیا از حذف ' + title + ' اطمینان دارید؟'
+    },
+    toman (key = 500000, suffix) {
+      if (key) {
+        let string = key.toLocaleString('fa')
+        if (typeof suffix === 'undefined' || suffix) {
+          string += ' تومان '
+        }
+        return string
+      }
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
+.filter-toggle{
+  color:#6D708B;
+}
+.gray-bg{
+  background: #E4E8EF;
+}
+.search-box{
+  margin-bottom: 20px;
+  @media  screen and (max-width: 599px){
+      margin-bottom: 20px;
+  }
+}
+.expand-filter{
+  &:deep(.q-item-type){
+    display: none;
+  }
+  .filter-option{
+
+  }
+  .filter-items{
+    font-weight: 400!important;
+    font-size: 16px;
+    line-height: 25px;
+    letter-spacing: -0.03em;
+    color: #434765;
+    margin-bottom: 15px;
+    position: relative;
+    &:deep(.filter-option){
+      .outsideLabel{
+        padding-bottom: 8px;
+      }
+      @media screen and (max-width: 1439px) {
+        order: 3;
+      }
+      @media screen and (max-width: 599px) {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+    &:deep(.till){
+      padding-top: 40px;
+      @media screen and (max-width: 599px) {
+        padding: 1px;
+      }
+    }
+    &:deep(.since){
+      .outsideLabel{
+        padding-bottom: 8px;
+      }
+      &:deep(.q-icon){
+        &::before{
+          content: '';
+        }
+      }
+      @media screen and (max-width: 599px) {
+        padding: 1px 1px 8px;
+      }
+      @media screen and (max-width: 1439px) {
+
+      }
+    }
+    .action-btn{
+      @media screen and (max-width: 1439px) {
+        position: absolute;
+        bottom: 0;
+        margin-top:10px;
+      }
+      @media screen and (max-width: 599px){
+        position: relative;
+      }
+    }
+    .select-input{
+
+    }
+    .filter-inputs{
+      @media screen and (max-width: 1439px) {
+        order: 1;
+      }
+    }
+    .filter-btn{
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 22px;
+      letter-spacing: -0.03em;
+      color: #FFFFFF;
+    }
+    .reload-icon{
+      color: #6D708B;
+      margin-right: 16px;
+    }
+  }
+}
+.search-input{
+  background-color: white;
+  //border-radius: 8px;
+  //border: none;
+  &:deep(.q-field__append){
+    .q-icon{
+      color: #6D708B;
+      cursor: pointer;
+    }
+  }
+  .search-icon{
+
+  }
+  &:deep(.q-field__control){
+    //q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input
+    background-color: white;
+  }
+  &:deep(.q-field__append){
+
+  }
+}
 .my-orders-list {
   .title {
     font-style: normal;
@@ -694,6 +579,9 @@ export default {
 
         //}
       }
+      .q-table__grid-content {
+        flex-direction: column;
+      }
     }
 
     .q-table__top {
@@ -715,70 +603,56 @@ export default {
         }
       }
     }
-
-  //.q-pagination {
-  //    //background: red;
-  //    //.q-btn--flat {
-  //    //  background: #FFFFFF;
-  //    //  border-radius: 12px;
-  //    //}
-  //    :not(.justify-center) {
-  //      button {
-  //        &:last-child {
-  //          background: #FFFFFF;
-  //          border-radius: 12px;
-  //        }
-  //
-  //        &:first-child {
-  //          background: #FFFFFF;
-  //          border-radius: 12px;
-  //        }
-  //      }
-  //    }
-  //
-  //    .q-btn--actionable {
-  //      //background: none;
-  //    }
-  //
-  //    //button &:last-child {
-  //    //  background: #FFFFFF;
-  //    //  border-radius: 12px;
-  //    //}
-  //    :nth-child(1):nth-last-child(1) {
-  //      background: #FFFFFF;
-  //      border-radius: 12px;
-  //    }
-  //
-  //    //:not(.q-btn--actionable)
-  //    :first-child &button {
-  //      background: #FFFFFF;
-  //      border-radius: 12px;
-  //    }
-  //
-  //    :last-child &button {
-  //      background: #FFFFFF;
-  //      border-radius: 12px;
-  //    }
-  //
-  //    .q-btn {
-  //      color: #6D708B !important;
-  //      width: 40px;
-  //      height: 40px;
-  //      padding: 0 !important;
-  //
-  //      :first-child {
-  //        background: none;
-  //        //border-radius: n;
-  //      }
-  //
-  //    }
-  //  }
   }
 
   .details-dialog {
     background: #FFFFFF;
     box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
     border-radius: 16px;
+  }
+
+  .details-table-mobile {
+      box-shadow: none;
+      border-radius: 0;
+    border-bottom: 1px solid #E4E8EF;
+
+    .details-info {
+      padding: 15px 20px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      text-align: left;
+      letter-spacing: -0.03em;
+      display: flex;
+      justify-content: space-between;
+      .first-col {
+        color: #6D708B;
+        div {
+          padding-top: 5px;
+          padding-bottom: 5px;
+        }
+        .order {
+          .order-id {
+            padding-left: 8px;
+          }
+        }
+      }
+      .second-col {
+        text-align: right;
+        div {
+          padding-top: 5px;
+          padding-bottom: 5px;
+        }
+        .details-btn {
+          color:#8075DC ;
+        }
+        //:deep(.q-btn) {
+        //  .q-btn__content {
+        //    margin: 0;
+        //  }
+        //}
+      }
+    }
   }
 }
 .empty-order-list {
@@ -834,86 +708,4 @@ export default {
     }
   }
 }
-</style>
-<style lang="scss">
-// TODo IMPORTANT : pleeaaaseee let me know if you ever touched this
-//.my-orders-list {
-.order-details-dialog {
-  background: #FFFFFF;
-  box-shadow: none !important;
-  border-radius: 16px !important;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 25px;
-  text-align: left;
-  letter-spacing: -0.03em;
-  color: #434765;
-  width: 830px;
-  height: 640px;
-  overflow-x: scroll;
-  @media screen and (max-width: 1439px) {
-    width: 664px;
-    height: 480px;
-  }
-  @media screen and (max-width: 1023px) {
-    width: 540px;
-    height: 640px;
-  }
-
-  .dialog-header {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    align-items: center;
-
-    .title {
-      justify-self: center;
-    }
-  }
-
-  .info {
-    display: grid;
-    grid-template-columns: auto auto;
-    align-items: center;
-    padding: 16px 30px;
-
-    .info-box {
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 25px;
-      text-align: left;
-      letter-spacing: -0.03em;
-      color: #6D708B;
-    }
-
-    .part2 {
-      padding-top: 20px;
-    }
-  }
-
-  .info-discount {
-    color: #DA5F5C;
-    padding: 0 8px;
-  }
-
-  .default-info {
-    color: #434765;
-    padding: 0 8px;
-
-    &.paid {
-      padding-left: 0;
-    }
-  }
-
-  .products {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 25px;
-    text-align: left;
-    letter-spacing: -0.03em;
-    color: #434765;
-  }
-}
-
-//}
 </style>
