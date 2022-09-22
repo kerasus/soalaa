@@ -1,48 +1,70 @@
 <template>
   <div class="steps row">
-    <div class="steps-box col-12 row no-padding items-center">
+
+    <div
+      class="exam-info step"
+      :class="{ 'current-step' : this.currentStep === 'createPage' }"
+      @click="changeCurrentStep('createPage')"
+    >
+      <q-icon
+        name="isax:edit"
+        class="icon"
+      />
       <div
-        class="exam-info col-5 flex items-center step"
-        :class="{ 'current-step' : this.currentStep === 'createPage' }"
-        @click="changeCurrentStep('createPage')"
-      >
-        <q-icon name="isax:edit"
-                class="icon" />
-        <div class="exam-info-title title "
-             :class="{ 'hidden-mobile' : this.currentStep !== 'createPage' }">اطلاعات آزمون</div>
-        <div class="line"
-             :class="{ 'border-mobile' : this.currentStep !== 'createPage' }" />
+        class="exam-info-title title "
+        :class="{ 'hidden-mobile' : this.currentStep !== 'createPage' }">
+        اطلاعات آزمون
       </div>
       <div
-        class="choose-questions col-5 flex items-center step"
-        :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }"
-        @click="changeCurrentStep('chooseQuestion')"
+        class="line"
+        :class="{ 'border-mobile' : this.currentStep !== 'createPage' }"
+      />
+    </div>
+
+    <div
+      class="choose-questions step"
+      :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }"
+      @click="changeCurrentStep('chooseQuestion')"
+    >
+      <q-icon
+        name="isax:task-square"
+        class="icon"
+      />
+      <div
+        class="choose-questions-title title"
+        :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }"
       >
-        <q-icon name="isax:task-square"
-                class="icon" />
-        <div class="choose-questions-title title"
-             :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }">انتخاب سوال</div>
-        <div class="line"
-             :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion' }" />
+        انتخاب سوال
       </div>
       <div
-        class="final-approval col-2 flex items-center step"
-        :class="{ 'current-step' : this.currentStep === 'finalApproval' }"
-        @click="changeCurrentStep('finalApproval')"
+        class="line"
+        :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion' }"
+      />
+    </div>
+
+    <div
+      class="final-approval step"
+      :class="{ 'current-step' : this.currentStep === 'finalApproval' }"
+      @click="changeCurrentStep('finalApproval')"
+    >
+      <q-icon
+        name="isax:tick-square"
+        class="icon"
+      />
+      <div
+        class="final-approval-title"
+        :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }"
       >
-        <q-icon name="isax:tick-square"
-                class="icon" />
-        <div class="final-approval-title"
-             :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }">تایید نهایی</div>
+        تایید نهایی
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'Steps',
+
   props: {
     currentComponent: {
       type: String,
@@ -51,15 +73,32 @@ export default {
       }
     }
   },
-  emits: [
-    'update:currentComponent',
-    'currentStepChanged'
-  ],
-  methods: {
-    changeCurrentStep (step) {
-      this.$emit('currentStepChanged', step)
+
+  data () {
+    return {
+      stepList: [
+        {
+          stepName: 'createPage',
+          icon: 'isax:edit',
+          title: 'اطلاعات آزمون',
+          separator: true
+        },
+        {
+          stepName: 'createPage',
+          icon: 'isax:task-square',
+          title: 'انتخاب سوال',
+          separator: true
+        },
+        {
+          stepName: 'finalApproval',
+          icon: 'isax:tick-square',
+          title: 'تایید نهایی',
+          separator: false
+        }
+      ]
     }
   },
+
   computed: {
     currentStep: {
       get () {
@@ -69,76 +108,101 @@ export default {
         this.$emit('update:currentComponent', value)
       }
     }
+  },
+
+  emits: [
+    'update:currentComponent',
+    'currentStepChanged'
+  ],
+
+  methods: {
+    changeCurrentStep (step) {
+      this.$emit('currentStepChanged', step)
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
 .steps {
+  display: flex;
   height: 64px;
+  width: 100%;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   font-size: 16px;
-  line-height: 28px;
-  color: #DEDEDE;
-  border-radius: 20px;
+  line-height: 25px;
+  color: #8A8CA6;
+  padding: 20px 40px;
+  background: #FFFFFF;
+  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+  border-radius: 16px;
+
+  @media screen and (max-width: 1439px) {
+    padding: 20px 30px;
+  }
+
+  @media screen and (max-width: 1023px) {
+    height: 60px;
+    padding: 20px;
+  }
+
+  @media screen and (max-width: 599px) {
+      height: 54px;
+
+    .hidden-mobile {
+      display: none !important;
+    }
+
+    .border-mobile{
+      width: calc(100% - 44.65px) !important;
+    }
+  }
+
   .step {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    &.choose-questions {
+      .line {
+        width: 440px;
+
+        @media screen and (max-width: 1439px) {
+          width: 237px;
+        }
+
+        @media screen and (max-width: 1023px) {
+          width: 70px;
+        }
+      }
+    }
   }
-  .steps-box {
-    background: #FFFFFF;
-    box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
-    padding-left: 62px !important;
-    border-radius: 20px;
-    .icon {
-      font-size: 22px;
-      margin-right: 10px;
-    }
-    .title{
-      margin-right: 16px;
-    }
+  .icon {
+    font-size: 22px;
+    margin-right: 10px;
+  }
+  .title{
+    margin-right: 16px;
   }
   .line {
-    border: 1.5px solid #DEDEDE;
-    width: calc(100% - 160.65px);
+    height: 1.5px;
+    background: #E4E8EF;
+    width: 408px;
+    margin-right: 18px;
+
+    @media screen and (max-width: 1439px) {
+      width: 237px;
+    }
+
+    @media screen and (max-width: 1023px) {
+      width: 70px;
+    }
   }
   .current-step{
-    border-color: #8075DC;
-    color: #8075DC;
+    color: #FFA117;
   }
 
 }
-@media screen and (max-width: 1919px){
-  .steps {
-    padding-right: 30px;
-    padding-left: 0;
-    .steps-box {
-      padding-left: 58px !important;
-    }
-  }
-}
-@media screen and (max-width: 1440px){
-  .steps {
-    padding-left: 30px;
-    .steps-box {
-      padding-left: 50px !important;
-    }
-  }
-}
-@media screen and (max-width: 600px){
-  .steps {
-    padding-right: 16px !important;
-    padding-left: 16px !important;
-    height: 60px;
-    .steps-box {
-      padding-left: 34px !important;
-    }
-  }
-  .hidden-mobile {
-    display: none !important;
-  }
-  .border-mobile{
-    width: calc(100% - 44.65px) !important;
-  }
-}
+
 </style>
