@@ -1,32 +1,34 @@
 <template>
-  <div class="main-container">
-    <div class="row">
-      <div ref="header"
-           class="col-12 question-bank-header">
-        <QuestionBankHeader />
-      </div>
-      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
-        <question-filter
-          ref="filter"
-          :filterQuestions="filterQuestions"
-          @onFilter="onFilter"
-          @delete-filter="deleteFilterItem"
-        />
-      </div>
-      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
+  <div class="row main-container">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
+      <question-filter
+        ref="filter"
+        :filterQuestions="filterQuestions"
+        @onFilter="onFilter"
+        @delete-filter="deleteFilterItem"
+      />
+    </div>
+
+    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
+      <div class="question-list">
         <div class="question-bank-toolbar">
-          <QuestionToolBar
+          <questions-general-info
             :key="questionListKey"
             :check-box="checkBox"
             :selectedQuestions="selectedQuestions"
             @remove="RemoveChoice"
+            @nextTab="goToNextStep"
+            @lastTab="goToLastStep"
             @deleteAllQuestions="deleteAllQuestions"
             @selectAllQuestions="selectAllQuestions"
           />
         </div>
+
         <div class="question-bank-content">
-          <question-item v-if="questions.loading"
-                         :question="loadingQuestion" />
+          <question-item
+            v-if="questions.loading"
+            :question="loadingQuestion"
+          />
           <template v-else>
             <question-item
               v-for="question in questions.list"
@@ -47,6 +49,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -55,14 +58,16 @@ import pagination from 'components/Question/QuestionBank/Pagination'
 import API_ADDRESS from 'src/api/Addresses'
 import { Exam } from 'src/models/Exam'
 import { Question, QuestionList } from 'src/models/Question'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
+import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
-import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
-import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
+import QuestionsGeneralInfo from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo'
 
 export default {
   name: 'ExamSelectionTab',
-  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
+  components: { QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
+
+  props: {},
+
   data () {
     return {
       filterData: null,
@@ -125,6 +130,14 @@ export default {
   },
   emits: ['onFilter'],
   methods: {
+    goToLastStep () {
+      this.$emit('lastTab')
+    },
+
+    goToNextStep () {
+      this.$emit('nextTab')
+    },
+
     onFilter (filterData) {
       this.$emit('onFilter', filterData)
       this.filterData = this.getFiltersForRequest(filterData)
@@ -277,59 +290,37 @@ export default {
 }
 
 .main-container {
+  .question-bank-filter {}
 
-  .question-bank-header {
-    padding-bottom: 30px;
-  }
+  .question-list {
+    margin-left: 30px;
 
-  .question-bank-filter {
-    padding-right: 24px;
-  }
+    @media only screen and (max-width: 1023px) {
+      margin-left: 0;
+    }
+    .question-bank-toolbar {
+      padding-bottom: 24px;
+    }
 
-  .question-bank-toolbar {
-    padding-bottom: 24px;
-  }
-
-  .question-bank-content {
-    margin-bottom: 16px;
-    :deep(.question-card) {
+    .question-bank-content {
       margin-bottom: 16px;
+
+      :deep(.question-card) {
+        margin-bottom: 16px;
+      }
     }
   }
+
 }
 @media only screen and (max-width: 1919px) {
-  .main-container {
-    padding-left: 0;
-    padding-right: 24px;
-  }
-  .question-bank-filter {
-    padding-right: 20px;
-  }
 }
 @media only screen and (max-width: 1439px) {
-  .main-container {
-    padding-left: 30px;
-  }
-  .question-bank-header {
-    padding-bottom: 20px;
-  }
-
-  .question-bank-filter {
-    padding-right: 20px;
-  }
-
   .question-bank-toolbar {
     padding-bottom: 20px;
   }
 }
 @media only screen and (max-width: 1023px) {
-  .question-bank-filter {
-    padding-right: 0px;
-  }
 }
 @media only screen and (max-width: 599px) {
-  .question-bank-toolbar {
-    padding-bottom: 0;
-  }
 }
 </style>
