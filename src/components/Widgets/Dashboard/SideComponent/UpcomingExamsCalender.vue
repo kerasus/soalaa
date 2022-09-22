@@ -104,16 +104,18 @@
                                 'bottom-left':row === 6 && col === 7,
                                 'holiday': month[row-1][col-1].is_holiday}">
                     {{ month[row-1][col-1].num !== 0 ? month[row-1][col-1].num : '' }} <br />
-                    <q-icon v-for="event in month[row-1][col-1].events"
-                            :key="event"
-                            name="circle"
-                            class="q-mx-xs"
-                            color="primary">
-                      <q-tooltip anchor="top middle"
-                                 self="center middle">
-                        {{ event.title }}
-                      </q-tooltip>
-                    </q-icon>
+                    <div class="flex">
+                      <q-icon v-for="event in month[row-1][col-1].events"
+                              :key="event"
+                              name="circle"
+                              class="q-mx-xs"
+                              color="primary">
+                        <q-tooltip anchor="top middle"
+                                   self="center middle">
+                          {{ event.title }}
+                        </q-tooltip>
+                      </q-icon>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -124,18 +126,18 @@
                   <div v-for="day in 7"
                        :key="day"
                        class="day-col">
-                    <div v-for="hour in 13"
+                    <div v-for="hour in 25"
                          :key="hour"
                          class="hour-line">
                       <div v-if="day === 1 "
                            class="hour">
-                        {{ `${hour+8}:00` }}
+                        {{ `${hour + baseHour - 1 }:00` }}
                       </div>
                     </div>
                     <div v-for="event in chartWeek[day - 1].events"
                          :key="event.id"
                          class="weekly-event"
-                         :style = "{ top: (parseInt(event.start_at.substring(11,13)) - baseHour) * baseHight + 'px', height: (parseInt(event.finish_at.substring(11,13)) - parseInt(event.start_at.substring(11,13))) * baseHight + 'px' }"
+                         :style = "{ top: ((parseInt(event.start_at.substring(11,13)) + (parseInt(event.start_at.substring(14,16))/60) )- baseHour) * baseHight + 'px', height: (parseInt(event.finish_at.substring(11,13)) - parseInt(event.start_at.substring(11,13))) * baseHight + 'px' }"
                     >
                       <q-tooltip class="flex column flex-center"
                                  anchor="top middle"
@@ -442,7 +444,7 @@ export default defineComponent({
       ]
     ])
     const baseHight = ref(50)
-    const baseHour = ref(9)
+    const baseHour = ref(0)
     const chartWeek = ref([])
     const dayList = ref(['شنبه', 'یک‌شنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'آدینه'])
     const tab = ref('month')
@@ -522,173 +524,12 @@ export default defineComponent({
   methods: {
     getEvents() {
       this.$axios.get(API_ADDRESS.exam.userExamList(this.startFrom, this.startTill)).then((res) => {
-        const test = [
-          {
-            id: '630d9a4412040eafc0014699',
-            title: 'آزمون 2 دهم - بهمن1401- علوم انسانی',
-            holding_status: null,
-            start_at: '2022-09-20 09:00:00',
-            finish_at: '2022-09-20 11:00:00',
-            photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-            delay_time: 3840,
-            n_questions: 0,
-            enable: false,
-            updated_at: '2022-09-20 07:30:02',
-            created_at: '2022-08-30 09:34:04',
-            generate_questions_automatically: false,
-            confirm: false,
-            report_config: [],
-            holding_config: {
-              randomize_questions: false
-            },
-            alaa_product_link: null,
-            type: {
-              id: '6225f4828044517f52500c03',
-              type: 'exam_type',
-              value: 'psychometric',
-              image: null,
-              updated_at: '2022-03-07 15:33:14',
-              created_at: '2022-03-07 15:33:14'
-            },
-            user_exam_id: null,
-            is_free: false,
-            is_register_open: true,
-            is_open: false
-          },
-          {
-            id: '630d99c891dd2ef4f20b7d05',
-            title: 'آزمون 2 دهم - بهمن1401- علوم تجربی',
-            holding_status: null,
-            start_at: '2023-01-24 08:00:00',
-            finish_at: '2023-01-24 08:00:00',
-            photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-            delay_time: 3840,
-            n_questions: 0,
-            enable: false,
-            updated_at: '2022-09-20 07:30:02',
-            created_at: '2022-08-30 09:32:00',
-            generate_questions_automatically: false,
-            confirm: false,
-            report_config: [],
-            holding_config: {
-              randomize_questions: false
-            },
-            alaa_product_link: null,
-            type: {
-              id: '6225f4828044517f52500c02',
-              type: 'exam_type',
-              value: 'konkur',
-              image: null,
-              updated_at: '2022-03-07 15:33:14',
-              created_at: '2022-03-07 15:33:14'
-            },
-            user_exam_id: null,
-            is_free: false,
-            is_register_open: true,
-            is_open: false
-          },
-          {
-            id: '630cca7c998410a51006c77f',
-            title: 'آزمون 2 دهم - بهمن1401- ریاضی و فیزیک',
-            holding_status: null,
-            start_at: '2023-01-24 08:00:00',
-            finish_at: '2023-01-24 08:00:00',
-            photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-            delay_time: 3840,
-            n_questions: 0,
-            enable: false,
-            updated_at: '2022-09-20 07:30:02',
-            created_at: '2022-08-29 18:47:32',
-            generate_questions_automatically: false,
-            confirm: false,
-            report_config: [],
-            holding_config: {
-              randomize_questions: false
-            },
-            alaa_product_link: null,
-            type: {
-              id: '6225f4828044517f52500c02',
-              type: 'exam_type',
-              value: 'konkur',
-              image: null,
-              updated_at: '2022-03-07 15:33:14',
-              created_at: '2022-03-07 15:33:14'
-            },
-            user_exam_id: null,
-            is_free: false,
-            is_register_open: true,
-            is_open: false
-          },
-          {
-            id: '630380e6334f9c94bd0658fa',
-            title: 'آزمون 1 دوازدهم - مهر1401 - علوم انسانی - پایه‌های 10 و 11',
-            holding_status: null,
-            start_at: '2022-09-27 08:00:00',
-            finish_at: '2022-09-27 11:40:00',
-            photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-            delay_time: 3840,
-            n_questions: 35,
-            enable: false,
-            updated_at: '2022-09-20 07:30:02',
-            created_at: '2022-08-22 17:43:10',
-            generate_questions_automatically: false,
-            confirm: false,
-            report_config: [],
-            holding_config: {
-              randomize_questions: false
-            },
-            alaa_product_link: null,
-            type: {
-              id: '6225f4828044517f52500c03',
-              type: 'exam_type',
-              value: 'psychometric',
-              image: null,
-              updated_at: '2022-03-07 15:33:14',
-              created_at: '2022-03-07 15:33:14'
-            },
-            user_exam_id: null,
-            is_free: false,
-            is_register_open: true,
-            is_open: false
-          },
-          {
-            id: '630380a7334f9c94bd0658f3',
-            title: 'آزمون 1 دوازدهم - مهر1401 - علوم انسانی - پایه 10',
-            holding_status: null,
-            start_at: '2022-09-27 08:00:00',
-            finish_at: '2022-09-27 11:40:00',
-            photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-            delay_time: 3840,
-            n_questions: 93,
-            enable: false,
-            updated_at: '2022-09-20 07:30:02',
-            created_at: '2022-08-22 17:42:07',
-            generate_questions_automatically: false,
-            confirm: false,
-            report_config: [],
-            holding_config: {
-              randomize_questions: false
-            },
-            alaa_product_link: null,
-            type: {
-              id: '6225f4828044517f52500c03',
-              type: 'exam_type',
-              value: 'psychometric',
-              image: null,
-              updated_at: '2022-03-07 15:33:14',
-              created_at: '2022-03-07 15:33:14'
-            },
-            user_exam_id: null,
-            is_free: false,
-            is_register_open: true,
-            is_open: false
-          }
-        ]
         for (let w = 0; w < 6; w++) {
           for (let col = 0; col < 7; col++) {
-            for (let e = 0; e < test.length; e++) {
-              if (test[e].start_at.substring(0, 10) === this.month[w][col].date.toString().split('/').join('-')) {
-                this.month[w][col].events.push(test[e])
+            for (let e = 0; e < res.data.data.length; e++) {
+              console.log(res.data.data[e].start_at.substring(0, 10))
+              if (res.data.data[e].start_at.substring(0, 10) === this.month[w][col].date.toString().split('/').join('-')) {
+                this.month[w][col].events.push(res.data.data[e])
               }
             }
           }
@@ -742,6 +583,10 @@ export default defineComponent({
           text-align: right;
           letter-spacing: -0.03em;
           color: #434765;
+
+          @media screen and (max-width: 600px) {
+            padding: 7px 7px;
+          }
         }
 
         .calendar-panel {
@@ -767,6 +612,14 @@ export default defineComponent({
               text-align: center;
               color: #434765;
               margin-left: 10px;
+            }
+
+            @media screen and (max-width: 720px) {
+              padding: 10px 10px;
+              margin-right: 4px;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 22px;
             }
           }
 
@@ -806,6 +659,11 @@ export default defineComponent({
               border-radius: 20px;
             }
           }
+        }
+
+        @media screen and (max-width: 600px) {
+          flex-direction: column;
+          height: 120px;
         }
       }
 
@@ -946,13 +804,21 @@ export default defineComponent({
             }
           }
         }
+
+        @media screen and (max-width: 720px) {
+          min-width: 660px;
+        }
+      }
+
+      @media screen and (max-width: 720px) {
+        overflow-x: auto;
       }
     }
     @media screen and (max-width: 1439px) {
       margin-right: 24px;
       height: 394px;
     }
-    @media screen and (max-width: 1023px) {
+    @media screen and (max-width: 1200px) {
       margin-right: 0;
       height: 473px;
     }

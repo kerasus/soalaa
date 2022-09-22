@@ -31,7 +31,8 @@ const API_ADDRESS = {
     },
     orders: {
       status: lumenServer + '/orders/status'
-    }
+    },
+    statistics: lumenServer + 'user/dashboard/statistics'
   },
   set: {
     base: authServer + '/set'
@@ -87,7 +88,7 @@ const API_ADDRESS = {
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
     analysisVideo: lumenServer + '/exam-question/attach/sub-category',
     userExamList(start, end) {
-      return lumenServer + '/examAndUser' + '?started_from=' + start + '&started_till=' + end
+      return lumenServer + '/examAndUser' + '?start_at_from=' + start + '&start_at_till=' + end
     },
     getAnalysisVideo (examId) {
       return lumenServer + '/exam-question/videos/' + examId
