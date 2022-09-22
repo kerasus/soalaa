@@ -256,13 +256,16 @@ export default {
     },
 
     edit () {
-      this.$axios.put(API_ADDRESS.user.edit(this.user.id))
+      const formData = this.$refs.EntityCrudFormBuilder.getFormData()
+
+      console.log('formData', formData)
+      this.$axios.put(API_ADDRESS.user.edit(this.user.id), formData)
         .then((resp) => {
-          console.log(resp)
+          // console.log(resp)
         })
-        .catch((error) => {
-          console.log(error)
-        })
+        // .catch((error) => {
+        //   console.log(error)
+        // })
     }
 
   }
