@@ -582,7 +582,6 @@ export default {
     margin-bottom: 24px;
 
     @media only screen and (max-width: 1439px) {
-      margin-top: 20px;
       margin-bottom: 14px;
     }
 
@@ -794,15 +793,6 @@ export default {
 
   .answer-section {
     padding: 0;
-    margin-bottom: 24px;
-
-    @media only screen and (max-width: 1023px) {
-      margin-bottom: 20px;
-    }
-
-    @media only screen and (max-width: 599px) {
-      margin-bottom: 28px;
-    }
 
     :deep(.hideExpansionHeader) {
       display: none;
@@ -811,7 +801,14 @@ export default {
     .description-answer-body {
       display: flex;
 
+      margin-bottom: 24px;
+
+      @media only screen and (max-width: 1023px) {
+        margin-bottom: 20px;
+      }
+
       @media only screen and (max-width: 599px) {
+        margin-bottom: 28px;
         margin-right: 0;
         flex-direction: column;
       }
