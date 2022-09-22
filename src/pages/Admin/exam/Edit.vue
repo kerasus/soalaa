@@ -165,6 +165,7 @@ export default {
       loading: true
     })
     this.api += '/' + this.$route.params.id
+    this.getOptions()
     this.getCategoryList()
   },
   methods: {
@@ -172,7 +173,6 @@ export default {
       if (!response) {
         return
       }
-      this.getOptions()
       this.getCategories(response)
     },
     getCategories (response, setNewInputData) {
