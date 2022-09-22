@@ -2,10 +2,11 @@
   <dashboard-header />
   <next-exam />
   <div class="board-container row q-col-gutter-sm">
-    <div class="col-12 col-md-8">
-      <upcoming-exams-calender />
+    <div class="col-12 col-lg-8">
+      <upcoming-exams-calender :calendarTitle="'آزمون های پیش‌رو'"
+                               :calendarIcon="'isax:calendar-1'" />
     </div>
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-lg-4">
       <subscription-status />
     </div>
   </div>
