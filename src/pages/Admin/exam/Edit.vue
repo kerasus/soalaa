@@ -7,7 +7,7 @@
       :entity-id-key="entityIdKey"
       :entity-param-key="entityParamKey"
       :show-route-name="showRouteName"
-      :before-get-data="beforeGetData"
+      :before-load-input-data="beforeLoadInputData"
     >
       <template #after-form-builder>
         <q-card class="category-card">
@@ -123,7 +123,7 @@ export default {
       return this.inputs.findIndex(item => item.name === 'categories')
     },
     totalCategory () {
-      return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 2
+      return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 3
     }
   },
   data () {
@@ -157,10 +157,7 @@ export default {
         { type: 'hidden', name: 'categories', responseKey: 'data.categories', value: [] }
       ],
       category: { title: '', id: '', order: 0, time: 0 },
-      categoryOptions: [
-        { title: 'دفترچه سؤالات عمومی', id: '60b7858d743940688b23c7f3' },
-        { title: 'دفترچه سؤالات اختصاصی', id: '60b7858d743940688b23c7f4' }
-      ]
+      categoryOptions: []
     }
   },
   created () {
@@ -171,7 +168,7 @@ export default {
     this.getCategoryList()
   },
   methods: {
-    beforeGetData (response, setNewInputData) {
+    beforeLoadInputData (response, setNewInputData) {
       if (!response) {
         return
       }
