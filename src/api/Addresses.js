@@ -31,7 +31,8 @@ const API_ADDRESS = {
     },
     orders: {
       status: lumenServer + '/orders/status'
-    }
+    },
+    statistics: lumenServer + 'user/dashboard/statistics'
   },
   set: {
     base: authServer + '/set'
