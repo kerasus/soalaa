@@ -168,7 +168,7 @@ const routes = [
           {
 
             path: 'profile',
-            name: 'profile',
+            name: 'User.Profile',
             component: () => import('pages/User/profile/profile'),
             layoutConfig: {
               layoutLeftDrawerVisible: true
