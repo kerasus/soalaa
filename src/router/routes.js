@@ -197,9 +197,7 @@ const routes = [
             component: () => import('pages/User/Dashboard/Dashboard'),
             layoutConfig: {
               layoutHeaderVisible: true,
-              layoutHeaderType: 'default',
-              layoutLeftDrawerVisible: true,
-              layoutLeftSideBarType: 'default'
+              layoutLeftDrawerVisible: false
             },
             meta: {
               middlewares: [auth]

@@ -1,9 +1,13 @@
 <template>
   <dashboard-header />
   <next-exam />
-  <div class="board-container row">
-    <upcoming-exams-calender class="col-12 col-md-8" />
-    <subscription-status class="col-12 col-md-4" />
+  <div class="board-container row q-col-gutter-sm">
+    <div class="col-12 col-md-8">
+      <upcoming-exams-calender />
+    </div>
+    <div class="col-12 col-md-4">
+      <subscription-status />
+    </div>
   </div>
 </template>
 
@@ -20,9 +24,9 @@ export default {
 
 <style scoped lang="scss">
 .board-container {
-margin-top: 30px;
+margin: 30px 0;
   @media screen and (max-width: 1023px) {
-    margin-top: 20px;
+    margin: 20px 0;
     //margin-bottom: 20px;
   }
 }
