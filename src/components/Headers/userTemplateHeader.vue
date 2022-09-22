@@ -116,30 +116,29 @@ export default {
       headerItems: [
         {
           selected: 'exams',
-          title: 'آزمون ها',
+          title: 'آزمون های سه‌آ',
           to: 'User.Exam.List'
         },
-        // {
-        //   selected: 'questionBank',
-        //   title: 'بانک سوال',
-        //   to: ''
-        // },
-        // {
-        //   selected: 'soalaMag',
-        //   title: 'سوالامگ',
-        //   to: ''
-        // },
+        {
+          selected: 'questionBank',
+          title: 'بانک سوالا',
+          to: ''
+        },
+        {
+          selected: 'soalaMag',
+          title: 'سوالامگ',
+          to: ''
+        },
         {
           selected: 'askedQuestions',
           title: 'سوالات متداول',
           to: 'faq'
+        },
+        {
+          selected: 'contactUs',
+          title: 'تماس با ما',
+          to: ''
         }
-        // {
-        //   selected: 'contactUs',
-        //   title: 'تماس با ما',
-        //   to: ''
-        // }
-
       ]
     }
   },
