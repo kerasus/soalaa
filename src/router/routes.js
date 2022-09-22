@@ -74,9 +74,9 @@ const routes = [
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     layoutConfig: {
       layoutHeaderVisible: true,
-      layoutHeaderType: 'panel',
+      layoutHeaderType: 'default',
       layoutLeftDrawerVisible: true,
-      layoutLeftSideBarType: 'panel',
+      layoutLeftSideBarType: 'default',
       layoutView: 'lHh Lpr lFf',
       layoutHeader: true,
       layoutHeaderReveal: false,
@@ -87,7 +87,7 @@ const routes = [
       layoutLeftDrawerElevated: false,
       layoutLeftDrawerBordered: false,
       layoutLeftDrawerWidth: 325,
-      layoutLeftDrawerBehavior: 'panel',
+      layoutLeftDrawerBehavior: 'default',
       layoutPageContainer: true,
       layoutRightDrawer: false,
       layoutFooter: false,
@@ -99,7 +99,13 @@ const routes = [
       {
         path: '',
         name: 'HomePage',
-        component: () => import('pages/User/landing/landing')
+        component: () => import('pages/HomePage'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false
+        }
+
       },
       {
         path: 'landing',
@@ -123,6 +129,7 @@ const routes = [
           layoutHeaderType: 'panel',
           layoutLeftDrawerVisible: true,
           layoutLeftSideBarType: 'panel'
+
         }
       },
       {
@@ -131,22 +138,35 @@ const routes = [
         component: () => import('pages/Auth/Login.vue')
       },
       {
-        path: '/user',
-        name: 'User',
-        component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
+        path: 'subscription',
+        name: 'subscription',
+        component: () => import('pages/User/Subscription'),
+        breadcrumbs: { title: 'ساخت آزمون' },
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
-          layoutLeftDrawerVisible: true,
-          layoutLeftDrawer: false,
+          layoutLeftDrawerVisible: false,
+          layoutLeftSideBarType: 'default'
+        }
+      },
+      {
+        path: 'user',
+        name: 'User',
+        component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
+        layoutConfig: {
+          name: 'User.MyOrders',
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false,
           layoutLeftSideBarType: 'default',
-          layoutLeftDrawerOverlay: false
+          layoutLeftDrawerOverlay: true
         },
         meta: {
           middlewares: [auth]
         },
         children: [
           {
+
             path: 'profile',
             name: 'profile',
             component: () => import('pages/User/profile/profile'),
@@ -166,6 +186,10 @@ const routes = [
             path: 'dashboard',
             name: 'User.Dashboard',
             component: () => import('pages/User/Dashboard/Dashboard'),
+            layoutConfig: {
+              layoutHeaderVisible: true,
+              layoutLeftDrawerVisible: false
+            },
             meta: {
               middlewares: [auth]
 
@@ -175,14 +199,47 @@ const routes = [
             path: 'my-orders',
             name: 'User.MyOrders',
             component: () => import('pages/User/MyOrders/MyOrders'),
-            breadcrumbs: { title: 'سفارش های من' }
+            breadcrumbs: { title: 'سفارش های من' },
+            meta: {
+              middlewares: [
+                Permissions.hasPermission('examStore')
+              ]
+            }
           },
           {
             path: 'user_exam_list',
             name: 'User.Exam.List',
             component: () => import('pages/User/exam/List'),
+            layoutConfig: {
+              layoutHeaderVisible: true
+            },
             middleware: [
               Permissions.hasPermission('examStore')
+            ]
+          },
+          {
+            path: 'ticket',
+            component: () => import('layouts/bareLayout.vue'),
+            meta: {
+              middlewares: [auth]
+            },
+            name: 'User.Ticket',
+            children: [
+              {
+                path: '',
+                name: 'User.Ticket.Index',
+                component: () => import('pages/User/Ticket/Index.vue')
+              },
+              {
+                path: ':id',
+                name: 'User.Ticket.Show',
+                component: () => import('pages/User/Ticket/Show.vue')
+              },
+              {
+                path: 'create',
+                name: 'User.Ticket.Create',
+                component: () => import('pages/User/Ticket/Create.vue')
+              }
             ]
           }
         ]

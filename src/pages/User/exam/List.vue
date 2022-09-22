@@ -44,11 +44,6 @@ export default {
       options: []
     }
   },
-  created() {
-    this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
-    this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
-  },
-
   computed: {
     calculateHeightStyle() {
       return this.$store.getters['AppLayout/calculateContainerFullHeight']

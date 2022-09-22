@@ -1,7 +1,7 @@
 <template>
   <div class="row user-panel-layout">
     <user-side-bar
-      v-if="getTemplateLeftSideBarType === 'default' && getLayoutLeftDrawerVisibility"
+      v-if="getTemplateLeftSideBarType === 'default' && !getLayoutLeftDrawerVisibility"
       class="user-side-bar col-xl-3 col-lg-3 col-md-3"
     />
     <div class="col-xl-9 col-lg-9 col-md-9 col-12 user-panel-content">

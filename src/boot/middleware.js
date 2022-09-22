@@ -14,9 +14,16 @@ function middlewarePipeline (context, middlewares, index) {
   }
 }
 
+function setRouteNameToRedirectTo (routeName) {
+  if (routeName && routeName !== 'login') {
+    window.localStorage.setItem('routeNameToRedirect', routeName.toString())
+  }
+}
+
 export default boot(({ router, store }) => {
   router.beforeEach((to, from, next) => {
     // Now you need to add your authentication logic here, like calling an API endpoint
+    setRouteNameToRedirectTo(to.name)
     if (!to.meta.middlewares) {
       return next()
     }
