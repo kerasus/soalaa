@@ -279,46 +279,64 @@
     </q-card-section>
   </q-card>
   <q-dialog v-model="reportProblemDialog.show">
-    <q-card flat
-            class="report-problem-dialog">
-      <q-btn v-close-popup
-             flat
-             round
-             dense
-             icon="close"
-             class="close-btn" />
-      <div class="title-style text-center">گزارش خطا</div>
+    <q-card
+      flat
+      class="report-problem-dialog"
+    >
+      <q-card-section class="header-section">
+        <q-btn
+          v-close-popup
+          flat
+          round
+          dense
+          icon="close"
+          class="close-button"
+        />
+        <div class="report-title">گزارش خطا</div>
+      </q-card-section>
+
       <q-card-section class="problem-type no-padding">
-        <div class="title-style">
+        <div class="report-title">
           نوع خطا
         </div>
-        <q-select v-model="reportProblemDialog.problemType"
-                  filled
-                  dense
-                  dropdown-icon="isax:arrow-down-1"
-                  :options="reportProblemDialog.problems"
-                  label="پاسخ نادرست" />
+        <q-select
+          v-model="reportProblemDialog.problemType"
+          filled
+          dense
+          dropdown-icon="isax:arrow-down-1"
+          :options="reportProblemDialog.options"
+          option-value="id"
+          option-label="value"
+          class="report-select-type"
+        />
       </q-card-section>
+
       <q-card-section class="problem-description no-padding">
-        <div class="title-style">
+        <div class="report-title">
           توضیحات
         </div>
-        <q-input v-model="reportProblemDialog.description"
-                 filled
-                 solo
-                 type="textarea" />
+        <q-input
+          v-model="reportProblemDialog.description"
+          filled
+          type="textarea"
+          class="description-input"
+        />
       </q-card-section>
+
       <q-card-actions class="action-box no-padding">
-        <q-btn v-close-popup
-               unelevated
-               label="انصراف"
-               class="cancel question-item-button" />
+        <q-btn
+          v-close-popup
+          unelevated
+          label="انصراف"
+          class="cancel report-button"
+        />
         <q-btn
           v-close-popup
           unelevated
           label="ثبت"
           color="primary"
-          class="question-item-button"
+          class="report-button"
+          @click="report"
         />
       </q-card-actions>
     </q-card>
@@ -330,6 +348,7 @@ import VueKatex from 'src/components/VueKatex'
 import question from 'components/CommonComponents/Exam/Create/QuestionTemplate/Question'
 // import VideoPlayer from 'src/components/VideoPlayer'
 import { Question } from 'src/models/Question'
+import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'QuestionItem',
@@ -370,6 +389,10 @@ export default {
     showQuestionNumber: {
       type: Boolean,
       default: false
+    },
+    reportOptions: {
+      type: Array,
+      default: () => {}
     }
   },
   emits: ['checkSelect', 'changeOrder'],
@@ -442,12 +465,13 @@ export default {
       reportProblemDialog: {
         show: false,
         problemType: '',
-        problems: [],
+        options: [],
         description: ''
       }
     }
   },
   created () {
+    this.reportProblemDialog.options = this.reportOptions
     this.setPageConfig()
   },
   mounted () {
@@ -554,9 +578,17 @@ export default {
 
       this.listConfig = Object.assign(this.listConfig, finalConf)
     },
-
     emitAdminActions (action, data) {
       this.$emit(action, data)
+    },
+    report () {
+      const params = {
+        type_id: this.reportProblemDialog.problemType,
+        body: this.reportProblemDialog.description
+      }
+      this.$axios.post(API_ADDRESS.exam.user.report(this.question.id), params)
+        .then((response) => {
+        })
     }
   }
 }
@@ -982,47 +1014,74 @@ export default {
 }
 
 .report-problem-dialog {
-  position: relative;
-
-  .close-btn {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    z-index: 1000000;
-  }
-
+  background: #FFFFFF;
   border-radius: 15px;
-  padding: 24px;
+  padding: 12px 24px 20px 24px;
+  width: 348px;
+  height: 496px;
 
-  .title-style {
-    font-weight: 500;
+  .header-section {
+    padding: 0;
+    display: flex;
+    margin-bottom: 30px;
+
+    .close-button {
+      min-width: 24px;
+      min-height: 24px;
+      margin-left: -12px;
+      margin-right: 109px;
+
+      &:deep(.q-btn__content ) {
+        margin: 0;
+      }
+
+      &:deep(.q-icon) {
+        font-size: 20px;
+        color: #6D708B;
+      }
+    }
+
+  }
+
+  .report-title {
+    font-style: normal;
+    font-weight: 400;
     font-size: 16px;
-    line-height: 28px;
-    color: #23263B;
-    margin-bottom: 8px;
+    line-height: 25px;
+    color: #434765;
   }
 
-  .problem-type {
-    margin-top: 10px;
-    width: 300px;
+  .report-select-type {
+    margin-top: 8px;
+    margin-bottom: 14px;
   }
 
-  .problem-description {
-    margin-top: 16px;
+  .description-input {
+    height: 225px;
+    margin-top: 8px;
+    margin-bottom: 24px;
   }
 
   .action-box {
-    margin-top: 20px;
+    display: flex;
+    justify-content: end;
 
-    .btn-style {
-      border-radius: 10px;
-      color: #23263B;
-      width: 96px;
+    .report-button {
       height: 40px;
-    }
+      width: 96px;
+      background: #9690E4;
+      border-radius: 8px;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 22px;
+      letter-spacing: -0.03em;
+      color: #FFFFFF;
 
-    .cancel {
-      background-color: #F4F5F6;
+      &.cancel {
+        background: #F2F5F9;
+        color: #6D708B;
+      }
     }
   }
 }

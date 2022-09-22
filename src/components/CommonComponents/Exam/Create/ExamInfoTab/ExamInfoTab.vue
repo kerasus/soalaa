@@ -81,14 +81,7 @@ export default {
   },
 
   created () {
-    this.inputList = this.inputs
-    this.getPageReady()
-  },
-
-  mounted () {
-    // const element = document.getElementsByClassName('')
-    // console.log(element)
-    // element.classList.remove('.col')
+    this.onLoadPage()
   },
 
   computed: {
@@ -110,7 +103,9 @@ export default {
   },
 
   methods: {
-    getPageReady () {
+    onLoadPage () {
+      this.inputList = this.inputs
+
       this.getExamTypeList()
       this.getGradesList()
       this.loadMajorList()
@@ -142,7 +137,7 @@ export default {
         this.inputList.forEach(input => {
           if (input.type === 'formBuilder') {
             input.value.forEach(item => {
-              if (item.name === 'grade_type') {
+              if (item.name === 'temp.level') {
                 item.options = []
                 this.gradesList.forEach(type => {
                   item.options.push({ label: type.title, value: type.id })
@@ -161,7 +156,7 @@ export default {
           this.inputList.forEach(input => {
             if (input.type === 'formBuilder') {
               input.value.forEach(item => {
-                if (item.name === 'major_type') {
+                if (item.name === 'temp.tags') {
                   item.options = []
                   this.majorList.forEach(type => {
                     item.options.push({ label: type.value, value: type.id })
@@ -201,36 +196,6 @@ export default {
         color: #434765;
       }
     }
-
-    &:deep(.q-btn-toggle) {
-    }
-
-    //&:deep(.setting-box) {
-    //  padding: 8px 0 0 12px;
-    //  .title {
-    //    padding-bottom: 8px;
-    //  }
-    //}
-    //&:deep(.editor-box div p) {
-    //  margin-bottom: 0;
-    //}
-    //&:deep(.editor-section .row) {
-    //  height: 100%;
-    //}
-    //&:deep(.form-builder .form-builder-col) {
-    //  background: var(--3a-Neutral3);
-    //  border-radius: 20px;
-    //  padding: 0;
-    //}
-    //&:deep(.form-builder-tiptapEditor-col div) {
-    //  &:first-child {
-    //    height: 100%;
-    //  }
-    //}
-    //&:deep(.exam-type-toggle-button) {
-    //  padding-bottom: 0 !important;
-    //}
-
   }
 
   .exam-info-buttons {

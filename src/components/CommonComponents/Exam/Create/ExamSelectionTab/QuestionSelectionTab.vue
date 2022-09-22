@@ -34,6 +34,7 @@
               v-for="question in questions.list"
               :key="question.id"
               :question="question"
+              :report-options="reportTypeList"
               pageStrategy="question-bank"
               @checkSelect="onClickedCheckQuestionBtn"
             />
@@ -49,7 +50,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -106,7 +106,8 @@ export default {
         per_page: 0,
         to: 0,
         total: 0
-      }
+      },
+      reportTypeList: []
     }
   },
   inject: {
@@ -127,17 +128,23 @@ export default {
   created () {
     this.getQuestionData()
     this.getFilterOptions()
+    this.getReportOptions()
   },
   emits: ['onFilter'],
   methods: {
+    getReportOptions() {
+      this.$axios.get(API_ADDRESS.exam.user.reportType)
+        .then((response) => {
+          this.reportTypeList = response.data.data
+          console.log(this.reportTypeList)
+        })
+    },
     goToLastStep () {
       this.$emit('lastTab')
     },
-
     goToNextStep () {
       this.$emit('nextTab')
     },
-
     onFilter (filterData) {
       this.$emit('onFilter', filterData)
       this.filterData = this.getFiltersForRequest(filterData)
@@ -197,7 +204,6 @@ export default {
       this.deleteQuestionFromExam(question)
       this.questionListKey = Date.now()
     },
-
     updatePage (page) {
       this.getQuestionData(page, this.filterData)
     },
@@ -213,7 +219,6 @@ export default {
         reference: (filterData.reference) ? filterData.reference.map(item => item.id) : []
       }
     },
-
     getQuestionData (page, filters) {
       if (!page) {
         page = 1
