@@ -41,12 +41,20 @@
           سوالات متداول
         </div>
       </div>
-      <q-btn
-        unelevated
-        class="submit-btn-style"
-        label="ثبت نام آزمون"
-        @click="onClickRegisterBtn"
-      />
+      <div>
+        <q-btn
+          unelevated
+          class="submit-btn-style sign-up-btn"
+          label="ثبت نام آزمون"
+          @click="onClickRegisterBtn"
+        />
+        <q-btn
+          unelevated
+          class="submit-btn-style"
+          label="آزمون های من"
+          @click="onClickUserExamListBtn"
+        />
+      </div>
     </div>
   </div>
 
@@ -55,8 +63,11 @@
 <script>
 export default {
   name: 'NavBar',
-  emits: ['onClickRegisterBtn', 'onClickConditionsBtn', 'onClickFaqsBtn'],
+  emits: ['onClickUserExamListBtn', 'onClickRegisterBtn', 'onClickConditionsBtn', 'onClickFaqsBtn'],
   methods: {
+    onClickUserExamListBtn () {
+      this.$emit('onClickUserExamListBtn')
+    },
     onClickRegisterBtn () {
       this.$emit('onClickRegisterBtn')
     },
@@ -96,7 +107,8 @@ export default {
     }
   }
   .logo{
-    width: 105px;
+    //width: 105px;
+    width: 200px;
   }
   .submit-btn-style {
     box-sizing: border-box;
@@ -105,6 +117,9 @@ export default {
     background: #FFF0C1;
     border: 2px solid #FEA800;
     border-radius: 24px;
+    &.sign-up-btn {
+      margin-right: 10px;
+    }
   }
 }
 @media screen and (max-width: 1439px){
@@ -131,6 +146,9 @@ export default {
           margin: 0 16px;
         }
       }
+    }
+    .logo{
+      width: 50px !important;
     }
   }
 }

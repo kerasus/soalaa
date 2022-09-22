@@ -28,7 +28,11 @@ const API_ADDRESS = {
     getOrderList (id) {
       return authServer + '/user/' + id + '/orders?seller=2'
       // return authServer + '/user/' + id + '/orders?seller=1'
-    }
+    },
+    orders: {
+      status: lumenServer + '/orders/status'
+    },
+    statistics: lumenServer + 'user/dashboard/statistics'
   },
   set: {
     base: authServer + '/set'
@@ -83,6 +87,9 @@ const API_ADDRESS = {
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
     analysisVideo: lumenServer + '/exam-question/attach/sub-category',
+    userExamList(start, end) {
+      return lumenServer + '/examAndUser' + '?start_at_from=' + start + '&start_at_till=' + end
+    },
     getAnalysisVideo (examId) {
       return lumenServer + '/exam-question/videos/' + examId
     },
@@ -274,8 +281,17 @@ const API_ADDRESS = {
       sea: {
         all: authServer + '/product/soalaa/all'
       }
-    }
+    },
 
+    edit: {
+      base: apiV2Server + '/admin/product'
+    },
+    index: {
+      base: apiV2Server + '/admin/product'
+    },
+    show: {
+      base: apiV2Server + '/product'
+    }
   },
   cart: {
     orderproduct: {
@@ -285,6 +301,32 @@ const API_ADDRESS = {
     review: apiV2Server + '/checkout/review?seller=2',
     getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2',
     orderWithTransaction (orderId) { return apiV2Server + '/orderWithTransaction/' + orderId }
+  },
+  subscription: {
+    landing: lumenServer + 'subscribe/landing',
+    list: lumenServer + 'subscribe/user',
+    register: (userId) => lumenServer + `/subscribe/user/${userId}`
+  },
+  homePage: {
+    base: lumenServer + '/homepage'
+  },
+  ticket: {
+    create: {
+      base: authServer + '/ticket'
+    },
+    index: {
+      base: authServer + '/ticket'
+    },
+    show: {
+      base: authServer + '/ticket',
+      statusNotice: (ticketId) =>
+        authServer + '/ticket/' + ticketId + '/sendTicketStatusNotice',
+      batchExtend: authServer + '/orderproduct/batchExtend',
+      ticketMessage: authServer + '/ticketMessage',
+      reportMessage: (ticketId) =>
+        authServer + '/ticketMessage/' + ticketId + '/report'
+    },
+    ticketRate: (ticketId) => authServer + '/ticket/' + ticketId + '/rate'
   }
 }
 export default API_ADDRESS

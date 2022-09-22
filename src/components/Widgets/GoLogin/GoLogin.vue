@@ -1,0 +1,91 @@
+<template>
+  <div  class="sub-mit-box flex justify-between items-center page-width">
+    <div class="info">با ورود و یا ثبت نام در سوالا میتوانید محتوای شخصی سازی شده و مربوط به خود را دنبال کنید</div>
+    <div class="action-box">
+      <q-btn
+        unelevated
+        class="btn-style"
+        label="ورود"></q-btn>
+      <q-btn unelevated
+             color="primary"
+             class="btn-style"
+             label="ثبت نام"></q-btn>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'GoLogin'
+}
+</script>
+
+<style scoped lang="scss">
+.page-width{
+  width: 1362px;
+  margin: auto;
+  @media screen and (max-width:1439px ){
+    width: 954px;
+  }
+  @media screen and (max-width:1023px ){
+    width: 600px;
+  }
+  @media screen and (max-width:599px ){
+    width: 100%;
+  }
+}
+.sub-mit-box{
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 30px 80px;
+  margin-bottom: 80px;
+  @media  screen and (max-width: 1439px){
+    padding: 24px 60px;
+    margin-bottom: 60px;
+  }
+  @media  screen and (max-width: 1023px){
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-bottom: 40px;
+  }
+  @media  screen and (max-width: 599px){
+    border-radius: 12px;
+  }
+  .info{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: -0.03em;
+    color: #000000;
+    @media  screen and (max-width: 1439px){
+      font-size: 16px;
+      line-height: 25px;
+    }
+    @media  screen and (max-width: 1023px){
+    margin-bottom: 24px;
+    }
+    @media  screen and (max-width: 599px){
+      font-size: 14px;
+      line-height: 22px;
+    }
+  }
+  .action-box{
+    @media  screen and (max-width: 1023px){
+      justify-self: flex-end;
+    }
+  }
+  .btn-style{
+    width: 96px;
+    color: #6D708B;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 22px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: -0.03em;
+  }
+}
+</style>
