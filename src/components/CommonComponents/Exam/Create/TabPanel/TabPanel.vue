@@ -41,14 +41,18 @@
         </q-tab-panel>
       </q-tab-panels>
       <q-dialog v-model="examConfirmedDialog">
-        <q-card flat
-                class="report-problem-dialog">
-          <q-btn v-close-popup
-                 flat
-                 round
-                 dense
-                 icon="close"
-                 class="close-btn" />
+        <q-card
+          flat
+          class="report-problem-dialog"
+        >
+          <q-btn
+            v-close-popup
+            flat
+            round
+            dense
+            icon="close"
+            class="close-btn"
+          />
           <q-card-section class="problem-type no-padding">
             <q-icon name="isax:tick-circle"
                     size="110px" />
@@ -115,7 +119,18 @@ export default {
     }
   },
 
+  created () {
+    this.onLoadPage()
+  },
+
   methods: {
+    onLoadPage () {
+      this.$axios.get(API_ADDRESS.exam.user.draft())
+        .then(response => {
+          // console.log(response)
+        }).catch(() => {})
+    },
+
     onFilter (filterData) {
       // console.log('filterData', filterData)
     },
@@ -143,12 +158,10 @@ export default {
     isFinalStep (tab) {
       return this.allTabs.indexOf(tab) === this.allTabs.length - 1
     },
-
     changeTab (tab) {
       this.updateExamData()
       if (this.accept) { this.currentTab = tab }
     },
-
     goToLastStep () {
       this.updateExamData()
       this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
@@ -223,6 +236,8 @@ export default {
       if (this.currentTab === 'createPage') {
         const formData = this.$refs.createExam.$refs.EntityCrudFormBuilder.getFormData()
         const formDataValues = this.$refs.createExam.$refs.EntityCrudFormBuilder.getValues()
+        console.log('formData', formData)
+        console.log('formDataValues', formDataValues)
         this.accept = !this.accept
         this.checkValues(formDataValues)
         this.checkValidate(formDataValues)
@@ -238,9 +253,15 @@ export default {
         this.accept = true
       } else if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length === 0) {
         this.accept = false
-        const messages = ['یه سوال برامون انتخاب کنن اخوی']
+        const messages = ['سوالی انتخاب نشده است!']
         this.showMessagesInNotify(messages)
       }
+    },
+    createExammm() {
+      this.$axios.get(API_ADDRESS.exam.user.create)
+        .then((r) => {
+          console.log(r)
+        })
     }
   }
 
@@ -248,7 +269,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .create-exam-panel {
   display: flex;
   .exam-create-panel {
@@ -335,6 +355,5 @@ export default {
       }
     }
   }
-
 }
 </style>
