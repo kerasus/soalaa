@@ -25,7 +25,7 @@ export default {
             { type: 'separator', label: 'نوع آزمون', separatorType: 'none', col: 'exam-type-separator' },
             {
               type: 'toggleButton',
-              name: 'exam_type',
+              name: 'type_id',
               responseKey: 'data.exam_type',
               col: 'exam-type-toggle-button',
               value: '6225f4828044517f52500c02',
@@ -63,7 +63,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'رشته تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'major_type', responseKey: 'data.major_type', col: 'col-12' }
+            { type: 'select', name: 'temp.tags', responseKey: 'data.temp.tags', col: 'col-12' }
           ]
         },
         {
@@ -72,7 +72,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'پایه تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'grade_type', responseKey: 'data.grade_type', col: 'col-12' }
+            { type: 'select', name: 'temp.level', responseKey: 'data.temp.level', col: 'col-12' }
           ]
         }
       ]

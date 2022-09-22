@@ -185,9 +185,9 @@ export default {
         // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
       })
     },
-    createExam () {
+    createExam (params) {
       return new Promise((resolve, reject) => {
-        this.$axios.post(API_ADDRESS.exam.base())
+        this.$axios.post(API_ADDRESS.exam.user.create, params)
           .then(response => {
             resolve(response)
           })
@@ -236,8 +236,6 @@ export default {
       if (this.currentTab === 'createPage') {
         const formData = this.$refs.createExam.$refs.EntityCrudFormBuilder.getFormData()
         const formDataValues = this.$refs.createExam.$refs.EntityCrudFormBuilder.getValues()
-        console.log('formData', formData)
-        console.log('formDataValues', formDataValues)
         this.accept = !this.accept
         this.checkValues(formDataValues)
         this.checkValidate(formDataValues)
@@ -248,6 +246,7 @@ export default {
           this.accept = true
         }
         this.exam = Object.assign(this.exam, formData)
+        this.createExam(formData)
       }
       if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length > 0) {
         this.accept = true
