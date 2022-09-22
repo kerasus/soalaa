@@ -22,7 +22,7 @@
         </q-tab-panel>
 
         <q-tab-panel name="chooseQuestion">
-          <exam-selection-tab
+          <question-selection-tab
             v-model="exam.questions.list"
             @onFilter="onFilter"
             @nextTab="goToNextStep"
@@ -78,12 +78,12 @@ import Steps from 'pages/Admin/exam/Create/Steps'
 import ExamInfoTab from 'components/CommonComponents/Exam/Create/ExamInfoTab/ExamInfoTab'
 import FinalApprovalTab from 'components/CommonComponents/Exam/Create/FinalApprovalTab/FinalApprovalTab'
 import API_ADDRESS from 'src/api/Addresses'
-import ExamSelectionTab from 'components/CommonComponents/Exam/Create/ExamSelectionTab/ExamSelectionTab'
+import QuestionSelectionTab from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionSelectionTab'
 
 export default {
   name: 'tabPanel',
   components: {
-    ExamSelectionTab,
+    QuestionSelectionTab,
     FinalApprovalTab,
     ExamInfoTab,
     Steps

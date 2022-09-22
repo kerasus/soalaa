@@ -63,7 +63,7 @@ import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionsGeneralInfo from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo'
 
 export default {
-  name: 'ExamSelectionTab',
+  name: 'QuestionSelectionTab',
   components: { QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
 
   props: {},
