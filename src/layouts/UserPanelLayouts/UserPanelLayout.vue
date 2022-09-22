@@ -74,10 +74,10 @@ export default {
     padding-left: 20px;
     padding-right: 20px;
   }
-
-  .user-panel-content{
-    width: 100%;
-  }
+  // ======================================================= attention
+  //.user-panel-content{
+  //  width: 100%;
+  //}
   .user-side-bar {
     @media screen and (max-width: 1023px) {
      display: none;
