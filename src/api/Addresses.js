@@ -137,6 +137,16 @@ const API_ADDRESS = {
     },
     examBookletUpload (examId) {
       return lumenServer + '/exam-question/booklet-file/' + examId
+    },
+    user: {
+      create: lumenServer + '/exam/user',
+      update (examId) { return lumenServer + '/exam/user' + examId },
+      draft () { return lumenServer + '/exam/user/draft' },
+      reportType: lumenServer + '/option/user?type=question_report_type',
+      report(questionId) { return lumenServer + '/question/report/store/' + questionId },
+      attach: lumenServer + '/exam-question/user/attach/v3',
+      detach(questionId) { return lumenServer + '/exam-question/user/detach/' + questionId },
+      attached(examId) { return lumenServer + '/exam-question/user/attach/show/' + examId }
     }
   },
   question: {

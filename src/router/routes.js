@@ -175,6 +175,14 @@ const routes = [
             }
           },
           {
+            path: 'exam/create',
+            name: 'user-creat-exam',
+            component: () => import('pages/User/exam/Create/Create'),
+            layoutConfig: {
+              layoutLeftDrawerVisible: false
+            }
+          },
+          {
             path: 'dashboard',
             name: 'User.Dashboard',
             component: () => import('pages/User/Dashboard/Dashboard'),
