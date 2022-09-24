@@ -1,5 +1,10 @@
+@import "mixin";
+
 .form-builder-date-time-col {
-  padding: 8px 12px 15px 12px;
+  //padding: 8px 12px 15px 12px;
+  .outsideLabel {
+    @include global-outsideLabel;
+  }
   .form-calender {
     border-radius: 10px 0 0 10px;
     @include global-input;
