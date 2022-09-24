@@ -33,6 +33,9 @@ export default {
     },
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']
+    },
+    hasNavigationBar() {
+      return this.getTemplateLeftSideBarType === 'default' && !this.getLayoutLeftDrawerVisibility
     }
   },
   created () {

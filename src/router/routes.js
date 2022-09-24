@@ -259,6 +259,19 @@ const routes = [
                 component: () => import('pages/User/Ticket/Create.vue')
               }
             ]
+          },
+          {
+            name: 'User.Exam.Download',
+            path: '/download',
+            component: () => import('pages/User/exam/Download/Download'),
+            layoutConfig: {
+              layoutHeaderVisible: true,
+              layoutLeftSideBarType: 'test',
+              layoutLeftDrawerVisible: false
+            },
+            middleware: [
+              Permissions.hasPermission('examStore')
+            ]
           }
         ]
       },
