@@ -96,17 +96,23 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 // ToDo: check this styles in scoped style tag
+.html-katex.katex * {
+  font-family: KaTeX_Main, Times New Roman, serif !important;
+}
 #mathfield .ML__cmr,
 .katex .mtight {
-  font-family: IRANSans;
+  font-family: yekanbakh,serif;
 }
 
 .html-katex {
   width: 100%;
-
+  font-family: KaTeX_Main, Times New Roman, serif !important;
   .katex {
+    * {
+      font-family: KaTeX_Main, Times New Roman, serif !important;
+    }
     /*rtl:ignore*/
     direction: ltr !important;
     /*rtl:ignore*/
