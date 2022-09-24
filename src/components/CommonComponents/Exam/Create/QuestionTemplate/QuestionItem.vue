@@ -949,7 +949,7 @@ export default {
 
     .attach-question-buttons {
       display: flex;
-      align-items: end;
+      align-items: flex-end;
 
       .question-item-button {
         width: 40px;
@@ -985,7 +985,7 @@ export default {
         text-align: center;
 
         @media only screen and (max-width: 599px) {
-          align-items: end;
+          align-items: flex-end;
         }
         &:deep(.q-icon) {
           font-size: 14px;
@@ -1064,7 +1064,7 @@ export default {
 
   .action-box {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 
     .report-button {
       height: 40px;
