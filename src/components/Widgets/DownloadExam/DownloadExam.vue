@@ -306,7 +306,8 @@ export default {
       color: #8A8CA6;
 
       &:deep(.q-tab__indicator) {
-        width: 100%;
+        width: 70%;
+        left: 18px;
         height: 2px;
         padding-right: 30px;
         border-radius: 6px;
@@ -321,16 +322,17 @@ export default {
         padding: 0 24px;
       }
 
-      &:deep(.q-tab__label) {
-        font-style: normal;
-        font-weight: 600;
-        font-size: 16px;
-        line-height: 25px;
-        text-align: center;
-        letter-spacing: -0.03em;
-        color: #FFA117;
-
+      :deep(.q-tab--inactive){
+        &:deep(.q-tab__label) {
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 25px;
+          text-align: right;
+          letter-spacing: -0.03em;
+          color: #6D708B;
+        }
       }
+
     }
   }
 }
