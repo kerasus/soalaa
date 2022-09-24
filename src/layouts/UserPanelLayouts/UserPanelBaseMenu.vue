@@ -116,6 +116,14 @@ export default {
           children: []
         },
         {
+          title: 'ساخت آزمون',
+          icon: 'isax:task-square',
+          routeName: 'User.Create.Exam',
+          permission: 'all',
+          active: false,
+          children: []
+        },
+        {
           title: 'سفارش‌ های من',
           icon: 'isax:clipboard-text',
           routeName: 'User.MyOrders',
