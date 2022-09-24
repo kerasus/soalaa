@@ -87,8 +87,35 @@ const API_ADDRESS = {
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
     analysisVideo: lumenServer + '/exam-question/attach/sub-category',
-    userExamList(start, end) {
-      return lumenServer + '/examAndUser' + '?start_at_from=' + start + '&start_at_till=' + end
+    userExamList: {
+      base () {
+        return lumenServer + '/examAndUser'
+      },
+      allExams(start, end) {
+        let route = 'start_at_from=' + start
+        if (start && end) {
+          route = 'start_at_from=' + start + '&start_at_till=' + end
+        } else if (end) {
+          route = 'start_at_till=' + end
+        }
+        return lumenServer + '/examAndUser?' + route
+      },
+      upcomingExams(start) {
+        return lumenServer + '/examAndUser' + '?start_at_from=' + start
+      },
+      myExams(start, end, designerType = 'personal') {
+        let route = '?designer_type=' + designerType
+        if (start) {
+          route += '&created_at_from=' + start
+          if (start && end) {
+            route += '&created_at_till=' + end
+          }
+        } else if (end) {
+          route += '&created_at_till=' + end
+        }
+        return lumenServer + '/examAndUser' + route
+      }
+
     },
     getAnalysisVideo (examId) {
       return lumenServer + '/exam-question/videos/' + examId
