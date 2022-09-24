@@ -123,8 +123,7 @@ export default defineComponent({
     getTitledTime (time) {
       const timePieces = time.split(':')
       if ((parseInt(timePieces[0]) > 23)) {
-        const days = Math.round(timePieces[0] / 24) + ' روز'
-        return days
+        return Math.round(timePieces[0] / 24) + ' روز'
       }
       return time
     }
