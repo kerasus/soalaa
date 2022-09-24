@@ -136,7 +136,7 @@ export default {
       this.$axios.get(API_ADDRESS.exam.user.reportType)
         .then((response) => {
           this.reportTypeList = response.data.data
-          console.log(this.reportTypeList)
+          // console.log(this.reportTypeList)
         })
     },
     goToLastStep () {
