@@ -30,7 +30,7 @@ const API_ADDRESS = {
       // return authServer + '/user/' + id + '/orders?seller=1'
     },
     orders: {
-      status: lumenServer + '/orders/status'
+      status: lumenServer + '/orders/statuses'
     }
   },
   set: {
