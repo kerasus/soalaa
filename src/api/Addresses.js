@@ -303,8 +303,9 @@ const API_ADDRESS = {
     orderWithTransaction (orderId) { return apiV2Server + '/orderWithTransaction/' + orderId }
   },
   subscription: {
-    landing: lumenServer + 'subscribe/landing',
-    list: lumenServer + 'subscribe/user',
+    landing: lumenServer + '/subscribe/landing',
+    list: lumenServer + '/subscribe/user',
+    last: lumenServer + '/subscribe/user/last',
     register: (userId) => lumenServer + `/subscribe/user/${userId}`
   },
   homePage: {
