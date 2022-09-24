@@ -1,10 +1,11 @@
 <template>
-  <div class="row user-panel-layout">
-    <user-side-bar
-      v-if="getTemplateLeftSideBarType === 'default' && !getLayoutLeftDrawerVisibility"
-      class="user-side-bar col-xl-3 col-lg-3 col-md-3"
-    />
-    <div class="col-xl-9 col-lg-9 col-md-9 col-12 user-panel-content">
+  <div class="user-panel-layout">
+    <div v-if="getTemplateLeftSideBarType === 'default' && !getLayoutLeftDrawerVisibility"
+         class="user-side-bar"
+    >
+      <user-side-bar />
+    </div>
+    <div class="user-panel-content">
       <Router :include="keepAliveComponents" />
     </div>
   </div>
@@ -49,11 +50,18 @@ export default {
 
 <style scoped lang="scss">
 .user-panel-layout {
+  display: flex;
   max-width: 1362px;
   margin: auto;
   padding-top: 30px;
   background: #f4f6f9;
-  justify-content: center;
+  justify-content: space-between;
+  .user-side-bar {
+    width: 277px;
+  }
+  .user-panel-content {
+    width: 1050px;
+  }
   @media screen and (max-width: 1439px) {
     max-width: 100%;
   }
