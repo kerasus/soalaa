@@ -193,7 +193,7 @@ const routes = [
           },
           {
             path: 'exam/create',
-            name: 'user-creat-exam',
+            name: 'User.Create.Exam',
             component: () => import('pages/User/exam/Create/Create'),
             layoutConfig: {
               layoutLeftDrawerVisible: false
@@ -225,10 +225,7 @@ const routes = [
             component: () => import('pages/User/exam/List'),
             layoutConfig: {
               layoutHeaderVisible: true
-            },
-            middleware: [
-              Permissions.hasPermission('examStore')
-            ]
+            }
           },
           {
             path: '/faq',
