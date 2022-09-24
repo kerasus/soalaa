@@ -11,7 +11,9 @@
               <q-btn color="dark"
                      icon="search"
                      flat
-                     @click="onClick" />
+                     :loading="exams.loading"
+                     @click="setFilter"
+              />
             </template>
           </q-input>
         </div>
@@ -50,12 +52,13 @@
           text-color="dark"
           class="filter-refresh-btn"
           icon="refresh"
-          @click="onClick"
+          @click="clearInputs"
         />
         <q-btn
           color="primary"
           label="اعمال"
           class="filter-submit-btn"
+          :loading="exams.loading"
           @click="setFilter"
         />
       </div>
@@ -102,22 +105,27 @@
               <div class="quiz-list-item-schedule"
                    :class="quizType === 'myExam' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
               >
-                1400/02/11 ,08:30
+                {{getDate(item.start_at) }}
+                ,
+                {{ getTimeFromDateTime(item.start_at) }}
               </div>
               <div class="quiz-list-item-action"
                    :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
               >
                 <q-btn
                   class="quiz-action-btn"
-                  :class="item % 2 == 1 ? 'enroll' : 'result'"
-                  :label="item % 2 == 1 ? 'شرکت در آزمون' : 'مشاهده نتایج'"
-                  @click="onClick" />
-                <q-btn v-if="quizType === 'myExam'"
-                       color="dark"
-                       class="quiz-action-download"
-                       flat
-                       icon="isax:import"
-                       @click="onClick" />
+                  :class="item.exam_actions.can_start ? 'enroll' : 'result'"
+                  :label="item.exam_actions.can_start ? 'شرکت در آزمون' : 'مشاهده نتایج'"
+                  @click="onClick"
+                />
+                <q-btn
+                  v-if="quizType === 'myExam'"
+                  color="dark"
+                  class="quiz-action-download"
+                  flat
+                  icon="isax:import"
+                  @click="onClick"
+                />
               </div>
             </div>
           </q-item-section>
@@ -147,6 +155,7 @@ import { Exam, ExamList } from 'src/models/Exam'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
 import API_ADDRESS from 'src/api/Addresses'
 import { FormBuilder, inputMixin } from 'quasar-form-builder'
+import ShamsiDate from 'src/plugins/ShamsiDate'
 
 export default defineComponent({
   name: 'QuizList',
@@ -160,6 +169,9 @@ export default defineComponent({
       default: new ExamList()
     }
   },
+  emits: [
+    'filterExamList'
+  ],
   mixins: [mixinAuth, mixinQuiz, inputMixin],
   components: {
     FormBuilder
@@ -170,7 +182,7 @@ export default defineComponent({
     examItem: new Exam(),
     loadingList: false,
     examType: '',
-    typeOptions: ['تست', 'تشریحی', 'ترکیببی'],
+    typeOptions: ['تست', 'تشریحی', 'ترکببی'],
     filterBar: false,
     inputs: [
       {
@@ -197,6 +209,9 @@ export default defineComponent({
     // this.getExams()
   },
   watch: {
+    quizType () {
+      this.clearInputs()
+    },
     loadingList () {
       if (this.loadingList) {
         this.$store.commit('loading/loading', true)
@@ -205,7 +220,16 @@ export default defineComponent({
       }
     }
   },
+  mounted() {
+    this.clearInputs()
+  },
   methods: {
+    getTimeFromDateTime(dateTime) {
+      return ShamsiDate.getTimeFromDateTime(dateTime)
+    },
+    getDate(dateTime) {
+      return ShamsiDate.getDate(dateTime)
+    },
     goToResult (exam) {
       let routeName = 'user.exam.results'
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
@@ -306,7 +330,28 @@ export default defineComponent({
       window.open(bookletUrl, '_blank').focus()
     },
     setFilter() {
-
+      const inputValues = this.$refs.filterForm.getValues()
+      const filterData = {
+        from: '',
+        to: ''
+      }
+      inputValues.forEach(input => {
+        if (input.value) {
+          Object.assign(filterData, {
+            [input.name]: input.value
+          })
+        }
+      })
+      Object.assign(filterData, {
+        examType: this.examType,
+        title: this.searchInExams
+      })
+      this.$emit('onFilter', filterData)
+    },
+    clearInputs () {
+      this.$refs.filterForm.clearFormBuilderInputValues()
+      this.examType = ''
+      this.searchInExams = ''
     },
     toggleFilter() {
       this.filterBar = !this.filterBar

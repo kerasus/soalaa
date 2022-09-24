@@ -15,7 +15,7 @@
           - paginator for tab panels
         -->
         <div class="slider-row">
-          <future-quizzes-carousel :exams="allExamsList" />
+          <future-quizzes-carousel :exams="upcomingExams" />
         </div>
         <div class="row">
           <div class="col-12">
@@ -41,12 +41,14 @@
                 <quiz-list
                   :quiz-type="'exam'"
                   :exams="allExamsList"
+                  @onFilter="filterAllExams"
                 />
               </q-tab-panel>
               <q-tab-panel name="myExam">
                 <quiz-list
                   :quiz-type="'myExam'"
                   :exams="myExams"
+                  @onFilter="filterMyExams"
                 />
               </q-tab-panel>
             </q-tab-panels>
@@ -105,28 +107,42 @@ export default defineComponent({
   },
   methods: {
     getBaseExamList () {
+      this.allExamsList.loading = true
       this.$axios.get(API_ADDRESS.exam.userExamList.base())
         .then((response) => {
           this.allExamsList = new ExamList(response.data.data)
+          this.allExamsList.loading = false
         })
     },
-    getAllExams (start, end) {
-      this.$axios.get(API_ADDRESS.exam.userExamList.allExams(start, end))
+    filterMyExams(filterData) {
+      this.getMyExams(filterData.title, filterData.from, filterData.to)
+    },
+    filterAllExams(filterData) {
+      this.getAllExams(filterData.title, filterData.from, filterData.to)
+    },
+    getAllExams (title, start, end) {
+      this.allExamsList.loading = true
+      this.$axios.get(API_ADDRESS.exam.userExamList.allExams(title, start, end))
         .then((response) => {
           this.allExamsList = new ExamList(response.data.data)
+          this.allExamsList.loading = false
         })
     },
-    getMyExams (start, end, designerType) {
-      this.$axios.get(API_ADDRESS.exam.userExamList.myExams(start, end))
+    getMyExams (title, start, end) {
+      this.myExams.loading = true
+      this.$axios.get(API_ADDRESS.exam.userExamList.myExams(title, start, end))
         .then((response) => {
           this.myExams = new ExamList(response.data.data)
+          this.myExams.loading = false
         })
     },
     getUpcomingExams () {
+      this.upcomingExams.loading = true
       const today = moment(new Date(Date.now())).format('YYYY-MM-DD')
       this.$axios.get(API_ADDRESS.exam.userExamList.upcomingExams(today))
         .then((response) => {
           this.upcomingExams = new ExamList(response.data.data)
+          this.upcomingExams.loading = false
         })
     }
   }
