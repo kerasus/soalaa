@@ -50,11 +50,18 @@ export default {
 
 <style scoped lang="scss">
 .user-panel-layout {
+  display: flex;
   max-width: 1362px;
   margin: auto;
   padding-top: 30px;
   background: #f4f6f9;
-  justify-content: center;
+  justify-content: space-between;
+  .user-side-bar {
+    width: 277px;
+  }
+  .user-panel-content {
+    width: 1050px;
+  }
   @media screen and (max-width: 1439px) {
     max-width: 100%;
   }
