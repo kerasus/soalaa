@@ -15,33 +15,39 @@
           - paginator for tab panels
         -->
         <div class="slider-row">
-          <future-quizzes-carousel />
+          <future-quizzes-carousel :exams="allExamsList" />
         </div>
         <div class="row">
           <div class="col-12">
-            <div class="test-list-title">
+            <div class="exam-list-title">
               آزمون ها
             </div>
             <q-tabs
               v-model="tab"
               color="light1"
-              class="test-tabs"
+              class="exam-tabs"
               active-color="secondary"
               align="left"
             >
-              <q-tab name="test"
+              <q-tab name="exam"
                      label="آزمون ها" />
-              <q-tab name="myTest"
+              <q-tab name="myExam"
                      label="آزمون های من" />
             </q-tabs>
             <q-tab-panels v-model="tab"
                           class="quiz-panels"
                           animated>
-              <q-tab-panel name="test">
-                <quiz-list :quizType="'test'" />
+              <q-tab-panel name="exam">
+                <quiz-list
+                  :quiz-type="'exam'"
+                  :exams="allExamsList"
+                />
               </q-tab-panel>
-              <q-tab-panel name="myTest">
-                <quiz-list :quizType="'myTest'" />
+              <q-tab-panel name="myExam">
+                <quiz-list
+                  :quiz-type="'myExam'"
+                  :exams="myExams"
+                />
               </q-tab-panel>
             </q-tab-panels>
           </div>
@@ -69,9 +75,12 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import FutureQuizzesCarousel from 'src/components/Quiz/FutureQuizzesCarousel'
 import QuizList from 'src/components/Quiz/QuizList'
+import API_ADDRESS from 'src/api/Addresses'
+import { ExamList } from 'src/models/Exam'
+import moment from 'moment'
 
 export default defineComponent({
   name: 'List',
@@ -80,19 +89,60 @@ export default defineComponent({
     FutureQuizzesCarousel,
     QuizList
   },
-  setup() {
-    const tab = ref('test')
-
+  data() {
     return {
-      tab
+      tab: 'exam',
+      allExamsList: new ExamList(),
+      upcomingExams: new ExamList(),
+      myExams: new ExamList()
+    }
+  },
+  mounted() {
+    // this.getAllExams()
+    this.getBaseExamList()
+    this.getMyExams()
+    this.getUpcomingExams()
+  },
+  methods: {
+    getBaseExamList () {
+      this.$axios.get(API_ADDRESS.exam.userExamList.base())
+        .then((response) => {
+          this.allExamsList = new ExamList(response.data.data)
+        })
+    },
+    getAllExams (start, end) {
+      this.$axios.get(API_ADDRESS.exam.userExamList.allExams(start, end))
+        .then((response) => {
+          this.allExamsList = new ExamList(response.data.data)
+        })
+    },
+    getMyExams (start, end, designerType) {
+      this.$axios.get(API_ADDRESS.exam.userExamList.myExams(start, end))
+        .then((response) => {
+          this.myExams = new ExamList(response.data.data)
+        })
+    },
+    getUpcomingExams () {
+      const today = moment(new Date(Date.now())).format('YYYY-MM-DD')
+      this.$axios.get(API_ADDRESS.exam.userExamList.upcomingExams(today))
+        .then((response) => {
+          this.upcomingExams = new ExamList(response.data.data)
+        })
     }
   }
+  // setup() {
+  //   const tab = ref('exam')
+  //
+  //   return {
+  //     tab
+  //   }
+  // }
 
 })
 </script>
 
 <style lang="scss">
-.test-tabs {
+.exam-tabs {
   color: #8A8CA6;
 
   &:deep(.q-tab__indicator) {
@@ -121,7 +171,7 @@ export default defineComponent({
 
   }
 }
-.test-list-title {
+.exam-list-title {
   margin: 20px 0 20px;
   font-style: normal;
   font-weight: 600;

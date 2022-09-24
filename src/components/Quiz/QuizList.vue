@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-6">
         <div class="search-bar">
-          <q-input v-model="text"
+          <q-input v-model="searchInExams"
                    type="search"
                    label="جست و جو در آزمون ها">
             <template v-slot:append>
@@ -24,11 +24,11 @@
     </div>
     <div class="row filter-wrapper"
          :class="filterBar ? 'open': '' ">
-      <div v-if="quizType === 'myTest'"
+      <div v-if="quizType === 'myExam'"
            class="col-xs-12 col-sm-12 flex justify-start items-end"
-           :class="quizType === 'myTest' ? 'col-md-4 col-lg-4 col-xl-4' : ''">
+           :class="quizType === 'myExam' ? 'col-md-4 col-lg-4 col-xl-4' : ''">
         <div class="filter-input-label">نوع سوالات آزمون</div>
-        <q-select v-model="type"
+        <q-select v-model="examType"
                   :options="typeOptions"
                   bg-color="white"
                   style="width:100%"
@@ -36,7 +36,7 @@
       </div>
       <div
         class="col-xs-12 col-sm-12"
-        :class="quizType === 'myTest' ? 'col-md-6 col-lg-6 col-xl-6' : 'col-md-8 col-lg-8 col-xl-8'">
+        :class="quizType === 'myExam' ? 'col-md-6 col-lg-6 col-xl-6' : 'col-md-8 col-lg-8 col-xl-8'">
         <div class="filter-input-label">تاریخ آزمون</div>
         <form-builder
           ref="filterForm"
@@ -44,16 +44,20 @@
         />
       </div>
       <div class="col-xs-12 col-sm-12 flex justify-end items-end"
-           :class="quizType === 'myTest' ? 'col-md-2 col-lg-2 col-xl-2' : 'col-md-4 col-lg-4 col-xl-4'">
-        <q-btn color="white"
-               text-color="dark"
-               class="filter-refresh-btn"
-               icon="refresh"
-               @click="onClick" />
-        <q-btn color="primary"
-               label="اعمال"
-               class="filter-submit-btn"
-               @click="setFilter" />
+           :class="quizType === 'myExam' ? 'col-md-2 col-lg-2 col-xl-2' : 'col-md-4 col-lg-4 col-xl-4'">
+        <q-btn
+          color="white"
+          text-color="dark"
+          class="filter-refresh-btn"
+          icon="refresh"
+          @click="onClick"
+        />
+        <q-btn
+          color="primary"
+          label="اعمال"
+          class="filter-submit-btn"
+          @click="setFilter"
+        />
       </div>
     </div>
     <div class="quiz-list-wrapper">
@@ -62,53 +66,53 @@
           <q-item-section>
             <div class="row quiz-list-header-row">
               <div class="quiz-list-header-col"
-                   :class="quizType === 'myTest' ? 'col-5' : 'col-6'">
+                   :class="quizType === 'myExam' ? 'col-5' : 'col-6'">
                 عنوان آزمون
               </div>
-              <div v-if="quizType === 'myTest'"
-                   :class="quizType === 'myTest' ? 'col-2' : 'col-3'"
+              <div v-if="quizType === 'myExam'"
+                   :class="quizType === 'myExam' ? 'col-2' : 'col-3'"
                    class="quiz-list-header-col">
                 نوع آزمون
               </div>
               <div class="quiz-list-header-col"
-                   :class="quizType === 'myTest' ? 'col-2' : 'col-3'">
+                   :class="quizType === 'myExam' ? 'col-2' : 'col-3'">
                 شروع آزمون
               </div>
               <div class="quiz-list-header-col"
-                   :class="quizType === 'myTest' ? 'col-3' : 'col-3'">
+                   :class="quizType === 'myExam' ? 'col-3' : 'col-3'">
                 عملیات
               </div>
             </div>
           </q-item-section>
         </q-item>
-        <q-item v-for="item in 5"
+        <q-item v-for="item in exams.list"
                 :key="item"
                 class="quiz-list-item">
           <q-item-section>
             <div class="row quiz-list-item-row">
               <div class="quiz-list-item-name"
-                   :class="quizType === 'myTest' ? 'col-xs-12 col-sm-5 col-md-5 col-lg-5 col-xl-5' : 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
-                {{'آزمون پنجم - پایه یازدهم رشته انسانی طولانی'.substring(0,40)}} ...
+                   :class="quizType === 'myExam' ? 'col-xs-12 col-sm-5 col-md-5 col-lg-5 col-xl-5' : 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
+                {{item.title.substring(0,40)}} ...
               </div>
-              <div v-if="quizType === 'myTest'"
+              <div v-if="quizType === 'myExam'"
                    class="quiz-list-item-schedule"
-                   :class="quizType === 'myTest' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'">
+                   :class="quizType === 'myExam' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'">
                 تست
               </div>
               <div class="quiz-list-item-schedule"
-                   :class="quizType === 'myTest' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
+                   :class="quizType === 'myExam' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
               >
                 1400/02/11 ,08:30
               </div>
               <div class="quiz-list-item-action"
-                   :class="quizType === 'myTest' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
+                   :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
               >
                 <q-btn
                   class="quiz-action-btn"
                   :class="item % 2 == 1 ? 'enroll' : 'result'"
                   :label="item % 2 == 1 ? 'شرکت در آزمون' : 'مشاهده نتایج'"
                   @click="onClick" />
-                <q-btn v-if="quizType === 'myTest'"
+                <q-btn v-if="quizType === 'myExam'"
                        color="dark"
                        class="quiz-action-download"
                        flat
@@ -150,6 +154,10 @@ export default defineComponent({
     quizType: {
       type: String,
       default: () => {}
+    },
+    exams: {
+      type: ExamList,
+      default: new ExamList()
     }
   },
   mixins: [mixinAuth, mixinQuiz, inputMixin],
@@ -157,11 +165,11 @@ export default defineComponent({
     FormBuilder
   },
   data: () => ({
+    searchInExams: '',
     preventStartExam: false,
     examItem: new Exam(),
-    exams: new ExamList(),
     loadingList: false,
-    type: '',
+    examType: '',
     typeOptions: ['تست', 'تشریحی', 'ترکیببی'],
     filterBar: false,
     inputs: [
@@ -186,7 +194,7 @@ export default defineComponent({
     ]
   }),
   created () {
-    this.getExams()
+    // this.getExams()
   },
   watch: {
     loadingList () {
@@ -235,21 +243,21 @@ export default defineComponent({
       }
       this.$router.push({ name: routeName, params: { quizId: exam.id, questNumber: 1 } })
     },
-    getExams () {
-      const that = this
-      this.loadingList = true
-      // this.user.getUserExams()
-      this.$axios.get(API_ADDRESS.exam.userExamsList)
-        .then((response) => {
-          this.user.exams = new ExamList(response.data.data.exams)
-          this.user.exams.loading = false
-          this.exams = new ExamList(response.data.data.exams)
-          this.loadingList = false
-        })
-        .catch(() => {
-          that.loadingList = false
-        })
-    },
+    // getExams () {
+    //   const that = this
+    //   this.loadingList = true
+    //   // this.user.getUserExams()
+    //   this.$axios.get(API_ADDRESS.exam.userExamsList)
+    //     .then((response) => {
+    //       this.user.exams = new ExamList(response.data.data.exams)
+    //       this.user.exams.loading = false
+    //       this.exams = new ExamList(response.data.data.exams)
+    //       this.loadingList = false
+    //     })
+    //     .catch(() => {
+    //       that.loadingList = false
+    //     })
+    // },
     registerExam (exam) {
       this.$axios.post(API_ADDRESS.exam.registerExam, { exam_id: exam.id })
         .then((response) => {
@@ -298,6 +306,7 @@ export default defineComponent({
       window.open(bookletUrl, '_blank').focus()
     },
     setFilter() {
+
     },
     toggleFilter() {
       this.filterBar = !this.filterBar
