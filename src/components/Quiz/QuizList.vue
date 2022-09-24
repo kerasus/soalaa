@@ -110,6 +110,7 @@
                   @click="onClick" />
                 <q-btn v-if="quizType === 'myTest'"
                        color="dark"
+                       :to="{name : 'User.Exam.Download'}"
                        class="quiz-action-download"
                        flat
                        icon="isax:import"

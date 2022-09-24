@@ -98,7 +98,7 @@ export default defineComponent({
 
   &:deep(.q-tab__indicator) {
     width: 100%;
-    height: 6px;
+    height: 16px;
     border-radius: 6px 6px 0 0;
   }
 

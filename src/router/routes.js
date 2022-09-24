@@ -210,6 +210,19 @@ const routes = [
             middleware: [
               Permissions.hasPermission('examStore')
             ]
+          },
+          {
+            name: 'User.Exam.Download',
+            path: '/download',
+            component: () => import('pages/User/exam/Download/Download'),
+            layoutConfig: {
+              layoutHeaderVisible: true,
+              layoutLeftSideBarType: 'test',
+              layoutLeftDrawerVisible: false
+            },
+            middleware: [
+              Permissions.hasPermission('examStore')
+            ]
           }
         ]
       },
