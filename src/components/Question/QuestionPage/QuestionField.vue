@@ -129,4 +129,7 @@ export default {
     }
   }
 }
+.katex .svg-align {
+  text-align: right !important;
+}
 </style>
