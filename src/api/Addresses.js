@@ -327,8 +327,9 @@ const API_ADDRESS = {
     ticketRate: (ticketId) => authServer + '/ticket/' + ticketId + '/rate'
   },
   subscription: {
-    landing: lumenServer + 'subscribe/landing',
-    list: lumenServer + 'subscribe/user',
+    landing: lumenServer + '/subscribe/landing',
+    list: lumenServer + '/subscribe/user',
+    last: lumenServer + '/subscribe/user/last',
     register: (userId) => lumenServer + `/subscribe/user/${userId}`
   },
   homePage: {
