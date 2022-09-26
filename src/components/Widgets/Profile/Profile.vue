@@ -186,7 +186,17 @@ export default {
       this.getFormData()
         .then(() => {
           this.setInputsInitData()
+          this.disableFilledInputs()
         })
+    },
+
+    disableFilledInputs() {
+      const allInputs = this.$refs.EntityCrudFormBuilder.$refs.formBuilder.getValues()
+      allInputs.forEach(input => {
+        if (input.value) {
+          this.findInput(this.inputs, input.name).readonly = true
+        }
+      })
     },
 
     getFormData () {
