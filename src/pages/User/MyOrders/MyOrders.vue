@@ -1,51 +1,44 @@
 <template>
   <div style="display: none"> {{windowSize}}</div>
-  <div
-    v-if="!hasUserOrdered"
-  >
+  <div v-if="!hasUserOrdered">
     <div class="empty-order-list">
-      <q-img
-        class="image"
-        :src="'https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_orders.png'"
+      <q-img class="image"
+             :src="'https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_orders.png'"
       />
       <div class="list-text">
         لیست سفارش‌های شما خالی است!
       </div>
       <div class="back-to-shop">
-        <q-btn
-          class="back-to-shop-btn"
-          flat
-          :color="'primary'"
-          label="رفتن به فروشگاه"
-          :to="{name:'Landing.3aExams'}"
+        <q-btn class="back-to-shop-btn"
+               flat
+               :color="'primary'"
+               label="رفتن به فروشگاه"
+               :to="{name:'Landing.3aExams'}"
         />
       </div>
     </div>
   </div>
-  <div
-    v-else
-    class="my-orders-list"
+  <div v-else
+       class="my-orders-list"
   >
     <div class="title">سفارش های من</div>
-    <entity-index
-      ref="orderList"
-      v-model:value="inputs"
-      class="orders-list-entity-index"
-      title="سفارش های من"
-      :api="getEntityApi"
-      :table="table"
-      :table-keys="tableKeys"
-      :default-layout="false"
-      :table-grid-size="$q.screen.lt.sm"
-      :create-route-name="'Admin.Exam.Create'"
+    <entity-index ref="orderList"
+                  v-model:value="inputs"
+                  class="orders-list-entity-index"
+                  title="سفارش های من"
+                  :api="getEntityApi"
+                  :table="table"
+                  :table-keys="tableKeys"
+                  :default-layout="false"
+                  :table-grid-size="$q.screen.lt.sm"
+                  :create-route-name="'Admin.Exam.Create'"
     >
       <template v-slot:before-index-table="">
         <div class="row items-center search-box">
           <div class="col-lg-4 col-xl-4 col-md-6 col-xs-9 text-left">
-            <q-input
-              v-model="searchInput"
-              filled
-              class="search-input bg-white">
+            <q-input v-model="searchInput"
+                     filled
+                     class="search-input bg-white">
               <template v-slot:append>
                 <q-icon name="isax:search-normal-1"
                         class="search-icon"
@@ -54,26 +47,26 @@
             </q-input>
           </div>
           <div class="col-lg-8 col-xl-8 col-md-6 col-xs-3 text-right">
-            <q-btn
-              unelevated
-              class="filter-toggle"
-              :class="filterExpanded? 'gray-bg': 'bg-white'"
-              icon="isax:filter"
-              @click="filterExpanded = !filterExpanded" />
+            <q-btn unelevated
+                   class="filter-toggle"
+                   :class="filterExpanded? 'gray-bg': 'bg-white'"
+                   icon="isax:filter"
+                   @click="filterExpanded = !filterExpanded" />
           </div>
         </div>
-        <q-expansion-item
-          v-model="filterExpanded"
-          icon="perm_identity"
-          class="expand-filter"
-          label="Account settings"
-          caption="John Doe"
+        <q-expansion-item v-model="filterExpanded"
+                          icon="perm_identity"
+                          class="expand-filter"
+                          label="Account settings"
+                          caption="John Doe"
         >
           <div class="row filter-items">
             <!--            col-lg-10 col-xs-12-->
             <div class="col-12">
               <form-builder ref="filterSlot"
-                            :value="filterInputs" />
+                            :value="filterInputs"
+                            @onClick="onClickFilterFormBuilder"
+              />
             </div>
             <div v-if="false"
                  class="action-btn col-lg-2 flex col-xs-12 items-end q-pb-md justify-end">
@@ -94,25 +87,22 @@
       <template #table-cell="{inputData}">
         <q-td :props="inputData.props">
           {{setHasUserOrderedValue(inputData.props.row)}}
-
           <template v-if="inputData.props.col.name === 'details'">
-            <q-btn
-              round
-              flat
-              dense
-              size="md"
-              @click="showDetailsDialog(inputData.props.row)"
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   @click="showDetailsDialog(inputData.props.row)"
             >
               <!--              <q-tooltip anchor="top middle"-->
               <!--                         self="bottom middle">-->
               <!--                مشاهده-->
               <!--              </q-tooltip>-->
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <svg width="24"
+                   height="24"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   xmlns="http://www.w3.org/2000/svg"
               >
                 <circle
                   cx="12"
@@ -133,9 +123,7 @@
                   fill="#6D708B"
                 />
               </svg>
-
             </q-btn>
-
           </template>
           <template v-else>
             {{ inputData.props.value }}
@@ -155,22 +143,18 @@
               <div class="first-col-item">تاریخ سفارش:</div>
             </div>
             <div class="second-col">
-              <q-btn
-                round
-                flat
-                dense
-                size="md"
-                class="details-btn"
-                @click="toggleDetailsCard(inputData.props.row)"
+              <q-btn round
+                     flat
+                     dense
+                     size="md"
+                     class="details-btn"
+                     @click="toggleDetailsCard(inputData.props.row)"
               >
                 جزییات
               </q-btn>
-              <div
-                :class="
-                  { 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
-                    'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
-                    'payment-installment' : inputData.props.row.paymentstatus.id
-                  }"
+              <div :class="{ 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
+                             'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
+                             'payment-installment' : inputData.props.row.paymentstatus.id}"
               >
                 <!--                پرداخت نشده-->
                 {{inputData.props.row.paymentstatus.name}}
@@ -184,18 +168,16 @@
               </div>
             </div>
           </div>
-          <order-details-card
-            v-if="windowSize.x < 600"
-            v-model:toggleValue="detailsCardToggle[inputData.props.row.id]"
-            :order="currentOrder"
+          <order-details-card v-if="windowSize.x < 600"
+                              v-model:toggleValue="detailsCardToggle[inputData.props.row.id]"
+                              :order="currentOrder"
           />
         </q-card>
       </template>
     </entity-index>
-    <order-details-dialog
-      v-if="windowSize.x >= 600"
-      v-model:dialogValue="detailsDialog"
-      :order="currentOrder"
+    <order-details-dialog v-if="windowSize.x >= 600"
+                          v-model:dialogValue="detailsDialog"
+                          :order="currentOrder"
     />
   </div>
 </template>
@@ -218,7 +200,6 @@ export default {
     OrderDetailsDialog,
     EntityIndex
   },
-
   data() {
     return {
       filterExpanded: true,
@@ -230,9 +211,9 @@ export default {
       ],
       filterInputs: [
         { type: 'select', name: 'paymentStatuses', dropdownIcon: 'isax:arrow-down-1', optionValue: 'id', optionLabel: 'title', responseKey: 'paymentStatuses', label: 'وضعیت پرداخت', placeholder: ' ', col: 'filter-option col-sm-6 col-lg-4 col-xs-12' },
-        { type: 'date', name: 'since', responseKey: 'since', label: 'تاریخ سفارش', class: 'since', placeholder: ' از', calendarIcon: 'isax filter', col: 'since col-lg-3 col-sm-6 col-xs-12' },
-        { type: 'date', name: 'till', label: ' ', placeholder: 'تا', responseKey: 'till', class: '', col: 'till col-lg-3 col-sm-6 col-xs-12' },
-        { type: ActionBtn, name: '', label: ' ', placeholder: 'تا', responseKey: 'till', class: '', col: 'till col-lg-2 col-sm-6 col-xs-12' }
+        { type: 'date', name: 'since', responseKey: 'since', label: 'تاریخ سفارش', placeholder: ' از', calendarIcon: ' ', col: 'col-lg-3 col-sm-6 col-xs-12' },
+        { type: 'date', name: 'till', label: ' ', placeholder: 'تا', calendarIcon: ' ', responseKey: 'till', col: 'col-lg-3 col-sm-6 col-xs-12' },
+        { type: ActionBtn, name: 'ActionBtn', col: 'col-lg-2 col-sm-6 col-xs-12' }
       ],
       searchInput: '',
       table: {
@@ -337,6 +318,9 @@ export default {
     }
   },
   methods: {
+    onClickFilterFormBuilder (event) {
+      console.log('event, input', event)
+    },
     searchInData() {
 
     },

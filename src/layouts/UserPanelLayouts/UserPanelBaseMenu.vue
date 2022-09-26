@@ -99,14 +99,14 @@ export default {
     return {
       clickedItem: null,
       titlesList: [
-        // {
-        //   title: 'داشبورد',
-        //   icon: 'isax:home',
-        //   routeName: 'dashboard',
-        //   permission: 'all',
-        //   active: false,
-        //   children: []
-        // },
+        {
+          title: 'داشبورد',
+          icon: 'isax:home',
+          routeName: 'User.Dashboard',
+          permission: 'all',
+          active: false,
+          children: []
+        },
         {
           title: 'آزمون ها',
           icon: 'isax:task-square',
@@ -116,9 +116,25 @@ export default {
           children: []
         },
         {
+          title: 'ساخت آزمون',
+          icon: 'isax:task-square',
+          routeName: 'User.Create.Exam',
+          permission: 'all',
+          active: false,
+          children: []
+        },
+        {
           title: 'سفارش‌ های من',
           icon: 'isax:clipboard-text',
           routeName: 'User.MyOrders',
+          permission: 'all',
+          active: false,
+          children: []
+        },
+        {
+          title: 'اطلاعات کاربری',
+          icon: 'isax:user',
+          routeName: 'User.Profile',
           permission: 'all',
           active: false,
           children: []
