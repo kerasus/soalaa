@@ -147,6 +147,10 @@ export default {
       const that = this
       this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id, false)
         .then(response => {
+          this.$q.notify({
+            message: 'ثبت با موفقیت انجام شد',
+            type: 'positive'
+          })
           that.$router.push({ name: 'User.Exam.List' })
           that.confirmationBubbleSheet = true
         })
