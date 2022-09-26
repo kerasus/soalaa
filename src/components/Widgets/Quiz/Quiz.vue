@@ -3,7 +3,7 @@
     class="userExamList"
     style="font-size: 16px;"
   >
-    <!--    ToDo : add confirm-dialog-->
+    <!--    TODO: add confirm-dialog-->
     <!--    <vue-confirm-dialog />-->
     <div v-if="true"
          class="fit row wrap justify-center items-start content-start"
@@ -11,7 +11,6 @@
       <div class="col col-12 examList-container">
         <!-- TODO:
           - slider load data
-          - tab & tab panel
           - load tab panels data
           - paginator for tab panels
         -->
@@ -180,7 +179,7 @@ export default defineComponent({
 
   &:deep(.q-tab__indicator) {
     width: 100%;
-    height: 6px;
+    height: 16px;
     border-radius: 6px 6px 0 0;
   }
 
@@ -218,7 +217,7 @@ export default defineComponent({
     border-top: 2px solid #E4E8EF;
 
     .q-tab-panel {
-      padding: 16px 0;
+      padding: 2px 0;
     }
 }
 

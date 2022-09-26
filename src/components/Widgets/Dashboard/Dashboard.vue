@@ -17,9 +17,32 @@ import DashboardHeader from 'components/Widgets/Dashboard/SideComponent/Dashboar
 import SubscriptionStatus from 'components/Widgets/Dashboard/SideComponent/SubscriptionStatus'
 import UpcomingExamsCalender from 'components/Widgets/Dashboard/SideComponent/UpcomingExamsCalender'
 import NextExam from 'components/Widgets/Dashboard/SideComponent/NextExam'
+import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'Dashboard',
-  components: { NextExam, UpcomingExamsCalender, SubscriptionStatus, DashboardHeader }
+  components: { NextExam, UpcomingExamsCalender, SubscriptionStatus, DashboardHeader },
+  data () {
+    return {
+      lastSubscribeLoading: false,
+      lastSubscribeDate: null
+    }
+  },
+  created() {
+    this.getLaStsubscribe()
+  },
+  methods: {
+    getLaStsubscribe () {
+      this.lastSubscribeLoading = true
+      this.$axios.get(API_ADDRESS.subscription.last)
+        .then((response) => {
+          this.lastSubscribeLoading = false
+          this.lastSubscribeDate = response.data.data.subscribe
+        })
+        .then(() => {
+          this.lastSubscribeLoading = false
+        })
+    }
+  }
 }
 </script>
 

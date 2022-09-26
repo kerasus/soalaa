@@ -1,21 +1,17 @@
 <template>
-  <div class="dashboard">
-    <page-builder
-      :sections="sections"
-      :options="options"
-      :containerFullHeight="calculateHeightStyle"
-    />
-  </div>
+  <page-builder
+    :sections="sections"
+    :options="options"
+  ></page-builder>
 </template>
 
 <script>
-// import DashboardHeader from 'components/Dashboard/DashboardHeader'
-import pageBuilder from 'src/components/PageBuilder/PageBuilder'
+import PageBuilder from 'components/PageBuilder/PageBuilder'
 
 export default {
-  name: 'Dashboard',
+  name: 'Download',
   components: {
-    pageBuilder
+    PageBuilder
   },
   data() {
     return {
@@ -28,12 +24,14 @@ export default {
                   {
                     widgets: [
                       {
-                        name: 'Dashboard'
+                        name: 'download-exam'
                       }
                     ]
                   }
                 ],
                 options: {
+                  boxed: true,
+                  boxedWidth: 1362,
                   style: {}
                 }
               }
@@ -43,11 +41,6 @@ export default {
         }
       ],
       options: []
-    }
-  },
-  computed: {
-    calculateHeightStyle() {
-      return this.$store.getters['AppLayout/calculateContainerFullHeight']
     }
   }
 }
