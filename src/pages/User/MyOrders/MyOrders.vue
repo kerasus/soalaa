@@ -64,7 +64,9 @@
             <!--            col-lg-10 col-xs-12-->
             <div class="col-12">
               <form-builder ref="filterSlot"
-                            :value="filterInputs" />
+                            :value="filterInputs"
+                            @onClick="onClickFilterFormBuilder"
+              />
             </div>
             <div v-if="false"
                  class="action-btn col-lg-2 flex col-xs-12 items-end q-pb-md justify-end">
@@ -198,7 +200,6 @@ export default {
     OrderDetailsDialog,
     EntityIndex
   },
-
   data() {
     return {
       filterExpanded: true,
@@ -317,6 +318,9 @@ export default {
     }
   },
   methods: {
+    onClickFilterFormBuilder (event) {
+      console.log('event, input', event)
+    },
     searchInData() {
 
     },
