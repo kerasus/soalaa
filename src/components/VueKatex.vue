@@ -9,23 +9,7 @@
 
 <script>
 import 'katex/dist/katex.min.css'
-import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
 import katex from 'katex'
-
-// import { createApp } from 'vue'
-// const app = createApp({})
-// import VueKatex from 'vue-katex'
-// import 'katex/dist/katex.min.css'
-// app.use(VueKatex, {
-//   globalOptions: {
-//     delimiters: [
-//       { left: '$$', right: '$$', display: true },
-//       { left: '\\[', right: '\\]', display: true },
-//       { left: '$', right: '$', display: false },
-//       { left: '\\(', right: '\\)', display: false }
-//     ]
-//   }
-// })
 
 export default {
   name: 'VueKatex',
@@ -58,10 +42,15 @@ export default {
       const persianRegex = /[\u0600-\u06FF]/
       return !string.match(persianRegex)
     },
-    computedKatex () {
+    computedKatex() {
       let string = this.input
-      string = mixinConvertToTiptap.methods.convertKatex(string)
-      const regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms
+
+      string = string.replaceAll('\\[ ', '\\[')
+      string = string.replaceAll(' \\]', '\\]')
+      string = string.replaceAll(' $', '$')
+      string = string.replaceAll('$ ', '$')
+      // string = string.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&')
+      const regex = /(\${1}((?!\$).)+?\${1})|(\${2}((?!\$).)+?\${2})|(\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\[\\((?! ).){1}((?!\$).)*?((?! ).){1}\]\\)/gms
       string = string.replace(regex, (match) => {
         let finalMatch
         if (match.includes('$$')) {
@@ -76,12 +65,9 @@ export default {
           strict: 'warn'
         })
       })
+
       return string
     }
-    // computedKatex () {
-    //   // purified katex
-    //   return mixinConvertToTiptap.methods.convertKatex(this.input)
-    // }
   },
   mounted () {
     setTimeout(() => {
@@ -96,17 +82,23 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 // ToDo: check this styles in scoped style tag
+.html-katex.katex * {
+  font-family: KaTeX_Main, Times New Roman, serif !important;
+}
 #mathfield .ML__cmr,
 .katex .mtight {
-  font-family: IRANSans;
+  font-family: yekanbakh,serif;
 }
 
 .html-katex {
   width: 100%;
-
+  font-family: KaTeX_Main, Times New Roman, serif !important;
   .katex {
+    * {
+      font-family: KaTeX_Main, Times New Roman, serif !important;
+    }
     /*rtl:ignore*/
     direction: ltr !important;
     /*rtl:ignore*/
