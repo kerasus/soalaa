@@ -2,14 +2,14 @@
   <div
     class="html-katex"
     style="overflow: hidden"
-    dir="ltr"
+    :dir="!isLtrString ? 'rtl' : 'ltr'"
     v-html="computedKatex"
   />
 </template>
 
 <script>
 import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
-import 'katex/dist/katex.min.css'
+// import 'katex/dist/katex.min.css'
 import katex from 'katex'
 
 export default {
@@ -112,18 +112,26 @@ export default {
 </script>
 
 <style lang="scss">
-// ToDo: check this styles in scoped style tag
-.html-katex.katex * {
-  font-family: KaTeX_Main, Times New Roman, serif !important;
-}
-#mathfield .ML__cmr,
-.katex .mtight {
-  font-family: yekanbakh,serif;
+/*rtl:ignore*/
+@import "katex/dist/katex.min.css";
+
+//rtl change bug fix
+.html-katex {
+  .katex .sqrt > .root {
+    margin-left:.27777778em;
+    margin-right:-.55555556em;
+  }
 }
 
 .html-katex {
   width: 100%;
   font-family: KaTeX_Main, Times New Roman, serif !important;
+  & > p {
+    direction: inherit;
+    &:first-child {
+      display: inline-block;
+    }
+  }
   .katex {
     * {
       font-family: KaTeX_Main, Times New Roman, serif !important;
@@ -132,79 +140,6 @@ export default {
     direction: ltr !important;
     /*rtl:ignore*/
   }
-
-  table {
-    border-collapse: collapse;
-    table-layout: fixed;
-    width: 100%;
-    margin: 0;
-    overflow: hidden;
-
-    td,
-    th {
-      min-width: 1em;
-      border: 2px solid #ced4da;
-      padding: 3px 5px;
-      vertical-align: top;
-      box-sizing: border-box;
-      position: relative;
-
-      > * {
-        margin-bottom: 0;
-      }
-    }
-
-    th {
-      font-weight: bold;
-      text-align: left;
-      background-color: #f1f3f5;
-    }
-  }
-}
-.beit {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
-}
-
-.beit .mesra {
-  position: relative;
-  width: 100%;
-  min-height: 1px;
-  padding-right: 15px;
-  padding-left: 15px;
-  -ms-flex-preferred-size: 0;
-  flex-basis: 0;
-  -webkit-box-flex: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  max-width: 100%;
-  white-space: nowrap;
-}
-
-@media only screen and (max-width: 500px) {
-  .beit {
-    flex-direction: column;
-  }
-  .beit .mesra {
-    white-space: normal;
-    flex-basis: auto;
-  }
-}
-.html-katex > p {
-  direction: inherit;
-}
-
-.html-katex > p:first-child {
-  display: inline-block;
-}
-// check top styles in scoped style tag
-
-.html-katex {
   table {
     border-collapse: collapse;
     table-layout: fixed;
@@ -249,5 +184,41 @@ export default {
       pointer-events: none;
     }
   }
+  .beit {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    @media only screen and (max-width: 500px) {
+      flex-direction: column;
+    }
+    .mesra {
+      position: relative;
+      width: 100%;
+      min-height: 1px;
+      padding-right: 15px;
+      padding-left: 15px;
+      -ms-flex-preferred-size: 0;
+      flex-basis: 0;
+      -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+      flex-grow: 1;
+      max-width: 100%;
+      white-space: nowrap;
+      @media only screen and (max-width: 500px) {
+        white-space: normal;
+        flex-basis: auto;
+      }
+    }
+  }
 }
+
+#mathfield .ML__cmr,
+.katex .mtight {
+  font-family: yekanbakh,serif;
+}
+
 </style>
