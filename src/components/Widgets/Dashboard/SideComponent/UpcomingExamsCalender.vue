@@ -502,7 +502,7 @@ export default defineComponent({
     }
 
     const setAttr = (event) => {
-      console.log(document.getSelection(), event)
+      // console.log(document.getSelection(), event)
     }
 
     return {
@@ -527,7 +527,7 @@ export default defineComponent({
         for (let w = 0; w < 6; w++) {
           for (let col = 0; col < 7; col++) {
             for (let e = 0; e < res.data.data.length; e++) {
-              console.log(res.data.data[e].start_at.substring(0, 10))
+              // console.log(res.data.data[e].start_at.substring(0, 10))
               if (res.data.data[e].start_at.substring(0, 10) === this.month[w][col].date.toString().split('/').join('-')) {
                 this.month[w][col].events.push(res.data.data[e])
               }

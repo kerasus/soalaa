@@ -154,7 +154,6 @@ const routes = [
         name: 'User',
         component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
         layoutConfig: {
-          name: 'User.MyOrders',
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
           layoutLeftDrawerVisible: false,
@@ -176,7 +175,7 @@ const routes = [
           },
           {
             path: 'exam/create',
-            name: 'user-creat-exam',
+            name: 'User.Create.Exam',
             component: () => import('pages/User/exam/Create/Create'),
             layoutConfig: {
               layoutLeftDrawerVisible: false
@@ -199,12 +198,7 @@ const routes = [
             path: 'my-orders',
             name: 'User.MyOrders',
             component: () => import('pages/User/MyOrders/MyOrders'),
-            breadcrumbs: { title: 'سفارش های من' },
-            meta: {
-              middlewares: [
-                Permissions.hasPermission('examStore')
-              ]
-            }
+            breadcrumbs: { title: 'سفارش های من' }
           },
           {
             path: 'user_exam_list',
@@ -212,10 +206,7 @@ const routes = [
             component: () => import('pages/User/exam/List'),
             layoutConfig: {
               layoutHeaderVisible: true
-            },
-            middleware: [
-              Permissions.hasPermission('examStore')
-            ]
+            }
           },
           {
             path: 'ticket',

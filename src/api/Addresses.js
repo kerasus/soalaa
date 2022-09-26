@@ -87,8 +87,18 @@ const API_ADDRESS = {
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
     analysisVideo: lumenServer + '/exam-question/attach/sub-category',
-    userExamList(start, end) {
-      return lumenServer + '/examAndUser' + '?start_at_from=' + start + '&start_at_till=' + end
+    userExamList: {
+      base () {
+        return lumenServer + '/examAndUser'
+      },
+      upcomingExams(start) {
+        return lumenServer + '/examAndUser' + '?start_at_from=' + start
+      },
+      myExams(designerType = 'personal') {
+        const route = '?designer_type=' + designerType
+        return lumenServer + '/examAndUser' + route
+      }
+
     },
     getAnalysisVideo (examId) {
       return lumenServer + '/exam-question/videos/' + examId
