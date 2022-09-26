@@ -5,7 +5,7 @@
         <div>آزمون‌های ثبت‌نام شده‌</div>
       </div>
       <div class="footer">
-        45
+        {{statistics.register_exam}}
         <span class="exam">آزمون</span>
       </div>
     </div>
@@ -24,7 +24,7 @@
         </q-btn>
       </div>
       <div class="footer exam-create">
-        55
+        {{statistics.self_exam}}
         <span class="exam">آزمون</span>
         <q-btn
           class="exam-create-btn md-hide"
@@ -47,10 +47,11 @@
           flat
           dense
           size="md"
+          :to="{name: 'User.MyOrders'}"
         ></q-btn>
       </div>
       <div class="footer exam-plus">
-        10
+        {{statistics.self_order}}
         <span class="exam">آزمون</span>
         <q-btn
           class="exam-plus-btn md-hide"
@@ -66,12 +67,29 @@
 </template>
 
 <script>
+import API_ADDRESS from 'src/api/Addresses'
+
 export default {
   name: 'DashboardHeader',
+  data() {
+    return {
+      statistics: []
+    }
+  },
   computed: {
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']
     }
+  },
+  methods: {
+    getStatistics() {
+      this.$axios.get(API_ADDRESS.user.statistics).then((res) => {
+        this.statistics = res.data.data
+      })
+    }
+  },
+  created() {
+    this.getStatistics()
   }
 }
 </script>

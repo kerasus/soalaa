@@ -4,7 +4,7 @@
       :sections="sections"
       :options="options"
       :containerFullHeight="calculateHeightStyle"
-    ></page-builder>
+    />
   </div>
 </template>
 

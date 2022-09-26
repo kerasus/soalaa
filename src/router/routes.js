@@ -168,10 +168,18 @@ const routes = [
           {
 
             path: 'profile',
-            name: 'profile',
+            name: 'User.Profile',
             component: () => import('pages/User/profile/profile'),
             layoutConfig: {
               layoutLeftDrawerVisible: true
+            }
+          },
+          {
+            path: 'exam/create',
+            name: 'user-creat-exam',
+            component: () => import('pages/User/exam/Create/Create'),
+            layoutConfig: {
+              layoutLeftDrawerVisible: false
             }
           },
           {
@@ -180,9 +188,7 @@ const routes = [
             component: () => import('pages/User/Dashboard/Dashboard'),
             layoutConfig: {
               layoutHeaderVisible: true,
-              layoutHeaderType: 'default',
-              layoutLeftDrawerVisible: true,
-              layoutLeftSideBarType: 'default'
+              layoutLeftDrawerVisible: false
             },
             meta: {
               middlewares: [auth]
@@ -209,6 +215,31 @@ const routes = [
             },
             middleware: [
               Permissions.hasPermission('examStore')
+            ]
+          },
+          {
+            path: 'ticket',
+            component: () => import('layouts/bareLayout.vue'),
+            meta: {
+              middlewares: [auth]
+            },
+            name: 'User.Ticket',
+            children: [
+              {
+                path: '',
+                name: 'User.Ticket.Index',
+                component: () => import('pages/User/Ticket/Index.vue')
+              },
+              {
+                path: ':id',
+                name: 'User.Ticket.Show',
+                component: () => import('pages/User/Ticket/Show.vue')
+              },
+              {
+                path: 'create',
+                name: 'User.Ticket.Create',
+                component: () => import('pages/User/Ticket/Create.vue')
+              }
             ]
           }
         ]
