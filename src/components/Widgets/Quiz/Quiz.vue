@@ -217,7 +217,7 @@ export default defineComponent({
     border-top: 2px solid #E4E8EF;
 
     .q-tab-panel {
-      padding: 16px 0;
+      padding: 2px 0;
     }
 }
 
