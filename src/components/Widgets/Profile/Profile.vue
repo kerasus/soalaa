@@ -258,7 +258,7 @@ export default {
     edit () {
       const formData = this.$refs.EntityCrudFormBuilder.getFormData()
 
-      console.log('formData', formData)
+      // console.log('formData', formData)
       this.$axios.put(API_ADDRESS.user.edit(this.user.id), formData)
         .then((resp) => {
           // console.log(resp)

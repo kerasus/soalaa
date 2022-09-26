@@ -259,7 +259,7 @@ export default {
     createExammm() {
       this.$axios.get(API_ADDRESS.exam.user.create)
         .then((r) => {
-          console.log(r)
+          // console.log(r)
         })
     }
   }

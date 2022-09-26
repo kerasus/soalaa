@@ -3,7 +3,7 @@
     class="userExamList"
     style="font-size: 16px;"
   >
-    <!--    ToDo : add confirm-dialog-->
+    <!--    TODO: add confirm-dialog-->
     <!--    <vue-confirm-dialog />-->
     <div v-if="true"
          class="fit row wrap justify-center items-start content-start"
@@ -11,38 +11,45 @@
       <div class="col col-12 examList-container">
         <!-- TODO:
           - slider load data
-          - tab & tab panel
           - load tab panels data
           - paginator for tab panels
         -->
         <div class="slider-row">
-          <future-quizzes-carousel />
+          <future-quizzes-carousel :exams="upcomingExams" />
         </div>
         <div class="row">
           <div class="col-12">
-            <div class="test-list-title">
+            <div class="exam-list-title">
               آزمون ها
             </div>
             <q-tabs
               v-model="tab"
               color="light1"
-              class="test-tabs"
+              class="exam-tabs"
               active-color="secondary"
               align="left"
             >
-              <q-tab name="test"
+              <q-tab name="exam"
                      label="آزمون ها" />
-              <q-tab name="myTest"
+              <q-tab name="myExam"
                      label="آزمون های من" />
             </q-tabs>
             <q-tab-panels v-model="tab"
                           class="quiz-panels"
                           animated>
-              <q-tab-panel name="test">
-                <quiz-list :quizType="'test'" />
+              <q-tab-panel name="exam">
+                <quiz-list
+                  :quiz-type="'exam'"
+                  :exams="allExamsList"
+                  @onFilter="filterAllExams"
+                />
               </q-tab-panel>
-              <q-tab-panel name="myTest">
-                <quiz-list :quizType="'myTest'" />
+              <q-tab-panel name="myExam">
+                <quiz-list
+                  :quiz-type="'myExam'"
+                  :exams="myExams"
+                  @onFilter="filterMyExams"
+                />
               </q-tab-panel>
             </q-tab-panels>
           </div>
@@ -70,9 +77,12 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import FutureQuizzesCarousel from 'src/components/Quiz/FutureQuizzesCarousel'
 import QuizList from 'src/components/Quiz/QuizList'
+import API_ADDRESS from 'src/api/Addresses'
+import { ExamList } from 'src/models/Exam'
+import moment from 'moment'
 
 export default defineComponent({
   name: 'List',
@@ -81,19 +91,90 @@ export default defineComponent({
     FutureQuizzesCarousel,
     QuizList
   },
-  setup() {
-    const tab = ref('test')
-
+  data() {
     return {
-      tab
+      tab: 'exam',
+      allExamsList: new ExamList(),
+      upcomingExams: new ExamList(),
+      myExams: new ExamList()
+    }
+  },
+  mounted() {
+    // this.getAllExams()
+    this.getBaseExamList()
+    this.getMyExams()
+    this.getUpcomingExams()
+  },
+  methods: {
+    getBaseExamList () {
+      this.allExamsList.loading = true
+      this.$axios.get(API_ADDRESS.exam.userExamList.base())
+        .then((response) => {
+          this.allExamsList = new ExamList(response.data.data)
+          this.allExamsList.loading = false
+        })
+    },
+    filterMyExams(filterData) {
+      this.getMyExams(filterData.title, filterData.from, filterData.to)
+    },
+    filterAllExams(filterData) {
+      this.getAllExams(filterData.title, filterData.from, filterData.to)
+    },
+    getAllExams (title, start, end) {
+      this.allExamsList.loading = true
+      this.$axios.get(API_ADDRESS.exam.userExamList.base(),
+        {
+          params:
+            {
+              ...(title && { title }),
+              ...(start && { start_at_from: start }),
+              ...(end && { start_at_till: end })
+            }
+        })
+        .then((response) => {
+          this.allExamsList = new ExamList(response.data.data)
+          this.allExamsList.loading = false
+        })
+    },
+    getMyExams (title, start, end) {
+      this.myExams.loading = true
+      this.$axios.get(API_ADDRESS.exam.userExamList.myExams(),
+        {
+          params:
+            {
+              ...(title && { title }),
+              ...(start && { created_at_from: start }),
+              ...(end && { created_at_till: end })
+            }
+        })
+        .then((response) => {
+          this.myExams = new ExamList(response.data.data)
+          this.myExams.loading = false
+        })
+    },
+    getUpcomingExams () {
+      this.upcomingExams.loading = true
+      const today = moment(new Date(Date.now())).format('YYYY-MM-DD')
+      this.$axios.get(API_ADDRESS.exam.userExamList.upcomingExams(today))
+        .then((response) => {
+          this.upcomingExams = new ExamList(response.data.data)
+          this.upcomingExams.loading = false
+        })
     }
   }
+  // setup() {
+  //   const tab = ref('exam')
+  //
+  //   return {
+  //     tab
+  //   }
+  // }
 
 })
 </script>
 
 <style lang="scss">
-.test-tabs {
+.exam-tabs {
   color: #8A8CA6;
 
   &:deep(.q-tab__indicator) {
@@ -122,7 +203,7 @@ export default defineComponent({
 
   }
 }
-.test-list-title {
+.exam-list-title {
   margin: 20px 0 20px;
   font-style: normal;
   font-weight: 600;
