@@ -42,7 +42,7 @@
               <template v-slot:append>
                 <q-icon name="isax:search-normal-1"
                         class="search-icon"
-                        @click="searchInData" />
+                        @click="filterFormBuilderData" />
               </template>
             </q-input>
           </div>
@@ -61,25 +61,11 @@
                           caption="John Doe"
         >
           <div class="row filter-items">
-            <!--            col-lg-10 col-xs-12-->
             <div class="col-12">
               <form-builder ref="filterSlot"
                             :value="filterInputs"
                             @onClick="onClickFilterFormBuilder"
               />
-            </div>
-            <div v-if="false"
-                 class="action-btn col-lg-2 flex col-xs-12 items-end q-pb-md justify-end">
-              <q-btn icon="isax:rotate-left"
-                     class="reload-icon bg-white"
-                     unelevated
-                     @click="resetData"  />
-              <q-btn unelevated
-                     class="filter-btn"
-                     color="primary"
-                     padding="1px 23px"
-                     label="اعمال"
-                     @click="filterTable" />
             </div>
           </div>
         </q-expansion-item>
@@ -318,11 +304,25 @@ export default {
     }
   },
   methods: {
-    onClickFilterFormBuilder (event) {
-      console.log('event, input', event)
+    onClickFilterFormBuilder (data) {
+      data.event === 'reload' ? this.reloadFilterData() : this.filterFormBuilderData()
     },
-    searchInData() {
 
+    reloadFilterData() {
+      if (this.$refs.orderList) {
+        this.$refs.orderList.clearData()
+      }
+      if (this.$refs.filterSlot) {
+        this.$refs.filterSlot.clearFormBuilderInputValues()
+      }
+      this.searchInput = ''
+    },
+
+    filterFormBuilderData() {
+      if (!this.$refs.orderList) {
+        return
+      }
+      this.$refs.orderList.search()
     },
     updateInputsValue(name, newValue) {
       const input = this.getInput('inputs', name)
