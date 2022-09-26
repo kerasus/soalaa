@@ -122,7 +122,15 @@ export default defineComponent({
     },
     getAllExams (title, start, end) {
       this.allExamsList.loading = true
-      this.$axios.get(API_ADDRESS.exam.userExamList.allExams(title, start, end))
+      this.$axios.get(API_ADDRESS.exam.userExamList.base(),
+        {
+          params:
+            {
+              ...(title && { title }),
+              ...(start && { start_at_from: start }),
+              ...(end && { start_at_till: end })
+            }
+        })
         .then((response) => {
           this.allExamsList = new ExamList(response.data.data)
           this.allExamsList.loading = false
@@ -130,7 +138,15 @@ export default defineComponent({
     },
     getMyExams (title, start, end) {
       this.myExams.loading = true
-      this.$axios.get(API_ADDRESS.exam.userExamList.myExams(title, start, end))
+      this.$axios.get(API_ADDRESS.exam.userExamList.myExams(),
+        {
+          params:
+            {
+              ...(title && { title }),
+              ...(start && { created_at_from: start }),
+              ...(end && { created_at_till: end })
+            }
+        })
         .then((response) => {
           this.myExams = new ExamList(response.data.data)
           this.myExams.loading = false

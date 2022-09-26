@@ -91,41 +91,11 @@ const API_ADDRESS = {
       base () {
         return lumenServer + '/examAndUser'
       },
-      allExams(title, start, end) {
-        let route = ''
-        if (start) {
-          route = 'start_at_from=' + start
-        }
-        if (start && end) {
-          route = 'start_at_from=' + start + '&start_at_till=' + end
-        } else if (end) {
-          route = 'start_at_till=' + end
-        }
-        if (title) {
-          if (start || end) {
-            route += '&title=' + title
-          } else {
-            route = 'title=' + title
-          }
-        }
-        return lumenServer + '/examAndUser?' + route
-      },
       upcomingExams(start) {
         return lumenServer + '/examAndUser' + '?start_at_from=' + start
       },
-      myExams(title, start, end, designerType = 'personal') {
-        let route = '?designer_type=' + designerType
-        if (start) {
-          route += '&created_at_from=' + start
-          if (start && end) {
-            route += '&created_at_till=' + end
-          }
-        } else if (end) {
-          route += '&created_at_till=' + end
-        }
-        if (title) {
-          route += '&title=' + title
-        }
+      myExams(designerType = 'personal') {
+        const route = '?designer_type=' + designerType
         return lumenServer + '/examAndUser' + route
       }
 
