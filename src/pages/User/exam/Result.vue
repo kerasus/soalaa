@@ -231,8 +231,8 @@ export default {
         })
     },
     goToExamList () {
-      if (this.$route.name !== 'user.exam.list') {
-        this.$router.push({ name: 'user.exam.list' })
+      if (this.$route.name !== 'User.Exam.List') {
+        this.$router.push({ name: 'User.Exam.List' })
       }
     },
     loadKarname (report) {

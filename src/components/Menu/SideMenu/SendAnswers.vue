@@ -144,10 +144,11 @@ export default {
       }
     },
     confirmSendingAllAnswers () {
+      const that = this
       this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id, false)
         .then(response => {
-          this.$router.push({ name: 'user.exam.list' })
-          this.confirmationBubbleSheet = true
+          that.$router.push({ name: 'User.Exam.List' })
+          that.confirmationBubbleSheet = true
         })
     },
     showSendAnswerPhotoDialog () {
