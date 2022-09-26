@@ -19,6 +19,7 @@
     />
   </div>
 </template>
+
 <script>
 import API_ADDRESS from 'src/api/Addresses'
 import { Question } from 'src/models/Question'
@@ -107,6 +108,13 @@ export default {
 
 </style>
 <style lang="scss">
+/*rtl:ignore*/
+@import "src/css/katex-rtl-fix.scss";
+//rtl change bug fix
+[dir="rtl"] .katex {
+  @include katex-rtl-fix
+}
+
 .type-section.katex * {
   font-family: KaTeX_Main, Times New Roman, serif !important;
 }

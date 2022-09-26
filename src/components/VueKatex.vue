@@ -114,13 +114,11 @@ export default {
 <style lang="scss">
 /*rtl:ignore*/
 @import "katex/dist/katex.min.css";
+@import "src/css/katex-rtl-fix.scss";
 
 //rtl change bug fix
-.html-katex {
-  .katex .sqrt > .root {
-    margin-left:.27777778em;
-    margin-right:-.55555556em;
-  }
+[dir="rtl"] .html-katex {
+  @include katex-rtl-fix
 }
 
 .html-katex {
