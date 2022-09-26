@@ -4,7 +4,6 @@
     :class="{ 'selected': question.selected && !finalApprovalMode }"
   >
     <q-resize-observer @resize="onResize" />
-
     <q-card-section class="question-card-header row">
       <div class="question-info col-xl-9 col-sm-8 col-xs-12">
         <div
@@ -307,6 +306,8 @@
           :options="reportProblemDialog.options"
           option-value="id"
           option-label="value"
+          map-options
+          emit-value
           class="report-select-type"
         />
       </q-card-section>
@@ -336,7 +337,7 @@
           label="ثبت"
           color="primary"
           class="report-button"
-          @click="report"
+          @click="reportProblem"
         />
       </q-card-actions>
     </q-card>
@@ -471,7 +472,6 @@ export default {
     }
   },
   created () {
-    this.reportProblemDialog.options = this.reportOptions
     this.setPageConfig()
   },
   mounted () {
@@ -517,6 +517,10 @@ export default {
     setPageConfig () {
       this.applyPageStrategy()
       this.applyListConfig()
+      this.getQuestionReportOptions()
+    },
+    getQuestionReportOptions() {
+      this.reportProblemDialog.options = this.reportOptions
     },
     applyPageStrategy () {
       if (!this.pageStrategy) return
@@ -581,14 +585,23 @@ export default {
     emitAdminActions (action, data) {
       this.$emit(action, data)
     },
-    report () {
+    async reportProblem() {
       const params = {
         type_id: this.reportProblemDialog.problemType,
         body: this.reportProblemDialog.description
       }
-      this.$axios.post(API_ADDRESS.exam.user.report(this.question.id), params)
-        .then((response) => {
+      try {
+        await this.$axios.post(API_ADDRESS.exam.user.report(this.question.id), params)
+        this.$q.notify({
+          type: 'positive',
+          message: 'گزازش با موفقیت ثبت شد.'
         })
+      } catch (e) {
+        this.$q.notify({
+          type: 'negative',
+          message: 'مشکلی به وجود آمده.'
+        })
+      }
     }
   }
 }
@@ -1060,6 +1073,9 @@ export default {
     height: 225px;
     margin-top: 8px;
     margin-bottom: 24px;
+    :deep(.q-field__control){
+      height: 225px;
+    }
   }
 
   .action-box {
