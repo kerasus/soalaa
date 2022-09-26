@@ -3,19 +3,26 @@
     <q-btn icon="isax:rotate-left"
            class="reload-icon bg-white"
            unelevated
+           @click="onClick('reload')"
     />
     <q-btn unelevated
            class="filter-btn"
            color="primary"
            padding="1px 23px"
            label="اعمال"
+           @click="onClick('filter')"
     />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'actionBtn'
+  name: 'actionBtn',
+  methods: {
+    onClick (data) {
+      this.$emit('onClick', data)
+    }
+  }
 }
 </script>
 
