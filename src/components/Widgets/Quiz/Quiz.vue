@@ -3,7 +3,7 @@
     class="userExamList"
     style="font-size: 16px;"
   >
-    <!--    ToDo : add confirm-dialog-->
+    <!--    TODO: add confirm-dialog-->
     <!--    <vue-confirm-dialog />-->
     <div v-if="true"
          class="fit row wrap justify-center items-start content-start"
@@ -11,7 +11,6 @@
       <div class="col col-12 examList-container">
         <!-- TODO:
           - slider load data
-          - tab & tab panel
           - load tab panels data
           - paginator for tab panels
         -->
