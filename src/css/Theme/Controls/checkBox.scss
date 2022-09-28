@@ -14,4 +14,20 @@
     }
   }
 }
-
+.q-checkbox__svg{
+  width: 10px !important;
+  margin-left: 4px;
+}
+.q-checkbox__inner--truthy {
+  .q-checkbox__bg {
+    background: var(--3a-Secondary);
+    border: 1px solid var(--3a-Secondary) !important;
+    border-radius: 5px;
+  }
+}
+.q-checkbox__inner--falsy{
+  .q-checkbox__bg{
+    border: 1px solid #8A8CA6;
+    border-radius: 5px;
+  }
+}

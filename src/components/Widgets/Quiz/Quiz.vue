@@ -179,7 +179,7 @@ export default defineComponent({
 
   &:deep(.q-tab__indicator) {
     width: 100%;
-    height: 6px;
+    height: 16px;
     border-radius: 6px 6px 0 0;
   }
 
@@ -217,7 +217,7 @@ export default defineComponent({
     border-top: 2px solid #E4E8EF;
 
     .q-tab-panel {
-      padding: 16px 0;
+      padding: 2px 0;
     }
 }
 

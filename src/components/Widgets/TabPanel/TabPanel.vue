@@ -38,7 +38,7 @@
                  class="more-detail text-right">
               <q-btn
                 flat
-                :to="tabData.link"
+                :href="tabData.link"
                 style="color: #8075DC"
                 class="btn"
                 padding="9px 17px"

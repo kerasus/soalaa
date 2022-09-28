@@ -121,6 +121,7 @@
                 <q-btn
                   v-if="quizType === 'myExam'"
                   color="dark"
+                  :to="{name : 'User.Exam.Download'}"
                   class="quiz-action-download"
                   flat
                   icon="isax:import"

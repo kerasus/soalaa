@@ -24,7 +24,7 @@
         <q-btn
           unelevated
           color="primary"
-          :to="featureData.link"
+          :href="featureData.link"
           style="color: #8075DC"
           class="btn q-ma-none"
           padding="7px 15px 7px 15px"
