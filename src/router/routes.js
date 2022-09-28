@@ -182,6 +182,9 @@ const routes = [
           {
             path: 'user_exam_list',
             name: 'User.Exam.List',
+            layoutConfig: {
+              layoutLeftDrawerVisible: false
+            },
             component: () => import('pages/User/exam/List')
           },
           {
