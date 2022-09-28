@@ -447,6 +447,7 @@ export default defineComponent({
     const baseHour = ref(0)
     const chartWeek = ref([])
     const dayList = ref(['شنبه', 'یک‌شنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'آدینه'])
+    const monthList = ref(['فرودین', 'اردیبهشت', 'خرداد', 'تیر', 'امرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'])
     const tab = ref('month')
     const calendarYear = ref(null)
     const calendarDate = ref(null)
@@ -468,7 +469,7 @@ export default defineComponent({
       persianDate.value = new Intl.DateTimeFormat('fa-IR').format(calendarDate.value)
       startOfMonth.value = calendarDate.value.startOf('jMonth').format('dddd')
       startIndex.value = dayList.value.indexOf(startOfMonth.value)
-      calendarMonth.value = moment(calendarDate.value.jMonth(), 'jM').format('jMMMM')
+      calendarMonth.value = monthList.value[moment(calendarDate.value.jMonth(), 'jM').format('jM')]
       calendarYear.value = calendarDate.value.jWeekYear()
       dayNum.value = moment.jDaysInMonth(calendarYear.value, calendarDate.value.jMonth())
       isLeapYear.value = moment.jIsLeapYear(calendarDate.value.jWeekYear())
@@ -494,7 +495,7 @@ export default defineComponent({
       // import data to weekly view object
       for (let w = 0; w < 6; w++) {
         for (let col = 0; col < 7; col++) {
-          if (month.value[w][col].date === calendarDate.value.format('YYYY/MM/DD')) {
+          if (month.value[w][col].date === moment().format('YYYY/MM/DD')) {
             chartWeek.value = month.value[w]
           }
         }
@@ -506,6 +507,7 @@ export default defineComponent({
     }
 
     return {
+      calendarDate,
       baseHight,
       baseHour,
       month,
@@ -523,7 +525,7 @@ export default defineComponent({
   },
   methods: {
     getEvents() {
-      this.$axios.get(API_ADDRESS.exam.userExamList(this.startFrom, this.startTill)).then((res) => {
+      this.$axios.get(API_ADDRESS.exam.userExamList.base(), { params: { start_at_from: this.startFrom, start_at_till: this.startTill } }).then((res) => {
         for (let w = 0; w < 6; w++) {
           for (let col = 0; col < 7; col++) {
             for (let e = 0; e < res.data.data.length; e++) {
