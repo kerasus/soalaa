@@ -373,7 +373,7 @@ export default {
             position: 'top'
           })
           that.$store.commit('Exam/clearExamData', userExamId)
-          that.$router.push({ name: 'User.Exam.List' })
+          that.$router.push({ name: 'user.exam.list' })
         })
         .catch(() => {
           that.$q.notify({

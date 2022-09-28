@@ -143,7 +143,7 @@ const mixinQuiz = {
               text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
               type: 'error'
             })
-            that.$router.push({ name: 'User.Exam.List' })
+            that.$router.push({ name: 'user.exam.list' })
           })
       })
 
@@ -191,7 +191,7 @@ const mixinQuiz = {
       //           text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
       //           type: 'error'
       //         })
-      //         that.$router.push({ name: 'User.Exam.List' })
+      //         that.$router.push({ name: 'user.exam.list' })
       //       })
       //   })
       //
@@ -259,13 +259,13 @@ const mixinQuiz = {
               resolve(result)
             } catch (error) {
               console.error(error)
-              that.$router.push({ name: 'User.Exam.List' })
+              that.$router.push({ name: 'user.exam.list' })
               reject(error)
             }
           })
           .catch((error) => {
             reject(error)
-            that.$router.push({ name: 'User.Exam.List' })
+            that.$router.push({ name: 'user.exam.list' })
           })
           .finally(() => {
             that.$store.commit('loading/overlay', { loading: false, message: '' })
@@ -467,13 +467,13 @@ const mixinQuiz = {
               resolve(result)
             } catch (error) {
               console.error(error)
-              that.$router.push({ name: 'User.Exam.List' })
+              that.$router.push({ name: 'user.exam.list' })
               reject(error)
             }
           })
           .catch((error) => {
             reject(error)
-            that.$router.push({ name: 'User.Exam.List' })
+            that.$router.push({ name: 'user.exam.list' })
           })
           .finally(() => {
             that.$store.commit('loading/overlay', false)
