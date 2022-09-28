@@ -62,6 +62,12 @@ const API_ADDRESS = {
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=reference_type&with_pagination=true'
     },
+    questionReport: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/option',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=question_report_type&with_pagination=true'
+    },
     questionTarget: {
       show: lumenServer + '/option/',
       edit: lumenServer + '/option',
@@ -246,7 +252,10 @@ const API_ADDRESS = {
     uploadImage (questionId) {
       return lumenServer + '/question/upload/' + questionId
     },
-    printQuestions: lumenServer + '/question/export'
+    printQuestions: lumenServer + '/question/export',
+    report(questionId) {
+      return lumenServer + 'question/report/store/' + questionId
+    }
   },
   questionSubcategory: {
     base: lumenServer + '/sub-category',

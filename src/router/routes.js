@@ -48,6 +48,14 @@ const entityCrudRouteConfigs = [
 
   },
   {
+    path: 'questionReport',
+    baseRouteName: 'Admin.QuestionReport',
+    componentPath: 'pages/Admin/QuestionReport',
+    breadcrumbs: { title: 'گزارش خطا سوال' },
+    permissions: ['optionIndex', 'optionStore', 'optionShow', 'optionUpdate']
+
+  },
+  {
     path: 'QuestionTarget',
     baseRouteName: 'Admin.QuestionTarget',
     componentPath: 'pages/Admin/QuestionTarget.vue',
