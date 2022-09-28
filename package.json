@@ -51,7 +51,8 @@
     "vue-tiptap-katex-core": "^1.0.28",
     "vue-upload-component": "^3.0.50",
     "vue3-tiptap-katex": "^1.0.26",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.18.9",
