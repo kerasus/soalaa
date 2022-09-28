@@ -201,7 +201,7 @@ export default {
           message: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
           color: 'negative'
         })
-        that.$router.push({ name: 'User.Exam.List' })
+        that.$router.push({ name: 'user.exam.list' })
         console.error('error', error)
       })
   },
