@@ -201,12 +201,12 @@ export default {
               position: 'top'
             })
             this.$store.commit('Exam/clearExamData', this.userExamId)
-            this.$router.push({ name: 'user.exam.list' })
+            this.$router.push({ name: 'User.Exam.List' })
           }
           this.updateOverlay(false)
         }).catch((err) => {
           Assistant.reportErrors(err)
-          this.$router.push({ name: 'user.exam.list' })
+          this.$router.push({ name: 'User.Exam.List' })
           this.updateOverlay(false)
         })
     },
