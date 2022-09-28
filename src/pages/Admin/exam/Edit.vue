@@ -1,114 +1,112 @@
 <template>
-  <div>
-    <entity-edit
-      v-model:value="inputs"
-      title="ویرایش اطلاعات آزمون"
-      :api="api"
-      :entity-id-key="entityIdKey"
-      :entity-param-key="entityParamKey"
-      :show-route-name="showRouteName"
-      :before-load-input-data="beforeLoadInputData"
-    >
-      <template #after-form-builder>
-        <q-card class="category-card">
-          <q-card-section>
-            <h6 class="category-header q-ma-md">لیست دفترچه ها</h6>
-          </q-card-section>
-          <q-separator />
-          <q-card-section class="flex">
-            <div class="row bg-grey-3 add-category-box">
+  <entity-edit
+    v-model:value="inputs"
+    title="ویرایش اطلاعات آزمون"
+    :api="api"
+    :entity-id-key="entityIdKey"
+    :entity-param-key="entityParamKey"
+    :show-route-name="showRouteName"
+    :before-load-input-data="beforeLoadInputData"
+  >
+    <template #after-form-builder>
+      <q-card class="category-card">
+        <q-card-section>
+          <h6 class="category-header q-ma-md">لیست دفترچه ها</h6>
+        </q-card-section>
+        <q-separator />
+        <q-card-section class="flex">
+          <div class="row bg-grey-3 add-category-box">
+            <q-select
+              v-model="category.title"
+              class="q-pa-md col-md-4"
+              :value="category"
+              label="دفترچه"
+              :options="categoryOptions"
+              option-value="categoryOptions"
+              option-label="title"
+              emit-value
+              map-options
+              :disable="totalCategory"
+            />
+            <q-input
+              v-model="category.order"
+              class="q-pa-md col-md-3"
+              label="ترتیب"
+              :disable="totalCategory"
+            />
+            <q-input
+              v-model="category.time"
+              class="q-pa-md col-md-3"
+              label="زمان"
+              :disable="totalCategory"
+            />
+            <div class="q-pa-md col-md-2 flex">
+              <q-btn
+                class="q-ma-md"
+                icon="add"
+                color="green"
+                flat
+                dense
+                fab-mini
+                :disable="totalCategory"
+                @click="addCategory"
+              />
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-section>
+          <div
+            v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length === 0"
+            class="category-list">
+            <p class="bg-red-2 alert">در حال حاضر دفترچه ای به آزمون اضافه نشده است !</p>
+          </div>
+          <div
+            v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length > 0"
+            class="row"
+          >
+            <div
+              v-for="(category , index) in inputs[examCategoriesIndex].value"
+              :key="index"
+              class="row col-md-12 category-list-row"
+            >
               <q-select
                 v-model="category.title"
                 class="q-pa-md col-md-4"
-                :value="category"
+                :value="category.id"
                 label="دفترچه"
                 :options="categoryOptions"
-                option-value="categoryOptions"
+                option-value="id"
                 option-label="title"
                 emit-value
                 map-options
-                :disable="totalCategory"
               />
               <q-input
                 v-model="category.order"
                 class="q-pa-md col-md-3"
                 label="ترتیب"
-                :disable="totalCategory"
               />
               <q-input
                 v-model="category.time"
                 class="q-pa-md col-md-3"
                 label="زمان"
-                :disable="totalCategory"
               />
               <div class="q-pa-md col-md-2 flex">
                 <q-btn
                   class="q-ma-md"
-                  icon="add"
-                  color="green"
+                  icon="close"
+                  color="red"
                   flat
                   dense
                   fab-mini
-                  :disable="totalCategory"
-                  @click="addCategory"
+                  @click="deleteCategory(category.id)"
                 />
               </div>
             </div>
-          </q-card-section>
-          <q-card-section>
-            <div
-              v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length === 0"
-              class="category-list">
-              <p class="bg-red-2 alert">در حال حاضر دفترچه ای به آزمون اضافه نشده است !</p>
-            </div>
-            <div
-              v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length > 0"
-              class="row"
-            >
-              <div
-                v-for="(category , index) in inputs[examCategoriesIndex].value"
-                :key="index"
-                class="row col-md-12 category-list-row"
-              >
-                <q-select
-                  v-model="category.title"
-                  class="q-pa-md col-md-4"
-                  :value="category.id"
-                  label="دفترچه"
-                  :options="categoryOptions"
-                  option-value="id"
-                  option-label="title"
-                  emit-value
-                  map-options
-                />
-                <q-input
-                  v-model="category.order"
-                  class="q-pa-md col-md-3"
-                  label="ترتیب"
-                />
-                <q-input
-                  v-model="category.time"
-                  class="q-pa-md col-md-3"
-                  label="زمان"
-                />
-                <div class="q-pa-md col-md-2 flex">
-                  <q-btn
-                    class="q-ma-md"
-                    icon="close"
-                    color="red"
-                    flat
-                    dense
-                    fab-mini
-                    @click="deleteCategory(category.id)"
-                  />
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-      </template>
-    </entity-edit>
-  </div>
+          </div>
+        </q-card-section>
+      </q-card>
+    </template>
+  </entity-edit>
 </template>
 
 <script>
@@ -138,7 +136,7 @@ export default {
         {
           type: 'Select',
           name: 'type_id',
-          responseKey: 'data.type.value',
+          responseKey: 'data.type.id',
           label: ' انتخاب نوع آزمون',
           col: 'col-md-6',
           options: [],
@@ -187,18 +185,18 @@ export default {
         })
         .catch(() => {})
     },
+    setExamTypeOptions (options) {
+      const examTypeInputIndex = this.inputs.findIndex(item => item.name === 'type_id')
+      if (examTypeInputIndex === -1) {
+        return
+      }
+      this.inputs[examTypeInputIndex].options = options
+    },
     getOptions () {
       this.$axios.get(API_ADDRESS.option.base)
         .then((response) => {
           const options = response.data.data.filter(data => data.type === 'exam_type')
-          this.inputs.forEach(input => {
-            if (input.name === 'type_id') {
-              options.forEach(type => {
-                input.options.push(type)
-                input.value = type.id
-              })
-            }
-          })
+          this.setExamTypeOptions(options)
           this.addBreadcrumb()
         })
         .catch(() => {
