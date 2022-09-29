@@ -193,58 +193,38 @@
             </div>
           </div>
           pageCount : {{ pageCount }}
-<!--          <pdf-->
-<!--            src= 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase4moshavere.pdf' />-->
-          <!--          <PDFViewer   :source="pdfSrc" />-->
-          <!--          <embed  :src="pdfSrc"-->
-          <!--                  type="application/pdf"-->
-          <!--                  width="100%"-->
-          <!--                  height="600px" />-->
-          <!--          <iframe class="ifa full-width"-->
-          <!--                  frameborder="0"-->
-          <!--                  scrolling="no"-->
-          <!--                  style="border:1px solid #666CCC"-->
-          <!--                  :src="pdfSrc" />-->
-          <!--          <vue-pdf-embed-->
-          <!--            ref="pdfRef"-->
-
-          <!--            :source="pdfSrc"-->
-          <!--            :page="page"-->
-          <!--            @rendered="handleDocumentRender"-->
-          <!--          />-->
-          <q-pagination
-            v-model="page"
-            :max="pageCount"
-            direction-links
-            unelevated
-            color="black"
-            active-color="yellow"
-            active-text-color="black"
-            @update:model-value="onChangePage"
-          />
+          <div class="pdf-container">
+            <vue-pdf-embed
+              ref="pdfRef"
+              :page="page"
+              class="pdf"
+              :source="pdfSrc"
+              @rendered="handleDocumentRender"
+            />
+          </div>
         </q-tab-panel>
       </q-card>
+      <div class="row text-center justify-center pagination-box">
+        <q-pagination
+          v-model="page"
+          :max="pageCount"
+          icon-first="isax:arrow-right-4"
+          icon-next="isax:arrow-right"
+          icon-last="isax:arrow-left"
+          @update:model-value="onChangePage"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 
-// import VuePdfEmbed from 'vue-pdf-embed'
-// import VuePdfReader from 'vue-pdf-reader'
-// import pdf from 'vue-pdf-cdn'
-// import pdf from 'vue-pdf'
-// import VuePdf from '@boooooob/vue3-pdfjs'
-// import VuePdf from 'vue3-pdfjs'
-// import pdf from '@jbtje/vue3pdf'
+import VuePdfEmbed from 'vue-pdf-embed'
 export default {
   name: 'DownloadExam',
   components: {
-    // VuePdfEmbed,
-    // VuePdfReader
-    // pdf
-    // VuePdf
-    // pdf
+    VuePdfEmbed
   },
   data: () => ({
     tab: 'questions',
@@ -263,13 +243,10 @@ export default {
   }),
   methods: {
     handleDocumentRender(data) {
-      console.log('handleDocumentRender', data)
       this.pageCount = this.$refs.pdfRef.pageCount
-      console.log('  this.pageCount :', this.pageCount)
-      console.log('this.$refs.pdfRef :', this.$refs.pdfRef)
     },
     onChangePage(value) {
-      console.log('value :', value)
+      // console.log('value :', value)
     }
   }
 }
@@ -466,9 +443,30 @@ export default {
      padding: 30px 0 0 0;
       border-top: 1px solid #E4E8EF;
 
+      .pdf-container{
+        direction: rtl!important ;
+        :deep(.vue-pdf-embed){
+          direction: rtl!important;
+          canvas{
+            border-radius: 12px !important;
+          }
+        }
+        .pdf{
+          direction: rtl!important;
+          *{
+            direction: rtl!important;
+          }
+        }
+      }
+
+      .pagination-box{
+          margin-top: 30px;
+      }
+
       .ifa{
         height: 500px;
       }
+
       .question-info{
         font-style: normal;
         font-weight: 400;
@@ -507,9 +505,7 @@ export default {
           }
         }
       }
-
     }
-
   }
 }
 </style>
