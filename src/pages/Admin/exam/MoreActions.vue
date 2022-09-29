@@ -20,45 +20,39 @@
         </div>
       </div>
     </q-expansion-item>
-    <div class="q-pt-md">
-      <q-expansion-item
-        label="ویرایش کارنامه آزمون"
-        expand-separator
-      >
-        <portlet>
-          <template v-slot:title><span></span></template>
-          <template v-slot:content>
-            <edit-exam-report />
-          </template>
-        </portlet>
-      </q-expansion-item>
-    </div>
-    <div class="q-pt-md">
-      <q-expansion-item
-        expand-separator
-        label="آپلود فایل سوالات و جواب ها"
-      >
-        <portlet>
-          <template v-slot:title><span></span></template>
-          <template v-slot:content>
-            <upload />
-          </template>
-        </portlet>
-      </q-expansion-item>
-    </div>
-    <div class="q-pt-md">
-      <q-expansion-item
-        label="اصلاح ضرایب"
-        expand-separator
-      >
-        <portlet>
-          <template v-slot:title><span></span></template>
-          <template v-slot:content>
-            <edit-coefficients />
-          </template>
-        </portlet>
-      </q-expansion-item>
-    </div>
+    <q-expansion-item label="ویرایش کارنامه آزمون"
+                      expand-separator
+                      class="q-mt-md"
+    >
+      <portlet>
+        <template v-slot:title><span></span></template>
+        <template v-slot:content>
+          <edit-exam-report />
+        </template>
+      </portlet>
+    </q-expansion-item>
+    <q-expansion-item label="آپلود فایل سوالات و جواب ها"
+                      expand-separator
+                      class="q-mt-md"
+    >
+      <portlet>
+        <template v-slot:title><span></span></template>
+        <template v-slot:content>
+          <upload />
+        </template>
+      </portlet>
+    </q-expansion-item>
+    <q-expansion-item label="اصلاح ضرایب"
+                      expand-separator
+                      class="q-mt-md"
+    >
+      <portlet>
+        <template v-slot:title><span></span></template>
+        <template v-slot:content>
+          <edit-coefficients />
+        </template>
+      </portlet>
+    </q-expansion-item>
   </div>
 </template>
 
