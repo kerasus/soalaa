@@ -4,6 +4,7 @@ import { Exam } from 'src/models/Exam'
 import { QuestionList } from 'src/models/Question'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+// import { axios } from 'src/boot/axios'
 
 class ShuffleQuestions {
   constructor (questionList) {

@@ -118,7 +118,12 @@ export default {
 
 //rtl change bug fix
 [dir="rtl"] .html-katex {
-  @include katex-rtl-fix
+  @include katex-rtl-fix;
+  font-size: 1.2rem;
+  line-height: 4rem;
+  .katex {
+    font-size: 1.9rem;
+  }
 }
 
 .html-katex {
