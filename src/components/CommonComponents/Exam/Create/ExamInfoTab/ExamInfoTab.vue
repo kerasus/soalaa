@@ -6,7 +6,6 @@
         v-model:value="inputList"
       />
     </div>
-
     <div class="exam-info-buttons">
       <div
         class="exam-info-button back-button"
@@ -19,7 +18,6 @@
         @click="goToNextStep"
       >
         مرحله بعد
-
         <q-icon
           class="next-button-icon"
           name="isax:arrow-left"

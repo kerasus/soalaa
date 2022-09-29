@@ -163,6 +163,7 @@ export default {
     cursor: pointer;
     display: flex;
     align-items: center;
+    width: 33%;
 
     &.choose-questions {
       .line {
@@ -184,6 +185,7 @@ export default {
   }
   .title{
     margin-right: 16px;
+    min-width: 100px;
   }
   .line {
     height: 1.5px;
