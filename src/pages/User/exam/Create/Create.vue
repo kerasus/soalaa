@@ -45,7 +45,7 @@ export default {
           responseKey: 'data.question_type',
           label: 'نوع سوالات',
           placeholder: ' ',
-          options: [{ label: 'konkur', value: '6225f4828044517f52500c04' }, { label: 'psychometric', value: '6225f4828044517f52500c05' }, { label: 'descriptive', value: '6225f4828044517f52500c06' }],
+          options: [],
           col: 'col-12 col-md-3 col-sm-6',
           icon: 'isax:arrow-right-3'
         },
