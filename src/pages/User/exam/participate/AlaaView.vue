@@ -1,6 +1,5 @@
 <template>
-  <div class="row quiz-page"
-       :style="{ height: '100%'}">
+  <div class="row quiz-page">
     <div class="col "
          :style="{ 'min-height': '100%' }">
       <div class="row main-page"
@@ -272,7 +271,8 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 0px 0px 0px 12px;
+  padding: 0 0 0 12px;
+  min-height: calc( 100vh - 100px );
   .timer-row {
     //max-width: calc(75% - 150px);
     width: calc(75% - 150px);

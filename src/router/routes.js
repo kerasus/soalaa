@@ -182,7 +182,18 @@ const routes = [
           {
             path: 'user_exam_list',
             name: 'User.Exam.List',
+            layoutConfig: {
+              layoutLeftDrawerVisible: false
+            },
             component: () => import('pages/User/exam/List')
+          },
+          {
+            path: '/faq',
+            name: 'faq',
+            layoutConfig: {
+              layoutLeftDrawerVisible: false
+            },
+            component: () => import('src/pages/CommonQuestions/list')
           },
           {
             path: 'ticket',
@@ -545,16 +556,6 @@ const routes = [
         name: 'user.exam.results',
         component: () => import('pages/User/exam/Result'),
         middleware: [auth]
-      },
-      {
-        path: '/faq',
-        name: 'faq',
-        component: () => import('src/pages/CommonQuestions/list'),
-        meta: {
-          middlewares: [
-            auth
-          ]
-        }
       },
       {
         path: '/onlineQuiz/alaaView/:quizId/:questNumber',
