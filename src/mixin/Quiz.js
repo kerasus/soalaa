@@ -421,7 +421,7 @@ const mixinQuiz = {
 
       return currentExamQuestionsArray
     },
-    startExam (examId, viewType) {
+    startExam (examId, viewType, retake) {
       if (!Assistant.getId(examId)) {
         return
       }
@@ -429,12 +429,12 @@ const mixinQuiz = {
       return new Promise((resolve, reject) => {
         let userExamId
         const examData = new ExamData(this.$axios)
-        if (that.needToLoadQuizData()) {
+        if (that.needToLoadQuizData() || retake) {
           that.saveCurrentExamQuestions([])
           that.$store.commit('Exam/cleanCurrentQuestion')
           that.bookletsDialog = true
           that.$store.commit('loading/overlay', true)
-          examData.getExamDataAndParticipate(examId)
+          examData.getExamDataAndParticipate(examId, retake)
           examData.loadQuestionsFromFile()
         } else {
           userExamId = that.quiz.user_exam_id

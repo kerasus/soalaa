@@ -97,23 +97,29 @@
                     </div>
                     <div class="col col-12 col-md-4 examList-action-section"
                     >
-                      <q-btn
-                        v-if="item.exam_actions.can_register"
-                        class="exam-action-big-btn exam-btn-text"
-                        style="background: #4CAF50"
-                        flat
-                        @click="registerExam(item)"
+                      <q-btn v-if="item.exam_actions.can_register"
+                             class="exam-action-big-btn exam-btn-text"
+                             style="background: #4CAF50"
+                             flat
+                             @click="registerExam(item)"
                       >
                         ثبت نام در آزمون
                       </q-btn>
-                      <q-btn
-                        v-if="item.exam_actions.can_start"
-                        class="exam-action-big-btn exam-btn-text"
-                        style="background: #9690E4"
-                        flat
-                        @click="goToParticipateExamPage(item)"
+                      <q-btn v-if="item.exam_actions.can_start"
+                             class="exam-action-big-btn exam-btn-text"
+                             style="background: #9690E4"
+                             flat
+                             @click="goToParticipateExamPage(item)"
                       >
                         شروع آزمون
+                      </q-btn>
+                      <q-btn v-if="item.exam_actions.can_retake"
+                             class="exam-action-big-btn exam-btn-text q-mx-xs"
+                             style="background: #9690E4"
+                             flat
+                             @click="showRetakeConfirmation(item)"
+                      >
+                        شروع مجدد
                       </q-btn>
                       <div class="exam-list-exam-actions">
                         <q-btn
@@ -295,8 +301,29 @@ export default {
       }
       this.$router.push({ name: routeName, params: { user_exam_id: exam.user_exam_id, exam_id: exam.id } })
     },
-    goToParticipateExamPage (exam) {
-      let routeName = 'onlineQuiz.alaaView'
+    showRetakeConfirmation (exam) {
+      this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
+        message: 'با زدن دکمه تایید گزینه های شما حدف نمی شوند اما زمان آزمون شما از اول شروع می شود',
+        buttons: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: async (confirm) => {
+          if (confirm) {
+            this.goToParticipateExamPage(exam, true)
+          }
+          this.closeConfirmModal()
+        }
+      })
+    },
+    closeConfirmModal () {
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        show: false
+      })
+    },
+    goToParticipateExamPage (exam, retake) {
+      let routeName = retake ? 'onlineQuiz.alaaView.retake' : 'onlineQuiz.alaaView'
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
         routeName = 'onlineQuiz.mbtiBartle'
       }

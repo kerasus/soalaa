@@ -190,7 +190,8 @@ export default {
   },
   methods: {
     startExamProcess () {
-      this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
+      const retake = this.$route.name === 'onlineQuiz.alaaView.retake'
+      this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView', retake)
         .then(() => {
           this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
           if (this.getCurrentExamQuestionsInArray().length === 0) {
