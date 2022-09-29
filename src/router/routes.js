@@ -236,6 +236,9 @@ const routes = [
             }
           },
           {
+            name: 'User.Exam.Download',
+            path: 'download_exam',
+            component: () => import('pages/User/exam/Download/Download'),
             path: '/faq',
             name: 'faq',
             layoutConfig: {
