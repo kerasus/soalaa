@@ -171,8 +171,8 @@ export default {
         { type: 'input', name: 'email', label: 'شماره سفارش', col: 'col-md-3' },
         { type: 'input', name: 'address', label: 'شماره تیکت', col: 'col-md-3' },
         { type: 'input', name: 'postal_code', label: 'عنوان', col: 'col-md-3' },
-        { type: 'date', name: 'from', responseKey: 'data.from', label: 'از:', col: 'col-md-3' },
-        { type: 'date', name: 'to', label: 'تا:', col: 'col-md-3' },
+        { type: 'date', name: 'from', responseKey: 'data.from', calendarIcon: ' ', label: 'از:', col: 'col-md-3' },
+        { type: 'date', name: 'to', label: 'تا:', calendarIcon: ' ', col: 'col-md-3' },
         {
           type: 'entity',
           name: 'management',

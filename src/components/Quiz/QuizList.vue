@@ -192,7 +192,7 @@ export default defineComponent({
         col: 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6',
         value: [
           { type: 'separator', label: 'از', size: '0', separatorType: 'none', col: 'col-1' },
-          { type: 'date', name: 'from', responseKey: 'fromDate', value: '2022-08-27', col: 'col-11' }
+          { type: 'date', name: 'from', responseKey: 'fromDate', calendarIcon: ' ', value: '2022-08-27', col: 'col-11' }
         ]
       },
       {
@@ -201,7 +201,7 @@ export default defineComponent({
         col: 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6',
         value: [
           { type: 'separator', label: 'تا', size: '0', separatorType: 'none', col: 'col-1' },
-          { type: 'date', name: 'to', responseKey: 'toDate', value: '2022-08-27', col: 'col-11' }
+          { type: 'date', name: 'to', responseKey: 'toDate', calendarIcon: ' ', value: '2022-08-27', col: 'col-11' }
         ]
       }
     ]
