@@ -119,8 +119,22 @@
                    filled
                    prefix=" cm | "
           />
+
           <div class="sub-title">
             صفحه بندی سوالات
+          </div>
+          <div class="radio-btn">
+            <q-radio v-model="radioOne"
+                     val=""
+                     label="بله" />
+
+            <q-radio v-model="radioTow"
+                     val=""
+                     label="خیر" />
+          </div>
+
+          <div class="sub-title">
+            شماره اولین صفحه سوال
           </div>
           <q-input v-model="number"
                    type="number"
@@ -143,33 +157,82 @@
       <q-card>
         <q-tabs
           v-model="tab"
-          class="test-tabs"
+          class="tabs-box"
           active-color="secondary"
           align="left"
         >
-          <q-tab name="test"
+          <q-tab name="questions"
                  label="سوالات" />
-          <q-tab name="myTest"
+          <q-tab name="descriptiveAnswer"
                  label="پاسخنامه تشریحی" />
-          <q-tab name="mymyTest"
+          <q-tab name="keyAnswer"
                  label="پاسخنامه کلیدی" />
         </q-tabs>
         <q-tab-panel class="tab-panel-style"
-                     name="test">
-          <div class="question-count">
-
+                     name="questions">
+          <div class="question-info flex">
+            <div class="question-count">
+              تعداد کل سوالات : 50
+            </div>
+            <div class="pages">
+              تعداد کل صفحات : 14
+            </div>
+            <div class="action-box full-width flex justify-between items-end">
+              <div class="description">
+                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،
+              </div>
+              <div class="action-btn">
+                <q-btn unelevated
+                       class="btn cancel"
+                       label="انصراف"></q-btn>
+                <q-btn unelevated
+                       color="primary"
+                       class="btn"
+                       label="دانلود PDF"></q-btn>
+              </div>
+            </div>
+          </div>
+          pageCount : {{ pageCount }}
+          <div class="pdf-container">
+            <vue-pdf-embed
+              ref="pdfRef"
+              :page="page"
+              class="pdf"
+              :source="pdfSrc"
+              @rendered="handleDocumentRender"
+            />
           </div>
         </q-tab-panel>
       </q-card>
+      <div class="row text-center justify-center pagination-box">
+        <q-pagination
+          v-model="page"
+          :max="pageCount"
+          icon-first="isax:arrow-right-4"
+          icon-next="isax:arrow-right"
+          icon-last="isax:arrow-left"
+          @update:model-value="onChangePage"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+
+import VuePdfEmbed from 'vue-pdf-embed'
 export default {
   name: 'DownloadExam',
+  components: {
+    VuePdfEmbed
+  },
   data: () => ({
-    tab: 'test',
+    tab: 'questions',
+    pageCount: 0,
+    page: 1,
+    pdfSrc: 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase4moshavere.pdf',
+    radioOne: false,
+    radioTow: false,
     pafConfig: {
       hasTitle: false,
       hasMajor: true,
@@ -177,7 +240,15 @@ export default {
       hasCreator: true,
       space: 0
     }
-  })
+  }),
+  methods: {
+    handleDocumentRender(data) {
+      this.pageCount = this.$refs.pdfRef.pageCount
+    },
+    onChangePage(value) {
+      // console.log('value :', value)
+    }
+  }
 }
 </script>
 
@@ -249,7 +320,6 @@ export default {
         margin-bottom: 16px;
       }
     }
-
     .spaces {
       .sub-title {
         font-weight: 400;
@@ -307,6 +377,21 @@ export default {
         margin-bottom: 8px;
         margin-top: 20px;
       }
+
+      .radio-btn{
+        .q-radio {
+          .q-radio__inner {
+            .q-radio__icon-container {
+              border-radius: 50%;
+              color: white;
+              background: var(--3a-Secondary);
+              i {
+                font-size: 16px;
+              }
+            }
+          }
+        }
+      }
     }
   }
 
@@ -323,41 +408,103 @@ export default {
 
     }
 
-    .test-tabs {
+    .tabs-box {
       color: #8A8CA6;
 
-      &:deep(.q-tab__indicator) {
+      :deep(.q-tab__indicator) {
         width: 100%;
-        //left: 18px;
-        height: 2px;
+        height: 3px;
         padding-right: 30px;
         border-radius: 6px;
       }
 
-      &:deep(.q-tab) {
+      :deep(.q-tab) {
         color: var(--3a-TextSecondary);
         padding: 0;
       }
 
-      &:deep(.q-tab__content) {
+      :deep(.q-tab__content) {
         padding: 0;
+        border-radius: 0 !important;
       }
 
       :deep(.q-tab--inactive) {
-        &:deep(.q-tab__label) {
-          font-weight: 400;
-          font-size: 16px;
-          line-height: 25px;
-          text-align: right;
-          letter-spacing: -0.03em;
-          color: #6D708B;
-        }
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 25px;
+        text-align: right;
+        letter-spacing: -0.03em;
+        color: #6D708B;
       }
 
     }
 
     .tab-panel-style {
      padding: 30px 0 0 0;
+      border-top: 1px solid #E4E8EF;
+
+      .pdf-container{
+        direction: rtl!important ;
+        :deep(.vue-pdf-embed){
+          direction: rtl!important;
+          canvas{
+            border-radius: 12px !important;
+          }
+        }
+        .pdf{
+          direction: rtl!important;
+          *{
+            direction: rtl!important;
+          }
+        }
+      }
+
+      .pagination-box{
+          margin-top: 30px;
+      }
+
+      .ifa{
+        height: 500px;
+      }
+
+      .question-info{
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+        text-align: right;
+        color: #434765;
+        margin-bottom: 5px;
+        .question-count{
+          margin-right: 33px;
+        }
+      }
+
+      .action-box{
+        .description{
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 22px;
+          text-align: right;
+          color: #434765;
+        }
+        .cancel{
+          margin-right: 12px;
+          background: #F2F5F9;
+          :deep(.q-btn__content){
+            color: #6D708B;
+          }
+        }
+        .btn{
+          width: 120px;
+          :deep(.q-btn__content){
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 22px;
+            letter-spacing: -0.03em;
+          }
+        }
+      }
     }
   }
 }

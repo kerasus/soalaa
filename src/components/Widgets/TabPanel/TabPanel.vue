@@ -19,7 +19,7 @@
         <q-tab v-for="(tab, index) in tabs"
                :key="index"
                :name="index"
-               icon="img:https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/2_on.png"
+               :icon="tabIcon(index, tab.icon, tab.icon2)"
                class="tab-style"
                :label="tab.key"
         />
@@ -77,12 +77,15 @@ export default {
     this.initPageData()
   },
   methods: {
+    tabIcon(index, icon, icon2) {
+      const iconImg = index === this.activeTab ? icon : icon2
+      return 'img:' + iconImg
+    },
     async initPageData() {
       this.loading = true
       try {
         const response = await this.getData(API_ADDRESS.homePage.base)
         this.tabs = response.data.data.tabs
-        // console.log('tabs :', this.tabs)
         this.loading = false
       } catch (e) {
         this.loading = false
@@ -156,16 +159,15 @@ export default {
       padding: 0 34px;
     }
   }
+
   .tab-panel-container{
     margin-bottom: 80px;
     @media screen and (max-width: 1439px) {
       margin-bottom: 40px;
     }
     .active-tab{
-      &:deep(.q-tab__content){
-        .q-tab__label{
-          color: #9690E4;
-        }
+      :deep(.q-tab__label){
+        color: #9690E4 !important;
       }
     }
     .active-container{
@@ -229,6 +231,9 @@ export default {
         }
         .content{
           margin-right: 40px;
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-template-rows: min-content;
           @media screen and (max-width: 1439px){
             margin-right: 0;
             margin-bottom: 20px;
@@ -281,7 +286,7 @@ export default {
             }
           }
           .more-detail{
-
+            align-self: flex-end;
             .btn{
               color: #8075DC;
               font-style: normal;

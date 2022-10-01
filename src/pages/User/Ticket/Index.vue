@@ -155,8 +155,8 @@ export default {
         // { type: 'select', options: ['test'], name: 'status', label: 'وضعیت', col: 'col-md-3' },
         // { type: 'input', name: 'email', label: 'شماره سفارش', col: 'col-md-3' },
         // { type: 'input', name: 'address', label: 'شماره تیکت', col: 'col-md-3' },
-        { type: 'date', name: 'from', responseKey: 'data.from', label: 'از:', col: 'col-md-6' },
-        { type: 'date', name: 'to', label: 'تا:', col: 'col-md-6' },
+        { type: 'date', name: 'from', calendarIcon: ' ', responseKey: 'data.from', label: 'از:', col: 'col-md-6' },
+        { type: 'date', name: 'to', calendarIcon: ' ', label: 'تا:', col: 'col-md-6' },
         { type: 'hidden', name: 'department', value: 12, col: 'col-md-12' }
       ]
     }

@@ -1,11 +1,14 @@
 <template>
   <div class="row user-panel-layout">
-    <user-side-bar
+    <div
       v-if="hasNavigationBar"
       class="user-side-bar col-xl-3 col-lg-3 col-md-3"
-    />
+    >
+      <user-side-bar />
+    </div>
+
     <div class="col-xl-9 col-lg-9 col-md-9 col-12 user-panel-content"
-         :class="{'col-xl-12 col-lg-12 col-md-12 col-12' : !hasNavigationBar}"
+         :class="{'col-xl-12' : !hasNavigationBar}"
     >
       <Router :include="keepAliveComponents" />
     </div>
@@ -36,7 +39,7 @@ export default {
       return this.$store.getters['AppLayout/windowSize']
     },
     hasNavigationBar() {
-      return this.getTemplateLeftSideBarType === 'default' && !this.getLayoutLeftDrawerVisibility
+      return this.getTemplateLeftSideBarType === 'default' && this.getLayoutLeftDrawerVisibility
     }
   },
   created () {

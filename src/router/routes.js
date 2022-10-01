@@ -116,7 +116,7 @@ const routes = [
 
       },
       {
-        path: 'landing',
+        path: 'landing/3a_exams',
         name: 'landing',
         component: () => import('layouts/LandingLayout'),
         children: [
@@ -186,7 +186,8 @@ const routes = [
             name: 'User.Create.Exam',
             component: () => import('pages/User/exam/Create/Create'),
             layoutConfig: {
-              layoutLeftDrawerVisible: false
+              layoutLeftDrawerVisible: false,
+              layoutLeftSideBarType: 'none'
             }
           },
           {
@@ -218,16 +219,13 @@ const routes = [
           },
           {
             name: 'User.Exam.Download',
-            path: '/download',
+            path: 'download_exam',
             component: () => import('pages/User/exam/Download/Download'),
             layoutConfig: {
               layoutHeaderVisible: true,
               layoutLeftSideBarType: 'test',
               layoutLeftDrawerVisible: false
-            },
-            middleware: [
-              Permissions.hasPermission('examStore')
-            ]
+            }
           },
           {
             path: 'ticket',

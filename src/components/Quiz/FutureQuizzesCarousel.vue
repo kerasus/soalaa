@@ -26,9 +26,10 @@
         <div class="test-box">
           <div class="test-box-content">
             <div class="test-box-image">
-              <img v-if="!!slide.photo"
-                   :src="slide.photo"
-                   alt="image">
+              <q-img v-if="!!slide.photo"
+                     :src="slide.photo"
+                     class="img"
+                     alt="image" />
             </div>
             <div class="test-box-info">
               <div class="test-box-title">
@@ -210,6 +211,14 @@ export default defineComponent({
         width: 102px;
         height: 102px;
         border-radius: 8px;
+        .img{
+          width: 100%;
+          height: 100%;
+          border-radius: inherit;
+          :deep(.q-img__image){
+            object-fit: fill !important;
+          }
+        }
 
         @media screen and (max-width: 600px) {
           width: 64px;

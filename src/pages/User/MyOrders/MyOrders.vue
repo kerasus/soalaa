@@ -18,20 +18,23 @@
       </div>
     </div>
   </div>
-  <div v-else
-       class="my-orders-list"
+  <div
+    v-else
+    class="my-orders-list"
   >
     <div class="title">سفارش های من</div>
-    <entity-index ref="orderList"
-                  v-model:value="inputs"
-                  class="orders-list-entity-index"
-                  title="سفارش های من"
-                  :api="getEntityApi"
-                  :table="table"
-                  :table-keys="tableKeys"
-                  :default-layout="false"
-                  :table-grid-size="$q.screen.lt.sm"
-                  :create-route-name="'Admin.Exam.Create'"
+    <entity-index
+      ref="orderList"
+      v-model:value="inputs"
+      class="orders-list-entity-index"
+      title="سفارش های من"
+      :api="getEntityApi"
+      :table="table"
+      :table-keys="tableKeys"
+      :default-layout="false"
+      :table-grid-size="$q.screen.lt.sm"
+      :create-route-name="'Admin.Exam.Create'"
+      @onPageChanged="onPageChange"
     >
       <template v-slot:before-index-table="">
         <div class="row items-center search-box">
@@ -72,7 +75,6 @@
       </template>
       <template #table-cell="{inputData}">
         <q-td :props="inputData.props">
-          {{setHasUserOrderedValue(inputData.props.row)}}
           <template v-if="inputData.props.col.name === 'details'">
             <q-btn round
                    flat
@@ -188,7 +190,7 @@ export default {
   },
   data() {
     return {
-      filterExpanded: true,
+      filterExpanded: false,
       inputs: [
         { type: 'hidden', name: 'paymentStatuses', class: '', responseKey: 'paymentStatuses', col: 'col-12 col-lg-12 col-sm-6' },
         { type: 'hidden', name: 'since', responseKey: 'since', col: 'col-12 col-lg-12 col-sm-6' },
@@ -196,7 +198,7 @@ export default {
         { type: 'hidden', name: 'search', responseKey: 'search', col: 'col-12 col-lg-12 col-sm-6' }
       ],
       filterInputs: [
-        { type: 'select', name: 'paymentStatuses', dropdownIcon: 'isax:arrow-down-1', optionValue: 'id', optionLabel: 'title', responseKey: 'paymentStatuses', label: 'وضعیت پرداخت', placeholder: ' ', col: 'filter-option col-sm-6 col-lg-4 col-xs-12' },
+        { type: 'select', name: 'paymentStatuses', dropdownIcon: 'isax:arrow-down-1', optionValue: 'id', optionLabel: 'name', responseKey: 'paymentStatuses', label: 'وضعیت پرداخت', placeholder: ' ', col: 'filter-option col-sm-6 col-lg-4 col-xs-12' },
         { type: 'date', name: 'since', responseKey: 'since', label: 'تاریخ سفارش', placeholder: ' از', calendarIcon: ' ', col: 'col-lg-3 col-sm-6 col-xs-12' },
         { type: 'date', name: 'till', label: ' ', placeholder: 'تا', calendarIcon: ' ', responseKey: 'till', col: 'col-lg-3 col-sm-6 col-xs-12' },
         { type: ActionBtn, name: 'ActionBtn', col: 'col-lg-2 col-sm-6 col-xs-12' }
@@ -292,7 +294,7 @@ export default {
       return this.getInput('filterInputs', 'till').value
     },
     getEntityApi() {
-      return API_ADDRESS.user.getOrderList(this.user.id)
+      return API_ADDRESS.user.orders.userOrders
     },
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']
@@ -304,18 +306,24 @@ export default {
     }
   },
   methods: {
+    onPageChange(response) {
+      this.hasUserOrdered = response.data.data.length > 0
+    },
     onClickFilterFormBuilder (data) {
       data.event === 'reload' ? this.reloadFilterData() : this.filterFormBuilderData()
     },
 
     reloadFilterData() {
-      if (this.$refs.orderList) {
-        this.$refs.orderList.clearData()
-      }
       if (this.$refs.filterSlot) {
         this.$refs.filterSlot.clearFormBuilderInputValues()
       }
       this.searchInput = ''
+      // need to $nextTick
+      this.$nextTick(() => {
+        if (this.$refs.orderList) {
+          this.$refs.orderList.reload()
+        }
+      })
     },
 
     filterFormBuilderData() {
