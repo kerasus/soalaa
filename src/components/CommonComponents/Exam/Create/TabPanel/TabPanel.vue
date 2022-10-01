@@ -71,6 +71,27 @@
           </q-card-section>
         </q-card>
       </q-dialog>
+      <q-dialog v-model="draftDialog"
+                persistent>
+        <q-card>
+          <q-card-section class="row items-center">
+            <div class="q-ma-md">
+              شما یک آزمون ساخته شده دارید ، آیا تمایل به ادامه فرآیند ساخت آن دارید؟
+            </div>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn v-close-popup
+                   flat
+                   label="انصراف"
+                   color="primary"
+                   @click="clearDraft" />
+            <q-btn v-close-popup
+                   label="ادامه"
+                   color="primary"
+                   @click="setDraft" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </div>
   </div>
 </template>
@@ -110,7 +131,9 @@ export default {
       allTabs: ['createPage', 'chooseQuestion', 'finalApproval'],
       isExamDataInitiated: false,
       examConfirmedDialog: false,
-      accept: false
+      accept: false,
+      draftDialog: false,
+      draftExam: new Exam()
     }
   },
 
@@ -128,7 +151,10 @@ export default {
     onLoadPage() {
       this.$axios.get(API_ADDRESS.exam.user.draft())
         .then(() => {
-          // console.log(response)
+          if (response.data.data !== null) {
+            this.draftDialog = true
+            this.draftExam = new Exam(response.data.data)
+          }
         }).catch(() => {
         })
     },
@@ -271,6 +297,12 @@ export default {
         .then(() => {
           // console.log(r)
         })
+    },
+    setDraft() {
+      this.exam = new Exam(this.draftExam)
+    },
+    clearDraft() {
+      this.draftExam = {}
     }
   }
 
