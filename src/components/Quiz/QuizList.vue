@@ -192,8 +192,24 @@ export default defineComponent({
     typeOptions: ['تست', 'تشریحی', 'ترکببی'],
     filterBar: false,
     inputs: [
-      { type: 'date', name: 'from', label: ' ', placeholder: 'از', calendarIcon: ' ', responseKey: 'fromDate', value: '', col: 'col-6' },
-      { type: 'date', name: 'to', label: ' ', placeholder: 'تا', responseKey: 'toDate', calendarIcon: ' ', value: '', col: 'col-6' }
+      {
+        type: 'formBuilder',
+        name: 'formBuilderCol',
+        col: 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6',
+        value: [
+          { type: 'separator', label: 'از', size: '0', separatorType: 'none', col: 'col-1' },
+          { type: 'date', name: 'from', responseKey: 'fromDate', calendarIcon: ' ', value: '2022-08-27', col: 'col-11' }
+        ]
+      },
+      {
+        type: 'formBuilder',
+        name: 'formBuilderCol',
+        col: 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6',
+        value: [
+          { type: 'separator', label: 'تا', size: '0', separatorType: 'none', col: 'col-1' },
+          { type: 'date', name: 'to', responseKey: 'toDate', calendarIcon: ' ', value: '2022-08-27', col: 'col-11' }
+        ]
+      }
     ]
   }),
   created () {
