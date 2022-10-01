@@ -50,6 +50,7 @@ const Time = (function () {
   }
   function now (justDate) {
     if (!window.serverDate?.offset) {
+      window.serverDate = {}
       window.serverDate.offset = 0
     }
     const serverDate = new Date(Date.now() + window.serverDate.offset)
