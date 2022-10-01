@@ -1,22 +1,82 @@
 <template>
-  <div class="next-exam">
+  <div v-if="countDown !== 0"
+       class="next-exam">
     <div class="title">
       <div class="base-title">تا آزمون بعدی</div>
       <div class="exam ellipsis"> ( آزمون پنجم - پایه یازدهم رشته انسانی )</div>
     </div>
     <div class="time-section">
-      <div class="time">2:30:15</div>
+      <div class="time">{{ Math.floor(countDown/3600) + ':' + Math.floor((countDown%3600)/60) + ':' + (countDown%3600)%60}}</div>
       <div class="remaining">
         <span class="hidden">روز</span>
         مانده
       </div>
     </div>
   </div>
+  <div v-else
+       class="next-exam">
+    <div class="title">
+      <div class="base-title">
+        در حال حاضر آزمونی وجود ندارد
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import moment from 'moment-jalaali'
+import API_ADDRESS from 'src/api/Addresses'
+
 export default {
-  name: 'NextExam'
+  name: 'NextExam',
+  data() {
+    return {
+      exam: '',
+      calendarDate: null,
+      calendarYear: null,
+      dayNum: null,
+      startFrom: null,
+      startTill: null,
+      lastExam: null,
+      countDown: 0
+    }
+  },
+  methods: {
+    getExams() {
+      this.calendarDate = moment(new Date())
+      this.calendarYear = this.calendarDate.jWeekYear()
+      this.dayNum = moment.jDaysInMonth(this.calendarYear, this.calendarDate.jMonth())
+      this.startFrom = moment(`${this.calendarYear}/${this.calendarDate.jMonth() + 1}/${moment().startOf('jMonth').jDate()}`, 'jYYYY/jM/jD').format('YYYY-M-D')
+      this.startTill = moment(`${this.calendarYear}/${this.calendarDate.jMonth() + 1}/${this.dayNum}`, 'jYYYY/jM/jD').format('YYYY-M-D')
+      this.$axios.get(API_ADDRESS.exam.userExamList.base(), { params: { start_at_from: this.startFrom, start_at_till: this.startTill } }).then((res) => {
+        this.exam = res.data.data
+        this.exam.forEach(element => {
+          if (element.start_at.substring(0, 10) === moment().format('YYYY-MM-DD')) {
+            const timeToExam = moment(element.finish_at, 'YYYY-MM-DD HH:mm:ss').diff(moment(element.start_at, 'YYYY-MM-DD HH:mm:ss'))
+            if (this.lastExam === null) {
+              this.lastExam = element.start_at
+              this.countDown = timeToExam / 1000
+            } else if (moment(element.start_at, 'YYYY-MM-DD HH:mm:ss').diff(moment(this.lastExam, 'YYYY-MM-DD HH:mm:ss')) > 0) {
+              this.lastExam = element.start_at
+              this.countDown = timeToExam / 1000
+            }
+          }
+        })
+      })
+    },
+    countDownTimer() {
+      if (this.countDown > 0) {
+        setTimeout(() => {
+          this.countDown -= 1
+          this.countDownTimer()
+        }, 1000)
+      }
+    }
+  },
+  created() {
+    this.getExams()
+    this.countDownTimer()
+  }
 }
 </script>
 

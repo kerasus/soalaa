@@ -18,62 +18,52 @@ export default {
     return {
       examInfoInputs: [
         {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12',
-          value: [
-            { type: 'separator', label: 'نوع آزمون', separatorType: 'none', col: 'exam-type-separator' },
-            {
-              type: 'toggleButton',
-              name: 'type_id',
-              responseKey: 'data.exam_type',
-              col: 'exam-type-toggle-button',
-              value: '6225f4828044517f52500c02',
-              ripple: false,
-              color: 'white',
-              toggleColor: 'primary',
-              toggleTextColor: 'white',
-              textColor: 'black',
-              options: [{ label: 'عادی', value: '6225f4828044517f52500c02' }, { label: 'جامع' }]
-            },
-            { type: 'hidden', name: 'space', col: 'col-md-9 col-sm-6' }
-          ]
+          type: 'toggleButton',
+          name: 'type_id',
+          responseKey: 'data.exam_type',
+          col: 'col-12 exam-type-toggle-button',
+          value: '6225f4828044517f52500c02',
+          ripple: false,
+          color: 'white',
+          toggleColor: 'primary',
+          toggleTextColor: 'white',
+          textColor: 'black',
+          label: 'نوع آزمون',
+          options: [{ label: 'عادی', value: '6225f4828044517f52500c02' }, { label: 'جامع' }]
         },
         {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-3 col-sm-6',
-          value: [
-            { type: 'separator', label: 'عنوان آزمون', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'title', responseKey: 'data.title', label: '', col: 'col-12', placeholder: ' ' }
-          ]
+          type: 'input',
+          name: 'title',
+          responseKey: 'data.title',
+          label: 'عنوان آزمون',
+          placeholder: ' ',
+          col: 'col-12 col-md-3 col-sm-6'
         },
         {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
+          type: 'select',
+          name: 'question_type',
+          responseKey: 'data.question_type',
+          label: 'نوع سوالات',
+          placeholder: ' ',
+          options: [],
           col: 'col-12 col-md-3 col-sm-6',
-          value: [
-            { type: 'separator', label: 'نوع سوالات', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'question_type', responseKey: 'data.question_type', options: [{ label: 'konkur', value: '6225f4828044517f52500c04' }, { label: 'psychometric', value: '6225f4828044517f52500c05' }, { label: 'descriptive', value: '6225f4828044517f52500c06' }], col: 'col-12', icon: 'isax:arrow-right-3' }
-          ]
+          icon: 'isax:arrow-right-3'
         },
         {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-3 col-sm-6',
-          value: [
-            { type: 'separator', label: 'رشته تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'temp.tags', responseKey: 'data.temp.tags', col: 'col-12' }
-          ]
+          type: 'select',
+          name: 'temp.tags',
+          responseKey: 'data.temp.tags',
+          label: 'رشته تحصیلی',
+          placeholder: ' ',
+          col: 'col-12 col-md-3 col-sm-6'
         },
         {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-3 col-sm-6',
-          value: [
-            { type: 'separator', label: 'پایه تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'temp.level', responseKey: 'data.temp.level', col: 'col-12' }
-          ]
+          type: 'select',
+          name: 'temp.level',
+          responseKey: 'data.temp.level',
+          label: 'پایه تحصیلی',
+          placeholder: ' ',
+          col: 'col-12 col-md-3 col-sm-6'
         }
       ]
 
