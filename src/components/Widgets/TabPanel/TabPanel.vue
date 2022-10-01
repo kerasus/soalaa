@@ -19,7 +19,7 @@
         <q-tab v-for="(tab, index) in tabs"
                :key="index"
                :name="index"
-               icon="img:https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/2_on.png"
+               :icon="tabIcon(index, tab.icon, tab.icon2)"
                class="tab-style"
                :label="tab.key"
         />
@@ -77,12 +77,15 @@ export default {
     this.initPageData()
   },
   methods: {
+    tabIcon(index, icon, icon2) {
+      const iconImg = index === this.activeTab ? icon : icon2
+      return 'img:' + iconImg
+    },
     async initPageData() {
       this.loading = true
       try {
         const response = await this.getData(API_ADDRESS.homePage.base)
         this.tabs = response.data.data.tabs
-        // console.log('tabs :', this.tabs)
         this.loading = false
       } catch (e) {
         this.loading = false
