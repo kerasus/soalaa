@@ -91,7 +91,8 @@
             </div>
           </div>
 
-          <div class="question-deActive">
+          <div v-if="false"
+               class="question-deActive">
             <div class=" delete-all">
               <q-btn
                 rounded
