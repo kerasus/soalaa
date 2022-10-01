@@ -25,12 +25,9 @@ const API_ADDRESS = {
     },
     formData: authServer + '/megaroute/getUserFormData',
     show_user: authServer + '/getUserFor3a',
-    getOrderList (id) {
-      return authServer + '/user/' + id + '/orders?seller=2'
-      // return authServer + '/user/' + id + '/orders?seller=1'
-    },
     orders: {
-      status: lumenServer + '/orders/status'
+      status: lumenServer + '/payment/status',
+      userOrders: lumenServer + '/orders'
     },
     statistics: lumenServer + 'user/dashboard/statistics'
   },
