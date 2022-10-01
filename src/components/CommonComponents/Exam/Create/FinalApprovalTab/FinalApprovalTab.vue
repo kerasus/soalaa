@@ -225,7 +225,7 @@ export default {
 <style scoped lang="scss">
 
 .main-container {
-  padding: 0 80px 0 84px;
+  padding: 0;
   .exam-detail-container{
     padding-right: 24px;
     .exam-detail-content{
