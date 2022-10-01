@@ -1,7 +1,7 @@
 <template>
   <div v-if="true"
        class="quiz-list-container">
-    <div class="row">
+    <div class="row q-pt-md">
       <div class="col-6">
         <div class="search-bar">
           <q-input v-model="searchInExams"
@@ -19,9 +19,11 @@
         </div>
       </div>
       <div class="col-6 filter-btn-col">
-        <q-btn class="filter-toggle"
-               icon="isax:filter"
-               @click="toggleFilter" />
+        <q-btn
+          unelevated
+          class="filter-toggle"
+          icon="isax:filter"
+          @click="toggleFilter" />
       </div>
     </div>
     <div class="row filter-wrapper"
@@ -32,8 +34,9 @@
         <div class="filter-input-label">نوع سوالات آزمون</div>
         <q-select v-model="examType"
                   :options="typeOptions"
+                  dropdown-icon="isax:arrow-down-1"
                   bg-color="white"
-                  style="width:100%"
+                  style="width:90%"
                   filled />
       </div>
       <div
@@ -48,6 +51,7 @@
       <div class="col-xs-12 col-sm-12 flex justify-end items-end"
            :class="quizType === 'myExam' ? 'col-md-2 col-lg-2 col-xl-2' : 'col-md-4 col-lg-4 col-xl-4'">
         <q-btn
+          unelevated
           color="white"
           text-color="dark"
           class="filter-refresh-btn"
@@ -55,6 +59,7 @@
           @click="clearInputs"
         />
         <q-btn
+          unelevated
           color="primary"
           label="اعمال"
           class="filter-submit-btn"
@@ -157,6 +162,7 @@ import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
 import API_ADDRESS from 'src/api/Addresses'
 import { FormBuilder, inputMixin } from 'quasar-form-builder'
 import ShamsiDate from 'src/plugins/ShamsiDate'
+import Time from 'src/plugins/time.js'
 
 export default defineComponent({
   name: 'QuizList',
@@ -186,24 +192,8 @@ export default defineComponent({
     typeOptions: ['تست', 'تشریحی', 'ترکببی'],
     filterBar: false,
     inputs: [
-      {
-        type: 'formBuilder',
-        name: 'formBuilderCol',
-        col: 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6',
-        value: [
-          { type: 'separator', label: 'از', size: '0', separatorType: 'none', col: 'col-1' },
-          { type: 'date', name: 'from', responseKey: 'fromDate', calendarIcon: ' ', value: '2022-08-27', col: 'col-11' }
-        ]
-      },
-      {
-        type: 'formBuilder',
-        name: 'formBuilderCol',
-        col: 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6',
-        value: [
-          { type: 'separator', label: 'تا', size: '0', separatorType: 'none', col: 'col-1' },
-          { type: 'date', name: 'to', responseKey: 'toDate', calendarIcon: ' ', value: '2022-08-27', col: 'col-11' }
-        ]
-      }
+      { type: 'date', name: 'from', label: ' ', placeholder: 'از', calendarIcon: ' ', responseKey: 'fromDate', value: '', col: 'col-6' },
+      { type: 'date', name: 'to', label: ' ', placeholder: 'تا', responseKey: 'toDate', calendarIcon: ' ', value: '', col: 'col-6' }
     ]
   }),
   created () {
@@ -222,9 +212,18 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.clearInputs()
+    this.initPageData()
   },
   methods: {
+    initPageData() {
+      this.clearInputs()
+      this.setDefaultData()
+    },
+    setDefaultData() {
+      if (this.quizType !== 'exam') return
+      const input = this.inputs.find(i => i.name === 'to')
+      input.value = Time.now()
+    },
     getTimeFromDateTime(dateTime) {
       return ShamsiDate.getTimeFromDateTime(dateTime)
     },

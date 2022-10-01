@@ -156,16 +156,15 @@ export default {
       padding: 0 34px;
     }
   }
+
   .tab-panel-container{
     margin-bottom: 80px;
     @media screen and (max-width: 1439px) {
       margin-bottom: 40px;
     }
     .active-tab{
-      &:deep(.q-tab__content){
-        .q-tab__label{
-          color: #9690E4;
-        }
+      :deep(.q-tab__label){
+        color: #9690E4 !important;
       }
     }
     .active-container{
@@ -229,6 +228,9 @@ export default {
         }
         .content{
           margin-right: 40px;
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-template-rows: min-content;
           @media screen and (max-width: 1439px){
             margin-right: 0;
             margin-bottom: 20px;
@@ -281,7 +283,7 @@ export default {
             }
           }
           .more-detail{
-
+            align-self: flex-end;
             .btn{
               color: #8075DC;
               font-style: normal;

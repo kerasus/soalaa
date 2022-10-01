@@ -5,37 +5,39 @@
   <div v-else
        class="feature-box page-width">
     <div class="content">
-      <div class="title">
-        {{data.title }}
+      <div>
+        <div class="title">
+          {{featureData.head }}
+        </div>
+        <div class="sub-title ellipsis">
+          {{featureData.title}}
+        </div>
+        <div v-for="(item, index) in featureData.value"
+             :key="index"
+             class="soalaa-item">
+          <q-icon size="7px"
+                  class="badge"
+                  name="circle" />
+          <div class="ellipsis">{{item}}</div>
+        </div>
       </div>
-      <div class="sub-title">
-        {{featureData.title}}
-      </div>
-      <div v-for="(item, index) in featureData.value"
-           :key="index"
-           class="soalaa-item">
-        <q-icon size="7px"
-                class="badge"
-                name="circle" />
-        <div>{{item}}</div>
-      </div>
-      <div v-if="featureData.link"
+      <div v-if="featureData.button?.url"
            class="more-details text-right">
         <q-btn
           unelevated
           color="primary"
-          :href="featureData.link"
+          :href="featureData.button?.url"
           style="color: #8075DC"
           class="btn q-ma-none"
           padding="7px 15px 7px 15px"
           icon-right="west"
-          label="اطلاعات بیشتر" />
+          :label="featureData.button?.text" />
       </div>
     </div>
     <div class="img-box">
       <q-img
         class="img"
-        :src="featureData.image" />
+        :src="featureData.image?.link" />
     </div>
   </div>
 </template>
@@ -83,7 +85,6 @@ export default {
     .content{
       .title{
         color: #FFC107;
-      ;
       }
     }
   }
@@ -124,6 +125,9 @@ export default {
   .content{
     margin-right: 135px;
     width: 587px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     @media screen and (max-width: 1023px){
       flex-direction: column;
       width: 100%;
