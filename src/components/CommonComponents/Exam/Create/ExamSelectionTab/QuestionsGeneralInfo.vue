@@ -91,7 +91,8 @@
             </div>
           </div>
 
-          <div class="question-deActive">
+          <div v-if="false"
+               class="question-deActive">
             <div class=" delete-all">
               <q-btn
                 rounded
@@ -346,25 +347,25 @@ export default {
   computed: {
     countOfSelectedSubCategory () {
       const lessons = this.questions.list.filter((v, i, a) => a.findIndex(question => {
-        const targetTag = question.tags.list.find(tag => tag.type === 'lesson')
-        const valueTargetTag = v.tags.list.find(tag => tag.type === 'lesson')
+        const targetTag = question.tags.list.find(tag => tag.type === null)
+        const valueTargetTag = v.tags.list.find(tag => tag.type === null)
         if (!targetTag || !valueTargetTag) {
           return false
         }
         return targetTag.title === valueTargetTag.title
       }) === i)
-        .map(question => question.tags.list.find(tag => tag.type === 'lesson'))
+        .map(question => question.tags.list.find(tag => tag.type === null))
       lessons.forEach(lesson => {
-        lesson.selectedQuestionsCount = this.questions.list.filter(question => !!question.tags.list.find(tag => tag.type === 'lesson' && tag.title === lesson.title)).length
+        lesson.selectedQuestionsCount = this.questions.list.filter(question => !!question.tags.list.find(tag => tag.type === null && tag.title === lesson.title)).length
       })
       return lessons
     },
     questionLvl () {
       if (!this.questions) return
       return {
-        hard: this.questions.list.filter(question => question.level === 1).length,
-        medium: this.questions.list.filter(question => question.level === 2).length,
-        easy: this.questions.list.filter(question => question.level === 3).length
+        hard: this.questions.list.filter(question => question.level === '3').length,
+        medium: this.questions.list.filter(question => question.level === '2').length,
+        easy: this.questions.list.filter(question => question.level === '1').length
       }
     }
   },
@@ -522,6 +523,10 @@ export default {
             background: #FFFFFF;
             border: 1px solid #6D708B;
             border-radius: 5px;
+          }
+
+          &:deep(.q-checkbox__svg) {
+            color: $secondary;
           }
 
           &:deep(.q-checkbox__label) {

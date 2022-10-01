@@ -103,66 +103,63 @@ export default {
   methods: {
     onLoadPage () {
       this.inputList = this.inputs
-
       this.getExamTypeList()
       this.getGradesList()
       this.loadMajorList()
     },
 
+    loadSelectInputOptions (inputName, options) {
+      const inputIndex = this.inputList.findIndex(input => input.name === inputName)
+      if (inputIndex === -1) {
+        return
+      }
+      this.inputList[inputIndex].options = options
+    },
+    loadQuestionTypesInput (options) {
+      this.loadSelectInputOptions('question_type', options)
+    },
     getExamTypeList () {
       this.$axios.get(API_ADDRESS.option.base)
         .then((response) => {
           this.typeOptions = response.data.data.filter(data => data.type === 'exam_type')
-          this.inputList.forEach(input => {
-            if (input.type === 'formBuilder') {
-              input.value.forEach(item => {
-                if (item.name === 'question_type') {
-                  item.options = []
-                  this.typeOptions.forEach(type => {
-                    item.options.push({ label: type.value, value: type.id })
-                  })
-                }
-              })
+          this.loadQuestionTypesInput(this.typeOptions.map(type => {
+            return {
+              label: type.value,
+              value: type.id
             }
-          })
+          }))
         })
         .catch(() => {})
     },
-
+    loadGradesInput (options) {
+      this.loadSelectInputOptions('temp.level', options)
+    },
     getGradesList () {
-      this.getRootNode('test').then(response => {
-        this.gradesList = response.data.data.children
-        this.inputList.forEach(input => {
-          if (input.type === 'formBuilder') {
-            input.value.forEach(item => {
-              if (item.name === 'temp.level') {
-                item.options = []
-                this.gradesList.forEach(type => {
-                  item.options.push({ label: type.title, value: type.id })
-                })
-              }
-            })
-          }
+      this.getRootNode('test')
+        .then(response => {
+          this.gradesList = response.data.data.children
+          this.loadGradesInput(this.gradesList.map(type => {
+            return {
+              label: type.title,
+              value: type.id
+            }
+          }))
         })
-      })
     },
 
+    loadMajorInput (options) {
+      this.loadSelectInputOptions('temp.tags', options)
+    },
     loadMajorList () {
       this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
         .then((response) => {
           this.majorList = response.data.data
-          this.inputList.forEach(input => {
-            if (input.type === 'formBuilder') {
-              input.value.forEach(item => {
-                if (item.name === 'temp.tags') {
-                  item.options = []
-                  this.majorList.forEach(type => {
-                    item.options.push({ label: type.value, value: type.id })
-                  })
-                }
-              })
+          this.loadMajorInput(this.majorList.map(type => {
+            return {
+              label: type.value,
+              value: type.id
             }
-          })
+          }))
         })
     },
 
