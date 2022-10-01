@@ -71,8 +71,9 @@ export default {
     },
     doActionsOnChangeCategory (newCat) {
       if (!newCat || !this.currentCat || Assistant.getId(newCat.id) !== Assistant.getId(this.currentCat.id)) {
-        this.currentCat = newCat
-        this.$store.commit('Exam/setActiveStateOfExamCategories')
+        this.quiz.categories.list[0].is_active = true
+        this.currentCat = this.quiz.categories.list[0]
+        this.$store.commit('Exam/setActiveStateOfExamCategories', this.currentCat.is_active)
         if (this.currentCat) {
           this.goToCategory(this.currentCat.id)
           Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz, this.getCurrentExamQuestions())

@@ -1,20 +1,16 @@
 <template>
-  <q-card
-    class="profile-card"
-  >
-    <q-img
-      src="https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg"
-      width="300px"
-      height="300px"
-      dark
+  <q-card class="profile-card">
+    <q-img src="https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg"
+           width="300px"
+           height="300px"
+           dark
     />
     <q-card-actions vertical>
-      <a
-        class="profile-link bg-green"
-        @click="goHome"
+      <q-btn class="profile-link bg-green"
+             :to="{ name: 'User.Exam.List' }"
       >
-        <span>بازگشت به پیشخوان</span>
-      </a>
+        بازگشت به پیشخوان
+      </q-btn>
     </q-card-actions>
   </q-card>
 </template>
@@ -55,20 +51,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.profile-card{
+.profile-card {
   width: 100%;
   max-width: 324px;
   border-radius: 20px;
-  .q-card__actions{
+  .q-card__actions {
     padding: 0 !important;
-    a{
+    .q-btn {
       text-decoration: none;
       cursor: pointer;
       height: 44px;
       color: white;
       text-align: center;
-      padding: 12px;
       box-sizing: border-box;
+      border-radius: 0 0 5px 5px;
     }
   }
 }

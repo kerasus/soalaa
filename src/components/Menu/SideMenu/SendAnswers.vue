@@ -102,7 +102,7 @@ export default {
       this.confirmationBtnLoading = true
       this.syncUserAnswersWithDBAndSendAnswersToServerInExamTime(this.quiz.user_exam_id, false)
         .then(() => {
-          const examData = new ExamData()
+          const examData = new ExamData(this.$axios)
           examData.getUserExamData(this.quiz.user_exam_id)
             .run()
             .then(() => {
@@ -144,15 +144,15 @@ export default {
       }
     },
     confirmSendingAllAnswers () {
-      const that = this
       this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id, false)
         .then(response => {
           this.$q.notify({
-            message: 'ثبت با موفقیت انجام شد',
-            type: 'positive'
+            type: 'positive',
+            message: 'اطلاعات آزمون شما ثبت شد.',
+            position: 'top'
           })
-          that.$router.push({ name: 'User.Exam.List' })
-          that.confirmationBubbleSheet = true
+          this.$router.push({ name: 'User.Exam.List' })
+          this.confirmationBubbleSheet = true
         })
     },
     showSendAnswerPhotoDialog () {

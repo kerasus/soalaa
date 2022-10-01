@@ -271,7 +271,7 @@ export function setActiveStateOfExamCategories (state, newInfo) {
   if (!state.quiz) {
     return
   }
-  Time.setStateOfExamCategories(state.quiz.categories, newInfo)
+  Time.setStateOfExamCategories(state.quiz.categories, !!newInfo)
 }
 
 export function setActiveStateOfQuestionsBasedOnActiveCategory (state) {

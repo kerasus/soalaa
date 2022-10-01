@@ -182,7 +182,18 @@ const routes = [
           {
             path: 'user_exam_list',
             name: 'User.Exam.List',
+            layoutConfig: {
+              layoutLeftDrawerVisible: false
+            },
             component: () => import('pages/User/exam/List')
+          },
+          {
+            path: '/faq',
+            name: 'faq',
+            layoutConfig: {
+              layoutLeftDrawerVisible: false
+            },
+            component: () => import('src/pages/CommonQuestions/list')
           },
           {
             path: 'ticket',
@@ -547,18 +558,22 @@ const routes = [
         middleware: [auth]
       },
       {
-        path: '/faq',
-        name: 'faq',
-        component: () => import('src/pages/CommonQuestions/list'),
+        path: '/onlineQuiz/alaaView/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView',
+        component: () => import('pages/User/exam/participate/AlaaView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
         meta: {
-          middlewares: [
-            auth
-          ]
+          middlewares: [auth]
         }
       },
       {
-        path: '/onlineQuiz/alaaView/:quizId/:questNumber',
-        name: 'onlineQuiz.alaaView',
+        path: '/onlineQuiz/alaaView/retake/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView.retake',
         component: () => import('pages/User/exam/participate/AlaaView'),
         layoutConfig: {
           layoutHeaderVisible: true,
