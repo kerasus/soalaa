@@ -39,32 +39,32 @@
         <q-card-section class="info">
           <div class="info-box part1">
             <div class="default-info paid">اطلاعات کلی</div>
-            <div>
+            <div class="info-item">
               شماره سفارش:
               <span class="default-info">{{ order.id }}</span>
             </div>
-            <div>
+            <div class="info-item">
               وضعیت پرداخت:
               <span class="default-info">{{ order.paymentstatus.name }}</span>
             </div>
-            <div>
+            <div class="info-item">
               تاریخ سفارش:
               <span class="default-info">{{ getCurrentOrderCompletedAt(order.completed_at) }}</span>
             </div>
           </div>
           <div class="info-box part2">
-            <div>
+            <div class="info-item">
               جمع مبلغ سفارش:
               <span class="default-info">{{ toman(order.price, null) }} تومان</span>
             </div>
-            <div>
+            <div class="info-item">
               میزان تخفیف:
-              <span class="info-discount">({{ order.getOrderDiscount() }}%)</span>
+              <span class="info-discount">{{ order.getOrderDiscount() ? '(' + order.getOrderDiscount() + '% )' : 0 }}</span>
               <!--            <span class="info-discount">({{ order.discount }}%)</span>-->
               <!--              <span class="default-info paid">پرداخت شده</span>-->
               <span class="default-info">{{ order.getOrderDiscount('toman') }}</span>
             </div>
-            <div>
+            <div class="info-item">
               مبلغ نهایی:
               <span class="default-info">{{ toman(order.paid_price, null) }} تومان</span>
             </div>
@@ -105,6 +105,11 @@ export default {
         return new Order()
       }
     }
+  },
+  watch: {
+    // order(val) {
+    //   console.log(val)
+    // }
   },
   emits: [
     'update:dialogValue'
@@ -208,7 +213,9 @@ export default {
       color: #DA5F5C;
       padding: 0 8px;
     }
-
+    .info-item{
+      margin-bottom: 16px;
+    }
     .default-info {
       color: #434765;
       padding: 0 8px;

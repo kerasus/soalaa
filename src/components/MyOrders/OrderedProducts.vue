@@ -27,8 +27,11 @@
             <div
               class="price-container"
             >
-              <div class="discount-part">
-                <div class="discount-percent">
+              <div v-if="orderedItem.grand?.price"
+                   class="discount-part">
+                <div
+                  v-if=" orderedItem.grand.price.discountInPercent() "
+                  class="discount-percent">
                   {{ orderedItem.grand.price.discountInPercent() }}%
                 </div>
 
@@ -39,7 +42,8 @@
 
               <div class="final-part">
                 <div class="final-price">{{ orderedItem.grand.price.toman('final', null) }}</div>
-                <div class="toman">تومان</div>
+                <div v-if=" orderedItem.grand.price > 0"
+                     class="toman">تومان</div>
               </div>
             </div>
           </div>
@@ -87,6 +91,7 @@
             </div>
           </div>
         </q-card-section>
+
         <q-card-section
           v-if="orderedItem.grand.id"
           class="card-actions"
@@ -123,7 +128,7 @@
                           <span
                             class="price"
                           >
-                            {{ item.price.toman('final')  }} تومان
+                            {{ item.price.toman('final', null)  }} تومان
                           </span>
                         </div>
                       </template>
