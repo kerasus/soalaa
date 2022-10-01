@@ -1,5 +1,11 @@
+@import "mixin";
+
 .form-builder-input-col,
 .form-builder-select-col {
+  .outsideLabel {
+    @include global-outsideLabel;
+  }
+
   //padding: 8px 12px 15px 12px;
   @media screen and (max-width: 1919px) {
     //padding: 8px 10px 15px 10px;
