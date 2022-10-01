@@ -139,6 +139,7 @@ export default {
         //   title: 'تماس با ما',
         //   to: ''
         // }
+
       ]
     }
   },
@@ -156,12 +157,24 @@ export default {
       return new User()
     }
   },
+  mounted() {
+    this.addAdminItem()
+  },
   methods: {
     ...mapMutations('AppLayout', [
       'updateLayoutLeftDrawerVisible'
     ]),
     toggleLeftDrawer () {
       this.updateLayoutLeftDrawerVisible(true)
+    },
+    addAdminItem () {
+      if (this.user.hasPermission('examStore')) {
+        this.headerItems.push({
+          selected: 'contactUs',
+          title: 'پنل ادمین',
+          to: 'Admin.Exam.Index'
+        })
+      }
     }
   }
 }
