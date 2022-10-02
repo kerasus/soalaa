@@ -249,6 +249,9 @@ export default {
     checkValues(formDataValues) {
       const messages = []
       formDataValues.forEach((item) => {
+        if (item.label === 'عنوان آزمون') {
+          return
+        }
         if (typeof item.value !== 'undefined' && item.value !== null && item.value !== 0) {
           return
         }
@@ -281,7 +284,7 @@ export default {
         }
         this.exam = Object.assign(this.exam, formData)
         this.createExam(formData)
-        return
+        // return
       }
       if (tab === 'finalApproval' && this.exam.questions.list.length > 0) {
         this.accept = true
