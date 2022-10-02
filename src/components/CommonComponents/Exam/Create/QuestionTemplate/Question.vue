@@ -44,6 +44,7 @@
           :key="index"
           class=" col-lg-3 col-md-3 col-sm-12"
           :class="questionCol"
+          :isLtr="isLtrQuestion()"
           :dir="isLtrQuestion()? 'ltr':''"
           :choice="choice"
         />
@@ -88,7 +89,6 @@ export default {
   methods: {
     setChoiceCol () {
       const el = this.$refs.questionChoice
-
       if (!el) {
         return
       }
@@ -98,9 +98,9 @@ export default {
         }
         if (!this.isSingleLine(choice.$el)) {
           this.questionCol = 'col-lg-6 col-sm-6'
-          this.$nextTick(() => {
-            this.checkLines(choice.$el)
-          })
+          // this.$nextTick(() => {
+          //   this.checkLines(choice.$el)
+          // })
         }
       })
     },
@@ -112,16 +112,27 @@ export default {
     },
 
     getElementHeight (choiceBoxElement, computed) {
+      // console.log(computed.marginBottom)
       const padding = parseInt(computed.paddingTop) + parseInt(computed.paddingBottom)
+      // console.log('padding :', padding)
+      // console.log('clientHeight :', choiceBoxElement.clientHeight)
       return choiceBoxElement.clientHeight - padding
     },
 
     isSingleLine (choiceBoxElement) {
+      // console.log('-------------------------------------------------------------------------')
+      // console.log('isSingleLine', choiceBoxElement)
       const choiceContentElement = choiceBoxElement.childNodes[1]
+      // console.log('choiceContentElement :', choiceContentElement)
       const computed = getComputedStyle(choiceContentElement)
+      // console.log('computed :', computed)
       const height = this.getElementHeight(choiceBoxElement, computed)
+      // console.log('height :', height)
       // 16 => margin-bottom
-      const choiceContentLineHeight = parseInt(computed.lineHeight) + 16
+      const choiceContentLineHeight = parseInt(computed.lineHeight)
+
+      // console.log('choiceContentLineHeight :', choiceContentLineHeight)
+      // console.log('RESULT :', height <= choiceContentLineHeight)
       return height <= choiceContentLineHeight
     },
 
