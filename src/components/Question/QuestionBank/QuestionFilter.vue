@@ -102,12 +102,7 @@
         <q-option-group
           v-model="selectedLevels"
           type="checkbox"
-          :options="filterQuestions.levels.map(option => {
-            return {
-              label: option.value,
-              value: option
-            }
-          })"
+          :options="filterQuestions.levels"
           @update:model-value="onChangeLevels"
         />
         <div v-if="filterQuestions.levels.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
@@ -143,7 +138,11 @@ export default {
       selectedLevels: [],
       selectedTags: [],
       filtersData: {
-        tags: []
+        tags: [],
+        reference: [],
+        majors: [],
+        level: [],
+        years: []
       }
     }
   },
@@ -154,7 +153,7 @@ export default {
       filtersDataKey.forEach(key => {
         const filterGroup = this.filtersData[key]
         filterGroup.forEach(filterItem => {
-          const title = filterItem.title ? filterItem.title : filterItem.value
+          const title = filterItem.title || filterItem.label || filterItem.value
           titles.push(title)
         })
       })
@@ -181,6 +180,7 @@ export default {
       this.onUpdateFilterData()
     },
     onChangeReference (value) {
+      console.log('val:', value)
       this.changeFilterData('reference', value)
     },
     onChangeLevels (value) {
@@ -209,7 +209,13 @@ export default {
     },
     deleteAllFilters () {
       this.filtersData.tags.splice(0, this.filtersData.tags.length)
-      this.QuestionFilters.splice(0, this.QuestionFilters.length)
+      this.filtersData.reference.splice(0, this.filtersData.reference.length)
+      this.filtersData.level.splice(0, this.filtersData.level.length)
+      this.filtersData.years.splice(0, this.filtersData.years.length)
+      this.filtersData.majors.splice(0, this.filtersData.majors.length)
+
+      // this.QuestionFilters.splice(0, this.QuestionFilters.length)
+      console.log(this.QuestionFilters, this.filtersData)
       this.onUpdateFilterData()
     }
   }
