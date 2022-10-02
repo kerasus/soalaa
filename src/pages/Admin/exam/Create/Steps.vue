@@ -2,7 +2,7 @@
   <div class="steps row">
 
     <div
-      class="exam-info step"
+      class="exam-info step step-1"
       :class="{ 'current-step' : this.currentStep === 'createPage' }"
       @click="changeCurrentStep('createPage')"
     >
@@ -22,7 +22,7 @@
     </div>
 
     <div
-      class="choose-questions step"
+      class="choose-questions step step-2"
       :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }"
       @click="changeCurrentStep('chooseQuestion')"
     >
@@ -43,7 +43,7 @@
     </div>
 
     <div
-      class="final-approval step"
+      class="final-approval step step-3"
       :class="{ 'current-step' : this.currentStep === 'finalApproval' }"
       @click="changeCurrentStep('finalApproval')"
     >
@@ -159,11 +159,22 @@ export default {
     }
   }
 
+  .step-1{
+    width:45%
+  }
+
+  .step-2{
+    width:45%
+  }
+
+  .step-3{
+    width:10%
+  }
+
   .step {
     cursor: pointer;
     display: flex;
     align-items: center;
-    width: 33%;
 
     &.choose-questions {
       .line {
