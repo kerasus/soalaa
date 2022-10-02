@@ -96,7 +96,7 @@ export default {
         height: max-content;
         width: 100%;
         color: #777;
-        padding-left: 30px;
+        /*padding-left: 30px;*/
         display: flex;
     }
     .answer-text.ltr {
