@@ -186,7 +186,8 @@ const routes = [
             name: 'User.Create.Exam',
             component: () => import('pages/User/exam/Create/Create'),
             layoutConfig: {
-              layoutLeftDrawerVisible: false
+              layoutLeftDrawerVisible: false,
+              layoutLeftSideBarType: 'none'
             }
           },
           {

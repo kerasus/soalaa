@@ -225,7 +225,7 @@ export default {
 <style scoped lang="scss">
 
 .main-container {
-  padding: 0 80px 0 84px;
+  padding: 0;
   .exam-detail-container{
     padding-right: 24px;
     .exam-detail-content{
@@ -354,7 +354,7 @@ export default {
 @media only screen and (max-width: 1919px) {
   .main-container {
     padding-left: 0;
-    padding-right: 24px;
+    //padding-right: 24px;
   }
   .question-bank-filter {
     padding-right: 20px;

@@ -161,7 +161,10 @@
       </div>
     </q-card-section>
 
-    <q-card-section class="question-section">
+    <q-card-section
+      class="question-section "
+      :class="{'extra-panel' : finalApprovalMode }"
+    >
       <div
         v-if="finalApprovalMode || showQuestionNumber"
         class="question-index"
@@ -175,7 +178,7 @@
         :class="isLtrQuestion() ? 'order-last' : ''"
       />
 
-      <div class="question">
+      <div class="question full-width">
         <question
           ref="questionComponent"
           :question="question"
@@ -610,6 +613,12 @@ export default {
 <style lang="scss" scoped>
 .question-card {
   padding: 18px 24px 24px 24px;
+  margin-bottom: 16px;
+  &.selected{
+    background: #F6F9FF;
+    box-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3), -1px -1px 2px rgba(112, 108, 161, 0.05), inset -8px 8px 20px rgba(112, 108, 161, 0.1), inset 8px -8px 20px rgba(112, 108, 161, 0.1), inset -8px -8px 10px rgba(255, 255, 255, 0.9), inset 8px 8px 13px rgba(112, 108, 161, 0.15) #{"/* rtl:ignore */"};
+    border-radius: 16px;
+  }
 
   @media only screen and (max-width: 1023px) {
     padding: 16px 20px 20px 20px;
@@ -790,13 +799,16 @@ export default {
   .question-section {
     display: flex;
     padding: 0;
+    &.extra-panel{
+      padding-left: 20px;
+    }
 
     .question-index {
       position: relative;
 
       .question-number {
         position: absolute;
-        left: -40px;
+        left: -44px;
         width: 34px;
         height: 36px;
         background: var(--3a-Primary);
@@ -969,6 +981,7 @@ export default {
         height: 40px;
         box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
         border-radius: 10px;
+        margin-right: 12px;
 
         &.attach-button {
           background: #9690E4;
