@@ -161,16 +161,12 @@ export default {
       return this.allTabs.indexOf(tab) === this.allTabs.length - 1
     },
     changeTab(tab) {
-      this.updateExamData()
+      this.updateExamData(tab)
       if (this.accept) {
         this.currentTab = tab
       }
     },
     goToLastStep() {
-      // this.updateExamData()
-      // if (this.currentTab === 'chooseQuestion') {
-      //   this.accept = true
-      // }
       this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
     },
     goToNextStep() {
@@ -187,7 +183,6 @@ export default {
         this.accept = true
       }
       this.updateExamData()
-      console.log(this.accept)
       if (this.accept) {
         this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1]
       }
@@ -228,9 +223,6 @@ export default {
     checkValues(formDataValues) {
       const messages = []
       formDataValues.forEach((item) => {
-        if (item.type !== 'input' && item.type !== 'dateTime') {
-          return
-        }
         if (typeof item.value !== 'undefined' && item.value !== null && item.value !== 0) {
           return
         }
@@ -241,7 +233,7 @@ export default {
     checkValidate(formDataValues) {
       for (const item of Object.entries(formDataValues)) {
         const input = item[1]
-        if (input.type === 'input' || input.type === 'dateTime') {
+        if (input.type === 'input' || input.type === 'dateTime' || input.type === 'select') {
           if (!input.value || input.value === 'undefined' || input.value === null) {
             this.accept = false
             break
@@ -249,7 +241,7 @@ export default {
         }
       }
     },
-    updateExamData() {
+    updateExamData(tab) {
       if (this.currentTab === 'createPage') {
         const formData = this.$refs.createExam.$refs.EntityCrudFormBuilder.getFormData()
         const formDataValues = this.$refs.createExam.$refs.EntityCrudFormBuilder.getValues()
@@ -260,18 +252,18 @@ export default {
         if (!this.isExamDataInitiated && this.accept) {
           this.exam = new Exam(formData)
           this.isExamDataInitiated = true
-          // this.accept = true
         }
         this.exam = Object.assign(this.exam, formData)
         this.createExam(formData)
+        return
       }
-      // if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length > 0) {
-      //   this.accept = true
-      // } else if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length === 0) {
-      //   this.accept = false
-      //   const messages = ['سوالی انتخاب نشده است!']
-      //   this.showMessagesInNotify(messages)
-      // }
+      if (tab === 'finalApproval' && this.exam.questions.list.length > 0) {
+        this.accept = true
+      } else if (tab === 'finalApproval' && this.exam.questions.list.length === 0) {
+        this.accept = false
+        const messages = ['سوالی انتخاب نشده است!']
+        this.showMessagesInNotify(messages)
+      }
     },
     createExammm() {
       this.$axios.get(API_ADDRESS.exam.user.create)
