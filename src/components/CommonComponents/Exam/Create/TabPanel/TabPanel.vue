@@ -14,10 +14,13 @@
         <q-tab-panel name="createPage">
           <exam-info-tab
             ref="createExam"
+            v-model:exam="exam"
             v-model:currentTab="currentTab"
+            :typeOptions="typeOptions"
+            :gradesList="gradesList"
+            :majorList="majorList"
             :inputs="examInfoInputs"
             @nextTab="goToNextStep"
-            @lastTab="goToLastStep"
           />
         </q-tab-panel>
 
@@ -104,6 +107,7 @@ import ExamInfoTab from 'components/CommonComponents/Exam/Create/ExamInfoTab/Exa
 import FinalApprovalTab from 'components/CommonComponents/Exam/Create/FinalApprovalTab/FinalApprovalTab'
 import API_ADDRESS from 'src/api/Addresses'
 import QuestionSelectionTab from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionSelectionTab'
+import mixinTree from 'src/mixin/Tree'
 
 export default {
   name: 'tabPanel',
@@ -123,7 +127,9 @@ export default {
       type: String
     }
   },
-
+  mixins: [
+    mixinTree
+  ],
   data() {
     return {
       exam: new Exam(),
@@ -133,7 +139,10 @@ export default {
       examConfirmedDialog: false,
       accept: false,
       draftDialog: false,
-      draftExam: new Exam()
+      draftExam: new Exam(),
+      gradesList: null,
+      majorList: null,
+      typeOptions: []
     }
   },
 
@@ -145,6 +154,9 @@ export default {
 
   created() {
     this.onLoadPage()
+    this.getExamTypeList()
+    this.getGradesList()
+    this.loadMajorList()
   },
 
   methods: {
@@ -305,6 +317,25 @@ export default {
     },
     clearDraft() {
       this.draftExam = {}
+    },
+    getGradesList () {
+      this.getRootNode('test')
+        .then(response => {
+          this.gradesList = response.data.data.children
+        })
+    },
+    getExamTypeList () {
+      this.$axios.get(API_ADDRESS.option.base)
+        .then((response) => {
+          this.typeOptions = response.data.data.filter(data => data.type === 'exam_type')
+        })
+        .catch(() => {})
+    },
+    loadMajorList () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
+        .then((response) => {
+          this.majorList = response.data.data
+        })
     }
   }
 
