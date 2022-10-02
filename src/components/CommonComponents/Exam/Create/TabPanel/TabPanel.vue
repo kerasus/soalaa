@@ -3,7 +3,7 @@
     <div class="exam-create-panel">
       <steps
         v-model:currentComponent="currentTab"
-        @currentStepChanged="changeTab"
+        @currentStepChanged = "changeTab"
       />
 
       <q-tab-panels
@@ -127,7 +127,7 @@ export default {
   methods: {
     onLoadPage() {
       this.$axios.get(API_ADDRESS.exam.user.draft())
-        .then(response => {
+        .then(() => {
           // console.log(response)
         }).catch(() => {
         })
@@ -150,6 +150,7 @@ export default {
     camelize(word) {
       return word.replace(/-./g, x => x[1].toUpperCase())
     },
+
     // FOR EDUCATIONAL PURPOSES
     kebabize(word) {
       return word.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase())
@@ -161,13 +162,12 @@ export default {
       return this.allTabs.indexOf(tab) === this.allTabs.length - 1
     },
     changeTab(tab) {
-      this.updateExamData()
+      this.updateExamData(tab)
       if (this.accept) {
         this.currentTab = tab
       }
     },
     goToLastStep() {
-      this.updateExamData()
       this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
     },
     goToNextStep() {
@@ -176,12 +176,21 @@ export default {
         this.setFinalStep()
         return
       }
+      if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length === 0) {
+        this.accept = false
+        const messages = ['سوالی انتخاب نشده است!']
+        this.showMessagesInNotify(messages)
+      } else if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length > 0) {
+        this.accept = true
+      }
       this.updateExamData()
-      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1]
+      if (this.accept) {
+        this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1]
+      }
     },
     setFinalStep() {
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-      this.createExam().then(res => {
+      this.createExam().then(() => {
         // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         this.examConfirmedDialog = true
       }).catch(err => {
@@ -215,9 +224,6 @@ export default {
     checkValues(formDataValues) {
       const messages = []
       formDataValues.forEach((item) => {
-        if (item.type !== 'input' && item.type !== 'dateTime') {
-          return
-        }
         if (typeof item.value !== 'undefined' && item.value !== null && item.value !== 0) {
           return
         }
@@ -228,15 +234,15 @@ export default {
     checkValidate(formDataValues) {
       for (const item of Object.entries(formDataValues)) {
         const input = item[1]
-        if (input.type === 'input' || input.type === 'dateTime') {
+        if (input.type === 'input' || input.type === 'dateTime' || input.type === 'select') {
           if (!input.value || input.value === 'undefined' || input.value === null) {
-            // this.accept = false
+            this.accept = false
             break
           }
         }
       }
     },
-    updateExamData() {
+    updateExamData(tab) {
       if (this.currentTab === 'createPage') {
         const formData = this.$refs.createExam.$refs.EntityCrudFormBuilder.getFormData()
         const formDataValues = this.$refs.createExam.$refs.EntityCrudFormBuilder.getValues()
@@ -247,14 +253,14 @@ export default {
         if (!this.isExamDataInitiated && this.accept) {
           this.exam = new Exam(formData)
           this.isExamDataInitiated = true
-          this.accept = true
         }
         this.exam = Object.assign(this.exam, formData)
         this.createExam(formData)
+        return
       }
-      if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length > 0) {
+      if (tab === 'finalApproval' && this.exam.questions.list.length > 0) {
         this.accept = true
-      } else if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length === 0) {
+      } else if (tab === 'finalApproval' && this.exam.questions.list.length === 0) {
         this.accept = false
         const messages = ['سوالی انتخاب نشده است!']
         this.showMessagesInNotify(messages)
@@ -262,7 +268,7 @@ export default {
     },
     createExammm() {
       this.$axios.get(API_ADDRESS.exam.user.create)
-        .then((r) => {
+        .then(() => {
           // console.log(r)
         })
     }
