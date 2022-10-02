@@ -97,7 +97,7 @@ const Time = (function () {
   }
 
   function setStateOfExamCategories (categories, newState) {
-    categories.list.forEach((category, index, categories) => {
+    categories.forEach((category, index, categories) => {
       if (newState === true) {
         category.is_active = true
 
