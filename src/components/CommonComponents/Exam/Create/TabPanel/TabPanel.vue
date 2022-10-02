@@ -35,8 +35,8 @@
         <q-tab-panel name="finalApproval">
           <final-approval-tab
             @deleteQuestionFromExam="deleteQuestionFromExam"
-            @goToLastStep = goToLastStep
-            @goToNextStep = goToNextStep
+            @goToLastStep="goToLastStep"
+            @goToNextStep="goToNextStep"
           />
         </q-tab-panel>
       </q-tab-panels>
@@ -95,14 +95,15 @@ export default {
   props: {
     examInfoInputs: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
     userRule: {
       type: String
     }
   },
 
-  data () {
+  data() {
     return {
       exam: new Exam(),
       currentTab: 'createPage',
@@ -113,31 +114,32 @@ export default {
     }
   },
 
-  provide () {
+  provide() {
     return {
       providedExam: computed(() => this.exam)
     }
   },
 
-  created () {
+  created() {
     this.onLoadPage()
   },
 
   methods: {
-    onLoadPage () {
+    onLoadPage() {
       this.$axios.get(API_ADDRESS.exam.user.draft())
         .then(response => {
           // console.log(response)
-        }).catch(() => {})
+        }).catch(() => {
+        })
     },
 
-    onFilter (filterData) {
+    onFilter(filterData) {
       // console.log('filterData', filterData)
     },
-    addQuestionToExam (question) {
+    addQuestionToExam(question) {
       this.exam.questions.list.push(question)
     },
-    deleteQuestionFromExam (question) {
+    deleteQuestionFromExam(question) {
       const target = this.exam.questions.list.findIndex(questionItem => questionItem.id === question.id)
       if (target === -1) {
         return
@@ -145,28 +147,30 @@ export default {
       this.exam.questions.list.splice(target, 1)
     },
     // FOR EDUCATIONAL PURPOSES
-    camelize (word) {
+    camelize(word) {
       return word.replace(/-./g, x => x[1].toUpperCase())
     },
     // FOR EDUCATIONAL PURPOSES
-    kebabize (word) {
+    kebabize(word) {
       return word.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase())
     },
-    getCurrentIndexOfStep () {
+    getCurrentIndexOfStep() {
       return this.allTabs.indexOf(this.currentTab)
     },
-    isFinalStep (tab) {
+    isFinalStep(tab) {
       return this.allTabs.indexOf(tab) === this.allTabs.length - 1
     },
-    changeTab (tab) {
+    changeTab(tab) {
       this.updateExamData()
-      if (this.accept) { this.currentTab = tab }
+      if (this.accept) {
+        this.currentTab = tab
+      }
     },
-    goToLastStep () {
+    goToLastStep() {
       this.updateExamData()
       this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
     },
-    goToNextStep () {
+    goToNextStep() {
       const nextStep = this.allTabs[this.getCurrentIndexOfStep() + 1]
       if (!nextStep) {
         this.setFinalStep()
@@ -175,7 +179,7 @@ export default {
       this.updateExamData()
       this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1]
     },
-    setFinalStep () {
+    setFinalStep() {
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
       this.createExam().then(res => {
         // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
@@ -185,7 +189,7 @@ export default {
         // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
       })
     },
-    createExam (params) {
+    createExam(params) {
       return new Promise((resolve, reject) => {
         this.$axios.post(API_ADDRESS.exam.user.create, params)
           .then(response => {
@@ -196,7 +200,7 @@ export default {
           })
       })
     },
-    showMessagesInNotify (messages, type) {
+    showMessagesInNotify(messages, type) {
       if (!type) {
         type = 'negative'
       }
@@ -208,7 +212,7 @@ export default {
         })
       })
     },
-    checkValues (formDataValues) {
+    checkValues(formDataValues) {
       const messages = []
       formDataValues.forEach((item) => {
         if (item.type !== 'input' && item.type !== 'dateTime') {
@@ -221,7 +225,7 @@ export default {
       })
       this.showMessagesInNotify(messages, 'negative')
     },
-    checkValidate (formDataValues) {
+    checkValidate(formDataValues) {
       for (const item of Object.entries(formDataValues)) {
         const input = item[1]
         if (input.type === 'input' || input.type === 'dateTime') {
@@ -232,7 +236,7 @@ export default {
         }
       }
     },
-    updateExamData () {
+    updateExamData() {
       if (this.currentTab === 'createPage') {
         const formData = this.$refs.createExam.$refs.EntityCrudFormBuilder.getFormData()
         const formDataValues = this.$refs.createExam.$refs.EntityCrudFormBuilder.getValues()
@@ -270,6 +274,7 @@ export default {
 <style scoped lang="scss">
 .create-exam-panel {
   display: flex;
+
   .exam-create-panel {
     &:deep(.q-tab-panels) {
       background: transparent;
@@ -279,6 +284,7 @@ export default {
         padding: 0;
       }
     }
+
     @media screen and (max-width: 1919px) {
       width: 100%;
       .q-tab-panel {
@@ -295,6 +301,7 @@ export default {
         //padding: 16px 16px 0 16px !important;
       }
     }
+
     .report-problem-dialog {
       position: relative;
 
@@ -324,10 +331,12 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
+
         .q-icon {
           color: #4CAF50;
           padding-bottom: 28px;
         }
+
         .final-btn {
           padding-right: 25px;
           padding-left: 25px;
