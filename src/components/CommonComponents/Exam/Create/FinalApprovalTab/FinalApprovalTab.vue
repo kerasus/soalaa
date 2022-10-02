@@ -354,7 +354,7 @@ export default {
 @media only screen and (max-width: 1919px) {
   .main-container {
     padding-left: 0;
-    padding-right: 24px;
+    //padding-right: 24px;
   }
   .question-bank-filter {
     padding-right: 20px;
