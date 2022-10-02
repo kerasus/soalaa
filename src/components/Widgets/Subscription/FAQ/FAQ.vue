@@ -1,6 +1,5 @@
 <template>
   <div class="faq-container">
-    {{ '....' + data}}
     <q-list class="faq-list">
       <q-expansion-item
         v-for="(item, index) in info"

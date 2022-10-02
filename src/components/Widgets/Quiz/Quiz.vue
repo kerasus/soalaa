@@ -83,7 +83,7 @@ import QuizList from 'src/components/Quiz/QuizList'
 import API_ADDRESS from 'src/api/Addresses'
 import { ExamList } from 'src/models/Exam'
 import moment from 'moment'
-
+import Time from 'src/plugins/time.js'
 export default defineComponent({
   name: 'List',
   //       ToDo : ProgressLinear
@@ -108,7 +108,13 @@ export default defineComponent({
   methods: {
     getBaseExamList () {
       this.allExamsList.loading = true
-      this.$axios.get(API_ADDRESS.exam.userExamList.base())
+      const date = moment(new Date(Time.now())).format('YYYY-MM-DD')
+      this.$axios.get(API_ADDRESS.exam.userExamList.base(), {
+        params:
+          {
+            start_at_till: date
+          }
+      })
         .then((response) => {
           this.allExamsList = new ExamList(response.data.data)
           this.allExamsList.loading = false
@@ -154,7 +160,7 @@ export default defineComponent({
     },
     getUpcomingExams () {
       this.upcomingExams.loading = true
-      const today = moment(new Date(Date.now())).format('YYYY-MM-DD')
+      const today = moment(new Date(Time.now())).format('YYYY-MM-DD')
       this.$axios.get(API_ADDRESS.exam.userExamList.upcomingExams(today))
         .then((response) => {
           this.upcomingExams = new ExamList(response.data.data)

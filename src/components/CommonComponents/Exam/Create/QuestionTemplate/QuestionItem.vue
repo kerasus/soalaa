@@ -610,6 +610,7 @@ export default {
 <style lang="scss" scoped>
 .question-card {
   padding: 18px 24px 24px 24px;
+  margin-bottom: 16px;
 
   @media only screen and (max-width: 1023px) {
     padding: 16px 20px 20px 20px;

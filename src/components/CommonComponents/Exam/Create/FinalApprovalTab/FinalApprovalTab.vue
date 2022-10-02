@@ -47,7 +47,8 @@
             </q-btn>
           </div>
         </div>
-        <div class="exam-categories">
+        <div v-if="exam.categories.length > 2"
+             class="exam-categories">
           <div class="title-show-categories">دفترچه های تعریف شده </div>
           <div class="attached-exam-box">
             <div class="flex row exam-result-box">
@@ -66,13 +67,13 @@
                    :key="index"
                    class="flex row attached-exam">
                 <div class="detail-box exam-result attached-exam-title  detail-box-first col-6">
-                  {{category.title}}
+                  {{category?.title}}
                 </div>
                 <div class="detail-box exam-result detail-box-first col-3">
-                  {{category.time}}
+                  {{category?.time}}
                 </div>
                 <div class="detail-box exam-result order-exam-title detail-box-last col-1">
-                  {{category.order}}
+                  {{category?.order}}
                 </div>
               </div>
             </div>
@@ -224,7 +225,7 @@ export default {
 <style scoped lang="scss">
 
 .main-container {
-  padding: 0 80px 0 84px;
+  padding: 0;
   .exam-detail-container{
     padding-right: 24px;
     .exam-detail-content{
