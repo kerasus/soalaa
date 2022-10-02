@@ -9,9 +9,9 @@
     <div class="exam-info-buttons">
       <div
         class="exam-info-button back-button"
-        @click="goToLastStep"
+        @click="cancelExam"
       >
-        بازگشت
+        لغو
       </div>
       <div
         class="exam-info-button next-button"
@@ -29,55 +29,52 @@
 
 <script>
 import { EntityCrudFormBuilder } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from 'src/models/Exam'
-import mixinTree from 'src/mixin/Tree'
 
 export default {
   name: 'CreateExam',
   components: { EntityCrudFormBuilder },
-  mixins: [
-    mixinTree
-  ],
   props: {
     inputs: {
       type: Object,
       default: () => {}
+    },
+    exam: {
+      type: Object,
+      default: () => {}
+    },
+    majorList: {
+      type: Array,
+      default: () => []
+    },
+    gradesList: {
+      type: Array,
+      default: () => []
+    },
+    typeOptions: {
+      type: Array,
+      default: () => []
     }
   },
-  emits: ['nextTab', 'lastTab'],
-
+  emits: ['nextTab'],
   data () {
     return {
       model: 'one',
       expanded: true,
-      api: API_ADDRESS.exam.base(),
       entityIdKeyInResponse: 'data.id',
       showRouteParamKey: 'id',
       showRouteName: 'Admin.Exam.Show',
       indexRouteName: 'Admin.Exam.Index',
       inputList: [],
-      gradesList: null,
-      lessonGroupList: null,
       lessonsList: null,
-      majorList: null,
+      lessonGroupList: null,
       categoryOptions: [
         { title: 'دفترچه سؤالات عمومی', id: '60b7858d743940688b23c7f3' },
         { title: 'دفترچه سؤالات اختصاصی', id: '60b7858d743940688b23c7f4' }
       ],
-      typeOptions: [],
       category: { title: '', id: '', order: 0, time: 0 },
       allTabs: ['createPage', 'chooseQuestion', 'finalApproval']
     }
   },
-
-  inject: {
-    exam: {
-      from: 'providedExam', // this is optional if using the same key for injection
-      default: new Exam()
-    }
-  },
-
   created () {
     this.onLoadPage()
   },
@@ -97,17 +94,43 @@ export default {
       handler (newValue) {
         this.inputList = newValue
       }
+    },
+    typeOptions: {
+      deep: true,
+      handler (newValue) {
+        this.loadQuestionTypesInput(newValue.map(type => {
+          return {
+            label: type.value,
+            value: type.id
+          }
+        }))
+      }
+    },
+    gradesList: {
+      deep: true,
+      handler (newValue) {
+        this.loadGradesInput(newValue.map(type => {
+          return {
+            label: type.title,
+            value: type.id
+          }
+        }))
+      }
+    },
+    majorList: {
+      deep: true,
+      handler (newValue) {
+        this.loadMajorInput(newValue.map(type => {
+          return {
+            label: type.value,
+            value: type.id
+          }
+        }))
+      }
     }
   },
 
   methods: {
-    onLoadPage () {
-      this.inputList = this.inputs
-      this.getExamTypeList()
-      this.getGradesList()
-      this.loadMajorList()
-    },
-
     loadSelectInputOptions (inputName, options) {
       const inputIndex = this.inputList.findIndex(input => input.name === inputName)
       if (inputIndex === -1) {
@@ -118,57 +141,25 @@ export default {
     loadQuestionTypesInput (options) {
       this.loadSelectInputOptions('question_type', options)
     },
-    getExamTypeList () {
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
-          this.typeOptions = response.data.data.filter(data => data.type === 'exam_type')
-          this.loadQuestionTypesInput(this.typeOptions.map(type => {
-            return {
-              label: type.value,
-              value: type.id
-            }
-          }))
-        })
-        .catch(() => {})
-    },
+
     loadGradesInput (options) {
       this.loadSelectInputOptions('temp.level', options)
-    },
-    getGradesList () {
-      this.getRootNode('test')
-        .then(response => {
-          this.gradesList = response.data.data.children
-          this.loadGradesInput(this.gradesList.map(type => {
-            return {
-              label: type.title,
-              value: type.id
-            }
-          }))
-        })
     },
 
     loadMajorInput (options) {
       this.loadSelectInputOptions('temp.tags', options)
     },
-    loadMajorList () {
-      this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
-        .then((response) => {
-          this.majorList = response.data.data
-          this.loadMajorInput(this.majorList.map(type => {
-            return {
-              label: type.value,
-              value: type.id
-            }
-          }))
-        })
+    onLoadPage () {
+      this.inputList = this.inputs
     },
-
-    goToLastStep () {
-      this.$emit('lastTab')
-    },
-
     goToNextStep () {
       this.$emit('nextTab')
+    },
+    cancelExam() {
+      this.$router.push({ name: 'User.Exam.List' })
+    },
+    getValueByName(name) {
+      this.inputList.findIndex()
     }
   }
 }

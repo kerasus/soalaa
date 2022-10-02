@@ -29,7 +29,8 @@ export default {
           toggleTextColor: 'white',
           textColor: 'black',
           label: 'نوع آزمون',
-          options: [{ label: 'عادی', value: '6225f4828044517f52500c02' }, { label: 'جامع' }]
+          disable: true,
+          options: [{ label: 'عادی', value: '6225f4828044517f52500c02' }, { label: 'جامع', value: 'test' }]
         },
         {
           type: 'input',
@@ -47,7 +48,8 @@ export default {
           placeholder: ' ',
           options: [],
           col: 'col-12 col-md-3 col-sm-6',
-          icon: 'isax:arrow-right-3'
+          icon: 'isax:arrow-right-3',
+          dropdownIcon: 'isax:arrow-down-1'
         },
         {
           type: 'select',
@@ -55,7 +57,8 @@ export default {
           responseKey: 'data.temp.tags',
           label: 'رشته تحصیلی',
           placeholder: ' ',
-          col: 'col-12 col-md-3 col-sm-6'
+          col: 'col-12 col-md-3 col-sm-6',
+          dropdownIcon: 'isax:arrow-down-1'
         },
         {
           type: 'select',
@@ -63,7 +66,8 @@ export default {
           responseKey: 'data.temp.level',
           label: 'پایه تحصیلی',
           placeholder: ' ',
-          col: 'col-12 col-md-3 col-sm-6'
+          col: 'col-12 col-md-3 col-sm-6',
+          dropdownIcon: 'isax:arrow-down-1'
         }
       ]
 
