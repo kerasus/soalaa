@@ -3,7 +3,7 @@
     <div
       name="question-choice-number"
       class="question-choice-number"
-      :class="choice.answer ? 'correct-answer' : 'wrong-answer'"
+      :class="[choice.answer ? 'correct-answer' : 'wrong-answer', isLtr ? 'ltr-margin' : 'rtl-margin']"
     >
       {{ choice.number }}
     </div>
@@ -28,6 +28,10 @@ export default {
     choice: {
       types: '',
       default: ''
+    },
+    isLtr: {
+      type: Boolean,
+      default: false
     }
   }
 }
@@ -62,7 +66,12 @@ export default {
     min-width: 20px;
     height: 20px;
     box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
-    margin-right: 8px;
+    &.ltr-margin{
+      margin-left: 8px;
+    }
+    &.rtl-margin{
+      margin-right: 8px;
+    }
 
     @media only screen and (max-width: 1023px) {
       margin-right: 10px;
