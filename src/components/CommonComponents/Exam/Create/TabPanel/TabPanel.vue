@@ -154,9 +154,6 @@ export default {
 
   created() {
     this.onLoadPage()
-    this.getExamTypeList()
-    this.getGradesList()
-    this.loadMajorList()
   },
 
   methods: {
@@ -308,8 +305,8 @@ export default {
     },
     createExammm() {
       this.$axios.get(API_ADDRESS.exam.user.create)
-        .then(() => {
-          // console.log(r)
+        .then((response) => {
+          this.exam = new Exam(response.data.data)
         })
     },
     setDraft() {
@@ -347,6 +344,11 @@ export default {
       } else if (event.name === 'grade') {
         this.exam.temp.grade = event.value
       }
+    },
+    getOptions() {
+      this.getExamTypeList()
+      this.getGradesList()
+      this.loadMajorList()
     }
   }
 
