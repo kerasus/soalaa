@@ -4,6 +4,8 @@
       <question-filter
         ref="filter"
         :filterQuestions="filterQuestions"
+        :root-node-id-to-load="rootNodeIdInFilter"
+        :node-ids-to-tick="selectedNodesIds"
         @onFilter="onFilter"
         @delete-filter="deleteFilterItem"
       />
@@ -51,6 +53,14 @@
       </div>
     </div>
   </div>
+  <question-tree-modal
+    ref="questionTreeModal"
+    v-model:dialogValue="treeModalValue"
+    v-model:subjectsField="allSubjects"
+    :lessons-list="treeModalLessonsList"
+    single-list-choice-mode
+    @lessonSelected="setFilterTreeLesson"
+  />
 </template>
 
 <script>
@@ -61,15 +71,37 @@ import { Question, QuestionList } from 'src/models/Question'
 import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionsGeneralInfo from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo'
+import QuestionTreeModal from 'components/Question/QuestionPage/QuestionTreeModal'
+import mixinTree from 'src/mixin/Tree'
+import { TreeNode } from 'src/models/TreeNode'
 
 export default {
   name: 'QuestionSelectionTab',
-  components: { QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
-
-  props: {},
+  components: { QuestionTreeModal, QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
+  mixins: [
+    mixinTree
+  ],
+  props: {
+    currentTab: {
+      type: String,
+      default() {
+        return ''
+      }
+    }
+  },
 
   data () {
     return {
+      treeModalValue: false,
+      allSubjects: {},
+      treeModalLessonsList: [],
+      rootNodeIdInFilter: '',
+      groupsList: [],
+      allSubjectsFlat: [],
+      lastSelectedNodes: [],
+      examGradeSetValue: '',
+      selectedNodesIds: [],
+      lessonsTitles: [],
       filterData: null,
       checkBox: false,
       filterQuestions: {
@@ -123,6 +155,24 @@ export default {
         this.exam.questions.list = this.selectedQuestions
         this.questionListKey = Date.now()
       }
+    },
+    currentTab() {
+      if (this.examGradeSetValue !== this.exam.temp.grade) {
+        this.setupTreeModal()
+        this.setLocalGradeValue(this.exam.temp.grade)
+      }
+    },
+    allSubjects: {
+      handler () {
+        this.updateLessonsTitles()
+        this.getTheLastSelectedNode()
+      },
+      deep: true
+    },
+    treeModalValue(newVal) {
+      if (!newVal) {
+        this.updateTreeFilter()
+      }
     }
   },
   created () {
@@ -130,13 +180,39 @@ export default {
     this.getFilterOptions()
     this.getReportOptions()
   },
-  emits: ['onFilter'],
+  mounted() {
+    this.setLocalGradeValue(this.exam.temp.grade)
+    this.setupTreeModal()
+  },
+  emits: [
+    'onFilter',
+    'lastTab',
+    'nextTab',
+    'addQuestionToExam',
+    'deleteQuestionFromExam'
+  ],
+  computed: {},
   methods: {
+    setLocalGradeValue (value) {
+      this.examGradeSetValue = value
+    },
+    updateTreeFilter () {
+      this.selectedNodesIds = this.lastSelectedNodes.map(node => node.id)
+      this.$refs.filter.changeFilterData('tags', this.lastSelectedNodes)
+    },
+    setupTreeModal() {
+      this.toggleTreeModal()
+      this.getLessonsList(new TreeNode({
+        id: this.exam.temp.grade
+      }))
+    },
+    toggleTreeModal() {
+      this.treeModalValue = !this.treeModalValue
+    },
     getReportOptions() {
       this.$axios.get(API_ADDRESS.exam.user.reportType)
         .then((response) => {
           this.reportTypeList = response.data.data
-          // console.log(this.reportTypeList)
         })
     },
     goToLastStep () {
@@ -280,6 +356,48 @@ export default {
         question.selected = false
         this.selectedQuestions.splice(question)
       })
+    },
+    setFilterTreeLesson(item) {
+      this.rootNodeIdInFilter = item.id
+    },
+    getLessonsList (item) {
+      this.getNode(item.id).then(response => {
+        this.treeModalLessonsList = response.data.data.children
+      })
+    },
+    updateLessonsTitles () {
+      const fieldText = []
+      const flatSelectedNodes = []
+      if (Object.keys(this.allSubjects).length !== 0) {
+        for (const key in this.allSubjects) {
+          if (this.allSubjects[key].nodes && this.allSubjects[key].nodes.length > 0) {
+            this.allSubjects[key].nodes.forEach(val => {
+              fieldText.push(val.title)
+              flatSelectedNodes.push(val)
+            })
+          }
+        }
+      }
+      this.allSubjectsFlat = flatSelectedNodes
+      this.lessonsTitles = fieldText
+    },
+    getTheLastSelectedNode () {
+      const foundedNodes = []
+      let cleaned = []
+      this.allSubjectsFlat.forEach((selectedNode) => {
+        selectedNode.ancestors.forEach((parentNode) => {
+          if (this.allSubjectsFlat.find(item => item.id === parentNode.id)) {
+            foundedNodes.push(parentNode)
+          }
+        })
+      })
+      cleaned = this.getUniqueListBy(foundedNodes, 'id')
+      this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
+        return !(cleaned.find(item => item.id === selectedNode.id))
+      })
+    },
+    getUniqueListBy (arr, key) {
+      return [...new Map(arr.map(item => [item[key], item])).values()]
     }
   }
 }
