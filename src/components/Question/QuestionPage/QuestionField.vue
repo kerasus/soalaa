@@ -116,7 +116,7 @@ export default {
 }
 
 .type-section.katex * {
-  font-family: KaTeX_Main, Times New Roman, serif !important;
+  //font-family: KaTeX_Main, Times New Roman, serif !important;
 }
 #mathfield .ML__cmr,
 .katex .mtight {
@@ -130,10 +130,10 @@ export default {
   border: solid 1px #dedede;
 }
 .type-section {
-  font-family: KaTeX_Main, Times New Roman, serif !important;
+  //font-family: KaTeX_Main, Times New Roman, serif !important;
   .katex {
     * {
-      font-family: KaTeX_Main, Times New Roman, serif !important;
+      //font-family: KaTeX_Main, Times New Roman, serif !important;
     }
   }
 }
