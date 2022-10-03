@@ -5,10 +5,9 @@
         v-model:currentComponent="currentTab"
         @currentStepChanged = "changeTab"
       />
-
+      <!--        keep-alive-->
       <q-tab-panels
         v-model="currentTab"
-        keep-alive
         animated
       >
         <q-tab-panel name="createPage">
@@ -27,7 +26,7 @@
 
         <q-tab-panel name="chooseQuestion">
           <question-selection-tab
-            v-model="exam.questions.list"
+            :currentTab="currentTab"
             @onFilter="onFilter"
             @nextTab="goToNextStep"
             @lastTab="goToLastStep"
@@ -342,7 +341,7 @@ export default {
       if (event.name === 'title') {
         this.exam.title = event.value
       } else if (event.name === 'question_type') {
-        this.exam.type.id = event.value
+        this.exam.type_id = event.value
       } else if (event.name === 'major') {
         this.exam.temp.major = event.value
       } else if (event.name === 'grade') {
