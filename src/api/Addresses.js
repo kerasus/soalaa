@@ -159,7 +159,10 @@ const API_ADDRESS = {
       report(questionId) { return lumenServer + '/question/report/store/' + questionId },
       attach: lumenServer + '/exam-question/user/attach/v3',
       detach(questionId) { return lumenServer + '/exam-question/user/detach/' + questionId },
-      attached(examId) { return lumenServer + '/exam-question/user/attach/show/' + examId }
+      attached(examId) { return lumenServer + '/exam-question/user/attach/show/' + examId },
+      updateOrders(examId) {
+        return lumenServer + '/exam-question/user/replace-questions/' + examId
+      }
     }
   },
   question: {
