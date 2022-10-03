@@ -32,6 +32,13 @@ class Exam extends Model {
       { key: 'booklet_url' },
       { key: 'total_question_number' },
       {
+        key: 'temp',
+        default: {
+          geade: null,
+          major: null
+        }
+      },
+      {
         key: 'is_open',
         default: false
       },
