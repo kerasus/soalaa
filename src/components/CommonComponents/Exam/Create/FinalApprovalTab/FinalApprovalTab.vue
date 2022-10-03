@@ -17,8 +17,8 @@
             <p> <span class="field">عنوان آزمون:</span> {{ exam.title }}</p>
             <p> <span class="field">رشته تحصیلی:</span> {{exam.major}}</p>
             <p> <span class="field">پایه تحصیلی:</span> {{exam.grade}}</p>
-            <p> <span class="field">شروع آزمون:</span> <span>  {{ exam.start_at === null ? '' :     exam.shamsiDate('start_at').dateTime }} </span></p>
-            <p> <span class="field">پایان آزمون:</span> <span> {{  exam.finish_at === null ? '' :     exam.shamsiDate('finish_at').dateTime  }} </span></p>
+            <p> <span class="field">شروع آزمون:</span> <span>  {{ exam.start_at === null ? '' :  exam.shamsiDate('start_at').dateTime }} </span></p>
+            <p> <span class="field">پایان آزمون:</span> <span> {{  exam.finish_at === null ? '' :  exam.shamsiDate('finish_at').dateTime  }} </span></p>
             <p> <span class="field">مدت زمان آزمون:</span> {{exam.exam_time}} </p>
             <p> <span class="field">مدت تاخیر آزمون:</span> {{exam.delay_time}}</p>
           </div>
@@ -82,7 +82,7 @@
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12 ">
         <div class="question-item-content">
-          <question-item v-if="questions.loading"
+          <question-item v-if="exam.questions.loading"
                          :question="loadingQuestion" />
           <template v-else-if="exam.questions.list.length > 0">
             <q-virtual-scroll
@@ -91,10 +91,11 @@
               :virtual-scroll-item-size="450"
               :virtual-scroll-slice-size="5"
             >
-              <template v-slot="{ item }">
+              <template v-slot="{ item , index}">
                 <question-item
                   :key="item.id"
                   :question="item"
+                  :index="index"
                   pageStrategy="question-bank"
                   final-approval-mode
                   @changeOrder="changeSelectedQuestionOrder"
@@ -113,7 +114,7 @@
 import { Question, QuestionList } from 'src/models/Question'
 import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem'
 import { Exam } from 'src/models/Exam'
-
+import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'FinalApprovalTab',
   components: { QuestionItem },
@@ -125,13 +126,6 @@ export default {
   },
   data () {
     return {
-      // start_At: this.exam.start_at,
-      // finish_At: this.exam.finish_at,
-      filterQuestions: {
-        major_type: [],
-        reference_type: [],
-        year_type: []
-      },
       questionListKey: Date.now(),
       loadingQuestion: new Question(),
       questions: new QuestionList(),
@@ -149,41 +143,80 @@ export default {
     }
   },
   created () {
-    this.getExamQuestions()
+    this.initPageData()
   },
   watch: {
     'exam.questions.list.length': {
       handler (newValue) {
-        this.getExamQuestions()
+        this.initPageData()
       }
     }
   },
   methods: {
-    // getShamsiDate (value) {
-    //   return moment(value, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
-    // },
+    initPageData () {
+      console.log('this.exam :', this.exam)
+      this.questions = new QuestionList({ ...this.exam.questions })
+      this.reIndexEamQuestions()
+    },
+
     changeSelectedQuestionOrder (value) {
-      const fromIndex = this.exam.questions.list.findIndex(item => item.id === value.question.id)
-      let toIndex = fromIndex - 1 // the index before
+      // const fromIndex = this.exam.questions.list.findIndex(item => item.id === value.question.id)
+      // console.log('fromIndex', fromIndex)
+      // let toIndex = fromIndex - 1 // the index before
+      // if (value.mode === 'down') {
+      //   toIndex = fromIndex + 1 // the index after
+      // }
+      console.log('befoer : ', this.questions.list)
+      const fromIndex2 = this.questions.list.findIndex(item => item.id === value.question.id)
+      console.log('fromIndex2 :', fromIndex2)
+      // // let tt = fromIndex2 + 1
+      // // value.mode === 'down' ? tt++ : tt--
       if (value.mode === 'down') {
-        toIndex = fromIndex + 1 // the index after
+        this.questions.list[fromIndex2].order++
+        this.questions.list[fromIndex2 + 1].order--
+      } else {
+        this.questions.list[fromIndex2].order--
+        console.log()
+        this.questions.list[fromIndex2 - 1].order++
       }
-      const element = this.exam.questions.list.splice(fromIndex, 1)[0]
-      this.exam.questions.list.splice(toIndex, 0, element)
-      this.reIndexEamQuestions(this.exam.questions.list)
+
+      // const element = this.exam.questions.list.splice(fromIndex, 1)[0]
+      // this.exam.questions.list.splice(toIndex, 0, element)
+      // this.reIndexEamQuestions(this.exam.questions.list)
+      const data = {
+        questions: []
+      }
+      this.questions.list.forEach(question => {
+        data.questions.push({
+          question_id: question.id,
+          order: question.order
+        })
+      })
+      console.log('this.exam :', this.exam)
+      this.$axios.post(API_ADDRESS.exam.user.updateOrders(this.exam.type_id), data)
+        .then(res => {
+          console.log('res :', res)
+        })
+      console.log('data :', data)
+    },
+    updateOrder(question) {
+
     },
     toggleQuestionSelected (question) {
       question.selected = !question.selected
     },
+
     handleAddOrDelete (question) {
-      if (question.selected) {
-        this.addQuestionToExam(question)
-      } else {
-        this.deleteQuestionFromExam(question)
-      }
+      // if (question.selected) {
+      //   this.addQuestionToExam(question)
+      // } else {
+      //   this.deleteQuestionFromExam(question)
+      // }
+      question.selected ? this.addQuestionToExam(question) : this.deleteQuestionFromExam(question)
       this.reIndexEamQuestions(this.exam.questions.list)
     },
     onClickedCheckQuestionBtn (question) {
+      console.log('onClickedCheckQuestionBtn', question)
       this.toggleQuestionSelected(question)
       this.handleAddOrDelete(question)
     },
@@ -198,20 +231,15 @@ export default {
     updatePage (page) {
       this.getExamQuestions(page)
     },
-    reIndexEamQuestions (questionList) {
-      questionList.map((item, index) => {
+    reIndexEamQuestions () {
+      this.questions.list.map((item, index) => {
         item.selected = true
         item.order = index + 1
         return true
       })
-    },
-    fakeExamQuestionScenario (questionList) {
-      this.reIndexEamQuestions(questionList)
-    },
-    getExamQuestions () {
-      this.fakeExamQuestionScenario(this.exam.questions.list)
-    },
 
+      console.log(this.questions)
+    },
     goToLastStep () {
       this.$emit('goToLastStep')
     },
