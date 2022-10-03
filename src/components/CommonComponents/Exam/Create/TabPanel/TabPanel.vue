@@ -5,10 +5,9 @@
         v-model:currentComponent="currentTab"
         @currentStepChanged = "changeTab"
       />
-
+      <!--        keep-alive-->
       <q-tab-panels
         v-model="currentTab"
-        keep-alive
         animated
       >
         <q-tab-panel name="createPage">
