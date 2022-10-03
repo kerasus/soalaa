@@ -376,6 +376,7 @@ export default {
       } catch (e) {
         this.exam.questions.loading = false
       }
+    },
     getOptions() {
       this.getExamTypeList()
       this.getGradesList()
