@@ -53,8 +53,8 @@ export default {
         },
         {
           type: 'select',
-          name: 'temp.tags',
-          responseKey: 'data.temp.tags',
+          name: 'temp.major',
+          responseKey: 'data.temp.major',
           label: 'رشته تحصیلی',
           placeholder: ' ',
           col: 'col-12 col-md-3 col-sm-6',
@@ -62,8 +62,8 @@ export default {
         },
         {
           type: 'select',
-          name: 'temp.level',
-          responseKey: 'data.temp.level',
+          name: 'temp.grade',
+          responseKey: 'data.temp.grade',
           label: 'پایه تحصیلی',
           placeholder: ' ',
           col: 'col-12 col-md-3 col-sm-6',
