@@ -140,7 +140,7 @@ export default {
       //font-family: KaTeX_Main, Times New Roman, serif;
     }
     /*rtl:ignore*/
-    //direction: ltr !important;
+    direction: ltr !important;
     /*rtl:ignore*/
   }
   table {
