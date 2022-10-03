@@ -157,7 +157,9 @@ export default {
   },
 
   created() {
-    this.onLoadPage()
+    this.getOptions().then(() => {
+      this.onLoadPage()
+    })
   },
 
   methods: {
@@ -321,23 +323,38 @@ export default {
       this.draftExam = {}
     },
     getGradesList () {
-      this.getRootNode('test')
-        .then(response => {
-          this.gradesList = response.data.data.children
-        })
+      return new Promise((resolve, reject) => {
+        this.getRootNode('test')
+          .then(response => {
+            this.gradesList = response.data.data.children
+            resolve(response)
+          }).catch(() => {
+            reject()
+          })
+      })
     },
     getExamTypeList () {
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
-          this.typeOptions = response.data.data.filter(data => data.type === 'exam_type')
-        })
-        .catch(() => {})
+      return new Promise((resolve, reject) => {
+        this.$axios.get(API_ADDRESS.option.base)
+          .then((response) => {
+            this.typeOptions = response.data.data.filter(data => data.type === 'exam_type')
+            resolve(response)
+          })
+          .catch(() => {
+            reject()
+          })
+      })
     },
     loadMajorList () {
-      this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
-        .then((response) => {
-          this.majorList = response.data.data
-        })
+      return new Promise((resolve, reject) => {
+        this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
+          .then((response) => {
+            this.majorList = response.data.data
+            resolve(response)
+          }).catch(() => {
+            reject()
+          })
+      })
     },
 
     setInputValue(event) {
@@ -378,9 +395,11 @@ export default {
       }
     },
     getOptions() {
-      this.getExamTypeList()
-      this.getGradesList()
-      this.loadMajorList()
+      return Promise.all([
+        this.getExamTypeList(),
+        this.getGradesList(),
+        this.loadMajorList()
+      ])
     }
   }
 
