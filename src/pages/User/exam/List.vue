@@ -1,20 +1,13 @@
 <template>
-  <div
-    class="userExamList"
-    style="font-size: 16px;"
-  >
-    <!--    ToDo : add confirm-dialog-->
-    <!--    <vue-confirm-dialog />-->
-    <div class="fit row wrap justify-center items-start content-start"
-    >
+  <div class="userExamList">
+    <div class="fit row wrap justify-center items-start content-start">
       <div class="col col-9 examList-container">
-        <!--        ToDo : ProgressLinear-->
-        <!--        <progress-linear :active="loadingList" />-->
-        <q-banner
-          v-if="exams.list.length === 0 && !loadingList"
-          inline-actions
-          rounded
-          class="bg-blue text-white">
+        <q-linear-progress v-if="loadingList"
+                           indeterminate />
+        <q-banner v-if="exams.list.length === 0 && !loadingList"
+                  inline-actions
+                  rounded
+                  class="bg-blue text-white">
           <template v-slot:avatar>
             <q-icon name="mdi-information"
                     color="white"></q-icon>
@@ -27,7 +20,6 @@
             <div class="row table-header"
                  style="padding-bottom: 12px;"
             >
-              <div class="col col-1" />
               <div class="col col-3 text-center examList-title-text"
               >
                 عنوان آزمون
@@ -47,26 +39,18 @@
               >
                 میزان تاخیر مجاز
               </div>
-              <div class="col col-4 text-center examList-title-text"
+              <div class="col col-6 text-center examList-title-text"
               >
                 عملیات
               </div>
-              <div class="col col-1" />
             </div>
             <div v-for="item in exams.list"
                  :key="item.id"
                  class="row exam-info-bar"
             >
               <div class="col">
-                <!--                elevation="0"
-                                  outlined
-                                  rounded
-                                  shaped-->
-                <div
-                  class="d-flex exam-list-sheet"
-                >
+                <div class="d-flex exam-list-sheet">
                   <div class="row table-row justify-center">
-                    <div class="col col-1 exam-list-empty-col" />
                     <div class="col col-12 col-md-3 pr-7 justify-center text-center examList-content-text"
                     >
                       {{ item.title }}
@@ -95,7 +79,7 @@
                       {{ item.delay_time }}
                       دقیقه
                     </div>
-                    <div class="col col-12 col-md-4 examList-action-section"
+                    <div class="col col-12 col-md-6 examList-action-section"
                     >
                       <q-btn v-if="item.exam_actions.can_register"
                              class="exam-action-big-btn exam-btn-text"
@@ -244,7 +228,6 @@
                         {{ item.holding_status }}
                       </q-btn>
                     </div>
-                    <div class="col col-1 exam-list-empty-col" />
                   </div>
                 </div>
               </div>
@@ -516,13 +499,14 @@ export default {
         color: #FFFFFF;
       }
       .exam-action-big-btn {
-        width: 208px;
+        //max-width: 208px;
+        //min-width: 208px;
         height: 40px;
         border-radius: 10px;
       }
       .exam-action-medium-btn {
         padding: 0;
-        width: 96px;
+        //width: 96px;
         height: 40px;
         border-radius: 10px;
         margin-right: 16px;

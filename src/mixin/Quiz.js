@@ -243,7 +243,7 @@ const mixinQuiz = {
               // save exam info in vuex store (remove questions of exam then save in store)
               examData.exam.loadSubcategoriesOfCategories()
               const ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
-              Time.setStateOfExamCategories(examData.exam.categories, ACTIVE_ALL_CATEGORIES_IN_EXAM)
+              Time.setStateOfExamCategories(examData.exam.categories.list, ACTIVE_ALL_CATEGORIES_IN_EXAM)
               const currentExamQuestions = that.getCurrentExamQuestions()
               Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
               that.$store.commit('Exam/updateQuiz', examData.exam)
@@ -443,13 +443,13 @@ const mixinQuiz = {
           .run()
           .then((result) => {
             try {
-              if (that.needToLoadQuizData()) {
+              if (that.needToLoadQuizData() || retake) {
                 // save questions in localStorage
                 that.saveCurrentExamQuestions(examData.exam.questions.list)
                 // save exam info in vuex store (remove questions of exam then save in store)
                 examData.exam.loadSubcategoriesOfCategories()
                 const ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
-                Time.setStateOfExamCategories(examData.exam.categories, ACTIVE_ALL_CATEGORIES_IN_EXAM)
+                Time.setStateOfExamCategories(examData.exam.categories.list, ACTIVE_ALL_CATEGORIES_IN_EXAM)
                 const currentExamQuestions = that.getCurrentExamQuestions()
                 Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
                 that.$store.commit('Exam/updateQuiz', examData.exam)
@@ -513,7 +513,7 @@ const mixinQuiz = {
       if (viewType !== 'results') {
         const currentExamQuestions = this.getCurrentExamQuestions()
         const ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
-        Time.setStateOfExamCategories(quiz.categories, ACTIVE_ALL_CATEGORIES_IN_EXAM)
+        Time.setStateOfExamCategories(quiz.categories.list, ACTIVE_ALL_CATEGORIES_IN_EXAM)
         Time.setStateOfQuestionsBasedOnActiveCategory(quiz, currentExamQuestions)
         this.setCurrentExamQuestions(currentExamQuestions)
       }
@@ -689,10 +689,12 @@ const mixinQuiz = {
       return this.getQuestionByIndex(prevIndex)
     },
     goToCategory (categoryId) {
-      const nextCategoryQuestion = this.quiz.questions.list.find((item) => Assistant.getId(item.category_id) === Assistant.getId(categoryId))
-      if (nextCategoryQuestion) {
-        this.changeQuestion(nextCategoryQuestion.id)
+      const currentExamQuestionsInArray = this.getCurrentExamQuestionsInArray()
+      const firstQuestionOfCategory = currentExamQuestionsInArray.find((item) => Assistant.getId(item.sub_category.category_id) === Assistant.getId(categoryId))
+      if (!firstQuestionOfCategory) {
+        return
       }
+      this.changeQuestion(firstQuestionOfCategory.id)
     },
     goToNextQuestion (viewType) {
       const question = this.getNextQuestion(this.currentQuestion.id)

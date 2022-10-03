@@ -51,6 +51,9 @@ const Time = (function () {
   }
   function now () {
     if (!window.serverDate?.offset) {
+      if (!window.serverDate) {
+        window.serverDate = {}
+      }
       window.serverDate.offset = 0
     }
     const serverDate = new Date(Date.now() + window.serverDate.offset)
@@ -94,7 +97,7 @@ const Time = (function () {
   }
 
   function setStateOfExamCategories (categories, newState) {
-    categories.list.forEach((category, index, categories) => {
+    categories.forEach((category, index, categories) => {
       if (newState === true) {
         category.is_active = true
 

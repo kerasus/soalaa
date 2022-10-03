@@ -137,7 +137,7 @@ export default {
   }
   .katex {
     * {
-      font-family: KaTeX_Main, Times New Roman, serif !important;
+      //font-family: KaTeX_Main, Times New Roman, serif;
     }
     /*rtl:ignore*/
     direction: ltr !important;
