@@ -55,7 +55,7 @@ export default {
       default: () => []
     }
   },
-  emits: ['nextTab'],
+  emits: ['nextTab', 'getInputValue'],
   data () {
     return {
       model: 'one',
@@ -85,6 +85,18 @@ export default {
     },
     totalCategory () {
       return this.inputList[this.examCategoriesIndex].value && this.inputList[this.examCategoriesIndex].value.length >= 2
+    },
+    title() {
+      return this.getValueByName('title')
+    },
+    questionType() {
+      return this.getValueByName('question_type')
+    },
+    tempMajor() {
+      return this.getValueByName('temp.major')
+    },
+    tempGrade() {
+      return this.getValueByName('temp.grade')
     }
   },
 
@@ -127,6 +139,42 @@ export default {
           }
         }))
       }
+    },
+    title: {
+      deep: true,
+      handler (newValue) {
+        this.$emit('getInputValue', {
+          name: 'title',
+          value: newValue
+        })
+      }
+    },
+    questionType: {
+      deep: true,
+      handler (newValue) {
+        this.$emit('getInputValue', {
+          name: 'question_type',
+          value: newValue
+        })
+      }
+    },
+    tempMajor: {
+      deep: true,
+      handler (newValue) {
+        this.$emit('getInputValue', {
+          name: 'major',
+          value: newValue
+        })
+      }
+    },
+    tempGrade: {
+      deep: true,
+      handler (newValue) {
+        this.$emit('getInputValue', {
+          name: 'grade',
+          value: newValue
+        })
+      }
     }
   },
 
@@ -143,11 +191,11 @@ export default {
     },
 
     loadGradesInput (options) {
-      this.loadSelectInputOptions('temp.level', options)
+      this.loadSelectInputOptions('temp.grade', options)
     },
 
     loadMajorInput (options) {
-      this.loadSelectInputOptions('temp.tags', options)
+      this.loadSelectInputOptions('temp.major', options)
     },
     onLoadPage () {
       this.inputList = this.inputs
@@ -159,7 +207,7 @@ export default {
       this.$router.push({ name: 'User.Exam.List' })
     },
     getValueByName(name) {
-      this.inputList.findIndex()
+      return this.inputList[this.inputList.findIndex(item => item.name === name)]?.value
     }
   }
 }

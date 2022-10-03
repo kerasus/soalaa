@@ -21,6 +21,7 @@
             :majorList="majorList"
             :inputs="examInfoInputs"
             @nextTab="goToNextStep"
+            @getInputValue="setInputValue($event)"
           />
         </q-tab-panel>
 
@@ -336,6 +337,17 @@ export default {
         .then((response) => {
           this.majorList = response.data.data
         })
+    },
+    setInputValue(event) {
+      if (event.name === 'title') {
+        this.exam.title = event.value
+      } else if (event.name === 'question_type') {
+        this.exam.type = event.value
+      } else if (event.name === 'major') {
+        this.exam.temp.major = event.value
+      } else if (event.name === 'grade') {
+        this.exam.temp.grade = event.value
+      }
     }
   }
 
