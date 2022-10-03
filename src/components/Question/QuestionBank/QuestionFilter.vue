@@ -38,9 +38,11 @@
       >
         <tree-component
           ref="tree"
+          :key="treeKey"
           tick-strategy="strict"
           :get-node-by-id="getNodeById"
           @ticked="tickedData"
+          @lazy-loaded="getExpandedTree"
         />
       </question-filter-expansion>
 
@@ -119,6 +121,8 @@ import QuestionFilterExpansion from 'components/Question/QuestionBank/QuestionFi
 
 export default {
   name: 'QuestionBankFilter',
+  components: { QuestionFilterExpansion, TreeComponent },
+  mixins: [mixinTree],
   props: {
     filterQuestions: {
       type: Object,
@@ -127,10 +131,23 @@ export default {
           reference_type: null
         }
       }
+    },
+    rootNodeIdToLoad: {
+      type: String,
+      default: () => {
+        return ''
+      }
+    },
+    nodeIdsToTick: {
+      type: Array,
+      default: () => {
+        return []
+      }
     }
   },
   data () {
     return {
+      treeKey: 0,
       check: false,
       selectedReference: [],
       selectedYears: [],
@@ -143,6 +160,32 @@ export default {
         majors: [],
         level: [],
         years: []
+      }
+    }
+  },
+  watch: {
+    'selectedQuestions.length': {
+      handler(newValue, oldValue) {
+        this.exam.questions.list = []
+        this.exam.questions.list = this.selectedQuestions
+        this.questionListKey = Date.now()
+      }
+    },
+    rootNodeIdToLoad: {
+      deep: true,
+      handler(newVal) {
+        this.showTreeModalNode(newVal)
+      }
+    },
+    nodeIdsToTick: {
+      deep: true,
+      handler(newVal) {
+        const tags = newVal.map(function(key) {
+          return {
+            id: key
+          }
+        })
+        this.changeFilterData('tags', tags)
       }
     }
   },
@@ -161,14 +204,30 @@ export default {
       return titles
     }
   },
-  mixins: [mixinTree],
-  components: { QuestionFilterExpansion, TreeComponent },
   created () {
-    this.showTree('tree', this.getRootNode('test'))
-      .then(() => {
-      })
+    this.showTreeModalNode(this.rootNodeIdToLoad)
   },
   methods: {
+    setNodesTicked (nodeIds) {
+      this.$refs.tree.setNodesTicked(nodeIds, true)
+    },
+    getExpandedTree(tree) {
+      const currentTreeNodeIds = tree.map(node => node.id)
+      const availableIdsToTick = []
+      this.nodeIdsToTick.forEach(idToTick => {
+        const foundedIds = currentTreeNodeIds.filter(key => key === idToTick)
+        availableIdsToTick.push(...foundedIds)
+      })
+      if (availableIdsToTick.length > 0) {
+        this.setNodesTicked(availableIdsToTick)
+      }
+    },
+    showTreeModalNode (NodeId) {
+      const nodeToLoadTreeFrom = NodeId ? this.getNode(NodeId) : this.getRootNode('test')
+      this.treeKey += 1
+      this.showTree('tree', nodeToLoadTreeFrom)
+        .then(() => {})
+    },
     getFilters () {
       return this.filtersData
     },
@@ -180,7 +239,6 @@ export default {
       this.onUpdateFilterData()
     },
     onChangeReference (value) {
-      console.log('val:', value)
       this.changeFilterData('reference', value)
     },
     onChangeLevels (value) {
@@ -215,7 +273,6 @@ export default {
       this.filtersData.majors.splice(0, this.filtersData.majors.length)
 
       // this.QuestionFilters.splice(0, this.QuestionFilters.length)
-      console.log(this.QuestionFilters, this.filtersData)
       this.onUpdateFilterData()
     }
   }

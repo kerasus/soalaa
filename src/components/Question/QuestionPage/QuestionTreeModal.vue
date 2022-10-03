@@ -122,6 +122,12 @@ export default {
     },
     subjectsField: {
       type: Object
+    },
+    singleListChoiceMode: {
+      type: Boolean,
+      default () {
+        return false
+      }
     }
   },
   emits: [
@@ -272,6 +278,11 @@ export default {
     currentTreeNode (newVal) {
       if (newVal.length > 0) {
         this.updateChosenSubjects()
+      }
+    },
+    lesson (newVal) {
+      if (newVal && this.singleListChoiceMode) {
+        this.deleteAllNodes()
       }
     }
   }
