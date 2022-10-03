@@ -78,16 +78,16 @@ export default {
         year_type: [],
         levels: [
           {
-            id: '1',
-            value: 'آسان'
+            value: '1',
+            label: 'آسان'
           },
           {
-            id: '2',
-            value: 'متوسط'
+            value: '2',
+            label: 'متوسط'
           },
           {
-            id: '3',
-            value: 'سخت'
+            value: '3',
+            label: 'سخت'
           }
         ]
       },
