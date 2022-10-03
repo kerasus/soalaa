@@ -31,7 +31,7 @@
 import { EntityCrudFormBuilder } from 'quasar-crud'
 
 export default {
-  name: 'CreateExam',
+  name: 'ExamInfoTab',
   components: { EntityCrudFormBuilder },
   props: {
     inputs: {
