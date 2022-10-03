@@ -39,10 +39,15 @@
             محدودیت ساخت آزمون
           </div>
           <highcharts class="flex flex-center"
-                      :options="chartOptions" />
+                      :options="chartOptionsExam" />
         </q-tab-panel>
-        <q-tab-panel name="pdf">
-          dsf
+        <q-tab-panel name="pdf"
+                     class="subscription-status-test-tab">
+          <div class="subscription-status-test-tab-title">
+            محدودیت دانلود PDF
+          </div>
+          <highcharts class="flex flex-center"
+                      :options="chartOptionsPdf" />
         </q-tab-panel>
       </q-tab-panels>
     </div>
@@ -60,7 +65,7 @@ export default {
   data() {
     return {
       tab: 'tests',
-      chartOptions: {
+      chartOptionsExam: {
         chart: {
           height: '150',
           width: '150',
@@ -105,6 +110,59 @@ export default {
           verticalAlign: 'middle',
           floating: true,
           text: 'آزمون باقی‌مانده'
+        },
+        series: [{
+          id: 'idData',
+          data: [
+            { name: '', y: 31, color: '#9690E4' }
+          ]
+        }]
+      },
+      chartOptionsPdf: {
+        chart: {
+          height: '150',
+          width: '150',
+          type: 'pie',
+          plotShadow: false
+        },
+        credits: {
+          enabled: false
+        },
+        tooltip: {
+          shared: false,
+          useHTML: true,
+          borderWidth: 0,
+          backgroundColor: 'rgba(255,255,255,0)',
+          shadow: false,
+          formatter: function () {
+            const point = this.point
+            return '<span class="myTooltip" style="padding:5px;border-radius:5px;background-color:' + point.color + ';">' + point.y + '&nbsp' + 'PDF' + '</span>'
+          }
+        },
+        plotOptions: {
+          pie: {
+            innerSize: '98%',
+            startAngle: 0,
+            endAngle: 90,
+            borderWidth: 13,
+            center: ['50%', '52%'],
+            size: '150%',
+            borderColor: null,
+            backgroundColor: '#F2F500',
+            slicedOffset: 15,
+            dataLabels: {
+              connectorWidth: 0
+            }
+          }
+        },
+        title: {
+          y: 20,
+          style: {
+            useHTML: true
+          },
+          verticalAlign: 'middle',
+          floating: true,
+          text: 'PDF باقی‌مانده'
         },
         series: [{
           id: 'idData',
