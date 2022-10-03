@@ -370,7 +370,13 @@ export default {
     }
   },
 
-  emits: ['selectAllQuestions', 'deleteAllQuestions', 'remove'],
+  emits: [
+    'selectAllQuestions',
+    'deleteAllQuestions',
+    'remove',
+    'nextTab',
+    'lastTab'
+  ],
 
   created () {
     this.setDifficultyLevelsChart()

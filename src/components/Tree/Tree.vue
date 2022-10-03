@@ -2,6 +2,7 @@
   <q-tree
     ref="tree"
     v-model:ticked="ticked"
+    v-model:expanded="expandedNodes"
     class="q-ma-lg"
     :nodes="nodes"
     no-nodes-label="درختی ایجاد نشده است!"
@@ -12,6 +13,7 @@
     :tick-strategy="tickStrategy"
     @update:ticked="tickedNode"
     @lazy-load="getChildOfNode"
+    @update:expanded="nodeExpanded"
   >
     <template v-slot:default-header="prop">
       <span class="node-title">
@@ -180,6 +182,7 @@ export default {
   data: () => {
     return {
       ticked: [],
+      expandedNodes: [],
       completeTickedNode: [],
       nodes: [],
       tab: 'createNewNode',
@@ -200,6 +203,8 @@ export default {
     }
   },
 
+  mounted() {},
+
   watch: {
     editDialog () {
       this.tab = this.tabName
@@ -209,7 +214,11 @@ export default {
     }
   },
 
-  emits: ['ticked', 'lazy-loaded'],
+  emits: [
+    'ticked',
+    'expanded',
+    'lazy-loaded'
+  ],
 
   methods: {
     createRoot (nodeData) {
@@ -223,7 +232,6 @@ export default {
       this.completeTickedNode = []
       target.forEach(id => {
         const node = this.nodes[0].findNode(id)
-        // console.log('node', node)
         if (!node) {
           return
         }
@@ -320,6 +328,10 @@ export default {
 
     toggleMenu (state) {
       this.editDialog = state
+    },
+
+    nodeExpanded(nodeIds) {
+      this.$emit('expanded', nodeIds)
     }
   }
 }
