@@ -6,4 +6,10 @@
       margin-right:-.55555556em
     }
   }
+  .mtable {
+    .col-align-l > .vlist-t {
+      /*rtl:ignore*/
+      text-align: left;
+    }
+  }
 }
