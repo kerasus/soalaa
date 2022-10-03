@@ -162,6 +162,9 @@ const API_ADDRESS = {
       attached(examId) { return lumenServer + '/exam-question/user/attach/show/' + examId },
       updateOrders(examId) {
         return lumenServer + '/exam-question/user/replace-questions/' + examId
+      },
+      detachBulk(examId) {
+        return lumenServer + '/exam-question/user/detach/bulk/' + examId
       }
     }
   },
