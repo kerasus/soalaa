@@ -239,16 +239,15 @@
         />
 
         <q-btn
-          v-if="finalApprovalMode"
+          v-if="finalApprovalMode && questionsLength > 1 &&  questionIndex+1 !== 1"
           unelevated
           icon="isax:arrow-up-2"
           color="primary"
           class="question-item-button"
           @click="changeOrder('up', question)"
         />
-
         <q-btn
-          v-if="finalApprovalMode"
+          v-if="finalApprovalMode  && questionsLength > 1 && questionIndex+1 < questionsLength "
           unelevated
           icon="isax:arrow-down-1"
           color="primary"
@@ -362,6 +361,18 @@ export default {
     // VideoPlayer
   },
   props: {
+    questionsLength: {
+      type: Number,
+      default: 0
+    },
+    questionIndex: {
+      type: Number,
+      default: 0
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
     question: {
       type: Question,
       default: new Question()

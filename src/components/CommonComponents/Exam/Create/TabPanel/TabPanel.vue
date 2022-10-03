@@ -36,9 +36,13 @@
         </q-tab-panel>
 
         <q-tab-panel name="finalApproval">
+          <!--          deleteQuestionFromExam-->
           <final-approval-tab
-            @deleteQuestionFromExam="deleteQuestionFromExam"
-            @goToLastStep="goToLastStep"
+            :majors="majorList"
+            :grades="gradesList"
+            @detachQuestion="bulkDetachLastStep"
+            @updateOrders="updateQuestionOrder"
+            @creatFinalExam="submitFinalExam"
             @goToNextStep="goToNextStep"
           />
         </q-tab-panel>
@@ -228,7 +232,8 @@ export default {
     },
     setFinalStep() {
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-      this.createExam().then(() => {
+      this.createExam().then((createExam) => {
+        this.exam = new Exam(createExam.data.data)
         // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         this.examConfirmedDialog = true
       }).catch(err => {
@@ -338,6 +343,7 @@ export default {
           this.majorList = response.data.data
         })
     },
+
     setInputValue(event) {
       if (event.name === 'title') {
         this.exam.title = event.value
@@ -347,6 +353,32 @@ export default {
         this.exam.temp.major = event.value
       } else if (event.name === 'grade') {
         this.exam.temp.grade = event.value
+      }
+    },
+    submitFinalExam() {
+      this.exam.enable = true
+      this.createExam({
+        params: {}
+      })
+    },
+    async updateQuestionOrder(data) {
+      this.exam.questions.loading = true
+      try {
+        const response = await this.$axios.post(API_ADDRESS.exam.user.updateOrders('633aed8b3b8e23f84807cca2'), data)
+        console.log('response update exam :', response)
+        this.exam.questions.loading = false
+      } catch (e) {
+        this.exam.questions.loading = false
+      }
+    },
+    async bulkDetachLastStep(data) {
+      this.exam.questions.loading = true
+      try {
+        const response = await this.$axios.post(API_ADDRESS.exam.user.detachBulk('633aed8b3b8e23f84807cca2'), data)
+        console.log('response bulkDetachLastStep:', response)
+        this.exam.questions.loading = false
+      } catch (e) {
+        this.exam.questions.loading = false
       }
     }
   }
