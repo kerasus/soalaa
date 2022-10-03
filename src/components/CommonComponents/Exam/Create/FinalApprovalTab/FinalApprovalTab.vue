@@ -10,21 +10,42 @@
              class="exam-detail-content">
           <div class="exam-specifications flex justify-between">
             <div class="header-title"> مشخصات آزمون </div>
-            <div class="exam-title"> آزمون ۱۲۳۴۵۶۷</div>
+            <div class="exam-title"> آزمون </div>
           </div>
           <div class="exam-details">
-            <p> <span class="field">نوع آزمون:</span> {{exam.type_id}}</p>
+            <p> <span class="field">نوع آزمون:</span> {{exam.id}}</p>
             <p> <span class="field">عنوان آزمون:</span> {{ exam.title }}</p>
-            <p> <span class="field">رشته تحصیلی:</span> {{exam.major}}</p>
-            <p> <span class="field">پایه تحصیلی:</span> {{exam.grade}}</p>
-            <p> <span class="field">شروع آزمون:</span> <span>  {{ exam.start_at === null ? '' :     exam.shamsiDate('start_at').dateTime }} </span></p>
-            <p> <span class="field">پایان آزمون:</span> <span> {{  exam.finish_at === null ? '' :     exam.shamsiDate('finish_at').dateTime  }} </span></p>
+            <p> <span class="field">رشته تحصیلی:</span> {{ examMajor() }}</p>
+            <p> <span class="field">پایه تحصیلی:</span> {{ examGrade() }}</p>
+            <p> <span class="field">شروع آزمون:</span> <span>  {{ exam.start_at === null ? '' :  exam.shamsiDate('start_at').dateTime }} </span></p>
+            <p> <span class="field">پایان آزمون:</span> <span> {{  exam.finish_at === null ? '' :  exam.shamsiDate('finish_at').dateTime  }} </span></p>
             <p> <span class="field">مدت زمان آزمون:</span> {{exam.exam_time}} </p>
             <p> <span class="field">مدت تاخیر آزمون:</span> {{exam.delay_time}}</p>
           </div>
           <div class="selected-questions">
             <div class="title"> سوالات انتخابی</div>
-            <div> highchart</div>
+            <div class="chart-box row justify-around items-center q-mt-md">
+              <div class="col-6">
+                <div class="chart-titles">
+                  <q-badge class="titles-icon hard"
+                           rounded />
+                  <div>سخت</div>
+                </div>
+                <div class="chart-titles">
+                  <q-badge class="titles-icon medium"
+                           rounded></q-badge>
+                  <div>متوسط</div>
+                </div>
+                <div class="chart-titles">
+                  <q-badge class="titles-icon easy"
+                           rounded></q-badge>
+                  <div>آسان</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <chart :options="chartOptions" />
+              </div>
+            </div>
           </div>
           <div class="exam-btns">
             <q-btn
@@ -43,7 +64,7 @@
               style="width: 100%;"
               @click="goToNextStep"
             >
-              تایید نهایی
+              تایید نهایی و ساخت آزمون
             </q-btn>
           </div>
         </div>
@@ -82,7 +103,7 @@
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12 ">
         <div class="question-item-content">
-          <question-item v-if="questions.loading"
+          <question-item v-if="exam.questions.loading"
                          :question="loadingQuestion" />
           <template v-else-if="exam.questions.list.length > 0">
             <q-virtual-scroll
@@ -91,10 +112,13 @@
               :virtual-scroll-item-size="450"
               :virtual-scroll-slice-size="5"
             >
-              <template v-slot="{ item }">
+              <template v-slot="{ item , index}">
                 <question-item
                   :key="item.id"
                   :question="item"
+                  :questionIndex="index"
+                  :loading="exam.loading"
+                  :questionsLength="exam.questions.list.length"
                   pageStrategy="question-bank"
                   final-approval-mode
                   @changeOrder="changeSelectedQuestionOrder"
@@ -113,24 +137,79 @@
 import { Question, QuestionList } from 'src/models/Question'
 import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem'
 import { Exam } from 'src/models/Exam'
-
+import API_ADDRESS from 'src/api/Addresses'
+import { Chart } from 'highcharts-vue'
 export default {
   name: 'FinalApprovalTab',
-  components: { QuestionItem },
+  components: { QuestionItem, Chart },
+  emits: ['detachQuestion'],
   inject: {
     exam: {
       from: 'providedExam',
       default: new Exam()
     }
   },
+  props: {
+    majors: {
+      type: Array,
+      default: () => []
+    },
+    grades: {
+      type: Array,
+      default: () => []
+    }
+  },
   data () {
     return {
-      // start_At: this.exam.start_at,
-      // finish_At: this.exam.finish_at,
-      filterQuestions: {
-        major_type: [],
-        reference_type: [],
-        year_type: []
+      chartOptions: {
+        chart: {
+          height: '110',
+          width: '110',
+          type: 'pie',
+          plotShadow: false
+        },
+        credits: {
+          enabled: false
+        },
+        tooltip: {
+          shared: false,
+          useHTML: true,
+          borderWidth: 0,
+          backgroundColor: 'rgba(255,255,255,0)',
+          shadow: false,
+          formatter: function () {
+            const point = this.point
+            return '<span class="myTooltip" style="background-color:' + point.color + ';">' + point.y + '&nbsp' + 'سوال' + '</span>'
+          }
+        },
+        plotOptions: {
+          pie: {
+            innerSize: '98%',
+            startAngle: -250,
+            endAngle: 360,
+            borderWidth: 13,
+            center: ['50%', '52%'],
+            size: '100%',
+            borderColor: null,
+            slicedOffset: 0,
+            dataLabels: {
+              connectorWidth: 0
+            }
+          }
+        },
+        title: {
+          y: 26,
+          style: {
+            useHTML: true
+          },
+          verticalAlign: 'middle',
+          floating: true,
+          text: ''
+        },
+        series: [{
+          id: 'idData',
+          data: []
+        }]
       },
       questionListKey: Date.now(),
       loadingQuestion: new Question(),
@@ -149,43 +228,93 @@ export default {
     }
   },
   created () {
-    this.getExamQuestions()
+    this.initPageData()
+  },
+  computed: {
+    questionLvl () {
+      if (this.exam.questions.list.length < 1) return
+      return {
+        hard: this.exam.questions.list.filter(question => parseInt(question.level) === 3).length,
+        medium: this.exam.questions.list.filter(question => parseInt(question.level) === 2).length,
+        easy: this.exam.questions.list.filter(question => parseInt(question.level) === 1).length
+      }
+    }
   },
   watch: {
     'exam.questions.list.length': {
       handler (newValue) {
-        this.getExamQuestions()
+        this.initPageData()
       }
     }
   },
   methods: {
-    // getShamsiDate (value) {
-    //   return moment(value, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
-    // },
-    changeSelectedQuestionOrder (value) {
-      const fromIndex = this.exam.questions.list.findIndex(item => item.id === value.question.id)
-      let toIndex = fromIndex - 1 // the index before
-      if (value.mode === 'down') {
-        toIndex = fromIndex + 1 // the index after
-      }
-      const element = this.exam.questions.list.splice(fromIndex, 1)[0]
-      this.exam.questions.list.splice(toIndex, 0, element)
+    initPageData () {
+      console.log('this.exam :', this.exam)
+      this.questions = new QuestionList({ ...this.exam.questions })
       this.reIndexEamQuestions(this.exam.questions.list)
+      this.reIndexEamQuestions(this.questions.list)
+      this.setDifficultyLevelsChart()
+      this.replaceTitle()
+    },
+
+    examMajor() {
+      return this.majors.find(item => item.id === this.exam.temp.major).value
+    },
+    examGrade() {
+      return this.grades.find(item => item.id === this.exam.temp.grade).title
+    },
+
+    changeSelectedQuestionOrder (value) {
+      const fromIndex = this.questions.list.findIndex(item => item.id === value.question.id)
+      if (value.mode === 'down') {
+        this.questions.list[fromIndex].order++
+        this.questions.list[fromIndex + 1].order--
+      } else {
+        this.questions.list[fromIndex].order--
+        this.questions.list[fromIndex - 1].order++
+      }
+      const data = {
+        questions: []
+      }
+      this.questions.list.forEach(question => {
+        data.questions.push({
+          question_id: question.id,
+          order: question.order
+        })
+      })
+      // this.$emit('updateOrders', data)
+
+      this.$axios.post(API_ADDRESS.exam.user.updateOrders(this.exam.type_id), data)
+        .then(res => {
+          console.log('res :', res)
+        })
+    },
+
+    updateOrder(question) {
+
     },
     toggleQuestionSelected (question) {
       question.selected = !question.selected
     },
+
     handleAddOrDelete (question) {
-      if (question.selected) {
-        this.addQuestionToExam(question)
-      } else {
-        this.deleteQuestionFromExam(question)
-      }
+      // if (question.selected) {
+      //   this.addQuestionToExam(question)
+      // } else {
+      //   this.deleteQuestionFromExam(question)
+      // }
+      question.selected ? this.addQuestionToExam(question) : this.deleteQuestionFromExam(question)
       this.reIndexEamQuestions(this.exam.questions.list)
     },
     onClickedCheckQuestionBtn (question) {
-      this.toggleQuestionSelected(question)
-      this.handleAddOrDelete(question)
+      console.log('onClickedCheckQuestionBtn :', question)
+      const data = {
+        detaches: [
+          { question_id: question.id }
+        ]
+      }
+      this.$emit('detachQuestion', data)
+      // this.handleAddOrDelete(question)
     },
     addQuestionToExam (question) {
       this.$emit('addQuestionToExam', question)
@@ -198,25 +327,28 @@ export default {
     updatePage (page) {
       this.getExamQuestions(page)
     },
-    reIndexEamQuestions (questionList) {
-      questionList.map((item, index) => {
+    reIndexEamQuestions (list) {
+      list.map((item, index) => {
         item.selected = true
         item.order = index + 1
         return true
       })
     },
-    fakeExamQuestionScenario (questionList) {
-      this.reIndexEamQuestions(questionList)
-    },
-    getExamQuestions () {
-      this.fakeExamQuestionScenario(this.exam.questions.list)
-    },
-
     goToLastStep () {
       this.$emit('goToLastStep')
     },
     goToNextStep () {
-      this.$emit('goToNextStep')
+      this.$emit('creatFinalExam')
+    },
+    setDifficultyLevelsChart() {
+      this.chartOptions.series[0].data = [
+        { name: 'متوسط', y: this.questionLvl.medium, color: '#FFCA28' },
+        { name: 'آسان', y: this.questionLvl.easy, color: '#8ED6FF' },
+        { name: 'سخت', y: this.questionLvl.hard, color: '#DA5F5C' }
+      ]
+    },
+    replaceTitle () {
+      this.chartOptions.title.text = '<span class="title-1"> ' + this.exam.questions.list.length + '<br>' + '<br>' + '</span>' + '<span dy="-8" class="title-2">سوال</span>'
     }
   }
 }
@@ -272,6 +404,35 @@ export default {
       }
       .selected-questions{
         margin-bottom: 30px;
+        .chart-box{
+          .chart-titles {
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 24px;
+            color: #23263B;
+            display: flex;
+            align-items: center;
+
+            .titles-icon {
+              width: 13px;
+              height: 13px;
+              margin-right: 4px;
+            }
+
+            .hard {
+              background-color: #DA5F5C;
+            }
+
+            .medium {
+              background-color: #FFCA28;
+            }
+
+            .easy {
+              background-color: #8ED6FF;
+            }
+          }
+        }
         .title{
           font-weight: 500;
           font-size: 16px;
