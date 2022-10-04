@@ -16,6 +16,7 @@
         <div class="question-bank-toolbar">
           <questions-general-info
             :key="questionListKey"
+            :loading="questionLoading"
             :check-box="checkBox"
             :selectedQuestions="selectedQuestions"
             @remove="RemoveChoice"
@@ -25,7 +26,7 @@
             @selectAllQuestions="selectAllQuestions"
           />
         </div>
-
+        <!--        selectAllQuestions-->
         <div class="question-bank-content">
           <question-item
             v-if="questions.loading"
@@ -82,6 +83,10 @@ export default {
     mixinTree
   ],
   props: {
+    questionLoading: {
+      type: Boolean,
+      default: false
+    },
     currentTab: {
       type: String,
       default() {
