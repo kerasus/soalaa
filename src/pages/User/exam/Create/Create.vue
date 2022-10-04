@@ -94,20 +94,20 @@
 
 <script>
 import { Exam } from 'src/models/Exam'
+import mixinTree from 'src/mixin/Tree'
+import API_ADDRESS from 'src/api/Addresses'
 import Steps from 'pages/Admin/exam/Create/Steps'
 import ExamInfoTab from 'components/CommonComponents/Exam/Create/ExamInfoTab/ExamInfoTab'
 import FinalApprovalTab from 'components/CommonComponents/Exam/Create/FinalApprovalTab/FinalApprovalTab'
-import API_ADDRESS from 'src/api/Addresses'
 import QuestionSelectionTab from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionSelectionTab'
-import mixinTree from 'src/mixin/Tree'
 
 export default {
   name: 'Create',
   components: {
-    QuestionSelectionTab,
-    FinalApprovalTab,
+    Steps,
     ExamInfoTab,
-    Steps
+    FinalApprovalTab,
+    QuestionSelectionTab
   },
   props: {
     userRule: {
@@ -122,12 +122,9 @@ export default {
       draftExam: new Exam(),
       gradesList: [],
       majorList: [],
-
       currentTab: 'createPage',
       allTabs: ['createPage', 'chooseQuestion', 'finalApproval'],
-      isExamDataInitiated: false,
       createDraftExamMessageDialog: false,
-      accept: false,
       continueWithOldDraftExamConfirmationDialog: false
     }
   },
@@ -218,7 +215,7 @@ export default {
 
       return { error, messages }
     },
-    validateStep2 () {
+    getStep2Validation () {
       let error = false
       const messages = []
       if (!this.draftExam.title) {
@@ -236,7 +233,7 @@ export default {
 
       return { error, messages }
     },
-    validateStep3 () {
+    getStep3Validation () {
       let error = false
       const messages = []
       if (!this.draftExam.title) {
