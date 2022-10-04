@@ -168,7 +168,9 @@ const API_ADDRESS = {
         create: lumenServer + '/exam/user',
         update: (examId) => lumenServer + '/exam/user/' + examId,
         getAttachedQuestions: (examId) => lumenServer + '/exam-question/user/attach/show/' + examId,
-        bulkAttachQuestions: (examId) => lumenServer + '/exam-question/user/attach/bulk/' + examId
+        bulkAttachQuestions: (examId) => lumenServer + '/exam-question/user/attach/bulk/' + examId,
+        bulkDetachQuestions: (examId) => lumenServer + '/exam-question/user/detach/bulk/' + examId,
+        replaceQuestions: (examId) => lumenServer + '/exam-question/user/replace-questions/' + examId
       }
     }
   },

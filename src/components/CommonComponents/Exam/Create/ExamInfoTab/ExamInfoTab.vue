@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loading"
+  <div v-if="exam.loading"
        class="exam-info-component loading">
 
   </div>
@@ -55,10 +55,6 @@ export default {
     typeOptions: {
       type: Array,
       default: () => ['کنکور']
-    },
-    loading: {
-      type: Boolean,
-      default: false
     }
   },
   emits: ['nextTab', 'update:exam'],
@@ -123,7 +119,7 @@ export default {
           options: []
         }
       ],
-      localExam: new Exam(this.exam),
+      localExam: new Exam(),
       expanded: true,
       entityIdKeyInResponse: 'data.id',
       showRouteParamKey: 'id',
@@ -159,14 +155,7 @@ export default {
       return this.getValueByName('temp.grade')
     }
   },
-
   watch: {
-    inputs: {
-      deep: true,
-      handler (newValue) {
-        this.inputList = newValue
-      }
-    },
     typeOptions: {
       deep: true,
       handler (newValue) {
@@ -231,6 +220,7 @@ export default {
     exam: {
       deep: true,
       handler(newValue) {
+        this.localExam = new Exam(this.exam)
         this.inputList.forEach(element => {
           if (element.name === 'title') {
             element.value = this.exam.title
@@ -243,7 +233,6 @@ export default {
       }
     }
   },
-
   methods: {
     loadSelectInputOptions (inputName, options) {
       const inputIndex = this.inputList.findIndex(input => input.name === inputName)
@@ -270,7 +259,11 @@ export default {
       this.$router.push({ name: 'User.Exam.List' })
     },
     getValueByName(name) {
-      return this.inputList[this.inputList.findIndex(item => item.name === name)]?.value
+      const inputIndex = this.inputList.findIndex(item => item.name === name)
+      if (inputIndex === -1) {
+        return
+      }
+      return this.inputList[inputIndex].value
     }
   }
 }
@@ -360,5 +353,4 @@ export default {
     }
   }
 }
-
 </style>
