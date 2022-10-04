@@ -270,7 +270,8 @@ export default {
         return
       }
 
-      this.draftExam.loading = true
+      this.onChangeTab(nextStep)
+
       const hasOldDraftExam = !!this.draftExam.id
       if (hasOldDraftExam) {
         this.updateExam()
@@ -293,7 +294,7 @@ export default {
           })
       }
     },
-    onChangeTab (newTap) {
+    onChangeTab () {
       let stepValidation = null
       const currentTabIndex = this.getCurrentTabIndex()
       if (currentTabIndex === 0) {

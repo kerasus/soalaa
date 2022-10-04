@@ -168,7 +168,7 @@ const API_ADDRESS = {
       },
       draftExam: {
         create: lumenServer + '/exam/user',
-        update: (examId) => lumenServer + '/exam/user' + examId,
+        update: (examId) => lumenServer + '/exam/user/' + examId,
         getAttachedQuestions: (examId) => lumenServer + '/exam-question/user/attach/show/' + examId,
         bulkAttachQuestions: (examId) => lumenServer + '/exam-question/user/attach/bulk/' + examId
       }
