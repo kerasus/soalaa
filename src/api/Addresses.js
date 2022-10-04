@@ -38,7 +38,8 @@ const API_ADDRESS = {
     base: authServer + '/c'
   },
   option: {
-    base: lumenServer + '/option'
+    base: lumenServer + '/option',
+    user(type) { return lumenServer + '/option/user?type=' + type }
   },
   log: {
     base: lumenServer + '/activity-log',
