@@ -19,18 +19,18 @@
         </q-tab-panel>
         <q-tab-panel name="chooseQuestion">
           <question-selection-tab
-            v-model:exam="exam"
-            v-model:lesson="exam.temp.lesson"
+            v-model:exam="draftExam"
+            v-model:lesson="draftExam.temp.lesson"
             @nextTab="goToNextStep"
             @lastTab="goToLastStep"
-            @addQuestionToExam="addQuestionToExam"
+            @addQuestionToExam="addQuestionsToExam"
             @deleteQuestionFromExam="deleteQuestionFromExam"
           />
         </q-tab-panel>
         <q-tab-panel name="finalApproval">
           <!--          deleteQuestionFromExam-->
           <final-approval-tab
-            v-model:exam="exam"
+            v-model:exam="draftExam"
             :majors="majorList"
             :grades="gradesList"
             @detachQuestion="bulkDetachLastStep"
@@ -271,30 +271,9 @@ export default {
       }
 
       this.onChangeTab(nextStep)
-
-      const hasOldDraftExam = !!this.draftExam.id
-      if (hasOldDraftExam) {
-        this.updateExam()
-          .then(response => {
-            this.draftExam.loading = false
-            this.currentTab = nextStep
-          })
-          .catch(() => {
-            this.draftExam.loading = false
-          })
-      } else {
-        this.createExam()
-          .then(response => {
-            this.loadDraftExam(response.data.data)
-            this.currentTab = nextStep
-            this.draftExam.loading = false
-          })
-          .catch(() => {
-            this.draftExam.loading = false
-          })
-      }
+      this.currentTab = nextStep
     },
-    onChangeTab () {
+    onChangeTab (newStep) {
       let stepValidation = null
       const currentTabIndex = this.getCurrentTabIndex()
       if (currentTabIndex === 0) {
@@ -304,15 +283,34 @@ export default {
       if (stepValidation.error) {
         this.showMessagesInNotify(stepValidation.messages)
       }
+
+      const hasOldDraftExam = !!this.draftExam.id
+      if (currentTabIndex === 0 && hasOldDraftExam) {
+        this.updateExam()
+          .then(response => {
+            this.draftExam.loading = false
+          })
+          .catch(() => {
+            this.draftExam.loading = false
+          })
+      } else if (currentTabIndex === 0 && !hasOldDraftExam) {
+        this.createExam()
+          .then(response => {
+            this.loadDraftExam(response.data.data)
+            this.draftExam.loading = false
+          })
+          .catch(() => {
+            this.draftExam.loading = false
+          })
+      }
     },
     createExam () {
       this.draftExam.loading = true
       return this.$axios.post(API_ADDRESS.exam.user.create, this.draftExam)
     },
     updateExam (params) {
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam)
+      return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam)
     },
-
     loadAttachedQuestions () {
       this.draftExam.loading = true
       return this.$axios.post(API_ADDRESS.exam.user.draftExam.getAttachedQuestions(this.draftExam.id))
