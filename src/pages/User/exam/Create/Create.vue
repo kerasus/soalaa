@@ -20,7 +20,7 @@
           <question-selection-tab v-model:exam="draftExam"
                                   v-model:lesson="draftExam.temp.lesson"
                                   @nextTab="goToNextStep"
-                                  @lastTab="goToLastStep"
+                                  @lastTab="goToPrevStep"
                                   @addQuestionToExam="bulkAttachQuestionsOfDraftExam"
                                   @deleteQuestionFromExam="bulkDetachQuestionsOfDraftExam"
           />
@@ -193,9 +193,12 @@ export default {
     goToFirstStep () {
       this.currentTab = this.getFirstStepName()
     },
+    goToPrevStep () {
+      this.currentTab = this.getPrevTabName()
+    },
     goToLastStep () {
-      this.currentTab = this.getlastStepName()
-      this.setFinalStep()
+      // this.currentTab = this.getlastStepName()
+      // this.setFinalStep()
     },
     getStep1Validation () {
       let error = false
@@ -383,17 +386,17 @@ export default {
       })
     },
 
-    setFinalStep() {
-      // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-      this.createExam().then((createExam) => {
-        this.exam = new Exam(createExam.data.data)
-        // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
-        this.createDraftExamMessageDialog = true
-      }).catch(err => {
-        console.error('err', err)
-        // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
-      })
-    },
+    // setFinalStep() {
+    //   // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+    //   this.createExam().then((createExam) => {
+    //     this.exam = new Exam(createExam.data.data)
+    //     // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+    //     this.createDraftExamMessageDialog = true
+    //   }).catch(err => {
+    //     console.error('err', err)
+    //     // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+    //   })
+    // },
 
     getGradesList () {
       return new Promise((resolve, reject) => {
