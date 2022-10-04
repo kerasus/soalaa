@@ -155,19 +155,22 @@ const API_ADDRESS = {
     },
     detachCategory: (examId, categoryId) => lumenServer + '/exam/detach/category/' + examId + '/' + categoryId ,
     user: {
-      create: lumenServer + '/exam/user',
-      update (examId) { return lumenServer + '/exam/user' + examId },
       draft () { return lumenServer + '/exam/user/draft' },
       reportType: lumenServer + '/option/user?type=question_report_type',
       report(questionId) { return lumenServer + '/question/report/store/' + questionId },
       attach: lumenServer + '/exam-question/user/attach/v3',
       detach(questionId) { return lumenServer + '/exam-question/user/detach/' + questionId },
-      attached(examId) { return lumenServer + '/exam-question/user/attach/show/' + examId },
       updateOrders(examId) {
         return lumenServer + '/exam-question/user/replace-questions/' + examId
       },
       detachBulk(examId) {
         return lumenServer + '/exam-question/user/detach/bulk/' + examId
+      },
+      draftExam: {
+        create: lumenServer + '/exam/user',
+        update: (examId) => lumenServer + '/exam/user' + examId,
+        getAttachedQuestions: (examId) => lumenServer + '/exam-question/user/attach/show/' + examId,
+        bulkAttachQuestions: (examId) => lumenServer + '/exam-question/user/attach/bulk/' + examId
       }
     }
   },
