@@ -2,9 +2,11 @@
   <div class="create-exam-panel">
     <div class="exam-create-panel">
       <steps v-model:step="currentTab"
+             :loading="draftExam.loading"
              @update:step="onChangeTab"
       />
       ({{ draftExam.id }})
+      ({{ draftExam.questions.list.length }})
       <q-tab-panels v-model="currentTab"
                     animated
       >
@@ -310,7 +312,8 @@ export default {
       this.draftExam.loading = true
       return this.$axios.post(API_ADDRESS.exam.user.draftExam.getAttachedQuestions(this.draftExam.id))
         .then((response) => {
-          this.draftExam.questions.add(response.data.data)
+          this.draftExam.questions.clear()
+          this.draftExam.questions.add(...response.data.data)
           this.draftExam.loading = false
         })
         .catch(() => {
@@ -319,13 +322,15 @@ export default {
     },
     bulkAttachQuestionsOfDraftExam(questions) {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.bulkAttachQuestions(this.draftExam.id),
-        this.draftExam.questions.list.map(question => {
+      let lastOrder = this.draftExam.questions.list.length
+      return this.$axios.post(API_ADDRESS.exam.user.draftExam.bulkAttachQuestions(this.draftExam.id), {
+        questions: questions.map(question => {
           return {
             question_id: question.id,
-            order: question.order
+            order: ++lastOrder
           }
-        }))
+        })
+      })
         .then(() => {
           this.loadAttachedQuestions()
           this.draftExam.loading = false
@@ -336,10 +341,13 @@ export default {
     },
     bulkDetachQuestionsOfDraftExam(questions) {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.bulkDetachQuestions(this.draftExam.id),
-        this.draftExam.questions.list.map(question => {
-          return { question_id: question.id }
-        }))
+      return this.$axios.post(API_ADDRESS.exam.user.draftExam.bulkDetachQuestions(this.draftExam.id), {
+        detaches: questions.map(question => {
+          return {
+            question_id: question.id
+          }
+        })
+      })
         .then(() => {
           this.loadAttachedQuestions()
           this.draftExam.loading = false
@@ -350,13 +358,15 @@ export default {
     },
     replaceQuestionsOfDraftExam(questions) {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.replaceQuestions(this.draftExam.id),
-        this.draftExam.questions.list.map(question => {
+      let lastOrder = this.draftExam.questions.list.length
+      return this.$axios.post(API_ADDRESS.exam.user.draftExam.replaceQuestions(this.draftExam.id), {
+        questions: questions.map(question => {
           return {
             question_id: question.id,
-            order: question.order
+            order: ++lastOrder
           }
-        }))
+        })
+      })
         .then(() => {
           this.loadAttachedQuestions()
           this.draftExam.loading = false
