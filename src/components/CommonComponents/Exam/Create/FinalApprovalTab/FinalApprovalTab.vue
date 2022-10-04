@@ -143,13 +143,17 @@ export default {
   name: 'FinalApprovalTab',
   components: { QuestionItem, Chart },
   emits: ['detachQuestion'],
-  inject: {
-    exam: {
-      from: 'providedExam',
-      default: new Exam()
-    }
-  },
+  // inject: {
+  //   exam: {
+  //     from: 'providedExam',
+  //     default: new Exam()
+  //   }
+  // },
   props: {
+    exam: {
+      type: Exam,
+      default: new Exam()
+    },
     majors: {
       type: Array,
       default: () => []
@@ -249,7 +253,7 @@ export default {
   },
   methods: {
     initPageData () {
-      console.log('this.exam :', this.exam)
+      // console.log('this.exam :', this.exam)
       this.questions = new QuestionList({ ...this.exam.questions })
       this.reIndexEamQuestions(this.exam.questions.list)
       this.reIndexEamQuestions(this.questions.list)
@@ -286,7 +290,7 @@ export default {
 
       this.$axios.post(API_ADDRESS.exam.user.updateOrders(this.exam.type_id), data)
         .then(res => {
-          console.log('res :', res)
+          // console.log('res :', res)
         })
     },
 
@@ -307,7 +311,7 @@ export default {
       this.reIndexEamQuestions(this.exam.questions.list)
     },
     onClickedCheckQuestionBtn (question) {
-      console.log('onClickedCheckQuestionBtn :', question)
+      // console.log('onClickedCheckQuestionBtn :', question)
       const data = {
         detaches: [
           { question_id: question.id }
