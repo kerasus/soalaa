@@ -26,6 +26,7 @@
 
         <q-tab-panel name="chooseQuestion">
           <question-selection-tab
+            v-model:lesson="exam.temp.lesson"
             :currentTab="currentTab"
             @onFilter="onFilter"
             @nextTab="goToNextStep"
