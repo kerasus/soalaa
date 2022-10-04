@@ -205,12 +205,13 @@ export default {
     nodeIdsToTick: {
       deep: true,
       handler(newVal) {
-        const tags = newVal.map(function(key) {
-          return {
-            id: key
-          }
-        })
-        this.changeFilterData('tags', tags)
+        // console.log('nodeIdsToTick')
+        // const tags = newVal.map(function(key) {
+        //   return {
+        //     id: key
+        //   }
+        // })
+        // this.changeFilterData('tags', tags)
       }
     }
   },

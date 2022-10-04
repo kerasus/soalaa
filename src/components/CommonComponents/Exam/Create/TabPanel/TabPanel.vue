@@ -20,6 +20,7 @@
         <q-tab-panel name="chooseQuestion">
           <question-selection-tab
             v-model:lesson="exam.temp.lesson"
+            v-model:exam="exam"
             :questionLoading="exam.questions.loading"
             @nextTab="goToNextStep"
             @lastTab="goToLastStep"
@@ -426,7 +427,7 @@ export default {
         this.checkValidate(formDataValues)
 
         if (!this.isExamDataInitiated && this.accept) {
-          this.exam = new Exam(formData)
+          // this.exam = new Exam(formData)
           this.isExamDataInitiated = true
         }
         this.exam = Object.assign(this.exam, formData)
