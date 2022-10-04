@@ -180,6 +180,7 @@
               v-model="checkbox"
               class="check-all-checkbox"
               label="انتخاب همه"
+              :disable="loading"
               indeterminate-value="maybe"
               @click="selectAllQuestions">
             </q-checkbox>
@@ -264,6 +265,10 @@ export default {
     selectedQuestions: {
       type: [Array, QuestionList],
       default: new QuestionList()
+    },
+    loading: {
+      type: Boolean,
+      default: false
     },
     checkBox: {
       type: Boolean,
