@@ -175,6 +175,23 @@ export default {
           value: newValue
         })
       }
+    },
+    exam: {
+      deep: true,
+      handler(newValue) {
+        this.inputList.forEach(element => {
+          if (element.name === 'title') {
+            element.value = this.exam.title
+          } else if (element.name === 'question_type') {
+            console.log(element.value, JSON.parse(JSON.stringify(this.typeOptions.filter(x => x.id === this.exam.type_id)))[0])
+            element.value = this.exam.type_id
+          } else if (element.name === 'temp.major') {
+            element.value = this.exam.temp.major
+          } else if (element.name === 'temp.grade') {
+            element.value = this.exam.temp.grade
+          }
+        })
+      }
     }
   },
 
