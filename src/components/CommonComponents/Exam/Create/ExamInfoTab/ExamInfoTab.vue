@@ -39,10 +39,6 @@ export default {
   name: 'ExamInfoTab',
   components: { EntityCrudFormBuilder },
   props: {
-    inputs: {
-      type: Object,
-      default: () => {}
-    },
     exam: {
       type: Object,
       default: () => {}
@@ -68,12 +64,67 @@ export default {
   data () {
     return {
       model: 'one',
+      inputList: [
+        {
+          type: 'toggleButton',
+          name: 'type_id',
+          responseKey: 'data.exam_type',
+          col: 'col-12 exam-type-toggle-button',
+          value: '6225f4828044517f52500c02',
+          ripple: false,
+          color: 'white',
+          toggleColor: 'primary',
+          toggleTextColor: 'white',
+          textColor: 'black',
+          label: 'نوع آزمون',
+          disable: true,
+          options: [{ label: 'عادی', value: '6225f4828044517f52500c02' }, { label: 'جامع', value: 'test' }]
+        },
+        {
+          type: 'input',
+          name: 'title',
+          responseKey: 'data.title',
+          label: 'عنوان آزمون',
+          placeholder: ' ',
+          col: 'col-12 col-md-3 col-sm-6'
+        },
+        {
+          type: 'select',
+          name: 'question_type',
+          responseKey: 'data.question_type',
+          label: 'نوع سوالات',
+          placeholder: ' ',
+          value: 'کنکور',
+          options: [],
+          disable: true,
+          col: 'col-12 col-md-3 col-sm-6',
+          icon: 'isax:arrow-right-3',
+          dropdownIcon: 'isax:arrow-down-1'
+        },
+        {
+          type: 'select',
+          name: 'temp.major',
+          responseKey: 'data.temp.major',
+          label: 'رشته تحصیلی',
+          placeholder: ' ',
+          col: 'col-12 col-md-3 col-sm-6',
+          dropdownIcon: 'isax:arrow-down-1'
+        },
+        {
+          type: 'select',
+          name: 'temp.grade',
+          responseKey: 'data.temp.grade',
+          label: 'پایه تحصیلی',
+          placeholder: ' ',
+          col: 'col-12 col-md-3 col-sm-6',
+          dropdownIcon: 'isax:arrow-down-1'
+        }
+      ],
       expanded: true,
       entityIdKeyInResponse: 'data.id',
       showRouteParamKey: 'id',
       showRouteName: 'Admin.Exam.Show',
       indexRouteName: 'Admin.Exam.Index',
-      inputList: [],
       lessonsList: null,
       lessonGroupList: null,
       categoryOptions: [
@@ -84,11 +135,6 @@ export default {
       allTabs: ['createPage', 'chooseQuestion', 'finalApproval']
     }
   },
-  created () {
-    this.onLoadPage()
-    this.inputList[this.inputList.findIndex(item => item.name === 'question_type')].value = 'کنکور'
-  },
-
   computed: {
     examCategoriesIndex () {
       return this.inputList.findIndex(item => item.name === 'categories')
@@ -153,10 +199,6 @@ export default {
     title: {
       deep: true,
       handler (newValue) {
-        this.$emit('getInputValue', {
-          name: 'title',
-          value: newValue
-        })
       }
     },
     questionType: {
@@ -220,9 +262,6 @@ export default {
 
     loadMajorInput (options) {
       this.loadSelectInputOptions('temp.major', options)
-    },
-    onLoadPage () {
-      this.inputList = this.inputs
     },
     goToNextStep () {
       this.$emit('nextTab')
