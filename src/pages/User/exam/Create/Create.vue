@@ -47,6 +47,7 @@ export default {
           label: 'نوع سوالات',
           placeholder: ' ',
           options: [],
+          disable: true,
           col: 'col-12 col-md-3 col-sm-6',
           icon: 'isax:arrow-right-3',
           dropdownIcon: 'isax:arrow-down-1'
