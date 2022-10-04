@@ -1,13 +1,11 @@
 <template>
   <div class="create-exam-panel">
     <div class="exam-create-panel">
-      <steps
-        v-model:currentComponent="currentTab"
-        @currentStepChanged = "changeTab"
+      <steps v-model:step="currentTab"
+             @update:step="onChangeTab"
       />
-      <q-tab-panels
-        v-model="currentTab"
-        animated
+      <q-tab-panels v-model="currentTab"
+                    animated
       >
         <q-tab-panel name="createPage">
           <exam-info-tab ref="createExam"
@@ -18,25 +16,22 @@
           />
         </q-tab-panel>
         <q-tab-panel name="chooseQuestion">
-          <question-selection-tab
-            v-model:exam="draftExam"
-            v-model:lesson="draftExam.temp.lesson"
-            @nextTab="goToNextStep"
-            @lastTab="goToLastStep"
-            @addQuestionToExam="addQuestionsToExam"
-            @deleteQuestionFromExam="deleteQuestionFromExam"
+          <question-selection-tab v-model:exam="draftExam"
+                                  v-model:lesson="draftExam.temp.lesson"
+                                  @nextTab="goToNextStep"
+                                  @lastTab="goToLastStep"
+                                  @addQuestionToExam="addQuestionsToExam"
+                                  @deleteQuestionFromExam="deleteQuestionFromExam"
           />
         </q-tab-panel>
         <q-tab-panel name="finalApproval">
-          <!--          deleteQuestionFromExam-->
-          <final-approval-tab
-            v-model:exam="draftExam"
-            :majors="majorList"
-            :grades="gradesList"
-            @detachQuestion="bulkDetachLastStep"
-            @updateOrders="updateQuestionOrder"
-            @creatFinalExam="submitFinalExam"
-            @goToNextStep="goToNextStep"
+          <final-approval-tab v-model:exam="draftExam"
+                              :majors="majorList"
+                              :grades="gradesList"
+                              @detachQuestion="bulkDetachLastStep"
+                              @updateOrders="updateQuestionOrder"
+                              @creatFinalExam="submitFinalExam"
+                              @goToNextStep="goToNextStep"
           />
         </q-tab-panel>
       </q-tab-panels>
@@ -133,11 +128,6 @@ export default {
       createDraftExamMessageDialog: false,
       accept: false,
       continueWithOldDraftExamConfirmationDialog: false
-    }
-  },
-  watch: {
-    currentTab (newTap) {
-
     }
   },
   created() {
@@ -289,6 +279,7 @@ export default {
         this.updateExam()
           .then(response => {
             this.draftExam.loading = false
+            this.currentTab = newStep
           })
           .catch(() => {
             this.draftExam.loading = false
@@ -298,11 +289,17 @@ export default {
           .then(response => {
             this.loadDraftExam(response.data.data)
             this.draftExam.loading = false
+            this.currentTab = newStep
           })
           .catch(() => {
             this.draftExam.loading = false
           })
       }
+
+      // if (currentTabIndex === 1) {
+      //
+      // }
+      this.currentTab = newStep
     },
     createExam () {
       this.draftExam.loading = true
