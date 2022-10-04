@@ -271,9 +271,20 @@ export default {
       }
 
       this.onChangeTab(nextStep)
+    },
+    onChangeTab (nextStep) {
+      let stepValidation = null
+      const currentTabIndex = this.getCurrentTabIndex()
+      if (currentTabIndex === 0) {
+        stepValidation = this.getStep1Validation()
+      }
+
+      if (stepValidation.error) {
+        this.showMessagesInNotify(stepValidation.messages)
+      }
 
       const hasOldDraftExam = !!this.draftExam.id
-      if (hasOldDraftExam) {
+      if (currentTabIndex === 0 && hasOldDraftExam) {
         this.updateExam()
           .then(response => {
             this.draftExam.loading = false
@@ -282,7 +293,7 @@ export default {
           .catch(() => {
             this.draftExam.loading = false
           })
-      } else {
+      } else if (currentTabIndex === 0 && !hasOldDraftExam) {
         this.createExam()
           .then(response => {
             this.loadDraftExam(response.data.data)
@@ -294,23 +305,12 @@ export default {
           })
       }
     },
-    onChangeTab () {
-      let stepValidation = null
-      const currentTabIndex = this.getCurrentTabIndex()
-      if (currentTabIndex === 0) {
-        stepValidation = this.getStep1Validation()
-      }
-
-      if (stepValidation.error) {
-        this.showMessagesInNotify(stepValidation.messages)
-      }
-    },
     createExam () {
       this.draftExam.loading = true
       return this.$axios.post(API_ADDRESS.exam.user.create, this.draftExam)
     },
     updateExam (params) {
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam)
+      return this.$axios.pust(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam)
     },
 
     loadAttachedQuestions () {
