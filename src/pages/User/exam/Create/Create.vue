@@ -19,8 +19,8 @@
         </q-tab-panel>
         <q-tab-panel name="chooseQuestion">
           <question-selection-tab
+            v-model:exam="exam"
             v-model:lesson="exam.temp.lesson"
-            :questionLoading="exam.questions.loading"
             @nextTab="goToNextStep"
             @lastTab="goToLastStep"
             @addQuestionToExam="addQuestionToExam"
