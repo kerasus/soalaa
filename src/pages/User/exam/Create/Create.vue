@@ -20,8 +20,8 @@
                                   v-model:lesson="draftExam.temp.lesson"
                                   @nextTab="goToNextStep"
                                   @lastTab="goToLastStep"
-                                  @addQuestionToExam="addQuestionsToExam"
-                                  @deleteQuestionFromExam="deleteQuestionFromExam"
+                                  @addQuestionToExam="bulkAttachQuestionsOfDraftExam"
+                                  @deleteQuestionFromExam="bulkDetachQuestionsOfDraftExam"
           />
         </q-tab-panel>
         <q-tab-panel name="finalApproval">
@@ -319,7 +319,7 @@ export default {
           this.draftExam.loading = false
         })
     },
-    addQuestionsToExam(questions) {
+    bulkAttachQuestionsOfDraftExam(questions) {
       this.draftExam.loading = true
       return this.$axios.post(API_ADDRESS.exam.user.draftExam.bulkAttachQuestions(this.draftExam.id),
         this.draftExam.questions.list.map(question => {
@@ -327,6 +327,20 @@ export default {
             question_id: question.id,
             order: question.order
           }
+        }))
+        .then(() => {
+          this.loadAttachedQuestions()
+          this.draftExam.loading = false
+        })
+        .catch(() => {
+          this.draftExam.loading = false
+        })
+    },
+    bulkDetachQuestionsOfDraftExam(questions) {
+      this.draftExam.loading = true
+      return this.$axios.post(API_ADDRESS.exam.user.draftExam.bulkDetachQuestions(this.draftExam.id),
+        this.draftExam.questions.list.map(question => {
+          return { question_id: question.id }
         }))
         .then(() => {
           this.loadAttachedQuestions()
