@@ -1,5 +1,10 @@
 <template>
-  <div class="exam-info-component">
+  <div v-if="loading"
+       class="exam-info-component loading">
+
+  </div>
+  <div v-else
+       class="exam-info-component">
     <div class="exam-info-form">
       <entity-crud-form-builder
         ref="EntityCrudFormBuilder"
@@ -52,7 +57,11 @@ export default {
     },
     typeOptions: {
       type: Array,
-      default: () => []
+      default: () => ['کنکور']
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['nextTab', 'getInputValue'],
@@ -77,6 +86,7 @@ export default {
   },
   created () {
     this.onLoadPage()
+    this.inputList[this.inputList.findIndex(item => item.name === 'question_type')].value = 'کنکور'
   },
 
   computed: {
@@ -182,9 +192,6 @@ export default {
         this.inputList.forEach(element => {
           if (element.name === 'title') {
             element.value = this.exam.title
-          } else if (element.name === 'question_type') {
-            console.log(element.value, JSON.parse(JSON.stringify(this.typeOptions.filter(x => x.id === this.exam.type_id)))[0])
-            element.value = this.exam.type_id
           } else if (element.name === 'temp.major') {
             element.value = this.exam.temp.major
           } else if (element.name === 'temp.grade') {
