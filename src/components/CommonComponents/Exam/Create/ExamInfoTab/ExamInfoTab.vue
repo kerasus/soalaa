@@ -34,6 +34,7 @@
 
 <script>
 import { EntityCrudFormBuilder } from 'quasar-crud'
+import { Exam } from 'src/models/Exam'
 
 export default {
   name: 'ExamInfoTab',
@@ -60,7 +61,7 @@ export default {
       default: false
     }
   },
-  emits: ['nextTab', 'getInputValue'],
+  emits: ['nextTab', 'update:exam'],
   data () {
     return {
       model: 'one',
@@ -108,7 +109,8 @@ export default {
           label: 'رشته تحصیلی',
           placeholder: ' ',
           col: 'col-12 col-md-3 col-sm-6',
-          dropdownIcon: 'isax:arrow-down-1'
+          dropdownIcon: 'isax:arrow-down-1',
+          options: []
         },
         {
           type: 'select',
@@ -117,9 +119,11 @@ export default {
           label: 'پایه تحصیلی',
           placeholder: ' ',
           col: 'col-12 col-md-3 col-sm-6',
-          dropdownIcon: 'isax:arrow-down-1'
+          dropdownIcon: 'isax:arrow-down-1',
+          options: []
         }
       ],
+      localExam: new Exam(this.exam),
       expanded: true,
       entityIdKeyInResponse: 'data.id',
       showRouteParamKey: 'id',
@@ -199,33 +203,29 @@ export default {
     title: {
       deep: true,
       handler (newValue) {
+        this.localExam.title = newValue
+        this.$emit('update:exam', this.localExam)
       }
     },
     questionType: {
       deep: true,
       handler (newValue) {
-        this.$emit('getInputValue', {
-          name: 'question_type',
-          value: newValue
-        })
+        this.localExam.type_id = newValue
+        this.$emit('update:exam', this.localExam)
       }
     },
     tempMajor: {
       deep: true,
       handler (newValue) {
-        this.$emit('getInputValue', {
-          name: 'major',
-          value: newValue
-        })
+        this.localExam.temp.major = newValue
+        this.$emit('update:exam', this.localExam)
       }
     },
     tempGrade: {
       deep: true,
       handler (newValue) {
-        this.$emit('getInputValue', {
-          name: 'grade',
-          value: newValue
-        })
+        this.localExam.temp.grade = newValue
+        this.$emit('update:exam', this.localExam)
       }
     },
     exam: {
