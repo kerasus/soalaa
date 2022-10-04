@@ -10,16 +10,11 @@
         animated
       >
         <q-tab-panel name="createPage">
-          <exam-info-tab
-            ref="createExam"
-            v-model:exam="exam"
-            v-model:currentTab="currentTab"
-            :typeOptions="typeOptions"
-            :gradesList="gradesList"
-            :majorList="majorList"
-            :inputs="examInfoInputs"
-            @nextTab="goToNextStep"
-            @getInputValue="setInputValue($event)"
+          <exam-info-tab ref="createExam"
+                         v-model:exam="draftExam"
+                         :gradesList="gradesList"
+                         :majorList="majorList"
+                         @nextTab="goToNextStep"
           />
         </q-tab-panel>
         <q-tab-panel name="chooseQuestion">
@@ -27,7 +22,6 @@
             v-model:lesson="exam.temp.lesson"
             :questionLoading="exam.questions.loading"
             :currentTab="currentTab"
-            @onFilter="onFilter"
             @nextTab="goToNextStep"
             @lastTab="goToLastStep"
             @addQuestionToExam="addQuestionToExam"
@@ -47,7 +41,7 @@
           />
         </q-tab-panel>
       </q-tab-panels>
-      <q-dialog v-model="examConfirmedDialog">
+      <q-dialog v-model="createDraftExamMessageDialog">
         <q-card
           flat
           class="report-problem-dialog"
@@ -78,7 +72,7 @@
           </q-card-section>
         </q-card>
       </q-dialog>
-      <q-dialog v-model="draftDialog"
+      <q-dialog v-model="continueWithOldDraftExamConfirmationDialog"
                 persistent>
         <q-card>
           <q-card-section class="row items-center">
@@ -91,11 +85,11 @@
                    flat
                    label="انصراف"
                    color="primary"
-                   @click="clearDraft" />
+                   @click="clearDraftExam" />
             <q-btn v-close-popup
                    label="ادامه"
                    color="primary"
-                   @click="setDraft" />
+                   @click="setDraftExam" />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -121,11 +115,6 @@ export default {
     Steps
   },
   props: {
-    examInfoInputs: {
-      type: Object,
-      default: () => {
-      }
-    },
     userRule: {
       type: String
     }
@@ -135,17 +124,16 @@ export default {
   ],
   data() {
     return {
-      exam: new Exam(),
+      draftExam: new Exam(),
+      gradesList: [],
+      majorList: [],
+
       currentTab: 'createPage',
       allTabs: ['createPage', 'chooseQuestion', 'finalApproval'],
       isExamDataInitiated: false,
-      examConfirmedDialog: false,
+      createDraftExamMessageDialog: false,
       accept: false,
-      draftDialog: false,
-      draftExam: new Exam(),
-      gradesList: null,
-      majorList: null,
-      typeOptions: []
+      continueWithOldDraftExamConfirmationDialog: false
     }
   },
   created() {
@@ -160,8 +148,8 @@ export default {
               if (!response.data?.data) {
                 return
               }
-              this.draftDialog = true
-              this.loadDraftExam()
+              this.continueWithOldDraftExamConfirmationDialog = true
+              this.loadDraftExam(response.data.data)
             })
             .catch(() => {
             })
@@ -170,23 +158,189 @@ export default {
     getDraftExam () {
       return this.$axios.get(API_ADDRESS.exam.user.draft())
     },
-    getOptions() {
+    getOptions () {
       return Promise.all([
-        this.getExamTypeList(),
         this.getGradesList(),
         this.loadMajorList()
       ])
     },
     loadDraftExam (draftExam) {
       this.draftExam = new Exam(draftExam)
+      this.loadAttachedQuestions()
+    },
+    setDraftExam () {
+      // load tab page based on draftExam level
+    },
+    clearDraftExam () {
+      this.draftExam = new Exam()
+    },
+    createAndLoadNewDraftExam () {
+      this.createExam(this.draftExam)
+        .then(response => {
+          this.draftExam = new Exam(response.data.data)
+        })
+        .catch(() => {
+
+        })
+    },
+    getNextTabName () {
+      return this.allTabs[this.getCurrentTabIndex() + 1]
+    },
+    getPrevTabName () {
+      return this.allTabs[this.getCurrentTabIndex() - 1]
+    },
+    getCurrentTabIndex () {
+      return this.allTabs.indexOf(this.currentTab)
+    },
+    getFirstStepName () {
+      return this.allTabs[0]
+    },
+    getlastStepName () {
+      return this.allTabs[this.allTabs.length - 1]
+    },
+    goToFirstStep () {
+      this.currentTab = this.getFirstStepName()
+    },
+    goToLastStep () {
+      this.currentTab = this.getlastStepName()
+      this.setFinalStep()
+    },
+    getStep1Validation () {
+      let error = false
+      const messages = []
+      if (!this.draftExam.title) {
+        error = true
+        messages.push('عنوان آزمون مشخص نشده است.')
+      }
+      if (!this.draftExam.temp.major) {
+        error = true
+        messages.push('رشته آزمون مشخص نشده است.')
+      }
+      if (!this.draftExam.temp.grade) {
+        error = true
+        messages.push('پایه آزمون مشخص نشده است.')
+      }
+
+      return { error, messages }
+    },
+    validateStep2 () {
+      let error = false
+      const messages = []
+      if (!this.draftExam.title) {
+        error = true
+        messages.push('عنوان آزمون مشخص نشده است.')
+      }
+      if (!this.draftExam.temp.major) {
+        error = true
+        messages.push('رشته آزمون مشخص نشده است.')
+      }
+      if (!this.draftExam.temp.grade) {
+        error = true
+        messages.push('پایه آزمون مشخص نشده است.')
+      }
+
+      return { error, messages }
+    },
+    validateStep3 () {
+      let error = false
+      const messages = []
+      if (!this.draftExam.title) {
+        error = true
+        messages.push('عنوان آزمون مشخص نشده است.')
+      }
+      if (!this.draftExam.temp.major) {
+        error = true
+        messages.push('رشته آزمون مشخص نشده است.')
+      }
+      if (!this.draftExam.temp.grade) {
+        error = true
+        messages.push('پایه آزمون مشخص نشده است.')
+      }
+
+      return { error, messages }
+    },
+    goToNextStep () {
+      let stepValidation = null
+      const currentTabIndex = this.getCurrentTabIndex()
+      if (currentTabIndex === 0) {
+        stepValidation = this.getStep1Validation()
+      }
+
+      if (stepValidation.error) {
+        this.showMessagesInNotify(stepValidation.messages)
+        return
+      }
+
+      const nextStep = this.getNextTabName()
+      if (!nextStep) {
+        this.goToLastStep()
+        return
+      }
+
+      this.draftExam.loading = true
+      const hasOldDraftExam = !!this.draftExam.id
+      if (hasOldDraftExam) {
+        this.updateExam()
+          .then(response => {
+            this.draftExam.loading = false
+            this.currentTab = nextStep
+          })
+          .catch(() => {
+            this.draftExam.loading = false
+          })
+      } else {
+        this.createExam()
+          .then(response => {
+            this.loadDraftExam(response.data.data)
+            this.currentTab = nextStep
+            this.draftExam.loading = false
+          })
+          .catch(() => {
+            this.draftExam.loading = false
+          })
+      }
+    },
+    createExam () {
+      this.draftExam.loading = true
+      return this.$axios.post(API_ADDRESS.exam.user.create, this.draftExam)
+    },
+    updateExam (params) {
+      return this.$axios.post(API_ADDRESS.exam.user.update(this.draftExam.id), this.draftExam)
     },
 
-    onFilter(filterData) {
-      // console.log('filterData', filterData)
+    loadAttachedQuestions () {
+      this.draftExam.loading = true
+      return this.$axios.post(API_ADDRESS.exam.user.draftExam.getAttachedQuestions(this.draftExam.id))
+        .then((response) => {
+          this.draftExam.questions.add(response.data.data)
+          this.draftExam.loading = false
+        })
+        .catch(() => {
+          this.draftExam.loading = false
+        })
     },
+    addQuestionsToExam(questions) {
+      this.draftExam.loading = true
+      return this.$axios.post(API_ADDRESS.exam.user.draftExam.bulkAttachQuestions(this.draftExam.id),
+        this.draftExam.questions.list.map(question => {
+          return {
+            question_id: question.id,
+            order: question.order
+          }
+        }))
+        .then(() => {
+          this.loadAttachedQuestions()
+          this.draftExam.loading = false
+        })
+        .catch(() => {
+          this.draftExam.loading = false
+        })
+    },
+
     addQuestionToExam(question) {
       this.exam.questions.list.push(question)
     },
+
     deleteQuestionFromExam(question) {
       const target = this.exam.questions.list.findIndex(questionItem => questionItem.id === question.id)
       if (target === -1) {
@@ -203,9 +357,6 @@ export default {
     kebabize(word) {
       return word.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase())
     },
-    getCurrentIndexOfStep() {
-      return this.allTabs.indexOf(this.currentTab)
-    },
     isFinalStep(tab) {
       return this.allTabs.indexOf(tab) === this.allTabs.length - 1
     },
@@ -215,47 +366,15 @@ export default {
         this.currentTab = tab
       }
     },
-    goToLastStep() {
-      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
-    },
-    goToNextStep() {
-      const nextStep = this.allTabs[this.getCurrentIndexOfStep() + 1]
-      if (!nextStep) {
-        this.setFinalStep()
-        return
-      }
-      if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length === 0) {
-        this.accept = false
-        const messages = ['سوالی انتخاب نشده است!']
-        this.showMessagesInNotify(messages)
-      } else if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length > 0) {
-        this.accept = true
-      }
-      this.updateExamData()
-      if (this.accept) {
-        this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1]
-      }
-    },
     setFinalStep() {
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
       this.createExam().then((createExam) => {
         this.exam = new Exam(createExam.data.data)
         // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
-        this.examConfirmedDialog = true
+        this.createDraftExamMessageDialog = true
       }).catch(err => {
         console.error('err', err)
         // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
-      })
-    },
-    createExam(params) {
-      return new Promise((resolve, reject) => {
-        this.$axios.post(API_ADDRESS.exam.user.create, params)
-          .then(response => {
-            resolve(response)
-          })
-          .catch(error => {
-            reject(error)
-          })
       })
     },
     showMessagesInNotify(messages, type) {
@@ -324,12 +443,6 @@ export default {
           this.exam = new Exam(response.data.data)
         })
     },
-    setDraft() {
-      this.exam = new Exam(this.draftExam)
-    },
-    clearDraft() {
-      this.draftExam = {}
-    },
     getGradesList () {
       return new Promise((resolve, reject) => {
         this.getRootNode('test')
@@ -337,18 +450,6 @@ export default {
             this.gradesList = response.data.data.children
             resolve(response)
           }).catch(() => {
-            reject()
-          })
-      })
-    },
-    getExamTypeList () {
-      return new Promise((resolve, reject) => {
-        this.$axios.get(API_ADDRESS.option.base)
-          .then((response) => {
-            this.typeOptions = response.data.data.filter(data => data.type === 'exam_type')
-            resolve(response)
-          })
-          .catch(() => {
             reject()
           })
       })
@@ -365,17 +466,6 @@ export default {
       })
     },
 
-    setInputValue(event) {
-      if (event.name === 'title') {
-        this.exam.title = event.value
-      } else if (event.name === 'question_type') {
-        this.exam.type_id = event.value
-      } else if (event.name === 'major') {
-        this.exam.temp.major = event.value
-      } else if (event.name === 'grade') {
-        this.exam.temp.grade = event.value
-      }
-    },
     submitFinalExam() {
       this.exam.enable = true
       this.createExam({
