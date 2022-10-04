@@ -355,7 +355,7 @@ export default {
     },
     loadMajorList () {
       return new Promise((resolve, reject) => {
-        this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
+        this.$axios.get(API_ADDRESS.option.user('major_type'))
           .then((response) => {
             this.majorList = response.data.data
             resolve(response)
