@@ -1,59 +1,45 @@
 <template>
   <div class="steps row">
-
-    <div
-      class="exam-info step step-1"
-      :class="{ 'current-step' : this.currentStep === 'createPage' }"
-      @click="changeCurrentStep('createPage')"
+    <div class="exam-info step step-1"
+         :class="{ 'current-step' : this.currentStep === 'createPage' }"
+         @click="changeCurrentStep('createPage')"
     >
-      <q-icon
-        name="isax:edit"
-        class="icon"
+      <q-icon name="isax:edit"
+              class="icon"
       />
-      <div
-        class="exam-info-title title "
-        :class="{ 'hidden-mobile' : this.currentStep !== 'createPage' }">
+      <div class="exam-info-title title "
+           :class="{ 'hidden-mobile' : this.currentStep !== 'createPage' }">
         اطلاعات آزمون
       </div>
-      <div
-        class="line"
-        :class="{ 'border-mobile' : this.currentStep !== 'createPage' }"
+      <div class="line"
+           :class="{ 'border-mobile' : this.currentStep !== 'createPage' }"
       />
     </div>
-
-    <div
-      class="choose-questions step step-2"
-      :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }"
-      @click="changeCurrentStep('chooseQuestion')"
+    <div class="choose-questions step step-2"
+         :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }"
+         @click="changeCurrentStep('chooseQuestion')"
     >
-      <q-icon
-        name="isax:task-square"
-        class="icon"
+      <q-icon name="isax:task-square"
+              class="icon"
       />
-      <div
-        class="choose-questions-title title"
-        :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }"
+      <div class="choose-questions-title title"
+           :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }"
       >
         انتخاب سوال
       </div>
-      <div
-        class="line"
-        :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion' }"
+      <div class="line"
+           :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion' }"
       />
     </div>
-
-    <div
-      class="final-approval step step-3"
-      :class="{ 'current-step' : this.currentStep === 'finalApproval' }"
-      @click="changeCurrentStep('finalApproval')"
+    <div class="final-approval step step-3"
+         :class="{ 'current-step' : this.currentStep === 'finalApproval' }"
+         @click="changeCurrentStep('finalApproval')"
     >
-      <q-icon
-        name="isax:tick-square"
-        class="icon"
+      <q-icon name="isax:tick-square"
+              class="icon"
       />
-      <div
-        class="final-approval-title"
-        :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }"
+      <div class="final-approval-title"
+           :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }"
       >
         تایید نهایی
       </div>
@@ -66,7 +52,7 @@ export default {
   name: 'Steps',
 
   props: {
-    currentComponent: {
+    step: {
       type: String,
       default () {
         return ''
@@ -102,22 +88,17 @@ export default {
   computed: {
     currentStep: {
       get () {
-        return this.currentComponent
+        return this.step
       },
       set (value) {
-        this.$emit('update:currentComponent', value)
+        this.$emit('update:step', value)
       }
     }
   },
-
-  emits: [
-    'update:currentComponent',
-    'currentStepChanged'
-  ],
-
+  emits: ['update:step'],
   methods: {
     changeCurrentStep (step) {
-      this.$emit('currentStepChanged', step)
+      this.$emit('update:step', step)
     }
   }
 }
