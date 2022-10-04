@@ -22,7 +22,7 @@
             @remove="RemoveChoice"
             @nextTab="goToNextStep"
             @lastTab="goToLastStep"
-            @deleteAllQuestions="deleteAllQuestions"
+            @deselectAllQuestions="deleteAllQuestions"
             @selectAllQuestions="selectAllQuestions"
           />
         </div>
@@ -178,7 +178,6 @@ export default {
       deep: true
     },
     treeModalValue(newVal) {
-      // console.log('this.providedExam.temp.lesson', this.providedExam.temp.lesson)
       if (!newVal) {
         this.updateTreeFilter()
       }
@@ -213,10 +212,8 @@ export default {
   },
   methods: {
     updateTreeFilter () {
-      // console.log('updateTreeFilter')
       const tagsToFilter = this.lastSelectedNodes.length > 0 ? this.lastSelectedNodes : [{ id: this.providedExam.temp.lesson }]
       this.selectedNodesIds = this.lastSelectedNodes.map(node => node.id)
-      // console.log('tagsToFilter', tagsToFilter)
       this.$refs.filter.changeFilterData('tags', tagsToFilter)
     },
     setupTreeModal() {
@@ -262,10 +259,10 @@ export default {
     questionHandle (question) {
       if (question.selected) {
         this.addQuestionToSelectedList(question)
-        // this.addQuestionToExam(question)
+        this.addQuestionToExam(question)
       } else {
         this.deleteQuestionFromSelectedList(question)
-        // this.deleteQuestionFromExam(question)
+        this.deleteQuestionFromExam(question)
       }
     },
     onClickedCheckQuestionBtn (question) {
@@ -273,11 +270,15 @@ export default {
       this.questionHandle(question)
     },
     addQuestionToExam (question) {
-      this.$emit('addQuestionToExam', question)
+      const arrayOfQuestion = []
+      arrayOfQuestion.push(question)
+      this.$emit('addQuestionToExam', arrayOfQuestion)
       this.questionListKey = Date.now()
     },
     deleteQuestionFromExam (question) {
-      this.$emit('deleteQuestionFromExam', question)
+      const arrayOfQuestion = []
+      arrayOfQuestion.push(question)
+      this.$emit('deleteQuestionFromExam', arrayOfQuestion)
       this.questionListKey = Date.now()
     },
     addQuestionToSelectedList (question) {
@@ -368,11 +369,13 @@ export default {
           this.selectedQuestions.splice(question)
         })
       }
+      this.$emit('addQuestionToExam', this.selectedQuestions)
     },
     deleteAllQuestions () {
       if (this.checkBox) {
         this.checkBox = false
       }
+      this.$emit('deleteQuestionFromExam', this.selectedQuestions)
       this.questions.list.forEach(question => {
         question.selected = false
         this.selectedQuestions.splice(question)
