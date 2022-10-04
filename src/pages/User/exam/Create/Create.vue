@@ -5,8 +5,6 @@
              :loading="draftExam.loading"
              @update:step="onChangeTab"
       />
-      ({{ draftExam.id }})
-      ({{ draftExam.questions.list.length }})
       <q-tab-panels v-model="currentTab"
                     animated
       >
