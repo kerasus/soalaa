@@ -21,7 +21,6 @@
           <question-selection-tab
             v-model:lesson="exam.temp.lesson"
             :questionLoading="exam.questions.loading"
-            :currentTab="currentTab"
             @nextTab="goToNextStep"
             @lastTab="goToLastStep"
             @addQuestionToExam="addQuestionToExam"
@@ -134,6 +133,11 @@ export default {
       createDraftExamMessageDialog: false,
       accept: false,
       continueWithOldDraftExamConfirmationDialog: false
+    }
+  },
+  watch: {
+    currentTab (newTap) {
+
     }
   },
   created() {
@@ -260,17 +264,6 @@ export default {
       return { error, messages }
     },
     goToNextStep () {
-      let stepValidation = null
-      const currentTabIndex = this.getCurrentTabIndex()
-      if (currentTabIndex === 0) {
-        stepValidation = this.getStep1Validation()
-      }
-
-      if (stepValidation.error) {
-        this.showMessagesInNotify(stepValidation.messages)
-        return
-      }
-
       const nextStep = this.getNextTabName()
       if (!nextStep) {
         this.goToLastStep()
@@ -300,12 +293,23 @@ export default {
           })
       }
     },
+    onChangeTab (newTap) {
+      let stepValidation = null
+      const currentTabIndex = this.getCurrentTabIndex()
+      if (currentTabIndex === 0) {
+        stepValidation = this.getStep1Validation()
+      }
+
+      if (stepValidation.error) {
+        this.showMessagesInNotify(stepValidation.messages)
+      }
+    },
     createExam () {
       this.draftExam.loading = true
       return this.$axios.post(API_ADDRESS.exam.user.create, this.draftExam)
     },
     updateExam (params) {
-      return this.$axios.post(API_ADDRESS.exam.user.update(this.draftExam.id), this.draftExam)
+      return this.$axios.post(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam)
     },
 
     loadAttachedQuestions () {
