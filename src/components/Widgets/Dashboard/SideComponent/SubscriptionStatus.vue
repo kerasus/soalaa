@@ -59,6 +59,12 @@ import { Chart } from 'highcharts-vue'
 
 export default {
   name: 'SubscriptionStatus',
+  props: {
+    subscribe: {
+      type: Object,
+      default: () => {}
+    }
+  },
   components: {
     highcharts: Chart
   },
@@ -90,7 +96,7 @@ export default {
           pie: {
             innerSize: '98%',
             startAngle: 0,
-            endAngle: 270,
+            endAngle: ((this.$props.subscribe.abilities_n.exam - this.$props.subscribe.made.exam) * 360) / this.$props.subscribe.abilities_n.exam,
             borderWidth: 13,
             center: ['50%', '52%'],
             size: '150%',
@@ -114,7 +120,7 @@ export default {
         series: [{
           id: 'idData',
           data: [
-            { name: '', y: 31, color: '#9690E4' }
+            { name: '', y: (this.$props.subscribe.abilities_n.exam - this.$props.subscribe.made.exam), color: '#9690E4' }
           ]
         }]
       },
@@ -143,7 +149,7 @@ export default {
           pie: {
             innerSize: '98%',
             startAngle: 0,
-            endAngle: 90,
+            endAngle: ((this.$props.subscribe.abilities_n.pdf_questions - this.$props.subscribe.made.pdf_questions) * 360) / this.$props.subscribe.abilities_n.pdf_questions,
             borderWidth: 13,
             center: ['50%', '52%'],
             size: '150%',
@@ -167,7 +173,7 @@ export default {
         series: [{
           id: 'idData',
           data: [
-            { name: '', y: 31, color: '#9690E4' }
+            { name: '', y: (this.$props.subscribe.abilities_n.pdf_questions - this.$props.subscribe.made.pdf_questions), color: '#9690E4' }
           ]
         }]
       }
