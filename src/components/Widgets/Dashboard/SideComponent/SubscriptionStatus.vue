@@ -62,7 +62,7 @@ export default {
   props: {
     subscribe: {
       type: Object,
-      default: () => {}
+      default: null
     }
   },
   components: {
@@ -96,7 +96,7 @@ export default {
           pie: {
             innerSize: '98%',
             startAngle: 0,
-            endAngle: ((this.$props.subscribe.abilities_n.exam - this.$props.subscribe.made.exam) * 360) / this.$props.subscribe.abilities_n.exam,
+            endAngle: 0,
             borderWidth: 13,
             center: ['50%', '52%'],
             size: '150%',
@@ -120,7 +120,7 @@ export default {
         series: [{
           id: 'idData',
           data: [
-            { name: '', y: (this.$props.subscribe.abilities_n.exam - this.$props.subscribe.made.exam), color: '#9690E4' }
+            { name: '', y: 0, color: '#9690E4' }
           ]
         }]
       },
@@ -149,7 +149,7 @@ export default {
           pie: {
             innerSize: '98%',
             startAngle: 0,
-            endAngle: ((this.$props.subscribe.abilities_n.pdf_questions - this.$props.subscribe.made.pdf_questions) * 360) / this.$props.subscribe.abilities_n.pdf_questions,
+            endAngle: 0,
             borderWidth: 13,
             center: ['50%', '52%'],
             size: '150%',
@@ -173,10 +173,27 @@ export default {
         series: [{
           id: 'idData',
           data: [
-            { name: '', y: (this.$props.subscribe.abilities_n.pdf_questions - this.$props.subscribe.made.pdf_questions), color: '#9690E4' }
+            { name: '', y: 0, color: '#9690E4' }
           ]
         }]
       }
+    }
+  },
+  watch: {
+    subscribe () {
+      this.loadChartData()
+    }
+  },
+  methods: {
+    loadChartData () {
+      if (!this.subscribe) {
+        return
+      }
+
+      this.chartOptionsExam.plotOptions.pie.endAngle = ((this.subscribe.abilities_n.exam - this.subscribe.made.exam) * 360) / this.subscribe.abilities_n.exam
+      this.chartOptionsExam.series[0].data[0].y = (this.subscribe.abilities_n.exam - this.subscribe.made.exam)
+      this.chartOptionsPdf.plotOptions.pie.endAngle = ((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions
+      this.chartOptionsPdf.series[0].data[0].y = (this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions)
     }
   }
 }
