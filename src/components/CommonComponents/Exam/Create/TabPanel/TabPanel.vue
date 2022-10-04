@@ -27,6 +27,7 @@
         <q-tab-panel name="chooseQuestion">
           <question-selection-tab
             v-model:lesson="exam.temp.lesson"
+            :questionLoading="exam.questions.loading"
             :currentTab="currentTab"
             @onFilter="onFilter"
             @nextTab="goToNextStep"
@@ -39,6 +40,7 @@
         <q-tab-panel name="finalApproval">
           <!--          deleteQuestionFromExam-->
           <final-approval-tab
+            v-model:exam="exam"
             :majors="majorList"
             :grades="gradesList"
             @detachQuestion="bulkDetachLastStep"
@@ -379,8 +381,8 @@ export default {
     async updateQuestionOrder(data) {
       this.exam.questions.loading = true
       try {
-        const response = await this.$axios.post(API_ADDRESS.exam.user.updateOrders('633aed8b3b8e23f84807cca2'), data)
-        console.log('response update exam :', response)
+        await this.$axios.post(API_ADDRESS.exam.user.updateOrders('633aed8b3b8e23f84807cca2'), data)
+        // console.log('response update exam :', response)
         this.exam.questions.loading = false
       } catch (e) {
         this.exam.questions.loading = false
@@ -389,8 +391,8 @@ export default {
     async bulkDetachLastStep(data) {
       this.exam.questions.loading = true
       try {
-        const response = await this.$axios.post(API_ADDRESS.exam.user.detachBulk('633aed8b3b8e23f84807cca2'), data)
-        console.log('response bulkDetachLastStep:', response)
+        await this.$axios.post(API_ADDRESS.exam.user.detachBulk('633aed8b3b8e23f84807cca2'), data)
+        // console.log('response bulkDetachLastStep:', response)
         this.exam.questions.loading = false
       } catch (e) {
         this.exam.questions.loading = false
