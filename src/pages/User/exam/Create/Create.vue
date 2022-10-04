@@ -30,7 +30,7 @@
                               :majors="majorList"
                               :grades="gradesList"
                               @detachQuestion="bulkDetachQuestionsOfDraftExam"
-                              @updateOrders="updateQuestionOrder"
+                              @updateOrders="replaceQuestionsOfDraftExam"
                               @creatFinalExam="submitFinalExam"
                               @goToNextStep="goToNextStep"
           />
@@ -348,6 +348,23 @@ export default {
           this.draftExam.loading = false
         })
     },
+    replaceQuestionsOfDraftExam(questions) {
+      this.draftExam.loading = true
+      return this.$axios.post(API_ADDRESS.exam.user.draftExam.replaceQuestions(this.draftExam.id),
+        this.draftExam.questions.list.map(question => {
+          return {
+            question_id: question.id,
+            order: question.order
+          }
+        }))
+        .then(() => {
+          this.loadAttachedQuestions()
+          this.draftExam.loading = false
+        })
+        .catch(() => {
+          this.draftExam.loading = false
+        })
+    },
     showMessagesInNotify(messages, type) {
       if (!type) {
         type = 'negative'
@@ -394,23 +411,6 @@ export default {
             reject()
           })
       })
-    },
-
-    submitFinalExam() {
-      this.exam.enable = true
-      this.createExam({
-        params: {}
-      })
-    },
-    async updateQuestionOrder(data) {
-      this.exam.questions.loading = true
-      try {
-        await this.$axios.post(API_ADDRESS.exam.user.updateOrders('633aed8b3b8e23f84807cca2'), data)
-        // console.log('response update exam :', response)
-        this.exam.questions.loading = false
-      } catch (e) {
-        this.exam.questions.loading = false
-      }
     }
   }
 }

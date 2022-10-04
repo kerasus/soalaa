@@ -377,7 +377,7 @@ export default {
 
   emits: [
     'selectAllQuestions',
-    'deleteAllQuestions',
+    'deselectAllQuestions',
     'remove',
     'nextTab',
     'lastTab'
@@ -398,7 +398,11 @@ export default {
     },
 
     selectAllQuestions () {
-      this.$emit('selectAllQuestions')
+      if (this.checkbox) {
+        this.$emit('selectAllQuestions')
+        return
+      }
+      this.$emit('deselectAllQuestions')
     },
 
     replaceTitle () {
@@ -420,7 +424,7 @@ export default {
     },
 
     deleteAllChoose (id) {
-      this.$emit('deleteAllQuestions')
+      this.$emit('deselectAllQuestions')
     },
 
     numberOfQuestions () {

@@ -155,9 +155,6 @@ export default {
       return this.getValueByName('temp.grade')
     }
   },
-  created() {
-    this.localExam = new Exam(this.exam)
-  },
   watch: {
     typeOptions: {
       deep: true,
@@ -223,6 +220,7 @@ export default {
     exam: {
       deep: true,
       handler(newValue) {
+        this.localExam = new Exam(this.exam)
         this.inputList.forEach(element => {
           if (element.name === 'title') {
             element.value = this.exam.title
@@ -261,7 +259,11 @@ export default {
       this.$router.push({ name: 'User.Exam.List' })
     },
     getValueByName(name) {
-      return this.inputList[this.inputList.findIndex(item => item.name === name)]?.value
+      const inputIndex = this.inputList.findIndex(item => item.name === name)
+      if (inputIndex === -1) {
+        return
+      }
+      return this.inputList[inputIndex].value
     }
   }
 }
