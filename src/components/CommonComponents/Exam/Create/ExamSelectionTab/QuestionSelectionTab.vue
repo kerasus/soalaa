@@ -59,7 +59,7 @@
     v-model:subjectsField="allSubjects"
     :lessons-list="treeModalLessonsList"
     single-list-choice-mode
-    @lessonSelected="setFilterTreeLesson"
+    @lessonSelected="onLessonChanged"
   />
 </template>
 
@@ -83,6 +83,12 @@ export default {
   ],
   props: {
     currentTab: {
+      type: String,
+      default() {
+        return ''
+      }
+    },
+    lesson: {
       type: String,
       default() {
         return ''
@@ -156,12 +162,12 @@ export default {
         this.questionListKey = Date.now()
       }
     },
-    currentTab() {
-      if (this.examGradeSetValue !== this.exam.temp.grade) {
-        this.setupTreeModal()
-        this.setLocalGradeValue(this.exam.temp.grade)
-      }
-    },
+    // currentTab() {
+    //   console.log('this.exam', this.exam.temp.lesson)
+    //   if (this.examGradeSetValue !== this.exam.temp.grade) {
+    //     this.setupTreeModal()
+    //   }
+    // },
     allSubjects: {
       handler () {
         this.updateLessonsTitles()
@@ -181,7 +187,15 @@ export default {
     this.getReportOptions()
   },
   mounted() {
-    this.setLocalGradeValue(this.exam.temp.grade)
+    let rootToLoad = {
+      id: this.exam.temp.grade
+    }
+    if (this.exam.temp.lesson) {
+      rootToLoad = {
+        id: this.exam.temp.lesson
+      }
+    }
+    this.setFilterTreeLesson(rootToLoad)
     this.setupTreeModal()
   },
   emits: [
@@ -189,13 +203,11 @@ export default {
     'lastTab',
     'nextTab',
     'addQuestionToExam',
-    'deleteQuestionFromExam'
+    'deleteQuestionFromExam',
+    'update:lesson'
   ],
   computed: {},
   methods: {
-    setLocalGradeValue (value) {
-      this.examGradeSetValue = value
-    },
     updateTreeFilter () {
       this.selectedNodesIds = this.lastSelectedNodes.map(node => node.id)
       this.$refs.filter.changeFilterData('tags', this.lastSelectedNodes)
@@ -356,6 +368,10 @@ export default {
         question.selected = false
         this.selectedQuestions.splice(question)
       })
+    },
+    onLessonChanged (item) {
+      this.$emit('update:lesson', item.id)
+      this.setFilterTreeLesson(item)
     },
     setFilterTreeLesson(item) {
       this.rootNodeIdInFilter = item.id
