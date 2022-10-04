@@ -270,7 +270,7 @@ export default {
         stepValidation = this.getStep1Validation()
       }
 
-      if (stepValidation.error) {
+      if (stepValidation && stepValidation.error) {
         this.showMessagesInNotify(stepValidation.messages)
       }
 
