@@ -271,8 +271,9 @@ export default {
       }
 
       this.onChangeTab(nextStep)
+      this.currentTab = nextStep
     },
-    onChangeTab (nextStep) {
+    onChangeTab (newStep) {
       let stepValidation = null
       const currentTabIndex = this.getCurrentTabIndex()
       if (currentTabIndex === 0) {
@@ -288,7 +289,6 @@ export default {
         this.updateExam()
           .then(response => {
             this.draftExam.loading = false
-            this.currentTab = nextStep
           })
           .catch(() => {
             this.draftExam.loading = false
@@ -297,7 +297,6 @@ export default {
         this.createExam()
           .then(response => {
             this.loadDraftExam(response.data.data)
-            this.currentTab = nextStep
             this.draftExam.loading = false
           })
           .catch(() => {
@@ -310,7 +309,7 @@ export default {
       return this.$axios.post(API_ADDRESS.exam.user.create, this.draftExam)
     },
     updateExam (params) {
-      return this.$axios.pust(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam)
+      return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam)
     },
 
     loadAttachedQuestions () {
