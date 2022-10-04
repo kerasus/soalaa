@@ -19,18 +19,18 @@
         </q-tab-panel>
         <q-tab-panel name="chooseQuestion">
           <question-selection-tab
-            v-model:exam="exam"
-            v-model:lesson="exam.temp.lesson"
+            v-model:exam="draftExam"
+            v-model:lesson="draftExam.temp.lesson"
             @nextTab="goToNextStep"
             @lastTab="goToLastStep"
-            @addQuestionToExam="addQuestionToExam"
+            @addQuestionToExam="addQuestionsToExam"
             @deleteQuestionFromExam="deleteQuestionFromExam"
           />
         </q-tab-panel>
         <q-tab-panel name="finalApproval">
           <!--          deleteQuestionFromExam-->
           <final-approval-tab
-            v-model:exam="exam"
+            v-model:exam="draftExam"
             :majors="majorList"
             :grades="gradesList"
             @detachQuestion="bulkDetachLastStep"
@@ -311,7 +311,6 @@ export default {
     updateExam (params) {
       return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam)
     },
-
     loadAttachedQuestions () {
       this.draftExam.loading = true
       return this.$axios.post(API_ADDRESS.exam.user.draftExam.getAttachedQuestions(this.draftExam.id))
