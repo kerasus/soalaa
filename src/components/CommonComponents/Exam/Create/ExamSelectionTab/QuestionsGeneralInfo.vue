@@ -368,9 +368,9 @@ export default {
     questionLvl () {
       if (!this.questions) return
       return {
-        hard: this.questions.list.filter(question => question.level === '3').length,
-        medium: this.questions.list.filter(question => question.level === '2').length,
-        easy: this.questions.list.filter(question => question.level === '1').length
+        hard: this.questions.list.filter(question => question.level === '3' || question.level === 3).length,
+        medium: this.questions.list.filter(question => question.level === '2' || question.level === 2).length,
+        easy: this.questions.list.filter(question => question.level === '1' || question.level === 1).length
       }
     }
   },

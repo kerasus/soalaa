@@ -82,21 +82,30 @@ export default {
   mixins: [
     mixinTree
   ],
+  emits: [
+    'onFilter',
+    'lastTab',
+    'nextTab',
+    'addQuestionToExam',
+    'deleteQuestionFromExam',
+    'update:lesson',
+    'update:exam'
+  ],
   props: {
     questionLoading: {
       type: Boolean,
       default: false
     },
-    currentTab: {
+    lesson: {
       type: String,
       default() {
         return ''
       }
     },
-    lesson: {
-      type: String,
+    exam: {
+      type: Exam,
       default() {
-        return ''
+        return new Exam()
       }
     }
   },
@@ -153,26 +162,14 @@ export default {
       reportTypeList: []
     }
   },
-  inject: {
-    exam: {
-      from: 'providedExam',
-      default: new Exam()
-    }
-  },
   watch: {
     'selectedQuestions.length': {
       handler (newValue, oldValue) {
-        this.exam.questions.list = []
-        this.exam.questions.list = this.selectedQuestions
+        this.providedExam.questions.list = []
+        this.providedExam.questions.list = this.selectedQuestions
         this.questionListKey = Date.now()
       }
     },
-    // currentTab() {
-    //   console.log('this.exam', this.exam.temp.lesson)
-    //   if (this.examGradeSetValue !== this.exam.temp.grade) {
-    //     this.setupTreeModal()
-    //   }
-    // },
     allSubjects: {
       handler () {
         this.updateLessonsTitles()
@@ -181,6 +178,7 @@ export default {
       deep: true
     },
     treeModalValue(newVal) {
+      // console.log('this.providedExam.temp.lesson', this.providedExam.temp.lesson)
       if (!newVal) {
         this.updateTreeFilter()
       }
@@ -193,34 +191,38 @@ export default {
   },
   mounted() {
     let rootToLoad = {
-      id: this.exam.temp.grade
+      id: this.providedExam.temp.grade
     }
-    if (this.exam.temp.lesson) {
+    if (this.providedExam.temp.lesson) {
       rootToLoad = {
-        id: this.exam.temp.lesson
+        id: this.providedExam.temp.lesson
       }
     }
     this.setFilterTreeLesson(rootToLoad)
     this.setupTreeModal()
   },
-  emits: [
-    'onFilter',
-    'lastTab',
-    'nextTab',
-    'addQuestionToExam',
-    'deleteQuestionFromExam',
-    'update:lesson'
-  ],
-  computed: {},
+  computed: {
+    providedExam: {
+      get () {
+        return this.exam
+      },
+      set (value) {
+        this.$emit('update:exam', value)
+      }
+    }
+  },
   methods: {
     updateTreeFilter () {
+      // console.log('updateTreeFilter')
+      const tagsToFilter = this.lastSelectedNodes.length > 0 ? this.lastSelectedNodes : [{ id: this.providedExam.temp.lesson }]
       this.selectedNodesIds = this.lastSelectedNodes.map(node => node.id)
-      this.$refs.filter.changeFilterData('tags', this.lastSelectedNodes)
+      // console.log('tagsToFilter', tagsToFilter)
+      this.$refs.filter.changeFilterData('tags', tagsToFilter)
     },
     setupTreeModal() {
       this.toggleTreeModal()
       this.getLessonsList(new TreeNode({
-        id: this.exam.temp.grade
+        id: this.providedExam.temp.grade
       }))
     },
     toggleTreeModal() {
@@ -282,7 +284,9 @@ export default {
       this.selectedQuestions.push(question)
       if (this.selectedQuestions.length === this.questions.list.length) {
         this.checkBox = true
-      } else this.checkBox = 'maybe'
+      } else {
+        // this.checkBox = 'maybe'
+      }
       this.questionListKey = Date.now()
     },
     deleteQuestionFromSelectedList (question) {
