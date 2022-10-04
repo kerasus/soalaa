@@ -5,7 +5,6 @@
         v-model:currentComponent="currentTab"
         @currentStepChanged = "changeTab"
       />
-      <!--        keep-alive-->
       <q-tab-panels
         v-model="currentTab"
         animated
@@ -23,7 +22,6 @@
             @getInputValue="setInputValue($event)"
           />
         </q-tab-panel>
-
         <q-tab-panel name="chooseQuestion">
           <question-selection-tab
             v-model:lesson="exam.temp.lesson"
@@ -36,7 +34,6 @@
             @deleteQuestionFromExam="deleteQuestionFromExam"
           />
         </q-tab-panel>
-
         <q-tab-panel name="finalApproval">
           <!--          deleteQuestionFromExam-->
           <final-approval-tab
@@ -107,7 +104,6 @@
 </template>
 
 <script>
-import { computed } from 'vue'
 import { Exam } from 'src/models/Exam'
 import Steps from 'pages/Admin/exam/Create/Steps'
 import ExamInfoTab from 'components/CommonComponents/Exam/Create/ExamInfoTab/ExamInfoTab'
@@ -152,28 +148,37 @@ export default {
       typeOptions: []
     }
   },
-
-  provide() {
-    return {
-      providedExam: computed(() => this.exam)
-    }
-  },
-
   created() {
-    this.getOptions().then(() => {
-      this.onLoadPage()
-    })
+    this.getData()
   },
-
   methods: {
-    onLoadPage() {
-      this.$axios.get(API_ADDRESS.exam.user.draft())
-        .then(response => {
-          if (response.data.data !== null) {
-            this.draftDialog = true
-            this.draftExam = new Exam(response.data.data)
-          }
-        }).catch(() => {})
+    getData () {
+      this.getOptions()
+        .then(() => {
+          this.getDraftExam()
+            .then(response => {
+              if (!response.data?.data) {
+                return
+              }
+              this.draftDialog = true
+              this.loadDraftExam()
+            })
+            .catch(() => {
+            })
+        })
+    },
+    getDraftExam () {
+      return this.$axios.get(API_ADDRESS.exam.user.draft())
+    },
+    getOptions() {
+      return Promise.all([
+        this.getExamTypeList(),
+        this.getGradesList(),
+        this.loadMajorList()
+      ])
+    },
+    loadDraftExam (draftExam) {
+      this.draftExam = new Exam(draftExam)
     },
 
     onFilter(filterData) {
@@ -350,7 +355,7 @@ export default {
     },
     loadMajorList () {
       return new Promise((resolve, reject) => {
-        this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
+        this.$axios.get(API_ADDRESS.option.user('major_type'))
           .then((response) => {
             this.majorList = response.data.data
             resolve(response)
@@ -396,16 +401,8 @@ export default {
       } catch (e) {
         this.exam.questions.loading = false
       }
-    },
-    getOptions() {
-      return Promise.all([
-        this.getExamTypeList(),
-        this.getGradesList(),
-        this.loadMajorList()
-      ])
     }
   }
-
 }
 </script>
 
