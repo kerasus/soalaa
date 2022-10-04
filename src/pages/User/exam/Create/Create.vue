@@ -357,12 +357,11 @@ export default {
     },
     replaceQuestionsOfDraftExam(questions) {
       this.draftExam.loading = true
-      let lastOrder = this.draftExam.questions.list.length
       return this.$axios.post(API_ADDRESS.exam.user.draftExam.replaceQuestions(this.draftExam.id), {
         questions: questions.map(question => {
           return {
             question_id: question.id,
-            order: ++lastOrder
+            order: question.order
           }
         })
       })
