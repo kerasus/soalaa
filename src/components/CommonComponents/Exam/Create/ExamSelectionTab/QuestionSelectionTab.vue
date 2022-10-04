@@ -241,7 +241,6 @@ export default {
       this.$emit('nextTab')
     },
     onFilter (filterData) {
-      console.log('filterData', filterData)
       this.$emit('onFilter', filterData)
       this.filterData = this.getFiltersForRequest(filterData)
       this.getQuestionData(1, this.filterData)
