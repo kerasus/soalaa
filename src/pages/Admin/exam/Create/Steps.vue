@@ -148,15 +148,51 @@ export default {
   }
 
   .step-1{
-    width:45%
+    width:45%;
+
+    &.current-step {
+      @media screen and (max-width: 599px) {
+        width:60%;
+      }
+    }
+
+    @media screen and (max-width: 599px) {
+      width:20%;
+    }
   }
 
   .step-2{
-    width:45%
+    width:45%;
+
+    &.current-step {
+      @media screen and (max-width: 599px) {
+        width:60%;
+      }
+    }
+
+    @media screen and (max-width: 599px) {
+      width:20%;
+    }
+    @media screen and (max-width: 1200px) and (min-width: 600px) {
+      width:35%;
+    }
   }
 
   .step-3{
-    width:10%
+    width:10%;
+
+    &.current-step {
+      @media screen and (max-width: 599px) {
+        width:60%;
+      }
+    }
+
+    @media screen and (max-width: 599px) {
+      width:20%;
+    }
+    @media screen and (max-width: 1200px) {
+      width:20%;
+    }
   }
 
   .step {
