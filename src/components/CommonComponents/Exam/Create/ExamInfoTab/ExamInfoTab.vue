@@ -213,16 +213,7 @@ export default {
       }
     },
     examId (newValue) {
-      this.localExam = new Exam(this.exam)
-      this.inputList.forEach(element => {
-        if (element.name === 'title') {
-          element.value = this.exam.title
-        } else if (element.name === 'temp.major') {
-          element.value = this.exam.temp.major
-        } else if (element.name === 'temp.grade') {
-          element.value = this.exam.temp.grade
-        }
-      })
+      this.loadExamData()
     }
   },
   methods: {
@@ -256,6 +247,37 @@ export default {
         return
       }
       return this.inputList[inputIndex].value
+    },
+    loadExamData(setOptions) {
+      if (setOptions) {
+        this.loadGradesInput(this.gradesList.map(type => {
+          return {
+            label: type.title,
+            value: type.id
+          }
+        }))
+        this.loadMajorInput(this.majorList.map(type => {
+          return {
+            label: type.value,
+            value: type.id
+          }
+        }))
+      }
+      this.localExam = new Exam(this.exam)
+      this.inputList.forEach(element => {
+        if (element.name === 'title') {
+          element.value = this.exam.title
+        } else if (element.name === 'temp.major') {
+          element.value = this.exam.temp.major
+        } else if (element.name === 'temp.grade') {
+          element.value = this.exam.temp.grade
+        }
+      })
+    }
+  },
+  mounted() {
+    if (this.exam.id) {
+      this.loadExamData(true)
     }
   }
 }

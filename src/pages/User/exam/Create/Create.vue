@@ -221,17 +221,9 @@ export default {
     getStep2Validation () {
       let error = false
       const messages = []
-      if (!this.draftExam.title) {
+      if (!this.draftExam.questions.list) {
         error = true
-        messages.push('عنوان آزمون مشخص نشده است.')
-      }
-      if (!this.draftExam.temp.major) {
-        error = true
-        messages.push('رشته آزمون مشخص نشده است.')
-      }
-      if (!this.draftExam.temp.grade) {
-        error = true
-        messages.push('پایه آزمون مشخص نشده است.')
+        messages.push('هیچ سوالی انتخاب نشده است.')
       }
 
       return { error, messages }
@@ -239,17 +231,9 @@ export default {
     getStep3Validation () {
       let error = false
       const messages = []
-      if (!this.draftExam.title) {
+      if (!this.draftExam.questions.list) {
         error = true
-        messages.push('عنوان آزمون مشخص نشده است.')
-      }
-      if (!this.draftExam.temp.major) {
-        error = true
-        messages.push('رشته آزمون مشخص نشده است.')
-      }
-      if (!this.draftExam.temp.grade) {
-        error = true
-        messages.push('پایه آزمون مشخص نشده است.')
+        messages.push('هیچ سوالی انتخاب نشده است.')
       }
 
       return { error, messages }
@@ -261,8 +245,10 @@ export default {
         return
       }
 
-      this.onChangeTab(nextStep)
-      this.currentTab = nextStep
+      const validToChange = this.onChangeTab(nextStep)
+      if (validToChange) {
+        this.currentTab = nextStep
+      }
     },
     onChangeTab (newStep) {
       let stepValidation = null
@@ -271,8 +257,17 @@ export default {
         stepValidation = this.getStep1Validation()
       }
 
+      if (currentTabIndex === 1) {
+        stepValidation = this.getStep2Validation()
+      }
+
+      if (currentTabIndex === 2) {
+        stepValidation = this.getStep3Validation()
+      }
+
       if (stepValidation && stepValidation.error) {
         this.showMessagesInNotify(stepValidation.messages)
+        return false
       }
 
       const hasOldDraftExam = !!this.draftExam.id
@@ -297,10 +292,8 @@ export default {
           })
       }
 
-      // if (currentTabIndex === 1) {
-      //
-      // }
       this.currentTab = newStep
+      return true
     },
     createExam () {
       this.draftExam.loading = true
@@ -316,6 +309,7 @@ export default {
     updateExam (params) {
       // return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam.loadApiResource())
       return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), {
+        enable: this.draftExam.enable,
         title: this.draftExam.title,
         temp: {
           major: this.draftExam.temp.major,
@@ -365,7 +359,7 @@ export default {
       })
         .then(() => {
           this.loadAttachedQuestions()
-          this.draftExam.loading = false
+          // this.draftExam.loading = false
         })
         .catch(() => {
           this.draftExam.loading = false
