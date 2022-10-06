@@ -88,6 +88,10 @@
           </div>
         </div>
       </div>
+      <q-inner-loading
+        :showing="dialogLoading"
+        dark
+      />
     </q-card>
   </q-dialog>
 </template>
@@ -138,6 +142,7 @@ export default {
   ],
   data () {
     return {
+      dialogLoading: false,
       lesson: '',
       group: '',
       selectedNodesIDs: [],
@@ -230,10 +235,12 @@ export default {
     },
     showTreeModalNode (item) {
       this.treeKey += 1
+      this.dialogLoading = true
       this.showTree('tree', this.getNode(item.id))
         .then(() => {
           this.syncAllCheckedIds()
           this.selectWantedTree(this.lesson)
+          this.dialogLoading = false
         })
     },
     selectWantedTree (lesson) {
