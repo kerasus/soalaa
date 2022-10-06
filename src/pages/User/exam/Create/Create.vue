@@ -5,8 +5,6 @@
              :loading="draftExam.loading"
              @update:step="onChangeTab"
       />
-      ({{ draftExam.id }})
-      ({{ draftExam.questions.list.length }})
       <q-tab-panels v-model="currentTab"
                     animated
       >
@@ -22,7 +20,7 @@
           <question-selection-tab v-model:exam="draftExam"
                                   v-model:lesson="draftExam.temp.lesson"
                                   @nextTab="goToNextStep"
-                                  @lastTab="goToLastStep"
+                                  @lastTab="goToPrevStep"
                                   @addQuestionToExam="bulkAttachQuestionsOfDraftExam"
                                   @deleteQuestionFromExam="bulkDetachQuestionsOfDraftExam"
           />
@@ -195,9 +193,12 @@ export default {
     goToFirstStep () {
       this.currentTab = this.getFirstStepName()
     },
+    goToPrevStep () {
+      this.currentTab = this.getPrevTabName()
+    },
     goToLastStep () {
-      this.currentTab = this.getlastStepName()
-      this.setFinalStep()
+      // this.currentTab = this.getlastStepName()
+      // this.setFinalStep()
     },
     getStep1Validation () {
       let error = false
@@ -333,7 +334,6 @@ export default {
       })
         .then(() => {
           this.loadAttachedQuestions()
-          this.draftExam.loading = false
         })
         .catch(() => {
           this.draftExam.loading = false
@@ -350,7 +350,6 @@ export default {
       })
         .then(() => {
           this.loadAttachedQuestions()
-          this.draftExam.loading = false
         })
         .catch(() => {
           this.draftExam.loading = false
@@ -358,18 +357,16 @@ export default {
     },
     replaceQuestionsOfDraftExam(questions) {
       this.draftExam.loading = true
-      let lastOrder = this.draftExam.questions.list.length
       return this.$axios.post(API_ADDRESS.exam.user.draftExam.replaceQuestions(this.draftExam.id), {
         questions: questions.map(question => {
           return {
             question_id: question.id,
-            order: ++lastOrder
+            order: question.order
           }
         })
       })
         .then(() => {
           this.loadAttachedQuestions()
-          this.draftExam.loading = false
         })
         .catch(() => {
           this.draftExam.loading = false
@@ -388,17 +385,17 @@ export default {
       })
     },
 
-    setFinalStep() {
-      // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-      this.createExam().then((createExam) => {
-        this.exam = new Exam(createExam.data.data)
-        // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
-        this.createDraftExamMessageDialog = true
-      }).catch(err => {
-        console.error('err', err)
-        // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
-      })
-    },
+    // setFinalStep() {
+    //   // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+    //   this.createExam().then((createExam) => {
+    //     this.exam = new Exam(createExam.data.data)
+    //     // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+    //     this.createDraftExamMessageDialog = true
+    //   }).catch(err => {
+    //     console.error('err', err)
+    //     // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+    //   })
+    // },
 
     getGradesList () {
       return new Promise((resolve, reject) => {
