@@ -18,7 +18,7 @@
             color="orange"
             :label="'فایل سوالات ' + item.title"
             filled
-            :disable="item.questions_booklet || item.loading.question ? true : false"
+            :disable="item.loading.question ? true : false"
             @update:model-value="addFiles (item.questionFile, item, 'question')"
           >
             <template v-slot:append>
@@ -39,7 +39,7 @@
               icon-right="cloud_upload"
               label="آپلود"
               :loading="item.loading.question"
-              :disabled="item.questions_booklet || !item.canUpload['question']"
+              :disabled="!item.canUpload['question']"
               @click="upload(item, 'questionFile', 'questions_booklet', 'question')"
             />
             <a
@@ -66,7 +66,7 @@
             color="orange"
             :label="'فایل پاسخ ' + item.title"
             filled
-            :disable="item.descriptive_answers_booklet || item.loading.answer ? true :false"
+            :disable="item.loading.answer ? true :false"
             @update:model-value="addFiles (item.questionFile, item, 'answer')"
           >
             <template v-if="item.answerFile"
@@ -88,7 +88,7 @@
               icon-right="cloud_upload"
               label="آپلود"
               :loading="item.loading.answer"
-              :disabled="item.descriptive_answers_booklet || !item.canUpload['answer']"
+              :disabled="item.canUpload['answer']"
               @click="upload(item, 'answerFile', 'descriptive_answers_booklet','answer')"
             />
             <a

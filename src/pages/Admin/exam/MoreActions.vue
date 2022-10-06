@@ -7,6 +7,7 @@
             color="primary"
             class="full-width"
             label="ساخت فایل سوالات"
+            :loading="generateJsonFileLoading"
             @click="generateJsonFile(entityId, false)"
           />
         </div>
@@ -15,6 +16,7 @@
             color="primary"
             class="full-width"
             label="ساخت فایل سوالات با جواب"
+            :loading="generateJsonFileLoading"
             @click="generateJsonFile(entityId, true)"
           />
         </div>
@@ -71,8 +73,14 @@ export default {
     EditExamReport,
     Portlet
   },
+  data () {
+    return {
+      generateJsonFileLoading: false
+    }
+  },
   methods: {
     generateJsonFile (id, withAnswer) {
+      this.generateJsonFileLoading = true
       const that = this
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.post(API_ADDRESS.exam.generateExamFile(id, withAnswer))
@@ -83,9 +91,11 @@ export default {
             position: 'top'
           })
           this.$store.dispatch('loading/linearLoading', false)
+          this.generateJsonFileLoading = false
         })
         .catch(() => {
           this.$store.dispatch('loading/linearLoading', false)
+          this.generateJsonFileLoading = false
         })
     }
   },
