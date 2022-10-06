@@ -84,10 +84,5 @@ export default {
     background: #9690E4;
   }
 }
-@media only screen and (max-width: 599px){
-  .choice-box{
-    margin-bottom: -7px;
-  }
-}
 
 </style>
