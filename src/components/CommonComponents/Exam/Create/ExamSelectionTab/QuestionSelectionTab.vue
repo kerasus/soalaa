@@ -6,6 +6,7 @@
         :filterQuestions="filterQuestions"
         :root-node-id-to-load="rootNodeIdInFilter"
         :node-ids-to-tick="selectedNodesIds"
+        :initial-load-mode="false"
         @onFilter="onFilter"
         @delete-filter="deleteFilterItem"
       />
@@ -18,7 +19,7 @@
             :key="questionListKey"
             :loading="questionLoading"
             :check-box="checkBox"
-            :selectedQuestions="selectedQuestions"
+            :selectedQuestions="providedExam.questions.list"
             @remove="RemoveChoice"
             @nextTab="goToNextStep"
             @lastTab="goToLastStep"
@@ -175,8 +176,8 @@ export default {
     },
     'selectedQuestions.length': {
       handler (newValue, oldValue) {
-        this.providedExam.questions.list = []
-        this.providedExam.questions.list = this.selectedQuestions
+        // this.providedExam.questions.list = []
+        // this.providedExam.questions.list = this.selectedQuestions
         this.questionListKey = Date.now()
       }
     },
@@ -194,7 +195,7 @@ export default {
     }
   },
   created () {
-    this.getQuestionData()
+    // this.getQuestionData()
     this.getFilterOptions()
     this.getReportOptions()
   },
@@ -352,17 +353,20 @@ export default {
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
+      this.showLoading()
       this.$axios.get(API_ADDRESS.question.index(filters, page))
         .then((response) => {
           this.questions = new QuestionList(response.data.data)
           this.paginationMeta = response.data.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
+          this.hideLoading()
         })
         .catch(function (error) {
           console.error(error)
           this.loadingQuestion.loading = false
           this.questions.loading = false
+          this.hideLoading()
         })
     },
     getFilterOptions () {

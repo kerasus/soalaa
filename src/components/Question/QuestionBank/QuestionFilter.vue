@@ -166,6 +166,12 @@ export default {
       default: () => {
         return []
       }
+    },
+    initialLoadMode: {
+      type: Boolean,
+      default: () => {
+        return true
+      }
     }
   },
   data () {
@@ -233,7 +239,9 @@ export default {
     }
   },
   created () {
-    this.showTreeModalNode(this.rootNodeIdToLoad)
+    if (this.initialLoadMode) {
+      this.showTreeModalNode(this.rootNodeIdToLoad)
+    }
   },
   methods: {
     setNodesTicked (nodeIds) {
@@ -254,7 +262,8 @@ export default {
       const nodeToLoadTreeFrom = NodeId ? this.getNode(NodeId) : this.getRootNode('test')
       this.treeKey += 1
       this.showTree('tree', nodeToLoadTreeFrom)
-        .then(() => {})
+        .then(() => {
+        })
     },
     getFilters () {
       return this.filtersData
