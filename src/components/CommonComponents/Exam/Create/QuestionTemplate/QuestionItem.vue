@@ -10,7 +10,8 @@
           v-if="listConfig.questionId"
           class="question-card-chip-id"
         >
-          <q-chip>
+          kjjkjjjj: {{question.selected}}
+          <q-chip class="question-id ">
             سوال
             <q-skeleton
               v-if="question.loading"
@@ -18,7 +19,7 @@
               type="text"
               width="110px"
             />
-            <span class="chip-dynamic-text">
+            <span class="chip-dynamic-text ellipsis">
               {{ question.id }}
             </span>
           </q-chip>
@@ -54,14 +55,14 @@
             class="level-content"
           >
             <div class="level-text">
-              {{ questionLevelClasses[questionLevel].title }}
+              {{ questionLevelClasses[questionLevel]?.title }}
             </div>
 
             <div
               v-for="item in 3"
               :key="item"
               class="level-circles"
-              :class="item === questionLevelClasses[questionLevel].level ? questionLevelClasses[questionLevel].class : ''">
+              :class="item === questionLevelClasses[questionLevel]?.level ? questionLevelClasses[questionLevel].class : ''">
             </div>
           </div>
         </div>
@@ -123,7 +124,7 @@
           >
             <q-avatar
               v-if="question.reference[0].image"
-              :icon="`img: ${question.reference[0].image}`"
+              :icon="`img:${question.reference[0].image}`"
               size="36px"
             >
             </q-avatar>
@@ -134,10 +135,9 @@
           </div>
         </div>
       </div>
-
       <div
-        v-if="listConfig.questionInfo && question.tags.list > 0"
-        class="question-tags col-sm-12 col-xs-6"
+        v-if="listConfig.questionInfo && question.tags.list.length > 0"
+        class="question-tags ellipsis col-sm-12 col-xs-6"
       >
         <div
           v-for="(item, index) in question.tags.list"
@@ -152,11 +152,12 @@
           />
           <div
             v-else
-            class="tag-title"
+            class="tag-box no-wrap flex items-center "
           >
-            {{ item.title }}
+            <div class="tag-title">{{ item.title }}</div>
+            <div class="tag-circle" />
           </div>
-          <div class="tag-circle" />
+
         </div>
       </div>
     </q-card-section>
@@ -243,7 +244,7 @@
           unelevated
           icon="isax:arrow-up-2"
           color="primary"
-          class="question-item-button"
+          class="order-btn"
           @click="changeOrder('up', question)"
         />
         <q-btn
@@ -251,7 +252,7 @@
           unelevated
           icon="isax:arrow-down-1"
           color="primary"
-          class="question-item-button"
+          class="order-btn"
           @click="changeOrder('down', question)"
         />
       </div>
@@ -494,6 +495,7 @@ export default {
   },
   mounted () {
     this.setQuestionLevel()
+    // console.log('question :', this.question)
   },
   computed: {
     trueChoice () {
@@ -665,6 +667,12 @@ export default {
       .question-card-chip-id {
         display: flex;
 
+        .chip-dynamic-text{
+          @media screen and (max-width: 600px) {
+            max-width: 60px;
+          }
+        }
+
         &:deep(.q-chip) {
           font-weight: 400;
           font-size: 12px;
@@ -777,7 +785,8 @@ export default {
         margin-top: 20px;
       }
 
-      @media only screen and (max-width: 599px) {
+      @media screen and (max-width: 599px) {
+        flex-direction: column;
         order: 1;
         margin-top: 13px;
       }
@@ -797,7 +806,8 @@ export default {
           margin: 0 6px;
           width: 6px;
           height: 6px;
-          background: #6D708B;
+          //background: #6D708B;
+          background: black;
           opacity: 0.3;
         }
 
@@ -989,7 +999,16 @@ export default {
 
     .attach-question-buttons {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
+
+      .order-btn{
+        width: 32px;
+        height: 32px;
+        margin-right: 12px;
+        :deep(.q-icon){
+          font-size: 18px;
+        }
+      }
 
       .question-item-button {
         width: 40px;
@@ -1001,6 +1020,7 @@ export default {
         &.attach-button {
           background: #9690E4;
           color: #FFFFFF;
+
         }
 
         &.detach-button {
