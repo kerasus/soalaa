@@ -1,7 +1,6 @@
 <template>
   <div
     class="main-container ">
-    <!--    exam.loading : {{ exam.loading }}-->
     <div class="row">
       <div class="exam-detail-container col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
         <q-skeleton v-if="questions.loading"
@@ -43,26 +42,6 @@
                 {{ examGrade() }}
               </div>
             </div>
-            <!--            <div class="exam-detail-item">-->
-            <!--              <div class="field">شروع آزمون:</div>-->
-            <!--              <div>  {{ exam.start_at === null ? '' :  exam.shamsiDate('start_at').dateTime }} </div>-->
-            <!--            </div>-->
-            <!--            <div class="exam-detail-item">-->
-            <!--              <div class="field">پایان آزمون:</div>-->
-            <!--              <div> {{  exam.finish_at === null ? '' :  exam.shamsiDate('finish_at').dateTime  }} </div>-->
-            <!--            </div>-->
-            <!--            <div class="exam-detail-item">-->
-            <!--              <div class="field">مدت زمان آزمون:</div>-->
-            <!--              <div>-->
-            <!--                {{exam.exam_time}}-->
-            <!--              </div>-->
-            <!--            </div>-->
-            <!--            <div class="exam-detail-item">-->
-            <!--              <div class="field">مدت تاخیر آزمون:</div>-->
-            <!--              <div>-->
-            <!--                {{exam.delay_time}}-->
-            <!--              </div>-->
-            <!--            </div>-->
           </div>
           <q-separator class="q-my-lg" />
           <div class="selected-questions">
@@ -96,14 +75,14 @@
               unelevated
               color="primary"
               class="full-width confirm q-mr-xl"
-              @click="goToNextStep"
+              @click="confirmExam"
             >
               تایید نهایی و ساخت آزمون
             </q-btn>
             <q-btn
               unelevated
               class="full-width q-mr-xl previous"
-              @click="goToLastStep"
+              @click="goToPrevious"
             >
               بازگشت
             </q-btn>
@@ -289,15 +268,21 @@ export default {
         this.exam.questions.list.forEach(question => {
           question.selected = true
         })
-        this.setDifficultyLevelsChart()
-        this.replaceTitle()
+        this.$nextTick(() => {
+          this.setDifficultyLevelsChart()
+          this.replaceTitle()
+        })
       }
     }
   },
   methods: {
+    goToPrevious() {
+      this.$emit('previousStep')
+    },
+    confirmExam() {
+      this.$emit('confirmExam')
+    },
     async initPageData () {
-      // console.log('this.exam :', this.exam)
-      // console.log('creat ', this.exam.questions.list)
       this.questions = new QuestionList({ ...this.exam.questions })
       this.reIndexEamQuestions(this.exam.questions.list)
       this.reIndexEamQuestions(this.questions.list)
@@ -329,8 +314,6 @@ export default {
           order: question.order
         })
       })
-      // console.log('data :', data)
-      // console.log(this.questions.list)
       this.$emit('updateOrders', this.questions.list)
     },
 
@@ -341,20 +324,10 @@ export default {
       question.selected = !question.selected
     },
     handleAddOrDelete (question) {
-      // if (question.selected) {
-      //   this.addQuestionToExam(question)
-      // } else {
-      //   this.deleteQuestionFromExam(question)
-      // }
       question.selected ? this.addQuestionToExam(question) : this.deleteQuestionFromExam(question)
       this.reIndexEamQuestions(this.exam.questions.list)
     },
     onClickedCheckQuestionBtn (question) {
-      // const data = {
-      //   detaches: [
-      //     { question_id: question.id }
-      //   ]
-      // }
       this.$emit('detachQuestion', [question])
     },
     updatePage (page) {
