@@ -39,115 +39,18 @@ export default {
   data () {
     return {
       inputs: [
-        {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-4 col-sm-6',
-          value: [
-            { type: 'separator', label: 'نام', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'first_name', responseKey: 'first_name', label: '', col: 'col-12', placeholder: '' }
-          ]
-        },
-        {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-4 col-sm-6',
-          value: [
-            { type: 'separator', label: 'نام خانوادگی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'last_name', responseKey: 'last_name', label: '', col: 'col-12', placeholder: ' ' }
-          ]
-        },
-        {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-4 col-sm-6',
-          value: [
-            { type: 'separator', label: 'کدملی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'national_code', responseKey: 'national_code', label: '', col: 'col-12', placeholder: ' ' }
-          ]
-        },
-        {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-4 col-sm-6',
-          value: [
-            { type: 'separator', label: 'جنسیت', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'gender', responseKey: 'gender.title', label: '', col: 'col-12', placeholder: '' }
-          ]
-        },
-        {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-4 col-sm-6',
-          value: [
-            { type: 'separator', label: 'شماره موبایل', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'mobile', responseKey: 'mobile', label: '', col: 'col-12', placeholder: ' ' }
-          ]
-        },
-        {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-4 col-sm-6',
-          value: [
-            { type: 'separator', label: 'ایمیل', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'email', responseKey: 'email', label: '', col: 'col-12', placeholder: ' ' }
-          ]
-        },
-        {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-4 col-sm-6',
-          value: [
-            { type: 'separator', label: 'نوع کاربری', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', value: 'دانش آموز', col: 'col-12', placeholder: ' ', disable: true }
-          ]
-        },
-        {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-4 col-sm-6',
-          value: [
-            { type: 'separator', label: 'رشته تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'major', responseKey: 'major.title', col: 'col-12' }
-          ]
-        },
-        {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-4 col-sm-6',
-          value: [
-            { type: 'separator', label: 'پایه تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'grade', responseKey: 'grade.title', col: 'col-12' }
-          ]
-        },
-        {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-4 col-sm-6',
-          value: [
-            { type: 'separator', label: 'استان', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'province', responseKey: 'province.title', col: 'col-12' }
-          ]
-        },
-        {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-4 col-sm-6',
-          value: [
-            { type: 'separator', label: 'شهر', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'select', name: 'city', responseKey: 'city.title', col: 'col-12' }
-          ]
-        },
-        {
-          type: 'formBuilder',
-          name: 'formBuilderCol',
-          col: 'col-12 col-md-4 col-sm-6',
-          value: [
-            { type: 'separator', label: 'مدرسه', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'school', responseKey: 'school', label: '', options: {}, col: 'col-12', placeholder: ' ' }
-          ]
-        }
-
+        { type: 'input', name: 'first_name', responseKey: 'first_name', label: 'نام', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'input', name: 'last_name', responseKey: 'last_name', label: 'نام خانوادگی', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'input', name: 'national_code', responseKey: 'national_code', label: 'کدملی', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'select', name: 'gender', responseKey: 'gender.title', label: 'جنسیت', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'input', name: 'mobile', responseKey: 'mobile', label: 'شماره موبایل', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'input', name: 'email', responseKey: 'email', label: 'ایمیل', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'input', value: 'دانش آموز', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', label: 'نوع کاربری', placeholder: ' ', disable: true },
+        { type: 'select', name: 'major', label: 'رشته تحصیلی', responseKey: 'major.title', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'select', name: 'grade', responseKey: 'grade.title', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', label: 'پایه تحصیلی', placeholder: ' ' },
+        { type: 'select', name: 'province', responseKey: 'province.title', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', label: 'استان', placeholder: ' ' },
+        { type: 'select', name: 'city', responseKey: 'city.title', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', label: 'شهر', placeholder: ' ' },
+        { type: 'input', name: 'school', responseKey: 'school', label: 'مدرسه', options: {}, col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' }
       ],
       find: null,
       genders: null,

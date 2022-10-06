@@ -1,7 +1,8 @@
 <template>
   <div v-if="exam.loading"
        class="exam-info-component loading">
-
+    <q-skeleton type="QInput"
+                animation="wave" />
   </div>
   <div v-else
        class="exam-info-component">
@@ -136,37 +137,34 @@ export default {
     }
   },
   computed: {
-    examCategoriesIndex () {
-      return this.inputList.findIndex(item => item.name === 'categories')
-    },
-    totalCategory () {
-      return this.inputList[this.examCategoriesIndex].value && this.inputList[this.examCategoriesIndex].value.length >= 2
-    },
     title() {
       return this.getValueByName('title')
     },
-    questionType() {
-      return this.getValueByName('question_type')
-    },
+    // questionType() {
+    //   return this.getValueByName('question_type')
+    // },
     tempMajor() {
       return this.getValueByName('temp.major')
     },
     tempGrade() {
       return this.getValueByName('temp.grade')
+    },
+    examId () {
+      return this.exam.id
     }
   },
   watch: {
-    typeOptions: {
-      deep: true,
-      handler (newValue) {
-        this.loadQuestionTypesInput(newValue.map(type => {
-          return {
-            label: type.value,
-            value: type.id
-          }
-        }))
-      }
-    },
+    // typeOptions: {
+    //   deep: true,
+    //   handler (newValue) {
+    //     this.loadQuestionTypesInput(newValue.map(type => {
+    //       return {
+    //         label: type.value,
+    //         value: type.id
+    //       }
+    //     }))
+    //   }
+    // },
     gradesList: {
       deep: true,
       handler (newValue) {
@@ -189,20 +187,17 @@ export default {
         }))
       }
     },
-    title: {
-      deep: true,
-      handler (newValue) {
-        this.localExam.title = newValue
-        this.$emit('update:exam', this.localExam)
-      }
+    title(newValue) {
+      this.localExam.title = newValue
+      this.$emit('update:exam', this.localExam)
     },
-    questionType: {
-      deep: true,
-      handler (newValue) {
-        this.localExam.type_id = newValue
-        this.$emit('update:exam', this.localExam)
-      }
-    },
+    // questionType: {
+    //   deep: true,
+    //   handler (newValue) {
+    //     this.localExam.type_id = newValue
+    //     this.$emit('update:exam', this.localExam)
+    //   }
+    // },
     tempMajor: {
       deep: true,
       handler (newValue) {
@@ -217,20 +212,17 @@ export default {
         this.$emit('update:exam', this.localExam)
       }
     },
-    exam: {
-      deep: true,
-      handler(newValue) {
-        this.localExam = new Exam(this.exam)
-        this.inputList.forEach(element => {
-          if (element.name === 'title') {
-            element.value = this.exam.title
-          } else if (element.name === 'temp.major') {
-            element.value = this.exam.temp.major
-          } else if (element.name === 'temp.grade') {
-            element.value = this.exam.temp.grade
-          }
-        })
-      }
+    examId (newValue) {
+      this.localExam = new Exam(this.exam)
+      this.inputList.forEach(element => {
+        if (element.name === 'title') {
+          element.value = this.exam.title
+        } else if (element.name === 'temp.major') {
+          element.value = this.exam.temp.major
+        } else if (element.name === 'temp.grade') {
+          element.value = this.exam.temp.grade
+        }
+      })
     }
   },
   methods: {
