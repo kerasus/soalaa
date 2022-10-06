@@ -57,7 +57,8 @@ export default {
       provinces: null,
       cities: null,
       majors: null,
-      grades: null
+      grades: null,
+      isCityLocked: false
     }
   },
 
@@ -121,6 +122,11 @@ export default {
 
     setInputsInitData () {
       this.$refs.EntityCrudFormBuilder.loadInputData(this.user, this.inputs)
+      this.setProvinceValue(this.user.province)
+      if (this.user.city) {
+        this.setCityValue(this.user.city)
+        this.lockCityValue()
+      }
       this.setInputOption('gender', this.customizedOptionList(this.genders))
       this.setInputOption('province', this.customizedOptionList(this.provinces))
       this.setInputOption('major', this.customizedOptionList(this.majors))
@@ -161,10 +167,12 @@ export default {
 
     setCityInputOptions (cityList) {
       this.setInputOption('city', this.customizedOptionList(cityList))
-      this.setCityInputValue()
+      if (!this.isCityLocked) {
+        this.setCityInputValueAfterProvinceChange()
+      }
     },
 
-    setCityInputValue () {
+    setCityInputValueAfterProvinceChange () {
       this.findInput(this.inputs, 'city').value = this.findInput(this.inputs, 'city').options[0]
     },
 
@@ -179,6 +187,32 @@ export default {
         // .catch((error) => {
         //   console.log(error)
         // })
+    },
+
+    setProvinceValue(title) {
+      let provinceValue
+      const indexOfInput = this.inputs.findIndex(input => input.name === 'province')
+      provinceValue = this.provinces.find(item => item.title === title)
+      if (!this.user.province && this.user.city) {
+        provinceValue = this.cities.find(item => item.title === this.user.city)
+      }
+      this.inputs[indexOfInput].value = {
+        label: provinceValue.title,
+        value: provinceValue.id
+      }
+    },
+
+    setCityValue(title) {
+      const indexOfInput = this.inputs.findIndex(input => input.name === 'city')
+      const cityValue = this.cities.find(item => item.title === title)
+      this.inputs[indexOfInput].value = {
+        label: cityValue.title,
+        value: cityValue.id
+      }
+    },
+
+    lockCityValue() {
+      this.isCityLocked = true
     }
 
   }
