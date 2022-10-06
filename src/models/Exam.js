@@ -34,7 +34,7 @@ class Exam extends Model {
       {
         key: 'temp',
         default: {
-          geade: null,
+          grade: null,
           major: null
         }
       },
@@ -145,6 +145,7 @@ class Exam extends Model {
         { key: 'enable' },
         { key: 'is_free' },
         { key: 'confirm' },
+        { key: 'temp' },
         { key: 'generate_questions_automatically' },
         { key: 'type_id' },
         { key: 'start_at' },
