@@ -31,8 +31,8 @@
                               :grades="gradesList"
                               @detachQuestion="bulkDetachQuestionsOfDraftExam"
                               @updateOrders="replaceQuestionsOfDraftExam"
-                              @creatFinalExam="submitFinalExam"
-                              @goToNextStep="goToNextStep"
+                              @previousStep="goToPrevStep"
+                              @confirmExam="confirmDraftExam"
           />
         </q-tab-panel>
       </q-tab-panels>
@@ -197,7 +197,6 @@ export default {
       this.currentTab = this.getPrevTabName()
     },
     goToLastStep () {
-      // this.currentTab = this.getlastStepName()
       this.confirmDraftExam()
     },
     getStep1Validation () {

@@ -3,7 +3,7 @@
     v-model="modal"
   >
     <q-card class="tree-card">
-      <div class="fit row wrap">
+      <div class="fit row wrap tree-inner-container">
         <div class="choose-tree-box question-details col-6">
           <div class="details-container-2 default-details-container">
             <div class="detail-box"
@@ -316,6 +316,14 @@ export default {
   background: #FFFFFF;
   border-radius: 15px;
   padding: 30px;
+  @media screen and (max-width: 1024px) {
+    min-width: 350px;
+    .tree-inner-container {
+      display: flex;
+      flex-direction: column;
+      height: auto !important;
+    }
+  }
 }
 .question-details {
   font-style: normal;
@@ -324,6 +332,9 @@ export default {
   line-height: 28px;
   text-align: right #{"/* rtl:ignore */"};
   color: #23263B;
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+  }
   .tree-chips-box {
     height: 412px;
     max-width: 367px;

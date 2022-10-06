@@ -10,7 +10,6 @@
           v-if="listConfig.questionId"
           class="question-card-chip-id"
         >
-          kjjkjjjj: {{question.selected}}
           <q-chip class="question-id ">
             سوال
             <q-skeleton
@@ -152,9 +151,9 @@
           />
           <div
             v-else
-            class="tag-box no-wrap flex items-center "
+            class="tag-box no-wrap flex items-center"
           >
-            <div class="tag-title">{{ item.title }}</div>
+            <div class="tag-title ellipsis">{{ item.title }}</div>
             <div class="tag-circle" />
           </div>
 
@@ -787,7 +786,6 @@ export default {
 
       @media screen and (max-width: 599px) {
         flex-direction: column;
-        order: 1;
         margin-top: 13px;
       }
 
@@ -806,9 +804,17 @@ export default {
           margin: 0 6px;
           width: 6px;
           height: 6px;
-          //background: #6D708B;
-          background: black;
+          background: #6D708B;
           opacity: 0.3;
+          @media screen and (max-width: 599px){
+            order: 1;
+          }
+        }
+        .tag-title{
+
+          @media screen and (max-width: 599px){
+            order: 2;
+          }
         }
 
         &:last-child {

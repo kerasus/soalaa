@@ -57,10 +57,9 @@
               :key="index"
               v-ripple
               clickable
-              :active="selected === item.selected"
+              :active="isRouteSelected(item.to)"
               active-class="active-item"
               :to="{ name: item.to }"
-              @click="selected = item.selected"
             >
               <q-item-section class="tab-title">
                 {{ item.title }}
@@ -154,6 +153,11 @@ export default {
         return this.$store.getters['Auth/user']
       }
       return new User()
+    },
+    isRouteSelected () {
+      return (itemName) => {
+        return (this.$route.name === itemName)
+      }
     }
   },
   methods: {
