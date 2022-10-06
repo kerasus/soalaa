@@ -1,7 +1,7 @@
 <template>
   <q-card
     class="question-card custom-card"
-    :class="{ 'selected': question.selected && !finalApprovalMode }"
+    :class="{ 'selected': ( selected || question.selected) && !finalApprovalMode }"
   >
     <q-resize-observer @resize="onResize" />
     <q-card-section class="question-card-header row">
@@ -233,8 +233,8 @@
           v-if="listConfig.selectQuestion"
           unelevated
           class="question-item-button"
-          :class="question.selected ? 'detach-button': 'attach-button'"
-          :icon="question.selected ? 'isax:minus' : 'isax:add'"
+          :class="(selected || question.selected) ? 'detach-button': 'attach-button'"
+          :icon="(selected || question.selected) ? 'isax:minus' : 'isax:add'"
           @click="selectQuestion"
         />
 
@@ -408,6 +408,10 @@ export default {
     reportOptions: {
       type: Array,
       default: () => {}
+    },
+    selected: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['checkSelect', 'changeOrder'],
