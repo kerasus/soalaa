@@ -323,10 +323,10 @@ export default {
         .then((response) => {
           this.draftExam.questions.clear()
           this.draftExam.questions.add(...response.data.data)
-          // this.draftExam.loading = false
+          this.draftExam.loading = false
         })
         .catch(() => {
-          // this.draftExam.loading = false
+          this.draftExam.loading = false
         })
     },
     bulkAttachQuestionsOfDraftExam(questions) {
@@ -359,7 +359,7 @@ export default {
       })
         .then(() => {
           this.loadAttachedQuestions()
-          // this.draftExam.loading = false
+          this.draftExam.loading = false
         })
         .catch(() => {
           this.draftExam.loading = false
@@ -449,8 +449,6 @@ export default {
 
 <style scoped lang="scss">
 .create-exam-panel {
-  display: flex;
-
   .exam-create-panel {
     &:deep(.q-tab-panels) {
       background: transparent;
