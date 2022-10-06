@@ -198,7 +198,7 @@ export default {
     },
     goToLastStep () {
       // this.currentTab = this.getlastStepName()
-      // this.setFinalStep()
+      this.confirmDraftExam()
     },
     getStep1Validation () {
       let error = false
@@ -304,10 +304,24 @@ export default {
     },
     createExam () {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.create, this.draftExam)
+      // return this.$axios.post(API_ADDRESS.exam.user.draftExam.create, this.draftExam.loadApiResource())
+      return this.$axios.post(API_ADDRESS.exam.user.draftExam.create, {
+        title: this.draftExam.title,
+        temp: {
+          major: this.draftExam.temp.major,
+          grade: this.draftExam.temp.grade
+        }
+      })
     },
     updateExam (params) {
-      return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam)
+      // return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam.loadApiResource())
+      return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), {
+        title: this.draftExam.title,
+        temp: {
+          major: this.draftExam.temp.major,
+          grade: this.draftExam.temp.grade
+        }
+      })
     },
     loadAttachedQuestions () {
       this.draftExam.loading = true
@@ -315,10 +329,10 @@ export default {
         .then((response) => {
           this.draftExam.questions.clear()
           this.draftExam.questions.add(...response.data.data)
-          this.draftExam.loading = false
+          // this.draftExam.loading = false
         })
         .catch(() => {
-          this.draftExam.loading = false
+          // this.draftExam.loading = false
         })
     },
     bulkAttachQuestionsOfDraftExam(questions) {
@@ -383,6 +397,19 @@ export default {
           message
         })
       })
+    },
+    confirmDraftExam () {
+      this.draftExam.loading = true
+      this.draftExam.enable = true
+      this.updateExam()
+        .then(() => {
+          this.showMessagesInNotify(['آزمون شما با موفقیت ساخته شد.'])
+          this.$route.push({ name: 'User.Exam.List' })
+          this.draftExam.loading = false
+        })
+        .catch(() => {
+          this.draftExam.loading = false
+        })
     },
 
     // setFinalStep() {
