@@ -1,6 +1,7 @@
 <template>
   <div class="steps row">
-    <div class="exam-info step step-1"
+    <div v-if="!loading"
+         class="exam-info step step-1"
          :class="{ 'current-step' : this.currentStep === 'createPage' }"
          @click="changeCurrentStep('createPage')"
     >
@@ -15,7 +16,8 @@
            :class="{ 'border-mobile' : this.currentStep !== 'createPage' }"
       />
     </div>
-    <div class="choose-questions step step-2"
+    <div v-if="!loading"
+         class="choose-questions step step-2"
          :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }"
          @click="changeCurrentStep('chooseQuestion')"
     >
@@ -31,7 +33,8 @@
            :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion' }"
       />
     </div>
-    <div class="final-approval step step-3"
+    <div v-if="!loading"
+         class="final-approval step step-3"
          :class="{ 'current-step' : this.currentStep === 'finalApproval' }"
          @click="changeCurrentStep('finalApproval')"
     >
@@ -57,6 +60,10 @@ export default {
       default () {
         return ''
       }
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
 

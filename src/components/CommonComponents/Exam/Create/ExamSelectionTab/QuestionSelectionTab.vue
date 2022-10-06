@@ -37,6 +37,7 @@
               v-for="question in questions.list"
               :key="question.id"
               :question="question"
+              :selected="isQuestionSelected(question.id)"
               :report-options="reportTypeList"
               pageStrategy="question-bank"
               @checkSelect="onClickedCheckQuestionBtn"
@@ -163,6 +164,15 @@ export default {
     }
   },
   watch: {
+    'providedExam.loading': {
+      handler (newValue) {
+        if (newValue) {
+          this.showLoading()
+          return
+        }
+        this.hideLoading()
+      }
+    },
     'selectedQuestions.length': {
       handler (newValue, oldValue) {
         this.providedExam.questions.list = []
@@ -208,9 +218,28 @@ export default {
       set (value) {
         this.$emit('update:exam', value)
       }
+    },
+    // item
+    isQuestionSelected () {
+      return (id) => {
+        return !!(this.providedExam.questions.list.find(question => question.id === id))
+      }
     }
   },
   methods: {
+    showLoading() {
+      this.$q.loading.show()
+    },
+    hideLoading() {
+      this.$q.loading.hide()
+    },
+    getSelectedOfQuestion(question) {
+      return !!(this.providedExam.questions.list.find(item => item.id === question.id))
+    },
+    setSelectedOfQuestion(value, questionId) {
+      const questionIndex = this.providedExam.questions.list.indexOf(question => question.id === questionId)
+      this.providedExam.questions.list[questionIndex].selected = value
+    },
     updateTreeFilter () {
       const tagsToFilter = this.lastSelectedNodes.length > 0 ? this.lastSelectedNodes : [{ id: this.providedExam.temp.lesson }]
       this.selectedNodesIds = this.lastSelectedNodes.map(node => node.id)
@@ -246,7 +275,7 @@ export default {
       const target = this.selectedQuestions.filter(question => question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
       if (target.length) {
         target.forEach(question => {
-          question.selected = !question.selected
+          // question.selected = !question.selected
           this.selectedQuestions.splice(question.index - 1, 1)
           this.deleteQuestionFromExam(question)
           this.questionListKey = Date.now()
@@ -257,7 +286,7 @@ export default {
       question.selected = !question.selected
     },
     questionHandle (question) {
-      if (question.selected) {
+      if (!this.providedExam.questions.list.find(item => item.id === question.id)) {
         this.addQuestionToSelectedList(question)
         this.addQuestionToExam(question)
       } else {
@@ -266,7 +295,7 @@ export default {
       }
     },
     onClickedCheckQuestionBtn (question) {
-      this.toggleQuestionSelected(question)
+      // this.toggleQuestionSelected(question)
       this.questionHandle(question)
     },
     addQuestionToExam (question) {
@@ -354,18 +383,18 @@ export default {
       this.checkBox = !this.checkBox
       if (this.selectedQuestions.length) {
         this.questions.list.forEach(question => {
-          question.selected = false
+          // question.selected = false
           this.selectedQuestions.splice(question)
         })
       }
       if (this.checkBox) {
         this.questions.list.forEach(question => {
-          question.selected = true
+          // question.selected = true
           this.selectedQuestions.push(question)
         })
       } else {
         this.questions.list.forEach(question => {
-          question.selected = false
+          // question.selected = false
           this.selectedQuestions.splice(question)
         })
       }
@@ -377,7 +406,7 @@ export default {
       }
       this.$emit('deleteQuestionFromExam', this.selectedQuestions)
       this.questions.list.forEach(question => {
-        question.selected = false
+        // question.selected = false
         this.selectedQuestions.splice(question)
       })
     },
