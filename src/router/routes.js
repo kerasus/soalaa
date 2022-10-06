@@ -167,7 +167,6 @@ const routes = [
         path: 'subscription',
         name: 'subscription',
         component: () => import('pages/User/Subscription'),
-        breadcrumbs: { title: 'ساخت آزمون' },
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
@@ -178,7 +177,7 @@ const routes = [
       {
         path: 'user',
         name: 'User',
-        component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
+        component: () => import('layouts/UserPanelLayouts/UserPanelBareLayout'),
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
@@ -192,98 +191,64 @@ const routes = [
         },
         children: [
           {
-            path: 'profile',
-            name: 'User.Profile',
-            component: () => import('pages/User/profile/profile'),
-            layoutConfig: {
-              layoutLeftDrawerVisible: true
-            }
-          },
-          {
-            path: 'exam/create',
-            name: 'User.Create.Exam',
-            component: () => import('pages/User/exam/Create/Create'),
-            layoutConfig: {
-              layoutLeftDrawerVisible: false,
-              layoutLeftSideBarType: 'none'
-            }
-          },
-          {
-            path: 'dashboard',
-            name: 'User.Dashboard',
-            component: () => import('pages/User/Dashboard/Dashboard'),
-            layoutConfig: {
-              layoutHeaderVisible: true,
-              layoutLeftDrawerVisible: false
-            },
-            meta: {
-              middlewares: [auth]
 
-              // layoutLeftSideBarType: 'default'
-            }
-          },
-          {
-            path: 'my-orders',
-            name: 'User.MyOrders',
-            component: () => import('pages/User/MyOrders/MyOrders'),
-            breadcrumbs: { title: 'سفارش های من' }
-          },
-          {
-            path: 'user_exam_list',
-            name: 'User.Exam.List',
-            component: () => import('pages/User/exam/List'),
-            layoutConfig: {
-              layoutHeaderVisible: true
-            }
-          },
-          {
-            name: 'User.Exam.Download',
-            path: 'download_exam',
-            component: () => import('pages/User/exam/Download/Download'),
-            path: '/faq',
-            name: 'faq',
-            layoutConfig: {
-              layoutLeftDrawerVisible: false
-            },
-            component: () => import('src/pages/CommonQuestions/list')
-          },
-          {
-            path: 'ticket',
-            component: () => import('layouts/bareLayout.vue'),
-            meta: {
-              middlewares: [auth]
-            },
-            name: 'User.Ticket',
+            path: '',
+            component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
             children: [
               {
-                path: '',
-                name: 'User.Ticket.Index',
-                component: () => import('pages/User/Ticket/Index.vue')
+                path: 'profile',
+                name: 'User.Profile',
+                component: () => import('pages/User/profile/profile')
               },
               {
-                path: ':id',
-                name: 'User.Ticket.Show',
-                component: () => import('pages/User/Ticket/Show.vue')
+                path: 'dashboard',
+                name: 'User.Dashboard',
+                component: () => import('pages/User/Dashboard/Dashboard')
               },
               {
-                path: 'create',
-                name: 'User.Ticket.Create',
-                component: () => import('pages/User/Ticket/Create.vue')
+                path: 'my-orders',
+                name: 'User.MyOrders',
+                component: () => import('pages/User/MyOrders/MyOrders'),
+                breadcrumbs: { title: 'سفارش های من' }
+              },
+              {
+                path: 'user_exam_list',
+                name: 'User.Exam.List',
+                component: () => import('pages/User/exam/List')
+              },
+              {
+                name: 'User.Exam.Download',
+                path: 'download_exam',
+                component: () => import('pages/User/exam/Download/Download')
+              },
+              {
+                path: 'ticket',
+                component: () => import('layouts/bareLayout.vue'),
+                name: 'User.Ticket',
+                children: [
+                  {
+                    path: '',
+                    name: 'User.Ticket.Index',
+                    component: () => import('pages/User/Ticket/Index.vue')
+                  },
+                  {
+                    path: ':id',
+                    name: 'User.Ticket.Show',
+                    component: () => import('pages/User/Ticket/Show.vue')
+                  },
+                  {
+                    path: 'create',
+                    name: 'User.Ticket.Create',
+                    component: () => import('pages/User/Ticket/Create.vue')
+                  }
+                ]
               }
             ]
           },
           {
-            name: 'User.Exam.Download',
-            path: '/download',
-            component: () => import('pages/User/exam/Download/Download'),
-            layoutConfig: {
-              layoutHeaderVisible: true,
-              layoutLeftSideBarType: 'test',
-              layoutLeftDrawerVisible: false
-            },
-            middleware: [
-              Permissions.hasPermission('examStore')
-            ]
+            path: 'exam/create',
+            name: 'User.Create.Exam',
+            component: () => import('pages/User/exam/Create/Create')
           }
         ]
       },
