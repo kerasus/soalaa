@@ -348,6 +348,7 @@ export default {
       })
         .then(() => {
           this.loadAttachedQuestions()
+          this.draftExam.loading = false
         })
         .catch(() => {
           this.draftExam.loading = false
@@ -364,6 +365,7 @@ export default {
       })
         .then(() => {
           this.loadAttachedQuestions()
+          this.draftExam.loading = false
         })
         .catch(() => {
           this.draftExam.loading = false
@@ -381,6 +383,7 @@ export default {
       })
         .then(() => {
           this.loadAttachedQuestions()
+          this.draftExam.loading = false
         })
         .catch(() => {
           this.draftExam.loading = false
