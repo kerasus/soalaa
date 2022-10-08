@@ -338,20 +338,16 @@ export default {
   },
 
   watch: {
-    'questions.list.length': function () {
+    'selectedQuestions.length': function () {
       this.setDifficultyLevelsChart()
       this.numberOfQuestions()
       this.replaceTitle()
     }
   },
 
-  mounted () {
-    this.questions = new QuestionList(this.selectedQuestions)
-  },
-
   computed: {
     countOfSelectedSubCategory () {
-      const lessons = this.questions.list.filter((v, i, a) => a.findIndex(question => {
+      const lessons = this.selectedQuestions.filter((v, i, a) => a.findIndex(question => {
         const targetTag = question.tags.list.find(tag => tag.type === null)
         const valueTargetTag = v.tags.list.find(tag => tag.type === null)
         if (!targetTag || !valueTargetTag) {
@@ -361,16 +357,16 @@ export default {
       }) === i)
         .map(question => question.tags.list.find(tag => tag.type === null))
       lessons.forEach(lesson => {
-        lesson.selectedQuestionsCount = this.questions.list.filter(question => !!question.tags.list.find(tag => tag.type === null && tag.title === lesson.title)).length
+        lesson.selectedQuestionsCount = this.selectedQuestions.filter(question => !!question.tags.list.find(tag => tag.type === null && tag.title === lesson.title)).length
       })
       return lessons
     },
     questionLvl () {
-      if (!this.questions) return
+      if (!this.selectedQuestions) return
       return {
-        hard: this.questions.list.filter(question => question.level === '3' || question.level === 3).length,
-        medium: this.questions.list.filter(question => question.level === '2' || question.level === 2).length,
-        easy: this.questions.list.filter(question => question.level === '1' || question.level === 1).length
+        hard: this.selectedQuestions.filter(question => question.level === '3' || question.level === 3).length,
+        medium: this.selectedQuestions.filter(question => question.level === '2' || question.level === 2).length,
+        easy: this.selectedQuestions.filter(question => question.level === '1' || question.level === 1).length
       }
     }
   },
@@ -410,7 +406,7 @@ export default {
     },
 
     setDifficultyLevelsChart () {
-      if (this.questions) {
+      if (this.selectedQuestions) {
         this.chartOptions.series[0].data = [
           { name: 'متوسط', y: this.questionLvl.medium, color: '#FFCA28' },
           { name: 'آسان', y: this.questionLvl.easy, color: '#8ED6FF' },
@@ -428,7 +424,7 @@ export default {
     },
 
     numberOfQuestions () {
-      if (!this.questions) return
+      if (!this.selectedQuestions) return
       const x = this.questionLvl.hard + this.questionLvl.medium + this.questionLvl.easy
       return x
     },
