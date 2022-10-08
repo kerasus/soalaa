@@ -20,14 +20,15 @@
         <div>
           <q-card-actions class="filter-container q-pa-none">
             <q-chip
-              v-for="item in selectedFiltersTitle"
-              :key="item"
+              v-for="(item, index) in selectedFiltersTitle"
+              :key="index"
+              v-model="selectedFiltersTitle[index]"
               class="filter-items"
-              icon-remove="mdi-close"
               removable
               @remove="deleteFilterObject(item)"
-              v-text="item"
-            />
+            >
+              {{item}}
+            </q-chip>
           </q-card-actions>
         </div>
       </div>
@@ -104,7 +105,12 @@
         <q-option-group
           v-model="selectedLevels"
           type="checkbox"
-          :options="filterQuestions.levels"
+          :options="filterQuestions.levels.map(option => {
+            return {
+              label: option.label,
+              value: option
+            }
+          })"
           @update:model-value="onChangeLevels"
         />
         <div v-if="filterQuestions.levels.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
@@ -203,6 +209,7 @@ export default {
       filtersDataKey.forEach(key => {
         const filterGroup = this.filtersData[key]
         filterGroup.forEach(filterItem => {
+          console.log(filterItem)
           const title = filterItem.title || filterItem.label || filterItem.value
           titles.push(title)
         })
@@ -245,6 +252,7 @@ export default {
       this.$emit('onFilter', this.filtersData)
     },
     changeFilterData (key, value) {
+      console.log(key, value)
       this.filtersData[key] = value
       this.onUpdateFilterData()
     },
