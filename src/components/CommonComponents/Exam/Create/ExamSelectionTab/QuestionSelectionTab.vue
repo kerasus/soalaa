@@ -1,6 +1,27 @@
 <template>
   <div class="row main-container">
-    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
+    <div
+      class="col-xs-12"
+      :hidden="$q.screen.gt.sm"
+    >
+      <div class="question-list">
+        <div class="question-bank-toolbar">
+          <questions-general-info
+            :key="questionListKey"
+            :loading="questionLoading"
+            :check-box="checkBox"
+            :selectedQuestions="providedExam.questions.list"
+            @remove="RemoveChoice"
+            @nextTab="goToNextStep"
+            @lastTab="goToLastStep"
+            @deselectAllQuestions="deleteAllQuestions"
+            @selectAllQuestions="selectAllQuestions"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-xs-12 question-bank-filter">
       <question-filter
         ref="filter"
         :filterQuestions="filterQuestions"
@@ -12,9 +33,14 @@
       />
     </div>
 
-    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
+    <div
+      class="col-md-9 col-xs-12"
+    >
       <div class="question-list">
-        <div class="question-bank-toolbar">
+        <div
+          class="question-bank-toolbar"
+          :hidden="$q.screen.lt.md"
+        >
           <questions-general-info
             :key="questionListKey"
             :loading="questionLoading"
@@ -55,6 +81,7 @@
         </div>
       </div>
     </div>
+
   </div>
   <question-tree-modal
     ref="questionTreeModal"
@@ -484,6 +511,9 @@ export default {
     }
     .question-bank-toolbar {
       padding-bottom: 24px;
+      @media only screen and (max-width: 600px) {
+        padding-bottom: 0;
+      }
     }
 
     .question-bank-content {
