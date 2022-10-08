@@ -399,8 +399,8 @@ export default {
       this.draftExam.enable = true
       this.updateExam()
         .then(() => {
-          this.showMessagesInNotify(['آزمون شما با موفقیت ساخته شد.'])
-          this.$route.push({ name: 'User.Exam.List' })
+          this.showMessagesInNotify(['آزمون شما با موفقیت ساخته شد.'], 'positive')
+          this.$router.push({ name: 'User.Exam.List' })
           this.draftExam.loading = false
         })
         .catch(() => {
