@@ -149,11 +149,15 @@
           </template>
         </div>
       </div>
+      <questions-general-info
+        :loading="exam.loading"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import QuestionsGeneralInfo from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo'
 import { Question, QuestionList } from 'src/models/Question'
 import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem'
 import { Exam } from 'src/models/Exam'
@@ -161,7 +165,7 @@ import { Exam } from 'src/models/Exam'
 import { Chart } from 'highcharts-vue'
 export default {
   name: 'FinalApprovalTab',
-  components: { QuestionItem, Chart },
+  components: { QuestionItem, Chart, QuestionsGeneralInfo },
   emits: ['detachQuestion'],
   props: {
     exam: {
