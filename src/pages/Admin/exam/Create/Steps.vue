@@ -2,7 +2,7 @@
   <div class="steps row">
     <div v-if="!loading"
          class="exam-info step step-1"
-         :class="{ 'current-step' : this.currentStep === 'createPage' }"
+         :class="{ 'current-step' : this.currentStep === 'createPage','passed' : this.currentStep === 'chooseQuestion' }"
          @click="changeCurrentStep('createPage')"
     >
       <q-icon name="isax:edit"
@@ -13,12 +13,12 @@
         اطلاعات آزمون
       </div>
       <div class="line"
-           :class="{ 'border-mobile' : this.currentStep !== 'createPage' }"
+           :class="{ 'border-mobile' : this.currentStep !== 'createPage','passed' : this.currentStep === 'chooseQuestion' }"
       />
     </div>
     <div v-if="!loading"
          class="choose-questions step step-2"
-         :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }"
+         :class="{ 'current-step' : this.currentStep === 'chooseQuestion','passed' : this.currentStep === 'finalApproval' }"
          @click="changeCurrentStep('chooseQuestion')"
     >
       <q-icon name="isax:task-square"
@@ -30,12 +30,12 @@
         انتخاب سوال
       </div>
       <div class="line"
-           :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion' }"
+           :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion','passed' : this.currentStep === 'finalApproval' }"
       />
     </div>
     <div v-if="!loading"
          class="final-approval step step-3"
-         :class="{ 'current-step' : this.currentStep === 'finalApproval' }"
+         :class="{ 'current-step' : this.currentStep === 'finalApproval'}"
          @click="changeCurrentStep('finalApproval')"
     >
       <q-icon name="isax:tick-square"
@@ -136,7 +136,6 @@ export default {
   }
 
   @media screen and (max-width: 599px) {
-      height: 54px;
 
     .hidden-mobile {
       display: none !important;
@@ -228,6 +227,10 @@ export default {
     width: 408px;
     margin-right: 18px;
 
+    &.passed {
+      background: #8075DC;
+    }
+
     @media screen and (max-width: 1439px) {
       width: 237px;
     }
@@ -238,6 +241,9 @@ export default {
   }
   .current-step{
     color: #FFA117;
+  }
+  .passed {
+    color: #8075DC;
   }
 
 }
