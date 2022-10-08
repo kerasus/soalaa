@@ -90,6 +90,7 @@
     :lessons-list="treeModalLessonsList"
     :persistent="!doesExamHaveLesson"
     single-list-choice-mode
+    :initial-lesson="initialLesson"
     @lessonSelected="onLessonChanged"
   />
 </template>
@@ -118,7 +119,7 @@ export default {
     'nextTab',
     'addQuestionToExam',
     'deleteQuestionFromExam',
-    'update:lesson',
+    'lessonChanged',
     'update:exam'
   ],
   props: {
@@ -142,6 +143,7 @@ export default {
 
   data () {
     return {
+      initialLesson: new TreeNode(),
       treeModalValue: false,
       allSubjects: {},
       treeModalLessonsList: [],
@@ -279,9 +281,19 @@ export default {
     },
     setupTreeModal() {
       this.toggleTreeModal()
+      this.showLoading()
       this.getLessonsList(new TreeNode({
         id: this.providedExam.temp.grade
       }))
+        .then(response => {
+          this.hideLoading()
+          this.treeModalLessonsList = response.data.data.children
+          this.setInitialLesson(this.providedExam.temp.lesson)
+        })
+    },
+    setInitialLesson(lesson) {
+      this.initialLesson = this.treeModalLessonsList.find(item => item.id === lesson)
+      // this.treeModalLessonsList
     },
     toggleTreeModal() {
       this.treeModalValue = !this.treeModalValue
@@ -446,16 +458,27 @@ export default {
       })
     },
     onLessonChanged (item) {
-      this.$emit('update:lesson', item.id)
+      if (this.isSelectedLessonNew(item)) {
+        this.providedExam.temp.lesson = item.id
+        this.$emit('lessonChanged', item.id)
+        if (this.providedExam.questions.list.length > 0) {
+          this.detachAllQuestionsFromExam()
+        }
+      }
       this.setFilterTreeLesson(item)
+    },
+    isSelectedLessonNew(lesson) {
+      // this.providedExam.questions.list
+      return this.providedExam.temp.lesson !== lesson.id
+    },
+    detachAllQuestionsFromExam() {
+      this.$emit('deleteQuestionFromExam', this.providedExam.questions.list)
     },
     setFilterTreeLesson(item) {
       this.rootNodeIdInFilter = item.id
     },
     getLessonsList (item) {
-      this.getNode(item.id).then(response => {
-        this.treeModalLessonsList = response.data.data.children
-      })
+      return this.getNode(item.id)
     },
     updateLessonsTitles () {
       const fieldText = []
