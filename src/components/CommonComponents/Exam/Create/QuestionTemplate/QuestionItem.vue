@@ -56,7 +56,6 @@
             <div class="level-text">
               {{ questionLevelClasses[questionLevel]?.title }}
             </div>
-
             <div
               v-for="item in 3"
               :key="item"
@@ -169,7 +168,7 @@
         v-if="finalApprovalMode || showQuestionNumber"
         class="question-index"
       >
-        <div class="question-number">{{ question.order }}</div>
+        <div class="question-number">{{ finalApprovalMode ? questionIndex + 1 : question.order }}</div>
       </div>
 
       <div
@@ -832,6 +831,9 @@ export default {
     padding: 0;
     &.extra-panel{
       padding-left: 20px;
+      @media screen and (max-width: 1024px) {
+        padding-left: 10px;
+      }
     }
 
     .question-index {
@@ -853,6 +855,7 @@ export default {
         @media only screen and (max-width: 1023px) {
           width: 26px;
           height: 28px;
+          left: -30px;
         }
       }
     }

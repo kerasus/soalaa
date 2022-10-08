@@ -271,17 +271,12 @@ export default {
         this.$nextTick(() => {
           this.setDifficultyLevelsChart()
           this.replaceTitle()
+          this.reIndexEamQuestions(this.exam.questions.list)
         })
       }
     }
   },
   methods: {
-    goToPrevious() {
-      this.$emit('previousStep')
-    },
-    confirmExam() {
-      this.$emit('confirmExam')
-    },
     async initPageData () {
       this.questions = new QuestionList({ ...this.exam.questions })
       this.reIndexEamQuestions(this.exam.questions.list)
@@ -298,13 +293,22 @@ export default {
 
     changeSelectedQuestionOrder (value) {
       const fromIndex = this.questions.list.findIndex(item => item.id === value.question.id)
+      // if (value.mode === 'down') {
+      //   this.questions.list[fromIndex].order++
+      //   this.questions.list[fromIndex + 1].order--
+      // } else {
+      //   this.questions.list[fromIndex].order--
+      //   this.questions.list[fromIndex - 1].order++
+      // }
+
       if (value.mode === 'down') {
-        this.questions.list[fromIndex].order++
-        this.questions.list[fromIndex + 1].order--
+        this.questions.list[fromIndex].order = fromIndex + 2
+        this.questions.list[fromIndex + 1].order = fromIndex + 1
       } else {
-        this.questions.list[fromIndex].order--
-        this.questions.list[fromIndex - 1].order++
+        this.questions.list[fromIndex].order = fromIndex
+        this.questions.list[fromIndex - 1].order = fromIndex + 1
       }
+
       const data = {
         questions: []
       }
@@ -317,22 +321,18 @@ export default {
       this.$emit('updateOrders', this.questions.list)
     },
 
-    updateOrder(question) {
-
-    },
-    toggleQuestionSelected (question) {
-      question.selected = !question.selected
-    },
-    handleAddOrDelete (question) {
-      question.selected ? this.addQuestionToExam(question) : this.deleteQuestionFromExam(question)
-      this.reIndexEamQuestions(this.exam.questions.list)
-    },
     onClickedCheckQuestionBtn (question) {
       this.$emit('detachQuestion', [question])
     },
-    updatePage (page) {
-      this.getExamQuestions(page)
+
+    goToPrevious() {
+      this.$emit('previousStep')
     },
+
+    confirmExam() {
+      this.$emit('confirmExam')
+    },
+
     reIndexEamQuestions (list) {
       list.map((item, index) => {
         item.selected = true
@@ -340,12 +340,7 @@ export default {
         return true
       })
     },
-    goToLastStep () {
-      this.$emit('goToLastStep')
-    },
-    goToNextStep () {
-      this.$emit('creatFinalExam')
-    },
+
     setDifficultyLevelsChart() {
       this.chartOptions.series[0].data = [
         { name: 'متوسط', y: this.questionLvl.medium, color: '#FFCA28' },
@@ -353,6 +348,7 @@ export default {
         { name: 'سخت', y: this.questionLvl.hard, color: '#DA5F5C' }
       ]
     },
+
     replaceTitle () {
       this.chartOptions.title.text = '<span class="title-1"> ' + this.exam.questions.list.length + '<br>' + '<br>' + '</span>' + '<span dy="-8" class="title-2">سوال</span>'
     }
@@ -366,6 +362,9 @@ export default {
   padding: 0;
   .exam-detail-container{
     padding-right: 24px;
+    @media screen and (max-width: 1023px){
+      padding-right: 0;
+    }
     .action-btn{
       .previous{
         background: #F2F5F9;
@@ -559,7 +558,7 @@ export default {
 }
 @media only screen and (max-width: 1439px) {
   .main-container {
-    padding-left: 30px;
+    padding-left: 0
   }
   .question-bank-header {
     padding-bottom: 20px;
