@@ -1,6 +1,7 @@
 <template>
   <q-dialog
     v-model="modal"
+    :persistent="persistent"
   >
     <q-card class="tree-card">
       <div class="fit row wrap tree-inner-container">
@@ -128,6 +129,12 @@ export default {
       type: Object
     },
     singleListChoiceMode: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    },
+    persistent: {
       type: Boolean,
       default () {
         return false
