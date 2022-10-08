@@ -366,7 +366,8 @@ export default {
       return {
         hard: this.selectedQuestions.filter(question => question.level === '3' || question.level === 3).length,
         medium: this.selectedQuestions.filter(question => question.level === '2' || question.level === 2).length,
-        easy: this.selectedQuestions.filter(question => question.level === '1' || question.level === 1).length
+        easy: this.selectedQuestions.filter(question => question.level === '1' || question.level === 1).length,
+        none: this.selectedQuestions.filter(question => question.level === '0' || question.level === 0).length
       }
     }
   },
@@ -382,6 +383,14 @@ export default {
   created () {
     this.setDifficultyLevelsChart()
     this.replaceTitle()
+  },
+
+  mounted() {
+    if (this.selectedQuestions.length > 0) {
+      this.setDifficultyLevelsChart()
+      this.numberOfQuestions()
+      this.replaceTitle()
+    }
   },
 
   methods: {
@@ -425,8 +434,7 @@ export default {
 
     numberOfQuestions () {
       if (!this.selectedQuestions) return
-      const x = this.questionLvl.hard + this.questionLvl.medium + this.questionLvl.easy
-      return x
+      return this.selectedQuestions.length
     },
 
     RemoveSelectedChoice (selectedTap) {
