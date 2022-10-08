@@ -1,6 +1,27 @@
 <template>
   <div class="row main-container">
-    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
+    <div
+      class="col-xs-12"
+      :hidden="$q.screen.gt.sm"
+    >
+      <div class="question-list">
+        <div class="question-bank-toolbar">
+          <questions-general-info
+            :key="questionListKey"
+            :loading="questionLoading"
+            :check-box="checkBox"
+            :selectedQuestions="providedExam.questions.list"
+            @remove="RemoveChoice"
+            @nextTab="goToNextStep"
+            @lastTab="goToLastStep"
+            @deselectAllQuestions="deleteAllQuestions"
+            @selectAllQuestions="selectAllQuestions"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-xs-12 question-bank-filter">
       <question-filter
         ref="filter"
         :filterQuestions="filterQuestions"
@@ -12,9 +33,14 @@
       />
     </div>
 
-    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
+    <div
+      class="col-md-9 col-xs-12"
+    >
       <div class="question-list">
-        <div class="question-bank-toolbar">
+        <div
+          class="question-bank-toolbar"
+          :hidden="$q.screen.lt.md"
+        >
           <questions-general-info
             :key="questionListKey"
             :loading="questionLoading"
@@ -55,13 +81,16 @@
         </div>
       </div>
     </div>
+
   </div>
   <question-tree-modal
     ref="questionTreeModal"
     v-model:dialogValue="treeModalValue"
     v-model:subjectsField="allSubjects"
     :lessons-list="treeModalLessonsList"
+    :persistent="!doesExamHaveLesson"
     single-list-choice-mode
+    :initial-lesson="initialLesson"
     @lessonSelected="onLessonChanged"
   />
 </template>
@@ -90,7 +119,7 @@ export default {
     'nextTab',
     'addQuestionToExam',
     'deleteQuestionFromExam',
-    'update:lesson',
+    'lessonChanged',
     'update:exam'
   ],
   props: {
@@ -114,6 +143,7 @@ export default {
 
   data () {
     return {
+      initialLesson: new TreeNode(),
       treeModalValue: false,
       allSubjects: {},
       treeModalLessonsList: [],
@@ -225,6 +255,9 @@ export default {
       return (id) => {
         return !!(this.providedExam.questions.list.find(question => question.id === id))
       }
+    },
+    doesExamHaveLesson () {
+      return !!this.providedExam.temp.lesson
     }
   },
   methods: {
@@ -248,9 +281,19 @@ export default {
     },
     setupTreeModal() {
       this.toggleTreeModal()
+      this.showLoading()
       this.getLessonsList(new TreeNode({
         id: this.providedExam.temp.grade
       }))
+        .then(response => {
+          this.hideLoading()
+          this.treeModalLessonsList = response.data.data.children
+          this.setInitialLesson(this.providedExam.temp.lesson)
+        })
+    },
+    setInitialLesson(lesson) {
+      this.initialLesson = this.treeModalLessonsList.find(item => item.id === lesson)
+      // this.treeModalLessonsList
     },
     toggleTreeModal() {
       this.treeModalValue = !this.treeModalValue
@@ -415,16 +458,27 @@ export default {
       })
     },
     onLessonChanged (item) {
-      this.$emit('update:lesson', item.id)
+      if (this.isSelectedLessonNew(item)) {
+        this.providedExam.temp.lesson = item.id
+        this.$emit('lessonChanged', item.id)
+        if (this.providedExam.questions.list.length > 0) {
+          this.detachAllQuestionsFromExam()
+        }
+      }
       this.setFilterTreeLesson(item)
+    },
+    isSelectedLessonNew(lesson) {
+      // this.providedExam.questions.list
+      return this.providedExam.temp.lesson !== lesson.id
+    },
+    detachAllQuestionsFromExam() {
+      this.$emit('deleteQuestionFromExam', this.providedExam.questions.list)
     },
     setFilterTreeLesson(item) {
       this.rootNodeIdInFilter = item.id
     },
     getLessonsList (item) {
-      this.getNode(item.id).then(response => {
-        this.treeModalLessonsList = response.data.data.children
-      })
+      return this.getNode(item.id)
     },
     updateLessonsTitles () {
       const fieldText = []
@@ -484,6 +538,9 @@ export default {
     }
     .question-bank-toolbar {
       padding-bottom: 24px;
+      @media only screen and (max-width: 600px) {
+        padding-bottom: 0;
+      }
     }
 
     .question-bank-content {
