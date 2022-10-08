@@ -220,7 +220,7 @@ export default {
     getStep2Validation () {
       let error = false
       const messages = []
-      if (!this.draftExam.questions.list) {
+      if (this.draftExam.questions.list.length === 0) {
         error = true
         messages.push('هیچ سوالی انتخاب نشده است.')
       }
@@ -230,7 +230,7 @@ export default {
     getStep3Validation () {
       let error = false
       const messages = []
-      if (!this.draftExam.questions.list) {
+      if (this.draftExam.questions.list.length === 0) {
         error = true
         messages.push('هیچ سوالی انتخاب نشده است.')
       }
@@ -258,10 +258,12 @@ export default {
 
       if (currentTabIndex === 1) {
         stepValidation = this.getStep2Validation()
+        console.log('2')
       }
 
       if (currentTabIndex === 2) {
         stepValidation = this.getStep3Validation()
+        console.log('3')
       }
 
       if (stepValidation && stepValidation.error) {
