@@ -258,12 +258,10 @@ export default {
 
       if (currentTabIndex === 1) {
         stepValidation = this.getStep2Validation()
-        console.log('2')
       }
 
       if (currentTabIndex === 2) {
         stepValidation = this.getStep3Validation()
-        console.log('3')
       }
 
       if (stepValidation && stepValidation.error) {
