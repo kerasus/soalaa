@@ -138,6 +138,10 @@ const API_ADDRESS = {
     },
     registerExam: lumenServer + '/user/registerExam',
     examUser: lumenServer + '/exam-user',
+    participate: {
+      sample: lumenServer + '/exam-user',
+      personal: (examId) => lumenServer + '/exam-user/personal/' + examId
+    },
     examQuestion (quizId) {
       return lumenServer + '/exam-question/attach/show/' + quizId
     },

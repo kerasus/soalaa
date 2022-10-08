@@ -133,7 +133,7 @@
                 <q-btn v-if="item.exam_actions.can_start"
                        class="quiz-action-btn enroll"
                        flat
-                       @click="goToParticipateExamPage(item)"
+                       @click="goToParticipateExamPage(item, personal)"
                 >
                   شروع آزمون
                 </q-btn>
@@ -309,6 +309,10 @@ export default defineComponent({
       type: String,
       default: () => {}
     },
+    personal: {
+      type: Boolean,
+      default: false
+    },
     exams: {
       type: ExamList,
       default: new ExamList()
@@ -375,8 +379,8 @@ export default defineComponent({
       }
       this.$router.push({ name: routeName, params: { user_exam_id: exam.user_exam_id, exam_id: exam.id } })
     },
-    goToParticipateExamPage (exam) {
-      let routeName = 'onlineQuiz.alaaView'
+    goToParticipateExamPage (exam, personal) {
+      let routeName = personal ? 'onlineQuiz.alaaView.personal' : 'onlineQuiz.alaaView'
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
         routeName = 'onlineQuiz.mbtiBartle'
       }
