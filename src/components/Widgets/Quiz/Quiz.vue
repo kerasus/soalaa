@@ -48,6 +48,7 @@
                 <quiz-list
                   :quiz-type="'myExam'"
                   :exams="myExams"
+                  personal
                   @onFilter="filterMyExams"
                 />
               </q-tab-panel>
