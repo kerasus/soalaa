@@ -98,9 +98,9 @@
                 class="quiz-list-item">
           <q-item-section>
             <div class="row quiz-list-item-row">
-              <div class="quiz-list-item-name"
+              <div class="quiz-list-item-name ellipses"
                    :class="quizType === 'myExam' ? 'col-xs-12 col-sm-5 col-md-5 col-lg-5 col-xl-5' : 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
-                {{item.title.substring(0,40)}} ...
+                {{item.title}}
               </div>
               <div v-if="quizType === 'myExam'"
                    class="quiz-list-item-schedule"
@@ -117,60 +117,53 @@
               <div class="quiz-list-item-action"
                    :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
               >
-                <q-btn
+                <!-- <q-btn
                   class="quiz-action-btn"
                   :class="item.exam_actions.can_start ? 'enroll' : 'result'"
                   :label="item.exam_actions.can_start ? 'ثبت نام در آزمون' : 'مشاهده نتایج'"
                   @click="item.exam_actions.can_start ? registerExam(item) : goToResult(item)"
-                />
+                /> -->
                 <q-btn v-if="item.exam_actions.can_register"
-                       class="exam-action-big-btn exam-btn-text"
-                       style="background: #4CAF50"
+                       class="quiz-action-btn enroll"
                        flat
                        @click="registerExam(item)"
                 >
                   ثبت نام در آزمون
                 </q-btn>
                 <q-btn v-if="item.exam_actions.can_start"
-                       class="exam-action-big-btn exam-btn-text"
-                       style="background: #9690E4"
+                       class="quiz-action-btn enroll"
                        flat
                        @click="goToParticipateExamPage(item)"
                 >
                   شروع آزمون
                 </q-btn>
                 <q-btn v-if="item.exam_actions.can_retake"
-                       class="exam-action-big-btn exam-btn-text q-mx-xs"
-                       style="background: #9690E4"
+                       class="quiz-action-btn enroll"
                        flat
                        @click="showRetakeConfirmation(item)"
                 >
                   شروع مجدد
                 </q-btn>
-                <div class="exam-list-exam-actions">
-                  <q-btn
-                    v-if="item.exam_actions.can_continue"
-                    class="exam-action-medium-btn exam-btn-text"
-                    style="background: #9690E4"
-                    unelevated
-                    @click="continueExam(item)"
-                  >
-                    ادامه آزمون
-                  </q-btn>
-                  <q-btn
-                    v-if="item.exam_actions.can_see_report"
-                    class="exam-action-medium-btn exam-btn-text exam-show-result"
-                    style="background: #FFB74D"
-                    unelevated
-                    @click="goToResult(item)"
-                  >
-                    مشاهده نتایج
-                  </q-btn>
-                </div>
+                <q-btn
+                  v-if="item.exam_actions.can_continue"
+                  class="quiz-action-btn continue"
+                  unelevated
+                  @click="continueExam(item)"
+                >
+                  ادامه آزمون
+                </q-btn>
+                <q-btn
+                  v-if="item.exam_actions.can_see_report"
+                  class="quiz-action-btn result"
+                  style="background: #FFB74D"
+                  unelevated
+                  @click="goToResult(item)"
+                >
+                  مشاهده نتایج
+                </q-btn>
                 <q-btn
                   v-if="item.exam_actions.can_submit_answer"
-                  class="exam-action-big-btn exam-btn-text"
-                  style="background: #FFB74D"
+                  class="quiz-action-btn document"
                   unelevated
                   @click="getConfirmation(item.user_exam_id)"
                 >
@@ -180,10 +173,9 @@
                   ثبت پاسخنامه ذخیره شده
                 </q-btn>
                 <template v-if="item.booklet_url">
-                  <q-btn class="exam-list-menu-btn exam-action-big-btn  exam-btn-text"
+                  <q-btn class="quiz-action-btn document"
                          unelevated
-                         label="لیست دفترچه ها"
-                         style="background: #71C5F4">
+                         label="لیست دفترچه ها">
                     <q-menu
                       fit
                       transition-show="flip-right"
@@ -660,7 +652,6 @@ export default defineComponent({
               font-weight: 400;
               font-size: 14px;
               line-height: 22px;
-              text-align: right;
               color: #434765;
             }
             .quiz-list-item-schedule {
@@ -700,6 +691,14 @@ export default defineComponent({
                   background: #9690E4;
                 }
 
+                &.continue {
+                  background: #4CAF50;
+                }
+
+                &.document {
+                  background: #71c5f4;
+                }
+
                 @media only screen and (max-width: 600px){
                   align-items: center;
                   width: 252px;
@@ -721,14 +720,12 @@ export default defineComponent({
               align-items: center;
               flex-direction: column;
               min-width: 100%;
-              width: 312px;
               height: 165px;
             }
           }
 
           @media only screen and (max-width: 390px){
             min-width: 100%;
-            width: 312px;
             height: 165px;
             flex-direction: column;
           }
