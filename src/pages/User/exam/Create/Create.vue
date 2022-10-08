@@ -220,7 +220,7 @@ export default {
     getStep2Validation () {
       let error = false
       const messages = []
-      if (!this.draftExam.questions.list) {
+      if (this.draftExam.questions.list.length === 0) {
         error = true
         messages.push('هیچ سوالی انتخاب نشده است.')
       }
@@ -230,7 +230,7 @@ export default {
     getStep3Validation () {
       let error = false
       const messages = []
-      if (!this.draftExam.questions.list) {
+      if (this.draftExam.questions.list.length === 0) {
         error = true
         messages.push('هیچ سوالی انتخاب نشده است.')
       }
@@ -399,8 +399,8 @@ export default {
       this.draftExam.enable = true
       this.updateExam()
         .then(() => {
-          this.showMessagesInNotify(['آزمون شما با موفقیت ساخته شد.'])
-          this.$route.push({ name: 'User.Exam.List' })
+          this.showMessagesInNotify(['آزمون شما با موفقیت ساخته شد.'], 'positive')
+          this.$router.push({ name: 'User.Exam.List' })
           this.draftExam.loading = false
         })
         .catch(() => {
