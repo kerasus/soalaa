@@ -18,7 +18,7 @@
         </q-tab-panel>
         <q-tab-panel name="chooseQuestion">
           <question-selection-tab v-model:exam="draftExam"
-                                  v-model:lesson="draftExam.temp.lesson"
+                                  @lessonChanged="onLessonChanged"
                                   @nextTab="goToNextStep"
                                   @lastTab="goToPrevStep"
                                   @addQuestionToExam="bulkAttachQuestionsOfDraftExam"
@@ -166,6 +166,9 @@ export default {
     clearDraftExam () {
       this.draftExam = new Exam()
     },
+    onLessonChanged(lessonId) {
+      this.updateExam()
+    },
     createAndLoadNewDraftExam () {
       this.createExam(this.draftExam)
         .then(response => {
@@ -312,6 +315,7 @@ export default {
         title: this.draftExam.title,
         temp: {
           major: this.draftExam.temp.major,
+          lesson: this.draftExam.temp.lesson,
           grade: this.draftExam.temp.grade
         }
       })
