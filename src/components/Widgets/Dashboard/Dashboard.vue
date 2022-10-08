@@ -1,13 +1,15 @@
 <template>
-  <dashboard-header />
-  <next-exam />
-  <div class="board-container row q-col-gutter-sm">
-    <div class="col-12 col-lg-8">
-      <upcoming-exams-calender :calendarTitle="'آزمون های پیش‌رو'"
-                               :calendarIcon="'isax:calendar-1'" />
-    </div>
-    <div class="col-12 col-lg-4">
-      <subscription-status :subscribe="lastSubscribeDate" />
+  <div>
+    <dashboard-header />
+    <next-exam />
+    <div class="board-container row q-col-gutter-sm">
+      <div class="col-12 col-lg-8">
+        <upcoming-exams-calender :calendarTitle="'آزمون های پیش‌رو'"
+                                 :calendarIcon="'isax:calendar-1'" />
+      </div>
+      <div class="col-12 col-lg-4">
+        <subscription-status :subscribe="lastSubscribeDate" />
+      </div>
     </div>
   </div>
 </template>
