@@ -2,26 +2,30 @@
   <div class="profile-page-widget">
     <div class="profile-card-title">اطلاعات کاربری</div>
 
-    <div class="profile-card">
+    <div class="profile-card relative-position">
       <entity-crud-form-builder
         ref="EntityCrudFormBuilder"
         v-model:value="inputs"
       />
 
       <div class="card-actions">
-        <div
-          class="card-actions-button dont-save-button"
+        <div class="card-actions-button dont-save-button"
+             @click="goToDashboard()"
         >
           انصراف
         </div>
 
-        <div
-          class="card-actions-button save-button"
-          @click="edit"
+        <div class="card-actions-button save-button"
+             @click="edit"
         >
           ذخیره
         </div>
       </div>
+
+      <q-inner-loading :showing="loading"
+                       label="کمی صبر کنید..."
+      />
+
     </div>
   </div>
 </template>
@@ -38,6 +42,7 @@ export default {
 
   data () {
     return {
+      loading: false,
       inputs: [
         { type: 'input', name: 'first_name', responseKey: 'first_name', label: 'نام', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
         { type: 'input', name: 'last_name', responseKey: 'last_name', label: 'نام خانوادگی', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
@@ -87,11 +92,21 @@ export default {
 
   methods: {
     onLoadPage () {
+      this.loading = true
       this.getFormData()
         .then(() => {
+          this.loading = false
           this.setInputsInitData()
           this.disableFilledInputs()
         })
+        .catch(() => {
+          this.loading = false
+          this.goToDashboard()
+        })
+    },
+
+    goToDashboard () {
+      this.$router.push({ name: 'User.Dashboard' })
     },
 
     disableFilledInputs() {
@@ -177,16 +192,17 @@ export default {
     },
 
     edit () {
+      this.loading = true
       const formData = this.$refs.EntityCrudFormBuilder.getFormData()
 
       // console.log('formData', formData)
       this.$axios.put(API_ADDRESS.user.edit(this.user.id), formData)
-        .then((resp) => {
-          // console.log(resp)
+        .then(() => {
+          this.loading = false
         })
-        // .catch((error) => {
-        //   console.log(error)
-        // })
+        .catch(() => {
+          this.loading = false
+        })
     },
 
     setProvinceValue(title) {

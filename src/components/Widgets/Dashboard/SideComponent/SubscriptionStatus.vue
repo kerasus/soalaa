@@ -314,7 +314,7 @@ export default {
     height: 443px;
   }
   @media screen and (max-width: 1023px) {
-    height: 312px;
+    height: auto;
   }
 }
 </style>
