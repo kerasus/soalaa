@@ -88,6 +88,7 @@
     v-model:dialogValue="treeModalValue"
     v-model:subjectsField="allSubjects"
     :lessons-list="treeModalLessonsList"
+    :persistent="!doesExamHaveLesson"
     single-list-choice-mode
     @lessonSelected="onLessonChanged"
   />
@@ -252,6 +253,9 @@ export default {
       return (id) => {
         return !!(this.providedExam.questions.list.find(question => question.id === id))
       }
+    },
+    doesExamHaveLesson () {
+      return !!this.providedExam.temp.lesson
     }
   },
   methods: {
