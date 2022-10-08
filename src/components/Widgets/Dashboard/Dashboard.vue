@@ -7,7 +7,7 @@
                                :calendarIcon="'isax:calendar-1'" />
     </div>
     <div class="col-12 col-lg-4">
-      <subscription-status />
+      <subscription-status :subscribe="lastSubscribeDate" />
     </div>
   </div>
 </template>

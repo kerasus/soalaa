@@ -1,5 +1,11 @@
 <template>
-  <div class="exam-info-component">
+  <div v-if="exam.loading"
+       class="exam-info-component loading">
+    <q-skeleton type="QInput"
+                animation="wave" />
+  </div>
+  <div v-else
+       class="exam-info-component">
     <div class="exam-info-form">
       <entity-crud-form-builder
         ref="EntityCrudFormBuilder"
@@ -9,9 +15,9 @@
     <div class="exam-info-buttons">
       <div
         class="exam-info-button back-button"
-        @click="goToLastStep"
+        @click="cancelExam"
       >
-        بازگشت
+        لغو
       </div>
       <div
         class="exam-info-button next-button"
@@ -29,85 +35,188 @@
 
 <script>
 import { EntityCrudFormBuilder } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
 import { Exam } from 'src/models/Exam'
-import mixinTree from 'src/mixin/Tree'
 
 export default {
-  name: 'CreateExam',
+  name: 'ExamInfoTab',
   components: { EntityCrudFormBuilder },
-  mixins: [
-    mixinTree
-  ],
   props: {
-    inputs: {
+    exam: {
       type: Object,
       default: () => {}
+    },
+    majorList: {
+      type: Array,
+      default: () => []
+    },
+    gradesList: {
+      type: Array,
+      default: () => []
+    },
+    typeOptions: {
+      type: Array,
+      default: () => ['کنکور']
     }
   },
-  emits: ['nextTab', 'lastTab'],
-
+  emits: ['nextTab', 'update:exam'],
   data () {
     return {
       model: 'one',
+      inputList: [
+        {
+          type: 'toggleButton',
+          name: 'type_id',
+          responseKey: 'data.exam_type',
+          col: 'col-12 exam-type-toggle-button',
+          value: '6225f4828044517f52500c02',
+          ripple: false,
+          color: 'white',
+          toggleColor: 'primary',
+          toggleTextColor: 'white',
+          textColor: 'black',
+          label: 'نوع آزمون',
+          disable: true,
+          options: [{ label: 'عادی', value: '6225f4828044517f52500c02' }, { label: 'جامع', value: 'test' }]
+        },
+        {
+          type: 'input',
+          name: 'title',
+          responseKey: 'data.title',
+          label: 'عنوان آزمون',
+          placeholder: ' ',
+          col: 'col-12 col-md-3 col-sm-6'
+        },
+        {
+          type: 'select',
+          name: 'question_type',
+          responseKey: 'data.question_type',
+          label: 'نوع سوالات',
+          placeholder: ' ',
+          value: 'کنکور',
+          options: [],
+          disable: true,
+          col: 'col-12 col-md-3 col-sm-6',
+          icon: 'isax:arrow-right-3',
+          dropdownIcon: 'isax:arrow-down-1'
+        },
+        {
+          type: 'select',
+          name: 'temp.major',
+          responseKey: 'data.temp.major',
+          label: 'رشته تحصیلی',
+          placeholder: ' ',
+          col: 'col-12 col-md-3 col-sm-6',
+          dropdownIcon: 'isax:arrow-down-1',
+          options: []
+        },
+        {
+          type: 'select',
+          name: 'temp.grade',
+          responseKey: 'data.temp.grade',
+          label: 'پایه تحصیلی',
+          placeholder: ' ',
+          col: 'col-12 col-md-3 col-sm-6',
+          dropdownIcon: 'isax:arrow-down-1',
+          options: []
+        }
+      ],
+      localExam: new Exam(),
       expanded: true,
-      api: API_ADDRESS.exam.base(),
       entityIdKeyInResponse: 'data.id',
       showRouteParamKey: 'id',
       showRouteName: 'Admin.Exam.Show',
       indexRouteName: 'Admin.Exam.Index',
-      inputList: [],
-      gradesList: null,
-      lessonGroupList: null,
       lessonsList: null,
-      majorList: null,
+      lessonGroupList: null,
       categoryOptions: [
         { title: 'دفترچه سؤالات عمومی', id: '60b7858d743940688b23c7f3' },
         { title: 'دفترچه سؤالات اختصاصی', id: '60b7858d743940688b23c7f4' }
       ],
-      typeOptions: [],
       category: { title: '', id: '', order: 0, time: 0 },
       allTabs: ['createPage', 'chooseQuestion', 'finalApproval']
     }
   },
-
-  inject: {
-    exam: {
-      from: 'providedExam', // this is optional if using the same key for injection
-      default: new Exam()
-    }
-  },
-
-  created () {
-    this.onLoadPage()
-  },
-
   computed: {
-    examCategoriesIndex () {
-      return this.inputList.findIndex(item => item.name === 'categories')
+    title() {
+      return this.getValueByName('title')
     },
-    totalCategory () {
-      return this.inputList[this.examCategoriesIndex].value && this.inputList[this.examCategoriesIndex].value.length >= 2
+    // questionType() {
+    //   return this.getValueByName('question_type')
+    // },
+    tempMajor() {
+      return this.getValueByName('temp.major')
+    },
+    tempGrade() {
+      return this.getValueByName('temp.grade')
+    },
+    examId () {
+      return this.exam.id
     }
   },
-
   watch: {
-    inputs: {
+    // typeOptions: {
+    //   deep: true,
+    //   handler (newValue) {
+    //     this.loadQuestionTypesInput(newValue.map(type => {
+    //       return {
+    //         label: type.value,
+    //         value: type.id
+    //       }
+    //     }))
+    //   }
+    // },
+    gradesList: {
       deep: true,
       handler (newValue) {
-        this.inputList = newValue
+        this.loadGradesInput(newValue.map(type => {
+          return {
+            label: type.title,
+            value: type.id
+          }
+        }))
       }
+    },
+    majorList: {
+      deep: true,
+      handler (newValue) {
+        this.loadMajorInput(newValue.map(type => {
+          return {
+            label: type.value,
+            value: type.id
+          }
+        }))
+      }
+    },
+    title(newValue) {
+      this.localExam.title = newValue
+      this.$emit('update:exam', this.localExam)
+    },
+    // questionType: {
+    //   deep: true,
+    //   handler (newValue) {
+    //     this.localExam.type_id = newValue
+    //     this.$emit('update:exam', this.localExam)
+    //   }
+    // },
+    tempMajor: {
+      deep: true,
+      handler (newValue) {
+        this.localExam.temp.major = newValue
+        this.$emit('update:exam', this.localExam)
+      }
+    },
+    tempGrade: {
+      deep: true,
+      handler (newValue) {
+        this.localExam.temp.grade = newValue
+        this.$emit('update:exam', this.localExam)
+      }
+    },
+    examId (newValue) {
+      this.loadExamData()
     }
   },
-
   methods: {
-    onLoadPage () {
-      this.inputList = this.inputs
-      this.getExamTypeList()
-      this.getGradesList()
-      this.loadMajorList()
-    },
-
     loadSelectInputOptions (inputName, options) {
       const inputIndex = this.inputList.findIndex(input => input.name === inputName)
       if (inputIndex === -1) {
@@ -118,57 +227,57 @@ export default {
     loadQuestionTypesInput (options) {
       this.loadSelectInputOptions('question_type', options)
     },
-    getExamTypeList () {
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
-          this.typeOptions = response.data.data.filter(data => data.type === 'exam_type')
-          this.loadQuestionTypesInput(this.typeOptions.map(type => {
-            return {
-              label: type.value,
-              value: type.id
-            }
-          }))
-        })
-        .catch(() => {})
-    },
+
     loadGradesInput (options) {
-      this.loadSelectInputOptions('temp.level', options)
-    },
-    getGradesList () {
-      this.getRootNode('test')
-        .then(response => {
-          this.gradesList = response.data.data.children
-          this.loadGradesInput(this.gradesList.map(type => {
-            return {
-              label: type.title,
-              value: type.id
-            }
-          }))
-        })
+      this.loadSelectInputOptions('temp.grade', options)
     },
 
     loadMajorInput (options) {
-      this.loadSelectInputOptions('temp.tags', options)
+      this.loadSelectInputOptions('temp.major', options)
     },
-    loadMajorList () {
-      this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
-        .then((response) => {
-          this.majorList = response.data.data
-          this.loadMajorInput(this.majorList.map(type => {
-            return {
-              label: type.value,
-              value: type.id
-            }
-          }))
-        })
-    },
-
-    goToLastStep () {
-      this.$emit('lastTab')
-    },
-
     goToNextStep () {
       this.$emit('nextTab')
+    },
+    cancelExam() {
+      this.$router.push({ name: 'User.Exam.List' })
+    },
+    getValueByName(name) {
+      const inputIndex = this.inputList.findIndex(item => item.name === name)
+      if (inputIndex === -1) {
+        return
+      }
+      return this.inputList[inputIndex].value
+    },
+    loadExamData(setOptions) {
+      if (setOptions) {
+        this.loadGradesInput(this.gradesList.map(type => {
+          return {
+            label: type.title,
+            value: type.id
+          }
+        }))
+        this.loadMajorInput(this.majorList.map(type => {
+          return {
+            label: type.value,
+            value: type.id
+          }
+        }))
+      }
+      this.localExam = new Exam(this.exam)
+      this.inputList.forEach(element => {
+        if (element.name === 'title') {
+          element.value = this.exam.title
+        } else if (element.name === 'temp.major') {
+          element.value = this.exam.temp.major
+        } else if (element.name === 'temp.grade') {
+          element.value = this.exam.temp.grade
+        }
+      })
+    }
+  },
+  mounted() {
+    if (this.exam.id) {
+      this.loadExamData(true)
     }
   }
 }
@@ -258,5 +367,4 @@ export default {
     }
   }
 }
-
 </style>

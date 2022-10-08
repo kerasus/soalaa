@@ -180,6 +180,7 @@
               v-model="checkbox"
               class="check-all-checkbox"
               label="انتخاب همه"
+              :disable="loading"
               indeterminate-value="maybe"
               @click="selectAllQuestions">
             </q-checkbox>
@@ -264,6 +265,10 @@ export default {
     selectedQuestions: {
       type: [Array, QuestionList],
       default: new QuestionList()
+    },
+    loading: {
+      type: Boolean,
+      default: false
     },
     checkBox: {
       type: Boolean,
@@ -363,14 +368,20 @@ export default {
     questionLvl () {
       if (!this.questions) return
       return {
-        hard: this.questions.list.filter(question => question.level === '3').length,
-        medium: this.questions.list.filter(question => question.level === '2').length,
-        easy: this.questions.list.filter(question => question.level === '1').length
+        hard: this.questions.list.filter(question => question.level === '3' || question.level === 3).length,
+        medium: this.questions.list.filter(question => question.level === '2' || question.level === 2).length,
+        easy: this.questions.list.filter(question => question.level === '1' || question.level === 1).length
       }
     }
   },
 
-  emits: ['selectAllQuestions', 'deleteAllQuestions', 'remove'],
+  emits: [
+    'selectAllQuestions',
+    'deselectAllQuestions',
+    'remove',
+    'nextTab',
+    'lastTab'
+  ],
 
   created () {
     this.setDifficultyLevelsChart()
@@ -387,7 +398,11 @@ export default {
     },
 
     selectAllQuestions () {
-      this.$emit('selectAllQuestions')
+      if (this.checkbox) {
+        this.$emit('selectAllQuestions')
+        return
+      }
+      this.$emit('deselectAllQuestions')
     },
 
     replaceTitle () {
@@ -409,7 +424,7 @@ export default {
     },
 
     deleteAllChoose (id) {
-      this.$emit('deleteAllQuestions')
+      this.$emit('deselectAllQuestions')
     },
 
     numberOfQuestions () {

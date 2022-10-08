@@ -3,7 +3,7 @@
     v-model="modal"
   >
     <q-card class="tree-card">
-      <div class="fit row wrap">
+      <div class="fit row wrap tree-inner-container">
         <div class="choose-tree-box question-details col-6">
           <div class="details-container-2 default-details-container">
             <div class="detail-box"
@@ -88,6 +88,10 @@
           </div>
         </div>
       </div>
+      <q-inner-loading
+        :showing="dialogLoading"
+        dark
+      />
     </q-card>
   </q-dialog>
 </template>
@@ -122,6 +126,12 @@ export default {
     },
     subjectsField: {
       type: Object
+    },
+    singleListChoiceMode: {
+      type: Boolean,
+      default () {
+        return false
+      }
     }
   },
   emits: [
@@ -132,6 +142,7 @@ export default {
   ],
   data () {
     return {
+      dialogLoading: false,
       lesson: '',
       group: '',
       selectedNodesIDs: [],
@@ -224,10 +235,12 @@ export default {
     },
     showTreeModalNode (item) {
       this.treeKey += 1
+      this.dialogLoading = true
       this.showTree('tree', this.getNode(item.id))
         .then(() => {
           this.syncAllCheckedIds()
           this.selectWantedTree(this.lesson)
+          this.dialogLoading = false
         })
     },
     selectWantedTree (lesson) {
@@ -273,6 +286,11 @@ export default {
       if (newVal.length > 0) {
         this.updateChosenSubjects()
       }
+    },
+    lesson (newVal) {
+      if (newVal && this.singleListChoiceMode) {
+        this.deleteAllNodes()
+      }
     }
   }
 }
@@ -298,6 +316,14 @@ export default {
   background: #FFFFFF;
   border-radius: 15px;
   padding: 30px;
+  @media screen and (max-width: 1024px) {
+    min-width: 350px;
+    .tree-inner-container {
+      display: flex;
+      flex-direction: column;
+      height: auto !important;
+    }
+  }
 }
 .question-details {
   font-style: normal;
@@ -306,6 +332,9 @@ export default {
   line-height: 28px;
   text-align: right #{"/* rtl:ignore */"};
   color: #23263B;
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+  }
   .tree-chips-box {
     height: 412px;
     max-width: 367px;

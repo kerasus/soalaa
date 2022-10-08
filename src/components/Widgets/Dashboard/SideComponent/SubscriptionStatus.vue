@@ -39,10 +39,15 @@
             محدودیت ساخت آزمون
           </div>
           <highcharts class="flex flex-center"
-                      :options="chartOptions" />
+                      :options="chartOptionsExam" />
         </q-tab-panel>
-        <q-tab-panel name="pdf">
-          dsf
+        <q-tab-panel name="pdf"
+                     class="subscription-status-test-tab">
+          <div class="subscription-status-test-tab-title">
+            محدودیت دانلود PDF
+          </div>
+          <highcharts class="flex flex-center"
+                      :options="chartOptionsPdf" />
         </q-tab-panel>
       </q-tab-panels>
     </div>
@@ -54,13 +59,19 @@ import { Chart } from 'highcharts-vue'
 
 export default {
   name: 'SubscriptionStatus',
+  props: {
+    subscribe: {
+      type: Object,
+      default: null
+    }
+  },
   components: {
     highcharts: Chart
   },
   data() {
     return {
       tab: 'tests',
-      chartOptions: {
+      chartOptionsExam: {
         chart: {
           height: '150',
           width: '150',
@@ -85,7 +96,7 @@ export default {
           pie: {
             innerSize: '98%',
             startAngle: 0,
-            endAngle: 270,
+            endAngle: 0,
             borderWidth: 13,
             center: ['50%', '52%'],
             size: '150%',
@@ -109,10 +120,80 @@ export default {
         series: [{
           id: 'idData',
           data: [
-            { name: '', y: 31, color: '#9690E4' }
+            { name: '', y: 0, color: '#9690E4' }
+          ]
+        }]
+      },
+      chartOptionsPdf: {
+        chart: {
+          height: '150',
+          width: '150',
+          type: 'pie',
+          plotShadow: false
+        },
+        credits: {
+          enabled: false
+        },
+        tooltip: {
+          shared: false,
+          useHTML: true,
+          borderWidth: 0,
+          backgroundColor: 'rgba(255,255,255,0)',
+          shadow: false,
+          formatter: function () {
+            const point = this.point
+            return '<span class="myTooltip" style="padding:5px;border-radius:5px;background-color:' + point.color + ';">' + point.y + '&nbsp' + 'PDF' + '</span>'
+          }
+        },
+        plotOptions: {
+          pie: {
+            innerSize: '98%',
+            startAngle: 0,
+            endAngle: 0,
+            borderWidth: 13,
+            center: ['50%', '52%'],
+            size: '150%',
+            borderColor: null,
+            backgroundColor: '#F2F500',
+            slicedOffset: 15,
+            dataLabels: {
+              connectorWidth: 0
+            }
+          }
+        },
+        title: {
+          y: 20,
+          style: {
+            useHTML: true
+          },
+          verticalAlign: 'middle',
+          floating: true,
+          text: 'PDF باقی‌مانده'
+        },
+        series: [{
+          id: 'idData',
+          data: [
+            { name: '', y: 0, color: '#9690E4' }
           ]
         }]
       }
+    }
+  },
+  watch: {
+    subscribe () {
+      this.loadChartData()
+    }
+  },
+  methods: {
+    loadChartData () {
+      if (!this.subscribe) {
+        return
+      }
+
+      this.chartOptionsExam.plotOptions.pie.endAngle = ((this.subscribe.abilities_n.exam - this.subscribe.made.exam) * 360) / this.subscribe.abilities_n.exam
+      this.chartOptionsExam.series[0].data[0].y = (this.subscribe.abilities_n.exam - this.subscribe.made.exam)
+      this.chartOptionsPdf.plotOptions.pie.endAngle = ((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions
+      this.chartOptionsPdf.series[0].data[0].y = (this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions)
     }
   }
 }
@@ -233,7 +314,7 @@ export default {
     height: 443px;
   }
   @media screen and (max-width: 1023px) {
-    height: 312px;
+    height: auto;
   }
 }
 </style>

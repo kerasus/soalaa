@@ -29,9 +29,9 @@
               تومان
             </div>
             <ul class="package-item-feature-list">
-              <li class="package-item-feature-item">{{item.abilities.exam}}</li>
-              <li class="package-item-feature-item">{{item.abilities.pdf_questions}}</li>
-              <li class="package-item-feature-item">{{ item.abilities.grades_covered }}</li>
+              <li v-for="ability in item.abilities"
+                  :key="ability"
+                  class="package-item-feature-item">{{ability}}</li>
             </ul>
             <q-btn class="package-item-action-btn"
                    label="شروع کنید"
@@ -146,7 +146,7 @@ export default defineComponent({
           justify-content: flex-start;
           align-items: center;
           width: 318px;
-          height: 420px;
+          min-height: 420px;
           margin: 60px 0;
           padding: 30px;
           background: #FFFFFF;
@@ -167,7 +167,6 @@ export default defineComponent({
               font-weight: 700;
               font-size: 24px;
               line-height: 37px;
-              text-align: right;
               letter-spacing: -0.03em;
               color: #6D708B;
             }
@@ -178,6 +177,7 @@ export default defineComponent({
               line-height: 25px;
               letter-spacing: -0.03em;
               color: #8075DC;
+              min-width: 51px;
             }
           }
 
