@@ -191,7 +191,8 @@ export default {
   },
   methods: {
     startExamProcess () {
-      this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
+      const isPersonalExam = this.$route.name === 'onlineQuiz.alaaView.personal'
+      this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView', isPersonalExam)
         .then(() => {
           this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
           if (this.getCurrentExamQuestionsInArray().length === 0) {
@@ -201,12 +202,12 @@ export default {
               position: 'top'
             })
             this.$store.commit('Exam/clearExamData', this.userExamId)
-            this.$router.push({ name: 'user.exam.list' })
+            this.$router.push({ name: 'dashboard' })
           }
           this.updateOverlay(false)
         }).catch((err) => {
           Assistant.reportErrors(err)
-          this.$router.push({ name: 'user.exam.list' })
+          this.$router.push({ name: 'dashboard' })
           this.updateOverlay(false)
         })
     },
