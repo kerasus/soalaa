@@ -389,7 +389,7 @@ export default {
           this.loadAttachedQuestions()
         })
         .catch(() => {
-          this.draftExam.loading = false
+          this.loadAttachedQuestions()
         })
     },
     bulkDetachQuestionsOfDraftExam(questions) {
@@ -405,7 +405,7 @@ export default {
           this.loadAttachedQuestions()
         })
         .catch(() => {
-          this.draftExam.loading = false
+          this.loadAttachedQuestions()
         })
     },
     replaceQuestionsOfDraftExam(questions) {
