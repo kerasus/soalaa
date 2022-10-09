@@ -2,6 +2,7 @@
   <div class="exam-create-panel">
     <steps v-model:step="currentTab"
            :loading="draftExam.loading"
+           :disabled="draftExamIsConfirmed"
            @update:step="onChangeTab"
     />
     <q-tab-panels v-if="!draftExamIsConfirmed"
@@ -37,7 +38,26 @@
       </q-tab-panel>
     </q-tab-panels>
     <div v-else>
-      draftExamIsConfirmed
+      <div class="confirmed-draft-exam-page">
+        <div class="icon-section">
+          circle
+        </div>
+        <div class="message">
+          آزمون شما با موفقیت ساخته شد
+        </div>
+        <div class="actions-section">
+          <q-btn flat
+                 class="btn-go-to-exam-list"
+                 :to="{name: 'User.Exam.List'}"
+          >
+            مشاهده آزمون در پنل کاربری
+          </q-btn>
+          <q-btn flat
+                 class="btn-go-to-print-exam">
+            دانلود فایل آزمون
+          </q-btn>
+        </div>
+      </div>
     </div>
     <q-dialog v-model="createDraftExamMessageDialog">
       <q-card
@@ -95,10 +115,14 @@
         <q-card-actions class="flex flex-center">
           <q-btn label="خیر"
                  class="cancel-draft"
-                 @click="clearDraftExam" />
+                 unelevated
+                 @click="clearDraftExam"
+          />
           <q-btn label="بله، ادامه می‌دهم"
                  color="primary"
-                 @click="setDraftExam" />
+                 unelevated
+                 @click="setDraftExam"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -147,10 +171,18 @@ export default {
   },
   computed: {
     draftMajor() {
-      return this.majorList.find(x => x.id === this.draftExam.temp.major).value
+      const major = this.majorList.find(x => x.id === this.draftExam.temp.major)
+      if (!major) {
+        return ''
+      }
+      return major.value
     },
     draftGrade() {
-      return this.gradesList.find(x => x.id === this.draftExam.temp.grade).title
+      const grade = this.gradesList.find(x => x.id === this.draftExam.temp.grade)
+      if (!grade) {
+        return ''
+      }
+      return grade.title
     }
   },
   methods: {
@@ -160,11 +192,12 @@ export default {
         .then(() => {
           this.getDraftExam()
             .then(response => {
-              if (!response.data?.data) {
-                return
+              if (response.data?.data) {
+                this.loadDraftExam(response.data.data)
+                this.continueWithOldDraftExamConfirmationDialog = true
+              } else {
+                this.loadDraftExam()
               }
-              this.continueWithOldDraftExamConfirmationDialog = true
-              this.loadDraftExam(response.data.data)
             })
             .catch(() => {
               this.draftExam.loading = false
@@ -204,7 +237,9 @@ export default {
     },
     loadDraftExam (draftExam) {
       this.draftExam = new Exam(draftExam)
-      this.loadAttachedQuestions()
+      if (this.draftExam.id) {
+        this.loadAttachedQuestions()
+      }
     },
     setDraftExam () {
       // load tab page based on draftExam level
@@ -387,7 +422,7 @@ export default {
           this.loadAttachedQuestions()
         })
         .catch(() => {
-          this.draftExam.loading = false
+          this.loadAttachedQuestions()
         })
     },
     bulkDetachQuestionsOfDraftExam(questions) {
@@ -403,7 +438,7 @@ export default {
           this.loadAttachedQuestions()
         })
         .catch(() => {
-          this.draftExam.loading = false
+          this.loadAttachedQuestions()
         })
     },
     replaceQuestionsOfDraftExam(questions) {
@@ -442,7 +477,8 @@ export default {
       this.updateExam()
         .then(() => {
           this.showMessagesInNotify(['آزمون شما با موفقیت ساخته شد.'], 'positive')
-          this.$router.push({ name: 'User.Exam.List' })
+          // this.$router.push({ name: 'User.Exam.List' })
+          this.currentTab = 'confirmedPage'
           this.draftExam.loading = false
           this.draftExamIsConfirmed = true
         })
@@ -539,6 +575,35 @@ export default {
 
       .cancel {
         background-color: #F4F5F6;
+      }
+    }
+  }
+  .confirmed-draft-exam-page {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    .icon-section {
+      width: 100px;
+      height: 100px;
+      border: solid 1px red;
+    }
+    .message {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .actions-section {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      justify-content: center;
+      .q-btn {
+        color: pink;
+        font-size: 1rem;
+        font-weight: normal;
+        margin-top: 5px;
       }
     }
   }
