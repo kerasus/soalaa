@@ -209,13 +209,17 @@
           </div>
 
           <div class="description-answer-video">
-            <div class="answer-video">
+            <div class="answer-video flex items-center justify-center">
+              <div class="soon flex items-center justify-center">
+                به زودی
+              </div>
+
               <!--              ToDo : uncomment this when backend give you a valid key-->
               <!--              <video-player />-->
             </div>
 
             <div class="answer-video-title">
-              {{'پاسخ ویدیویی'}}
+              پاسخنامه ویدیویی
             </div>
           </div>
         </div>
@@ -271,10 +275,21 @@
           flat
           role="presentation"
           class="see-answer-button no-padding"
-          :label="descriptiveAnswerExpanded ? 'بستن پاسخ تشریحی' : 'پاسخ تشریحی'"
+          :label="descriptiveAnswerExpanded ? '' : ''"
           :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
           @click="descriptiveAnswerExpanded = !descriptiveAnswerExpanded"
-        />
+        >
+          <span v-if="descriptiveAnswerExpanded">
+            پاسخ تشریحی
+            <!--            بستن پاسخ تشریحی-->
+          </span>
+          <span v-else>
+            <!--            <span :hidden="$q.screen.lt.sm">نمایش </span>-->
+            <span>
+              پاسخ تشریحی
+            </span>
+          </span>
+        </q-btn>
       </div>
     </q-card-section>
   </q-card>
@@ -914,7 +929,6 @@ export default {
         padding: 20px 24px;
         max-width: 620px;
         width: 100%;
-        height: 252px;
         background: #F6F9FF;
         border-radius: 16px;
         margin-right: 30px;
@@ -965,6 +979,13 @@ export default {
           background: #F6F9FF;
           border-radius: 16px;
           margin-bottom: 10px;
+          .soon{
+            width: 86px;
+            height: 32px;
+            background: #FFB74D;
+            border-radius: 18px;
+            color: white;
+          }
 
           @media only screen and (max-width: 1439px) {
             width: 230px;
