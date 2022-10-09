@@ -407,7 +407,7 @@ export default {
     },
     reportOptions: {
       type: Array,
-      default: () => {}
+      default: () => []
     },
     selected: {
       type: Boolean,
