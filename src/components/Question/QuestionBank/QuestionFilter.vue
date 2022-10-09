@@ -209,7 +209,6 @@ export default {
       filtersDataKey.forEach(key => {
         const filterGroup = this.filtersData[key]
         filterGroup.forEach(filterItem => {
-          console.log(filterItem)
           const title = filterItem.title || filterItem.label || filterItem.value
           titles.push(title)
         })
@@ -252,7 +251,6 @@ export default {
       this.$emit('onFilter', this.filtersData)
     },
     changeFilterData (key, value) {
-      console.log(key, value)
       this.filtersData[key] = value
       this.onUpdateFilterData()
     },

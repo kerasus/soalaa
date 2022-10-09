@@ -1,94 +1,92 @@
 <template>
-  <div class="create-exam-panel">
-    <div class="exam-create-panel">
-      <steps v-model:step="currentTab"
-             :loading="draftExam.loading"
-             @update:step="onChangeTab"
-      />
-      <q-tab-panels v-model="currentTab"
-                    animated
+  <div class="exam-create-panel">
+    <steps v-model:step="currentTab"
+           :loading="draftExam.loading"
+           @update:step="onChangeTab"
+    />
+    <q-tab-panels v-model="currentTab"
+                  animated
+    >
+      <q-tab-panel name="createPage">
+        <exam-info-tab ref="createExam"
+                       v-model:exam="draftExam"
+                       :gradesList="gradesList"
+                       :majorList="majorList"
+                       @nextTab="goToNextStep"
+        />
+      </q-tab-panel>
+      <q-tab-panel name="chooseQuestion">
+        <question-selection-tab v-model:exam="draftExam"
+                                @lessonChanged="onLessonChanged"
+                                @nextTab="goToNextStep"
+                                @lastTab="goToPrevStep"
+                                @addQuestionToExam="bulkAttachQuestionsOfDraftExam"
+                                @deleteQuestionFromExam="bulkDetachQuestionsOfDraftExam"
+        />
+      </q-tab-panel>
+      <q-tab-panel name="finalApproval">
+        <final-approval-tab v-model:exam="draftExam"
+                            :majors="majorList"
+                            :grades="gradesList"
+                            @detachQuestion="bulkDetachQuestionsOfDraftExam"
+                            @updateOrders="replaceQuestionsOfDraftExam"
+                            @previousStep="goToPrevStep"
+                            @confirmExam="confirmDraftExam"
+        />
+      </q-tab-panel>
+    </q-tab-panels>
+    <q-dialog v-model="createDraftExamMessageDialog">
+      <q-card
+        flat
+        class="report-problem-dialog"
       >
-        <q-tab-panel name="createPage">
-          <exam-info-tab ref="createExam"
-                         v-model:exam="draftExam"
-                         :gradesList="gradesList"
-                         :majorList="majorList"
-                         @nextTab="goToNextStep"
-          />
-        </q-tab-panel>
-        <q-tab-panel name="chooseQuestion">
-          <question-selection-tab v-model:exam="draftExam"
-                                  @lessonChanged="onLessonChanged"
-                                  @nextTab="goToNextStep"
-                                  @lastTab="goToPrevStep"
-                                  @addQuestionToExam="bulkAttachQuestionsOfDraftExam"
-                                  @deleteQuestionFromExam="bulkDetachQuestionsOfDraftExam"
-          />
-        </q-tab-panel>
-        <q-tab-panel name="finalApproval">
-          <final-approval-tab v-model:exam="draftExam"
-                              :majors="majorList"
-                              :grades="gradesList"
-                              @detachQuestion="bulkDetachQuestionsOfDraftExam"
-                              @updateOrders="replaceQuestionsOfDraftExam"
-                              @previousStep="goToPrevStep"
-                              @confirmExam="confirmDraftExam"
-          />
-        </q-tab-panel>
-      </q-tab-panels>
-      <q-dialog v-model="createDraftExamMessageDialog">
-        <q-card
+        <q-btn
+          v-close-popup
           flat
-          class="report-problem-dialog"
-        >
+          round
+          dense
+          icon="close"
+          class="close-btn"
+        />
+        <q-card-section class="problem-type no-padding">
+          <q-icon name="isax:tick-circle"
+                  size="110px" />
+          <div class="title-style text-center"
+               style="padding-bottom: 20px">
+            آزمون شما با موفقیت ثبت شد
+          </div>
           <q-btn
-            v-close-popup
-            flat
-            round
-            dense
-            icon="close"
-            class="close-btn"
-          />
-          <q-card-section class="problem-type no-padding">
-            <q-icon name="isax:tick-circle"
-                    size="110px" />
-            <div class="title-style text-center"
-                 style="padding-bottom: 20px">
-              آزمون شما با موفقیت ثبت شد
-            </div>
-            <q-btn
-              unelevated
-              color="primary"
-              class="btn-lg final-btn"
-              :to="{name :'Admin.Exam.Index'}"
-            >
-              رفتن به صفحه لیست آزمون
-            </q-btn>
-          </q-card-section>
-        </q-card>
-      </q-dialog>
-      <q-dialog v-model="continueWithOldDraftExamConfirmationDialog"
-                persistent>
-        <q-card>
-          <q-card-section class="row items-center">
-            <div class="q-ma-md">
-              شما یک آزمون ساخته شده دارید ، آیا تمایل به ادامه فرآیند ساخت آن دارید؟
-            </div>
-          </q-card-section>
-          <q-card-actions align="right">
-            <q-btn v-close-popup
-                   flat
-                   label="انصراف"
-                   color="primary"
-                   @click="clearDraftExam" />
-            <q-btn v-close-popup
-                   label="ادامه"
-                   color="primary"
-                   @click="setDraftExam" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
-    </div>
+            unelevated
+            color="primary"
+            class="btn-lg final-btn"
+            :to="{name :'Admin.Exam.Index'}"
+          >
+            رفتن به صفحه لیست آزمون
+          </q-btn>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="continueWithOldDraftExamConfirmationDialog"
+              persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <div class="q-ma-md">
+            شما یک آزمون ساخته شده دارید ، آیا تمایل به ادامه فرآیند ساخت آن دارید؟
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn v-close-popup
+                 flat
+                 label="انصراف"
+                 color="primary"
+                 @click="clearDraftExam" />
+          <q-btn v-close-popup
+                 label="ادامه"
+                 color="primary"
+                 @click="setDraftExam" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -451,92 +449,90 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.create-exam-panel {
-  .exam-create-panel {
-    &:deep(.q-tab-panels) {
-      background: transparent;
-      padding: 30px 0 0 0;
+.exam-create-panel {
+  &:deep(.q-tab-panels) {
+    background: transparent;
+    padding: 30px 0 0 0;
 
-      .q-tab-panel {
-        padding: 0;
+    .q-tab-panel {
+      padding: 0;
+    }
+  }
+
+  @media screen and (max-width: 1919px) {
+    width: 100%;
+    .q-tab-panel {
+      padding: 0;
+    }
+  }
+  @media screen and (max-width: 1439px) {
+    //.q-tab-panel {
+    //  padding: 30px 30px 0 30px !important;
+    //}
+  }
+  @media screen and (max-width: 599px) {
+    .q-tab-panel {
+      //padding: 16px 16px 0 16px !important;
+    }
+  }
+
+  .report-problem-dialog {
+    position: relative;
+
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 1000000;
+    }
+
+    border-radius: 15px;
+    padding: 24px;
+
+    .title-style {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 31px;
+      color: #23263B;
+      margin-bottom: 8px;
+    }
+
+    .problem-type {
+      display: flex;
+      margin-top: 10px;
+      width: 300px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .q-icon {
+        color: #4CAF50;
+        padding-bottom: 28px;
+      }
+
+      .final-btn {
+        padding-right: 25px;
+        padding-left: 25px;
       }
     }
 
-    @media screen and (max-width: 1919px) {
-      width: 100%;
-      .q-tab-panel {
-        padding: 0;
-      }
-    }
-    @media screen and (max-width: 1439px) {
-      //.q-tab-panel {
-      //  padding: 30px 30px 0 30px !important;
-      //}
-    }
-    @media screen and (max-width: 599px) {
-      .q-tab-panel {
-        //padding: 16px 16px 0 16px !important;
-      }
+    .problem-description {
+      margin-top: 16px;
     }
 
-    .report-problem-dialog {
-      position: relative;
+    .action-box {
+      margin-top: 20px;
 
-      .close-btn {
-        position: absolute;
-        top: 12px;
-        left: 12px;
-        z-index: 1000000;
-      }
-
-      border-radius: 15px;
-      padding: 24px;
-
-      .title-style {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 31px;
+      .btn-style {
+        border-radius: 10px;
         color: #23263B;
-        margin-bottom: 8px;
+        width: 96px;
+        height: 40px;
       }
 
-      .problem-type {
-        display: flex;
-        margin-top: 10px;
-        width: 300px;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        .q-icon {
-          color: #4CAF50;
-          padding-bottom: 28px;
-        }
-
-        .final-btn {
-          padding-right: 25px;
-          padding-left: 25px;
-        }
-      }
-
-      .problem-description {
-        margin-top: 16px;
-      }
-
-      .action-box {
-        margin-top: 20px;
-
-        .btn-style {
-          border-radius: 10px;
-          color: #23263B;
-          width: 96px;
-          height: 40px;
-        }
-
-        .cancel {
-          background-color: #F4F5F6;
-        }
+      .cancel {
+        background-color: #F4F5F6;
       }
     }
   }
