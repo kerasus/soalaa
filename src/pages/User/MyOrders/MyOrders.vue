@@ -1,173 +1,183 @@
 <template>
-  <div style="display: none"> {{windowSize}}</div>
-  <div v-if="!hasUserOrdered">
-    <div class="empty-order-list">
-      <q-img class="image"
-             :src="'https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_orders.png'"
-      />
-      <div class="list-text">
-        لیست سفارش‌های شما خالی است!
-      </div>
-      <div class="back-to-shop">
-        <q-btn class="back-to-shop-btn"
-               flat
-               :color="'primary'"
-               label="رفتن به فروشگاه"
-               :to="{name:'Landing.3aExams'}"
+  <div v-if="loading"
+       class="flex justify-center q-mt-xl">
+    <q-spinner-ball
+      color="primary"
+      size="2em"
+    />
+  </div>
+  <template v-if="!loading">
+    <div style="display: none"> {{windowSize}}</div>
+    <div v-if="!hasUserOrdered">
+      <div class="empty-order-list">
+        <q-img class="image"
+               :src="'https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_orders.png'"
         />
+        <div class="list-text">
+          لیست سفارش‌های شما خالی است!
+        </div>
+        <div class="back-to-shop">
+          <q-btn class="back-to-shop-btn"
+                 flat
+                 :color="'primary'"
+                 label="رفتن به فروشگاه"
+                 :to="{name:'Landing.3aExams'}"
+          />
+        </div>
       </div>
     </div>
-  </div>
-  <div
-    v-else
-    class="my-orders-list"
-  >
-    <div class="title">سفارش های من</div>
-    <entity-index
-      ref="orderList"
-      v-model:value="inputs"
-      class="orders-list-entity-index"
-      title="سفارش های من"
-      :api="getEntityApi"
-      :table="table"
-      :table-keys="tableKeys"
-      :default-layout="false"
-      :table-grid-size="$q.screen.lt.sm"
-      :create-route-name="'Admin.Exam.Create'"
-      @onPageChanged="onPageChange"
+    <div
+      v-else
+      class="my-orders-list"
     >
-      <template v-slot:before-index-table="">
-        <div class="row items-center search-box">
-          <div class="col-lg-4 col-xl-4 col-md-6 col-xs-9 text-left">
-            <q-input v-model="searchInput"
-                     filled
-                     class="search-input bg-white">
-              <template v-slot:append>
-                <q-icon name="isax:search-normal-1"
-                        class="search-icon"
-                        @click="filterFormBuilderData" />
-              </template>
-            </q-input>
-          </div>
-          <div class="col-lg-8 col-xl-8 col-md-6 col-xs-3 text-right">
-            <q-btn unelevated
-                   class="filter-toggle"
-                   :class="filterExpanded? 'gray-bg': 'bg-white'"
-                   icon="isax:filter"
-                   @click="filterExpanded = !filterExpanded" />
-          </div>
-        </div>
-        <q-expansion-item v-model="filterExpanded"
-                          icon="perm_identity"
-                          class="expand-filter"
-                          label="Account settings"
-                          caption="John Doe"
-        >
-          <div class="row filter-items">
-            <div class="col-12">
-              <form-builder ref="filterSlot"
-                            :value="filterInputs"
-                            @onClick="onClickFilterFormBuilder"
-              />
+      <div class="title">سفارش های من</div>
+      <entity-index
+        ref="orderList"
+        v-model:value="inputs"
+        class="orders-list-entity-index"
+        title="سفارش های من"
+        :api="getEntityApi"
+        :table="table"
+        :table-keys="tableKeys"
+        :default-layout="false"
+        :table-grid-size="$q.screen.lt.sm"
+        :create-route-name="'Admin.Exam.Create'"
+        @onPageChanged="onPageChange"
+      >
+        <template v-slot:before-index-table="">
+          <div class="row items-center search-box">
+            <div class="col-lg-4 col-xl-4 col-md-6 col-xs-9 text-left">
+              <q-input v-model="searchInput"
+                       filled
+                       class="search-input bg-white">
+                <template v-slot:append>
+                  <q-icon name="isax:search-normal-1"
+                          class="search-icon"
+                          @click="filterFormBuilderData" />
+                </template>
+              </q-input>
+            </div>
+            <div class="col-lg-8 col-xl-8 col-md-6 col-xs-3 text-right">
+              <q-btn unelevated
+                     class="filter-toggle"
+                     :class="filterExpanded? 'gray-bg': 'bg-white'"
+                     icon="isax:filter"
+                     @click="filterExpanded = !filterExpanded" />
             </div>
           </div>
-        </q-expansion-item>
-      </template>
-      <template #table-cell="{inputData}">
-        <q-td :props="inputData.props">
-          <template v-if="inputData.props.col.name === 'details'">
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   @click="showDetailsDialog(inputData.props.row)"
-            >
-              <!--              <q-tooltip anchor="top middle"-->
-              <!--                         self="bottom middle">-->
-              <!--                مشاهده-->
-              <!--              </q-tooltip>-->
-              <svg width="24"
-                   height="24"
-                   viewBox="0 0 24 24"
-                   fill="none"
-                   xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle
-                  cx="12"
-                  cy="6"
-                  r="2"
-                  fill="#6D708B"
+          <q-expansion-item v-model="filterExpanded"
+                            icon="perm_identity"
+                            class="expand-filter"
+                            label="Account settings"
+                            caption="John Doe"
+          >
+            <div class="row filter-items">
+              <div class="col-12">
+                <form-builder ref="filterSlot"
+                              :value="filterInputs"
+                              @onClick="onClickFilterFormBuilder"
                 />
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="2"
-                  fill="#6D708B"
-                />
-                <circle
-                  cx="12"
-                  cy="18"
-                  r="2"
-                  fill="#6D708B"
-                />
-              </svg>
-            </q-btn>
-          </template>
-          <template v-else>
-            {{ inputData.props.value }}
-          </template>
-        </q-td>
-      </template>
-      <template v-slot:table-item-cell="{inputData}">
-        <q-card class="details-table-mobile">
-          <div class="details-info">
-            <div class="first-col">
-              <div class="order first-col-item">
-                شماره سفارش:
-                <span class="order-id">{{inputData.props.row.id}}</span>
               </div>
-              <div class="first-col-item">وضعیت پرداخت:</div>
-              <div class="first-col-item">مبلغ:</div>
-              <div class="first-col-item">تاریخ سفارش:</div>
             </div>
-            <div class="second-col">
+          </q-expansion-item>
+        </template>
+        <template #table-cell="{inputData}">
+          <q-td :props="inputData.props">
+            <template v-if="inputData.props.col.name === 'details'">
               <q-btn round
                      flat
                      dense
                      size="md"
-                     class="details-btn"
-                     @click="toggleDetailsCard(inputData.props.row)"
+                     @click="showDetailsDialog(inputData.props.row)"
               >
-                جزییات
+                <!--              <q-tooltip anchor="top middle"-->
+                <!--                         self="bottom middle">-->
+                <!--                مشاهده-->
+                <!--              </q-tooltip>-->
+                <svg width="24"
+                     height="24"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="12"
+                    cy="6"
+                    r="2"
+                    fill="#6D708B"
+                  />
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="2"
+                    fill="#6D708B"
+                  />
+                  <circle
+                    cx="12"
+                    cy="18"
+                    r="2"
+                    fill="#6D708B"
+                  />
+                </svg>
               </q-btn>
-              <div :class="{ 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
-                             'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
-                             'payment-installment' : inputData.props.row.paymentstatus.id}"
-              >
-                <!--                پرداخت نشده-->
-                {{inputData.props.row.paymentstatus.name}}
+            </template>
+            <template v-else>
+              {{ inputData.props.value }}
+            </template>
+          </q-td>
+        </template>
+        <template v-slot:table-item-cell="{inputData}">
+          <q-card class="details-table-mobile">
+            <div class="details-info">
+              <div class="first-col">
+                <div class="order first-col-item">
+                  شماره سفارش:
+                  <span class="order-id">{{inputData.props.row.id}}</span>
+                </div>
+                <div class="first-col-item">وضعیت پرداخت:</div>
+                <div class="first-col-item">مبلغ:</div>
+                <div class="first-col-item">تاریخ سفارش:</div>
               </div>
-              <div>
-                {{ toman(inputData.props.row.price) }}
-              </div>
-              <div>
-                {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}
-                <!--                {{ getCurrentOrderCompletedAt('1401/09/25') }}-->
+              <div class="second-col">
+                <q-btn round
+                       flat
+                       dense
+                       size="md"
+                       class="details-btn"
+                       @click="toggleDetailsCard(inputData.props.row)"
+                >
+                  جزییات
+                </q-btn>
+                <div :class="{ 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
+                               'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
+                               'payment-installment' : inputData.props.row.paymentstatus.id}"
+                >
+                  <!--                پرداخت نشده-->
+                  {{inputData.props.row.paymentstatus.name}}
+                </div>
+                <div>
+                  {{ toman(inputData.props.row.price) }}
+                </div>
+                <div>
+                  {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}
+                  <!--                {{ getCurrentOrderCompletedAt('1401/09/25') }}-->
+                </div>
               </div>
             </div>
-          </div>
-          <order-details-card v-if="windowSize.x < 600"
-                              v-model:toggleValue="detailsCardToggle[inputData.props.row.id]"
-                              :order="currentOrder"
-          />
-        </q-card>
-      </template>
-    </entity-index>
-    <order-details-dialog v-if="windowSize.x >= 600"
-                          v-model:dialogValue="detailsDialog"
-                          :order="currentOrder"
-    />
-  </div>
+            <order-details-card v-if="windowSize.x < 600"
+                                v-model:toggleValue="detailsCardToggle[inputData.props.row.id]"
+                                :order="currentOrder"
+            />
+          </q-card>
+        </template>
+      </entity-index>
+      <order-details-dialog v-if="windowSize.x >= 600"
+                            v-model:dialogValue="detailsDialog"
+                            :order="currentOrder"
+      />
+    </div>
+  </template>
+
 </template>
 
 <script>
@@ -190,6 +200,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       isFirstReq: true,
       filterExpanded: false,
       inputs: [
@@ -346,6 +357,7 @@ export default {
     },
     async getPaymentStatus() {
       const response = await this.$axios.get(API_ADDRESS.user.orders.status)
+      this.loading = false
       this.getInput('filterInputs', 'paymentStatuses').options = response.data.data
     },
     filterTable() {
@@ -423,8 +435,16 @@ export default {
     line-height: 25px;
     letter-spacing: -0.03em;
     color: #434765;
-    margin-bottom: 15px;
+    margin-bottom: 30px;
     position: relative;
+    @media screen and (max-width: 1439px){
+      margin-bottom: 24px;
+    }
+
+    @media screen and (max-width: 599px){
+      margin-bottom: 24px;
+    }
+
     &:deep(.filter-option){
       .outsideLabel{
         padding-bottom: 8px;
@@ -521,6 +541,24 @@ export default {
     color: #434765;
     padding-bottom: 24px;
   }
+  :deep(.q-table__bottom){
+    display: none;
+  }
+  .quasar-crud-index-table{
+    :deep(.q-table){
+
+      tr{
+        border: none;
+      }
+      th{
+        border: none;
+      }
+      td{
+        border: none;
+      }
+    }
+
+  }
 
   .payment-okay {
     color: #4CAF50;
@@ -556,6 +594,16 @@ export default {
             font-size: 16px;
             line-height: 25px;
             color: #6D708B;
+            //background: white;
+            padding: 23px;
+          }
+
+          tbody{
+            tr{
+              &:nth-child(2n + 1) {
+                background: #F6F9FF;
+              }
+            }
           }
 
           tr {
@@ -563,10 +611,6 @@ export default {
             font-size: 14px;
             line-height: 22px;
             color: #434765;
-
-            &:nth-child(2n) {
-              background: #F6F9FF;
-            }
 
             :not(:last-child) > td {
               border-bottom-width: 0 !important;
@@ -704,5 +748,10 @@ export default {
       color: #8075DC;
     }
   }
+}
+</style>
+<style>
+.q-table thead, .q-table tr, .q-table th, .q-table td {
+  border-color: transparent;
 }
 </style>
