@@ -92,36 +92,77 @@
           <div class="access title-box">
             <div class="main-title">دسترسی سایت</div>
             <q-btn flat
-                   class="sub-title">
+                   class="sub-title"
+                   :to="{name: 'HomePage'}"
+            >
               صفحه اصلی
             </q-btn>
+            <q-btn v-if="user.id"
+                   flat
+                   class="sub-title"
+                   :to="{name: 'login'}"
+            >
+              ورود / ثبت نام
+            </q-btn>
             <q-btn flat
-                   class="sub-title">ورود / ثبت نام</q-btn>
-            <q-btn flat
-                   class="sub-title">سبد خرید</q-btn>
+                   class="sub-title"
+                   :to="{name: 'cart'}"
+            >
+              سبد خرید
+            </q-btn>
           </div>
           <div class="profile title-box">
             <div class="main-title">پروفایل</div>
             <q-btn flat
-                   class="sub-title">سفارش ها</q-btn>
+                   class="sub-title"
+                   :to="{name: 'User.MyOrders'}"
+            >
+              سفارش ها
+            </q-btn>
             <q-btn flat
-                   class="sub-title">آزمون‌های من</q-btn>
+                   class="sub-title"
+                   :to="{name: 'User.Exam.List'}"
+            >
+              آزمون‌های من
+            </q-btn>
           </div>
           <div class="products title-box">
             <div class="main-title">محصولات</div>
             <q-btn flat
-                   class="sub-title">آزمون‌های سه‌آ</q-btn>
+                   class="sub-title"
+                   :to="{name: 'landing'}"
+            >
+              آزمون‌های سه‌آ
+            </q-btn>
             <q-btn flat
-                   class="sub-title">بانک سوالا</q-btn>
+                   class="sub-title"
+                   :to="{name: 'User.Create.Exam'}"
+            >
+              بانک سوالا
+            </q-btn>
             <q-btn flat
-                   class="sub-title">سبد خرید</q-btn>
+                   class="sub-title"
+                   :to="{name: 'cart'}"
+            >
+              سبد خرید
+            </q-btn>
           </div>
           <div class="others title-box">
             <div class="main-title">سایر</div>
             <q-btn flat
-                   class="sub-title">آلاء</q-btn>
+                   class="sub-title"
+                   :href="'https://alaatv.com'"
+                   :target="'_blank'"
+            >
+              آلاء
+            </q-btn>
             <q-btn flat
-                   class="sub-title">آلاخونه</q-btn>
+                   class="sub-title"
+                   :href="'https://forum.alaatv.com/'"
+                   :target="'_blank'"
+            >
+              آلاخونه
+            </q-btn>
           </div>
         </div>
       </div>
@@ -193,8 +234,18 @@
 </template>
 
 <script>
+import { User } from 'src/models/User'
+
 export default {
   name: 'Footer',
+  computed: {
+    user () {
+      if (this.$store.getters['Auth/user']) {
+        return this.$store.getters['Auth/user']
+      }
+      return new User()
+    }
+  }
   methods: {
     scrollToTop() {
       document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
