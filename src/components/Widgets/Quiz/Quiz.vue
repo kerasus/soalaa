@@ -1,47 +1,4 @@
 <template>
-<<<<<<< Updated upstream
-  <div class="userExamList">
-    <div v-if="allExamsList.list.length > 0 || myExams.list.length > 0"
-         class="fit row wrap justify-center items-start content-start"
-    >
-      <div class="col col-12 examList-container">
-        <div class="slider-row">
-          <future-quizzes-carousel :exams="upcomingExams" />
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <div class="exam-list-title">
-              آزمون ها
-            </div>
-            <q-tabs v-model="tab"
-                    color="light1"
-                    class="exam-tabs"
-                    active-color="secondary"
-                    align="left"
-            >
-              <q-tab name="exam"
-                     label="آزمون ها" />
-              <q-tab name="myExam"
-                     label="آزمون های من" />
-            </q-tabs>
-            <q-tab-panels v-model="tab"
-                          class="quiz-panels"
-                          animated>
-              <q-tab-panel name="exam">
-                <quiz-list :quiz-type="'exam'"
-                           :exams="allExamsList"
-                           @onFilter="filterAllExams"
-                />
-              </q-tab-panel>
-              <q-tab-panel name="myExam">
-                <quiz-list :quiz-type="'myExam'"
-                           :exams="myExams"
-                           personal
-                           @onFilter="filterMyExams"
-                />
-              </q-tab-panel>
-            </q-tab-panels>
-=======
   <div class="quiz-container">
     <div v-if="allExamsList.loading"
          class="loading">
@@ -130,7 +87,6 @@
                 </q-tab-panels>
               </div>
             </div>
->>>>>>> Stashed changes
           </div>
         </div>
         <div v-else
