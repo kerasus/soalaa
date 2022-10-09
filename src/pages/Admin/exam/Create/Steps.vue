@@ -2,7 +2,7 @@
   <div class="steps row">
     <div v-if="!loading"
          class="exam-info step step-1"
-         :class="{ 'current-step' : this.currentStep === 'createPage','passed' : this.currentStep === 'chooseQuestion' || this.currentStep === 'finalApproval' }"
+         :class="{ 'current-step' : this.currentStep === 'createPage','passed' : this.currentStep === 'chooseQuestion' || this.currentStep === 'finalApproval' || isConfirmd }"
          @click="changeCurrentStep('createPage')"
     >
       <q-icon name="isax:edit"
@@ -13,12 +13,12 @@
         اطلاعات آزمون
       </div>
       <div class="line"
-           :class="{ 'border-mobile' : this.currentStep !== 'createPage','passed' : this.currentStep === 'chooseQuestion' || this.currentStep === 'finalApproval' }"
+           :class="{ 'border-mobile' : this.currentStep !== 'createPage','passed' : this.currentStep === 'chooseQuestion' || this.currentStep === 'finalApproval' || isConfirmd }"
       />
     </div>
     <div v-if="!loading"
          class="choose-questions step step-2"
-         :class="{ 'current-step' : this.currentStep === 'chooseQuestion','passed' : this.currentStep === 'finalApproval' }"
+         :class="{ 'current-step' : this.currentStep === 'chooseQuestion','passed' : this.currentStep === 'finalApproval' || isConfirmd }"
          @click="changeCurrentStep('chooseQuestion')"
     >
       <q-icon name="isax:task-square"
@@ -30,12 +30,12 @@
         انتخاب سوال
       </div>
       <div class="line"
-           :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion','passed' : this.currentStep === 'finalApproval' }"
+           :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion','passed' : this.currentStep === 'finalApproval' || isConfirmd }"
       />
     </div>
     <div v-if="!loading"
          class="final-approval step step-3"
-         :class="{ 'current-step' : this.currentStep === 'finalApproval'}"
+         :class="{ 'current-step' : this.currentStep === 'finalApproval','passed' : isConfirmd}"
          @click="changeCurrentStep('finalApproval')"
     >
       <q-icon name="isax:tick-square"
@@ -55,6 +55,10 @@ export default {
   name: 'Steps',
 
   props: {
+    isConfirmd: {
+      type: Boolean,
+      default: false
+    },
     step: {
       type: String,
       default () {
