@@ -1,6 +1,7 @@
 <template>
   <q-dialog
     v-model="modal"
+    :persistent="persistent"
   >
     <q-card class="tree-card">
       <div class="fit row wrap tree-inner-container">
@@ -22,6 +23,7 @@
             <div class="detail-box">
               <div class="detail-box-title">نام درس</div>
               <q-select
+                ref="lessonSelector"
                 v-model="lesson"
                 filled
                 dense
@@ -84,6 +86,7 @@
               class="close-btn"
               label="بستن"
               color="primary"
+              :disable="persistent"
             />
           </div>
         </div>
@@ -99,6 +102,7 @@
 
 import Tree from 'components/Tree/Tree'
 import mixinTree from 'src/mixin/Tree'
+import { TreeNode } from 'src/models/TreeNode'
 
 export default {
   name: 'QuestionTreeModal',
@@ -132,6 +136,18 @@ export default {
       default () {
         return false
       }
+    },
+    initialLesson: {
+      type: [Object, TreeNode],
+      default () {
+        return new TreeNode()
+      }
+    },
+    persistent: {
+      type: Boolean,
+      default () {
+        return false
+      }
     }
   },
   emits: [
@@ -154,6 +170,11 @@ export default {
     }
   },
   created () {},
+  mounted () {
+    if (this.initialLesson.id) {
+      this.lesson = this.initialLesson
+    }
+  },
   updated () {},
   computed: {
     getAllSubjects () {
@@ -192,7 +213,6 @@ export default {
       }
     }
   },
-  mounted () {},
   methods: {
     updateNodes (values) {
       this.nodesUpdatedFromTree = values
@@ -258,7 +278,7 @@ export default {
       this.currentTreeNode = this.chosenSubjects[lessonId].nodes
     },
     updateChosenSubjects () {
-      if (this.lesson.id) {
+      if (this.lesson.id && this.chosenSubjects[this.lesson.id]) {
         this.chosenSubjects[this.lesson.id].nodes = this.currentTreeNode
       }
     },
@@ -290,6 +310,12 @@ export default {
     lesson (newVal) {
       if (newVal && this.singleListChoiceMode) {
         this.deleteAllNodes()
+      }
+    },
+    initialLesson (newVal) {
+      if (newVal.id) {
+        this.lesson = newVal
+        this.lessonSelected(newVal)
       }
     }
   }
@@ -485,10 +511,5 @@ export default {
       }
     }
   }
-}
-.q-menu {
-  // I'm in charge of this one and did this on purpose, if you need to change this please let me know.TU
-  background: #FFFFFF;
-  border-radius: 10px;
 }
 </style>

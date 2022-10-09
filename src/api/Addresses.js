@@ -39,6 +39,7 @@ const API_ADDRESS = {
   },
   option: {
     base: lumenServer + '/option',
+    userIndex: lumenServer + '/option/user?type=question_report_type',
     user(type) { return lumenServer + '/option/user?type=' + type }
   },
   log: {
@@ -188,14 +189,20 @@ const API_ADDRESS = {
     },
     index (filters, page) {
       let newFilter = (filters) ? JSON.parse(JSON.stringify(filters)) : {}
-      function setQueryParams (paramKey) {
+      function setQueryParams (paramKey, singleMode = false) {
         if (!newFilter) {
           newFilter = {}
         }
         newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
-        newFilter[paramKey] = newFilter[paramKey].join('&' + paramKey + '[]=')
-        if (newFilter[paramKey]) {
-          newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
+        if (!singleMode) {
+          newFilter[paramKey] = newFilter[paramKey].join('&' + paramKey + '[]=')
+          if (newFilter[paramKey]) {
+            newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
+          }
+        } else {
+          if (newFilter[paramKey]) {
+            newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
+          }
         }
       }
       setQueryParams('statuses')
@@ -204,6 +211,9 @@ const API_ADDRESS = {
       setQueryParams('reference')
       setQueryParams('tags')
       setQueryParams('level')
+      setQueryParams('statement', true)
+      setQueryParams('sort_by', true)
+      setQueryParams('sort_type', true)
 
       if (typeof page !== 'undefined') {
         page = '&page=' + page

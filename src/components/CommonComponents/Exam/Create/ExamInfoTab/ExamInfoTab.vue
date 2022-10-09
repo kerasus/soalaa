@@ -1,8 +1,32 @@
 <template>
   <div v-if="exam.loading"
        class="exam-info-component loading">
-    <q-skeleton type="QInput"
-                animation="wave" />
+    <div class="row">
+      <div class="col-12 q-pa-sm">
+        <q-skeleton width="50px" />
+        <q-skeleton class="q-mt-sm"
+                    width="150px"
+                    height="40px" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-md-3 q-pa-sm">
+        <q-skeleton type="QInput"
+                    animation="wave" />
+      </div>
+      <div class="col-12 col-md-3 q-pa-sm">
+        <q-skeleton type="QInput"
+                    animation="wave" />
+      </div>
+      <div class="col-12 col-md-3 q-pa-sm">
+        <q-skeleton type="QInput"
+                    animation="wave" />
+      </div>
+      <div class="col-12 col-md-3 q-pa-sm">
+        <q-skeleton type="QInput"
+                    animation="wave" />
+      </div>
+    </div>
   </div>
   <div v-else
        class="exam-info-component">
