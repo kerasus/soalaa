@@ -19,7 +19,7 @@
               width="110px"
             />
             <span class="chip-dynamic-text ellipsis">
-              {{ question.id }}
+              {{ question.code }}
             </span>
           </q-chip>
         </div>
@@ -661,6 +661,9 @@ export default {
     .question-info {
       display: flex;
       justify-content: space-between;
+      @media screen and (max-width: 599px) {
+        margin-bottom: 12px;
+      }
 
       .question-card-chip-id {
         display: flex;
@@ -737,7 +740,6 @@ export default {
 
       @media only screen and (max-width: 599px) {
         order: 2;
-        padding-top: 13px;
       }
         .source-content,
         .source-skeleton {
@@ -785,7 +787,7 @@ export default {
 
       @media screen and (max-width: 599px) {
         flex-direction: column;
-        margin-top: 13px;
+        margin-top: 0;
       }
 
       .question-tag {
@@ -810,18 +812,22 @@ export default {
           }
         }
         .tag-title{
-
           @media screen and (max-width: 599px){
             order: 2;
+          }
+          div{
+            max-width: 99px;
           }
         }
 
         &:last-child {
           .tag-circle {
             display: none;
+            @media screen and (max-width: 599px) {
+              display: block;
+            }
           }
         }
-
       }
     }
   }
