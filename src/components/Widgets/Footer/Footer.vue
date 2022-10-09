@@ -91,25 +91,37 @@
         <div class="titles">
           <div class="access title-box">
             <div class="main-title">دسترسی سایت</div>
-            <div class="sub-title">صفحه اصلی</div>
-            <div class="sub-title">ورود / ثبت نام</div>
-            <div class="sub-title">سبد خرید</div>
+            <q-btn flat
+                   class="sub-title">
+              صفحه اصلی
+            </q-btn>
+            <q-btn flat
+                   class="sub-title">ورود / ثبت نام</q-btn>
+            <q-btn flat
+                   class="sub-title">سبد خرید</q-btn>
           </div>
           <div class="profile title-box">
             <div class="main-title">پروفایل</div>
-            <div class="sub-title">سفارش ها</div>
-            <div class="sub-title">آزمون‌های من</div>
+            <q-btn flat
+                   class="sub-title">سفارش ها</q-btn>
+            <q-btn flat
+                   class="sub-title">آزمون‌های من</q-btn>
           </div>
           <div class="products title-box">
             <div class="main-title">محصولات</div>
-            <div class="sub-title">آزمون‌های سه‌آ</div>
-            <div class="sub-title">بانک سوالا</div>
-            <div class="sub-title">سبد خرید</div>
+            <q-btn flat
+                   class="sub-title">آزمون‌های سه‌آ</q-btn>
+            <q-btn flat
+                   class="sub-title">بانک سوالا</q-btn>
+            <q-btn flat
+                   class="sub-title">سبد خرید</q-btn>
           </div>
           <div class="others title-box">
             <div class="main-title">سایر</div>
-            <div class="sub-title">آلاء</div>
-            <div class="sub-title">آلاخونه</div>
+            <q-btn flat
+                   class="sub-title">آلاء</q-btn>
+            <q-btn flat
+                   class="sub-title">آلاخونه</q-btn>
           </div>
         </div>
       </div>
@@ -265,8 +277,20 @@ export default {
     .titles {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
-      .sub-title {
+      .main-title {
+        margin-left: 8px;
+      }
+      :deep(.sub-title) {
+        width: 100%;
+        align-items: flex-start;
         color: #434765;
+        font-size: 14px;
+        line-height: 22px;
+        min-height: unset;
+        .q-btn__content {
+          margin-top: 0;
+          margin-bottom: 0;
+        }
       }
       @media screen and (max-width: 599px) {
         grid-template-columns: 1fr 1fr;
