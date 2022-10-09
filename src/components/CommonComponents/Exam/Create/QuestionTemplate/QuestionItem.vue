@@ -191,7 +191,9 @@
         header-class="hideExpansionHeader"
       >
         <div class="description-answer-body">
-          <div class="description-answer">
+          <div class="description-answer"
+               :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
+          >
             <div
               v-if="this.question.choices.getSelected()"
               class="question-answer-choice"
@@ -208,8 +210,11 @@
             </div>
           </div>
 
-          <div class="description-answer-video">
-            <div class="answer-video flex items-center justify-center">
+          <div class="description-answer-video"
+          >
+            <div class="answer-video flex items-center justify-center"
+                 :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
+            >
               <div class="soon flex items-center justify-center">
                 به زودی
               </div>
@@ -599,7 +604,7 @@ export default {
       if (this.finalApprovalMode) {
         finalConf = {
           ...this.listOptions,
-          reportProblem: false,
+          reportProblem: true,
           editQuestion: false,
           menu: {
             show: false,
@@ -976,7 +981,7 @@ export default {
         .answer-video {
           width: 316px;
           height: 176px;
-          background: #F6F9FF;
+          background: #f6f9ff;
           border-radius: 16px;
           margin-bottom: 10px;
           .soon{
