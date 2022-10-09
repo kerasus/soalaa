@@ -442,7 +442,7 @@ export default {
       this.updateExam()
         .then(() => {
           this.showMessagesInNotify(['آزمون شما با موفقیت ساخته شد.'], 'positive')
-          this.$router.push({ name: 'User.Exam.List' })
+          // this.$router.push({ name: 'User.Exam.List' })
           this.draftExam.loading = false
           this.draftExamIsConfirmed = true
         })
