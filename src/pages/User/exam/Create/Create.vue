@@ -147,10 +147,18 @@ export default {
   },
   computed: {
     draftMajor() {
-      return this.majorList.find(x => x.id === this.draftExam.temp.major).value
+      const major = this.majorList.find(x => x.id === this.draftExam.temp.major)
+      if (!major) {
+        return ''
+      }
+      return major.value
     },
     draftGrade() {
-      return this.gradesList.find(x => x.id === this.draftExam.temp.grade).title
+      const grade = this.gradesList.find(x => x.id === this.draftExam.temp.grade)
+      if (!grade) {
+        return ''
+      }
+      return grade.title
     }
   },
   methods: {
