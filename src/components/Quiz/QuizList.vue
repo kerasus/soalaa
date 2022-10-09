@@ -515,6 +515,15 @@ export default defineComponent({
         width: 330px;
         height: 40px;
         border-radius: 8px;
+        color: transparent;
+
+        &::before{
+          border: none;
+        }
+      }
+
+      &:deep(.q-field__native) {
+        padding-right: 5px;
       }
 
       &:deep(.q-field__append) {
