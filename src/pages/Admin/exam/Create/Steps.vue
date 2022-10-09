@@ -64,6 +64,10 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -105,6 +109,9 @@ export default {
   emits: ['update:step'],
   methods: {
     changeCurrentStep (step) {
+      if (this.disabled) {
+        return
+      }
       this.$emit('update:step', step)
     }
   }

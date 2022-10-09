@@ -2,6 +2,7 @@
   <div class="exam-create-panel">
     <steps v-model:step="currentTab"
            :loading="draftExam.loading"
+           :disabled="draftExamIsConfirmed"
            @update:step="onChangeTab"
     />
     <q-tab-panels v-if="!draftExamIsConfirmed"
@@ -37,7 +38,26 @@
       </q-tab-panel>
     </q-tab-panels>
     <div v-else>
-      draftExamIsConfirmed
+      <div class="confirmed-draft-exam-page">
+        <div class="icon-section">
+          circle
+        </div>
+        <div class="message">
+          آزمون شما با موفقیت ساخته شد
+        </div>
+        <div class="actions-section">
+          <q-btn flat
+                 class="btn-go-to-exam-list"
+                 :to="{name: 'User.Exam.List'}"
+          >
+            مشاهده آزمون در پنل کاربری
+          </q-btn>
+          <q-btn flat
+                 class="btn-go-to-print-exam">
+            دانلود فایل آزمون
+          </q-btn>
+        </div>
+      </div>
     </div>
     <q-dialog v-model="createDraftExamMessageDialog">
       <q-card
@@ -458,6 +478,7 @@ export default {
         .then(() => {
           this.showMessagesInNotify(['آزمون شما با موفقیت ساخته شد.'], 'positive')
           // this.$router.push({ name: 'User.Exam.List' })
+          this.currentTab = 'confirmedPage'
           this.draftExam.loading = false
           this.draftExamIsConfirmed = true
         })
@@ -554,6 +575,35 @@ export default {
 
       .cancel {
         background-color: #F4F5F6;
+      }
+    }
+  }
+  .confirmed-draft-exam-page {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    .icon-section {
+      width: 100px;
+      height: 100px;
+      border: solid 1px red;
+    }
+    .message {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .actions-section {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      justify-content: center;
+      .q-btn {
+        color: pink;
+        font-size: 1rem;
+        font-weight: normal;
+        margin-top: 5px;
       }
     }
   }
