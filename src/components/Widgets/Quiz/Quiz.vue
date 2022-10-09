@@ -1,77 +1,111 @@
 <template>
-  <div
-    class="userExamList"
-    style="font-size: 16px;"
-  >
-    <!--    TODO: add confirm-dialog-->
-    <!--    <vue-confirm-dialog />-->
-    <div v-if="allExamsList.list.length > 0 || myExams.list.length > 0"
-         class="fit row wrap justify-center items-start content-start"
-    >
-      <div class="col col-12 examList-container">
-        <!-- TODO:
-          - slider load data
-          - load tab panels data
-          - paginator for tab panels
-        -->
-        <div class="slider-row">
-          <future-quizzes-carousel :exams="upcomingExams" />
+  <div class="quiz-container">
+    <div v-if="allExamsList.loading"
+         class="loading">
+      <div class="row">
+        <div class="col-12 col-md-4">
+          <q-skeleton width="200px"
+                      height="100px" />
         </div>
-        <div class="row">
-          <div class="col-12">
-            <div class="exam-list-title">
-              آزمون ها
-            </div>
-            <q-tabs
-              v-model="tab"
-              color="light1"
-              class="exam-tabs"
-              active-color="secondary"
-              align="left"
-            >
-              <q-tab name="exam"
-                     label="آزمون ها" />
-              <q-tab name="myExam"
-                     label="آزمون های من" />
-            </q-tabs>
-            <q-tab-panels v-model="tab"
-                          class="quiz-panels"
-                          animated>
-              <q-tab-panel name="exam">
-                <quiz-list
-                  :quiz-type="'exam'"
-                  :exams="allExamsList"
-                  @onFilter="filterAllExams"
-                />
-              </q-tab-panel>
-              <q-tab-panel name="myExam">
-                <quiz-list
-                  :quiz-type="'myExam'"
-                  :exams="myExams"
-                  personal
-                  @onFilter="filterMyExams"
-                />
-              </q-tab-panel>
-            </q-tab-panels>
-          </div>
+        <div class="col-12 col-md-4">
+          <q-skeleton width="200px"
+                      height="100px" />
+        </div>
+        <div class="col-12 col-md-4">
+          <q-skeleton width="200px"
+                      height="100px" />
+        </div>
+      </div>
+      <div class="row q-mt-xl">
+        <div class="col-12 q-mt-md">
+          <q-skeleton type="rect" />
+        </div>
+        <div class="col-12 q-mt-md">
+          <q-skeleton type="rect" />
+        </div>
+        <div class="col-12 q-mt-md">
+          <q-skeleton type="rect" />
+        </div>
+        <div class="col-12 q-mt-md">
+          <q-skeleton type="rect" />
         </div>
       </div>
     </div>
     <div v-else
-         class="row">
-      <div class="col-12 flex column flex-center">
-        <img class="no-item"
-             src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_azmuns.png"
-             alt="no-item">
-        <div class="no-item-title">
-          شما آزمون ساخته شده ای ندارید
+         class="quiz-page-wrapper">
+      <div
+        class="userExamList"
+        style="font-size: 16px;"
+      >
+        <div v-if="allExamsList.list.length > 0 || myExams.list.length > 0"
+             class="fit row wrap justify-center items-start content-start"
+        >
+          <div class="col col-12 examList-container">
+            <!-- TODO:
+          - slider load data
+          - load tab panels data
+          - paginator for tab panels
+        -->
+            <div class="slider-row">
+              <future-quizzes-carousel :exams="upcomingExams" />
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div class="exam-list-title">
+                  آزمون ها
+                </div>
+                <q-tabs
+                  v-model="tab"
+                  color="light1"
+                  class="exam-tabs"
+                  active-color="secondary"
+                  align="left"
+                >
+                  <q-tab name="exam"
+                         label="آزمون ها" />
+                  <q-tab name="myExam"
+                         label="آزمون های من" />
+                </q-tabs>
+                <q-tab-panels v-model="tab"
+                              class="quiz-panels"
+                              animated>
+                  <q-tab-panel name="exam">
+                    <quiz-list
+                      :quiz-type="'exam'"
+                      :exams="allExamsList"
+                      @onFilter="filterAllExams"
+                    />
+                  </q-tab-panel>
+                  <q-tab-panel name="myExam">
+                    <quiz-list
+                      :quiz-type="'myExam'"
+                      :exams="myExams"
+                      personal
+                      @onFilter="filterMyExams"
+                    />
+                  </q-tab-panel>
+                </q-tab-panels>
+              </div>
+            </div>
+          </div>
         </div>
-        <a class="new-link">
-          ثبت نام در آزمون
-        </a>
-        <a class="new-link">
-          ساخت آزمون جدید
-        </a>
+        <div v-else
+             class="row">
+          <div class="col-12 flex column flex-center">
+            <img class="no-item"
+                 src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_azmuns.png"
+                 alt="no-item">
+            <div class="no-item-title">
+              شما آزمون ساخته شده ای ندارید
+            </div>
+            <a class="new-link">
+              ثبت نام در آزمون
+            </a>
+            <a class="new-link">
+              ساخت آزمون جدید
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -181,6 +215,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.userExamList {
+  font-size: 16px;
+}
+
 .exam-tabs {
   color: #8A8CA6;
 
@@ -210,6 +248,7 @@ export default defineComponent({
 
   }
 }
+
 .exam-list-title {
   margin: 20px 0 20px;
   font-style: normal;
@@ -219,52 +258,55 @@ export default defineComponent({
   text-align: left;
   color: #434765;
 }
-.q-tab-panels {
-    background: transparent;
-    border-top: 2px solid #E4E8EF;
 
-    .q-tab-panel {
-      padding: 2px 0;
-    }
+.q-tab-panels {
+  background: transparent;
+  border-top: 2px solid #E4E8EF;
+
+  .q-tab-panel {
+    padding: 2px 0;
+  }
 }
 
 .no-item {
-    width: 290px;
-    height: 290px;
-    margin: 160px 0 30px 0;
+  width: 290px;
+  height: 290px;
+  margin: 160px 0 30px 0;
 
-    @media only screen and (max-width: 390px){
-      width: 230px;
-      height: 230px;
-      margin: 100px 0 30px 0;
+  @media only screen and (max-width: 390px) {
+    width: 230px;
+    height: 230px;
+    margin: 100px 0 30px 0;
 
-    }
   }
-  .no-item-title {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 22px;
-    line-height: 34px;
-    text-align: center;
-    color: #6D708B;
+}
 
-    @media only screen and (max-width: 600px){
-      font-size: 20px;
-      line-height: 31px;
-    }
-    @media only screen and (max-width: 390px){
-      font-size: 18px;
-      line-height: 28px;
-    }
+.no-item-title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 34px;
+  text-align: center;
+  color: #6D708B;
+
+  @media only screen and (max-width: 600px) {
+    font-size: 20px;
+    line-height: 31px;
   }
-  .new-link {
-    font-style: normal;
-    font-weight: 600;
+  @media only screen and (max-width: 390px) {
     font-size: 18px;
     line-height: 28px;
-    text-align: center;
-    color: #8075DC;
-    text-transform: none;
-    margin-top: 12px;
   }
+}
+
+.new-link {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  text-align: center;
+  color: #8075DC;
+  text-transform: none;
+  margin-top: 12px;
+}
 </style>

@@ -43,10 +43,15 @@
             />
           </div>
           <div class="logo-pic">
-            <q-img
-              class="logo-pic-img"
-              src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
-            />
+            <q-btn flat
+                   :to="{name: 'HomePage'}"
+                   class="homepage"
+            >
+              <q-img
+                class="logo-pic-img"
+                src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
+              />
+            </q-btn>
           </div>
         </div>
         <!--        -----------------------------------------------------Tabs Section--------------------------------------------   -->
@@ -70,22 +75,24 @@
         <!--        -----------------------------------------------------Actions Section--------------------------------------------   -->
         <div class="user-action">
           <div>
-            <q-btn
-              icon="isax:notification"
-              unelevated
-              rounded
-              size="12px"
-              class="action-btn"
-            />
+            <!--            <q-btn-->
+            <!--              icon="isax:notification"-->
+            <!--              unelevated-->
+            <!--              rounded-->
+            <!--              size="12px"-->
+            <!--              class="action-btn"-->
+            <!--            />-->
             <q-btn
               icon="isax:shopping-bag"
               unelevated
               rounded
               size="12px"
               class="action-btn"
+              :to="{name: 'cart'}"
             />
           </div>
           <q-btn
+            v-if="isUserLogin"
             flat
             class="btn-user-profile"
           >
@@ -96,6 +103,24 @@
               height="48px"
             />
           </q-btn>
+          <div
+            v-else
+            class="sub-mit-box"
+          >
+            <q-btn
+              unelevated
+              class="btn-style"
+              label="ورود"
+              :to="{ name: 'login' }"
+            />
+            <q-btn
+              unelevated
+              color="primary"
+              class="btn-style"
+              label="ثبت نام"
+              :to="{ name: 'login' }"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -154,6 +179,9 @@ export default {
       }
       return new User()
     },
+    isUserLogin() {
+      return this.$store.getters['Auth/isUserLogin']
+    },
     isRouteSelected () {
       return (itemName) => {
         return (this.$route.name === itemName)
@@ -172,6 +200,38 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.user-panel-bare-layout {
+  max-width: 1362px;
+  margin: auto;
+  padding-top: 30px;
+  background: #f4f6f9;
+  justify-content: center;
+  @media screen and (max-width: 1439px) {
+    max-width: 100%;
+  }
+  @media screen and (max-width: 1439px) {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  @media screen and (max-width: 1148px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  @media screen and (max-width: 1023px) {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  @media screen and (max-width: 600px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .user-side-bar {
+    @media screen and (max-width: 1023px) {
+      display: none;
+    }
+  }
+}
+
 .user-app-bar-container {
   background-color: #fff;
   height: 72px;
@@ -189,8 +249,8 @@ export default {
     height: 72px;
     @media screen and (max-width: 1919px) {
       width: 100%;
-      padding-left: 40px;
-      padding-right: 40px;
+      //padding-left: 40px;
+      //padding-right: 40px;
     }
     @media screen and (max-width: 1439px) {
       padding-left: 35px;
@@ -230,12 +290,17 @@ export default {
           @media screen and (max-width: 1023px) {
             height: 64px;
           }
-          .logo-pic-img {
-            height: 72px;
-            width: 72px;
-            @media screen and (max-width: 1023px) {
-              height: 48px;
-              width: 48px;
+          :deep(.homepage.q-btn) {
+            .q-btn__content {
+              margin: 0;
+            }
+            .logo-pic-img {
+              height: 72px;
+              width: 72px;
+              @media screen and (max-width: 1023px) {
+                height: 48px;
+                width: 48px;
+              }
             }
           }
           //img {
@@ -275,6 +340,12 @@ export default {
         color: #9690E4;
       }
       .user-action {
+        .sign-up-btn {
+          :deep(.q-btn .q-btn__content) {
+            margin-left: 10px;
+            margin-right: 10px;
+          }
+        }
         @media screen and (max-width: 1023px) {
           justify-self: end;
           height: 64px;
@@ -286,6 +357,7 @@ export default {
         //justify-content: flex-end;
         align-items: center;
         height: 72px;
+        justify-self: end;
         .btn-user-profile {
           margin-left: 18px;
           width: 48px;
@@ -314,7 +386,24 @@ export default {
       }
     }
   }
+  .sub-mit-box{
+    background: #FFFFFF;
+    border-radius: 16px;
+    display: flex;
+    margin-bottom: 0px;
+    padding: 0px;
+
+    .btn-style{
+      width: 96px;
+      color: #6D708B;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 22px;
+      align-items: center;
+      text-align: center;
+      letter-spacing: -0.03em;
+    }
+  }
 }
-</style>
-<style scoped>
 </style>

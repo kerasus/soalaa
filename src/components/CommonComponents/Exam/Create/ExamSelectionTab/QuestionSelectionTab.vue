@@ -53,6 +53,46 @@
             @selectAllQuestions="selectAllQuestions"
           />
         </div>
+        <div class="col-12 filter-card-container">
+          <q-card
+            class="filter-card"
+            flat
+          >
+            <q-card-section class="search-section">
+              <q-input
+                v-model="searchInput"
+                filled
+                class="backGround-gray-input search-input"
+                placeholder="جستجو در سوالات..."
+              >
+                <template v-slot:append>
+                  <q-btn
+                    flat
+                    rounded
+                    icon="isax:search-normal"
+                    class="search"
+                    @click="filterByStatement"
+                  />
+                </template>
+              </q-input>
+            </q-card-section>
+
+            <q-card-section class="filter-section">
+              <q-select
+                v-model="searchSelector"
+                filled
+                dropdown-icon="isax:arrow-down-1"
+                option-value="value"
+                option-label="title"
+                :options="searchInputOptions"
+                class="backGround-gray-input filter-input"
+                @update:model-value="sortByCreatedAt"
+              >
+              </q-select>
+            </q-card-section>
+          </q-card>
+        </div>
+
         <!--        selectAllQuestions-->
         <div class="question-bank-content">
           <question-item
@@ -88,7 +128,9 @@
     v-model:dialogValue="treeModalValue"
     v-model:subjectsField="allSubjects"
     :lessons-list="treeModalLessonsList"
+    :persistent="!doesExamHaveLesson"
     single-list-choice-mode
+    :initial-lesson="initialLesson"
     @lessonSelected="onLessonChanged"
   />
 </template>
@@ -117,7 +159,7 @@ export default {
     'nextTab',
     'addQuestionToExam',
     'deleteQuestionFromExam',
-    'update:lesson',
+    'lessonChanged',
     'update:exam'
   ],
   props: {
@@ -141,6 +183,22 @@ export default {
 
   data () {
     return {
+      searchInput: '',
+      searchSelector: {
+        title: 'جدید ترین',
+        value: 'ASC'
+      },
+      searchInputOptions: [
+        {
+          title: 'جدید ترین',
+          value: 'ASC'
+        },
+        {
+          title: 'قدیمی ترین',
+          value: 'DESC'
+        }
+      ],
+      initialLesson: new TreeNode(),
       treeModalValue: false,
       allSubjects: {},
       treeModalLessonsList: [],
@@ -159,15 +217,15 @@ export default {
         year_type: [],
         levels: [
           {
-            value: '1',
+            value: 1,
             label: 'آسان'
           },
           {
-            value: '2',
+            value: 2,
             label: 'متوسط'
           },
           {
-            value: '3',
+            value: 3,
             label: 'سخت'
           }
         ]
@@ -252,6 +310,9 @@ export default {
       return (id) => {
         return !!(this.providedExam.questions.list.find(question => question.id === id))
       }
+    },
+    doesExamHaveLesson () {
+      return !!this.providedExam.temp.lesson
     }
   },
   methods: {
@@ -275,9 +336,19 @@ export default {
     },
     setupTreeModal() {
       this.toggleTreeModal()
+      this.showLoading()
       this.getLessonsList(new TreeNode({
         id: this.providedExam.temp.grade
       }))
+        .then(response => {
+          this.hideLoading()
+          this.treeModalLessonsList = response.data.data.children
+          this.setInitialLesson(this.providedExam.temp.lesson)
+        })
+    },
+    setInitialLesson(lesson) {
+      this.initialLesson = this.treeModalLessonsList.find(item => item.id === lesson)
+      // this.treeModalLessonsList
     },
     toggleTreeModal() {
       this.treeModalValue = !this.treeModalValue
@@ -298,6 +369,12 @@ export default {
       this.$emit('onFilter', filterData)
       this.filterData = this.getFiltersForRequest(filterData)
       this.getQuestionData(1, this.filterData)
+    },
+    filterByStatement() {
+      this.$refs.filter.changeFilterData('statement', [this.searchInput])
+    },
+    sortByCreatedAt() {
+      this.$refs.filter.changeFilterData('sort_type', [this.searchSelector.value])
     },
     RemoveChoice (title) {
       const target = this.selectedQuestions.filter(question => question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
@@ -368,10 +445,13 @@ export default {
     getFiltersForRequest (filterData) {
       return {
         tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
-        level: (filterData.level) ? filterData.level.map(item => item.id) : [],
+        level: (filterData.level) ? filterData.level.map(item => item.value) : [],
         years: (filterData.years) ? filterData.years.map(item => item.id) : [],
         majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
-        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : []
+        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
+        statement: (filterData.statement) ? filterData.statement[0] : '',
+        sort_by: (this.searchSelector.value) ? 'created_at' : '',
+        sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value
       }
     },
     getQuestionData (page, filters) {
@@ -389,15 +469,15 @@ export default {
           this.questions.loading = false
           this.hideLoading()
         })
-        .catch(function (error) {
-          console.error(error)
+        .catch((err) => {
+          console.error(err)
           this.loadingQuestion.loading = false
           this.questions.loading = false
           this.hideLoading()
         })
     },
     getFilterOptions () {
-      this.$axios.get(API_ADDRESS.option.base)
+      this.$axios.get(API_ADDRESS.option.userIndex)
         .then((response) => {
           response.data.data.forEach(option => {
             if (option.type === 'reference_type') {
@@ -442,16 +522,27 @@ export default {
       })
     },
     onLessonChanged (item) {
-      this.$emit('update:lesson', item.id)
+      if (this.isSelectedLessonNew(item)) {
+        this.providedExam.temp.lesson = item.id
+        this.$emit('lessonChanged', item.id)
+        if (this.providedExam.questions.list.length > 0) {
+          this.detachAllQuestionsFromExam()
+        }
+      }
       this.setFilterTreeLesson(item)
+    },
+    isSelectedLessonNew(lesson) {
+      // this.providedExam.questions.list
+      return this.providedExam.temp.lesson !== lesson.id
+    },
+    detachAllQuestionsFromExam() {
+      this.$emit('deleteQuestionFromExam', this.providedExam.questions.list)
     },
     setFilterTreeLesson(item) {
       this.rootNodeIdInFilter = item.id
     },
     getLessonsList (item) {
-      this.getNode(item.id).then(response => {
-        this.treeModalLessonsList = response.data.data.children
-      })
+      return this.getNode(item.id)
     },
     updateLessonsTitles () {
       const fieldText = []
@@ -493,7 +584,80 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.filter-card-container {
+  padding-bottom: 24px;
+  @media only screen and (max-width: 1439px) {
+    padding-bottom: 20px;
+  }
+  @media only screen and (max-width: 1023px) {
+    padding-bottom: 16px;
+  }
+  .filter-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: #f4f6f9;
+    @media only screen and (max-width: 599px) {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    &:deep(.q-card__section) {
+      padding: 0;
+      .q-field--filled .q-field__inner .q-field__control {
+        background: #FFFFFF;
+      }
+      .q-field--filled .q-field__inner .q-field__control .q-field__append, .q-field--filled .q-field__inner .q-field__control .q-field__prepend {
+        padding-right: 16px;
+        padding-left: 12px;
+      }
+      @media only screen and (max-width: 599px) {
+        width: 100%;
+      }
+    }
+    .search-section {
+      .search-input {
+        width: 300px;
+        @media only screen and (max-width: 1023px) {
+          width: 352px;
+        }
+        @media only screen and (max-width: 599px) {
+          width: 100%;
+        }
+        .search {
+          color: #6D708B;
+          :deep(.q-field__inner .q-field__control .q-field__append .q-icon) {
+            color: #6D708B;
+          }
+        }
+      }
+    }
+    .filter-section {
+      display: flex;
+      flex-direction: row;
+      :deep(.q-field--filled .q-field__inner .q-field__control .q-field__label) {
+        margin-top: -10px;
+      }
+      :deep(.q-field--filled .q-field__inner .q-field__control .q-field__native, .q-field--filled .q-field__inner .q-field__control .q-field__prefix, .q-field--filled .q-field__inner .q-field__control .q-field__suffix, .q-field--filled .q-field__inner .q-field__control .q-field__input) {
+       padding-left: 16px;
+        padding-right: 0;
+        min-height: 40px;
+      }
+      .filter-input {
+        width: 160px;
+        @media only screen and (max-width: 1023px) {
+          width: 164px;
+        }
+        @media only screen and (max-width: 599px) {
+          width: 100%;
+          padding-top: 16px;
+        }
+      }
 
+    }
+  }
+}
 .q-checkbox__bg {
   border: 1px solid #65677F;
   box-sizing: border-box;

@@ -44,18 +44,18 @@ export default {
     return {
       loading: false,
       inputs: [
-        { type: 'input', name: 'first_name', responseKey: 'first_name', label: 'نام', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
-        { type: 'input', name: 'last_name', responseKey: 'last_name', label: 'نام خانوادگی', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
-        { type: 'input', name: 'national_code', responseKey: 'national_code', label: 'کدملی', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
-        { type: 'select', name: 'gender', responseKey: 'gender.title', label: 'جنسیت', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
-        { type: 'input', name: 'mobile', responseKey: 'mobile', label: 'شماره موبایل', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
-        { type: 'input', name: 'email', responseKey: 'email', label: 'ایمیل', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
-        { type: 'input', value: 'دانش آموز', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', label: 'نوع کاربری', placeholder: ' ', disable: true },
-        { type: 'select', name: 'major', label: 'رشته تحصیلی', responseKey: 'major.title', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
-        { type: 'select', name: 'grade', responseKey: 'grade.title', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', label: 'پایه تحصیلی', placeholder: ' ' },
-        { type: 'select', name: 'province', responseKey: 'province.title', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', label: 'استان', placeholder: ' ' },
-        { type: 'select', name: 'city', responseKey: 'city.title', col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', label: 'شهر', placeholder: ' ' },
-        { type: 'input', name: 'school', responseKey: 'school', label: 'مدرسه', options: {}, col: 'col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' }
+        { type: 'input', name: 'first_name', responseKey: 'first_name', label: 'نام', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'input', name: 'last_name', responseKey: 'last_name', label: 'نام خانوادگی', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'input', name: 'national_code', responseKey: 'national_code', label: 'کدملی', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'select', name: 'gender', responseKey: 'gender.title', label: 'جنسیت', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'input', name: 'mobile', responseKey: 'mobile', label: 'شماره موبایل', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'input', name: 'email', responseKey: 'email', label: 'ایمیل', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'input', value: 'دانش آموز', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'نوع کاربری', placeholder: ' ', disable: true },
+        { type: 'select', name: 'major', label: 'رشته تحصیلی', responseKey: 'major.title', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'select', name: 'grade', responseKey: 'grade.title', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'پایه تحصیلی', placeholder: ' ' },
+        { type: 'select', name: 'province', responseKey: 'province.title', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'استان', placeholder: ' ' },
+        { type: 'select', name: 'city', responseKey: 'city.title', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'شهر', placeholder: ' ' },
+        { type: 'input', name: 'school', responseKey: 'school', label: 'مدرسه', options: {}, col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' }
       ],
       find: null,
       genders: null,
@@ -265,18 +265,26 @@ export default {
   }
 
   .profile-card {
+
+    :deep(.outsideLabel) {
+        margin-left: 12px;
+      @media only screen and (max-width: 599px) {
+        margin-left: 0;
+      }
+    }
     background: #FFFFFF;
     box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
     border-radius: 16px;
-    padding: 30px 28px;
-
+    padding: 45px 30px 30px 45px;
+    //padding-left: 45px;
     @media only screen and (max-width: 1439px) {
       padding: 20px 18px;
     }
 
     @media only screen and (max-width: 1023px) {
-      padding: 16px 8px;
+      //padding: 16px 8px;
       border-radius: 12px;
+      padding: 35px 20px 20px 35px;
     }
 
     @media only screen and (max-width: 599px) {
