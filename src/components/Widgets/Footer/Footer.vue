@@ -115,12 +115,37 @@
       </div>
     </div>
     <div class="footer-box-2">
-      <div class="content-layout">
+      <div class="content-layout box-2-details">
         <div class="layer-1">
-          <div></div>
-          <div></div>
+          <div class="description">
+            سوالا اولین فرزند آلاء است. وب سایت سوالا پلتفرم برگزاری آزمون است و تمام امکانات اجرای آزمون از جمله تولید آزمون، برگزاری، صدور کارنامه را در خود جای داده است. آزمون آنلاین آلاء (سه آ) دو سال است که بر روی پلتفرم سوالاء برگزار می شود. همچنین محصول دیگر سوالا، بانک سوال آن است که امکان ساخت آزمون را از بین بیش از ۵۰ هزار تست تالیفی، کنکور، آزمون های تیزهوشان و کتاب های کمک آموزشی را برای دانش آموزان، دبیران و مشاوران فراهم می کند. آزمون های متنوع و خدمات جدید بر روی بانک سوال بزودی به سوالا اضافه خواهند شد.
+          </div>
+          <div class="footer-row">
+            <div class="footer-logo-item item-soala">
+              <router-link :to="{name: 'dashboard'}">
+                <q-img src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"></q-img>
+              </router-link>
+            </div>
+            <div class="footer-logo-item item-alaa">
+              <a href="https://alaatv.com">
+                <q-img src="https://nodes.alaatv.com/upload/landing/logo.png"
+                       alt="آلاء"
+                />
+              </a>
+            </div>
+            <div class="footer-logo-item item-enamad">
+              <a href="https://trustseal.enamad.ir/?id=294345&code=GxeQYgRGNFFOLcO4o81Q"
+                 target="_blank">
+                <q-img src="https://trustseal.enamad.ir/Content/Images/Star/star1.png?v=5.0.0.47"
+                       alt="enamad.ir"
+                       style="cursor:pointer"
+                />
+              </a>
+            </div>
+          </div>
         </div>
         <div class="layer-2">
+          <div></div>
           <div></div>
           <div></div>
         </div>
@@ -142,6 +167,11 @@ export default {
     margin: auto;
     padding-top: 60px;
     padding-bottom: 65px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    letter-spacing: -0.03em;
+    color: #8A8CA6;
     @media screen and (max-width: 1439px) {
       max-width: 100%;
       padding: 36px 32px;
@@ -204,11 +234,6 @@ export default {
     .titles {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
-      font-weight: 400;
-      font-size: 14px;
-      line-height: 22px;
-      letter-spacing: -0.03em;
-      color: #8A8CA6;
       .sub-title {
         color: #434765;
       }
@@ -222,6 +247,117 @@ export default {
           padding-bottom: 30px;
         }
       }
+    }
+  }
+  .box-2-details {
+    .layer-1 {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 42px;
+      @media screen and (max-width: 1023px) {
+        flex-direction: column;
+        padding-bottom: 30px;
+      }
+      @media screen and (max-width: 599px) {
+        padding-bottom: 20px;
+      }
+      .description {
+        width: 540px;
+        text-align: justify;
+        @media screen and (max-width: 1439px) {
+          width: 420px;
+        }
+        @media screen and (max-width: 1023px) {
+          width: auto;
+          padding-bottom: 20px;
+        }
+        //@media screen and (max-width: 599px) {}
+      }
+      .footer-row {
+        display: flex;
+        flex-flow: row;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        @media screen and (max-width: 1023px) {
+          justify-content: space-between;
+          padding-right: 52px;
+          padding-left: 52px;
+        }
+        @media screen and (max-width: 599px) {
+          padding-right: 20px;
+          padding-left: 20px;
+        }
+        .footer-logo-item {
+          width: 180px;
+          height: 180px;
+          background: #FFFFFF;
+          border-radius: 30px;
+          .q-img,
+          svg {
+            max-width: 100%;
+          }
+          @media screen and (max-width: 1439px) {
+            width: 134px;
+            height: 134px;
+            border-radius: 24px;
+
+          }
+          @media screen and (max-width: 1023px) {
+            width: 120px;
+            height: 120px;
+          }
+          @media screen and (max-width: 599px) {
+            width: 86px;
+            height: 86px;
+            border-radius: 20px;
+          }
+          .q-img {
+            width: 120px;
+            height: 120px;
+            @media screen and (max-width: 1439px) {
+              width: 97px;
+              height: 97px;
+            }
+            @media screen and (max-width: 1023px) {
+              width: 74px;
+              height: 74px;
+            }
+            @media screen and (max-width: 599px) {
+              width: 53px;
+              height: 53px;
+            }
+          }
+
+        }
+        .item-soala {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .item-alaa {
+          margin-right: 52px;
+          margin-left: 52px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          @media screen and (max-width: 1439px) {
+            margin-right: 30px;
+            margin-left: 30px;
+          }
+          @media screen and (max-width:1023px) {
+            margin-right: 0px;
+            margin-left: 00px;
+          }
+        }
+        .item-enamad {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+
     }
   }
 }
