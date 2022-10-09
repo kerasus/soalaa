@@ -16,7 +16,8 @@
              @click="nextSlide()" />
     </div>
   </div>
-  <carousel ref="carousel"
+  <carousel v-if="exams.list.length > 0"
+            ref="carousel"
             dir="rtl"
             :items-to-show="$q.screen.lt.sm ? 1.4 : $q.screen.lt.md ? 2 : $q.screen.lt.lg ? 2.3 : 3"
             style="width:100%;height: 200px; background: transparent;">

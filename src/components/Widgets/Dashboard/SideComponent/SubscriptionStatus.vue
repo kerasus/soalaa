@@ -7,13 +7,13 @@
       <div class="subscription-type-title">نوع اشتراک:</div>
       <div class="subscription-type-value">
         <span class="subscription-type-value-base">
-          معمولی
+          {{subscribe.title}}
         </span>
         <span class="subscription-type-value-description">
-          (سه‌ماهه) -
+          ({{subscribe.length + ' روزه'}}) -
         </span>
         <span class="subscription-type-value-duration">
-          55 روز باقیمانده
+          {{parseInt(subscribe.length) - subscribe.made.length}} روز باقیمانده
         </span>
       </div>
     </div>
@@ -39,10 +39,15 @@
             محدودیت ساخت آزمون
           </div>
           <highcharts class="flex flex-center"
-                      :options="chartOptions" />
+                      :options="chartOptionsExam" />
         </q-tab-panel>
-        <q-tab-panel name="pdf">
-          dsf
+        <q-tab-panel name="pdf"
+                     class="subscription-status-test-tab">
+          <div class="subscription-status-test-tab-title">
+            محدودیت دانلود PDF
+          </div>
+          <highcharts class="flex flex-center"
+                      :options="chartOptionsPdf" />
         </q-tab-panel>
       </q-tab-panels>
     </div>
@@ -54,13 +59,19 @@ import { Chart } from 'highcharts-vue'
 
 export default {
   name: 'SubscriptionStatus',
+  props: {
+    subscribe: {
+      type: Object,
+      default: null
+    }
+  },
   components: {
     highcharts: Chart
   },
   data() {
     return {
       tab: 'tests',
-      chartOptions: {
+      chartOptionsExam: {
         chart: {
           height: '150',
           width: '150',
@@ -85,7 +96,7 @@ export default {
           pie: {
             innerSize: '98%',
             startAngle: 0,
-            endAngle: 270,
+            endAngle: ((this.subscribe.abilities_n.exam - this.subscribe.made.exam) * 360) / this.subscribe.abilities_n.exam,
             borderWidth: 13,
             center: ['50%', '52%'],
             size: '150%',
@@ -104,15 +115,90 @@ export default {
           },
           verticalAlign: 'middle',
           floating: true,
-          text: 'آزمون باقی‌مانده'
+          text: `${((this.subscribe.abilities_n.exam - this.subscribe.made.exam) * 360) / this.subscribe.abilities_n.pdf_questions}<br>آزمون باقی‌مانده`
         },
         series: [{
           id: 'idData',
           data: [
-            { name: '', y: 31, color: '#9690E4' }
+            { name: '', y: (this.subscribe.abilities_n.exam - this.subscribe.made.exam), color: '#9690E4' }
+          ]
+        }]
+      },
+      chartOptionsPdf: {
+        chart: {
+          height: '150',
+          width: '150',
+          type: 'pie',
+          plotShadow: false
+        },
+        credits: {
+          enabled: false
+        },
+        tooltip: {
+          shared: false,
+          useHTML: true,
+          borderWidth: 0,
+          backgroundColor: 'rgba(255,255,255,0)',
+          shadow: false,
+          formatter: function () {
+            const point = this.point
+            return '<span class="myTooltip" style="padding:5px;border-radius:5px;background-color:' + point.color + ';">' + point.y + '&nbsp' + 'PDF' + '</span>'
+          }
+        },
+        plotOptions: {
+          pie: {
+            innerSize: '98%',
+            startAngle: 0,
+            endAngle: ((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions,
+            borderWidth: 13,
+            center: ['50%', '52%'],
+            size: '150%',
+            borderColor: null,
+            backgroundColor: '#F2F500',
+            slicedOffset: 15,
+            dataLabels: {
+              connectorWidth: 0
+            }
+          }
+        },
+        title: {
+          y: 20,
+          style: {
+            useHTML: true
+          },
+          verticalAlign: 'middle',
+          floating: true,
+          text: `PDF ${((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions} باقی‌مانده`
+        },
+        series: [{
+          id: 'idData',
+          data: [
+            { name: '', y: ((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions, color: '#9690E4' }
           ]
         }]
       }
+    }
+  },
+  computed: {
+    thisSubscribe() {
+      return this.subscribe.title
+    }
+  },
+  watch: {
+    subscribe () {
+      this.loadChartData()
+    }
+  },
+  methods: {
+    loadChartData () {
+      // if (!this.subscribe) {
+      //   return
+      // }
+
+      // this.chartOptionsExam.plotOptions.pie.endAngle =
+      // this.chartOptionsExam.series[0].data[0].y =
+      // this.chartOptionsPdf.plotOptions.pie.endAngle =
+      // this.chartOptionsPdf.series[0].data[0].y = (this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions)
     }
   }
 }
@@ -233,7 +319,7 @@ export default {
     height: 443px;
   }
   @media screen and (max-width: 1023px) {
-    height: 312px;
+    height: auto;
   }
 }
 </style>

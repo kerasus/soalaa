@@ -38,7 +38,8 @@ const API_ADDRESS = {
     base: authServer + '/c'
   },
   option: {
-    base: lumenServer + '/option'
+    base: lumenServer + '/option',
+    user(type) { return lumenServer + '/option/user?type=' + type }
   },
   log: {
     base: lumenServer + '/activity-log',
@@ -137,6 +138,10 @@ const API_ADDRESS = {
     },
     registerExam: lumenServer + '/user/registerExam',
     examUser: lumenServer + '/exam-user',
+    participate: {
+      sample: lumenServer + '/exam-user',
+      personal: (examId) => lumenServer + '/exam-user/personal/' + examId
+    },
     examQuestion (quizId) {
       return lumenServer + '/exam-question/attach/show/' + quizId
     },
@@ -152,14 +157,25 @@ const API_ADDRESS = {
       return lumenServer + '/exam-question/booklet-file/' + examId
     },
     user: {
-      create: lumenServer + '/exam/user',
-      update (examId) { return lumenServer + '/exam/user' + examId },
       draft () { return lumenServer + '/exam/user/draft' },
       reportType: lumenServer + '/option/user?type=question_report_type',
       report(questionId) { return lumenServer + '/question/report/store/' + questionId },
       attach: lumenServer + '/exam-question/user/attach/v3',
       detach(questionId) { return lumenServer + '/exam-question/user/detach/' + questionId },
-      attached(examId) { return lumenServer + '/exam-question/user/attach/show/' + examId }
+      updateOrders(examId) {
+        return lumenServer + '/exam-question/user/replace-questions/' + examId
+      },
+      detachBulk(examId) {
+        return lumenServer + '/exam-question/user/detach/bulk/' + examId
+      },
+      draftExam: {
+        create: lumenServer + '/exam/user',
+        update: (examId) => lumenServer + '/exam/user/' + examId,
+        getAttachedQuestions: (examId) => lumenServer + '/exam-question/user/attach/show/' + examId,
+        bulkAttachQuestions: (examId) => lumenServer + '/exam-question/user/attach/bulk/' + examId,
+        bulkDetachQuestions: (examId) => lumenServer + '/exam-question/user/detach/bulk/' + examId,
+        replaceQuestions: (examId) => lumenServer + '/exam-question/user/replace-questions/' + examId
+      }
     }
   },
   question: {

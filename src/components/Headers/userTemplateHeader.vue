@@ -43,10 +43,15 @@
             />
           </div>
           <div class="logo-pic">
-            <q-img
-              class="logo-pic-img"
-              src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
-            />
+            <q-btn flat
+                   :to="{name: 'HomePage'}"
+                   class="homepage"
+            >
+              <q-img
+                class="logo-pic-img"
+                src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
+              />
+            </q-btn>
           </div>
         </div>
         <!--        -----------------------------------------------------Tabs Section--------------------------------------------   -->
@@ -57,10 +62,9 @@
               :key="index"
               v-ripple
               clickable
-              :active="selected === item.selected"
+              :active="isRouteSelected(item.to)"
               active-class="active-item"
               :to="{ name: item.to }"
-              @click="selected = item.selected"
             >
               <q-item-section class="tab-title">
                 {{ item.title }}
@@ -71,19 +75,20 @@
         <!--        -----------------------------------------------------Actions Section--------------------------------------------   -->
         <div class="user-action">
           <div>
-            <q-btn
-              icon="isax:notification"
-              unelevated
-              rounded
-              size="12px"
-              class="action-btn"
-            />
+            <!--            <q-btn-->
+            <!--              icon="isax:notification"-->
+            <!--              unelevated-->
+            <!--              rounded-->
+            <!--              size="12px"-->
+            <!--              class="action-btn"-->
+            <!--            />-->
             <q-btn
               icon="isax:shopping-bag"
               unelevated
               rounded
               size="12px"
               class="action-btn"
+              :to="{name: 'cart'}"
             />
           </div>
           <q-btn
@@ -154,6 +159,11 @@ export default {
         return this.$store.getters['Auth/user']
       }
       return new User()
+    },
+    isRouteSelected () {
+      return (itemName) => {
+        return (this.$route.name === itemName)
+      }
     }
   },
   methods: {
@@ -226,12 +236,17 @@ export default {
           @media screen and (max-width: 1023px) {
             height: 64px;
           }
-          .logo-pic-img {
-            height: 72px;
-            width: 72px;
-            @media screen and (max-width: 1023px) {
-              height: 48px;
-              width: 48px;
+          :deep(.homepage.q-btn) {
+            .q-btn__content {
+              margin: 0;
+            }
+            .logo-pic-img {
+              height: 72px;
+              width: 72px;
+              @media screen and (max-width: 1023px) {
+                height: 48px;
+                width: 48px;
+              }
             }
           }
           //img {

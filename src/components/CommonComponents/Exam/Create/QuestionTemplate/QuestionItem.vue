@@ -1,7 +1,7 @@
 <template>
   <q-card
     class="question-card custom-card"
-    :class="{ 'selected': question.selected && !finalApprovalMode }"
+    :class="{ 'selected': ( selected || question.selected) && !finalApprovalMode }"
   >
     <q-resize-observer @resize="onResize" />
     <q-card-section class="question-card-header row">
@@ -10,7 +10,7 @@
           v-if="listConfig.questionId"
           class="question-card-chip-id"
         >
-          <q-chip>
+          <q-chip class="question-id ">
             سوال
             <q-skeleton
               v-if="question.loading"
@@ -18,7 +18,7 @@
               type="text"
               width="110px"
             />
-            <span class="chip-dynamic-text">
+            <span class="chip-dynamic-text ellipsis">
               {{ question.id }}
             </span>
           </q-chip>
@@ -54,14 +54,14 @@
             class="level-content"
           >
             <div class="level-text">
-              {{ questionLevelClasses[questionLevel].title }}
+              {{ questionLevelClasses[questionLevel]?.title }}
             </div>
 
             <div
               v-for="item in 3"
               :key="item"
               class="level-circles"
-              :class="item === questionLevelClasses[questionLevel].level ? questionLevelClasses[questionLevel].class : ''">
+              :class="item === questionLevelClasses[questionLevel]?.level ? questionLevelClasses[questionLevel].class : ''">
             </div>
           </div>
         </div>
@@ -123,7 +123,7 @@
           >
             <q-avatar
               v-if="question.reference[0].image"
-              :icon="`img: ${question.reference[0].image}`"
+              :icon="`img:${question.reference[0].image}`"
               size="36px"
             >
             </q-avatar>
@@ -134,10 +134,9 @@
           </div>
         </div>
       </div>
-
       <div
-        v-if="listConfig.questionInfo && question.tags.list > 0"
-        class="question-tags col-sm-12 col-xs-6"
+        v-if="listConfig.questionInfo && question.tags.list.length > 0"
+        class="question-tags ellipsis col-sm-12 col-xs-6"
       >
         <div
           v-for="(item, index) in question.tags.list"
@@ -152,11 +151,12 @@
           />
           <div
             v-else
-            class="tag-title"
+            class="tag-box no-wrap flex items-center"
           >
-            {{ item.title }}
+            <div class="tag-title ellipsis">{{ item.title }}</div>
+            <div class="tag-circle" />
           </div>
-          <div class="tag-circle" />
+
         </div>
       </div>
     </q-card-section>
@@ -233,26 +233,25 @@
           v-if="listConfig.selectQuestion"
           unelevated
           class="question-item-button"
-          :class="question.selected ? 'detach-button': 'attach-button'"
-          :icon="question.selected ? 'isax:minus' : 'isax:add'"
+          :class="(selected || question.selected) ? 'detach-button': 'attach-button'"
+          :icon="(selected || question.selected) ? 'isax:minus' : 'isax:add'"
           @click="selectQuestion"
         />
 
         <q-btn
-          v-if="finalApprovalMode"
+          v-if="finalApprovalMode && questionsLength > 1 &&  questionIndex+1 !== 1"
           unelevated
           icon="isax:arrow-up-2"
           color="primary"
-          class="question-item-button"
+          class="order-btn"
           @click="changeOrder('up', question)"
         />
-
         <q-btn
-          v-if="finalApprovalMode"
+          v-if="finalApprovalMode  && questionsLength > 1 && questionIndex+1 < questionsLength "
           unelevated
           icon="isax:arrow-down-1"
           color="primary"
-          class="question-item-button"
+          class="order-btn"
           @click="changeOrder('down', question)"
         />
       </div>
@@ -362,6 +361,18 @@ export default {
     // VideoPlayer
   },
   props: {
+    questionsLength: {
+      type: Number,
+      default: 0
+    },
+    questionIndex: {
+      type: Number,
+      default: 0
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
     question: {
       type: Question,
       default: new Question()
@@ -397,6 +408,10 @@ export default {
     reportOptions: {
       type: Array,
       default: () => {}
+    },
+    selected: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['checkSelect', 'changeOrder'],
@@ -479,6 +494,7 @@ export default {
   },
   mounted () {
     this.setQuestionLevel()
+    // console.log('question :', this.question)
   },
   computed: {
     trueChoice () {
@@ -650,6 +666,12 @@ export default {
       .question-card-chip-id {
         display: flex;
 
+        .chip-dynamic-text{
+          @media screen and (max-width: 600px) {
+            max-width: 60px;
+          }
+        }
+
         &:deep(.q-chip) {
           font-weight: 400;
           font-size: 12px;
@@ -762,8 +784,8 @@ export default {
         margin-top: 20px;
       }
 
-      @media only screen and (max-width: 599px) {
-        order: 1;
+      @media screen and (max-width: 599px) {
+        flex-direction: column;
         margin-top: 13px;
       }
 
@@ -784,6 +806,15 @@ export default {
           height: 6px;
           background: #6D708B;
           opacity: 0.3;
+          @media screen and (max-width: 599px){
+            order: 1;
+          }
+        }
+        .tag-title{
+
+          @media screen and (max-width: 599px){
+            order: 2;
+          }
         }
 
         &:last-child {
@@ -974,7 +1005,16 @@ export default {
 
     .attach-question-buttons {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
+
+      .order-btn{
+        width: 32px;
+        height: 32px;
+        margin-right: 12px;
+        :deep(.q-icon){
+          font-size: 18px;
+        }
+      }
 
       .question-item-button {
         width: 40px;
@@ -986,6 +1026,7 @@ export default {
         &.attach-button {
           background: #9690E4;
           color: #FFFFFF;
+
         }
 
         &.detach-button {

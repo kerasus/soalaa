@@ -190,6 +190,7 @@ export default {
   },
   data() {
     return {
+      isFirstReq: true,
       filterExpanded: false,
       inputs: [
         { type: 'hidden', name: 'paymentStatuses', class: '', responseKey: 'paymentStatuses', col: 'col-12 col-lg-12 col-sm-6' },
@@ -198,7 +199,7 @@ export default {
         { type: 'hidden', name: 'search', responseKey: 'search', col: 'col-12 col-lg-12 col-sm-6' }
       ],
       filterInputs: [
-        { type: 'select', name: 'paymentStatuses', dropdownIcon: 'isax:arrow-down-1', optionValue: 'id', optionLabel: 'name', responseKey: 'paymentStatuses', label: 'وضعیت پرداخت', placeholder: ' ', col: 'filter-option col-sm-6 col-lg-4 col-xs-12' },
+        { type: 'select', name: 'paymentStatuses', dropdownIcon: 'isax:arrow-down-1', optionValue: 'id', optionLabel: 'name', responseKey: 'paymentStatuses', multiple: true, label: 'وضعیت پرداخت', placeholder: ' ', col: 'filter-option col-sm-6 col-lg-4 col-xs-12' },
         { type: 'date', name: 'since', responseKey: 'since', label: 'تاریخ سفارش', placeholder: ' از', calendarIcon: ' ', col: 'col-lg-3 col-sm-6 col-xs-12' },
         { type: 'date', name: 'till', label: ' ', placeholder: 'تا', calendarIcon: ' ', responseKey: 'till', col: 'col-lg-3 col-sm-6 col-xs-12' },
         { type: ActionBtn, name: 'ActionBtn', col: 'col-lg-2 col-sm-6 col-xs-12' }
@@ -307,7 +308,11 @@ export default {
   },
   methods: {
     onPageChange(response) {
+      if (!this.isFirstReq) {
+        return
+      }
       this.hasUserOrdered = response.data.data.length > 0
+      this.isFirstReq = false
     },
     onClickFilterFormBuilder (data) {
       data.event === 'reload' ? this.reloadFilterData() : this.filterFormBuilderData()
