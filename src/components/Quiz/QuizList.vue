@@ -98,9 +98,9 @@
                 class="quiz-list-item">
           <q-item-section>
             <div class="row quiz-list-item-row">
-              <div class="quiz-list-item-name"
+              <div class="quiz-list-item-name ellipses"
                    :class="quizType === 'myExam' ? 'col-xs-12 col-sm-5 col-md-5 col-lg-5 col-xl-5' : 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
-                {{item.title.substring(0,40)}} ...
+                {{item.title}}
               </div>
               <div v-if="quizType === 'myExam'"
                    class="quiz-list-item-schedule"
@@ -117,12 +117,150 @@
               <div class="quiz-list-item-action"
                    :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
               >
-                <q-btn
+                <!-- <q-btn
                   class="quiz-action-btn"
                   :class="item.exam_actions.can_start ? 'enroll' : 'result'"
-                  :label="item.exam_actions.can_start ? 'شرکت در آزمون' : 'مشاهده نتایج'"
-                  @click="onClick"
-                />
+                  :label="item.exam_actions.can_start ? 'ثبت نام در آزمون' : 'مشاهده نتایج'"
+                  @click="item.exam_actions.can_start ? registerExam(item) : goToResult(item)"
+                /> -->
+                <q-btn v-if="item.exam_actions.can_register"
+                       class="quiz-action-btn enroll"
+                       flat
+                       @click="registerExam(item)"
+                >
+                  ثبت نام در آزمون
+                </q-btn>
+                <q-btn v-if="item.exam_actions.can_start"
+                       class="quiz-action-btn enroll"
+                       flat
+                       @click="goToParticipateExamPage(item, personal)"
+                >
+                  شروع آزمون
+                </q-btn>
+                <q-btn v-if="item.exam_actions.can_retake"
+                       class="quiz-action-btn enroll"
+                       flat
+                       @click="showRetakeConfirmation(item)"
+                >
+                  شروع مجدد
+                </q-btn>
+                <q-btn
+                  v-if="item.exam_actions.can_continue"
+                  class="quiz-action-btn continue"
+                  unelevated
+                  @click="continueExam(item)"
+                >
+                  ادامه آزمون
+                </q-btn>
+                <q-btn
+                  v-if="item.exam_actions.can_see_report"
+                  class="quiz-action-btn result"
+                  style="background: #FFB74D"
+                  unelevated
+                  @click="goToResult(item)"
+                >
+                  مشاهده نتایج
+                </q-btn>
+                <q-btn
+                  v-if="item.exam_actions.can_submit_answer"
+                  class="quiz-action-btn document"
+                  unelevated
+                  @click="getConfirmation(item.user_exam_id)"
+                >
+                  <q-icon name="isax:tick-circle"
+                          size="20px"
+                          style="margin-left: 3px;" />
+                  ثبت پاسخنامه ذخیره شده
+                </q-btn>
+                <template v-if="item.booklet_url">
+                  <q-btn class="quiz-action-btn document"
+                         unelevated
+                         label="لیست دفترچه ها">
+                    <q-menu
+                      fit
+                      transition-show="flip-right"
+                      transition-hide="flip-left"
+                    >
+                      <q-list>
+                        <q-item
+                          v-if="item.booklet_url[1]"
+                          clickable
+                          @click="downloadBooklet(item.booklet_url[1].questions_booklet_url)"
+                        >
+                          <q-item-section
+                            :key="'questions_booklet_url-'+1"
+                            class="exam-btn-text">
+                            <span class="exam-list-menu-title">
+                              <q-icon name="isax:book-1"
+                                      size="20px" />
+                              {{ item.booklet_url[1].category_title }}
+                            </span>
+                          </q-item-section>
+                        </q-item>
+                        <q-item
+                          v-if="item.booklet_url[1]"
+                          clickable
+                          @click="downloadBooklet(item.booklet_url[1].descriptive_answers_booklet_url)"
+                        >
+                          <q-item-section
+                            :key="'questions_booklet_url-'+1"
+                            class="exam-btn-text"
+                          >
+                            <span class="exam-list-menu-title">
+                              <q-icon name="isax:note-2"
+                                      size="20px" />
+                              پاسخ {{ item.booklet_url[1].category_title }}
+                            </span>
+                          </q-item-section>
+                        </q-item>
+                        <q-separator />
+                        <q-item
+                          v-if="item.booklet_url[0]"
+                          clickable
+                          @click="downloadBooklet(item.booklet_url[0].questions_booklet_url)"
+                        >
+                          <q-item-section
+                            :key="'questions_booklet_url-'+0"
+                            class="exam-btn-text"
+                          >
+                            <span class="exam-list-menu-title">
+                              <q-icon name="isax:book-1"
+                                      size="20px" />
+                              {{ item.booklet_url[0].category_title }}
+                            </span>
+                          </q-item-section>
+                        </q-item>
+                        <q-item
+                          v-if="item.booklet_url[0]"
+                          clickable
+                          @click="downloadBooklet(item.booklet_url[0].descriptive_answers_booklet_url)"
+                        >
+                          <q-item-section
+                            :key="'questions_booklet_url-'+0"
+                            class="exam-btn-text"
+                          >
+                            <span class="exam-list-menu-title">
+                              <q-icon name="isax:note-2"
+                                      size="20px" />
+                              پاسخ {{ item.booklet_url[0].category_title }}
+                            </span>
+                          </q-item-section>
+                        </q-item>
+                      </q-list>
+                    </q-menu>
+                  </q-btn>
+                </template>
+                <q-btn
+                  v-if="!!item.holding_status"
+                  style="color: #ffc107"
+                  flat
+                  disabled
+                >
+                  <q-icon name="isax:info-circle"
+                          size="20px"
+                          style="margin-left: 3px;" />
+                  {{ item.holding_status }}
+                </q-btn>
                 <q-btn
                   v-if="quizType === 'myExam'"
                   color="dark"
@@ -170,6 +308,10 @@ export default defineComponent({
     quizType: {
       type: String,
       default: () => {}
+    },
+    personal: {
+      type: Boolean,
+      default: false
     },
     exams: {
       type: ExamList,
@@ -237,8 +379,8 @@ export default defineComponent({
       }
       this.$router.push({ name: routeName, params: { user_exam_id: exam.user_exam_id, exam_id: exam.id } })
     },
-    goToParticipateExamPage (exam) {
-      let routeName = 'onlineQuiz.alaaView'
+    goToParticipateExamPage (exam, personal) {
+      let routeName = personal ? 'onlineQuiz.alaaView.personal' : 'onlineQuiz.alaaView'
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
         routeName = 'onlineQuiz.mbtiBartle'
       }
@@ -504,6 +646,7 @@ export default defineComponent({
           .quiz-list-item-row {
             display: flex;
             flex-direction: row;
+            width: 100%;
 
             .quiz-list-item-name {
               display: flex;
@@ -513,7 +656,6 @@ export default defineComponent({
               font-weight: 400;
               font-size: 14px;
               line-height: 22px;
-              text-align: right;
               color: #434765;
             }
             .quiz-list-item-schedule {
@@ -553,6 +695,14 @@ export default defineComponent({
                   background: #9690E4;
                 }
 
+                &.continue {
+                  background: #4CAF50;
+                }
+
+                &.document {
+                  background: #71c5f4;
+                }
+
                 @media only screen and (max-width: 600px){
                   align-items: center;
                   width: 252px;
@@ -574,14 +724,12 @@ export default defineComponent({
               align-items: center;
               flex-direction: column;
               min-width: 100%;
-              width: 312px;
               height: 165px;
             }
           }
 
           @media only screen and (max-width: 390px){
             min-width: 100%;
-            width: 312px;
             height: 165px;
             flex-direction: column;
           }

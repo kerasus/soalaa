@@ -1,29 +1,59 @@
 <template>
   <div class="row main-container">
-    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
+    <div
+      class="col-xs-12"
+      :hidden="$q.screen.gt.sm"
+    >
+      <div class="question-list">
+        <div class="question-bank-toolbar">
+          <questions-general-info
+            :key="questionListKey"
+            :loading="questionLoading"
+            :check-box="checkBox"
+            :selectedQuestions="providedExam.questions.list"
+            @remove="RemoveChoice"
+            @nextTab="goToNextStep"
+            @lastTab="goToLastStep"
+            @deselectAllQuestions="deleteAllQuestions"
+            @selectAllQuestions="selectAllQuestions"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-xs-12 question-bank-filter">
       <question-filter
         ref="filter"
         :filterQuestions="filterQuestions"
+        :root-node-id-to-load="rootNodeIdInFilter"
+        :node-ids-to-tick="selectedNodesIds"
+        :initial-load-mode="false"
         @onFilter="onFilter"
         @delete-filter="deleteFilterItem"
       />
     </div>
 
-    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
+    <div
+      class="col-md-9 col-xs-12"
+    >
       <div class="question-list">
-        <div class="question-bank-toolbar">
+        <div
+          class="question-bank-toolbar"
+          :hidden="$q.screen.lt.md"
+        >
           <questions-general-info
             :key="questionListKey"
+            :loading="questionLoading"
             :check-box="checkBox"
-            :selectedQuestions="selectedQuestions"
+            :selectedQuestions="providedExam.questions.list"
             @remove="RemoveChoice"
             @nextTab="goToNextStep"
             @lastTab="goToLastStep"
-            @deleteAllQuestions="deleteAllQuestions"
+            @deselectAllQuestions="deleteAllQuestions"
             @selectAllQuestions="selectAllQuestions"
           />
         </div>
-
+        <!--        selectAllQuestions-->
         <div class="question-bank-content">
           <question-item
             v-if="questions.loading"
@@ -34,6 +64,7 @@
               v-for="question in questions.list"
               :key="question.id"
               :question="question"
+              :selected="isQuestionSelected(question.id)"
               :report-options="reportTypeList"
               pageStrategy="question-bank"
               @checkSelect="onClickedCheckQuestionBtn"
@@ -50,7 +81,18 @@
         </div>
       </div>
     </div>
+
   </div>
+  <question-tree-modal
+    ref="questionTreeModal"
+    v-model:dialogValue="treeModalValue"
+    v-model:subjectsField="allSubjects"
+    :lessons-list="treeModalLessonsList"
+    :persistent="!doesExamHaveLesson"
+    single-list-choice-mode
+    :initial-lesson="initialLesson"
+    @lessonSelected="onLessonChanged"
+  />
 </template>
 
 <script>
@@ -61,15 +103,57 @@ import { Question, QuestionList } from 'src/models/Question'
 import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionsGeneralInfo from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo'
+import QuestionTreeModal from 'components/Question/QuestionPage/QuestionTreeModal'
+import mixinTree from 'src/mixin/Tree'
+import { TreeNode } from 'src/models/TreeNode'
 
 export default {
   name: 'QuestionSelectionTab',
-  components: { QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
-
-  props: {},
+  components: { QuestionTreeModal, QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
+  mixins: [
+    mixinTree
+  ],
+  emits: [
+    'onFilter',
+    'lastTab',
+    'nextTab',
+    'addQuestionToExam',
+    'deleteQuestionFromExam',
+    'lessonChanged',
+    'update:exam'
+  ],
+  props: {
+    questionLoading: {
+      type: Boolean,
+      default: false
+    },
+    lesson: {
+      type: String,
+      default() {
+        return ''
+      }
+    },
+    exam: {
+      type: Exam,
+      default() {
+        return new Exam()
+      }
+    }
+  },
 
   data () {
     return {
+      initialLesson: new TreeNode(),
+      treeModalValue: false,
+      allSubjects: {},
+      treeModalLessonsList: [],
+      rootNodeIdInFilter: '',
+      groupsList: [],
+      allSubjectsFlat: [],
+      lastSelectedNodes: [],
+      examGradeSetValue: '',
+      selectedNodesIds: [],
+      lessonsTitles: [],
       filterData: null,
       checkBox: false,
       filterQuestions: {
@@ -78,16 +162,16 @@ export default {
         year_type: [],
         levels: [
           {
-            id: '1',
-            value: 'آسان'
+            value: 1,
+            label: 'آسان'
           },
           {
-            id: '2',
-            value: 'متوسط'
+            value: 2,
+            label: 'متوسط'
           },
           {
-            id: '3',
-            value: 'سخت'
+            value: 3,
+            label: 'سخت'
           }
         ]
       },
@@ -110,33 +194,114 @@ export default {
       reportTypeList: []
     }
   },
-  inject: {
-    exam: {
-      from: 'providedExam',
-      default: new Exam()
-    }
-  },
   watch: {
+    'providedExam.loading': {
+      handler (newValue) {
+        if (newValue) {
+          this.showLoading()
+          return
+        }
+        this.hideLoading()
+      }
+    },
     'selectedQuestions.length': {
       handler (newValue, oldValue) {
-        this.exam.questions.list = []
-        this.exam.questions.list = this.selectedQuestions
+        // this.providedExam.questions.list = []
+        // this.providedExam.questions.list = this.selectedQuestions
         this.questionListKey = Date.now()
+      }
+    },
+    allSubjects: {
+      handler () {
+        this.updateLessonsTitles()
+        this.getTheLastSelectedNode()
+      },
+      deep: true
+    },
+    treeModalValue(newVal) {
+      if (!newVal) {
+        this.updateTreeFilter()
       }
     }
   },
   created () {
-    this.getQuestionData()
+    // this.getQuestionData()
     this.getFilterOptions()
     this.getReportOptions()
   },
-  emits: ['onFilter'],
+  mounted() {
+    let rootToLoad = {
+      id: this.providedExam.temp.grade
+    }
+    if (this.providedExam.temp.lesson) {
+      rootToLoad = {
+        id: this.providedExam.temp.lesson
+      }
+    }
+    this.setFilterTreeLesson(rootToLoad)
+    this.setupTreeModal()
+  },
+  computed: {
+    providedExam: {
+      get () {
+        return this.exam
+      },
+      set (value) {
+        this.$emit('update:exam', value)
+      }
+    },
+    // item
+    isQuestionSelected () {
+      return (id) => {
+        return !!(this.providedExam.questions.list.find(question => question.id === id))
+      }
+    },
+    doesExamHaveLesson () {
+      return !!this.providedExam.temp.lesson
+    }
+  },
   methods: {
+    showLoading() {
+      this.$q.loading.show()
+    },
+    hideLoading() {
+      this.$q.loading.hide()
+    },
+    getSelectedOfQuestion(question) {
+      return !!(this.providedExam.questions.list.find(item => item.id === question.id))
+    },
+    setSelectedOfQuestion(value, questionId) {
+      const questionIndex = this.providedExam.questions.list.indexOf(question => question.id === questionId)
+      this.providedExam.questions.list[questionIndex].selected = value
+    },
+    updateTreeFilter () {
+      const tagsToFilter = this.lastSelectedNodes.length > 0 ? this.lastSelectedNodes : [{ id: this.providedExam.temp.lesson }]
+      this.selectedNodesIds = this.lastSelectedNodes.map(node => node.id)
+      this.$refs.filter.changeFilterData('tags', tagsToFilter)
+    },
+    setupTreeModal() {
+      this.toggleTreeModal()
+      this.showLoading()
+      this.getLessonsList(new TreeNode({
+        id: this.providedExam.temp.grade
+      }))
+        .then(response => {
+          this.hideLoading()
+          this.treeModalLessonsList = response.data.data.children
+          this.setInitialLesson(this.providedExam.temp.lesson)
+        })
+    },
+    setInitialLesson(lesson) {
+      this.initialLesson = this.treeModalLessonsList.find(item => item.id === lesson)
+      // this.treeModalLessonsList
+    },
+    toggleTreeModal() {
+      this.treeModalValue = !this.treeModalValue
+    },
     getReportOptions() {
       this.$axios.get(API_ADDRESS.exam.user.reportType)
         .then((response) => {
           this.reportTypeList = response.data.data
-          // console.log(this.reportTypeList)
         })
     },
     goToLastStep () {
@@ -154,7 +319,7 @@ export default {
       const target = this.selectedQuestions.filter(question => question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
       if (target.length) {
         target.forEach(question => {
-          question.selected = !question.selected
+          // question.selected = !question.selected
           this.selectedQuestions.splice(question.index - 1, 1)
           this.deleteQuestionFromExam(question)
           this.questionListKey = Date.now()
@@ -165,31 +330,37 @@ export default {
       question.selected = !question.selected
     },
     questionHandle (question) {
-      if (question.selected) {
+      if (!this.providedExam.questions.list.find(item => item.id === question.id)) {
         this.addQuestionToSelectedList(question)
-        // this.addQuestionToExam(question)
+        this.addQuestionToExam(question)
       } else {
         this.deleteQuestionFromSelectedList(question)
-        // this.deleteQuestionFromExam(question)
+        this.deleteQuestionFromExam(question)
       }
     },
     onClickedCheckQuestionBtn (question) {
-      this.toggleQuestionSelected(question)
+      // this.toggleQuestionSelected(question)
       this.questionHandle(question)
     },
     addQuestionToExam (question) {
-      this.$emit('addQuestionToExam', question)
+      const arrayOfQuestion = []
+      arrayOfQuestion.push(question)
+      this.$emit('addQuestionToExam', arrayOfQuestion)
       this.questionListKey = Date.now()
     },
     deleteQuestionFromExam (question) {
-      this.$emit('deleteQuestionFromExam', question)
+      const arrayOfQuestion = []
+      arrayOfQuestion.push(question)
+      this.$emit('deleteQuestionFromExam', arrayOfQuestion)
       this.questionListKey = Date.now()
     },
     addQuestionToSelectedList (question) {
       this.selectedQuestions.push(question)
       if (this.selectedQuestions.length === this.questions.list.length) {
         this.checkBox = true
-      } else this.checkBox = 'maybe'
+      } else {
+        // this.checkBox = 'maybe'
+      }
       this.questionListKey = Date.now()
     },
     deleteQuestionFromSelectedList (question) {
@@ -213,7 +384,7 @@ export default {
     getFiltersForRequest (filterData) {
       return {
         tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
-        level: (filterData.level) ? filterData.level.map(item => item.id) : [],
+        level: (filterData.level) ? filterData.level.map(item => item.value) : [],
         years: (filterData.years) ? filterData.years.map(item => item.id) : [],
         majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
         reference: (filterData.reference) ? filterData.reference.map(item => item.id) : []
@@ -225,17 +396,20 @@ export default {
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
+      this.showLoading()
       this.$axios.get(API_ADDRESS.question.index(filters, page))
         .then((response) => {
           this.questions = new QuestionList(response.data.data)
           this.paginationMeta = response.data.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
+          this.hideLoading()
         })
         .catch(function (error) {
           console.error(error)
           this.loadingQuestion.loading = false
           this.questions.loading = false
+          this.hideLoading()
         })
     },
     getFilterOptions () {
@@ -256,30 +430,89 @@ export default {
       this.checkBox = !this.checkBox
       if (this.selectedQuestions.length) {
         this.questions.list.forEach(question => {
-          question.selected = false
+          // question.selected = false
           this.selectedQuestions.splice(question)
         })
       }
       if (this.checkBox) {
         this.questions.list.forEach(question => {
-          question.selected = true
+          // question.selected = true
           this.selectedQuestions.push(question)
         })
       } else {
         this.questions.list.forEach(question => {
-          question.selected = false
+          // question.selected = false
           this.selectedQuestions.splice(question)
         })
       }
+      this.$emit('addQuestionToExam', this.selectedQuestions)
     },
     deleteAllQuestions () {
       if (this.checkBox) {
         this.checkBox = false
       }
+      this.$emit('deleteQuestionFromExam', this.selectedQuestions)
       this.questions.list.forEach(question => {
-        question.selected = false
+        // question.selected = false
         this.selectedQuestions.splice(question)
       })
+    },
+    onLessonChanged (item) {
+      if (this.isSelectedLessonNew(item)) {
+        this.providedExam.temp.lesson = item.id
+        this.$emit('lessonChanged', item.id)
+        if (this.providedExam.questions.list.length > 0) {
+          this.detachAllQuestionsFromExam()
+        }
+      }
+      this.setFilterTreeLesson(item)
+    },
+    isSelectedLessonNew(lesson) {
+      // this.providedExam.questions.list
+      return this.providedExam.temp.lesson !== lesson.id
+    },
+    detachAllQuestionsFromExam() {
+      this.$emit('deleteQuestionFromExam', this.providedExam.questions.list)
+    },
+    setFilterTreeLesson(item) {
+      this.rootNodeIdInFilter = item.id
+    },
+    getLessonsList (item) {
+      return this.getNode(item.id)
+    },
+    updateLessonsTitles () {
+      const fieldText = []
+      const flatSelectedNodes = []
+      if (Object.keys(this.allSubjects).length !== 0) {
+        for (const key in this.allSubjects) {
+          if (this.allSubjects[key].nodes && this.allSubjects[key].nodes.length > 0) {
+            this.allSubjects[key].nodes.forEach(val => {
+              fieldText.push(val.title)
+              flatSelectedNodes.push(val)
+            })
+          }
+        }
+      }
+      this.allSubjectsFlat = flatSelectedNodes
+      this.lessonsTitles = fieldText
+    },
+    getTheLastSelectedNode () {
+      const foundedNodes = []
+      let cleaned = []
+      this.allSubjectsFlat.forEach((selectedNode) => {
+        selectedNode.ancestors.forEach((parentNode) => {
+          if (this.allSubjectsFlat.find(item => item.id === parentNode.id)) {
+            foundedNodes.push(parentNode)
+          }
+        })
+      })
+      cleaned = this.getUniqueListBy(foundedNodes, 'id')
+      this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
+        return !(cleaned.find(item => item.id === selectedNode.id))
+      })
+    },
+    getUniqueListBy (arr, key) {
+      return [...new Map(arr.map(item => [item[key], item])).values()]
     }
   }
 }
@@ -305,6 +538,9 @@ export default {
     }
     .question-bank-toolbar {
       padding-bottom: 24px;
+      @media only screen and (max-width: 600px) {
+        padding-bottom: 0;
+      }
     }
 
     .question-bank-content {

@@ -1,59 +1,48 @@
 <template>
   <div class="steps row">
-
-    <div
-      class="exam-info step"
-      :class="{ 'current-step' : this.currentStep === 'createPage' }"
-      @click="changeCurrentStep('createPage')"
+    <div v-if="!loading"
+         class="exam-info step step-1"
+         :class="{ 'current-step' : this.currentStep === 'createPage','passed' : this.currentStep === 'chooseQuestion' }"
+         @click="changeCurrentStep('createPage')"
     >
-      <q-icon
-        name="isax:edit"
-        class="icon"
+      <q-icon name="isax:edit"
+              class="icon"
       />
-      <div
-        class="exam-info-title title "
-        :class="{ 'hidden-mobile' : this.currentStep !== 'createPage' }">
+      <div class="exam-info-title title "
+           :class="{ 'hidden-mobile' : this.currentStep !== 'createPage' }">
         اطلاعات آزمون
       </div>
-      <div
-        class="line"
-        :class="{ 'border-mobile' : this.currentStep !== 'createPage' }"
+      <div class="line"
+           :class="{ 'border-mobile' : this.currentStep !== 'createPage','passed' : this.currentStep === 'chooseQuestion' }"
       />
     </div>
-
-    <div
-      class="choose-questions step"
-      :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }"
-      @click="changeCurrentStep('chooseQuestion')"
+    <div v-if="!loading"
+         class="choose-questions step step-2"
+         :class="{ 'current-step' : this.currentStep === 'chooseQuestion','passed' : this.currentStep === 'finalApproval' }"
+         @click="changeCurrentStep('chooseQuestion')"
     >
-      <q-icon
-        name="isax:task-square"
-        class="icon"
+      <q-icon name="isax:task-square"
+              class="icon"
       />
-      <div
-        class="choose-questions-title title"
-        :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }"
+      <div class="choose-questions-title title"
+           :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }"
       >
         انتخاب سوال
       </div>
-      <div
-        class="line"
-        :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion' }"
+      <div class="line"
+           :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion','passed' : this.currentStep === 'finalApproval' }"
       />
     </div>
-
-    <div
-      class="final-approval step"
-      :class="{ 'current-step' : this.currentStep === 'finalApproval' }"
-      @click="changeCurrentStep('finalApproval')"
+    <div v-if="!loading"
+         class="final-approval step step-3"
+         :class="{ 'current-step' : this.currentStep === 'finalApproval'}"
+         @click="changeCurrentStep('finalApproval')"
     >
-      <q-icon
-        name="isax:tick-square"
-        class="icon"
+      <q-icon name="isax:tick-square"
+              class="icon"
       />
-      <div
-        class="final-approval-title"
-        :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }"
+      <div class="final-approval-title"
+           :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }"
       >
         تایید نهایی
       </div>
@@ -66,11 +55,15 @@ export default {
   name: 'Steps',
 
   props: {
-    currentComponent: {
+    step: {
       type: String,
       default () {
         return ''
       }
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -102,22 +95,17 @@ export default {
   computed: {
     currentStep: {
       get () {
-        return this.currentComponent
+        return this.step
       },
       set (value) {
-        this.$emit('update:currentComponent', value)
+        this.$emit('update:step', value)
       }
     }
   },
-
-  emits: [
-    'update:currentComponent',
-    'currentStepChanged'
-  ],
-
+  emits: ['update:step'],
   methods: {
     changeCurrentStep (step) {
-      this.$emit('currentStepChanged', step)
+      this.$emit('update:step', step)
     }
   }
 }
@@ -148,7 +136,6 @@ export default {
   }
 
   @media screen and (max-width: 599px) {
-      height: 54px;
 
     .hidden-mobile {
       display: none !important;
@@ -159,11 +146,58 @@ export default {
     }
   }
 
+  .step-1{
+    width:45%;
+
+    &.current-step {
+      @media screen and (max-width: 599px) {
+        width:60%;
+      }
+    }
+
+    @media screen and (max-width: 599px) {
+      width:20%;
+    }
+  }
+
+  .step-2{
+    width:45%;
+
+    &.current-step {
+      @media screen and (max-width: 599px) {
+        width:60%;
+      }
+    }
+
+    @media screen and (max-width: 599px) {
+      width:20%;
+    }
+    @media screen and (max-width: 1200px) and (min-width: 600px) {
+      width:35%;
+    }
+  }
+
+  .step-3{
+    width:10%;
+
+    &.current-step {
+      @media screen and (max-width: 599px) {
+        width:60%;
+      }
+    }
+
+    @media screen and (max-width: 599px) {
+      width:20%;
+    }
+    @media screen and (max-width: 1200px) {
+      width:20%;
+    }
+  }
+
   .step {
     cursor: pointer;
     display: flex;
     align-items: center;
-    width: 33%;
 
     &.choose-questions {
       .line {
@@ -193,6 +227,10 @@ export default {
     width: 408px;
     margin-right: 18px;
 
+    &.passed {
+      background: #8075DC;
+    }
+
     @media screen and (max-width: 1439px) {
       width: 237px;
     }
@@ -203,6 +241,9 @@ export default {
   }
   .current-step{
     color: #FFA117;
+  }
+  .passed {
+    color: #8075DC;
   }
 
 }

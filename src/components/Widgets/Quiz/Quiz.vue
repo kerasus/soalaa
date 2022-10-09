@@ -5,7 +5,7 @@
   >
     <!--    TODO: add confirm-dialog-->
     <!--    <vue-confirm-dialog />-->
-    <div v-if="true"
+    <div v-if="allExamsList.list.length > 0 || myExams.list.length > 0"
          class="fit row wrap justify-center items-start content-start"
     >
       <div class="col col-12 examList-container">
@@ -48,6 +48,7 @@
                 <quiz-list
                   :quiz-type="'myExam'"
                   :exams="myExams"
+                  personal
                   @onFilter="filterMyExams"
                 />
               </q-tab-panel>
