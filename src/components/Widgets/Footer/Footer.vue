@@ -145,9 +145,35 @@
           </div>
         </div>
         <div class="layer-2">
-          <div></div>
-          <div></div>
-          <div></div>
+          <div class="text-1">
+            کلیه حقوق این وب سایت به ‌توسعه علمی آموزشی عدالت محور آلاء تعلق دارد و کپی برداری از آن ممنوع می باشد.
+          </div>
+          <q-btn
+            unelevated
+            class="scroll-up"
+            icon="isax:arrow-up-2"
+            @click="scrollToTop"
+          >
+            برو بالا
+          </q-btn>
+          <div class="flex items-center text-replacement">
+            <div class="text">
+              کلیه حقوق این وب سایت به ‌توسعه علمی آموزشی عدالت محور آلاء تعلق دارد و کپی برداری از آن ممنوع می باشد.
+            </div>
+            <a
+              target="_blank"
+              href="https://alaatv.com"
+            >
+              <div class="flex items-center">
+
+                <div>AlaaTV.com</div>
+                <div>{{ ' '}} 2012 </div>
+                <div>©</div>
+              </div>
+
+            </a>
+
+          </div>
         </div>
       </div>
     </div>
@@ -156,7 +182,12 @@
 
 <script>
 export default {
-  name: 'Footer'
+  name: 'Footer',
+  methods: {
+    scrollToTop() {
+      document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
 }
 </script>
 
@@ -356,6 +387,68 @@ export default {
           justify-content: center;
           align-items: center;
         }
+      }
+
+    }
+    .layer-2{
+      display: grid;
+      grid-template-columns: 200px auto;
+      @media screen and (max-width: 1023px){
+        grid-template-columns: 1fr 1fr;
+      }
+      .text-replacement {
+        justify-self: end;
+      }
+      @media screen and (max-width: 599px){
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      .text-1{
+        display: none;
+        @media screen and (max-width: 1023px){
+          display: block;
+          justify-self: center;
+          grid-column-start: 1;
+          grid-column-end: 3;
+          font-size: 12px;
+          line-height: 19px;
+        }
+        @media screen and (max-width: 599px){
+          display: none;
+        }
+      }
+      .scroll-up {
+        @media screen and (max-width: 1023px){
+          justify-self: start;
+        }
+        @media screen and (max-width: 599px){
+          width: 90px;
+        }
+      }
+      .text{
+        margin-right: 57px;
+        @media screen and (max-width: 1023px){
+          display: none;
+        }
+        @media screen and (max-width: 599px){
+          display: block;
+          margin-right: 0;
+        }
+      }
+      color:#8A8CA6;
+      a{
+        text-decoration: none;
+        color:#8A8CA6;
+        @media screen and (max-width: 599px){
+          position: absolute;
+          bottom: 0;
+          right: 0;
+        }
+      }
+      .toUpStyle{
+        bottom: 0;
       }
 
     }
