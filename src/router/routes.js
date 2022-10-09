@@ -654,7 +654,9 @@ const routes = [
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
-          layoutLeftDrawerVisible: false
+          layoutLeftDrawerVisible: false,
+          layoutLeftSideBarType: 'default',
+          layoutLeftDrawerOverlay: true
         }
       },
       {
