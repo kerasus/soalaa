@@ -4,7 +4,8 @@
            :loading="draftExam.loading"
            @update:step="onChangeTab"
     />
-    <q-tab-panels v-model="currentTab"
+    <q-tab-panels v-if="!draftExamIsConfirmed"
+                  v-model="currentTab"
                   animated
     >
       <q-tab-panel name="createPage">
@@ -35,6 +36,9 @@
         />
       </q-tab-panel>
     </q-tab-panels>
+    <div v-else>
+      draftExamIsConfirmed
+    </div>
     <q-dialog v-model="createDraftExamMessageDialog">
       <q-card
         flat
@@ -75,13 +79,11 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn v-close-popup
-                 flat
+          <q-btn flat
                  label="انصراف"
                  color="primary"
                  @click="clearDraftExam" />
-          <q-btn v-close-popup
-                 label="ادامه"
+          <q-btn label="ادامه"
                  color="primary"
                  @click="setDraftExam" />
         </q-card-actions>
@@ -117,6 +119,7 @@ export default {
   ],
   data() {
     return {
+      draftExamIsConfirmed: false,
       draftExam: new Exam(),
       gradesList: [],
       majorList: [],
@@ -154,27 +157,43 @@ export default {
         this.loadMajorList()
       ])
     },
+    getGradesList () {
+      return new Promise((resolve, reject) => {
+        this.getRootNode('test')
+          .then(response => {
+            this.gradesList = response.data.data.children
+            resolve(response)
+          }).catch(() => {
+            reject()
+          })
+      })
+    },
+    loadMajorList () {
+      return new Promise((resolve, reject) => {
+        this.$axios.get(API_ADDRESS.option.user('major_type'))
+          .then((response) => {
+            this.majorList = response.data.data
+            resolve(response)
+          }).catch(() => {
+            reject()
+          })
+      })
+    },
     loadDraftExam (draftExam) {
       this.draftExam = new Exam(draftExam)
       this.loadAttachedQuestions()
     },
     setDraftExam () {
       // load tab page based on draftExam level
+      this.continueWithOldDraftExamConfirmationDialog = false
     },
     clearDraftExam () {
       this.draftExam = new Exam()
+      this.goToFirstStep()
+      this.continueWithOldDraftExamConfirmationDialog = false
     },
     onLessonChanged(lessonId) {
       this.updateExam()
-    },
-    createAndLoadNewDraftExam () {
-      this.createExam(this.draftExam)
-        .then(response => {
-          this.draftExam = new Exam(response.data.data)
-        })
-        .catch(() => {
-
-        })
     },
     getNextTabName () {
       return this.allTabs[this.getCurrentTabIndex() + 1]
@@ -198,7 +217,7 @@ export default {
       this.currentTab = this.getPrevTabName()
     },
     goToLastStep () {
-      this.confirmDraftExam()
+      this.currentTab = this.getlastStepName()
     },
     getStep1Validation () {
       let error = false
@@ -404,45 +423,11 @@ export default {
           this.showMessagesInNotify(['آزمون شما با موفقیت ساخته شد.'], 'positive')
           this.$router.push({ name: 'User.Exam.List' })
           this.draftExam.loading = false
+          this.draftExamIsConfirmed = true
         })
         .catch(() => {
           this.draftExam.loading = false
         })
-    },
-
-    // setFinalStep() {
-    //   // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-    //   this.createExam().then((createExam) => {
-    //     this.exam = new Exam(createExam.data.data)
-    //     // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
-    //     this.createDraftExamMessageDialog = true
-    //   }).catch(err => {
-    //     console.error('err', err)
-    //     // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
-    //   })
-    // },
-
-    getGradesList () {
-      return new Promise((resolve, reject) => {
-        this.getRootNode('test')
-          .then(response => {
-            this.gradesList = response.data.data.children
-            resolve(response)
-          }).catch(() => {
-            reject()
-          })
-      })
-    },
-    loadMajorList () {
-      return new Promise((resolve, reject) => {
-        this.$axios.get(API_ADDRESS.option.user('major_type'))
-          .then((response) => {
-            this.majorList = response.data.data
-            resolve(response)
-          }).catch(() => {
-            reject()
-          })
-      })
     }
   }
 }
