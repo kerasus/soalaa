@@ -652,7 +652,7 @@ export default {
           margin-left: 10px;
           font-style: normal;
           font-weight: 400;
-          font-size: 14px;
+          font-size: 13px;
           line-height: 22px;
           color: #434765;
           letter-spacing: -0.03em;
@@ -1235,7 +1235,7 @@ export default {
           .chosen-questions-number-title {
             font-style: normal;
             font-weight: 400;
-            font-size: 14px;
+            font-size: 13px;
             line-height: 24px;
             color: #FFFFFF;
           }
