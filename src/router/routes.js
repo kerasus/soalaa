@@ -603,8 +603,11 @@ const routes = [
         //     Permissions.hasPermission('examStore')]
         // },
         layoutConfig: {
-          layoutHeaderVisible: false,
-          layoutLeftDrawerVisible: false
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false,
+          layoutLeftSideBarType: 'default',
+          layoutLeftDrawerOverlay: true
         }
       },
       {

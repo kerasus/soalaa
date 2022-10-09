@@ -146,7 +146,7 @@ export default {
         {
           selected: 'questionBank',
           title: 'بانک سوالا',
-          to: ''
+          to: 'User.Create.Exam'
         }
         // {
         //   selected: 'soalaMag',
