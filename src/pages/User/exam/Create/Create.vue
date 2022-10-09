@@ -160,11 +160,11 @@ export default {
         .then(() => {
           this.getDraftExam()
             .then(response => {
-              if (!response.data?.data) {
-                return
-              }
               this.continueWithOldDraftExamConfirmationDialog = true
-              this.loadDraftExam(response.data.data)
+              if (response.data?.data) {
+                this.loadDraftExam(response.data.data)
+              }
+              this.loadDraftExam()
             })
             .catch(() => {
               this.draftExam.loading = false
@@ -204,7 +204,9 @@ export default {
     },
     loadDraftExam (draftExam) {
       this.draftExam = new Exam(draftExam)
-      this.loadAttachedQuestions()
+      if (this.draftExam.id) {
+        this.loadAttachedQuestions()
+      }
     },
     setDraftExam () {
       // load tab page based on draftExam level
