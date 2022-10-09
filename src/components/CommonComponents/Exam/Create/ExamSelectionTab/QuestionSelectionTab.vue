@@ -343,12 +343,23 @@ export default {
         .then(response => {
           this.hideLoading()
           this.treeModalLessonsList = response.data.data.children
-          this.setInitialLesson(this.providedExam.temp.lesson)
+          if (this.treeModalLessonsList.length === 0) {
+            this.$q.notify({
+              message: 'پایه تحصیلی انتخاب شده درس ندارد',
+              type: 'negative'
+            })
+          }
+          if (this.providedExam.temp.lesson) {
+            this.setInitialLesson(this.providedExam.temp.lesson)
+          }
         })
     },
     setInitialLesson(lesson) {
-      this.initialLesson = this.treeModalLessonsList.find(item => item.id === lesson)
-      // this.treeModalLessonsList
+      const foundedLesson = this.treeModalLessonsList.find(item => item.id === lesson)
+      if (!foundedLesson.id) {
+        return
+      }
+      this.initialLesson = foundedLesson
     },
     toggleTreeModal() {
       this.treeModalValue = !this.treeModalValue
