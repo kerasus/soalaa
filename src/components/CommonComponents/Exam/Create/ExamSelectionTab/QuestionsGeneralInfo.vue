@@ -1,5 +1,6 @@
 <template>
-  <q-card class="questions-general-info-ToolBar custom-card">
+  <q-card :hidden="finalApprovalMode"
+          class="questions-general-info-ToolBar custom-card">
     <q-expansion-item
       expand-icon-toggle
       expand-icon="isax:arrow-down-1"
@@ -149,8 +150,10 @@
         </div>
       </div>
 
-      <div class="questions-general-info-sticky">
-        <div class="general-info-buttons">
+      <div class=" questions-general-info-sticky">
+        <div class="general-info-buttons"
+             :class="{'top-space': finalApprovalMode}"
+        >
           <div
             class="general-info-button back-button"
             @click="goToLastStep"
@@ -165,8 +168,7 @@
             class="general-info-button next-button"
             @click="goToNextStep"
           >
-            مرحله بعد
-
+            {{finalApprovalMode ? 'تایید آزمون' : '   مرحله بعد'}}
             <q-icon
               class="next-button-icon"
               name="isax:arrow-left-2"
@@ -174,7 +176,8 @@
           </div>
         </div>
 
-        <div class="chosen-questions-general-info">
+        <div v-if="!finalApprovalMode"
+             class="chosen-questions-general-info">
           <div class="check-all">
             <q-checkbox
               v-model="checkbox"
@@ -200,7 +203,8 @@
     class="dialogueCard"
   >
     <q-card class="dialogueCardContainer">
-      <div class="dialogHeader">
+      <div v-if="!finalApprovalMode"
+           class="dialogHeader">
         <div class="dialogTitle"> سوالات انتخاب شده:</div>
 
         <div class="dialogBtn">
@@ -212,7 +216,8 @@
         </div>
       </div>
 
-      <div class="dialogChip">
+      <div v-if="!finalApprovalMode"
+           class="dialogChip">
         <q-chip
           v-for="item in countOfSelectedSubCategory"
           :key="item"
@@ -223,6 +228,50 @@
         >
           {{ item.title }}: {{ item.selectedQuestionsCount }}
         </q-chip>
+      </div>
+
+      <div v-if="finalApprovalMode">
+
+        <q-skeleton v-if="loading"
+                    width="330px"
+                    height="400px"
+                    class="q-ml-xs" />
+        <div v-else
+             class="exam-info">
+          <div class="header ">
+            <div class="header-title"> مشخصات آزمون </div>
+            <div class="chip ellipsis">
+              <span class="title">آزمون</span>
+              {{examInformation.id}}
+            </div>
+          </div>
+          <div class="info-item  ">
+            <div class="field">نوع آزمون:</div>
+            <div class="value">
+              {{ examInformation.type }}
+            </div>
+          </div>
+          <div class="info-item  ">
+            <div class="field">عنوان آزمون: </div>
+            <div class="value">
+              {{ examInformation.title }}
+            </div>
+          </div>
+          <div class="info-item  ">
+            <div class="field">رشته تحصیلی:</div>
+            <div class="value">
+              {{ examInformation.major}}
+            </div></div>
+          <div class="info-item  ">
+            <div class="field">
+              پایه تحصیلی:
+            </div>
+            <div class="value">
+              {{ examInformation.grade }}
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <div class="dialogChart">
@@ -262,6 +311,22 @@ export default {
   components: { highcharts: Chart },
 
   props: {
+    examInformation: {
+      type: Object,
+      default: () => {
+        return {
+          id: 0,
+          type: '',
+          title: '',
+          major: '',
+          grade: ''
+        }
+      }
+    },
+    finalApprovalMode: {
+      type: Boolean,
+      default: false
+    },
     selectedQuestions: {
       type: [Array, QuestionList],
       default: new QuestionList()
@@ -822,6 +887,52 @@ export default {
     background: #FFFFFF;
     border-radius: 25px;
 
+    .exam-info{
+      padding: 23px 16px;
+      .header{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        .header-title{
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 22px;
+          color: #434765;
+        }
+        .chip{
+          background: #F2F5F9;
+          border-radius: 10px 12px 12px 10px;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          color: #434765;
+          max-width: 95px;
+          padding: 2px 8px;
+          .title{
+            margin-right: 4px;
+          }
+        }
+      }
+      .info-item{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        .field{
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 19px;
+          color: #434765;
+        }
+        .value{
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 19px;
+          color: #6D708B;
+        }
+      }
+
+    }
+
     .dialogHeader {
       display: flex;
       justify-content: space-between;
@@ -1026,6 +1137,9 @@ export default {
       padding: 12px 32px 16px 32px;
 
       .general-info-buttons {
+        &.top-space{
+          margin-top: 35px;
+        }
         display: flex;
         align-items: center;
         justify-content: center;
