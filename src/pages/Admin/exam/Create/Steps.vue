@@ -2,7 +2,7 @@
   <div class="steps row">
     <div v-if="!loading"
          class="exam-info step step-1"
-         :class="{ 'current-step' : this.currentStep === 'createPage','passed' : this.currentStep === 'chooseQuestion' }"
+         :class="{ 'current-step' : this.currentStep === 'createPage','passed' : this.currentStep === 'chooseQuestion' || this.currentStep === 'finalApproval' }"
          @click="changeCurrentStep('createPage')"
     >
       <q-icon name="isax:edit"
@@ -13,7 +13,7 @@
         اطلاعات آزمون
       </div>
       <div class="line"
-           :class="{ 'border-mobile' : this.currentStep !== 'createPage','passed' : this.currentStep === 'chooseQuestion' }"
+           :class="{ 'border-mobile' : this.currentStep !== 'createPage','passed' : this.currentStep === 'chooseQuestion' || this.currentStep === 'finalApproval' }"
       />
     </div>
     <div v-if="!loading"
@@ -156,7 +156,7 @@ export default {
     }
 
     @media screen and (max-width: 599px) {
-      width:20%;
+      width:30%;
     }
   }
 
@@ -170,7 +170,7 @@ export default {
     }
 
     @media screen and (max-width: 599px) {
-      width:20%;
+      width:30%;
     }
     @media screen and (max-width: 1200px) and (min-width: 600px) {
       width:35%;
@@ -181,15 +181,16 @@ export default {
     width:10%;
 
     &.current-step {
+      justify-content: space-around;
       @media screen and (max-width: 599px) {
-        width:60%;
+        width:40%;
       }
     }
 
     @media screen and (max-width: 599px) {
-      width:20%;
+      width:10%;
     }
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1200px) and (min-width: 600px){
       width:20%;
     }
   }
@@ -220,6 +221,10 @@ export default {
   .title{
     margin-right: 16px;
     min-width: 100px;
+
+    @media screen and (max-width: 1023px) {
+      margin-right: 0;
+    }
   }
   .line {
     height: 1.5px;
