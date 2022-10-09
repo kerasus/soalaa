@@ -110,6 +110,24 @@ export default {
                 boxed: true,
                 boxedWidth: 1362
               }
+            },
+            {
+              cols: [
+                {
+                  widgets: [
+                    {
+                      name: 'Footer'
+                    }
+                  ],
+                  options: {
+                    className: 'yellow-title'
+                  }
+                }
+              ],
+              options: {
+                boxed: false,
+                style: {}
+              }
             }
           ]
         },
