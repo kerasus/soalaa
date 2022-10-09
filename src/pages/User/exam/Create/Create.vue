@@ -134,6 +134,7 @@ export default {
   },
   methods: {
     getData () {
+      this.draftExam.loading = true
       this.getOptions()
         .then(() => {
           this.getDraftExam()
@@ -145,6 +146,7 @@ export default {
               this.loadDraftExam(response.data.data)
             })
             .catch(() => {
+              this.draftExam.loading = false
             })
         })
     },
@@ -362,7 +364,6 @@ export default {
       })
         .then(() => {
           this.loadAttachedQuestions()
-          this.draftExam.loading = false
         })
         .catch(() => {
           this.draftExam.loading = false
@@ -379,7 +380,6 @@ export default {
       })
         .then(() => {
           this.loadAttachedQuestions()
-          this.draftExam.loading = false
         })
         .catch(() => {
           this.draftExam.loading = false
