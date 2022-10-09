@@ -39,6 +39,7 @@ const API_ADDRESS = {
   },
   option: {
     base: lumenServer + '/option',
+    userIndex: lumenServer + '/option/user?type=question_report_type',
     user(type) { return lumenServer + '/option/user?type=' + type }
   },
   log: {
@@ -189,19 +190,21 @@ const API_ADDRESS = {
       page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
     },
     index (filters, page) {
-      const newFilter = filters ? JSON.parse(JSON.stringify(filters)) : {}
-      function setQueryParams (paramKey) {
-        if (typeof newFilter[paramKey] === 'undefined') {
-          return
+      let newFilter = (filters) ? JSON.parse(JSON.stringify(filters)) : {}
+      function setQueryParams (paramKey, singleMode = false) {
+        if (!newFilter) {
+          newFilter = {}
         }
-        // newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
-        if (typeof newFilter[paramKey] === 'object') {
+        newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
+        if (!singleMode) {
           newFilter[paramKey] = newFilter[paramKey].join('&' + paramKey + '[]=')
           if (newFilter[paramKey]) {
             newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
           }
         } else {
-          newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
+          if (newFilter[paramKey]) {
+            newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
+          }
         }
       }
       setQueryParams('statuses')
@@ -210,6 +213,9 @@ const API_ADDRESS = {
       setQueryParams('reference')
       setQueryParams('tags')
       setQueryParams('level')
+      setQueryParams('statement', true)
+      setQueryParams('sort_by', true)
+      setQueryParams('sort_type', true)
       setQueryParams('tags_with_childrens')
 
       if (typeof page !== 'undefined') {
