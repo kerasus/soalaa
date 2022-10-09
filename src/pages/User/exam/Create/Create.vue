@@ -72,18 +72,31 @@
     </q-dialog>
     <q-dialog v-model="continueWithOldDraftExamConfirmationDialog"
               persistent>
-      <q-card>
-        <q-card-section class="row items-center">
-          <div class="q-ma-md">
-            شما یک آزمون ساخته شده دارید ، آیا تمایل به ادامه فرآیند ساخت آن دارید؟
+      <q-card class="draft-dialog">
+        <q-btn v-close-popup
+               flat
+               class="close-btn"
+               icon="close"
+               @click="clearDraftExam" />
+        <q-card-section class="flex column items-center">
+          <div class="exam-icon">
+            <q-icon size="70px"
+                    name="error_outline" />
+          </div>
+          <div class="exam-slogan">
+            یک آزمون نیمه تمام دارید، آیا می خواهید آن را تکمیل کنید؟
+          </div>
+          <div class="exam-info">
+            <div class="exam-title">نام آزمون: {{draftExam.title}}</div>
+            <div class="exam-major">رشته: {{draftMajor}}</div>
+            <div class="exam-grade">پایه: {{draftGrade}}</div>
           </div>
         </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat
-                 label="انصراف"
-                 color="primary"
+        <q-card-actions class="flex flex-center">
+          <q-btn label="خیر"
+                 class="cancel-draft"
                  @click="clearDraftExam" />
-          <q-btn label="ادامه"
+          <q-btn label="بله، ادامه می‌دهم"
                  color="primary"
                  @click="setDraftExam" />
         </q-card-actions>
@@ -131,6 +144,14 @@ export default {
   },
   created() {
     this.getData()
+  },
+  computed: {
+    draftMajor() {
+      return this.majorList.find(x => x.id === this.draftExam.temp.major).value
+    },
+    draftGrade() {
+      return this.gradesList.find(x => x.id === this.draftExam.temp.grade).title
+    }
   },
   methods: {
     getData () {
@@ -520,6 +541,76 @@ export default {
         background-color: #F4F5F6;
       }
     }
+  }
+}
+
+.draft-dialog {
+  width: 348px;
+  height: 343px;
+  background: #FFFFFF;
+  border-radius: 18px;
+  position: relative;
+
+  .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: #6D708B;
+  }
+
+  .exam-icon {
+    color: #F2A9A7;
+  }
+
+  .exam-slogan {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 25px;
+    text-align: center;
+    color: #434765;
+    margin-top: 20px;
+  }
+
+  .exam-info {
+    margin: 10px 0 20px;
+    .exam-title {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 19px;
+      color: #6D708B;
+    }
+
+    .exam-major {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 19px;
+      color: #6D708B;
+      margin: 4px 0;
+    }
+
+    .exam-grade {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 19px;
+      color: #6D708B;
+    }
+  }
+
+  .cancel-draft {
+    width: 144px;
+    height: 40px;
+    background: #F2F5F9;
+    border-radius: 8px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    color: #6D708B;
   }
 }
 </style>
