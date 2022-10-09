@@ -363,6 +363,7 @@ export default {
         justify-content: center;
         .title-box {
           justify-self: center;
+          width: 100%;
         }
         .access,.profile {
           padding-bottom: 30px;
