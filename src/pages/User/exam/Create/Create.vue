@@ -1,7 +1,9 @@
 <template>
   <div class="exam-create-panel">
+
     <steps v-model:step="currentTab"
            :loading="draftExam.loading"
+           :isConfirmd="draftExamIsConfirmed"
            :disabled="draftExamIsConfirmed"
            @update:step="onChangeTab"
     />
@@ -40,7 +42,39 @@
     <div v-else>
       <div class="confirmed-draft-exam-page">
         <div class="icon-section">
-          circle
+          <svg width="100%"
+               height="100%"
+               viewBox="0 0 290 290"
+               fill="none"
+               xmlns="http://www.w3.org/2000/svg">
+            <circle cx="144.5"
+                    cy="145.5"
+                    r="122.5"
+                    fill="url(#paint0_linear_2989_11788)" />
+            <path d="M145 235C194.5 235 235 194.5 235 145C235 95.5 194.5 55 145 55C95.5 55 55 95.5 55 145C55 194.5 95.5 235 145 235Z"
+                  stroke="#4CAF50"
+                  stroke-width="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+            <path d="M106.75 145L132.22 170.47L183.25 119.53"
+                  stroke="#4CAF50"
+                  stroke-width="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+            <defs>
+              <linearGradient id="paint0_linear_2989_11788"
+                              x1="144.5"
+                              y1="-10.5"
+                              x2="144.5"
+                              y2="268"
+                              gradientUnits="userSpaceOnUse">
+                <stop stop-color="white"
+                      stop-opacity="0" />
+                <stop offset="1"
+                      stop-color="white" />
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
         <div class="message">
           آزمون شما با موفقیت ساخته شد
@@ -585,14 +619,36 @@ export default {
     justify-content: center;
     margin-top: 50px;
     .icon-section {
-      width: 100px;
-      height: 100px;
-      border: solid 1px red;
+      width: 245px;
+      height: 245px;
+      @media screen and (max-width: 1439px){
+        width: 194px;
+        height: 194px;
+      }
+      @media screen and (max-width: 1023px){
+        width: 245px;
+        height: 245px;
+      }
+      @media screen and (max-width: 599px){
+        width: 168px;
+        height: 168px;
+      }
     }
     .message {
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin-top: 10px;
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 37px;
+      text-align: center;
+      letter-spacing: -0.03em;
+      color: #6D708B;
+      @media  screen and (max-width: 1023px){
+        font-size: 22px;
+        line-height: 34px;
+      }
+      @media  screen and (max-width: 599px){
+        font-size: 18px;
+        line-height: 28px;
+      }
     }
     .actions-section {
       display: flex;
@@ -600,10 +656,17 @@ export default {
       align-items: center;
       justify-content: center;
       .q-btn {
-        color: pink;
-        font-size: 1rem;
-        font-weight: normal;
+        font-size: 18px;
+        line-height: 28px;
+        text-align: center;
+        letter-spacing: -0.03em;
+        color: #8075DC;
+        font-weight: 600;
         margin-top: 5px;
+        @media  screen and (max-width: 599px){
+          font-size: 14px;
+          line-height: 22px;
+        }
       }
     }
   }
