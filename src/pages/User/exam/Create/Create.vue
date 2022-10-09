@@ -95,10 +95,14 @@
         <q-card-actions class="flex flex-center">
           <q-btn label="خیر"
                  class="cancel-draft"
-                 @click="clearDraftExam" />
+                 unelevated
+                 @click="clearDraftExam"
+          />
           <q-btn label="بله، ادامه می‌دهم"
                  color="primary"
-                 @click="setDraftExam" />
+                 unelevated
+                 @click="setDraftExam"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -168,11 +172,12 @@ export default {
         .then(() => {
           this.getDraftExam()
             .then(response => {
-              this.continueWithOldDraftExamConfirmationDialog = true
               if (response.data?.data) {
                 this.loadDraftExam(response.data.data)
+                this.continueWithOldDraftExamConfirmationDialog = true
+              } else {
+                this.loadDraftExam()
               }
-              this.loadDraftExam()
             })
             .catch(() => {
               this.draftExam.loading = false
