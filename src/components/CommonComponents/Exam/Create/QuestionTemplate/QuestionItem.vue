@@ -19,7 +19,7 @@
               width="110px"
             />
             <span class="chip-dynamic-text ellipsis">
-              {{ question.id }}
+              {{ question.code }}
             </span>
           </q-chip>
         </div>
@@ -56,7 +56,6 @@
             <div class="level-text">
               {{ questionLevelClasses[questionLevel]?.title }}
             </div>
-
             <div
               v-for="item in 3"
               :key="item"
@@ -169,7 +168,7 @@
         v-if="finalApprovalMode || showQuestionNumber"
         class="question-index"
       >
-        <div class="question-number">{{ question.order }}</div>
+        <div class="question-number">{{ finalApprovalMode ? questionIndex + 1 : question.order }}</div>
       </div>
 
       <div
@@ -192,7 +191,9 @@
         header-class="hideExpansionHeader"
       >
         <div class="description-answer-body">
-          <div class="description-answer">
+          <div class="description-answer"
+               :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
+          >
             <div
               v-if="this.question.choices.getSelected()"
               class="question-answer-choice"
@@ -209,14 +210,21 @@
             </div>
           </div>
 
-          <div class="description-answer-video">
-            <div class="answer-video">
+          <div class="description-answer-video"
+          >
+            <div class="answer-video flex items-center justify-center"
+                 :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
+            >
+              <div class="soon flex items-center justify-center">
+                به زودی
+              </div>
+
               <!--              ToDo : uncomment this when backend give you a valid key-->
               <!--              <video-player />-->
             </div>
 
             <div class="answer-video-title">
-              {{'پاسخ ویدیویی'}}
+              پاسخنامه ویدیویی
             </div>
           </div>
         </div>
@@ -272,10 +280,21 @@
           flat
           role="presentation"
           class="see-answer-button no-padding"
-          :label="descriptiveAnswerExpanded ? 'بستن پاسخ تشریحی' : 'پاسخ تشریحی'"
+          :label="descriptiveAnswerExpanded ? '' : ''"
           :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
           @click="descriptiveAnswerExpanded = !descriptiveAnswerExpanded"
-        />
+        >
+          <span v-if="descriptiveAnswerExpanded">
+            پاسخ تشریحی
+            <!--            بستن پاسخ تشریحی-->
+          </span>
+          <span v-else>
+            <!--            <span :hidden="$q.screen.lt.sm">نمایش </span>-->
+            <span>
+              پاسخ تشریحی
+            </span>
+          </span>
+        </q-btn>
       </div>
     </q-card-section>
   </q-card>
@@ -585,7 +604,7 @@ export default {
       if (this.finalApprovalMode) {
         finalConf = {
           ...this.listOptions,
-          reportProblem: false,
+          reportProblem: true,
           editQuestion: false,
           menu: {
             show: false,
@@ -662,6 +681,9 @@ export default {
     .question-info {
       display: flex;
       justify-content: space-between;
+      @media screen and (max-width: 599px) {
+        margin-bottom: 12px;
+      }
 
       .question-card-chip-id {
         display: flex;
@@ -738,7 +760,6 @@ export default {
 
       @media only screen and (max-width: 599px) {
         order: 2;
-        padding-top: 13px;
       }
         .source-content,
         .source-skeleton {
@@ -786,7 +807,7 @@ export default {
 
       @media screen and (max-width: 599px) {
         flex-direction: column;
-        margin-top: 13px;
+        margin-top: 0;
       }
 
       .question-tag {
@@ -811,18 +832,22 @@ export default {
           }
         }
         .tag-title{
-
           @media screen and (max-width: 599px){
             order: 2;
+          }
+          div{
+            max-width: 99px;
           }
         }
 
         &:last-child {
           .tag-circle {
             display: none;
+            @media screen and (max-width: 599px) {
+              display: block;
+            }
           }
         }
-
       }
     }
   }
@@ -832,6 +857,9 @@ export default {
     padding: 0;
     &.extra-panel{
       padding-left: 20px;
+      @media screen and (max-width: 1024px) {
+        padding-left: 10px;
+      }
     }
 
     .question-index {
@@ -853,6 +881,7 @@ export default {
         @media only screen and (max-width: 1023px) {
           width: 26px;
           height: 28px;
+          left: -30px;
         }
       }
     }
@@ -905,7 +934,6 @@ export default {
         padding: 20px 24px;
         max-width: 620px;
         width: 100%;
-        height: 252px;
         background: #F6F9FF;
         border-radius: 16px;
         margin-right: 30px;
@@ -953,9 +981,16 @@ export default {
         .answer-video {
           width: 316px;
           height: 176px;
-          background: #F6F9FF;
+          background: #f6f9ff;
           border-radius: 16px;
           margin-bottom: 10px;
+          .soon{
+            width: 86px;
+            height: 32px;
+            background: #FFB74D;
+            border-radius: 18px;
+            color: white;
+          }
 
           @media only screen and (max-width: 1439px) {
             width: 230px;
