@@ -1,22 +1,33 @@
 <template>
-  <div  class="sub-mit-box flex justify-between items-center page-width">
+  <div  v-if="!isUserLogin"
+        class="sub-mit-box flex justify-between items-center page-width">
     <div class="info">با ورود و یا ثبت نام در سوالا میتوانید محتوای شخصی سازی شده و مربوط به خود را دنبال کنید</div>
     <div class="action-box">
       <q-btn
         unelevated
         class="btn-style"
-        label="ورود"></q-btn>
-      <q-btn unelevated
-             color="primary"
-             class="btn-style"
-             label="ثبت نام"></q-btn>
+        label="ورود"
+        :to="{ name: 'login' }"
+      />
+      <q-btn
+        unelevated
+        color="primary"
+        class="btn-style"
+        label="ثبت نام"
+        :to="{ name: 'login' }"
+      />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'GoLogin'
+  name: 'GoLogin',
+  computed: {
+    isUserLogin() {
+      return this.$store.getters['Auth/isUserLogin']
+    }
+  }
 }
 </script>
 

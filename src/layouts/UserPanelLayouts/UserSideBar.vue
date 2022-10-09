@@ -144,8 +144,11 @@ export default {
           height: 56px;
         }
         .profile-photo-img {
+          width: 100%;
+          height: 100%;
           .q-img {
             border-radius: 16px;
+            height: 100%;
           }
         }
         .profile-photo-badge {
