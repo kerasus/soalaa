@@ -196,7 +196,7 @@ export default {
   ],
   data() {
     return {
-      subscribed: false,
+      subscribed: true,
       draftExamIsConfirmed: false,
       draftExam: new Exam(),
       gradesList: [],
