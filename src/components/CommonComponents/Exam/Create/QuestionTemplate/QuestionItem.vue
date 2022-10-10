@@ -50,17 +50,17 @@
           </div>
 
           <div
-            v-else
+            v-else-if="question.level"
             class="level-content"
           >
-            <div class="level-text">
-              {{ questionLevelClasses[questionLevel]?.title }}
-            </div>
             <div
               v-for="item in 3"
               :key="item"
               class="level-circles"
               :class="item === questionLevelClasses[questionLevel]?.level ? questionLevelClasses[questionLevel].class : ''">
+            </div>
+            <div class="level-text">
+              {{ questionLevelClasses[questionLevel]?.title }}
             </div>
           </div>
         </div>
@@ -468,21 +468,11 @@ export default {
           class: 'easy',
           title: 'آسان'
         },
-        // 2: {
-        //   level: 3,
-        //   class: 'easy',
-        //   title: 'آسان'
-        // },
         2: {
           level: 2,
           class: 'medium',
           title: 'متوسط'
         },
-        // 3: {
-        //   level: 2,
-        //   class: 'medium',
-        //   title: 'متوسط'
-        // },
         3: {
           level: 3,
           class: 'hard',
@@ -718,6 +708,7 @@ export default {
         .level-content,
         .level-skeleton {
           display: flex;
+          direction: rtl;
 
           .level-text {
             margin-right: 5px;
