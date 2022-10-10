@@ -41,11 +41,6 @@
              class="fit row wrap justify-center items-start content-start"
         >
           <div class="col col-12 examList-container">
-            <!-- TODO:
-          - slider load data
-          - load tab panels data
-          - paginator for tab panels
-        -->
             <div class="slider-row">
               <future-quizzes-carousel :exams="upcomingExams" />
             </div>
@@ -73,6 +68,7 @@
                     <quiz-list
                       :quiz-type="'exam'"
                       :exams="allExamsList"
+                      :personal="false"
                       @onFilter="filterAllExams"
                     />
                   </q-tab-panel>
@@ -80,7 +76,7 @@
                     <quiz-list
                       :quiz-type="'myExam'"
                       :exams="myExams"
-                      personal
+                      :personal="true"
                       @onFilter="filterMyExams"
                     />
                   </q-tab-panel>
