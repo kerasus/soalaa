@@ -234,7 +234,7 @@ export default {
         .catch((error) => {
           Assistant.reportErrors(error)
           // this.updateOverlay(false)
-          that.$router.push({ name: 'user.exam.list' })
+          that.$router.push({ name: 'User.Exam.List' })
         })
     },
     timerOpen (value) {
@@ -268,7 +268,7 @@ export default {
     confirmSendingAllAnswers () {
       this.syncUserAnswersWithDBAndSendAnswersToServerInExamTime(this.quiz.user_exam_id, false)
         .then(() => {
-          this.$router.push({ name: 'user.exam.list' })
+          this.$router.push({ name: 'User.Exam.List' })
           this.confirmationBubbleSheet = true
         })
         .catch(erroe => {
@@ -284,7 +284,7 @@ export default {
             message: 'اطلاعات آزمون شما ثبت شد.',
             type: 'positive'
           })
-          that.$router.push({ name: 'user.exam.list' })
+          that.$router.push({ name: 'User.Exam.List' })
         })
         .catch(() => {
           that.$q.notify({
@@ -293,7 +293,7 @@ export default {
             type: 'warning',
             duration: 30000
           })
-          that.$router.push({ name: 'user.exam.list' })
+          that.$router.push({ name: 'User.Exam.List' })
         })
     },
     isInView (payload) {

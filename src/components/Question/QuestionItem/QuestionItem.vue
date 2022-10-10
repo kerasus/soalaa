@@ -457,7 +457,7 @@ export default {
       default: false
     }
   },
-  emits: ['checkSelect', 'changeOrder'],
+  emits: ['checkSelect', 'changeOrder', 'detachQuestion', 'deleteQuestion', 'copyIdToClipboard', 'confirmQuestion'],
   data () {
     return {
       questionChoiceList: [],

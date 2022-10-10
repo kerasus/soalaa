@@ -70,15 +70,18 @@ export default {
       }
     },
     doActionsOnChangeCategory (newCat) {
-      if (!newCat || !this.currentCat || Assistant.getId(newCat.id) !== Assistant.getId(this.currentCat.id)) {
-        this.currentCat = newCat
-        this.$store.commit('Exam/setActiveStateOfExamCategories')
-        if (this.currentCat) {
-          this.goToCategory(this.currentCat.id)
-          Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz, this.getCurrentExamQuestions())
-        }
-        this.setExamAcceptAtIsPassedWhenAllCategoryIsPassed()
+      const newCategoryIsCurrentCategory = !!(newCat && this.currentCat && Assistant.getId(newCat.id) === Assistant.getId(this.currentCat.id))
+      if (newCategoryIsCurrentCategory) {
+        return
       }
+      if (this.quiz.categories.list.length === 0) {
+        return
+      }
+      this.currentCat = newCat
+      this.$store.commit('Exam/setActiveStateOfExamCategories')
+      this.goToCategory(this.currentCat.id)
+      Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz, this.getCurrentExamQuestions())
+      this.setExamAcceptAtIsPassedWhenAllCategoryIsPassed()
     },
     setExamAcceptAtIsPassedWhenAllCategoryIsPassed () {
       const newCat = Time.getCurrentCategoryAcceptAt(this.quiz.categories)

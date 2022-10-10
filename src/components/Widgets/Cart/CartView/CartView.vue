@@ -303,7 +303,7 @@ export default {
       this.$store.dispatch('Cart/removeItemFromCart', order)
         .then(() => {
           this.cartReview()
-          this.$store.dispatch('loading/overlayLoading', false)
+          // this.$store.dispatch('loading/overlayLoading', false)
           this.changeDialogState(false)
         }).catch(() => {
           this.changeDialogState(false)

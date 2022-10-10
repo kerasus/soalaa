@@ -259,6 +259,7 @@
                   </q-btn>
                   <q-btn
                     v-if="quizType === 'myExam'"
+                    disable
                     color="dark"
                     :to="{name : 'User.Exam.Download'}"
                     class="quiz-action-download"
