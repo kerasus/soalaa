@@ -34,7 +34,7 @@
                 <div class="col-lg-12 col-md-6 col-sm-12">
                   <div class="exam-detail-item">
                     <div class="field">عنوان آزمون: </div>
-                    <div class="value">
+                    <div class="value exam-title ellipsis">
                       {{ exam.title }}
                     </div>
                   </div>
@@ -488,6 +488,9 @@ export default {
           font-size: 14px;
           line-height: 22px;
           color: #6D708B;
+        }
+        .exam-title{
+
         }
       }
       .selected-questions{
