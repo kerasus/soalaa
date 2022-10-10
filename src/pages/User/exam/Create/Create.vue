@@ -11,7 +11,8 @@
                   v-model="currentTab"
                   animated
     >
-      <q-tab-panel name="createPage">
+      <q-tab-panel :disable="draftExamIsConfirmed"
+                   name="createPage">
         <exam-info-tab ref="createExam"
                        v-model:exam="draftExam"
                        :gradesList="gradesList"
@@ -19,7 +20,8 @@
                        @nextTab="goToNextStep"
         />
       </q-tab-panel>
-      <q-tab-panel name="chooseQuestion">
+      <q-tab-panel :disable="draftExamIsConfirmed"
+                   name="chooseQuestion">
         <question-selection-tab v-model:exam="draftExam"
                                 @lessonChanged="onLessonChanged"
                                 @nextTab="goToNextStep"
@@ -28,7 +30,8 @@
                                 @deleteQuestionFromExam="bulkDetachQuestionsOfDraftExam"
         />
       </q-tab-panel>
-      <q-tab-panel name="finalApproval">
+      <q-tab-panel :disable="draftExamIsConfirmed"
+                   name="finalApproval">
         <final-approval-tab v-model:exam="draftExam"
                             :majors="majorList"
                             :grades="gradesList"
