@@ -3,7 +3,7 @@
     <div v-if="exams.list.length > 0"
          class="quiz-list-container">
       <div class="row q-pt-md">
-        <div class="col-6">
+        <div class="col-12 col-md-6">
 
           <div class="search-bar">
             <q-input v-model="searchInExams"
@@ -20,12 +20,12 @@
             </q-input>
           </div>
         </div>
-        <div class="col-6 filter-btn-col">
+        <div class="col-12 col-md-6 filter-btn-col">
           <q-btn
             v-if="quizType === 'myExam'"
             unelevated
             class="create-exam"
-            @click="toggleFilter">
+            @click="gotoCreateExam">
             آزمون جدید
           </q-btn>
           <q-btn
@@ -97,16 +97,28 @@
               <div class="row quiz-list-item-row">
                 <div class="quiz-list-item-name ellipses"
                      :class="quizType === 'myExam' ? 'col-xs-12 col-sm-5 col-md-5 col-lg-5 col-xl-5' : 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
+                  <span v-if="$q.screen.lt.sm"
+                        class="q-mr-sm">
+                    نام آزمون :
+                  </span>
                   {{item.title}}
                 </div>
                 <div v-if="quizType === 'myExam'"
-                     class="quiz-list-item-schedule"
+                     class="quiz-list-item-schedule ellipses"
                      :class="quizType === 'myExam' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'">
+                  <span v-if="$q.screen.lt.sm"
+                        class="q-mr-sm">
+                    نوع آزمون :
+                  </span>
                   تست
                 </div>
-                <div class="quiz-list-item-schedule"
+                <div class="quiz-list-item-schedule ellipses"
                      :class="quizType === 'myExam' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
                 >
+                  <span v-if="$q.screen.lt.sm"
+                        class="q-mr-sm">
+                    زمان آزمون :
+                  </span>
                   {{getDate(item.start_at) }}
                   ,
                   {{ getTimeFromDateTime(item.start_at) }}
@@ -327,8 +339,8 @@ export default defineComponent({
     typeOptions: ['تست', 'تشریحی', 'ترکببی'],
     filterBar: false,
     inputs: [
-      { type: 'date', name: 'from', label: ' ', placeholder: 'از', calendarIcon: ' ', responseKey: 'fromDate', value: '', col: 'col-6' },
-      { type: 'date', name: 'to', label: ' ', placeholder: 'تا', responseKey: 'toDate', calendarIcon: ' ', value: '', col: 'col-6' }
+      { type: 'date', name: 'from', label: 'از', calendarIcon: ' ', responseKey: 'fromDate', col: 'col-12 col-md-6 form-builder-date-from' },
+      { type: 'date', name: 'to', label: 'تا', responseKey: 'toDate', calendarIcon: ' ', col: 'col-12 col-md-6 form-builder-date-to' }
     ]
   }),
   created () {
@@ -577,6 +589,9 @@ export default defineComponent({
         width: 230px;
         height: 50px;
       }
+      @media only screen and (max-width: 390px){
+        width: 100%;
+      }
     }
     .filter-btn-col {
       display: flex;
@@ -612,6 +627,10 @@ export default defineComponent({
         line-height: 22px;
         letter-spacing: -0.03em;
         color: #FFFFFF;
+      }
+
+      @media only screen and (max-width: 390px){
+        margin-bottom: 20px;
       }
     }
     .filter-wrapper {
@@ -729,6 +748,10 @@ export default defineComponent({
               font-size: 14px;
               line-height: 22px;
               color: #434765;
+
+              @media only screen and (max-width: 600px){
+                justify-content: flex-start;
+              }
             }
             .quiz-list-item-schedule {
               display: flex;
@@ -741,8 +764,9 @@ export default defineComponent({
               text-align: right;
               color: #434765;
 
-              @media only screen and (max-width: 390px){
+              @media only screen and (max-width: 600px){
                 margin: 3px 0;
+                justify-content: flex-start;
               }
             }
             .quiz-list-item-action {
@@ -853,5 +877,17 @@ export default defineComponent({
     color: #8075DC;
     text-transform: none;
     margin-top: 12px;
+  }
+
+  .form-builder-date-from {
+    .outsideLabel {
+      display: none;
+    }
+  }
+
+  .form-builder-date-to {
+    .outsideLabel {
+      display: none;
+    }
   }
 </style>
