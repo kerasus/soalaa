@@ -79,7 +79,7 @@
                     </div>
                   </div>
                   <div class="chart-b col-md-8 col-sm-12">
-                    <chart class="row justify-md-end justify-xs-center "
+                    <chart class="row justify-center"
                            :options="chartOptions" />
                   </div>
                 </div>
@@ -88,6 +88,7 @@
                     <q-btn
                       unelevated
                       color="primary"
+                      :disable="exam.loading"
                       class="full-width confirm q-mr-xl"
                       @click="confirmExam"
                     >
@@ -98,6 +99,7 @@
                   <div class="previous-b col-lg-12 col-sm-6">
                     <q-btn
                       unelevated
+                      :disable="exam.loading"
                       class="full-width q-mr-xl previous"
                       @click="goToPrevious"
                     >
