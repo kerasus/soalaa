@@ -148,19 +148,22 @@
                        class="details-btn"
                        @click="toggleDetailsCard(inputData.props.row)"
                 >
-                  جزییات
+                  جزئیات
+                  <q-icon color="primary"
+                          :name="detailsCardToggle[inputData.props.row.id] ? 'isax:arrow-up-2' : 'isax:arrow-down-1' " />
                 </q-btn>
-                <div :class="{ 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
+                <div class="min-h"
+                     :class="{ 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
                                'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
-                               'payment-installment' : inputData.props.row.paymentstatus.id}"
+                               'payment-installment' : inputData.props.row.paymentstatus.id === 4 }"
                 >
                   <!--                پرداخت نشده-->
                   {{inputData.props.row.paymentstatus.name}}
                 </div>
-                <div>
-                  {{ toman(inputData.props.row.price) }}
+                <div class="min-h">
+                  {{inputData.props.row.price ? toman(inputData.props.row.price) : 0 }}
                 </div>
-                <div>
+                <div class="min-h">
                   {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}
                   <!--                {{ getCurrentOrderCompletedAt('1401/09/25') }}-->
                 </div>
@@ -587,6 +590,9 @@ export default {
       background: #FFFFFF;
       box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       border-radius: 16px;
+      @media screen and (max-width: 599px) {
+        //padding-bottom: 20px;
+      }
 
       .q-table__middle {
         //.q-table {
@@ -671,7 +677,15 @@ export default {
   .details-table-mobile {
       box-shadow: none;
       border-radius: 0;
-    border-bottom: 1px solid #E4E8EF;
+      border-bottom: 1px solid #E4E8EF;
+    &:last-child{
+      border-radius: 16px;
+      border-bottom: none;
+    }
+    &:first-child{
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
 
     .details-info {
       padding: 15px 20px;
@@ -682,6 +696,7 @@ export default {
       letter-spacing: -0.03em;
       display: flex;
       justify-content: space-between;
+      color: #434765;
       .first-col {
         color: #6D708B;
         div {
@@ -702,6 +717,15 @@ export default {
         }
         .details-btn {
           color:#8075DC ;
+          :deep(.q-icon ){
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 6px;
+          }
+        }
+
+        .min-h{
+          min-height: 32px;
         }
         //:deep(.q-btn) {
         //  .q-btn__content {
