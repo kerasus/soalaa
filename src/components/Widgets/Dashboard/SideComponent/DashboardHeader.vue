@@ -18,6 +18,7 @@
           round
           flat
           dense
+          :to="{name:'User.Create.Exam'}"
           size="md"
         >
           <span v-if="windowSize.x > 1439">ساخت آزمون</span>
@@ -32,6 +33,7 @@
           round
           flat
           dense
+          :to="{name:'User.Create.Exam'}"
           size="md"
         ></q-btn>
       </div>
