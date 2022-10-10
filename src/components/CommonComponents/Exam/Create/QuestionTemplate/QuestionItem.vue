@@ -1104,6 +1104,13 @@ export default {
       }
     }
   }
+
+  &:last-child {
+
+    @media only screen and (max-width: 599px) {
+      margin-bottom: 160px;
+    }
+  }
 }
 
 .report-problem-dialog {
