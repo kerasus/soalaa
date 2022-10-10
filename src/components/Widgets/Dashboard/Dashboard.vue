@@ -35,7 +35,7 @@
     </div>
     <div v-else
          class="content-wrapper">
-      <div>
+      <div v-if="windowSize">
         <div
           v-if="windowSize.x < 1024"
           class="profile-container"

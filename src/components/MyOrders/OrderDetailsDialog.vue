@@ -4,8 +4,10 @@
     class="order-details-dialog"
   >
     <q-card class="order-details-card">
-      <q-card-section class="dialog-header">
-        <div>
+      <div class="dialog-header">
+        <div></div>
+        <div class="title">جزییات سفارش</div>
+        <div class="close">
           <q-btn
             round
             flat
@@ -29,12 +31,9 @@
                     stroke-linecap="round"
                     stroke-linejoin="round" />
             </svg>
-
           </q-btn>
         </div>
-        <div class="title">جزییات سفارش</div>
-        <div></div>
-      </q-card-section>
+      </div>
       <div>
         <q-card-section class="info">
           <div class="info-box part1">
@@ -183,9 +182,15 @@ export default {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       align-items: center;
-
+      padding: 30px 20px 15px 20px;
+      @media screen and (max-width:1439px ){
+        padding: 20px 20px 15px 20px;
+      }
       .title {
         justify-self: center;
+      }
+      .close{
+        justify-self: end;
       }
     }
 

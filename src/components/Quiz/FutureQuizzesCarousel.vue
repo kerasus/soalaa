@@ -172,11 +172,17 @@ export default defineComponent({
   .carousel-navigation-btn-wrapper {
 
     .carousel-navigation-btn {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
+      max-height: 28px;
+      min-height: 28px;
       background: #FFFFFF;
       box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05);
       border-radius: 6px;
+
+      &:deep(.q-btn__content) {
+        margin: 0;
+      }
 
       &.left {
         margin-right: 16px;
