@@ -199,7 +199,7 @@ class ExamData {
       if (!examId) {
         examId = that.exam.id
       }
-      const data = { exam_id: examId }
+      const data = { }
       if (retake) {
         data.retake = true
       }
