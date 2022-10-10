@@ -217,15 +217,15 @@ export default {
         year_type: [],
         levels: [
           {
-            value: '1',
+            value: 1,
             label: 'آسان'
           },
           {
-            value: '2',
+            value: 2,
             label: 'متوسط'
           },
           {
-            value: '3',
+            value: 3,
             label: 'سخت'
           }
         ]
@@ -343,12 +343,23 @@ export default {
         .then(response => {
           this.hideLoading()
           this.treeModalLessonsList = response.data.data.children
-          this.setInitialLesson(this.providedExam.temp.lesson)
+          if (this.treeModalLessonsList.length === 0) {
+            this.$q.notify({
+              message: 'پایه تحصیلی انتخاب شده درس ندارد',
+              type: 'negative'
+            })
+          }
+          if (this.providedExam.temp.lesson) {
+            this.setInitialLesson(this.providedExam.temp.lesson)
+          }
         })
     },
     setInitialLesson(lesson) {
-      this.initialLesson = this.treeModalLessonsList.find(item => item.id === lesson)
-      // this.treeModalLessonsList
+      const foundedLesson = this.treeModalLessonsList.find(item => item.id === lesson)
+      if (!foundedLesson.id) {
+        return
+      }
+      this.initialLesson = foundedLesson
     },
     toggleTreeModal() {
       this.treeModalValue = !this.treeModalValue
@@ -445,7 +456,7 @@ export default {
     getFiltersForRequest (filterData) {
       return {
         tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
-        level: (filterData.level) ? filterData.level.map(item => item.id) : [],
+        level: (filterData.level) ? filterData.level.map(item => item.value) : [],
         years: (filterData.years) ? filterData.years.map(item => item.id) : [],
         majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
         reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],

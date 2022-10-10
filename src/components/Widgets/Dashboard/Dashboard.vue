@@ -1,13 +1,55 @@
 <template>
-  <dashboard-header />
-  <next-exam />
-  <div class="board-container row q-col-gutter-sm">
-    <div class="col-12 col-lg-8">
-      <upcoming-exams-calender :calendarTitle="'آزمون های پیش‌رو'"
-                               :calendarIcon="'isax:calendar-1'" />
+  <div class="dashboard-container">
+    <div v-if="lastSubscribeLoading"
+         class="loading">
+      <div class="row">
+        <div class="col-12 col-md-4 q-pa-sm">
+          <q-skeleton width="100%"
+                      height="150px" />
+        </div>
+        <div class="col-12 col-md-4 q-pa-sm">
+          <q-skeleton width="100%"
+                      height="150px" />
+        </div>
+        <div class="col-12 col-md-4 q-pa-sm">
+          <q-skeleton width="100%"
+                      height="150px" />
+        </div>
+      </div>
+      <div class="row q-my-lg">
+        <div class="col-12">
+          <q-skeleton width="100%"
+                      height="70px" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-md-8 q-pa-sm">
+          <q-skeleton width="100%"
+                      height="480px" />
+        </div>
+        <div class="col-12 col-md-4 q-pa-sm">
+          <q-skeleton width="100%"
+                      height="480px" />
+        </div>
+      </div>
     </div>
-    <div class="col-12 col-lg-4">
-      <subscription-status :subscribe="lastSubscribeDate" />
+    <div v-else
+         class="content-wrapper">
+      <div>
+        <dashboard-header />
+        <next-exam />
+        <div class="board-container row">
+          <div class="col-12 col-lg-8"
+               style="padding-left: 15px;">
+            <upcoming-exams-calender :calendarTitle="'آزمون های پیش‌رو'"
+                                     :calendarIcon="'isax:calendar-1'" />
+          </div>
+          <div class="col-12 col-lg-4"
+               style="padding-right: 15px;">
+            <subscription-status :subscribe="lastSubscribeDate" />
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -28,10 +70,10 @@ export default {
     }
   },
   created() {
-    this.getLaStsubscribe()
+    this.getLastSubscribe()
   },
   methods: {
-    getLaStsubscribe () {
+    getLastSubscribe () {
       this.lastSubscribeLoading = true
       this.$axios.get(API_ADDRESS.subscription.last)
         .then((response) => {

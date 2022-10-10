@@ -2,7 +2,7 @@
   <div class="steps row">
     <div v-if="!loading"
          class="exam-info step step-1"
-         :class="{ 'current-step' : this.currentStep === 'createPage','passed' : this.currentStep === 'chooseQuestion' }"
+         :class="{ 'current-step' : this.currentStep === 'createPage','passed' : this.currentStep === 'chooseQuestion' || this.currentStep === 'finalApproval' || isConfirmd }"
          @click="changeCurrentStep('createPage')"
     >
       <q-icon name="isax:edit"
@@ -13,12 +13,12 @@
         اطلاعات آزمون
       </div>
       <div class="line"
-           :class="{ 'border-mobile' : this.currentStep !== 'createPage','passed' : this.currentStep === 'chooseQuestion' }"
+           :class="{ 'border-mobile' : this.currentStep !== 'createPage','passed' : this.currentStep === 'chooseQuestion' || this.currentStep === 'finalApproval' || isConfirmd }"
       />
     </div>
     <div v-if="!loading"
          class="choose-questions step step-2"
-         :class="{ 'current-step' : this.currentStep === 'chooseQuestion','passed' : this.currentStep === 'finalApproval' }"
+         :class="{ 'current-step' : this.currentStep === 'chooseQuestion','passed' : this.currentStep === 'finalApproval' || isConfirmd }"
          @click="changeCurrentStep('chooseQuestion')"
     >
       <q-icon name="isax:task-square"
@@ -30,12 +30,12 @@
         انتخاب سوال
       </div>
       <div class="line"
-           :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion','passed' : this.currentStep === 'finalApproval' }"
+           :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion','passed' : this.currentStep === 'finalApproval' || isConfirmd }"
       />
     </div>
     <div v-if="!loading"
          class="final-approval step step-3"
-         :class="{ 'current-step' : this.currentStep === 'finalApproval'}"
+         :class="{ 'current-step' : this.currentStep === 'finalApproval','passed' : isConfirmd}"
          @click="changeCurrentStep('finalApproval')"
     >
       <q-icon name="isax:tick-square"
@@ -55,6 +55,10 @@ export default {
   name: 'Steps',
 
   props: {
+    isConfirmd: {
+      type: Boolean,
+      default: false
+    },
     step: {
       type: String,
       default () {
@@ -62,6 +66,10 @@ export default {
       }
     },
     loading: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
       type: Boolean,
       default: false
     }
@@ -105,6 +113,9 @@ export default {
   emits: ['update:step'],
   methods: {
     changeCurrentStep (step) {
+      if (this.disabled) {
+        return
+      }
       this.$emit('update:step', step)
     }
   }
@@ -156,7 +167,7 @@ export default {
     }
 
     @media screen and (max-width: 599px) {
-      width:20%;
+      width:30%;
     }
   }
 
@@ -170,7 +181,7 @@ export default {
     }
 
     @media screen and (max-width: 599px) {
-      width:20%;
+      width:30%;
     }
     @media screen and (max-width: 1200px) and (min-width: 600px) {
       width:35%;
@@ -181,15 +192,16 @@ export default {
     width:10%;
 
     &.current-step {
+      justify-content: space-around;
       @media screen and (max-width: 599px) {
-        width:60%;
+        width:40%;
       }
     }
 
     @media screen and (max-width: 599px) {
-      width:20%;
+      width:10%;
     }
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1200px) and (min-width: 600px){
       width:20%;
     }
   }
@@ -220,6 +232,10 @@ export default {
   .title{
     margin-right: 16px;
     min-width: 100px;
+
+    @media screen and (max-width: 1023px) {
+      margin-right: 0;
+    }
   }
   .line {
     height: 1.5px;
