@@ -1,6 +1,36 @@
 <template>
   <div class="profile-page-widget">
-    <div class="profile-card-title">اطلاعات کاربری</div>
+    <div class="profile-card-title"
+         :hidden="$q.screen.lt.md">اطلاعات کاربری</div>
+    <div v-if="$q.screen.lt.md"
+         class="flex justify-start profile-btn">
+      <q-btn
+        color="dark"
+        flat
+      >
+        <svg width="22"
+             height="22"
+             viewBox="0 0 22 22"
+             fill="none"
+             xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.228 5.43555L18.7922 10.9997L13.228 16.5639"
+                stroke="#434765"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+          <path d="M3.2085 11H18.636"
+                stroke="#434765"
+                stroke-width="1.5"
+                stroke-miterlimit="10"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+        <div class="profile-card-title-2">
+          اطلاعات کاربری
+        </div>
+      </q-btn>
+    </div>
 
     <div class="profile-card relative-position">
       <entity-crud-form-builder
@@ -251,19 +281,29 @@ export default {
       margin-bottom: 16px;
     }
 
-    @media only screen and (max-width: 1023px) {
-      font-size: 14px;
-      line-height: 22px;
-      margin-bottom: 20px;
-    }
-
-    @media only screen and (max-width: 599px) {
-      font-size: 14px;
-      line-height: 22px;
-      margin-bottom: 16px;
+    //@media only screen and (max-width: 1023px) {
+    //  font-size: 14px;
+    //  line-height: 22px;
+    //  margin-bottom: 20px;
+    //}
+    //
+    //@media only screen and (max-width: 599px) {
+    //  font-size: 14px;
+    //  line-height: 22px;
+    //  margin-bottom: 16px;
+    //}
+  }
+  .profile-btn {
+    margin-bottom: 12px;
+    :deep(.q-btn) {
+      font-weight: 600 !important;
+      font-size: 16px !important;
+      line-height: 25px !important;
+      .profile-card-title-2 {
+        padding-left: 8px;
+      }
     }
   }
-
   .profile-card {
 
     :deep(.outsideLabel) {
