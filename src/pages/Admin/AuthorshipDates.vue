@@ -7,7 +7,7 @@
     v-bind="allProps"
   >
     <!--    {inputData, showConfirmRemoveDialog}-->
-    <template v-slot:entity-crud-table-cell="{inputData}">
+    <template v-slot:entity-crud-table-cell="{inputData, showConfirmRemoveDialog}">
       <q-td :props="inputData.props">
         <template v-if="inputData.props.col.name === 'actions'">
           <q-btn round
@@ -21,12 +21,18 @@
               مشاهده
             </q-tooltip>
           </q-btn>
-          <!--          <q-btn round flat dense size="md" color="negative" icon="delete" class="q-ml-md"-->
-          <!--                 @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">-->
-          <!--            <q-tooltip>-->
-          <!--              حذف-->
-          <!--            </q-tooltip>-->
-          <!--          </q-btn>-->
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="negative"
+                 icon="delete"
+                 class="q-ml-md"
+                 @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
+            <q-tooltip>
+              حذف
+            </q-tooltip>
+          </q-btn>
         </template>
         <template v-else-if="inputData.props.col.name === 'description'">
           <div v-html="inputData.props.value" />
@@ -140,9 +146,7 @@ export default {
   methods: {
     // for index.vue
     getRemoveMessage (row) {
-      const firstName = row.first_name
-      const lastName = row.last_name
-      return 'آیا از حذف ' + firstName + ' ' + lastName + ' اطمینان دارید؟'
+      return 'آیا از حذف ' + '(' + row.value + ')' + ' اطمینان دارید؟'
     },
     createValue (val, done) {
       // Calling done(var) when new-value-mode is not set or "add", or done(var, "add") adds "var" content to the model

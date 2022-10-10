@@ -143,7 +143,7 @@ const mixinQuiz = {
               text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
               type: 'error'
             })
-            that.$router.push({ name: 'user.exam.list' })
+            that.$router.push({ name: 'User.Exam.List' })
           })
       })
 
@@ -191,7 +191,7 @@ const mixinQuiz = {
       //           text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
       //           type: 'error'
       //         })
-      //         that.$router.push({ name: 'user.exam.list' })
+      //         that.$router.push({ name: 'User.Exam.List' })
       //       })
       //   })
       //
@@ -243,7 +243,7 @@ const mixinQuiz = {
               // save exam info in vuex store (remove questions of exam then save in store)
               examData.exam.loadSubcategoriesOfCategories()
               const ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
-              Time.setStateOfExamCategories(examData.exam.categories, ACTIVE_ALL_CATEGORIES_IN_EXAM)
+              Time.setStateOfExamCategories(examData.exam.categories.list, ACTIVE_ALL_CATEGORIES_IN_EXAM)
               const currentExamQuestions = that.getCurrentExamQuestions()
               Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
               that.$store.commit('Exam/updateQuiz', examData.exam)
@@ -259,13 +259,13 @@ const mixinQuiz = {
               resolve(result)
             } catch (error) {
               console.error(error)
-              that.$router.push({ name: 'user.exam.list' })
+              that.$router.push({ name: 'User.Exam.List' })
               reject(error)
             }
           })
           .catch((error) => {
             reject(error)
-            that.$router.push({ name: 'user.exam.list' })
+            that.$router.push({ name: 'User.Exam.List' })
           })
           .finally(() => {
             that.$store.commit('loading/overlay', { loading: false, message: '' })
@@ -421,7 +421,7 @@ const mixinQuiz = {
 
       return currentExamQuestionsArray
     },
-    startExam (examId, viewType, personal) {
+    startExam (examId, viewType, personal, retake) {
       if (!Assistant.getId(examId)) {
         return
       }
@@ -429,12 +429,12 @@ const mixinQuiz = {
       return new Promise((resolve, reject) => {
         let userExamId
         const examData = new ExamData(this.$axios)
-        if (that.needToLoadQuizData()) {
+        if (that.needToLoadQuizData() || retake) {
           that.saveCurrentExamQuestions([])
           that.$store.commit('Exam/cleanCurrentQuestion')
           that.bookletsDialog = true
           that.$store.commit('loading/overlay', true)
-          examData.getExamDataAndParticipate(examId, personal)
+          examData.getExamDataAndParticipate(examId, personal, retake)
           examData.loadQuestionsFromFile()
         } else {
           userExamId = that.quiz.user_exam_id
@@ -443,13 +443,13 @@ const mixinQuiz = {
           .run()
           .then((result) => {
             try {
-              if (that.needToLoadQuizData()) {
+              if (that.needToLoadQuizData() || retake) {
                 // save questions in localStorage
                 that.saveCurrentExamQuestions(examData.exam.questions.list)
                 // save exam info in vuex store (remove questions of exam then save in store)
                 examData.exam.loadSubcategoriesOfCategories()
                 const ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
-                Time.setStateOfExamCategories(examData.exam.categories, ACTIVE_ALL_CATEGORIES_IN_EXAM)
+                Time.setStateOfExamCategories(examData.exam.categories.list, ACTIVE_ALL_CATEGORIES_IN_EXAM)
                 const currentExamQuestions = that.getCurrentExamQuestions()
                 Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
                 that.$store.commit('Exam/updateQuiz', examData.exam)
@@ -467,13 +467,13 @@ const mixinQuiz = {
               resolve(result)
             } catch (error) {
               console.error(error)
-              that.$router.push({ name: 'user.exam.list' })
+              that.$router.push({ name: 'User.Exam.List' })
               reject(error)
             }
           })
           .catch((error) => {
             reject(error)
-            that.$router.push({ name: 'user.exam.list' })
+            that.$router.push({ name: 'User.Exam.List' })
           })
           .finally(() => {
             that.$store.commit('loading/overlay', false)
@@ -513,7 +513,7 @@ const mixinQuiz = {
       if (viewType !== 'results') {
         const currentExamQuestions = this.getCurrentExamQuestions()
         const ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
-        Time.setStateOfExamCategories(quiz.categories, ACTIVE_ALL_CATEGORIES_IN_EXAM)
+        Time.setStateOfExamCategories(quiz.categories.list, ACTIVE_ALL_CATEGORIES_IN_EXAM)
         Time.setStateOfQuestionsBasedOnActiveCategory(quiz, currentExamQuestions)
         this.setCurrentExamQuestions(currentExamQuestions)
       }
@@ -689,10 +689,14 @@ const mixinQuiz = {
       return this.getQuestionByIndex(prevIndex)
     },
     goToCategory (categoryId) {
-      const nextCategoryQuestion = this.quiz.questions.list.find((item) => Assistant.getId(item.category_id) === Assistant.getId(categoryId))
-      if (nextCategoryQuestion) {
-        this.changeQuestion(nextCategoryQuestion.id)
+      const currentExamQuestionsInArray = this.getCurrentExamQuestionsInArray()
+      const currentQuestionCategoryId = this.currentQuestion.sub_category.category_id
+      const currentQuestionCategoryIsSameCategory = currentQuestionCategoryId === categoryId
+      const firstQuestionOfCategory = (currentQuestionCategoryIsSameCategory) ? this.currentQuestion : currentExamQuestionsInArray.find((item) => Assistant.getId(item.sub_category.category_id) === Assistant.getId(categoryId))
+      if (!firstQuestionOfCategory) {
+        return
       }
+      this.changeQuestion(firstQuestionOfCategory.id)
     },
     goToNextQuestion (viewType) {
       const question = this.getNextQuestion(this.currentQuestion.id)

@@ -127,7 +127,7 @@ export default {
           //   type: 'success'
           // })
           that.$store.commit('clearExamData', that.quiz.user_exam_id)
-          that.$router.push({ name: 'user.exam.list' })
+          that.$router.push({ name: 'User.Exam.List' })
         })
         .catch(() => {
           // that.$notify({
@@ -137,7 +137,7 @@ export default {
           //   type: 'error',
           //   duration: 30000
           // })
-          that.$router.push({ name: 'user.exam.list' })
+          that.$router.push({ name: 'User.Exam.List' })
         })
     }
   }

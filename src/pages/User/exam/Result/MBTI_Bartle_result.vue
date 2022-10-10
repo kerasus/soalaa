@@ -319,7 +319,7 @@ export default {
 
     // const quizId = this.$route.params.exam_id
     // if (!this.userQuizListData || !this.userQuizListData[quizId] || !this.currentExamQuestions) {
-    //   this.$router.push({name: 'user.exam.list'})
+    //   this.$router.push({name: 'User.Exam.List'})
     //   return
     // }
     this.drawer = false

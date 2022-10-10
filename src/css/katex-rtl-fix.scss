@@ -1,0 +1,15 @@
+@mixin katex-rtl-fix {
+  .sqrt {
+    & > .root {
+      /*rtl:ignore*/
+      margin-left:.27777778em;
+      margin-right:-.55555556em
+    }
+  }
+  .mtable {
+    .col-align-l > .vlist-t {
+      /*rtl:ignore*/
+      text-align: left;
+    }
+  }
+}

@@ -5,6 +5,9 @@
         <div v-if="report"
              class="row">
           <div class="col col-12 proceeds-table">
+            <div>
+              تخمین رتبه براساس نتایج کنکور سراسری بزودی اضافه خواهد شد
+            </div>
             <q-btn class="full-width"
                    label="تخمین رتبه"
                    style="background-color: #00bcd4; color: #fffaee"
