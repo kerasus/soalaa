@@ -201,6 +201,18 @@ export default {
           return '<span class="myTooltip" style="background-color:' + point.color + ';">' + point.y + '&nbsp' + 'سوال' + '</span>'
         }
       },
+      xAxis: {
+        labels:
+          {
+            enabled: false
+          }
+      },
+      yAxis: {
+        labels:
+          {
+            enabled: false
+          }
+      },
       plotOptions: {
         pie: {
           innerSize: '98%',
@@ -524,7 +536,32 @@ export default {
           }
 
           .chart-b{
+            &:deep( .myTooltip) {
+              border-radius: 10px;
+              direction: ltr;
+              color: var(--3a-Neutral3);
+              padding: 5px !important;
+              width: 50px;
+              white-space: normal !important;
+              display: flex;
+              justify-content: center;
+            }
 
+            &:deep( .title-1 ) {
+              font-weight: 700;
+              font-size: 24px;
+              line-height: 20px;
+              text-align: center;
+              color: #23263B;
+            }
+
+            &:deep( .title-2) {
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 20px;
+              text-align: center;
+              color: #23263B;
+            }
             @media screen and (max-width: 1439px){
               margin-top: 12px;
             }
