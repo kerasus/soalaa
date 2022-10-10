@@ -891,7 +891,7 @@ export default defineComponent({
       }
     }
     @media screen and (max-width: 1439px) {
-      margin-right: 24px;
+      margin-right: 0;
       height: 394px;
     }
     @media screen and (max-width: 1200px) {
