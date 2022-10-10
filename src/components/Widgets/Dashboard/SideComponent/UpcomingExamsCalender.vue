@@ -515,7 +515,6 @@ export default defineComponent({
     }
 
     const loadCalendar = (date, first) => {
-      console.log(date)
       // assign variables data
       let dayCounter = 1
       moment.loadPersian()
