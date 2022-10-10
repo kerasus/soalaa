@@ -14,7 +14,7 @@
           >
             <q-img
               :src="orderedItem.grand.photo"
-              class="order-image"
+              class="order-image "
             />
           </div>
 
@@ -42,7 +42,7 @@
 
               <div class="final-part">
                 <div class="final-price">{{ orderedItem.grand.price.toman('final', null) }}</div>
-                <div v-if=" orderedItem.grand.price > 0"
+                <div v-if=" orderedItem.grand.price.final > 0"
                      class="toman">تومان</div>
               </div>
             </div>
@@ -72,7 +72,8 @@
             <div
               class="price-container"
             >
-              <div class="discount-part">
+              <div v-if="orderedItem.order_product.list[0].price.discountInPercent()"
+                   class="discount-part">
                 <div class="discount-percent">
                   {{ orderedItem.order_product.list[0].price.discountInPercent() }}%
                 </div>
@@ -84,7 +85,7 @@
 
               <div class="final-part">
                 <div class="final-price">
-                  {{ orderedItem.order_product.list[0].price.toman('final', null) }}
+                  {{ orderedItem.order_product.list[0].price.toman('final', null)  ? orderedItem.order_product.list[0].price.toman('final', null) : 0}}
                 </div>
                 <div class="toman">تومان</div>
               </div>
@@ -120,7 +121,7 @@
                       class="pamphlet"
                     >
                       <template v-if="item && item.product">
-                        <div class="title">
+                        <div class="title ellipsis">
                           {{ item.product.title }}
                         </div>
 
@@ -250,22 +251,25 @@ export default {
 
       @media screen and (max-width: 599px) {
         background: #F2F5F9 !important;
+        padding: 12px;
       }
 
       .card-section {
         padding: 0;
         display: flex;
         @media screen and (max-width: 450px) {
-          flex-direction: column;
+          //flex-direction: column;
         }
         .order-image-section {
           padding: 0;
-          margin-right: 20px;
+          margin-right: 24px;
 
           @media screen and (max-width: 1439px) {
             margin-right: 16px;
           }
-
+          @media screen and (max-width: 599px){
+            margin-right: 8px;
+          }
           .order-image {
             height: 96px;
             width: 96px;
@@ -276,11 +280,11 @@ export default {
             //  height: 110px;
             //}
 
-            //@media screen and (max-width: 599px) {
-            //  width: 72px;
-            //  height: 72px;
-            //  margin-top: 34px;
-            //}
+            @media screen and (max-width: 599px) {
+              width: 72px;
+              height: 72px;
+              margin-top: 0;
+            }
           }
         }
 
@@ -312,12 +316,13 @@ export default {
               letter-spacing: -0.03em;
               color: #434765;
               width: 100%;
-
-              //@media screen and (max-width: 599px) {
-              //  position: absolute;
-              //  padding-right: 36px;
-              //  font-size: 14px;
-              //}
+              @media screen and (max-width: 599px) {
+                //padding-right: 36px;
+                font-size: 14px;
+                line-height: 22px;
+                max-height: 44px;
+                overflow: hidden;
+              }
             }
 
             .trash-button {
@@ -382,6 +387,9 @@ export default {
             align-items: center;
             height: 25px;
             margin-top: 20px;
+            @media screen and (max-width: 599px) {
+              margin-top: 15px;
+            }
             .discount-part {
               display: flex;
               align-items: center;
@@ -420,9 +428,10 @@ export default {
                   margin-right: 8px;
                 }
 
-                //@media screen and (max-width: 599px) {
-                //  text-align: left;
-                //}
+                @media screen and (max-width: 599px) {
+                  font-size: 12px;
+                  line-height: 19px;
+                }
               }
             }
 
@@ -440,6 +449,10 @@ export default {
 
                 @media screen and (max-width: 1439px) {
                   margin-right: 2px;
+                }
+                @media screen and (max-width: 599px) {
+                  font-size: 16px;
+                  line-height: 25px;
                 }
 
               }
@@ -542,13 +555,18 @@ export default {
               }
 
               .details-expansion-card {
+                @media screen and (max-width: 599px) {
+                  background: #f2f5f9;
+                }
                 .details-expansion-card-section {
                   padding: 0;
                   margin: 20px 0 20px 0;
 
-                  //@media screen and (max-width: 599px) {
-                  //  margin: 16px 0 16px 0;
-                  //}
+                  @media screen and (max-width: 599px) {
+                    background: #f2f5f9 ;
+                    margin-top: 0;
+                    margin-bottom: 16px;
+                  }
 
                   .pamphlet {
                     padding: 10px 16px;
@@ -560,11 +578,11 @@ export default {
                     grid-template-columns: auto auto;
                     align-items: center;
 
-                    //@media screen and (max-width: 599px) {
-                    //  flex-direction: column;
-                    //  padding: 10px 12px;
-                    //  height: 68px;
-                    //}
+                    @media screen and (max-width: 599px) {
+                      height: auto;
+                      grid-template-columns:1fr;
+                      background: #fff;
+                    }
 
                     .title {
                       font-style: normal;
@@ -612,6 +630,9 @@ export default {
                   justify-content: flex-end;
                   align-items: center;
                   padding: 0;
+                  @media screen and (max-width: 599px){
+                    background: #f2f5f9;
+                  }
 
                   .expansion-link {
                     margin-right: 24px;
