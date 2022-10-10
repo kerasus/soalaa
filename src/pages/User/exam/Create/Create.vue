@@ -293,10 +293,9 @@ export default {
       if (this.draftExam.id) {
         this.loadAttachedQuestions()
       }
-      this.currentTab = this.allTabs[this.draftExam.temp.level - 1]
     },
     setDraftExam () {
-      // load tab page based on draftExam level
+      this.currentTab = this.allTabs[this.draftExam.temp.level - 1]
       this.continueWithOldDraftExamConfirmationDialog = false
     },
     clearDraftExam () {
