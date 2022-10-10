@@ -128,6 +128,12 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding-top: 42px;
+    padding-bottom: 20px;
+    @media screen and (max-width: 1439px){
+      padding-top: 0px;
+      padding-bottom: 0;
+    }
     @media screen and (max-width: 1023px){
       flex-direction: column;
       width: 100%;
