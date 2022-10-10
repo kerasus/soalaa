@@ -5,11 +5,13 @@
     </div>
     <div class="carousel-navigation-btn-wrapper">
       <q-btn color="white"
+             unelevated
              class="carousel-navigation-btn left"
              text-color="black"
              icon="chevron_right"
              @click="prevSlide()" />
       <q-btn color="white"
+             unelevated
              class="carousel-navigation-btn"
              text-color="black"
              icon="chevron_left"
