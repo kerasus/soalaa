@@ -697,6 +697,9 @@ export default {
       display: flex;
       justify-content: space-between;
       color: #434765;
+      @media screen and (max-width: 599px){
+        padding: 15px 18px;
+      }
       .first-col {
         color: #6D708B;
         div {
@@ -709,6 +712,7 @@ export default {
           }
         }
       }
+      //
       .second-col {
         text-align: right;
         div {
@@ -721,6 +725,9 @@ export default {
             font-size: 14px;
             font-weight: 600;
             margin-left: 6px;
+          }
+          :deep(.q-btn__content){
+            margin-right: 0;
           }
         }
 
