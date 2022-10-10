@@ -86,6 +86,7 @@ class ExamData {
       } else if (!that.questionsFileUrl && !questionsFileUrl) {
         that.questionsFileUrl = that.exam.questions_file_url
       }
+      that.questionsFileUrl = 'https://nodes.alaatv.com/aaa/questionFiles/632c3edd8380e35601051344bfb97d268c1a59e25fff57f5c78d3c7b.json'
       this.$axios.get(that.questionsFileUrl, {
         transformRequest: (data, headers) => {
           delete headers.common.Authorization
@@ -202,7 +203,7 @@ class ExamData {
       if (retake) {
         data.retake = true
       }
-      const url = personal ? API_ADDRESS.exam.participate.personal(examId) : API_ADDRESS.exam.participate.sample
+      const url = personal ? API_ADDRESS.exam.participate.personal(examId) : API_ADDRESS.exam.participate.sample(examId)
       this.$axios.post(url, data)
         .then(response => {
           that.exam = new Exam()

@@ -113,12 +113,6 @@
                 <div class="quiz-list-item-action"
                      :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
                 >
-                  <!-- <q-btn
-                  class="quiz-action-btn"
-                  :class="item.exam_actions.can_start ? 'enroll' : 'result'"
-                  :label="item.exam_actions.can_start ? 'ثبت نام در آزمون' : 'مشاهده نتایج'"
-                  @click="item.exam_actions.can_start ? registerExam(item) : goToResult(item)"
-                /> -->
                   <q-btn v-if="item.exam_actions.can_register"
                          class="quiz-action-btn enroll"
                          flat
@@ -129,14 +123,14 @@
                   <q-btn v-if="item.exam_actions.can_start"
                          class="quiz-action-btn enroll"
                          flat
-                         @click="goToParticipateExamPage(item, personal)"
+                         @click="goToParticipateExamPage(item, false, personal)"
                   >
                     شروع آزمون
                   </q-btn>
                   <q-btn v-if="item.exam_actions.can_retake"
                          class="quiz-action-btn enroll"
                          flat
-                         @click="showRetakeConfirmation(item)"
+                         @click="showRetakeConfirmation(item, personal)"
                   >
                     شروع مجدد
                   </q-btn>
@@ -144,7 +138,7 @@
                     v-if="item.exam_actions.can_continue"
                     class="quiz-action-btn continue"
                     unelevated
-                    @click="continueExam(item)"
+                    @click="continueExam(item, false, personal)"
                   >
                     ادامه آزمون
                   </q-btn>
@@ -377,8 +371,17 @@ export default defineComponent({
       }
       this.$router.push({ name: routeName, params: { user_exam_id: exam.user_exam_id, exam_id: exam.id } })
     },
-    goToParticipateExamPage (exam, personal) {
-      let routeName = personal ? 'onlineQuiz.alaaView.personal' : 'onlineQuiz.alaaView'
+    getParticipateExamPageRoute (retake, personal) {
+      if (retake) {
+        return 'onlineQuiz.alaaView.retake'
+      }
+      if (personal) {
+        return 'onlineQuiz.alaaView.personal'
+      }
+      return 'onlineQuiz.alaaView'
+    },
+    goToParticipateExamPage (exam, retake, personal) {
+      let routeName = this.getParticipateExamPageRoute(retake, personal)
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
         routeName = 'onlineQuiz.mbtiBartle'
       }
@@ -400,12 +403,31 @@ export default defineComponent({
         }
       })
     },
-    continueExam (exam) {
-      let routeName = 'onlineQuiz.alaaView'
+    continueExam (exam, retake, personal) {
+      let routeName = this.getParticipateExamPageRoute(retake, personal)
+      if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
+        routeName = 'onlineQuiz.mbtiBartle'
+      }
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
         routeName = 'onlineQuiz.mbtiBartle'
       }
       this.$router.push({ name: routeName, params: { quizId: exam.id, questNumber: 1 } })
+    },
+    showRetakeConfirmation (exam, personal) {
+      this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
+        message: 'با زدن دکمه تایید گزینه های شما حدف نمی شوند اما زمان آزمون شما از اول شروع می شود',
+        buttons: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: async (confirm) => {
+          if (confirm) {
+            this.goToParticipateExamPage(exam, true, personal)
+          }
+          this.closeConfirmModal()
+        }
+      })
     },
     // getExams () {
     //   const that = this
