@@ -31,6 +31,7 @@
           <!--          </div>-->
           <div
             class="drawer-btn hamburger"
+            :style="{ visibility: isUserLogin ? 'visible' : 'hidden' }"
           >
             <q-btn
               class="toolbar-button"
