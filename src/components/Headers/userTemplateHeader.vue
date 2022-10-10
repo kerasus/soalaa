@@ -104,6 +104,130 @@
               width="48px"
               height="48px"
             />
+            <q-menu class="user-profile-dropdown"
+                    :offset="[170, 10]">
+              <div class="dropdown-box">
+                <div class="header">
+                  <div class="profile-box">
+                    <div class="profile-detail">
+                      <div class="profile-photo-box">
+                        <div class="profile-photo-img">
+                          <q-img
+                            class="user-photo"
+                            :src="user.photo"
+                            width="60px"
+                            height="60px"
+                          />
+                        </div>
+                      </div>
+                      <div
+                        v-if="isUserLogin"
+                        class="profile-detail-info"
+                      >
+                        <div class="info-name">{{user.full_name}}</div>
+                        <div class="info-phoneNumber">{{user.mobile}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="body">
+                  <div
+                    class="user-panel-base-menu"
+                  >
+                    <q-list
+                      class="side-menu-list"
+                      padding
+                      dark
+                    >
+                      <div
+                        v-for="(item , index) in titlesList"
+                        :key="index"
+                      >
+                        <div
+                          v-if="showMenuItem(item)"
+                        >
+                          <q-expansion-item
+                            v-if="item.children.length"
+                            :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
+                            :label="item.title"
+                            :icon="item.icon"
+                            class="side-expansion-list"
+                            dark
+                          >
+                            <div class="expansion-body">
+                              <q-separator dark
+                                           size="2px"
+                                           vertical
+                                           class="vertical-separator" />
+                              <q-list class="list-expansion">
+                                <q-item
+                                  v-for="(subItem , i) in item.children"
+                                  :key="i"
+                                  :to="{ name: subItem.routeName, params: subItem.params }"
+                                  class="list-child-item"
+                                  :exact-active-class="getQItemExactActiveClass"
+                                >
+                                  <q-item-section
+                                    class="list-child-section"
+                                  >
+                                    {{ subItem.displayName }}
+                                  </q-item-section>
+                                  <span class="indicator" />
+                                </q-item>
+                              </q-list>
+                            </div>
+                          </q-expansion-item>
+                          <q-item
+                            v-else
+                            v-model="clickedItem"
+                            :to="(item.routeName) ? {name: item.routeName} : null"
+                            class="item-list"
+                            :class="{ 'alone-item': !item.children.length , 'alone-item-mode-drawer' : mode === 'drawer'}"
+                            :exact-active-class="getQItemExactActiveClass"
+                          >
+                            <div class="section-title">
+                              <q-item-section class="list-section title-icon"
+                                              avatar>
+                                <q-avatar :icon="item.icon"
+                                          size="30" />
+                              </q-item-section>
+                              <q-item-section class="list-section">
+                                {{ item.title }}
+                              </q-item-section>
+                              <span class="indicator" />
+                            </div>
+                          </q-item>
+                        </div>
+                      </div>
+                    </q-list>
+                    <div
+                      v-if="isUserLogin"
+                      class="log-out"
+                      @click="logOut"
+                    >
+                      <span>
+                        <q-avatar icon="isax:logout"
+                                  size="30"
+                                  dir="rtl" />
+                      </span>
+                      <span class="logout-text">خروج </span>
+                    </div>
+                    <div
+                      v-else
+                      class="log-out"
+                      @click="goToLogin"
+                    >
+                      <span>
+                        <q-avatar icon="isax:logout"
+                                  size="30"
+                                  dir="rtl" />
+                      </span>
+                      <span class="logout-text">ورود </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </q-menu>
           </q-btn>
           <div
             v-else
@@ -165,6 +289,32 @@ export default {
         //   title: 'تماس با ما',
         //   to: ''
         // }
+      ],
+      titlesList: [
+        {
+          title: 'پروفایل',
+          icon: 'isax:user',
+          routeName: 'User.Profile',
+          permission: 'all',
+          active: false,
+          children: []
+        },
+        {
+          title: 'آزمون های من',
+          icon: 'isax:task-square',
+          routeName: 'User.Exam.List',
+          permission: 'all',
+          active: false,
+          children: []
+        },
+        {
+          title: 'سفارش‌ ها',
+          icon: 'isax:clipboard-text',
+          routeName: 'User.MyOrders',
+          permission: 'all',
+          active: false,
+          children: []
+        }
       ]
     }
   },
@@ -188,6 +338,11 @@ export default {
       return (itemName) => {
         return (this.$route.name === itemName)
       }
+    },
+    showMenuItem () {
+      return (item) => {
+        return (item.permission === 'all' || this.user.hasPermission(item.permission))
+      }
     }
   },
   methods: {
@@ -196,6 +351,12 @@ export default {
     ]),
     toggleLeftDrawer () {
       this.updateLayoutLeftDrawerVisible(true)
+    },
+    logOut () {
+      return this.$store.dispatch('Auth/logOut')
+    },
+    goToLogin() {
+      this.$router.push({ name: 'login' })
     }
   }
 }
@@ -406,6 +567,293 @@ export default {
       text-align: center;
       letter-spacing: -0.03em;
     }
+  }
+}
+</style>
+<style lang="scss">
+.user-profile-dropdown {
+  width: 220px;
+  height: 300px;
+  background: #FFFFFF;
+  border: 1px solid #F2F5F9;
+  border-radius: 0px 16px 16px 16px #{"/* rtl:ignore */"};
+  .header {
+
+    box-shadow: 0px 6px 10px rgba(49, 46, 87, 0.04) #{"/* rtl:ignore */"};
+    border-radius: 0px 15px 0px 0px #{"/* rtl:ignore */"};
+  }
+  .profile-box {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: left;
+    color: #6D708B;
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 16px;
+    .profile-detail {
+      display: grid;
+      grid-template-columns: 70px auto;
+      align-items: center;
+      .profile-photo-box {
+        //background: #FFB74D;
+
+        width: 60px;
+        height: 60px;
+        border: 3px solid #FFFFFF;
+        border-radius: 16px;
+        position: relative;
+        .profile-photo-img {
+          .q-img {
+            border-radius: 16px;
+            height: 100%;
+          }
+          width: 60px;
+          height: 60px;
+          border-radius: 16px;
+          .user-photo {
+            img {
+              border: 2px solid #FFB74D;
+              border-radius: 16px;
+              max-width: 100%;
+              width: 100%;
+            }
+          }
+        }
+        .profile-photo-badge {
+          position: absolute;
+          bottom: -15px;
+          left: -7px;
+        }
+      }
+      .profile-detail-info {
+        .info-name {
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 25px;
+          color: #434765;
+        }
+        .info-phoneNumber {}
+      }
+    }
+  }
+  .user-panel-base-menu {
+    display: flex;
+    flex-direction: column;
+    color: #6D708B;
+
+    .q-list {
+      color: #6D708B;
+      padding: 0;
+
+      &.side-menu-list {
+        .top-separator {
+          margin: 0 40px 32px 40px;
+        }
+
+        .q-item {
+          padding: 0;
+          min-height: 0;
+
+          &.item-list {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 22px;
+            cursor: pointer;
+            padding: 0 14px 0 10px;
+            border-radius: 14px;
+            &.alone-item {
+              height: 40px;
+
+              &.active-route-side-mode {
+                .indicator {
+                  height: 8px;
+                  width: 8px;
+                  background-color: white;
+                  border-radius: 50%;
+                  margin: auto;
+                }
+              }
+            }
+            &.alone-item-mode-drawer {
+              &.active-route-side-mode {
+                .indicator {
+                  background-color: #6D708B6B !important;
+                }
+              }
+            }
+
+            .section-title {
+              height: 30px;
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+
+              .title-icon {
+                margin-right: 12px;
+              }
+
+              .q-item__section--side {
+                padding: 0;
+              }
+            }
+
+            .list-section {
+              display: flex;
+              flex-direction: row;
+              justify-content: right;
+
+              .q-avatar {
+                height: 22px;
+                width: 22px;
+              }
+            }
+          }
+        }
+
+        .side-expansion-list {
+          &.top-expansion {
+            margin-bottom: 10px;
+          }
+
+          .expansion-body {
+            display: flex;
+            margin-left: 8px;
+          }
+
+          .q-expansion-item__content {
+            .vertical-separator {
+              margin: 6px 9px 9px 9px;
+            }
+          }
+
+          .q-list {
+            &.list-expansion {
+              margin-bottom: 0;
+
+              .item-list-expansion {
+                height: 30px;
+                margin: 5px;
+
+                .item-list-expansion-title {
+                  justify-content: start;
+                }
+              }
+
+              .top-expansion-separator {
+              }
+
+              .list-child-item {
+                height: 30px;
+                justify-content: right;
+                margin-bottom: 8px;
+                width: 157px;
+                border-radius: 10px;
+                padding: 0 14px;
+
+                &:last-child {
+                  margin-bottom: 0;
+                }
+
+                .list-child-section {
+                  font-size: 14px !important;
+                  justify-content: center;
+                }
+              }
+            }
+          }
+        }
+
+        .active-route-side-mode {
+
+          background-color: #8075DC;
+          .indicator {
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+            margin: auto;
+          }
+        }
+        .item-mode-drawer {
+          background: #F6F9FF;
+          .indicator {
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+            margin: auto;
+            background-color: #6D708B6B ;
+          }
+        }
+
+      }
+
+      .q-item__section--avatar {
+        min-width: 0 !important;
+      }
+
+      a {
+        text-decoration: none;
+        padding: 0;
+      }
+    }
+
+    &.list-side-mode {
+      color: white;
+      .q-list {
+        a {
+          color: white;
+        }
+      }
+    }
+
+    &.list-drawer-mode {
+      color: #6D708B;
+      .q-list {
+        a {
+          color: #6D708B;
+        }
+      }
+    }
+
+    .log-out {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 22px;
+      cursor: pointer;
+      height: 40px !important;
+      padding: 0 6px;
+      //width: 232px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      margin-top: 15px;
+      //@media screen and (max-width: 1439px) {
+      //  margin: 0 31px 33px 31px;
+      //}
+      //@media screen and (max-width: 599px) {
+      //  margin: 0 30px 30px 30px;
+      //  //padding: 0 0 0 10px;
+      //}
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .q-avatar {
+        height: 22px;
+        width: 22px;
+        margin-right: 12px;
+        transform: matrix(-1, 0, 0, 1, 0, 0);
+      }
+    }
+  }
+  .body {
+    padding-right: 16px;
+    padding-left: 16px;
   }
 }
 </style>
