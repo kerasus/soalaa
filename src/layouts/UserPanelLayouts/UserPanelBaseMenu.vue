@@ -70,14 +70,29 @@
         </div>
       </div>
     </q-list>
-    <div class="log-out"
-         @click="logOut">
+    <div
+      v-if="isUserLogin"
+      class="log-out"
+      @click="logOut"
+    >
       <span>
         <q-avatar icon="isax:logout"
                   size="30"
                   dir="rtl" />
       </span>
       <span class="logout-text">خروج </span>
+    </div>
+    <div
+      v-else
+      class="log-out"
+      @click="goToLogin"
+    >
+      <span>
+        <q-avatar icon="isax:logout"
+                  size="30"
+                  dir="rtl" />
+      </span>
+      <span class="logout-text">ورود </span>
     </div>
   </div>
 </template>
@@ -161,9 +176,15 @@ export default {
   methods: {
     logOut () {
       return this.$store.dispatch('Auth/logOut')
+    },
+    goToLogin() {
+      this.$router.push({ name: 'login' })
     }
   },
   computed: {
+    isUserLogin() {
+      return this.$store.getters['Auth/isUserLogin']
+    },
     user () {
       if (this.$store.getters['Auth/user']) {
         return this.$store.getters['Auth/user']

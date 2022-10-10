@@ -25,7 +25,10 @@
             </svg>
           </div>
         </div>
-        <div class="profile-detail-info">
+        <div
+          v-if="isUserLogin"
+          class="profile-detail-info"
+        >
           <div class="info-name">{{user.full_name}}</div>
           <div class="info-phoneNumber">{{user.mobile}}</div>
         </div>
@@ -82,6 +85,9 @@ export default {
         return this.$store.getters['Auth/user']
       }
       return new User()
+    },
+    isUserLogin() {
+      return this.$store.getters['Auth/isUserLogin']
     },
     showMenuItem () {
       return (item) => {
