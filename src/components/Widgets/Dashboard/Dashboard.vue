@@ -35,7 +35,7 @@
     </div>
     <div v-else
          class="content-wrapper">
-      <div>
+      <div v-if="windowSize">
         <div
           v-if="windowSize.x < 1024"
           class="profile-container"
@@ -60,11 +60,13 @@
         <dashboard-header />
         <next-exam />
         <div class="board-container row">
-          <div class="col-12 col-lg-8">
+          <div class="col-12 col-lg-8 calendar-col"
+          >
             <upcoming-exams-calender :calendarTitle="'آزمون های پیش‌رو'"
                                      :calendarIcon="'isax:calendar-1'" />
           </div>
-          <div class="col-12 col-lg-4">
+          <div class="col-12 col-lg-4 subscription-col"
+          >
             <subscription-status :subscribe="lastSubscribeDate" />
           </div>
         </div>
@@ -230,7 +232,6 @@
                     fill="#8A8CA6" />
             </svg>
           </q-btn>
-
         </div>
       </div>
     </div>
@@ -294,6 +295,28 @@ export default {
 
 <style scoped lang="scss">
 .dashboard-container {
+  .calendar-col {
+    padding-right: 0;
+    margin-bottom: 0;
+    @media screen and (min-width: 1439px) {
+      padding-right: 15px;
+    }
+
+    @media screen and (max-width: 1439px) {
+      margin-bottom: 15px;
+    }
+  }
+  .subscription-col {
+    padding-left: 0;
+    margin-top: 0;
+    @media screen and (min-width: 1439px) {
+      padding-left: 15px;
+    }
+
+    @media screen and (max-width: 1439px) and (min-width: 1200px) {
+      margin-top: 85px;
+    }
+  }
   .profile-box {
     font-style: normal;
     font-weight: 400;
