@@ -367,6 +367,11 @@ export default {
       }
     }
   }
+  .content-wrapper {
+    @media screen and (max-width: 599px) {
+      padding-bottom: 60px;
+    }
+  }
 }
 .navigation-btn {
   width: 100%;
@@ -422,6 +427,7 @@ export default {
   }
 }
 .bottom-nav {
+  position: fixed;
   height: 72px;
   background: #FFFFFF;
   box-shadow: 0px -6px 10px rgba(112, 108, 161, 0.07) #{"/* rtl:ignore */"};
@@ -433,6 +439,8 @@ export default {
   align-items: center;
   padding-right: 42px;
   padding-left: 42px;
+  bottom: 0;
+  width: 100%;
   .btn-style {
     width: 44px;
     height: 44px;
