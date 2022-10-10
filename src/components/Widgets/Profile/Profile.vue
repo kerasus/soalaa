@@ -47,14 +47,14 @@ export default {
         { type: 'input', name: 'first_name', responseKey: 'first_name', label: 'نام', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
         { type: 'input', name: 'last_name', responseKey: 'last_name', label: 'نام خانوادگی', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
         { type: 'input', name: 'national_code', responseKey: 'national_code', label: 'کدملی', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
-        { type: 'select', name: 'gender', responseKey: 'gender.title', label: 'جنسیت', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'select', name: 'gender', responseKey: 'gender.title', dropdownIcon: 'isax:arrow-down-1', label: 'جنسیت', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
         { type: 'input', name: 'mobile', responseKey: 'mobile', label: 'شماره موبایل', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
         { type: 'input', name: 'email', responseKey: 'email', label: 'ایمیل', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
         { type: 'input', value: 'دانش آموز', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'نوع کاربری', placeholder: ' ', disable: true },
-        { type: 'select', name: 'major', label: 'رشته تحصیلی', responseKey: 'major.title', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
-        { type: 'select', name: 'grade', responseKey: 'grade.title', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'پایه تحصیلی', placeholder: ' ' },
-        { type: 'select', name: 'province', responseKey: 'province.title', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'استان', placeholder: ' ' },
-        { type: 'select', name: 'city', responseKey: 'city.title', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'شهر', placeholder: ' ' },
+        { type: 'select', name: 'major', label: 'رشته تحصیلی', responseKey: 'major.title', dropdownIcon: 'isax:arrow-down-1', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
+        { type: 'select', name: 'grade', responseKey: 'grade.title', dropdownIcon: 'isax:arrow-down-1', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'پایه تحصیلی', placeholder: ' ' },
+        { type: 'select', name: 'province', responseKey: 'province.title', dropdownIcon: 'isax:arrow-down-1', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'استان', placeholder: ' ' },
+        { type: 'select', name: 'city', responseKey: 'city.title', dropdownIcon: 'isax:arrow-down-1', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'شهر', placeholder: ' ' },
         { type: 'input', name: 'school', responseKey: 'school', label: 'مدرسه', options: {}, col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' }
       ],
       find: null,
@@ -332,7 +332,7 @@ export default {
       }
 
       .q-field__append {
-        padding: 0;
+        //padding: 0;
       }
     }
 
