@@ -79,7 +79,7 @@
                     </div>
                   </div>
                   <div class="chart-b col-md-8 col-sm-12">
-                    <chart class="row justify-md-end justify-xs-center "
+                    <chart class="row justify-center"
                            :options="chartOptions" />
                   </div>
                 </div>
@@ -88,6 +88,7 @@
                     <q-btn
                       unelevated
                       color="primary"
+                      :disable="exam.loading"
                       class="full-width confirm q-mr-xl"
                       @click="confirmExam"
                     >
@@ -98,6 +99,7 @@
                   <div class="previous-b col-lg-12 col-sm-6">
                     <q-btn
                       unelevated
+                      :disable="exam.loading"
                       class="full-width q-mr-xl previous"
                       @click="goToPrevious"
                     >
@@ -198,6 +200,18 @@ export default {
           const point = this.point
           return '<span class="myTooltip" style="background-color:' + point.color + ';">' + point.y + '&nbsp' + 'سوال' + '</span>'
         }
+      },
+      xAxis: {
+        labels:
+          {
+            enabled: false
+          }
+      },
+      yAxis: {
+        labels:
+          {
+            enabled: false
+          }
       },
       plotOptions: {
         pie: {
@@ -522,7 +536,32 @@ export default {
           }
 
           .chart-b{
+            &:deep( .myTooltip) {
+              border-radius: 10px;
+              direction: ltr;
+              color: var(--3a-Neutral3);
+              padding: 5px !important;
+              width: 50px;
+              white-space: normal !important;
+              display: flex;
+              justify-content: center;
+            }
 
+            &:deep( .title-1 ) {
+              font-weight: 700;
+              font-size: 24px;
+              line-height: 20px;
+              text-align: center;
+              color: #23263B;
+            }
+
+            &:deep( .title-2) {
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 20px;
+              text-align: center;
+              color: #23263B;
+            }
             @media screen and (max-width: 1439px){
               margin-top: 12px;
             }

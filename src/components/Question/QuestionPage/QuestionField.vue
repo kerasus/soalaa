@@ -19,6 +19,7 @@
     />
   </div>
 </template>
+
 <script>
 import API_ADDRESS from 'src/api/Addresses'
 import { Question } from 'src/models/Question'
@@ -104,16 +105,39 @@ export default {
 }
 
 // ToDo: check this styles in scoped style tag
-#mathfield .ML__cmr,
-.katex .mtight {
-  font-family: IRANSans;
+
+</style>
+<style lang="scss">
+/*rtl:ignore*/
+@import "src/css/katex-rtl-fix.scss";
+//rtl change bug fix
+[dir="rtl"] .katex {
+  @include katex-rtl-fix
 }
 
+.type-section.katex * {
+  //font-family: KaTeX_Main, Times New Roman, serif !important;
+}
+#mathfield .ML__cmr,
+.katex .mtight {
+  font-family: yekanbakh,serif;
+}
 .inline .v-btn.blue--text {
   display: none;
 }
 
 .tiptap-plus-container.focused {
   border: solid 1px #dedede;
+}
+.type-section {
+  //font-family: KaTeX_Main, Times New Roman, serif !important;
+  .katex {
+    * {
+      //font-family: KaTeX_Main, Times New Roman, serif !important;
+    }
+  }
+}
+.katex .svg-align {
+  text-align: right !important;
 }
 </style>

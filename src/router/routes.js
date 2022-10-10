@@ -567,6 +567,20 @@ const routes = [
         }
       },
       {
+        path: '/onlineQuiz/alaaView/retake/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView.retake',
+        component: () => import('pages/User/exam/participate/AlaaView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
         path: '/onlineQuiz/alaaView/personal/:quizId/:questNumber',
         name: 'onlineQuiz.alaaView.personal',
         component: () => import('pages/User/exam/participate/AlaaView'),

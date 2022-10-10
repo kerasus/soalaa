@@ -69,21 +69,20 @@
           dense
         >
           <q-item-section>
-            <question-item
-              pageStrategy="lesson-detail"
-              :question="item"
-              :confirmLoading="confirmQLoading"
-              :questionListOptions="questionsOptions"
-              :consider-active-category="false"
-              :questions-column="$refs.questionsColumn"
-              :exam-id="$route.params.quizId"
-              :sub-category="quizData.sub_categories"
-              :final-approval-mode="false"
-              :show-question-number="true"
-              @detachQuestion="detachQuestion"
-              @deleteQuestion="deleteQuestion"
-              @copyIdToClipboard="copyIdToClipboard"
-              @confirmQuestion="confirmQuestion"
+            <question-item pageStrategy="lesson-detail"
+                           :question="item"
+                           :confirmLoading="confirmQLoading"
+                           :questionListOptions="questionsOptions"
+                           :consider-active-category="false"
+                           :questions-column="$refs.questionsColumn"
+                           :exam-id="$route.params.quizId"
+                           :sub-category="quizData.sub_categories"
+                           :final-approval-mode="false"
+                           :show-question-number="true"
+                           @detachQuestion="detachQuestion"
+                           @deleteQuestion="deleteQuestion"
+                           @copyIdToClipboard="copyIdToClipboard"
+                           @confirmQuestion="confirmQuestion"
             />
           </q-item-section>
         </q-item>
