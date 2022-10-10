@@ -48,10 +48,10 @@ export default {
 .sub-mit-box{
   background: #FFFFFF;
   border-radius: 16px;
-  padding: 30px 80px;
+  padding: 36px 80px;
   margin-bottom: 80px;
   @media  screen and (max-width: 1439px){
-    padding: 24px 60px;
+    padding: 30px 60px;
     margin-bottom: 60px;
   }
   @media  screen and (max-width: 1023px){
@@ -97,6 +97,8 @@ export default {
     align-items: center;
     text-align: center;
     letter-spacing: -0.03em;
+    height: 40px;
+
   }
 }
 </style>

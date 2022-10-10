@@ -224,7 +224,8 @@ export default {
           borderColor: null,
           slicedOffset: 0,
           dataLabels: {
-            connectorWidth: 0
+            connectorWidth: 0,
+            enabled: false
           }
         }
       },

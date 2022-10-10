@@ -128,6 +128,24 @@ export default {
                 boxed: false,
                 style: {}
               }
+            },
+            {
+              cols: [
+                {
+                  widgets: [
+                    {
+                      name: 'BottomNavigation'
+                    }
+                  ],
+                  options: {
+                    className: 'bottom-nav-container'
+                  }
+                }
+              ],
+              options: {
+                boxed: false,
+                style: {}
+              }
             }
           ]
         },
@@ -138,6 +156,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+.bottom-nav-container {
+  position: relative;
+}
 </style>

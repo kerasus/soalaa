@@ -146,7 +146,7 @@
       </div>
     </div>
     <div class="timer-row col">
-      <Timer />
+      <Timer v-if="quiz.accept_at" />
     </div>
   </div>
 </template>
