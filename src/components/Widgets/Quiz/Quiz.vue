@@ -47,7 +47,7 @@
                      icon="east"
                      flat
                      label="آزمون های من"
-                     @click="onClick" />
+                     @click="gotoMyExam" />
             </div>
           </div>
           <div class="col col-12 examList-container">
@@ -208,6 +208,9 @@ export default defineComponent({
           this.upcomingExams = new ExamList(response.data.data)
           this.upcomingExams.loading = false
         })
+    },
+    gotoMyExam() {
+      this.tab = 'myExam'
     }
   }
   // setup() {
