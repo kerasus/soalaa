@@ -5,7 +5,8 @@
     </div>
     <div class="subscription-type">
       <div class="subscription-type-title">نوع اشتراک:</div>
-      <div class="subscription-type-value">
+      <div v-if="subscribe"
+           class="subscription-type-value">
         <span class="subscription-type-value-base">
           {{subscribe.title}}
         </span>
@@ -39,7 +40,8 @@
             محدودیت ساخت آزمون
           </div>
           <highcharts class="flex flex-center"
-                      :options="chartOptionsExam" />
+                      :options="chartOptionsExam"
+          />
         </q-tab-panel>
         <q-tab-panel name="pdf"
                      class="subscription-status-test-tab">
@@ -47,7 +49,8 @@
             محدودیت دانلود PDF
           </div>
           <highcharts class="flex flex-center"
-                      :options="chartOptionsPdf" />
+                      :options="chartOptionsPdf"
+          />
         </q-tab-panel>
       </q-tab-panels>
     </div>
@@ -96,7 +99,7 @@ export default {
           pie: {
             innerSize: '98%',
             startAngle: 0,
-            endAngle: ((this.subscribe.abilities_n.exam - this.subscribe.made.exam) * 360) / this.subscribe.abilities_n.exam,
+            endAngle: 0,
             borderWidth: 13,
             center: ['50%', '52%'],
             size: '150%',
@@ -115,12 +118,12 @@ export default {
           },
           verticalAlign: 'middle',
           floating: true,
-          text: `${((this.subscribe.abilities_n.exam - this.subscribe.made.exam) * 360) / this.subscribe.abilities_n.pdf_questions}<br>آزمون باقی‌مانده`
+          text: ' '
         },
         series: [{
           id: 'idData',
           data: [
-            { name: '', y: (this.subscribe.abilities_n.exam - this.subscribe.made.exam), color: '#9690E4' }
+            { name: '', y: 0, color: '#9690E4' }
           ]
         }]
       },
@@ -149,7 +152,7 @@ export default {
           pie: {
             innerSize: '98%',
             startAngle: 0,
-            endAngle: ((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions,
+            endAngle: 0,
             borderWidth: 13,
             center: ['50%', '52%'],
             size: '150%',
@@ -168,37 +171,47 @@ export default {
           },
           verticalAlign: 'middle',
           floating: true,
-          text: `PDF ${((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions} باقی‌مانده`
+          text: ' '
         },
         series: [{
           id: 'idData',
           data: [
-            { name: '', y: ((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions, color: '#9690E4' }
+            { name: '', y: 0, color: '#9690E4' }
           ]
         }]
       }
     }
   },
-  computed: {
-    thisSubscribe() {
-      return this.subscribe.title
-    }
-  },
   watch: {
     subscribe () {
-      this.loadChartData()
+      this.updateChartsOptions()
     }
   },
+  created() {
+    this.updateChartsOptions()
+  },
   methods: {
-    loadChartData () {
-      // if (!this.subscribe) {
-      //   return
-      // }
+    updateChartsOptions () {
+      this.updateChartOptionsExam()
+      this.updateChartOptionsPdf()
+    },
+    updateChartOptionsExam () {
+      if (!this.subscribe) {
+        return
+      }
 
-      // this.chartOptionsExam.plotOptions.pie.endAngle =
-      // this.chartOptionsExam.series[0].data[0].y =
-      // this.chartOptionsPdf.plotOptions.pie.endAngle =
-      // this.chartOptionsPdf.series[0].data[0].y = (this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions)
+      this.chartOptionsExam.plotOptions.pie.endAngle = ((this.subscribe.abilities_n.exam - this.subscribe.made.exam) * 360) / this.subscribe.abilities_n.exam
+      this.chartOptionsExam.title.text = `${((this.subscribe.abilities_n.exam - this.subscribe.made.exam) * 360) / this.subscribe.abilities_n.pdf_questions}<br>آزمون باقی‌مانده`
+      this.chartOptionsExam.series[0].data[0].y = (this.subscribe.abilities_n.exam - this.subscribe.made.exam)
+    },
+    updateChartOptionsPdf () {
+      if (!this.subscribe) {
+        return
+      }
+
+      this.chartOptionsPdf.plotOptions.pie.endAngle = ((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions
+      this.chartOptionsPdf.title.text = `PDF ${((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions} باقی‌مانده`
+      this.chartOptionsPdf.series[0].data[0].y = ((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions
     }
   }
 }
