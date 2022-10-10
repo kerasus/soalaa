@@ -395,11 +395,27 @@ export default {
     padding: 10px 16px;
     min-height: 70px;
     margin-top: 10px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
   }
   .title-box {
     display: flex;
     align-items: center;
     justify-content: center;
+    :deep(.q-icon) {
+      @media screen and (max-width: 599px) {
+        font-size: 20px !important;
+        padding-right: 8px !important;
+      }
+    }
+  }
+  .arrow-icon{
+    :deep(.q-icon) {
+      @media screen and (max-width: 599px) {
+        font-size: 20px !important;
+      }
+    }
   }
   &.logout {
     margin-bottom: 28px;
