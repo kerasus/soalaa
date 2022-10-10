@@ -50,7 +50,7 @@
           </div>
 
           <div
-            v-else
+            v-else-if="question.level"
             class="level-content"
           >
             <div
