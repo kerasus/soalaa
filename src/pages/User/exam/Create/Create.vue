@@ -295,7 +295,7 @@ export default {
       }
     },
     setDraftExam () {
-      // load tab page based on draftExam level
+      this.currentTab = this.allTabs[this.draftExam.temp.level - 1]
       this.continueWithOldDraftExamConfirmationDialog = false
     },
     clearDraftExam () {
@@ -402,7 +402,7 @@ export default {
 
       const hasOldDraftExam = !!this.draftExam.id
       if (currentTabIndex === 0 && hasOldDraftExam) {
-        this.updateExam()
+        this.updateExam(newStep)
           .then(response => {
             this.draftExam.loading = false
             this.currentTab = newStep
@@ -420,9 +420,17 @@ export default {
           .catch(() => {
             this.draftExam.loading = false
           })
+      } else {
+        this.updateExam(newStep)
+          .then(response => {
+            this.draftExam.loading = false
+            this.currentTab = newStep
+          })
+          .catch(() => {
+            this.draftExam.loading = false
+          })
       }
 
-      this.currentTab = newStep
       return true
     },
     createExam () {
@@ -432,11 +440,12 @@ export default {
         title: this.draftExam.title,
         temp: {
           major: this.draftExam.temp.major,
-          grade: this.draftExam.temp.grade
+          grade: this.draftExam.temp.grade,
+          level: 2
         }
       })
     },
-    updateExam (params) {
+    updateExam (newStep) {
       // return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam.loadApiResource())
       return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), {
         enable: this.draftExam.enable,
@@ -444,7 +453,8 @@ export default {
         temp: {
           major: this.draftExam.temp.major,
           lesson: this.draftExam.temp.lesson,
-          grade: this.draftExam.temp.grade
+          grade: this.draftExam.temp.grade,
+          level: newStep === 'createPage' ? 1 : newStep === 'chooseQuestion' ? 2 : 3
         }
       })
     },
