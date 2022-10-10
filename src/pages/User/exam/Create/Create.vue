@@ -213,6 +213,10 @@ export default {
       if (res.data.data) {
         this.subscribed = true
         this.getData()
+      } else {
+        this.currentTab = 'notSubscribed'
+        this.draftExam.loading = false
+        this.subscribed = false
       }
     }).catch((e) => {
       this.subscribed = false
