@@ -97,7 +97,10 @@
     </div>
     <div v-else-if="!subscribed"
          class="subscription-error">
-      شما دسترسی برای ایجاد آزمون ندارید
+      <div class="subscription-error-title">شما دسترسی برای ایجاد آزمون ندارید</div>
+      <q-btn color="primary"
+             label="تهیه اشتراک"
+             @click="gotoExamCreate" />
     </div>
     <q-dialog v-model="createDraftExamMessageDialog">
       <q-card
@@ -555,6 +558,9 @@ export default {
         .catch(() => {
           this.draftExam.loading = false
         })
+    },
+    gotoExamCreate() {
+      this.$router.push({ name: 'User.Create.Exam' })
     }
   }
 }
@@ -712,12 +718,16 @@ export default {
     justify-content: center;
     align-items: center;
     padding: 100px;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 37px;
-    text-align: center;
-    letter-spacing: -0.03em;
-    color: #6D708B;
+
+    .subscription-error-title {
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 37px;
+      text-align: center;
+      letter-spacing: -0.03em;
+      color: #6D708B;
+      margin-bottom: 100px;
+    }
     @media  screen and (max-width: 1023px){
       font-size: 22px;
       line-height: 34px;
