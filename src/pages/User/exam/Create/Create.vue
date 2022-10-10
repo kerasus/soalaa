@@ -3,7 +3,7 @@
     <steps v-model:step="currentTab"
            :loading="draftExam.loading"
            :isConfirmd="draftExamIsConfirmed"
-           :disabled="draftExamIsConfirmed"
+           :disabled="draftExamIsConfirmed || !subscribed"
            @update:step="onChangeTab"
     />
     <q-tab-panels v-if="subscribed && !draftExamIsConfirmed"
@@ -100,7 +100,7 @@
       <div class="subscription-error-title">شما دسترسی برای ایجاد آزمون ندارید</div>
       <q-btn color="primary"
              label="تهیه اشتراک"
-             @click="gotoExamCreate" />
+             @click="gotoSubscription" />
     </div>
     <q-dialog v-model="createDraftExamMessageDialog">
       <q-card
@@ -559,8 +559,8 @@ export default {
           this.draftExam.loading = false
         })
     },
-    gotoExamCreate() {
-      this.$router.push({ name: 'User.Create.Exam' })
+    gotoSubscription() {
+      this.$router.push({ name: 'subscription' })
     }
   }
 }
@@ -715,6 +715,7 @@ export default {
 
   .subscription-error {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 100px;
