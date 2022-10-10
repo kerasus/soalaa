@@ -40,6 +40,16 @@
         <div v-if="allExamsList.list.length > 0 || myExams.list.length > 0"
              class="fit row wrap justify-center items-start content-start"
         >
+          <div v-if="$q.screen.lt.sm"
+               class="col-12">
+            <div class="flex justify-start my-exam-btn">
+              <q-btn color="dark"
+                     icon="east"
+                     flat
+                     label="آزمون های من"
+                     @click="onClick" />
+            </div>
+          </div>
           <div class="col col-12 examList-container">
             <div class="slider-row">
               <future-quizzes-carousel :exams="upcomingExams" />
@@ -248,6 +258,10 @@ export default defineComponent({
     text-align: center;
     letter-spacing: -0.03em;
   }
+}
+
+.my-exam-btn {
+  margin-bottom: 24px;
 }
 
 .exam-list-title {
