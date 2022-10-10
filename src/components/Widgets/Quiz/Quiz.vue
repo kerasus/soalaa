@@ -53,6 +53,7 @@
                   v-model="tab"
                   color="light1"
                   class="exam-tabs"
+                  active-class="active-tab"
                   active-color="secondary"
                   align="left"
                 >
@@ -210,18 +211,24 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .userExamList {
   font-size: 16px;
 }
-
+:deep(.q-tab__indicator) {
+  width: 100%;
+  height: 6px;
+  border-radius: 6px 6px 0 0;
+}
 .exam-tabs {
   color: #8A8CA6;
 
-  &:deep(.q-tab__indicator) {
-    width: 100%;
-    height: 16px;
-    border-radius: 6px 6px 0 0;
+  :deep(.active-tab){
+      .q-tab__label{
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 25px;
+      }
   }
 
   &:deep(.q-tab) {
@@ -235,13 +242,11 @@ export default defineComponent({
 
   &:deep(.q-tab__label) {
     font-style: normal;
-    font-weight: 600;
     font-size: 16px;
     line-height: 25px;
+    padding-bottom: 8px;
     text-align: center;
     letter-spacing: -0.03em;
-    color: #FFA117;
-
   }
 }
 

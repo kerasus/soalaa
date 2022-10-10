@@ -397,6 +397,9 @@ export default {
 
       if (stepValidation && stepValidation.error) {
         this.showMessagesInNotify(stepValidation.messages)
+        if (newStep !== this.allTabs[0]) {
+          this.currentTab = this.allTabs[this.allTabs.indexOf(newStep) - 1]
+        }
         return false
       }
 
