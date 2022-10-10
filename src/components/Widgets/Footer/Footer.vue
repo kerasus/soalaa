@@ -321,9 +321,9 @@ export default {
       padding-right: 20px;
     }
     @media screen and (max-width: 1023px) {
-      padding: 60px 30px 65px;
+      padding: 34px 33px;
     }
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 599px) {
       padding-left: 20px;
       padding-right: 20px;
     }
@@ -333,6 +333,9 @@ export default {
     padding-bottom:10px;
     @media screen and (max-width: 1439px) {
       padding: 36px 50px 10px;
+    }
+    @media screen and (max-width: 1023px){
+      padding:20px 30px;
     }
   }
   .footer-box-1 {
@@ -354,12 +357,16 @@ export default {
         @media screen and (max-width: 1439px) {
           margin-bottom: 15px;
         }
+        @media screen and (max-width: 1023px) {
+          margin-bottom: 0;
+        }
+
       }
 
       @media screen and (max-width: 1023px) {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 32px;
+        margin-bottom: 25px;
       }
       @media screen and (max-width: 599px) {
         display: flex;
@@ -444,6 +451,9 @@ export default {
       display: flex;
       justify-content: space-between;
       padding-bottom: 30px;
+      @media screen and (max-width: 1439px){
+        padding-bottom: 25px;
+      }
       @media screen and (max-width: 1023px) {
         flex-direction: column;
         padding-bottom: 30px;
@@ -451,9 +461,7 @@ export default {
       @media screen and (max-width: 599px) {
         padding-bottom: 20px;
       }
-      @media screen and (max-width: 1439px){
-        padding-bottom: 25px;
-      }
+
       .description {
         width: 540px;
         text-align: justify;
@@ -473,8 +481,8 @@ export default {
         align-items: center;
         @media screen and (max-width: 1023px) {
           justify-content: space-between;
-          padding-right: 52px;
-          padding-left: 52px;
+          padding-right: 22px;
+          padding-left: 22px;
         }
         @media screen and (max-width: 599px) {
           padding-right: 20px;
