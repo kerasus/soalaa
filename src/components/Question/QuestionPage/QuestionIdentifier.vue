@@ -475,7 +475,7 @@ export default {
 
       .input-container {
         .input-box {
-          width: 89%;
+          width: 72%;
         }
 
         .icon-box {

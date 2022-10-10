@@ -8,24 +8,9 @@
 </template>
 
 <script>
-import 'katex/dist/katex.min.css'
 import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
-import katex from 'katex'
-
-// import { createApp } from 'vue'
-// const app = createApp({})
-// import VueKatex from 'vue-katex'
 // import 'katex/dist/katex.min.css'
-// app.use(VueKatex, {
-//   globalOptions: {
-//     delimiters: [
-//       { left: '$$', right: '$$', display: true },
-//       { left: '\\[', right: '\\]', display: true },
-//       { left: '$', right: '$', display: false },
-//       { left: '\\(', right: '\\)', display: false }
-//     ]
-//   }
-// })
+import katex from 'katex'
 
 export default {
   name: 'VueKatex',
@@ -58,10 +43,11 @@ export default {
       const persianRegex = /[\u0600-\u06FF]/
       return !string.match(persianRegex)
     },
-    computedKatex () {
+    computedKatex() {
       let string = this.input
-      string = mixinConvertToTiptap.methods.convertKatex(string)
-      const regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms
+      string = mixinConvertToTiptap.methods.convertToTiptap(string)
+      // const regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms
+      const regex = /(\${1}((?!\$).)+?\${1})|(\${2}((?!\$).)+?\${2})|(\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\[\\((?! ).){1}((?!\$).)*?((?! ).){1}\]\\)/gms
       string = string.replace(regex, (match) => {
         let finalMatch
         if (match.includes('$$')) {
@@ -77,11 +63,40 @@ export default {
         })
       })
       return string
+
+      // let string = this.input
+      //
+      // if (string === null || typeof string === 'undefined') {
+      //   return ''
+      // }
+      // string = string.replaceAll('¬', '&#8202;')
+      // string = string.replaceAll('­', '&#8202;')
+      //
+      // string = string.replaceAll('\\[ ', '\\[')
+      // string = string.replaceAll(' \\]', '\\]')
+      // string = string.replaceAll(' $', '$')
+      // string = string.replaceAll('$ ', '$')
+      // // string = string.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&')
+      // const regex = /(\${1}((?!\$).)+?\${1})|(\${2}((?!\$).)+?\${2})|(\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\[\\((?! ).){1}((?!\$).)*?((?! ).){1}\]\\)/gms
+      // string = string.replace(regex, (match) => {
+      //   let finalMatch
+      //   if (match.includes('$$')) {
+      //     finalMatch = match.slice(2, -2)
+      //   } else if (match.includes('$')) {
+      //     finalMatch = match.slice(1, -1)
+      //   } else {
+      //     finalMatch = match.slice(2, -2)
+      //   }
+      //   return katex.renderToString(finalMatch, {
+      //     throwOnError: false,
+      //     strict: 'warn'
+      //   })
+      // })
+      // string = string.replaceAll('&lt;', '<')
+      // string = string.replaceAll('&gt;', '>')
+      //
+      // return string
     }
-    // computedKatex () {
-    //   // purified katex
-    //   return mixinConvertToTiptap.methods.convertKatex(this.input)
-    // }
   },
   mounted () {
     setTimeout(() => {
@@ -96,94 +111,38 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-// ToDo: check this styles in scoped style tag
-#mathfield .ML__cmr,
-.katex .mtight {
-  font-family: IRANSans;
+<style lang="scss">
+/*rtl:ignore*/
+@import "katex/dist/katex.min.css";
+@import "src/css/katex-rtl-fix.scss";
+
+//rtl change bug fix
+[dir="rtl"] .html-katex {
+  @include katex-rtl-fix;
+  font-size: 1.2rem;
+  line-height: 4rem;
+  .katex {
+    font-size: 1.9rem;
+  }
 }
 
 .html-katex {
   width: 100%;
-
+  font-family: KaTeX_Main, Times New Roman, serif !important;
+  & > p {
+    direction: inherit;
+    &:first-child {
+      display: inline-block;
+    }
+  }
   .katex {
+    * {
+      //font-family: KaTeX_Main, Times New Roman, serif;
+    }
     /*rtl:ignore*/
     direction: ltr !important;
     /*rtl:ignore*/
   }
-
-  table {
-    border-collapse: collapse;
-    table-layout: fixed;
-    width: 100%;
-    margin: 0;
-    overflow: hidden;
-
-    td,
-    th {
-      min-width: 1em;
-      border: 2px solid #ced4da;
-      padding: 3px 5px;
-      vertical-align: top;
-      box-sizing: border-box;
-      position: relative;
-
-      > * {
-        margin-bottom: 0;
-      }
-    }
-
-    th {
-      font-weight: bold;
-      text-align: left;
-      background-color: #f1f3f5;
-    }
-  }
-}
-.beit {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  margin-right: -15px;
-  margin-left: -15px;
-}
-
-.beit .mesra {
-  position: relative;
-  width: 100%;
-  min-height: 1px;
-  padding-right: 15px;
-  padding-left: 15px;
-  -ms-flex-preferred-size: 0;
-  flex-basis: 0;
-  -webkit-box-flex: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  max-width: 100%;
-  white-space: nowrap;
-}
-
-@media only screen and (max-width: 500px) {
-  .beit {
-    flex-direction: column;
-  }
-  .beit .mesra {
-    white-space: normal;
-    flex-basis: auto;
-  }
-}
-.html-katex > p {
-  direction: inherit;
-}
-
-.html-katex > p:first-child {
-  display: inline-block;
-}
-// check top styles in scoped style tag
-
-.html-katex {
   table {
     border-collapse: collapse;
     table-layout: fixed;
@@ -228,5 +187,41 @@ export default {
       pointer-events: none;
     }
   }
+  .beit {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    @media only screen and (max-width: 500px) {
+      flex-direction: column;
+    }
+    .mesra {
+      position: relative;
+      width: 100%;
+      min-height: 1px;
+      padding-right: 15px;
+      padding-left: 15px;
+      -ms-flex-preferred-size: 0;
+      flex-basis: 0;
+      -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+      flex-grow: 1;
+      max-width: 100%;
+      white-space: nowrap;
+      @media only screen and (max-width: 500px) {
+        white-space: normal;
+        flex-basis: auto;
+      }
+    }
+  }
 }
+
+#mathfield .ML__cmr,
+.katex .mtight {
+  font-family: yekanbakh,serif;
+}
+
 </style>

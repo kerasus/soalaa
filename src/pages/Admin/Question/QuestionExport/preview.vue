@@ -281,7 +281,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss">
+/*rtl:ignore*/
+@import "katex/dist/katex.min.css";
+@import "src/css/katex-rtl-fix.scss";
+//rtl change bug fix
+[dir="rtl"] {
+  @include katex-rtl-fix
+}
+</style>
+
+<style lang="scss" scoped>
 .choice-parent {
   position: relative;
 }
