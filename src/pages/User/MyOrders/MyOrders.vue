@@ -30,7 +30,8 @@
       v-else
       class="my-orders-list"
     >
-      <div class="title">سفارش های من</div>
+      <div class="title">
+        سفارش های من</div>
       <entity-index
         ref="orderList"
         v-model:value="inputs"
@@ -49,6 +50,7 @@
             <div class="col-lg-4 col-xl-4 col-md-6 col-xs-9 text-left">
               <q-input v-model="searchInput"
                        filled
+                       placeholder="جستجو..."
                        class="search-input bg-white">
                 <template v-slot:append>
                   <q-icon name="isax:search-normal-1"
@@ -146,19 +148,22 @@
                        class="details-btn"
                        @click="toggleDetailsCard(inputData.props.row)"
                 >
-                  جزییات
+                  جزئیات
+                  <q-icon color="primary"
+                          :name="detailsCardToggle[inputData.props.row.id] ? 'isax:arrow-up-2' : 'isax:arrow-down-1' " />
                 </q-btn>
-                <div :class="{ 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
+                <div class="min-h"
+                     :class="{ 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
                                'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
-                               'payment-installment' : inputData.props.row.paymentstatus.id}"
+                               'payment-installment' : inputData.props.row.paymentstatus.id === 4 }"
                 >
                   <!--                پرداخت نشده-->
                   {{inputData.props.row.paymentstatus.name}}
                 </div>
-                <div>
-                  {{ toman(inputData.props.row.price) }}
+                <div class="min-h">
+                  {{inputData.props.row.price ? toman(inputData.props.row.price) : 0 }}
                 </div>
-                <div>
+                <div class="min-h">
                   {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}
                   <!--                {{ getCurrentOrderCompletedAt('1401/09/25') }}-->
                 </div>
@@ -171,11 +176,11 @@
           </q-card>
         </template>
       </entity-index>
-      <order-details-dialog v-if="windowSize.x >= 600"
-                            v-model:dialogValue="detailsDialog"
-                            :order="currentOrder"
-      />
     </div>
+    <order-details-dialog v-if="windowSize.x >= 600"
+                          v-model:dialogValue="detailsDialog"
+                          :order="currentOrder"
+    />
   </template>
 
 </template>
@@ -442,7 +447,7 @@ export default {
     }
 
     @media screen and (max-width: 599px){
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     &:deep(.filter-option){
@@ -453,7 +458,7 @@ export default {
         order: 3;
       }
       @media screen and (max-width: 599px) {
-        padding-left: 0;
+        padding-left: 16px;
         padding-right: 0;
       }
     }
@@ -477,6 +482,12 @@ export default {
       }
       @media screen and (max-width: 1439px) {
 
+      }
+    }
+    &:deep(.formBuilder-actionBtn-ActionBtn){
+      @media screen and (max-width: 1439px){
+        text-align: right;
+        order:3
       }
     }
     .action-btn{
@@ -539,7 +550,7 @@ export default {
     line-height: 28px;
     text-align: left;
     color: #434765;
-    padding-bottom: 24px;
+    padding-bottom: 40px;
   }
   :deep(.q-table__bottom){
     display: none;
@@ -579,6 +590,9 @@ export default {
       background: #FFFFFF;
       box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       border-radius: 16px;
+      @media screen and (max-width: 599px) {
+        //padding-bottom: 20px;
+      }
 
       .q-table__middle {
         //.q-table {
@@ -595,7 +609,7 @@ export default {
             line-height: 25px;
             color: #6D708B;
             //background: white;
-            padding: 23px;
+            padding: 23px 40px;
           }
 
           tbody{
@@ -611,8 +625,16 @@ export default {
             font-size: 14px;
             line-height: 22px;
             color: #434765;
+            td{
+              padding: 10px 40px;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 22px;
+              letter-spacing: -0.03em;
+            }
 
             :not(:last-child) > td {
+
               border-bottom-width: 0 !important;
             }
           }
@@ -655,7 +677,15 @@ export default {
   .details-table-mobile {
       box-shadow: none;
       border-radius: 0;
-    border-bottom: 1px solid #E4E8EF;
+      border-bottom: 1px solid #E4E8EF;
+    &:last-child{
+      border-radius: 16px;
+      border-bottom: none;
+    }
+    &:first-child{
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
 
     .details-info {
       padding: 15px 20px;
@@ -666,6 +696,7 @@ export default {
       letter-spacing: -0.03em;
       display: flex;
       justify-content: space-between;
+      color: #434765;
       .first-col {
         color: #6D708B;
         div {
@@ -686,6 +717,15 @@ export default {
         }
         .details-btn {
           color:#8075DC ;
+          :deep(.q-icon ){
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 6px;
+          }
+        }
+
+        .min-h{
+          min-height: 32px;
         }
         //:deep(.q-btn) {
         //  .q-btn__content {
