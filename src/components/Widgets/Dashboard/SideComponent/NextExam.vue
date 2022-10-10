@@ -107,6 +107,8 @@ export default {
     padding: 10px 16px;
     flex-direction: column;
     align-items: initial;
+    min-height: 70px;
+    justify-content: center;
   }
   .title {
     display: flex;
@@ -127,6 +129,7 @@ export default {
       @media screen and (max-width: 599px) {
         font-size: 14px;
         line-height: 22px;
+        justify-content: center;
       }
     }
     .exam {
