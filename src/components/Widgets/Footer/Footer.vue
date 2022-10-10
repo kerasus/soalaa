@@ -216,10 +216,28 @@
           <q-btn
             unelevated
             class="scroll-up"
-            icon="isax:arrow-up-2"
             @click="scrollToTop"
           >
+            <svg width="24"
+                 height="24"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.07 11.57L12 5.5L5.92999 11.57"
+                    stroke="#8A8CA6"
+                    stroke-width="1.5"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+              <path d="M12 19V5.66992"
+                    stroke="#8A8CA6"
+                    stroke-width="1.5"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
             برو بالا
+
           </q-btn>
           <div class="flex items-center text-replacement">
             <div class="text">
@@ -230,7 +248,6 @@
               href="https://alaatv.com"
             >
               <div class="flex items-center">
-
                 <div>AlaaTV.com</div>
                 <div>{{ ' '}} 2012 </div>
                 <div>©</div>
@@ -253,8 +270,8 @@ export default {
   methods: {
     scrollToTop() {
       document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
-     }
-     },
+    }
+  },
   computed: {
     user () {
       if (this.$store.getters['Auth/user']) {
@@ -343,15 +360,15 @@ export default {
     .titles {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
-      .sub-title {
-      font-weight: 400;
-      font-size: 14px;
-      line-height: 22px;
-      letter-spacing: -0.03em;
-      color: #8A8CA6;
-      .main-title {
-        margin-left: 8px;
-      }
+      //.sub-title {
+      //font-weight: 400;
+      //font-size: 14px;
+      //line-height: 22px;
+      //letter-spacing: -0.03em;
+      //color: #8A8CA6;
+      //.main-title {
+      //  margin-left: 8px;
+      //}
       :deep(.sub-title) {
         width: 100%;
         align-items: flex-start;
@@ -517,6 +534,7 @@ export default {
         }
       }
       .scroll-up {
+        width: 100px;
         @media screen and (max-width: 1023px){
           justify-self: start;
         }
@@ -532,6 +550,9 @@ export default {
         @media screen and (max-width: 599px){
           display: block;
           margin-right: 0;
+          font-size: 12px;
+          line-height: 19px;
+          max-width: 312px;
         }
       }
       color:#8A8CA6;
@@ -542,6 +563,8 @@ export default {
           position: absolute;
           bottom: 0;
           right: 0;
+          font-size: 12px;
+          line-height: 19px;
         }
       }
       .toUpStyle{
