@@ -124,7 +124,13 @@
             </q-btn>
           </div>
           <div class="profile title-box">
-            <div class="main-title">پروفایل</div>
+            <div class="main-title">فضای کاربری</div>
+            <q-btn flat
+                   class="sub-title"
+                   :to="{name: 'User.Profile'}"
+            >
+              پروفایل
+            </q-btn>
             <q-btn flat
                    class="sub-title"
                    :to="{name: 'User.MyOrders'}"
@@ -152,12 +158,12 @@
             >
               بانک سوالا
             </q-btn>
-            <q-btn flat
-                   class="sub-title"
-                   :to="{name: 'cart'}"
-            >
-              سبد خرید
-            </q-btn>
+            <!--            <q-btn flat-->
+            <!--                   class="sub-title"-->
+            <!--                   :to="{name: 'cart'}"-->
+            <!--            >-->
+            <!--              سبد خرید-->
+            <!--            </q-btn>-->
           </div>
           <div class="others title-box">
             <div class="main-title">سایر</div>
@@ -180,7 +186,7 @@
       </div>
     </div>
     <div class="footer-box-2">
-      <div class="content-layout box-2-details">
+      <div class="content-layout-2 box-2-details">
         <div class="layer-1">
           <div class="description">
             سوالا اولین فرزند آلاء است. وب سایت سوالا پلتفرم برگزاری آزمون است و تمام امکانات اجرای آزمون از جمله تولید آزمون، برگزاری، صدور کارنامه را در خود جای داده است. آزمون آنلاین آلاء (سه آ) دو سال است که بر روی پلتفرم سوالاء برگزار می شود. همچنین محصول دیگر سوالا، بانک سوال آن است که امکان ساخت آزمون را از بین بیش از ۵۰ هزار تست تالیفی، کنکور، آزمون های تیزهوشان و کتاب های کمک آموزشی را برای دانش آموزان، دبیران و مشاوران فراهم می کند. آزمون های متنوع و خدمات جدید بر روی بانک سوال بزودی به سوالا اضافه خواهند شد.
@@ -209,7 +215,7 @@
             </div>
           </div>
         </div>
-        <div class="layer-2">
+        <div class="layer-2 ">
           <div class="text-1">
             کلیه حقوق این وب سایت به ‌توسعه علمی آموزشی عدالت محور آلاء تعلق دارد و کپی برداری از آن ممنوع می باشد.
           </div>
@@ -249,7 +255,7 @@
             >
               <div class="flex items-center">
                 <div>AlaaTV.com</div>
-                <div>{{ ' '}} 2012 </div>
+                <div class="q-mx-xs">2012 </div>
                 <div>©</div>
               </div>
 
@@ -259,6 +265,7 @@
         </div>
       </div>
     </div>
+    <div class="layer-3"></div>
   </div>
 </template>
 
@@ -290,7 +297,7 @@ export default {
 
 <style scoped lang="scss">
 .homePage-footer-container {
-  .content-layout {
+  .content-layout,.content-layout-2 {
     max-width: 1362px;
     margin: auto;
     padding-top: 60px;
@@ -300,6 +307,11 @@ export default {
     line-height: 22px;
     letter-spacing: -0.03em;
     color: #8A8CA6;
+    @media screen and (max-width: 1439px) {
+      max-width: 100%;
+    }
+  }
+  .content-layout{
     @media screen and (max-width: 1439px) {
       max-width: 100%;
       padding: 36px 32px;
@@ -315,6 +327,10 @@ export default {
       padding-left: 20px;
       padding-right: 20px;
     }
+  }
+  .content-layout-2{
+    padding-top: 40px;
+    padding-bottom:10px ;
   }
   .footer-box-1 {
     background: #FFFFFF;
@@ -371,16 +387,24 @@ export default {
       //line-height: 22px;
       //letter-spacing: -0.03em;
       //color: #8A8CA6;
-      //.main-title {
-      //  margin-left: 8px;
-      //}
+      .main-title {
+        margin-left: 8px;
+        margin-bottom:16px;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+      }
       :deep(.sub-title) {
         width: 100%;
         align-items: flex-start;
         color: #434765;
-        font-size: 14px;
-        line-height: 22px;
+        font-size: 12px;
+        line-height: 19px;
         min-height: unset;
+        margin-bottom: 10px;
+        &:last-child{
+          margin-bottom: 0;
+        }
         .q-btn__content {
           margin-top: 0;
           margin-bottom: 0;
@@ -403,7 +427,7 @@ export default {
     .layer-1 {
       display: flex;
       justify-content: space-between;
-      padding-bottom: 42px;
+      padding-bottom: 30px;
       @media screen and (max-width: 1023px) {
         flex-direction: column;
         padding-bottom: 30px;
@@ -428,8 +452,6 @@ export default {
         flex-flow: row;
         justify-content: center;
         align-items: center;
-        padding-bottom: 10px;
-        padding-top: 10px;
         @media screen and (max-width: 1023px) {
           justify-content: space-between;
           padding-right: 52px;
@@ -512,6 +534,7 @@ export default {
     .layer-2{
       display: grid;
       grid-template-columns: 200px auto;
+      align-items: flex-end;
       @media screen and (max-width: 1023px){
         grid-template-columns: 1fr 1fr;
       }
@@ -576,6 +599,13 @@ export default {
         bottom: 0;
       }
 
+    }
+  }
+  .layer-3{
+    min-height: 40px;
+    background: white;
+    @media screen and (max-width:1023px){
+      min-height: 30px;
     }
   }
 }
