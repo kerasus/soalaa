@@ -330,7 +330,8 @@ export default {
       this.providedExam.questions.list[questionIndex].selected = value
     },
     updateTreeFilter () {
-      const tagsToFilter = this.lastSelectedNodes.length > 0 ? this.lastSelectedNodes : [{ id: this.providedExam.temp.lesson }]
+      const foundedLesson = this.treeModalLessonsList.find(item => item.id === this.providedExam.temp.lesson)
+      const tagsToFilter = this.lastSelectedNodes.length > 0 ? this.lastSelectedNodes : [foundedLesson]
       this.selectedNodesIds = this.lastSelectedNodes.map(node => node.id)
       this.$refs.filter.changeFilterData('tags', tagsToFilter)
     },
