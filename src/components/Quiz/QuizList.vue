@@ -4,16 +4,17 @@
          class="quiz-list-container">
       <div class="row q-pt-md">
         <div class="col-6">
+
           <div class="search-bar">
             <q-input v-model="searchInExams"
                      type="search"
                      label="جست و جو در آزمون ها">
               <template v-slot:append>
-                <q-btn color="dark"
-                       icon="search"
-                       flat
-                       :loading="exams.loading"
-                       @click="setFilter"
+                <q-icon name="isax:search-normal-1"
+                        icon="search"
+                        flat
+                        :loading="exams.loading"
+                        @click="setFilter"
                 />
               </template>
             </q-input>
@@ -51,7 +52,7 @@
             color="white"
             text-color="dark"
             class="filter-refresh-btn"
-            icon="isax:refresh"
+            icon="isax:rotate-left"
             @click="clearInputs"
           />
           <q-btn
@@ -512,6 +513,14 @@ export default defineComponent({
       border-radius: 8px;
       margin-bottom: 20px;
 
+      &:deep(.q-field__append){
+        .q-icon{
+          color: #6D708B;
+          cursor: pointer;
+          padding-right: 17px;
+        }
+      }
+
       &:deep(.q-field__control) {
         width: 330px;
         height: 40px;
@@ -557,6 +566,9 @@ export default defineComponent({
         height: 40px;
         background: #FFFFFF;
         border-radius: 8px;
+        :deep(.q-icon){
+          color: #6D708B;
+        }
 
         &.open {
           background: #E4E8EF;
@@ -627,6 +639,10 @@ export default defineComponent({
         border-radius: 8px;
         width: 40px;
         height: 40px;
+
+        :deep(.q-icon){
+          color: #6D708B;
+        }
 
         @media only screen and (max-width: 600px){
           margin-top: 16px;
