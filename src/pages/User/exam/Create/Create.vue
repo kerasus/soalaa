@@ -718,12 +718,16 @@ export default {
     justify-content: center;
     align-items: center;
     padding: 100px;
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 37px;
-    text-align: center;
-    letter-spacing: -0.03em;
-    color: #6D708B;
+
+    .subscription-error-title {
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 37px;
+      text-align: center;
+      letter-spacing: -0.03em;
+      color: #6D708B;
+      margin-bottom: 100px;
+    }
     @media  screen and (max-width: 1023px){
       font-size: 22px;
       line-height: 34px;
