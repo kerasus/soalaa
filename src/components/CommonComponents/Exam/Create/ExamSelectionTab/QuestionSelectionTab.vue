@@ -472,6 +472,9 @@ export default {
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
+      if (filters.tags.length === 0) {
+        filters.tags.push(this.providedExam.temp.lesson)
+      }
       this.showLoading()
       this.$axios.get(API_ADDRESS.question.index(filters, page))
         .then((response) => {
