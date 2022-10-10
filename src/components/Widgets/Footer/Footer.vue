@@ -296,7 +296,7 @@ export default {
     max-width: 1362px;
     margin: auto;
     padding-top: 60px;
-    padding-bottom: 65px;
+    padding-bottom: 60px;
     font-weight: 400;
     font-size: 14px;
     line-height: 22px;
@@ -309,7 +309,7 @@ export default {
   .content-layout{
     @media screen and (max-width: 1439px) {
       max-width: 100%;
-      padding: 36px 32px;
+      padding: 35px 53px;
     }
     @media screen and (max-width: 1148px) {
       padding-left: 20px;
@@ -325,7 +325,10 @@ export default {
   }
   .content-layout-2{
     padding-top: 40px;
-    padding-bottom:10px ;
+    padding-bottom:10px;
+    @media screen and (max-width: 1439px) {
+      padding: 36px 50px 10px;
+    }
   }
   .footer-box-1 {
     background: #FFFFFF;
@@ -341,6 +344,13 @@ export default {
       flex-direction: column;
     }
     .icons {
+      .soala{
+        margin-bottom: 30px;
+        @media screen and (max-width: 1439px) {
+          margin-bottom: 15px;
+        }
+      }
+
       @media screen and (max-width: 1023px) {
         display: flex;
         justify-content: space-between;
@@ -388,6 +398,9 @@ export default {
         font-weight: 400;
         font-size: 14px;
         line-height: 22px;
+        @media screen and (max-width: 1439px){
+          margin-bottom: 12px;
+        }
       }
       :deep(.sub-title) {
         width: 100%;
@@ -397,6 +410,9 @@ export default {
         line-height: 19px;
         min-height: unset;
         margin-bottom: 10px;
+        @media screen and (max-width: 1439px){
+          margin-bottom: 8px;
+        }
         &:last-child{
           margin-bottom: 0;
         }
@@ -429,6 +445,9 @@ export default {
       }
       @media screen and (max-width: 599px) {
         padding-bottom: 20px;
+      }
+      @media screen and (max-width: 1439px){
+        padding-bottom: 25px;
       }
       .description {
         width: 540px;
@@ -528,7 +547,7 @@ export default {
     }
     .layer-2{
       display: grid;
-      grid-template-columns: 200px auto;
+      grid-template-columns: 150px auto;
       align-items: flex-end;
       @media screen and (max-width: 1023px){
         grid-template-columns: 1fr 1fr;
@@ -567,6 +586,9 @@ export default {
       }
       .text{
         margin-right: 57px;
+        @media screen and (max-width: 1439px){
+          margin-right: 40px;
+        }
         @media screen and (max-width: 1023px){
           display: none;
         }
