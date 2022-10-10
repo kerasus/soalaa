@@ -234,9 +234,11 @@ export default {
           display: grid;
           grid-template-columns: 1fr;
           grid-template-rows: min-content;
+          padding-top: 20px;
           @media screen and (max-width: 1439px){
             margin-right: 0;
             margin-bottom: 20px;
+            padding-top: 0px;
           }
           .title{
             font-weight: 700;

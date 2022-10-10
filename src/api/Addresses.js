@@ -141,7 +141,7 @@ const API_ADDRESS = {
     registerExam: lumenServer + '/user/registerExam',
     examUser: lumenServer + '/exam-user',
     participate: {
-      sample: lumenServer + '/exam-user',
+      sample: (examId) => lumenServer + '/exam-user/' + examId,
       personal: (examId) => lumenServer + '/exam-user/personal/' + examId
     },
     examQuestion (quizId) {
