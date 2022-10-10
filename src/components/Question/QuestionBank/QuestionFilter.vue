@@ -321,7 +321,7 @@ export default {
       this.filtersData.level.splice(0, this.filtersData.level.length)
       this.filtersData.years.splice(0, this.filtersData.years.length)
       this.filtersData.majors.splice(0, this.filtersData.majors.length)
-
+      this.showTreeModalNode(this.rootNodeIdToLoad)
       // this.QuestionFilters.splice(0, this.QuestionFilters.length)
       this.onUpdateFilterData()
     }
