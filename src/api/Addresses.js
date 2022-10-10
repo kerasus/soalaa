@@ -30,7 +30,7 @@ const API_ADDRESS = {
       userOrders: lumenServer + '/orders'
     },
     statistics: lumenServer + 'user/dashboard/statistics',
-    feature: (feature) => lumenServer + '/user/feature/feature=' + feature
+    feature: (feature) => lumenServer + '/user/feature?feature=' + feature
   },
   set: {
     base: authServer + '/set'
