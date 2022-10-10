@@ -1,13 +1,12 @@
 <template>
   <div class="exam-create-panel">
-
     <steps v-model:step="currentTab"
            :loading="draftExam.loading"
            :isConfirmd="draftExamIsConfirmed"
            :disabled="draftExamIsConfirmed"
            @update:step="onChangeTab"
     />
-    <q-tab-panels v-if="!draftExamIsConfirmed"
+    <q-tab-panels v-if="subscribed && !draftExamIsConfirmed"
                   v-model="currentTab"
                   animated
     >
@@ -42,7 +41,7 @@
         />
       </q-tab-panel>
     </q-tab-panels>
-    <div v-else>
+    <div v-else-if="subscribed && draftExamIsConfirmed">
       <div class="confirmed-draft-exam-page">
         <div class="icon-section">
           <svg width="100%"
@@ -95,6 +94,10 @@
           </q-btn>
         </div>
       </div>
+    </div>
+    <div v-else-if="!subscribed"
+         class="subscription-error">
+      شما دسترسی برای ایجاد آزمون ندارید
     </div>
     <q-dialog v-model="createDraftExamMessageDialog">
       <q-card
@@ -193,6 +196,7 @@ export default {
   ],
   data() {
     return {
+      subscribed: false,
       draftExamIsConfirmed: false,
       draftExam: new Exam(),
       gradesList: [],
@@ -204,7 +208,16 @@ export default {
     }
   },
   created() {
-    this.getData()
+    this.draftExam.loading = true
+    this.checkSubscription().then((res) => {
+      if (res.data.data) {
+        this.subscribed = true
+        this.getData()
+      }
+    }).catch((e) => {
+      this.subscribed = false
+      this.draftExam.loading = false
+    })
   },
   computed: {
     draftMajor() {
@@ -249,6 +262,9 @@ export default {
         this.getGradesList(),
         this.loadMajorList()
       ])
+    },
+    checkSubscription() {
+      return this.$axios.get(API_ADDRESS.user.feature('exam'))
     },
     getGradesList () {
       return new Promise((resolve, reject) => {
@@ -671,6 +687,27 @@ export default {
           line-height: 22px;
         }
       }
+    }
+  }
+
+  .subscription-error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 37px;
+    text-align: center;
+    letter-spacing: -0.03em;
+    color: #6D708B;
+    @media  screen and (max-width: 1023px){
+      font-size: 22px;
+      line-height: 34px;
+    }
+    @media  screen and (max-width: 599px){
+      font-size: 18px;
+      line-height: 28px;
     }
   }
 }
