@@ -60,11 +60,15 @@
         <dashboard-header />
         <next-exam />
         <div class="board-container row">
-          <div class="col-12 col-lg-8">
+          <div class="col-12 col-lg-8"
+               style="padding-left: 15px;"
+          >
             <upcoming-exams-calender :calendarTitle="'آزمون های پیش‌رو'"
                                      :calendarIcon="'isax:calendar-1'" />
           </div>
-          <div class="col-12 col-lg-4">
+          <div class="col-12 col-lg-4"
+               style="padding-right: 15px;"
+          >
             <subscription-status :subscribe="lastSubscribeDate" />
           </div>
         </div>
@@ -230,7 +234,6 @@
                     fill="#8A8CA6" />
             </svg>
           </q-btn>
-
         </div>
       </div>
     </div>
