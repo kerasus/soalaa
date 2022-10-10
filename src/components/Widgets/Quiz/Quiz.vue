@@ -77,18 +77,22 @@
                               animated>
                   <q-tab-panel name="exam">
                     <quiz-list
+                      v-model:pagination="paginationPage"
                       :quiz-type="'exam'"
                       :exams="allExamsList"
                       :personal="false"
                       @onFilter="filterAllExams"
+                      @changePage="paginateList($event,'exam')"
                     />
                   </q-tab-panel>
                   <q-tab-panel name="myExam">
                     <quiz-list
+                      v-model:pagination="paginationPage"
                       :quiz-type="'myExam'"
                       :exams="myExams"
                       :personal="true"
                       @onFilter="filterMyExams"
+                      @changePage="paginateList($event,'myExam')"
                     />
                   </q-tab-panel>
                 </q-tab-panels>
@@ -126,6 +130,7 @@ import API_ADDRESS from 'src/api/Addresses'
 import { ExamList } from 'src/models/Exam'
 import moment from 'moment'
 import Time from 'src/plugins/time.js'
+
 export default defineComponent({
   name: 'List',
   //       ToDo : ProgressLinear
@@ -136,6 +141,11 @@ export default defineComponent({
   data() {
     return {
       tab: 'exam',
+      pagination: {
+        exam: {},
+        myExam: {}
+      },
+      paginationPage: 1,
       allExamsList: new ExamList(),
       upcomingExams: new ExamList(),
       myExams: new ExamList()
@@ -181,6 +191,7 @@ export default defineComponent({
         })
         .then((response) => {
           this.allExamsList = new ExamList(response.data.data)
+          this.pagination.exam = response.data.links
           this.allExamsList.loading = false
         })
     },
@@ -197,6 +208,7 @@ export default defineComponent({
         })
         .then((response) => {
           this.myExams = new ExamList(response.data.data)
+          this.pagination.myExam = response.data.links
           this.myExams.loading = false
         })
     },
@@ -211,6 +223,17 @@ export default defineComponent({
     },
     gotoMyExam() {
       this.tab = 'myExam'
+    },
+    paginateList(event, exam) {
+      this.$axios.get(this.pagination[exam].next).then((response) => {
+        if (exam === 'exam') {
+          this.allExamsList = new ExamList(response.data.data)
+          this.pagination.exam = response.data.links
+        } else {
+          this.myExams = new ExamList(response.data.data)
+          this.pagination.myExam = response.data.links
+        }
+      })
     }
   }
   // setup() {
