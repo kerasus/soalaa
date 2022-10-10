@@ -311,16 +311,13 @@ export default {
       max-width: 100%;
       padding: 35px 53px;
     }
-    @media screen and (max-width: 1148px) {
-      padding-left: 20px;
-      padding-right: 20px;
-    }
     @media screen and (max-width: 1023px) {
       padding: 34px 33px;
     }
     @media screen and (max-width: 599px) {
-      padding-left: 20px;
-      padding-right: 20px;
+      padding-top: 28px;
+      padding-left: 52px;
+      padding-right: 52px;
     }
   }
   .content-layout-2{
@@ -331,6 +328,9 @@ export default {
     }
     @media screen and (max-width: 1023px){
       padding:20px 30px;
+    }
+    @media screen and (max-width: 599px){
+      padding: 25px 20px;
     }
   }
   .footer-box-1 {
@@ -393,12 +393,17 @@ export default {
     .titles {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
-      //.sub-title {
-      //font-weight: 400;
-      //font-size: 14px;
-      //line-height: 22px;
-      //letter-spacing: -0.03em;
-      //color: #8A8CA6;
+      @media screen and (max-width: 599px) {
+        grid-template-columns: 62% 38%;
+        justify-content: center;
+        .title-box {
+          justify-self: center;
+          width: 100%;
+        }
+        .access,.profile {
+          padding-bottom: 30px;
+        }
+      }
       .main-title {
         margin-left: 8px;
         margin-bottom:16px;
@@ -428,17 +433,7 @@ export default {
           margin-bottom: 0;
         }
       }
-      @media screen and (max-width: 599px) {
-        grid-template-columns: 1fr 1fr;
-        justify-content: center;
-        .title-box {
-          justify-self: center;
-          width: 100%;
-        }
-        .access,.profile {
-          padding-bottom: 30px;
-        }
-      }
+
     }
   }
   .box-2-details {
@@ -480,8 +475,8 @@ export default {
           padding-left: 22px;
         }
         @media screen and (max-width: 599px) {
-          padding-right: 20px;
-          padding-left: 20px;
+          padding-right: 0;
+          padding-left: 0;
         }
         .footer-logo-item {
           width: 180px;
@@ -567,6 +562,7 @@ export default {
         display: flex;
         flex-direction: column;
         position: relative;
+        align-items: flex-start
       }
 
       .text-1{
@@ -631,6 +627,9 @@ export default {
     background: white;
     @media screen and (max-width:1023px){
       min-height: 30px;
+    }
+    @media screen and (max-width:599px){
+      min-height: 60px;
     }
   }
 }
