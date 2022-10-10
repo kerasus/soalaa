@@ -29,6 +29,9 @@ export default {
 <style scoped lang="scss">
 .actionBtn {
   padding-top: 33px;
+  @media screen and(max-width:599px ) {
+  padding-top: 0;
+  }
   .filter-btn{
     font-weight: 600;
     font-size: 14px;

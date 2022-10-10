@@ -30,7 +30,8 @@
       v-else
       class="my-orders-list"
     >
-      <div class="title">سفارش های من</div>
+      <div class="title">
+        سفارش های من</div>
       <entity-index
         ref="orderList"
         v-model:value="inputs"
@@ -49,6 +50,7 @@
             <div class="col-lg-4 col-xl-4 col-md-6 col-xs-9 text-left">
               <q-input v-model="searchInput"
                        filled
+                       placeholder="جستجو..."
                        class="search-input bg-white">
                 <template v-slot:append>
                   <q-icon name="isax:search-normal-1"
@@ -171,11 +173,11 @@
           </q-card>
         </template>
       </entity-index>
-      <order-details-dialog v-if="windowSize.x >= 600"
-                            v-model:dialogValue="detailsDialog"
-                            :order="currentOrder"
-      />
     </div>
+    <order-details-dialog v-if="windowSize.x >= 600"
+                          v-model:dialogValue="detailsDialog"
+                          :order="currentOrder"
+    />
   </template>
 
 </template>
@@ -442,7 +444,7 @@ export default {
     }
 
     @media screen and (max-width: 599px){
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     &:deep(.filter-option){
@@ -453,7 +455,7 @@ export default {
         order: 3;
       }
       @media screen and (max-width: 599px) {
-        padding-left: 0;
+        padding-left: 16px;
         padding-right: 0;
       }
     }
@@ -477,6 +479,12 @@ export default {
       }
       @media screen and (max-width: 1439px) {
 
+      }
+    }
+    &:deep(.formBuilder-actionBtn-ActionBtn){
+      @media screen and (max-width: 1439px){
+        text-align: right;
+        order:3
       }
     }
     .action-btn{
@@ -539,7 +547,7 @@ export default {
     line-height: 28px;
     text-align: left;
     color: #434765;
-    padding-bottom: 24px;
+    padding-bottom: 40px;
   }
   :deep(.q-table__bottom){
     display: none;
@@ -595,7 +603,7 @@ export default {
             line-height: 25px;
             color: #6D708B;
             //background: white;
-            padding: 23px;
+            padding: 23px 40px;
           }
 
           tbody{
@@ -611,8 +619,16 @@ export default {
             font-size: 14px;
             line-height: 22px;
             color: #434765;
+            td{
+              padding: 10px 40px;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 22px;
+              letter-spacing: -0.03em;
+            }
 
             :not(:last-child) > td {
+
               border-bottom-width: 0 !important;
             }
           }
