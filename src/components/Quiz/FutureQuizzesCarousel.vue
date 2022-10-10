@@ -167,7 +167,7 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 10px 20px;
+  padding: 10px 0 20px;
 
   .carousel-navigation-btn-wrapper {
 
@@ -182,6 +182,11 @@ export default defineComponent({
 
       &:deep(.q-btn__content) {
         margin: 0;
+      }
+
+      &:deep(.q-icon) {
+        color: #6D708B;
+        font-weight: 400;
       }
 
       &.left {
