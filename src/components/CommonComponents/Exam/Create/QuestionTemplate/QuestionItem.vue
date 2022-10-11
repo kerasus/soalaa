@@ -1119,6 +1119,23 @@ export default {
   padding: 12px 24px 20px 24px;
   width: 348px;
   height: 496px;
+  .problem-type{
+    .report-select-type{
+      :deep(.q-field__native){
+        span{
+          max-width: 250px;
+          max-height: 21px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          line-clamp: 1;
+          -webkit-box-orient: vertical;
+        }
+      }
+    }
+
+  }
 
   .header-section {
     padding: 0;
