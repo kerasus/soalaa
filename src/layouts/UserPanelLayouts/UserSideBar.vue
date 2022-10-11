@@ -1,6 +1,7 @@
 <template>
   <div class="user-panel-side-bar">
-    <div class="bg-primary profile-box">
+    <div v-if="isUserLogin"
+         class="bg-primary profile-box">
       <div class="profile-detail">
         <div class="profile-photo-box">
           <div class="profile-photo-img">
@@ -207,6 +208,7 @@ export default {
     min-height: 480px;
     border-radius: 20px;
     padding: 24px;
+    display: grid;
     @media screen and (max-width: 1919px) {
       width: 273px;
       min-height: 480px;

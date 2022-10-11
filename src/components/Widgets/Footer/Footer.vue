@@ -1,5 +1,6 @@
 <template>
-  <div class="homePage-footer-container">
+  <div
+    class="homePage-footer-container">
     <div class="footer-box-1">
       <div class="content-layout box-1-details">
         <div class="icons">
@@ -297,6 +298,9 @@ export default {
 
 <style scoped lang="scss">
 .homePage-footer-container {
+  @media screen and (max-width:599px){
+    display: none;
+  }
   .content-layout,.content-layout-2 {
     max-width: 1362px;
     margin: auto;
