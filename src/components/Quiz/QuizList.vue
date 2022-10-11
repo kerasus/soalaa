@@ -215,9 +215,11 @@
         <div class="no-item-title">
           شما آزمون ساخته شده ای ندارید
         </div>
-        <a class="new-link">
-          ساخت آزمون جدید
-        </a>
+        <q-btn class="new-link"
+               flat
+               unelevated
+               label="ساخت آزمون جدید"
+               @click="gotoCreateExam" />
       </div>
     </div>
   </div>
