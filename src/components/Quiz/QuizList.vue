@@ -72,19 +72,19 @@
             <q-item-section>
               <div class="row quiz-list-header-row">
                 <div class="quiz-list-header-col"
-                     :class="quizType === 'myExam' ? 'col-5' : 'col-6'">
+                     :class="quizType === 'myExam' ? 'col-4' : 'col-4'">
                   عنوان آزمون
                 </div>
                 <div v-if="quizType === 'myExam'"
-                     :class="quizType === 'myExam' ? 'col-2' : 'col-3'"
-                     class="quiz-list-header-col">
+                     :class="quizType === 'myExam' ? 'col-2' : 'col-4'"
+                     class="quiz-list-header-col centered">
                   نوع آزمون
                 </div>
-                <div class="quiz-list-header-col"
-                     :class="quizType === 'myExam' ? 'col-2' : 'col-3'">
+                <div class="quiz-list-header-col started"
+                     :class="quizType === 'myExam' ? 'col-3' : 'col-4'">
                   شروع آزمون
                 </div>
-                <div class="quiz-list-header-col"
+                <div class="quiz-list-header-col centered"
                      :class="quizType === 'myExam' ? 'col-3' : 'col-3'">
                   عملیات
                 </div>
@@ -97,7 +97,7 @@
             <q-item-section>
               <div class="row quiz-list-item-row">
                 <div class="quiz-list-item-name ellipses"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-5 col-md-5 col-lg-5 col-xl-5' : 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
+                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'">
                   <span v-if="$q.screen.lt.sm"
                         class="quiz-list-res-title">
                     نام آزمون :
@@ -106,7 +106,7 @@
                 </div>
                 <div v-if="quizType === 'myExam'"
                      class="quiz-list-item-schedule ellipses"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'">
+                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'">
                   <span v-if="$q.screen.lt.sm"
                         class="quiz-list-res-title">
                     نوع آزمون :
@@ -114,7 +114,7 @@
                   تست
                 </div>
                 <div class="quiz-list-item-schedule ellipses"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
+                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'"
                 >
                   <span v-if="$q.screen.lt.sm"
                         class="quiz-list-res-title">
@@ -284,6 +284,19 @@
           </q-item>
         </q-list>
       </div>
+      <div class="row text-center justify-center pagination-box">
+        <q-pagination
+          v-if="pageCount > 0"
+          v-model="page"
+          :max="pageCount"
+          :max-pages="6"
+          direction-links
+          icon-first="isax:arrow-right-3"
+          icon-next="chevron_right"
+          icon-last="chevron_left"
+          @update:model-value="onChangePage"
+        />
+      </div>
     </div>
     <div v-else
          class="row">
@@ -325,16 +338,26 @@ export default defineComponent({
     exams: {
       type: ExamList,
       default: new ExamList()
+    },
+    pageCount: {
+      type: Number,
+      default: 0
+    },
+    pagination: {
+      type: Number,
+      default: 1
     }
   },
   emits: [
-    'filterExamList'
+    'filterExamList',
+    'changePage'
   ],
   mixins: [mixinAuth, mixinQuiz, inputMixin],
   components: {
     FormBuilder
   },
   data: () => ({
+    page: 1,
     searchInExams: '',
     preventStartExam: false,
     examItem: new Exam(),
@@ -539,6 +562,9 @@ export default defineComponent({
     },
     gotoCreateExam() {
       this.$router.push({ name: 'User.Create.Exam' })
+    },
+    onChangePage(value) {
+      this.$emit('changePage', value)
     }
   }
 })
@@ -722,6 +748,7 @@ export default defineComponent({
           &.header {
             background: transparent;
             box-shadow: none;
+            margin-bottom: 0;
 
             @media only screen and (max-width: 600px){
               display: none;
@@ -731,7 +758,7 @@ export default defineComponent({
           .quiz-list-header-row {
             .quiz-list-header-col {
               display: flex;
-              justify-content: center;
+              justify-content: flex-start;
               align-items: center;
               font-style: normal;
               font-weight: 400;
@@ -739,6 +766,20 @@ export default defineComponent({
               line-height: 25px;
               text-align: right;
               color: #6D708B;
+              padding-left: 30px;
+
+              &.centered {
+                justify-content: center;
+                padding-left: 0px;
+              }
+
+              &.started {
+                padding-left: 85px;
+
+                @media only screen and (max-width: 1024px) and (min-width: 600px) {
+                  padding-left: 55px;
+                }
+              }
             }
           }
 
@@ -749,13 +790,14 @@ export default defineComponent({
 
             .quiz-list-item-name {
               display: flex;
-              justify-content: center;
+              justify-content: flex-start;
               align-items: center;
               font-style: normal;
               font-weight: 400;
               font-size: 14px;
               line-height: 22px;
               color: #434765;
+              padding-left: 30px;
 
               .quiz-list-item-name-text {
                 @media only screen and (max-width: 600px){
@@ -865,6 +907,10 @@ export default defineComponent({
           overflow-x: hidden;
         }
       }
+    }
+
+    .pagination-box{
+      margin-top: 30px;
     }
   }
 
