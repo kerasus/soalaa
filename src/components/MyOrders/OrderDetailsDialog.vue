@@ -199,6 +199,9 @@ export default {
       grid-template-columns: auto auto;
       align-items: center;
       padding: 16px 30px;
+      @media screen and (max-width: 1439px){
+        padding: 16px 20px
+      }
 
       .info-box {
         font-weight: 400;
@@ -238,6 +241,10 @@ export default {
       text-align: left;
       letter-spacing: -0.03em;
       color: #434765;
+      padding:0 30px 5px 30px;
+      @media screen and (max-width: 1439px){
+        padding:0  20px
+      }
     }
   }
   .q-dialog__inner--minimized > div {
