@@ -211,6 +211,7 @@ export default {
   display: grid;
   height: 100%;
   grid-template-rows:1fr;
+  grid-template-columns: 1fr;
   justify-content: space-between;
   color: #6D708B;
   @media screen and (max-width: 1919px) {}
