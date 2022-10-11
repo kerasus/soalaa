@@ -4,7 +4,10 @@
       v-if="hasNavigationBar"
       class="user-side-bar col-xl-3 col-lg-3 col-md-3"
     >
-      <user-side-bar />
+      <sticky-both-sides>
+        <user-side-bar />
+      </sticky-both-sides>
+
     </div>
 
     <div class=" user-panel-content"
@@ -19,10 +22,15 @@
 import UserSideBar from 'layouts/UserPanelLayouts/UserSideBar'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 import Router from 'src/router/Router'
+import StickyBothSides from 'components/Utils/StickyBothSides'
 
 export default {
   name: 'UserPanelLayout',
-  components: { UserSideBar, Router },
+  components: {
+    UserSideBar,
+    Router,
+    StickyBothSides
+  },
   data () {
     return {
       keepAliveComponents: KeepAliveComponents
