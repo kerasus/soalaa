@@ -33,6 +33,7 @@
     <div class="exam-info-form">
       <entity-crud-form-builder
         ref="EntityCrudFormBuilder"
+        :key="formBuilderCrud"
         v-model:value="inputList"
       />
     </div>
@@ -145,6 +146,7 @@ export default {
         }
       ],
       localExam: new Exam(),
+      formBuilderCrud: 0,
       expanded: true,
       entityIdKeyInResponse: 'data.id',
       showRouteParamKey: 'id',
@@ -297,12 +299,16 @@ export default {
           element.value = this.exam.temp.grade
         }
       })
+    },
+    forceRender() {
+      this.formBuilderCrud += 1
     }
   },
   mounted() {
     if (this.exam.id) {
       this.loadExamData(true)
     }
+    this.forceRender()
   }
 }
 </script>

@@ -341,6 +341,8 @@ export default {
     },
     goToPrevStep () {
       this.currentTab = this.getPrevTabName()
+      const currentTabIndex = this.getCurrentTabIndex()
+      this.stepsTab = this.allTabs[currentTabIndex]
     },
     goToLastStep () {
       this.currentTab = this.getlastStepName()
