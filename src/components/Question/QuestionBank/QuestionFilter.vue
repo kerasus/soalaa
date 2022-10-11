@@ -82,6 +82,7 @@
       </question-filter-expansion>
 
       <question-filter-expansion
+        v-if="showMajorList"
         header-title="رشته تحصیلی"
       >
         <q-option-group
@@ -151,6 +152,12 @@ export default {
       }
     },
     initialLoadMode: {
+      type: Boolean,
+      default: () => {
+        return true
+      }
+    },
+    showMajorList: {
       type: Boolean,
       default: () => {
         return true
