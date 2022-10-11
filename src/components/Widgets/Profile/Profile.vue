@@ -125,13 +125,13 @@ export default {
       this.loading = true
       this.getFormData()
         .then(() => {
-          this.loading = false
           this.setInputsInitData()
           this.disableFilledInputs()
+          this.loading = false
         })
         .catch(() => {
           this.loading = false
-          this.goToDashboard()
+          // this.goToDashboard()
         })
     },
 
@@ -157,7 +157,7 @@ export default {
             this.cities = response.data.data.cities
             this.majors = response.data.data.majors
             this.grades = response.data.data.grades
-            return resolve(true)
+            resolve(true)
           })
           .catch(() => {
             reject(true)
