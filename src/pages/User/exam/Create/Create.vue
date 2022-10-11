@@ -99,6 +99,7 @@
          class="subscription-error">
       <div class="subscription-error-title">شما دسترسی برای ایجاد آزمون ندارید</div>
       <q-btn color="primary"
+             unelevated
              label="تهیه اشتراک"
              @click="gotoSubscription" />
     </div>
