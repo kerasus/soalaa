@@ -223,6 +223,11 @@ const routes = [
                     component: () => import('pages/User/Ticket/Create.vue')
                   }
                 ]
+              },
+              {
+                path: '/onlineQuiz/results/:exam_id/:user_exam_id',
+                name: 'user.exam.results',
+                component: () => import('pages/User/exam/Result')
               }
             ]
           },
@@ -535,12 +540,6 @@ const routes = [
           },
           { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings'), breadcrumbs: { title: 'تنظیمات' } }
         ]
-      },
-      {
-        path: '/onlineQuiz/results/:exam_id/:user_exam_id',
-        name: 'user.exam.results',
-        component: () => import('pages/User/exam/Result'),
-        middleware: [auth]
       },
       {
         path: '/faq',

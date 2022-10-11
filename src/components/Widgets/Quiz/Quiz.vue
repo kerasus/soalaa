@@ -196,6 +196,8 @@ export default defineComponent({
           this.allExamsList = new ExamList(response.data.data)
           this.pagination.exam = response.data.meta
           this.allExamsList.loading = false
+        }).catch(() => {
+          this.allExamsList.loading = false
         })
     },
     filterMyExams(filterData) {
@@ -222,6 +224,8 @@ export default defineComponent({
           this.allExamsList = new ExamList(response.data.data)
           this.pagination.exam = response.data.meta
           this.allExamsList.loading = false
+        }).catch(() => {
+          this.allExamsList.loading = false
         })
     },
     getMyExams (title, start, end, page) {
@@ -240,6 +244,8 @@ export default defineComponent({
           this.myExams = new ExamList(response.data.data)
           this.pagination.myExam = response.data.meta
           this.myExams.loading = false
+        }).catch(() => {
+          this.allExamsList.loading = false
         })
     },
     getUpcomingExams () {
@@ -249,6 +255,8 @@ export default defineComponent({
         .then((response) => {
           this.upcomingExams = new ExamList(response.data.data)
           this.upcomingExams.loading = false
+        }).catch(() => {
+          this.allExamsList.loading = false
         })
     },
     gotoMyExam() {
