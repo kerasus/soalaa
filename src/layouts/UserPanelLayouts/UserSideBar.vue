@@ -53,7 +53,10 @@
       <!--        </div>-->
       <!--      </div>-->
     </div>
-    <div class="bg-primary side-menu-main-layout">
+    <div
+      class="bg-primary side-menu-main-layout"
+      :class="{ 'loggedIn' : isUserLogin }"
+    >
       <user-panel-base-menu />
     </div>
     <!--     Todo : usage of :mode="'drawer'" for panel in mobile size , default is 'sideBar'-->
@@ -129,6 +132,7 @@ export default {
     }
     @media screen and (max-width: 1023px) {
       width: 100%;
+      border-radius: 0;
     }
     @media screen and (max-width: 599px) {}
     .profile-detail {
@@ -224,7 +228,13 @@ export default {
     }
     @media screen and (max-width: 1023px) {
       width: 100%;
-      height: calc(100vh - 100px);
+      border-radius: 0;
+      height:100vh;
+
+      &.loggedIn {
+        height: calc(100vh - 90px);
+
+      }
     }
     @media screen and (max-width: 599px) {
       //width: 100%;
