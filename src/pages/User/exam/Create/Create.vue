@@ -1,6 +1,6 @@
 <template>
   <div class="exam-create-panel">
-    <steps v-model:step="currentTab"
+    <steps v-model:step="stepsTab"
            :loading="draftExam.loading"
            :isConfirmd="draftExamIsConfirmed"
            :disabled="draftExamIsConfirmed || !subscribed"
@@ -99,6 +99,7 @@
          class="subscription-error">
       <div class="subscription-error-title">شما دسترسی برای ایجاد آزمون ندارید</div>
       <q-btn color="primary"
+             unelevated
              label="تهیه اشتراک"
              @click="gotoSubscription" />
     </div>
@@ -204,6 +205,7 @@ export default {
       draftExam: new Exam(),
       gradesList: [],
       majorList: [],
+      stepsTab: 'createPage',
       currentTab: 'createPage',
       allTabs: ['createPage', 'chooseQuestion', 'finalApproval'],
       createDraftExamMessageDialog: false,
@@ -303,15 +305,21 @@ export default {
     },
     setDraftExam () {
       this.currentTab = this.allTabs[this.draftExam.temp.level - 1]
+      this.stepsTab = this.allTabs[this.draftExam.temp.level - 1]
       this.continueWithOldDraftExamConfirmationDialog = false
     },
     clearDraftExam () {
-      this.draftExam = new Exam()
-      this.goToFirstStep()
-      this.continueWithOldDraftExamConfirmationDialog = false
+      this.$axios.delete(API_ADDRESS.exam.user.draft()).then((res) => {
+        this.draftExam = new Exam()
+        this.goToFirstStep()
+        this.continueWithOldDraftExamConfirmationDialog = false
+        this.showMessagesInNotify(['آزمون قبلی شما با موفقیت پاک شد'], 'positive')
+      }).catch(() => {
+        this.showMessagesInNotify(['مشکلی رخ داده است'])
+      })
     },
     onLessonChanged(lessonId) {
-      this.updateExam()
+      this.updateExam('chooseQuestion')
     },
     getNextTabName () {
       return this.allTabs[this.getCurrentTabIndex() + 1]
@@ -390,6 +398,7 @@ export default {
     onChangeTab (newStep) {
       let stepValidation = null
       const currentTabIndex = this.getCurrentTabIndex()
+
       if (currentTabIndex === 0) {
         stepValidation = this.getStep1Validation()
       }
@@ -404,9 +413,8 @@ export default {
 
       if (stepValidation && stepValidation.error) {
         this.showMessagesInNotify(stepValidation.messages)
-        if (newStep !== this.allTabs[0]) {
-          this.currentTab = this.allTabs[this.allTabs.indexOf(newStep) - 1]
-        }
+        this.currentTab = this.allTabs[currentTabIndex]
+        this.stepsTab = this.allTabs[currentTabIndex]
         return false
       }
 
@@ -416,6 +424,7 @@ export default {
           .then(response => {
             this.draftExam.loading = false
             this.currentTab = newStep
+            this.stepsTab = newStep
           })
           .catch(() => {
             this.draftExam.loading = false
@@ -426,6 +435,7 @@ export default {
             this.loadDraftExam(response.data.data)
             this.draftExam.loading = false
             this.currentTab = newStep
+            this.stepsTab = newStep
           })
           .catch(() => {
             this.draftExam.loading = false
@@ -435,6 +445,7 @@ export default {
           .then(response => {
             this.draftExam.loading = false
             this.currentTab = newStep
+            this.stepsTab = newStep
           })
           .catch(() => {
             this.draftExam.loading = false
@@ -456,7 +467,6 @@ export default {
       })
     },
     updateExam (newStep) {
-      // return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam.loadApiResource())
       return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), {
         enable: this.draftExam.enable,
         title: this.draftExam.title,
@@ -547,7 +557,7 @@ export default {
     confirmDraftExam () {
       this.draftExam.loading = true
       this.draftExam.enable = true
-      this.updateExam()
+      this.updateExam('chooseQuestion')
         .then(() => {
           this.showMessagesInNotify(['آزمون شما با موفقیت ساخته شد.'], 'positive')
           // this.$router.push({ name: 'User.Exam.List' })
