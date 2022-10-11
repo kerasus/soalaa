@@ -28,10 +28,7 @@ export default {
               ],
               options: {
                 boxed: true,
-                boxedWidth: 1362,
-                style: {
-                  marginTop: '10px'
-                }
+                boxedWidth: 1362
               }
             },
             {
@@ -46,10 +43,7 @@ export default {
               ],
               options: {
                 boxed: true,
-                boxedWidth: 1362,
-                style: {
-                  marginTop: '10px'
-                }
+                boxedWidth: 1362
               }
             },
             {
@@ -63,10 +57,7 @@ export default {
                         title: 'بانک سوالا'
                       }
                     }
-                  ],
-                  options: {
-                    className: 'mitra'
-                  }
+                  ]
                 }
               ],
               options: {
@@ -110,6 +101,42 @@ export default {
                 boxed: true,
                 boxedWidth: 1362
               }
+            },
+            {
+              cols: [
+                {
+                  widgets: [
+                    {
+                      name: 'Footer'
+                    }
+                  ],
+                  options: {
+                    className: 'yellow-title'
+                  }
+                }
+              ],
+              options: {
+                boxed: false,
+                style: {}
+              }
+            },
+            {
+              cols: [
+                {
+                  widgets: [
+                    {
+                      name: 'BottomNavigation'
+                    }
+                  ],
+                  options: {
+                    className: 'bottom-nav-container'
+                  }
+                }
+              ],
+              options: {
+                boxed: false,
+                style: {}
+              }
             }
           ]
         },
@@ -120,6 +147,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+.bottom-nav-container {
+  position: relative;
+}
 </style>

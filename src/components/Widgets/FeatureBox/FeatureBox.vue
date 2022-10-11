@@ -96,7 +96,7 @@ export default {
     width: 954px;
   }
   @media screen and (max-width:1023px ){
-    width: 600px;
+    width: 540px;
   }
   @media screen and (max-width:599px ){
     width: 100%;
@@ -128,6 +128,12 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding-top: 42px;
+    padding-bottom: 20px;
+    @media screen and (max-width: 1439px){
+      padding-top: 0px;
+      padding-bottom: 0;
+    }
     @media screen and (max-width: 1023px){
       flex-direction: column;
       width: 100%;

@@ -1,22 +1,33 @@
 <template>
-  <div  class="sub-mit-box flex justify-between items-center page-width">
+  <div  v-if="!isUserLogin"
+        class="sub-mit-box flex justify-between items-center page-width">
     <div class="info">با ورود و یا ثبت نام در سوالا میتوانید محتوای شخصی سازی شده و مربوط به خود را دنبال کنید</div>
     <div class="action-box">
       <q-btn
         unelevated
         class="btn-style"
-        label="ورود"></q-btn>
-      <q-btn unelevated
-             color="primary"
-             class="btn-style"
-             label="ثبت نام"></q-btn>
+        label="ورود"
+        :to="{ name: 'login' }"
+      />
+      <q-btn
+        unelevated
+        color="primary"
+        class="btn-style"
+        label="ثبت نام"
+        :to="{ name: 'login' }"
+      />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'GoLogin'
+  name: 'GoLogin',
+  computed: {
+    isUserLogin() {
+      return this.$store.getters['Auth/isUserLogin']
+    }
+  }
 }
 </script>
 
@@ -28,7 +39,7 @@ export default {
     width: 954px;
   }
   @media screen and (max-width:1023px ){
-    width: 600px;
+    width: 540px;
   }
   @media screen and (max-width:599px ){
     width: 100%;
@@ -37,10 +48,10 @@ export default {
 .sub-mit-box{
   background: #FFFFFF;
   border-radius: 16px;
-  padding: 30px 80px;
+  padding: 36px 80px;
   margin-bottom: 80px;
   @media  screen and (max-width: 1439px){
-    padding: 24px 60px;
+    padding: 30px 60px;
     margin-bottom: 60px;
   }
   @media  screen and (max-width: 1023px){
@@ -86,6 +97,8 @@ export default {
     align-items: center;
     text-align: center;
     letter-spacing: -0.03em;
+    height: 40px;
+
   }
 }
 </style>

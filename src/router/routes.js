@@ -223,6 +223,11 @@ const routes = [
                     component: () => import('pages/User/Ticket/Create.vue')
                   }
                 ]
+              },
+              {
+                path: '/onlineQuiz/results/:exam_id/:user_exam_id',
+                name: 'user.exam.results',
+                component: () => import('pages/User/exam/Result')
               }
             ]
           },
@@ -537,12 +542,6 @@ const routes = [
         ]
       },
       {
-        path: '/onlineQuiz/results/:exam_id/:user_exam_id',
-        name: 'user.exam.results',
-        component: () => import('pages/User/exam/Result'),
-        middleware: [auth]
-      },
-      {
         path: '/faq',
         name: 'faq',
         component: () => import('src/pages/CommonQuestions/list'),
@@ -555,6 +554,20 @@ const routes = [
       {
         path: '/onlineQuiz/alaaView/:quizId/:questNumber',
         name: 'onlineQuiz.alaaView',
+        component: () => import('pages/User/exam/participate/AlaaView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
+        path: '/onlineQuiz/alaaView/retake/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView.retake',
         component: () => import('pages/User/exam/participate/AlaaView'),
         layoutConfig: {
           layoutHeaderVisible: true,
@@ -603,8 +616,11 @@ const routes = [
         //     Permissions.hasPermission('examStore')]
         // },
         layoutConfig: {
-          layoutHeaderVisible: false,
-          layoutLeftDrawerVisible: false
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false,
+          layoutLeftSideBarType: 'default',
+          layoutLeftDrawerOverlay: true
         }
       },
       {

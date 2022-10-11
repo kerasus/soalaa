@@ -75,9 +75,6 @@ export default {
 
   methods: {
     add () {
-      // console.log('1 cart', this.$store.getters['Cart/cart'])
-      // this.$store.getters['Cart/cart'].addToCart({ id: 489 })
-      // console.log('2 cart', this.$store.getters['Cart/cart'])
       this.$store.dispatch('Cart/addToCart', {
         product: { id: 901 },
         products: [903]

@@ -1,6 +1,7 @@
 <template>
   <div class="user-panel-side-bar">
-    <div class="bg-primary profile-box">
+    <div v-if="isUserLogin"
+         class="bg-primary profile-box">
       <div class="profile-detail">
         <div class="profile-photo-box">
           <div class="profile-photo-img">
@@ -25,7 +26,10 @@
             </svg>
           </div>
         </div>
-        <div class="profile-detail-info">
+        <div
+          v-if="isUserLogin"
+          class="profile-detail-info"
+        >
           <div class="info-name">{{user.full_name}}</div>
           <div class="info-phoneNumber">{{user.mobile}}</div>
         </div>
@@ -49,7 +53,10 @@
       <!--        </div>-->
       <!--      </div>-->
     </div>
-    <div class="bg-primary side-menu-main-layout">
+    <div
+      class="bg-primary side-menu-main-layout"
+      :class="{ 'loggedIn' : isUserLogin }"
+    >
       <user-panel-base-menu />
     </div>
     <!--     Todo : usage of :mode="'drawer'" for panel in mobile size , default is 'sideBar'-->
@@ -82,6 +89,9 @@ export default {
         return this.$store.getters['Auth/user']
       }
       return new User()
+    },
+    isUserLogin() {
+      return this.$store.getters['Auth/isUserLogin']
     },
     showMenuItem () {
       return (item) => {
@@ -122,6 +132,7 @@ export default {
     }
     @media screen and (max-width: 1023px) {
       width: 100%;
+      border-radius: 0;
     }
     @media screen and (max-width: 599px) {}
     .profile-detail {
@@ -144,8 +155,11 @@ export default {
           height: 56px;
         }
         .profile-photo-img {
+          width: 100%;
+          height: 100%;
           .q-img {
             border-radius: 16px;
+            height: 100%;
           }
         }
         .profile-photo-badge {
@@ -198,6 +212,7 @@ export default {
     min-height: 480px;
     border-radius: 20px;
     padding: 24px;
+    display: grid;
     @media screen and (max-width: 1919px) {
       width: 273px;
       min-height: 480px;
@@ -213,7 +228,13 @@ export default {
     }
     @media screen and (max-width: 1023px) {
       width: 100%;
-      height: calc(100vh - 100px);
+      border-radius: 0;
+      height:100vh;
+
+      &.loggedIn {
+        height: calc(100vh - 90px);
+
+      }
     }
     @media screen and (max-width: 599px) {
       //width: 100%;

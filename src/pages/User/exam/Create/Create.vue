@@ -1,14 +1,17 @@
 <template>
   <div class="exam-create-panel">
-    <steps v-model:step="currentTab"
+    <steps v-model:step="stepsTab"
            :loading="draftExam.loading"
+           :isConfirmd="draftExamIsConfirmed"
+           :disabled="draftExamIsConfirmed || !subscribed"
            @update:step="onChangeTab"
     />
-    <q-tab-panels v-if="!draftExamIsConfirmed"
+    <q-tab-panels v-if="subscribed && !draftExamIsConfirmed"
                   v-model="currentTab"
                   animated
     >
-      <q-tab-panel name="createPage">
+      <q-tab-panel :disable="draftExamIsConfirmed"
+                   name="createPage">
         <exam-info-tab ref="createExam"
                        v-model:exam="draftExam"
                        :gradesList="gradesList"
@@ -16,7 +19,8 @@
                        @nextTab="goToNextStep"
         />
       </q-tab-panel>
-      <q-tab-panel name="chooseQuestion">
+      <q-tab-panel :disable="draftExamIsConfirmed"
+                   name="chooseQuestion">
         <question-selection-tab v-model:exam="draftExam"
                                 @lessonChanged="onLessonChanged"
                                 @nextTab="goToNextStep"
@@ -25,7 +29,8 @@
                                 @deleteQuestionFromExam="bulkDetachQuestionsOfDraftExam"
         />
       </q-tab-panel>
-      <q-tab-panel name="finalApproval">
+      <q-tab-panel :disable="draftExamIsConfirmed"
+                   name="finalApproval">
         <final-approval-tab v-model:exam="draftExam"
                             :majors="majorList"
                             :grades="gradesList"
@@ -36,8 +41,67 @@
         />
       </q-tab-panel>
     </q-tab-panels>
-    <div v-else>
-      draftExamIsConfirmed
+    <div v-else-if="subscribed && draftExamIsConfirmed">
+      <div class="confirmed-draft-exam-page">
+        <div class="icon-section">
+          <svg width="100%"
+               height="100%"
+               viewBox="0 0 290 290"
+               fill="none"
+               xmlns="http://www.w3.org/2000/svg">
+            <circle cx="144.5"
+                    cy="145.5"
+                    r="122.5"
+                    fill="url(#paint0_linear_2989_11788)" />
+            <path d="M145 235C194.5 235 235 194.5 235 145C235 95.5 194.5 55 145 55C95.5 55 55 95.5 55 145C55 194.5 95.5 235 145 235Z"
+                  stroke="#4CAF50"
+                  stroke-width="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+            <path d="M106.75 145L132.22 170.47L183.25 119.53"
+                  stroke="#4CAF50"
+                  stroke-width="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+            <defs>
+              <linearGradient id="paint0_linear_2989_11788"
+                              x1="144.5"
+                              y1="-10.5"
+                              x2="144.5"
+                              y2="268"
+                              gradientUnits="userSpaceOnUse">
+                <stop stop-color="white"
+                      stop-opacity="0" />
+                <stop offset="1"
+                      stop-color="white" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="message">
+          آزمون شما با موفقیت ساخته شد
+        </div>
+        <div class="actions-section">
+          <q-btn flat
+                 class="btn-go-to-exam-list"
+                 :to="{name: 'User.Exam.List'}"
+          >
+            مشاهده آزمون در پنل کاربری
+          </q-btn>
+          <q-btn flat
+                 class="btn-go-to-print-exam">
+            دانلود فایل آزمون
+          </q-btn>
+        </div>
+      </div>
+    </div>
+    <div v-else-if="!subscribed"
+         class="subscription-error">
+      <div class="subscription-error-title">شما دسترسی برای ایجاد آزمون ندارید</div>
+      <q-btn color="primary"
+             unelevated
+             label="تهیه اشتراک"
+             @click="gotoSubscription" />
     </div>
     <q-dialog v-model="createDraftExamMessageDialog">
       <q-card
@@ -72,20 +136,37 @@
     </q-dialog>
     <q-dialog v-model="continueWithOldDraftExamConfirmationDialog"
               persistent>
-      <q-card>
-        <q-card-section class="row items-center">
-          <div class="q-ma-md">
-            شما یک آزمون ساخته شده دارید ، آیا تمایل به ادامه فرآیند ساخت آن دارید؟
+      <q-card class="draft-dialog">
+        <q-btn v-close-popup
+               flat
+               class="close-btn"
+               icon="close"
+               @click="clearDraftExam" />
+        <q-card-section class="flex column items-center">
+          <div class="exam-icon">
+            <q-icon size="70px"
+                    name="error_outline" />
+          </div>
+          <div class="exam-slogan">
+            یک آزمون نیمه تمام دارید، آیا می خواهید آن را تکمیل کنید؟
+          </div>
+          <div class="exam-info">
+            <div class="exam-title">نام آزمون: {{draftExam.title}}</div>
+            <div class="exam-major">رشته: {{draftMajor}}</div>
+            <div class="exam-grade">پایه: {{draftGrade}}</div>
           </div>
         </q-card-section>
-        <q-card-actions align="right">
-          <q-btn flat
-                 label="انصراف"
+        <q-card-actions class="flex flex-center">
+          <q-btn label="خیر"
+                 class="cancel-draft"
+                 unelevated
+                 @click="clearDraftExam"
+          />
+          <q-btn label="بله، ادامه می‌دهم"
                  color="primary"
-                 @click="clearDraftExam" />
-          <q-btn label="ادامه"
-                 color="primary"
-                 @click="setDraftExam" />
+                 unelevated
+                 @click="setDraftExam"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -119,10 +200,12 @@ export default {
   ],
   data() {
     return {
+      subscribed: true,
       draftExamIsConfirmed: false,
       draftExam: new Exam(),
       gradesList: [],
       majorList: [],
+      stepsTab: 'createPage',
       currentTab: 'createPage',
       allTabs: ['createPage', 'chooseQuestion', 'finalApproval'],
       createDraftExamMessageDialog: false,
@@ -130,7 +213,36 @@ export default {
     }
   },
   created() {
-    this.getData()
+    this.draftExam.loading = true
+    this.checkSubscription().then((res) => {
+      if (res.data.data) {
+        this.subscribed = true
+        this.getData()
+      } else {
+        this.currentTab = 'notSubscribed'
+        this.draftExam.loading = false
+        this.subscribed = false
+      }
+    }).catch((e) => {
+      this.subscribed = false
+      this.draftExam.loading = false
+    })
+  },
+  computed: {
+    draftMajor() {
+      const major = this.majorList.find(x => x.id === this.draftExam.temp.major)
+      if (!major) {
+        return ''
+      }
+      return major.value
+    },
+    draftGrade() {
+      const grade = this.gradesList.find(x => x.id === this.draftExam.temp.grade)
+      if (!grade) {
+        return ''
+      }
+      return grade.title
+    }
   },
   methods: {
     getData () {
@@ -139,11 +251,12 @@ export default {
         .then(() => {
           this.getDraftExam()
             .then(response => {
-              if (!response.data?.data) {
-                return
+              if (response.data?.data) {
+                this.loadDraftExam(response.data.data)
+                this.continueWithOldDraftExamConfirmationDialog = true
+              } else {
+                this.loadDraftExam()
               }
-              this.continueWithOldDraftExamConfirmationDialog = true
-              this.loadDraftExam(response.data.data)
             })
             .catch(() => {
               this.draftExam.loading = false
@@ -158,6 +271,9 @@ export default {
         this.getGradesList(),
         this.loadMajorList()
       ])
+    },
+    checkSubscription() {
+      return this.$axios.get(API_ADDRESS.user.feature('exam'))
     },
     getGradesList () {
       return new Promise((resolve, reject) => {
@@ -183,19 +299,27 @@ export default {
     },
     loadDraftExam (draftExam) {
       this.draftExam = new Exam(draftExam)
-      this.loadAttachedQuestions()
+      if (this.draftExam.id) {
+        this.loadAttachedQuestions()
+      }
     },
     setDraftExam () {
-      // load tab page based on draftExam level
+      this.currentTab = this.allTabs[this.draftExam.temp.level - 1]
+      this.stepsTab = this.allTabs[this.draftExam.temp.level - 1]
       this.continueWithOldDraftExamConfirmationDialog = false
     },
     clearDraftExam () {
-      this.draftExam = new Exam()
-      this.goToFirstStep()
-      this.continueWithOldDraftExamConfirmationDialog = false
+      this.$axios.delete(API_ADDRESS.exam.user.draft()).then((res) => {
+        this.draftExam = new Exam()
+        this.goToFirstStep()
+        this.continueWithOldDraftExamConfirmationDialog = false
+        this.showMessagesInNotify(['آزمون قبلی شما با موفقیت پاک شد'], 'positive')
+      }).catch(() => {
+        this.showMessagesInNotify(['مشکلی رخ داده است'])
+      })
     },
     onLessonChanged(lessonId) {
-      this.updateExam()
+      this.updateExam('chooseQuestion')
     },
     getNextTabName () {
       return this.allTabs[this.getCurrentTabIndex() + 1]
@@ -274,6 +398,7 @@ export default {
     onChangeTab (newStep) {
       let stepValidation = null
       const currentTabIndex = this.getCurrentTabIndex()
+
       if (currentTabIndex === 0) {
         stepValidation = this.getStep1Validation()
       }
@@ -288,15 +413,18 @@ export default {
 
       if (stepValidation && stepValidation.error) {
         this.showMessagesInNotify(stepValidation.messages)
+        this.currentTab = this.allTabs[currentTabIndex]
+        this.stepsTab = this.allTabs[currentTabIndex]
         return false
       }
 
       const hasOldDraftExam = !!this.draftExam.id
       if (currentTabIndex === 0 && hasOldDraftExam) {
-        this.updateExam()
+        this.updateExam(newStep)
           .then(response => {
             this.draftExam.loading = false
             this.currentTab = newStep
+            this.stepsTab = newStep
           })
           .catch(() => {
             this.draftExam.loading = false
@@ -307,13 +435,23 @@ export default {
             this.loadDraftExam(response.data.data)
             this.draftExam.loading = false
             this.currentTab = newStep
+            this.stepsTab = newStep
+          })
+          .catch(() => {
+            this.draftExam.loading = false
+          })
+      } else {
+        this.updateExam(newStep)
+          .then(response => {
+            this.draftExam.loading = false
+            this.currentTab = newStep
+            this.stepsTab = newStep
           })
           .catch(() => {
             this.draftExam.loading = false
           })
       }
 
-      this.currentTab = newStep
       return true
     },
     createExam () {
@@ -323,19 +461,20 @@ export default {
         title: this.draftExam.title,
         temp: {
           major: this.draftExam.temp.major,
-          grade: this.draftExam.temp.grade
+          grade: this.draftExam.temp.grade,
+          level: 2
         }
       })
     },
-    updateExam (params) {
-      // return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam.loadApiResource())
+    updateExam (newStep) {
       return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), {
         enable: this.draftExam.enable,
         title: this.draftExam.title,
         temp: {
           major: this.draftExam.temp.major,
           lesson: this.draftExam.temp.lesson,
-          grade: this.draftExam.temp.grade
+          grade: this.draftExam.temp.grade,
+          level: newStep === 'createPage' ? 1 : newStep === 'chooseQuestion' ? 2 : 3
         }
       })
     },
@@ -366,7 +505,7 @@ export default {
           this.loadAttachedQuestions()
         })
         .catch(() => {
-          this.draftExam.loading = false
+          this.loadAttachedQuestions()
         })
     },
     bulkDetachQuestionsOfDraftExam(questions) {
@@ -382,7 +521,7 @@ export default {
           this.loadAttachedQuestions()
         })
         .catch(() => {
-          this.draftExam.loading = false
+          this.loadAttachedQuestions()
         })
     },
     replaceQuestionsOfDraftExam(questions) {
@@ -418,16 +557,20 @@ export default {
     confirmDraftExam () {
       this.draftExam.loading = true
       this.draftExam.enable = true
-      this.updateExam()
+      this.updateExam('chooseQuestion')
         .then(() => {
           this.showMessagesInNotify(['آزمون شما با موفقیت ساخته شد.'], 'positive')
-          this.$router.push({ name: 'User.Exam.List' })
+          // this.$router.push({ name: 'User.Exam.List' })
+          this.currentTab = 'confirmedPage'
           this.draftExam.loading = false
           this.draftExamIsConfirmed = true
         })
         .catch(() => {
           this.draftExam.loading = false
         })
+    },
+    gotoSubscription() {
+      this.$router.push({ name: 'subscription' })
     }
   }
 }
@@ -520,6 +663,160 @@ export default {
         background-color: #F4F5F6;
       }
     }
+  }
+  .confirmed-draft-exam-page {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    .icon-section {
+      width: 245px;
+      height: 245px;
+      @media screen and (max-width: 1439px){
+        width: 194px;
+        height: 194px;
+      }
+      @media screen and (max-width: 1023px){
+        width: 245px;
+        height: 245px;
+      }
+      @media screen and (max-width: 599px){
+        width: 168px;
+        height: 168px;
+      }
+    }
+    .message {
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 37px;
+      text-align: center;
+      letter-spacing: -0.03em;
+      color: #6D708B;
+      @media  screen and (max-width: 1023px){
+        font-size: 22px;
+        line-height: 34px;
+      }
+      @media  screen and (max-width: 599px){
+        font-size: 18px;
+        line-height: 28px;
+      }
+    }
+    .actions-section {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      justify-content: center;
+      .q-btn {
+        font-size: 18px;
+        line-height: 28px;
+        text-align: center;
+        letter-spacing: -0.03em;
+        color: #8075DC;
+        font-weight: 600;
+        margin-top: 5px;
+        @media  screen and (max-width: 599px){
+          font-size: 14px;
+          line-height: 22px;
+        }
+      }
+    }
+  }
+
+  .subscription-error {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 100px;
+
+    .subscription-error-title {
+      font-weight: 700;
+      font-size: 24px;
+      line-height: 37px;
+      text-align: center;
+      letter-spacing: -0.03em;
+      color: #6D708B;
+      margin-bottom: 100px;
+    }
+    @media  screen and (max-width: 1023px){
+      font-size: 22px;
+      line-height: 34px;
+    }
+    @media  screen and (max-width: 599px){
+      font-size: 18px;
+      line-height: 28px;
+    }
+  }
+}
+
+.draft-dialog {
+  width: 348px;
+  height: 343px;
+  background: #FFFFFF;
+  border-radius: 18px;
+  position: relative;
+
+  .close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: #6D708B;
+  }
+
+  .exam-icon {
+    color: #F2A9A7;
+  }
+
+  .exam-slogan {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 25px;
+    text-align: center;
+    color: #434765;
+    margin-top: 20px;
+  }
+
+  .exam-info {
+    margin: 10px 0 20px;
+    .exam-title {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 19px;
+      color: #6D708B;
+    }
+
+    .exam-major {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 19px;
+      color: #6D708B;
+      margin: 4px 0;
+    }
+
+    .exam-grade {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 19px;
+      color: #6D708B;
+    }
+  }
+
+  .cancel-draft {
+    width: 144px;
+    height: 40px;
+    background: #F2F5F9;
+    border-radius: 8px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    text-align: center;
+    color: #6D708B;
   }
 }
 </style>

@@ -3,28 +3,29 @@
     <div v-if="exams.list.length > 0"
          class="quiz-list-container">
       <div class="row q-pt-md">
-        <div class="col-6">
+        <div class="col-12 col-md-6">
+
           <div class="search-bar">
             <q-input v-model="searchInExams"
                      type="search"
                      label="جست و جو در آزمون ها">
               <template v-slot:append>
-                <q-btn color="dark"
-                       icon="search"
-                       flat
-                       :loading="exams.loading"
-                       @click="setFilter"
+                <q-icon name="isax:search-normal-1"
+                        icon="search"
+                        flat
+                        :loading="exams.loading"
+                        @click="setFilter"
                 />
               </template>
             </q-input>
           </div>
         </div>
-        <div class="col-6 filter-btn-col">
+        <div class="col-12 col-md-6 filter-btn-col">
           <q-btn
             v-if="quizType === 'myExam'"
             unelevated
             class="create-exam"
-            @click="toggleFilter">
+            @click="gotoCreateExam">
             آزمون جدید
           </q-btn>
           <q-btn
@@ -38,20 +39,21 @@
       <div class="row filter-wrapper"
            :class="filterBar ? 'open': '' ">
         <div
-          class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-xl-8">
+          class="col-xs-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
           <div class="filter-input-label">{{quizType === 'myExam'? 'تاریخ ایجاد' : 'تاریخ آزمون'}}</div>
           <form-builder
             ref="filterForm"
+            class="filter-form-builder"
             :value="inputs"
           />
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 flex justify-end items-end">
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 flex justify-end items-end">
           <q-btn
             unelevated
             color="white"
             text-color="dark"
             class="filter-refresh-btn"
-            icon="isax:refresh"
+            icon="isax:rotate-left"
             @click="clearInputs"
           />
           <q-btn
@@ -70,20 +72,20 @@
             <q-item-section>
               <div class="row quiz-list-header-row">
                 <div class="quiz-list-header-col"
-                     :class="quizType === 'myExam' ? 'col-5' : 'col-6'">
+                     :class="quizType === 'myExam' ? 'col-5' : 'col-5'">
                   عنوان آزمون
                 </div>
                 <div v-if="quizType === 'myExam'"
-                     :class="quizType === 'myExam' ? 'col-2' : 'col-3'"
-                     class="quiz-list-header-col">
+                     :class="quizType === 'myExam' ? 'col-2' : 'col-4'"
+                     class="quiz-list-header-col centered">
                   نوع آزمون
                 </div>
-                <div class="quiz-list-header-col"
-                     :class="quizType === 'myExam' ? 'col-2' : 'col-3'">
+                <div class="quiz-list-header-col started"
+                     :class="quizType === 'myExam' ? 'col-3' : 'col-4 exam'">
                   شروع آزمون
                 </div>
                 <div class="quiz-list-header-col"
-                     :class="quizType === 'myExam' ? 'col-3' : 'col-3'">
+                     :class="quizType === 'myExam' ? 'col-2' : 'col-3'">
                   عملیات
                 </div>
               </div>
@@ -95,182 +97,113 @@
             <q-item-section>
               <div class="row quiz-list-item-row">
                 <div class="quiz-list-item-name ellipses"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-5 col-md-5 col-lg-5 col-xl-5' : 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
-                  {{item.title}}
+                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-4 col-md-5 col-lg-5 col-xl-5' : 'col-xs-12 col-sm-4 col-md-5 col-lg-5 col-xl-5'">
+                  <span v-if="$q.screen.lt.sm"
+                        class="quiz-list-res-title">
+                    عنوان آزمون :
+                  </span>
+                  <div class="quiz-list-item-name-text">{{item.title}}</div>
                 </div>
-                <div v-if="quizType === 'myExam'"
-                     class="quiz-list-item-schedule"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'">
-                  تست
+                <div v-if="quizType === 'myExam' || $q.screen.lt.sm"
+                     class="quiz-list-item-schedule ellipses"
+                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'">
+                  <span v-if="$q.screen.lt.sm"
+                        class="quiz-list-res-title type">
+                    نوع آزمون :
+                  </span>
+                  {{item.type.value === 'konkur' ? 'تست' : 'شخصیت شناسی'}}
                 </div>
-                <div class="quiz-list-item-schedule"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
+                <div class="quiz-list-item-schedule ellipses"
+                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'"
                 >
-                  {{getDate(item.start_at) }}
-                  ,
-                  {{ getTimeFromDateTime(item.start_at) }}
+                  <span v-if="$q.screen.lt.sm"
+                        class="quiz-list-res-title time">
+                    شروع آزمون :
+                  </span>
+                  <div class="uiz-list-item-schedule-time">
+                    {{ getTimeFromDateTime(item.start_at) + ' ، ' }}
+                  </div>
+                  <div class="uiz-list-item-schedule-date">
+                    {{getDate(item.start_at)}}
+                  </div>
                 </div>
                 <div class="quiz-list-item-action"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
+                     :class="{'has-secondary':getExamActons(item).secondary,'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3': quizType === 'myExam','col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-3': quizType === 'exam' }"
                 >
-                  <!-- <q-btn
-                  class="quiz-action-btn"
-                  :class="item.exam_actions.can_start ? 'enroll' : 'result'"
-                  :label="item.exam_actions.can_start ? 'ثبت نام در آزمون' : 'مشاهده نتایج'"
-                  @click="item.exam_actions.can_start ? registerExam(item) : goToResult(item)"
-                /> -->
-                  <q-btn v-if="item.exam_actions.can_register"
-                         class="quiz-action-btn enroll"
-                         flat
-                         @click="registerExam(item)"
-                  >
-                    ثبت نام در آزمون
-                  </q-btn>
-                  <q-btn v-if="item.exam_actions.can_start"
-                         class="quiz-action-btn enroll"
-                         flat
-                         @click="goToParticipateExamPage(item, personal)"
-                  >
-                    شروع آزمون
-                  </q-btn>
-                  <q-btn v-if="item.exam_actions.can_retake"
-                         class="quiz-action-btn enroll"
-                         flat
-                         @click="showRetakeConfirmation(item)"
-                  >
-                    شروع مجدد
-                  </q-btn>
-                  <q-btn
-                    v-if="item.exam_actions.can_continue"
-                    class="quiz-action-btn continue"
-                    unelevated
-                    @click="continueExam(item)"
-                  >
-                    ادامه آزمون
-                  </q-btn>
-                  <q-btn
-                    v-if="item.exam_actions.can_see_report"
-                    class="quiz-action-btn result"
-                    style="background: #FFB74D"
-                    unelevated
-                    @click="goToResult(item)"
-                  >
-                    مشاهده نتایج
-                  </q-btn>
-                  <q-btn
-                    v-if="item.exam_actions.can_submit_answer"
-                    class="quiz-action-btn document"
-                    unelevated
-                    @click="getConfirmation(item.user_exam_id)"
-                  >
-                    <q-icon name="isax:tick-circle"
-                            size="20px"
-                            style="margin-left: 3px;" />
-                    ثبت پاسخنامه ذخیره شده
-                  </q-btn>
-                  <template v-if="item.booklet_url">
-                    <q-btn class="quiz-action-btn document"
-                           unelevated
-                           label="لیست دفترچه ها">
-                      <q-menu
-                        fit
-                        transition-show="flip-right"
-                        transition-hide="flip-left"
-                      >
-                        <q-list>
-                          <q-item
-                            v-if="item.booklet_url[1]"
-                            clickable
-                            @click="downloadBooklet(item.booklet_url[1].questions_booklet_url)"
-                          >
-                            <q-item-section
-                              :key="'questions_booklet_url-'+1"
-                              class="exam-btn-text">
-                              <span class="exam-list-menu-title">
-                                <q-icon name="isax:book-1"
-                                        size="20px" />
-                                {{ item.booklet_url[1].category_title }}
-                              </span>
-                            </q-item-section>
-                          </q-item>
-                          <q-item
-                            v-if="item.booklet_url[1]"
-                            clickable
-                            @click="downloadBooklet(item.booklet_url[1].descriptive_answers_booklet_url)"
-                          >
-                            <q-item-section
-                              :key="'questions_booklet_url-'+1"
-                              class="exam-btn-text"
-                            >
-                              <span class="exam-list-menu-title">
-                                <q-icon name="isax:note-2"
-                                        size="20px" />
-                                پاسخ {{ item.booklet_url[1].category_title }}
-                              </span>
-                            </q-item-section>
-                          </q-item>
-                          <q-separator />
-                          <q-item
-                            v-if="item.booklet_url[0]"
-                            clickable
-                            @click="downloadBooklet(item.booklet_url[0].questions_booklet_url)"
-                          >
-                            <q-item-section
-                              :key="'questions_booklet_url-'+0"
-                              class="exam-btn-text"
-                            >
-                              <span class="exam-list-menu-title">
-                                <q-icon name="isax:book-1"
-                                        size="20px" />
-                                {{ item.booklet_url[0].category_title }}
-                              </span>
-                            </q-item-section>
-                          </q-item>
-                          <q-item
-                            v-if="item.booklet_url[0]"
-                            clickable
-                            @click="downloadBooklet(item.booklet_url[0].descriptive_answers_booklet_url)"
-                          >
-                            <q-item-section
-                              :key="'questions_booklet_url-'+0"
-                              class="exam-btn-text"
-                            >
-                              <span class="exam-list-menu-title">
-                                <q-icon name="isax:note-2"
-                                        size="20px" />
-                                پاسخ {{ item.booklet_url[0].category_title }}
-                              </span>
-                            </q-item-section>
-                          </q-item>
-                        </q-list>
-                      </q-menu>
-                    </q-btn>
-                  </template>
-                  <q-btn
-                    v-if="!!item.holding_status"
-                    style="color: #ffc107"
-                    flat
-                    disabled
-                  >
-                    <q-icon name="isax:info-circle"
-                            size="20px"
-                            style="margin-left: 3px;" />
-                    {{ item.holding_status }}
-                  </q-btn>
-                  <q-btn
-                    v-if="quizType === 'myExam'"
-                    color="dark"
-                    :to="{name : 'User.Exam.Download'}"
-                    class="quiz-action-download"
-                    flat
-                    icon="isax:import"
-                    @click="onClick"
+                  <q-btn v-if="getExamActons(item).primary"
+                         class="quiz-action-btn"
+                         :class="getExamActons(item).primary.title === 'شروع آزمون' ? 'enroll' : getExamActons(item).primary.title === 'ادامه آزمون' ? 'continue' : 'result'"
+                         :label="getExamActons(item).primary.title"
+                         @click="getExamActons(item).primary.action"
                   />
+                  <q-btn v-if="getExamActons(item).secondary"
+                         flat
+                         class="q-ml-md"
+                  >
+                    <svg width="24"
+                         height="24"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="12"
+                        cy="6"
+                        r="2"
+                        fill="#6D708B"
+                      />
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="2"
+                        fill="#6D708B"
+                      />
+                      <circle
+                        cx="12"
+                        cy="18"
+                        r="2"
+                        fill="#6D708B"
+                      />
+                    </svg>
+                    <q-menu fit
+                            anchor="bottom left"
+                            self="top middle"
+                            transition-show="flip-right"
+                            transition-hide="flip-left"
+                    >
+                      <q-list>
+                        <q-item v-for="(examAction, examActionIndex) in getExamActons(item).secondary"
+                                :key="'actionIndex-'+examActionIndex"
+                                v-ripple
+                                clickable
+                                @click="examAction.action"
+                        >
+                          <q-item-section avatar>
+                            <q-icon :name="examAction.icon" />
+                          </q-item-section>
+                          <q-item-section>{{ examAction.title }}</q-item-section>
+                        </q-item>
+                      </q-list>
+                    </q-menu>
+                  </q-btn>
                 </div>
               </div>
             </q-item-section>
           </q-item>
         </q-list>
+      </div>
+      <div class="row text-center justify-center pagination-box">
+        <q-pagination
+          v-if="pageCount > 1"
+          v-model="page"
+          :max="pageCount"
+          :max-pages="6"
+          direction-links
+          icon-first="isax:arrow-right-3"
+          icon-next="chevron_right"
+          icon-last="chevron_left"
+          @update:model-value="onChangePage"
+        />
       </div>
     </div>
     <div v-else
@@ -282,9 +215,11 @@
         <div class="no-item-title">
           شما آزمون ساخته شده ای ندارید
         </div>
-        <a class="new-link">
-          ساخت آزمون جدید
-        </a>
+        <q-btn class="new-link"
+               flat
+               unelevated
+               label="ساخت آزمون جدید"
+               @click="gotoCreateExam" />
       </div>
     </div>
   </div>
@@ -313,16 +248,29 @@ export default defineComponent({
     exams: {
       type: ExamList,
       default: new ExamList()
+    },
+    pageCount: {
+      type: Number,
+      default: 0
+    },
+    pagination: {
+      type: Number,
+      default: 1
     }
   },
   emits: [
-    'filterExamList'
+    'filterExamList',
+    'changePage'
   ],
   mixins: [mixinAuth, mixinQuiz, inputMixin],
   components: {
     FormBuilder
   },
   data: () => ({
+    examActions: [],
+    examPrimaryAction: null,
+    examSecondryActions: [],
+    page: 1,
     searchInExams: '',
     preventStartExam: false,
     examItem: new Exam(),
@@ -331,8 +279,8 @@ export default defineComponent({
     typeOptions: ['تست', 'تشریحی', 'ترکببی'],
     filterBar: false,
     inputs: [
-      { type: 'date', name: 'from', label: ' ', placeholder: 'از', calendarIcon: ' ', responseKey: 'fromDate', value: '', col: 'col-6' },
-      { type: 'date', name: 'to', label: ' ', placeholder: 'تا', responseKey: 'toDate', calendarIcon: ' ', value: '', col: 'col-6' }
+      { type: 'date', name: 'from', label: 'از', calendarIcon: ' ', responseKey: 'fromDate', col: 'col-12 col-sm-6 form-builder-date-from' },
+      { type: 'date', name: 'to', label: 'تا', responseKey: 'toDate', calendarIcon: ' ', col: 'col-12 col-sm-6 form-builder-date-to' }
     ]
   }),
   created () {
@@ -348,12 +296,100 @@ export default defineComponent({
       } else {
         this.$store.commit('loading/loading', false)
       }
+    },
+    pagination(newValue) {
+      this.page = newValue
     }
   },
   mounted() {
     this.initPageData()
   },
   methods: {
+    getExamActons (exam) {
+      const examActions = []
+      if (exam.exam_actions.can_register) {
+        examActions.push({
+          title: 'ثبت نام در آزمون',
+          icon: 'isax:pen-add',
+          action: () => this.registerExam(exam)
+        })
+      }
+      if (exam.exam_actions.can_start) {
+        examActions.push({
+          title: 'شروع آزمون',
+          icon: 'isax:timer-start',
+          action: () => this.goToParticipateExamPage(exam, false, this.personal)
+        })
+      }
+      if (exam.exam_actions.can_continue) {
+        examActions.push({
+          title: 'ادامه آزمون',
+          icon: 'isax:forward',
+          action: () => this.continueExam(exam, false, this.personal)
+        })
+      }
+      if (exam.exam_actions.can_see_report) {
+        examActions.push({
+          title: 'مشاهده نتایج',
+          icon: 'isax:receipt-item',
+          background: '#FFB74D',
+          action: () => this.goToResult(exam)
+        })
+      }
+      if (exam.exam_actions.can_submit_answer) {
+        examActions.push({
+          title: 'ثبت پاسخنامه ذخیره شده',
+          icon: 'isax:tick-circle',
+          action: () => this.getConfirmation(exam.user_exam_id)
+        })
+      }
+      if (exam.exam_actions.can_retake) {
+        examActions.push({
+          title: 'شروع مجدد',
+          icon: 'isax:play-cricle',
+          action: () => this.showRetakeConfirmation(exam, this.personal)
+        })
+      }
+      if (exam.booklet_url) {
+        exam.booklet_url.forEach(booklet => {
+          if (booklet && booklet.questions_booklet_url) {
+            examActions.push({
+              title: booklet.category_title,
+              icon: 'isax:book-1',
+              action: () => this.downloadBooklet(booklet.questions_booklet_url)
+            })
+          }
+          if (booklet && booklet.descriptive_answers_booklet_url) {
+            examActions.push({
+              title: 'پاسخ ' + booklet.category_title,
+              icon: 'isax:note-2',
+              action: () => this.downloadBooklet(booklet.descriptive_answers_booklet_url)
+            })
+          }
+        })
+      }
+      if (this.quizType === 'myExam') {
+        examActions.push({
+          title: 'دانلود سوالات آزمون',
+          disable: true,
+          to: { name: 'User.Exam.Download' },
+          icon: 'isax:import',
+          action: () => {}
+        })
+      }
+      if (exam.holding_status) {
+        examActions.push({
+          title: exam.holding_status,
+          icon: 'isax:info-circle',
+          action: () => {}
+        })
+      }
+
+      const primary = examActions.length > 0 ? examActions[0] : null
+      const secondary = examActions.length > 1 ? examActions.slice(1) : null
+
+      return { primary, secondary }
+    },
     initPageData() {
       this.clearInputs()
       this.setDefaultData()
@@ -376,8 +412,17 @@ export default defineComponent({
       }
       this.$router.push({ name: routeName, params: { user_exam_id: exam.user_exam_id, exam_id: exam.id } })
     },
-    goToParticipateExamPage (exam, personal) {
-      let routeName = personal ? 'onlineQuiz.alaaView.personal' : 'onlineQuiz.alaaView'
+    getParticipateExamPageRoute (retake, personal) {
+      if (retake) {
+        return 'onlineQuiz.alaaView.retake'
+      }
+      if (personal) {
+        return 'onlineQuiz.alaaView.personal'
+      }
+      return 'onlineQuiz.alaaView'
+    },
+    goToParticipateExamPage (exam, retake, personal) {
+      let routeName = this.getParticipateExamPageRoute(retake, personal)
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
         routeName = 'onlineQuiz.mbtiBartle'
       }
@@ -399,12 +444,31 @@ export default defineComponent({
         }
       })
     },
-    continueExam (exam) {
-      let routeName = 'onlineQuiz.alaaView'
+    continueExam (exam, retake, personal) {
+      let routeName = this.getParticipateExamPageRoute(retake, personal)
+      if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
+        routeName = 'onlineQuiz.mbtiBartle'
+      }
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
         routeName = 'onlineQuiz.mbtiBartle'
       }
       this.$router.push({ name: routeName, params: { quizId: exam.id, questNumber: 1 } })
+    },
+    showRetakeConfirmation (exam, personal) {
+      this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
+        message: 'با زدن دکمه تایید گزینه های شما حدف نمی شوند اما زمان آزمون شما از اول شروع می شود',
+        buttons: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: async (confirm) => {
+          if (confirm) {
+            this.goToParticipateExamPage(exam, true, personal)
+          }
+          this.closeConfirmModal()
+        }
+      })
     },
     // getExams () {
     //   const that = this
@@ -499,6 +563,9 @@ export default defineComponent({
     },
     gotoCreateExam() {
       this.$router.push({ name: 'User.Create.Exam' })
+    },
+    onChangePage(value) {
+      this.$emit('changePage', value)
     }
   }
 })
@@ -511,10 +578,27 @@ export default defineComponent({
       border-radius: 8px;
       margin-bottom: 20px;
 
+      &:deep(.q-field__append){
+        .q-icon{
+          color: #6D708B;
+          cursor: pointer;
+          padding-right: 17px;
+        }
+      }
+
       &:deep(.q-field__control) {
         width: 330px;
         height: 40px;
         border-radius: 8px;
+        color: transparent;
+
+        &::before{
+          border: none;
+        }
+      }
+
+      &:deep(.q-field__native) {
+        padding-right: 5px;
       }
 
       &:deep(.q-field__append) {
@@ -536,6 +620,9 @@ export default defineComponent({
         width: 230px;
         height: 50px;
       }
+      @media only screen and (max-width: 390px){
+        width: 100%;
+      }
     }
     .filter-btn-col {
       display: flex;
@@ -547,6 +634,9 @@ export default defineComponent({
         height: 40px;
         background: #FFFFFF;
         border-radius: 8px;
+        :deep(.q-icon){
+          color: #6D708B;
+        }
 
         &.open {
           background: #E4E8EF;
@@ -569,6 +659,10 @@ export default defineComponent({
         letter-spacing: -0.03em;
         color: #FFFFFF;
       }
+
+      @media only screen and (max-width: 390px){
+        margin-bottom: 20px;
+      }
     }
     .filter-wrapper {
       display: none;
@@ -581,6 +675,10 @@ export default defineComponent({
 
       &:deep(.form-builder-date-time-col){
         padding-bottom: 0 !important;
+
+        .outsideLabel{
+          display: none;
+        }
       }
 
       &:deep(.form-builder-separator-col) {
@@ -594,7 +692,7 @@ export default defineComponent({
         line-height: 25px;
         letter-spacing: -0.03em;
         color: #434765;
-        margin-bottom: -38px;
+        margin-bottom: 8px;
 
         @media only screen and (max-width: 600px){
           margin-top: 16px;
@@ -617,6 +715,10 @@ export default defineComponent({
         border-radius: 8px;
         width: 40px;
         height: 40px;
+
+        :deep(.q-icon){
+          color: #6D708B;
+        }
 
         @media only screen and (max-width: 600px){
           margin-top: 16px;
@@ -647,6 +749,7 @@ export default defineComponent({
           &.header {
             background: transparent;
             box-shadow: none;
+            margin-bottom: 0;
 
             @media only screen and (max-width: 600px){
               display: none;
@@ -656,7 +759,7 @@ export default defineComponent({
           .quiz-list-header-row {
             .quiz-list-header-col {
               display: flex;
-              justify-content: center;
+              justify-content: flex-start;
               align-items: center;
               font-style: normal;
               font-weight: 400;
@@ -664,6 +767,27 @@ export default defineComponent({
               line-height: 25px;
               text-align: right;
               color: #6D708B;
+              padding-left: 30px;
+
+              &.centered {
+                justify-content: center;
+                padding-left: 0px;
+              }
+
+              &.started {
+                padding-left: 85px;
+
+                &.exam {
+                  padding-left: 100px;
+                  @media only screen and (max-width: 1024px) and (min-width: 600px) {
+                    padding-left: 40px;
+                  }
+                }
+
+                @media only screen and (max-width: 1024px) and (min-width: 600px) {
+                  padding-left: 50px;
+                }
+              }
             }
           }
 
@@ -674,13 +798,25 @@ export default defineComponent({
 
             .quiz-list-item-name {
               display: flex;
-              justify-content: center;
+              justify-content: flex-start;
               align-items: center;
               font-style: normal;
               font-weight: 400;
               font-size: 14px;
               line-height: 22px;
               color: #434765;
+              padding-left: 30px;
+
+              .quiz-list-item-name-text {
+                @media only screen and (max-width: 600px){
+                  width: 85%;
+                }
+              }
+
+              @media only screen and (max-width: 600px){
+                justify-content: flex-start;
+                padding-left: 0px;
+              }
             }
             .quiz-list-item-schedule {
               display: flex;
@@ -693,14 +829,36 @@ export default defineComponent({
               text-align: right;
               color: #434765;
 
-              @media only screen and (max-width: 390px){
+              @media only screen and (min-width: 600px) and (max-width: 1024px){
+                flex-direction: column;
+              }
+
+              @media only screen and (max-width: 600px) {
                 margin: 3px 0;
+                justify-content: flex-start;
+              }
+            }
+
+            .quiz-list-res-title {
+              width: 100px;
+              text-align: left;
+
+              &.type{
+                width: 75px;
+              }
+
+              &.time{
+                width: 90px;
               }
             }
             .quiz-list-item-action {
               display: flex;
-              justify-content: center;
+              justify-content: flex-start;
               align-items: center;
+
+              &.has-secondary {
+                justify-content: space-between;
+              }
 
               .quiz-action-btn {
                 display: flex;
@@ -737,6 +895,10 @@ export default defineComponent({
               .quiz-action-download {
                 margin-left: 45px;
 
+                @media only screen and (min-width: 600px) and (max-width: 1024px){
+                  margin-left: 15px;
+                }
+
                 @media only screen and (max-width: 600px){
                   margin-left: 32px;
                 }
@@ -766,6 +928,10 @@ export default defineComponent({
           overflow-x: hidden;
         }
       }
+    }
+
+    .pagination-box{
+      margin-top: 30px;
     }
   }
 

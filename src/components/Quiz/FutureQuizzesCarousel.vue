@@ -5,11 +5,13 @@
     </div>
     <div class="carousel-navigation-btn-wrapper">
       <q-btn color="white"
+             unelevated
              class="carousel-navigation-btn left"
              text-color="black"
              icon="chevron_right"
              @click="prevSlide()" />
       <q-btn color="white"
+             unelevated
              class="carousel-navigation-btn"
              text-color="black"
              icon="chevron_left"
@@ -165,16 +167,27 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 10px 20px;
+  padding: 10px 0 20px;
 
   .carousel-navigation-btn-wrapper {
 
     .carousel-navigation-btn {
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
+      max-height: 28px;
+      min-height: 28px;
       background: #FFFFFF;
       box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05);
       border-radius: 6px;
+
+      &:deep(.q-btn__content) {
+        margin: 0;
+      }
+
+      &:deep(.q-icon) {
+        color: #6D708B;
+        font-weight: 400;
+      }
 
       &.left {
         margin-right: 16px;

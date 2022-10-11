@@ -84,12 +84,16 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   background-color: #f1f1f1;
-}
-</style>
-<style lang="scss">
-.online-quiz-template-header{
-  .left-side {
+  height: 100px;
+  align-items: center;
+  padding: 0 50px;
+  .right-side {
     .q-btn {
+      margin-left: 25px;
+    }
+  }
+  .left-side {
+    :deep(.q-btn) {
       &.toolbar-button {
         .q-btn__content {
           .q-btn-dropdown__arrow {

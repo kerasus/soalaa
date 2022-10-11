@@ -10,7 +10,8 @@
             <div class="calendar-date">
               <q-icon :name="calendarIcon"
                       size="18px" />
-              <div class="calendar-date-label">
+              <div class="calendar-date-label"
+                   @click="openCalendarDialog">
                 {{calendarMonth}} ماه {{calendarYear}}
               </div>
             </div>
@@ -155,6 +156,35 @@
         </div>
       </div>
     </div>
+    <q-dialog v-model="calendarDialog">
+      <q-card class="calendar-dialog">
+        <q-card-section class="row items-center content-section">
+          <div class="calendar-dialog-header">
+            {{calendarMonth + ' '  + calendarYear}}
+          </div>
+          <div class="row month-row">
+            <div v-for="item in monthList"
+                 :key="item"
+                 class="col-4">
+              <div class="month-item"
+                   :class="item === selectedMonth ? 'selected' : ''"
+                   @click="setSelectedMonth(item)">
+                {{item}}
+              </div>
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions class="action-section">
+          <q-btn v-close-popup
+                 label="انصراف"
+                 class="cancel-btn" />
+          <q-btn v-close-popup
+                 label="تایید"
+                 class="submit-btn"
+                 @click="setCalendarMonth(selectedMonth)" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -162,7 +192,7 @@
 import { defineComponent, ref } from 'vue'
 import moment from 'moment-jalaali'
 import API_ADDRESS from 'src/api/Addresses'
-// import Time from 'src/plugins/time'
+import Time from 'src/plugins/time'
 
 export default defineComponent({
   name: 'UpcomingExamsCalender',
@@ -460,12 +490,35 @@ export default defineComponent({
     const dayOfWeek = ref(null)
     const startFrom = ref(null)
     const startTill = ref(null)
+    const calendarDialog = ref(false)
+    const thisMonth = ref(null)
+    const selectedMonth = ref(null)
 
-    const loadCalendar = () => {
+    const openCalendarDialog = () => {
+      calendarDialog.value = true
+    }
+
+    const setSelectedMonth = (month) => {
+      selectedMonth.value = month
+    }
+
+    const setCalendarMonth = (selectedMonth) => {
+      const month = monthList.value.indexOf(selectedMonth)
+      const shamsi = `${calendarYear.value}-${month + 1}-01`
+      moment.loadPersian()
+      if (selectedMonth === thisMonth.value) {
+        loadCalendar(Time.now(), false)
+      } else {
+        const newDate = moment(shamsi, 'jYYYY/jM/jD').format('YYYY-M-D HH:MM:SS')
+        loadCalendar(newDate, false)
+      }
+    }
+
+    const loadCalendar = (date, first) => {
       // assign variables data
       let dayCounter = 1
       moment.loadPersian()
-      calendarDate.value = moment(new Date())
+      calendarDate.value = moment(date)
       persianDate.value = new Intl.DateTimeFormat('fa-IR').format(calendarDate.value)
       startOfMonth.value = calendarDate.value.startOf('jMonth').format('dddd')
       startIndex.value = dayList.value.indexOf(startOfMonth.value)
@@ -476,6 +529,20 @@ export default defineComponent({
       dayOfWeek.value = calendarDate.value.startOf('jMonth')
       startFrom.value = moment(`${calendarYear.value}/${calendarDate.value.jMonth() + 1}/${moment().startOf('jMonth').jDate()}`, 'jYYYY/jM/jD').format('YYYY-M-D')
       startTill.value = moment(`${calendarYear.value}/${calendarDate.value.jMonth() + 1}/${dayNum.value}`, 'jYYYY/jM/jD').format('YYYY-M-D')
+      if (first) {
+        thisMonth.value = calendarMonth.value
+      }
+
+      for (let w = 0; w < 6; w++) {
+        for (let col = 0; col < 7; col++) {
+          month.value[w][col] = {
+            date: 0,
+            is_holiday: false,
+            num: 0,
+            events: []
+          }
+        }
+      }
 
       // import data to month view object
       for (let w = 0; w < 6; w++) {
@@ -511,6 +578,8 @@ export default defineComponent({
       baseHight,
       baseHour,
       month,
+      monthList,
+      selectedMonth,
       chartWeek,
       calendarMonth,
       calendarYear,
@@ -519,6 +588,10 @@ export default defineComponent({
       dayNum,
       startFrom,
       startTill,
+      calendarDialog,
+      openCalendarDialog,
+      setSelectedMonth,
+      setCalendarMonth,
       loadCalendar,
       setAttr
     }
@@ -540,7 +613,7 @@ export default defineComponent({
     }
   },
   created() {
-    this.loadCalendar()
+    this.loadCalendar(Time.now(), true)
     this.getEvents()
   }
 })
@@ -605,6 +678,7 @@ export default defineComponent({
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
 
             .calendar-date-label {
               font-style: normal;
@@ -817,7 +891,7 @@ export default defineComponent({
       }
     }
     @media screen and (max-width: 1439px) {
-      margin-right: 24px;
+      margin-right: 0;
       height: 394px;
     }
     @media screen and (max-width: 1200px) {
@@ -826,6 +900,92 @@ export default defineComponent({
     }
     @media screen and (max-width: 1023px) {
       height: 498px;
+    }
+  }
+}
+
+.calendar-dialog {
+  position: relative;
+  width: 335px;
+  height: 392px;
+  background: #FFFFFF;
+  border-radius: 16px;
+
+  .content-section {
+    padding-bottom: 0;
+    .calendar-dialog-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 64px;
+      background: #9690E4;
+      border-radius: 16px 16px 0px 0px;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #FFFFFF;
+    }
+    .month-row {
+      margin: 64px 0 0;
+
+      .month-item {
+        width: 89px;
+        height: 48px;
+        background: #F6F9FF;
+        border-radius: 10px;
+        margin: 6px 5px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #434765;
+        cursor: pointer;
+
+        &.selected{
+          background: #FFB74D;
+          color: #FFFFFF;
+        }
+      }
+    }
+  }
+
+  .action-section {
+    padding: 12px 24px 2px;
+    display: flex;
+    justify-content: flex-end;
+
+    .submit-btn {
+      width: 96px;
+      height: 40px;
+      background: #9690E4;
+      border-radius: 8px;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 22px;
+      letter-spacing: -0.03em;
+      color: #FFFFFF;
+    }
+    .cancel-btn {
+      width: 96px;
+      height: 40px;
+      background: #F6F9FF;
+      border-radius: 10px;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 24px;
+      color: #6D708B;
     }
   }
 }
