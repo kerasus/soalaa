@@ -171,7 +171,7 @@ export default defineComponent({
       if (pageCount < 0 || pageCount === undefined) {
         return 0
       } else {
-        return pageCount
+        return Math.ceil(pageCount)
       }
     }
   },
