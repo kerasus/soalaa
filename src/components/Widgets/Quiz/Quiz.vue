@@ -111,12 +111,16 @@
             <div class="no-item-title">
               شما آزمون ساخته شده ای ندارید
             </div>
-            <a class="new-link">
-              ثبت نام در آزمون
-            </a>
-            <a class="new-link">
-              ساخت آزمون جدید
-            </a>
+            <q-btn class="new-link"
+                   flat
+                   unelevated
+                   label="ثبت نام در آزمون"
+                   @click="gotoSubscription" />
+            <q-btn class="new-link"
+                   flat
+                   unelevated
+                   label="ساخت آزمون جدید"
+                   @click="gotoExamCreate" />
           </div>
         </div>
       </div>
@@ -261,6 +265,12 @@ export default defineComponent({
     },
     gotoMyExam() {
       this.tab = 'myExam'
+    },
+    gotoSubscription() {
+      this.$router.push({ name: 'Landing.3aExams' })
+    },
+    gotoExamCreate() {
+      this.$router.push({ name: 'User.Ceate.Examr' })
     },
     paginateList(event, exam) {
       if (exam === 'exam') {
