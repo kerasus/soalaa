@@ -38,6 +38,7 @@
               <tree
                 ref="tree"
                 :key="treeKey"
+                :no-nodes-label="' '"
                 tick-strategy="strict"
                 :get-node-by-id="getNodeById"
                 @ticked="updateNodes"
