@@ -40,7 +40,7 @@ const API_ADDRESS = {
   },
   option: {
     base: lumenServer + '/option',
-    userIndex: lumenServer + '/option/user?type=question_report_type',
+    userIndex: lumenServer + '/option/user',
     user(type) { return lumenServer + '/option/user?type=' + type }
   },
   log: {
