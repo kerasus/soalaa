@@ -270,7 +270,7 @@ export default defineComponent({
       this.$router.push({ name: 'Landing.3aExams' })
     },
     gotoExamCreate() {
-      this.$router.push({ name: 'User.Ceate.Examr' })
+      this.$router.push({ name: 'User.Create.Exam' })
     },
     paginateList(event, exam) {
       if (exam === 'exam') {
