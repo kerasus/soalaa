@@ -1,20 +1,24 @@
 <template>
   <div class="faq-container">
+    <div class="faq-title">سوالات متداول</div>
     <q-list class="faq-list">
       <q-expansion-item
         v-for="(item, index) in info"
         :key="index"
         dense
-        expand-separator
         :default-opened="index === 1 ? true : false"
         icon="format_quote"
         class="faq-item"
       >
         <template v-slot:header>
           <q-item-section class="faq-item-header">
-            <q-icon name="format_quote"
-                    class="faq-item-header-icon"
-                    color="primary" />
+            <q-icon
+              name="format_quote"
+              class="faq-item-header-icon"
+              color="primary"
+              size="28px"
+
+            />
             <div class="faq-item-label">
               {{ item.key }}
             </div>
@@ -64,6 +68,24 @@ export default {
     width: 100%;
     margin-bottom: 177px;
 
+    .faq-title {
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 31px;
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 24px;
+      color: #434765;
+      @media screen and (max-width: 600px) {
+        padding-bottom: 20px;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 25px;
+      }
+    }
+
     .faq-list {
       width: 100%;
       display: flex;
@@ -100,6 +122,9 @@ export default {
             min-height: 64px;
             height: auto;
           }
+          .faq-item-label {
+            width: calc(100% - 36px);
+          }
         }
 
         &:deep(.q-expansion-item__toggle-icon) {
@@ -119,15 +144,15 @@ export default {
           border-radius: 12px;
 
           .faq-item-header-icon {
-            margin-right: 10px;
+            margin-right: 5px;
           }
-
-          @media screen and (max-width: 600px) {
-            padding: 0px 20px;
+          @media screen and (max-width: 1023px) {
+            align-items: flex-start;
+            padding: 18px 0px 7px;
           }
-          @media screen and (max-width: 390px) {
-            padding: 0px 20px;
-          }
+          //@media screen and (max-width: 599px) {
+          //  padding: 0px 20px;
+          //}
         }
 
         .faq-item-content {
@@ -138,7 +163,14 @@ export default {
           line-height: 22px;
           letter-spacing: -0.03em;
           color: #6D708B;
-
+          border-radius: 12px;
+          :deep(.q-card__section) {
+            padding-top: 0;
+            padding-bottom: 22px;
+            @media screen and (max-width: 600px) {
+              padding-bottom: 20px;
+            }
+          }
           @media screen and (max-width: 600px) {
             padding: 0 55px 0 45px;
           }
@@ -156,6 +188,9 @@ export default {
         @media screen and (max-width: 390px) {
           width: 90%;
         }
+      }
+      :first-child {
+        margin-top: 0;
       }
     }
   }

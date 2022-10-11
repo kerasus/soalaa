@@ -204,7 +204,7 @@
           <q-btn
             unelevated
             class="btn-style"
-            :to="{ name: 'User.MyOrders'}"
+            :to="{ name: 'User.Create.Exam'}"
           ><svg width="24"
                 height="24"
                 viewBox="0 0 24 24"
