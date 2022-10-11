@@ -179,6 +179,15 @@ export default {
       default: () => []
     }
   },
+  mounted() {
+    if (!this.exam.loading && this.exam.questions.list.length > 0) {
+      this.$nextTick(() => {
+        this.setDifficultyLevelsChart()
+        this.replaceTitle()
+        this.reIndexEamQuestions(this.exam.questions.list)
+      })
+    }
+  },
   data: () => ({
     chartOptions: {
       chart: {
@@ -296,6 +305,7 @@ export default {
           this.setDifficultyLevelsChart()
           this.replaceTitle()
           this.reIndexEamQuestions(this.exam.questions.list)
+          this.questions = new QuestionList({ ...this.exam.questions })
         })
       }
     }
@@ -337,7 +347,7 @@ export default {
       //   this.questions.list[fromIndex + 1].order--
       // } else {
       //   this.questions.list[fromIndex].order--
-      //   this.questions.list[fromIndex - 1].order++
+      //   this.q uestions.list[fromIndex - 1].order++
       // }
 
       if (value.mode === 'down') {
@@ -396,8 +406,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .main-container {
+
   padding: 0;
   .exam-detail-container{
     padding-right: 24px;
