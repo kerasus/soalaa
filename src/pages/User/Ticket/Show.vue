@@ -206,7 +206,7 @@ export default {
         { type: 'input', name: 'national_code', responseKey: 'ticket.user.national_code', label: 'کد ملی', col: 'col-md-3', disable: true },
         { type: 'input', name: 'major', responseKey: 'ticket.user.major.name', label: 'رشته', col: 'col-md-3', disable: true },
 
-        { type: 'dateTime', name: 'created_at', responseKey: 'ticket.created_at', label: 'تاریخ ایجاد', col: 'col-md-4', disable: true },
+        { type: 'dateTime', name: 'created_at', responseKey: 'ticket.created_at', label: 'تاریخ ایجاد', calendarIcon: ' ', col: 'col-md-4', disable: true },
         { type: 'input', name: 'priority', responseKey: 'ticket.priority.title', label: 'اولویت', col: 'col-md-4', disable: true },
         // { type: 'select', name: 'department', options: [], optionLabel: 'title', optionValue: 'id', responseKey: 'ticket.department.id', label: 'گروه', col: 'col-md-4' },
         { type: 'select', name: 'status', options: [], optionLabel: 'title', optionValue: 'id', responseKey: 'ticket.status.id', label: 'وضعیت', col: 'col-md-4' },
