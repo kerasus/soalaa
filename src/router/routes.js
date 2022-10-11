@@ -242,6 +242,11 @@ const routes = [
                     component: () => import('pages/User/Ticket/Create.vue')
                   }
                 ]
+              },
+              {
+                path: '/onlineQuiz/results/:exam_id/:user_exam_id',
+                name: 'user.exam.results',
+                component: () => import('pages/User/exam/Result')
               }
             ]
           },
@@ -586,6 +591,16 @@ const routes = [
         name: 'user.exam.results',
         component: () => import('pages/User/exam/Result'),
         middleware: [auth]
+      },
+      {
+        path: '/faq',
+        name: 'faq',
+        component: () => import('src/pages/CommonQuestions/list'),
+        meta: {
+          middlewares: [
+            auth
+          ]
+        }
       },
       {
         path: '/onlineQuiz/alaaView/:quizId/:questNumber',
