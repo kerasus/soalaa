@@ -5,7 +5,7 @@
     v-model:expanded="expandedNodes"
     class="q-ma-lg"
     :nodes="nodes"
-    no-nodes-label="درختی ایجاد نشده است!"
+    :no-nodes-label="noNodesLabel"
     node-key="id"
     control-color="secondary"
     label-key="title"
@@ -158,6 +158,10 @@ export default {
   props: {
     tickStrategy: {
       default: 'none'
+    },
+    noNodesLabel: {
+      type: String,
+      default: 'درختی ایجاد نشده است!'
     },
     editable: {
       type: Boolean,
