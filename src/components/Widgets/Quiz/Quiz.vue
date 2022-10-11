@@ -77,7 +77,8 @@
                               animated>
                   <q-tab-panel name="exam">
                     <quiz-list
-                      v-model:pagination="paginationPage"
+                      :pagination="paginationPage"
+                      :pageCount="pageCount"
                       :quiz-type="'exam'"
                       :exams="allExamsList"
                       :personal="false"
@@ -87,7 +88,8 @@
                   </q-tab-panel>
                   <q-tab-panel name="myExam">
                     <quiz-list
-                      v-model:pagination="paginationPage"
+                      :pagination="paginationPage"
+                      :pageCount="pageCount"
                       :quiz-type="'myExam'"
                       :exams="myExams"
                       :personal="true"
@@ -142,13 +144,35 @@ export default defineComponent({
     return {
       tab: 'exam',
       pagination: {
-        exam: {},
-        myExam: {}
+        exam: {
+          total: 0,
+          per_page: 0
+        },
+        myExam: {
+          total: 0,
+          per_page: 0
+        }
       },
+      filterData: {},
       paginationPage: 1,
       allExamsList: new ExamList(),
       upcomingExams: new ExamList(),
       myExams: new ExamList()
+    }
+  },
+  computed: {
+    pageCount() {
+      let pageCount
+      if (this.tab === 'exam') {
+        pageCount = this.pagination.exam.total / this.pagination.exam.per_page
+      } else {
+        pageCount = this.pagination.myExam.total / this.pagination.myExam.per_page
+      }
+      if (pageCount < 0 || pageCount === undefined) {
+        return 0
+      } else {
+        return pageCount
+      }
     }
   },
   mounted() {
@@ -164,21 +188,25 @@ export default defineComponent({
       this.$axios.get(API_ADDRESS.exam.userExamList.base(), {
         params:
           {
-            start_at_till: date
+            start_at_till: date,
+            page: 1
           }
       })
         .then((response) => {
           this.allExamsList = new ExamList(response.data.data)
+          this.pagination.exam = response.data.meta
           this.allExamsList.loading = false
         })
     },
     filterMyExams(filterData) {
+      this.filterData = filterData
       this.getMyExams(filterData.title, filterData.from, filterData.to)
     },
     filterAllExams(filterData) {
+      this.filterData = filterData
       this.getAllExams(filterData.title, filterData.from, filterData.to)
     },
-    getAllExams (title, start, end) {
+    getAllExams (title, start, end, page) {
       this.allExamsList.loading = true
       this.$axios.get(API_ADDRESS.exam.userExamList.base(),
         {
@@ -186,16 +214,17 @@ export default defineComponent({
             {
               ...(title && { title }),
               ...(start && { start_at_from: start }),
-              ...(end && { start_at_till: end })
+              ...(end && { start_at_till: end }),
+              ...(page && { start_at_till: page })
             }
         })
         .then((response) => {
           this.allExamsList = new ExamList(response.data.data)
-          this.pagination.exam = response.data.links
+          this.pagination.exam = response.data.meta
           this.allExamsList.loading = false
         })
     },
-    getMyExams (title, start, end) {
+    getMyExams (title, start, end, page) {
       this.myExams.loading = true
       this.$axios.get(API_ADDRESS.exam.userExamList.myExams(),
         {
@@ -203,12 +232,13 @@ export default defineComponent({
             {
               ...(title && { title }),
               ...(start && { created_at_from: start }),
-              ...(end && { created_at_till: end })
+              ...(end && { created_at_till: end }),
+              ...(page && { start_at_till: page })
             }
         })
         .then((response) => {
           this.myExams = new ExamList(response.data.data)
-          this.pagination.myExam = response.data.links
+          this.pagination.myExam = response.data.meta
           this.myExams.loading = false
         })
     },
@@ -225,24 +255,13 @@ export default defineComponent({
       this.tab = 'myExam'
     },
     paginateList(event, exam) {
-      this.$axios.get(this.pagination[exam].next).then((response) => {
-        if (exam === 'exam') {
-          this.allExamsList = new ExamList(response.data.data)
-          this.pagination.exam = response.data.links
-        } else {
-          this.myExams = new ExamList(response.data.data)
-          this.pagination.myExam = response.data.links
-        }
-      })
+      if (exam === 'exam') {
+        this.getAllExams(this.filterData.title, this.filterData.from, this.filterData.to, event)
+      } else {
+        this.getMyExams(this.filterData.title, this.filterData.from, this.filterData.to, event)
+      }
     }
   }
-  // setup() {
-  //   const tab = ref('exam')
-  //
-  //   return {
-  //     tab
-  //   }
-  // }
 
 })
 </script>
@@ -283,6 +302,10 @@ export default defineComponent({
     padding-bottom: 8px;
     text-align: center;
     letter-spacing: -0.03em;
+  }
+
+  @media only screen and (max-width: 600px) {
+    width: 240px;
   }
 }
 
