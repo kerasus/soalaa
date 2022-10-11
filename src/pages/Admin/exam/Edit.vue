@@ -143,8 +143,8 @@ export default {
           optionValue: 'id',
           optionLabel: 'value'
         },
-        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', col: 'col-md-4', label: 'زمان شروع' },
-        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', col: 'col-md-4', label: 'زمان پایان' },
+        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', calendarIcon: ' ', col: 'col-md-4', label: 'زمان شروع' },
+        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', calendarIcon: ' ', col: 'col-md-4', label: 'زمان پایان' },
         { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-md-4' },
         { type: 'Checkbox', name: 'enable', responseKey: 'data.enable', label: 'فعال', col: 'col-md-4' },
         { type: 'Checkbox', name: 'is_free', responseKey: 'data.is_free', label: 'رایگان', col: 'col-md-4' },
