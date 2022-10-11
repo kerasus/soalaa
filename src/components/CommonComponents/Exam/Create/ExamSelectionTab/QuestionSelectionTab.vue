@@ -24,6 +24,7 @@
     <div class="col-md-3 col-xs-12 question-bank-filter">
       <question-filter
         ref="filter"
+        :show-major-list="false"
         :filterQuestions="filterQuestions"
         :root-node-id-to-load="rootNodeIdInFilter"
         :node-ids-to-tick="selectedNodesIds"
