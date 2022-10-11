@@ -72,7 +72,7 @@
             <q-item-section>
               <div class="row quiz-list-header-row">
                 <div class="quiz-list-header-col"
-                     :class="quizType === 'myExam' ? 'col-4' : 'col-4'">
+                     :class="quizType === 'myExam' ? 'col-5' : 'col-5'">
                   عنوان آزمون
                 </div>
                 <div v-if="quizType === 'myExam'"
@@ -81,11 +81,11 @@
                   نوع آزمون
                 </div>
                 <div class="quiz-list-header-col started"
-                     :class="quizType === 'myExam' ? 'col-3' : 'col-4'">
+                     :class="quizType === 'myExam' ? 'col-3' : 'col-4 exam'">
                   شروع آزمون
                 </div>
-                <div class="quiz-list-header-col centered"
-                     :class="quizType === 'myExam' ? 'col-3' : 'col-3'">
+                <div class="quiz-list-header-col"
+                     :class="quizType === 'myExam' ? 'col-2' : 'col-3'">
                   عملیات
                 </div>
               </div>
@@ -97,49 +97,77 @@
             <q-item-section>
               <div class="row quiz-list-item-row">
                 <div class="quiz-list-item-name ellipses"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'">
+                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-4 col-md-5 col-lg-5 col-xl-5' : 'col-xs-12 col-sm-4 col-md-5 col-lg-5 col-xl-5'">
                   <span v-if="$q.screen.lt.sm"
                         class="quiz-list-res-title">
-                    نام آزمون :
+                    عنوان آزمون :
                   </span>
                   <div class="quiz-list-item-name-text">{{item.title}}</div>
                 </div>
-                <div v-if="quizType === 'myExam'"
+                <div v-if="quizType === 'myExam' || $q.screen.lt.sm"
                      class="quiz-list-item-schedule ellipses"
                      :class="quizType === 'myExam' ? 'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'">
                   <span v-if="$q.screen.lt.sm"
-                        class="quiz-list-res-title">
+                        class="quiz-list-res-title type">
                     نوع آزمون :
                   </span>
-                  تست
+                  {{item.type.value === 'konkur' ? 'تست' : 'شخصیت شناسی'}}
                 </div>
                 <div class="quiz-list-item-schedule ellipses"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'"
+                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'"
                 >
                   <span v-if="$q.screen.lt.sm"
-                        class="quiz-list-res-title">
-                    زمان آزمون :
+                        class="quiz-list-res-title time">
+                    شروع آزمون :
                   </span>
-                  <div class="uiz-list-item-schedule-date">
-                    {{getDate(item.start_at) }}
-                  </div>
                   <div class="uiz-list-item-schedule-time">
-                    {{ getTimeFromDateTime(item.start_at) }}
+                    {{ getTimeFromDateTime(item.start_at) + ' ، ' }}
+                  </div>
+                  <div class="uiz-list-item-schedule-date">
+                    {{getDate(item.start_at)}}
                   </div>
                 </div>
                 <div class="quiz-list-item-action"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3'"
+                     :class="{'has-secondary':getExamActons(item).secondary,'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3': quizType === 'myExam','col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-3': quizType === 'exam' }"
                 >
                   <q-btn v-if="getExamActons(item).primary"
+                         class="quiz-action-btn"
+                         :class="getExamActons(item).primary.title === 'شروع آزمون' ? 'enroll' : getExamActons(item).primary.title === 'ادامه آزمون' ? 'continue' : 'result'"
                          :label="getExamActons(item).primary.title"
-                         :icon="getExamActons(item).primary.icon"
                          @click="getExamActons(item).primary.action"
                   />
                   <q-btn v-if="getExamActons(item).secondary"
-                         label="..."
+                         flat
                          class="q-ml-md"
                   >
+                    <svg width="24"
+                         height="24"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="12"
+                        cy="6"
+                        r="2"
+                        fill="#6D708B"
+                      />
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="2"
+                        fill="#6D708B"
+                      />
+                      <circle
+                        cx="12"
+                        cy="18"
+                        r="2"
+                        fill="#6D708B"
+                      />
+                    </svg>
                     <q-menu fit
+                            anchor="bottom left"
+                            self="top middle"
                             transition-show="flip-right"
                             transition-hide="flip-left"
                     >
@@ -166,7 +194,7 @@
       </div>
       <div class="row text-center justify-center pagination-box">
         <q-pagination
-          v-if="pageCount > 0"
+          v-if="pageCount > 1"
           v-model="page"
           :max="pageCount"
           :max-pages="6"
@@ -266,6 +294,9 @@ export default defineComponent({
       } else {
         this.$store.commit('loading/loading', false)
       }
+    },
+    pagination(newValue) {
+      this.page = newValue
     }
   },
   mounted() {
@@ -744,8 +775,15 @@ export default defineComponent({
               &.started {
                 padding-left: 85px;
 
+                &.exam {
+                  padding-left: 100px;
+                  @media only screen and (max-width: 1024px) and (min-width: 600px) {
+                    padding-left: 40px;
+                  }
+                }
+
                 @media only screen and (max-width: 1024px) and (min-width: 600px) {
-                  padding-left: 55px;
+                  padding-left: 50px;
                 }
               }
             }
@@ -775,6 +813,7 @@ export default defineComponent({
 
               @media only screen and (max-width: 600px){
                 justify-content: flex-start;
+                padding-left: 0px;
               }
             }
             .quiz-list-item-schedule {
@@ -799,13 +838,25 @@ export default defineComponent({
             }
 
             .quiz-list-res-title {
-              width: 92px;
+              width: 100px;
               text-align: left;
+
+              &.type{
+                width: 75px;
+              }
+
+              &.time{
+                width: 90px;
+              }
             }
             .quiz-list-item-action {
               display: flex;
-              justify-content: center;
+              justify-content: flex-start;
               align-items: center;
+
+              &.has-secondary {
+                justify-content: space-between;
+              }
 
               .quiz-action-btn {
                 display: flex;
