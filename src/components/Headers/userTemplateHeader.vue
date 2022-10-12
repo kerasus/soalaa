@@ -59,19 +59,28 @@
         <!--        -----------------------------------------------------Tabs Section--------------------------------------------   -->
         <div class="user-tab-section">
           <q-list class="flex tabs-list">
-            <q-item
-              v-for="(item, index) in headerItems"
+            <div
+              v-for="(item , index) in headerItems"
               :key="index"
-              v-ripple
-              clickable
-              :active="isRouteSelected(item.to)"
-              active-class="active-item"
-              :to="{ name: item.to }"
+              class="tabs-list-container"
             >
-              <q-item-section class="tab-title">
-                {{ item.title }}
-              </q-item-section>
-            </q-item>
+              <div
+                v-if="showMenuItem(item)"
+                class="self-center"
+              >
+                <q-item
+                  v-ripple
+                  clickable
+                  :active="isRouteSelected(item.to)"
+                  active-class="active-item"
+                  :to="{ name: item.to }"
+                >
+                  <q-item-section class="tab-title">
+                    {{ item.title }}
+                  </q-item-section>
+                </q-item>
+              </div>
+            </div>
           </q-list>
         </div>
         <!--        -----------------------------------------------------Actions Section--------------------------------------------   -->
@@ -267,12 +276,20 @@ export default {
         {
           selected: 'exams',
           title: 'آزمون های سه‌آ',
-          to: 'User.Exam.List'
+          to: 'User.Exam.List',
+          permission: 'all'
         },
         {
           selected: 'questionBank',
           title: 'بانک سوالا',
-          to: 'User.Create.Exam'
+          to: 'User.Create.Exam',
+          permission: 'all'
+        },
+        {
+          selected: 'questionBank',
+          title: 'پنل ادمین',
+          to: 'Admin.Exam.Index',
+          permission: 'examStore'
         }
         // {
         //   selected: 'soalaMag',
@@ -492,6 +509,9 @@ export default {
             font-weight: 400;
             font-size: 16px;
             line-height: 25px;
+          }
+          .tabs-list-container{
+            display: grid;
           }
         }
         @media screen and (max-width: 1023px) {
