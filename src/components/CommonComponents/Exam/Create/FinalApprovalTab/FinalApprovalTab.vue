@@ -188,6 +188,7 @@ export default {
     'exam.questions.list': {
       deep: true,
       handler() {
+        // reflow
         this.exam.questions.list.forEach(question => {
           question.selected = true
         })
@@ -400,6 +401,7 @@ export default {
     },
 
     setDifficultyLevelsChart() {
+      this.chartOptions.series[0].data = []
       if (this.questionLvl.medium) {
         this.chartOptions.series[0].data.push(
           { name: 'متوسط', y: this.questionLvl.medium, color: '#FFCA28' }
@@ -415,6 +417,9 @@ export default {
           { name: 'سخت', y: this.questionLvl.hard, color: '#DA5F5C' }
         )
       }
+      // this.chartOptions.series[0].data.push(
+      //   { name: 'سخت', y: this.questionLvl.hard, color: '#DA5F5C' }
+      // )
     },
 
     replaceTitle () {
