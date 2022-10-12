@@ -223,6 +223,15 @@ const mixinQuiz = {
 
       return this.$axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: userExamId, finish: finishExam, questions: answers })
     },
+    actionOnNoQuestionInExam () {
+      this.$q.notify({
+        type: 'negative',
+        message: 'آزمون سوالی ندارد',
+        position: 'top'
+      })
+      this.$store.commit('Exam/clearExamData', this.userExamId)
+      this.$router.push({ name: 'User.Exam.List' })
+    },
     reloadQuestionFile (questionsFileUrl, viewType, examId) {
       if (!Assistant.getId(examId)) {
         return
@@ -256,6 +265,13 @@ const mixinQuiz = {
                 exam_id: examData.exam.id
               })
               setTimeout(() => { that.refreshFailedLists(examData.exam.user_exam_id) }, 0)
+
+              if (this.getCurrentExamQuestionsInArray().length === 0) {
+                this.actionOnNoQuestionInExam()
+                reject(result)
+                return
+              }
+
               resolve(result)
             } catch (error) {
               console.error(error)
@@ -469,6 +485,13 @@ const mixinQuiz = {
                 user_exam_id: examData.exam.user_exam_id
               })
               setTimeout(() => { that.refreshFailedLists(examData.exam.user_exam_id) }, 0)
+
+              if (this.getCurrentExamQuestionsInArray().length === 0) {
+                this.actionOnNoQuestionInExam()
+                reject(result)
+                return
+              }
+
               resolve(result)
             } catch (error) {
               console.error(error)
