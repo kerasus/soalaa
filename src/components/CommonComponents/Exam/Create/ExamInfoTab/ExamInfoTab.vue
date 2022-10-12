@@ -261,6 +261,25 @@ export default {
     loadMajorInput (options) {
       this.loadSelectInputOptions('temp.major', options)
     },
+
+    isValid () {
+      let error = false
+      const messages = []
+      if (!this.exam.title) {
+        error = true
+        messages.push('عنوان آزمون مشخص نشده است.')
+      }
+      if (!this.exam.temp.major) {
+        error = true
+        messages.push('رشته آزمون مشخص نشده است.')
+      }
+      if (!this.exam.temp.grade) {
+        error = true
+        messages.push('پایه آزمون مشخص نشده است.')
+      }
+
+      return { error, messages }
+    },
     goToNextStep () {
       this.$emit('nextTab')
     },
