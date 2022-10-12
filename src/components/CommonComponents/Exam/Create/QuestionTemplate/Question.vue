@@ -1,6 +1,12 @@
 <template>
   <div class="question-component">
     <div class="question-container">
+      <q-skeleton v-if="loading"
+                  height="25px" />
+      <q-skeleton v-if="loading"
+                  class="q-mt-sm"
+                  width="50%"
+                  height="25px" />
       <vue-katex
         v-if="question.statement"
         :input="question.statement"
@@ -22,14 +28,17 @@
           :key="item"
           class="choice-column col-3"
         >
-          <div class="question-choice">
-            {{ item }}
+          <div class="flex items-center">
+            <div class="question-choice bg-primary">
+              {{ item }}
+            </div>
+            <q-skeleton
+              type="text"
+              width="200px"
+              height="25px"
+            />
           </div>
-          <q-skeleton
-            type="text"
-            width="100px"
-            height="25px"
-          />
+
         </div>
       </template>
 
@@ -74,6 +83,10 @@ export default {
     question: {
       type: Question,
       default: new Question()
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -155,6 +168,19 @@ export default {
   font-size: 14px;
   line-height: 22px;
   color: #434765;
+
+  .multiple-choices-container{
+    .question-choice{
+      color: white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+    }
+  }
 
   .question-container {
     margin-bottom: 20px;
