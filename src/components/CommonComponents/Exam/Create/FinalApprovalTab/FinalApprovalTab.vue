@@ -388,9 +388,7 @@ export default {
     },
 
     confirmExam() {
-      if (this.isValid()) {
-        this.$emit('confirmExam')
-      }
+      this.$emit('confirmExam')
     },
 
     reIndexEamQuestions (list) {
