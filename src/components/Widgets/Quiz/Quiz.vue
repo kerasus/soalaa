@@ -2,7 +2,8 @@
   <div class="quiz-container">
     <div v-if="allExamsList.loading"
          class="loading">
-      <div class="row">
+      <div v-if="upcomingExams.list.length > 0"
+           class="row">
         <div class="col-12 col-md-4">
           <q-skeleton width="200px"
                       height="100px" />
@@ -51,7 +52,8 @@
             </div>
           </div>
           <div class="col col-12 examList-container">
-            <div class="slider-row">
+            <div v-if="upcomingExams.list.length > 0"
+                 class="slider-row">
               <future-quizzes-carousel :exams="upcomingExams" />
             </div>
             <div class="row">
