@@ -375,7 +375,7 @@ export default {
     isValid() {
       let error = false
       const messages = []
-      if (this.draftExam.questions.list.length === 0) {
+      if (this.exam.questions.list.length === 0) {
         error = true
         messages.push('هیچ سوالی انتخاب نشده است.')
       }
