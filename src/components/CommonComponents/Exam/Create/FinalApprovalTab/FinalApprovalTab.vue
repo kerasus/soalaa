@@ -389,11 +389,21 @@ export default {
     },
 
     setDifficultyLevelsChart() {
-      this.chartOptions.series[0].data = [
-        { name: 'متوسط', y: this.questionLvl.medium, color: '#FFCA28' },
-        { name: 'آسان', y: this.questionLvl.easy, color: '#8ED6FF' },
-        { name: 'سخت', y: this.questionLvl.hard, color: '#DA5F5C' }
-      ]
+      if (this.questionLvl.medium) {
+        this.chartOptions.series[0].data.push(
+          { name: 'متوسط', y: this.questionLvl.medium, color: '#FFCA28' }
+        )
+      }
+      if (this.questionLvl.easy) {
+        this.chartOptions.series[0].data.push(
+          { name: 'آسان', y: this.questionLvl.easy, color: '#8ED6FF' }
+        )
+      }
+      if (this.questionLvl.hard) {
+        this.chartOptions.series[0].data.push(
+          { name: 'سخت', y: this.questionLvl.hard, color: '#DA5F5C' }
+        )
+      }
     },
 
     replaceTitle () {
