@@ -494,12 +494,16 @@ const mixinQuiz = {
 
               resolve(result)
             } catch (error) {
-              console.error(error)
               that.$router.push({ name: 'User.Exam.List' })
               reject(error)
             }
           })
           .catch((error) => {
+            this.$q.notify({
+              type: 'negative',
+              message: error.message,
+              position: 'top'
+            })
             reject(error)
             that.$router.push({ name: 'User.Exam.List' })
           })
