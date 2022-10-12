@@ -306,7 +306,6 @@ export default {
         this.$emit('update:exam', value)
       }
     },
-    // item
     isQuestionSelected () {
       return (id) => {
         return !!(this.providedExam.questions.list.find(question => question.id === id))
@@ -376,7 +375,9 @@ export default {
       this.$emit('lastTab')
     },
     goToNextStep () {
-      this.$emit('nextTab')
+      if (this.isValid.error) {
+        this.$emit('nextTab')
+      }
     },
     onFilter (filterData) {
       this.$emit('onFilter', filterData)
@@ -593,6 +594,16 @@ export default {
     },
     getUniqueListBy (arr, key) {
       return [...new Map(arr.map(item => [item[key], item])).values()]
+    },
+    isValid () {
+      let error = false
+      const messages = []
+      if (this.providedExam.questions.list.length === 0) {
+        error = true
+        messages.push('هیچ سوالی انتخاب نشده است.')
+      }
+
+      return { error, messages }
     }
   }
 }

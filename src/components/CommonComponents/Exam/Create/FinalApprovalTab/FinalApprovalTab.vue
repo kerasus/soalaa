@@ -179,6 +179,27 @@ export default {
       default: () => []
     }
   },
+  watch: {
+    'exam.loading': {
+      handler() {
+        this.loadingQuestion.loading = this.exam.loading
+      }
+    },
+    'exam.questions.list': {
+      deep: true,
+      handler() {
+        this.exam.questions.list.forEach(question => {
+          question.selected = true
+        })
+        this.$nextTick(() => {
+          this.setDifficultyLevelsChart()
+          this.replaceTitle()
+          this.reIndexEamQuestions(this.exam.questions.list)
+          this.questions = new QuestionList({ ...this.exam.questions })
+        })
+      }
+    }
+  },
   mounted() {
     if (!this.exam.loading && this.exam.questions.list.length > 0) {
       this.setDifficultyLevelsChart()
@@ -287,27 +308,6 @@ export default {
       }
     }
   },
-  watch: {
-    'exam.loading': {
-      handler() {
-        this.loadingQuestion.loading = this.exam.loading
-      }
-    },
-    'exam.questions.list': {
-      deep: true,
-      handler() {
-        this.exam.questions.list.forEach(question => {
-          question.selected = true
-        })
-        this.$nextTick(() => {
-          this.setDifficultyLevelsChart()
-          this.replaceTitle()
-          this.reIndexEamQuestions(this.exam.questions.list)
-          this.questions = new QuestionList({ ...this.exam.questions })
-        })
-      }
-    }
-  },
   methods: {
     async initPageData () {
       this.questions = new QuestionList({ ...this.exam.questions })
@@ -372,12 +372,25 @@ export default {
       this.$emit('detachQuestion', [question])
     },
 
+    isValid() {
+      let error = false
+      const messages = []
+      if (this.draftExam.questions.list.length === 0) {
+        error = true
+        messages.push('هیچ سوالی انتخاب نشده است.')
+      }
+
+      return { error, messages }
+    },
+
     goToPrevious() {
       this.$emit('previousStep')
     },
 
     confirmExam() {
-      this.$emit('confirmExam')
+      if (this.isValid()) {
+        this.$emit('confirmExam')
+      }
     },
 
     reIndexEamQuestions (list) {
@@ -389,11 +402,21 @@ export default {
     },
 
     setDifficultyLevelsChart() {
-      this.chartOptions.series[0].data = [
-        { name: 'متوسط', y: this.questionLvl.medium, color: '#FFCA28' },
-        { name: 'آسان', y: this.questionLvl.easy, color: '#8ED6FF' },
-        { name: 'سخت', y: this.questionLvl.hard, color: '#DA5F5C' }
-      ]
+      if (this.questionLvl.medium) {
+        this.chartOptions.series[0].data.push(
+          { name: 'متوسط', y: this.questionLvl.medium, color: '#FFCA28' }
+        )
+      }
+      if (this.questionLvl.easy) {
+        this.chartOptions.series[0].data.push(
+          { name: 'آسان', y: this.questionLvl.easy, color: '#8ED6FF' }
+        )
+      }
+      if (this.questionLvl.hard) {
+        this.chartOptions.series[0].data.push(
+          { name: 'سخت', y: this.questionLvl.hard, color: '#DA5F5C' }
+        )
+      }
     },
 
     replaceTitle () {
