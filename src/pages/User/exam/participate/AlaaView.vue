@@ -196,15 +196,6 @@ export default {
       this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView', isPersonalExam, retake)
         .then(() => {
           this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
-          if (this.getCurrentExamQuestionsInArray().length === 0) {
-            this.$q.notify({
-              type: 'negative',
-              message: 'مشکلی در دریافت سوالات آزمون رخ داده است.',
-              position: 'top'
-            })
-            this.$store.commit('Exam/clearExamData', this.userExamId)
-            this.$router.push({ name: 'User.Exam.List' })
-          }
           this.updateOverlay(false)
         }).catch((err) => {
           Assistant.reportErrors(err)

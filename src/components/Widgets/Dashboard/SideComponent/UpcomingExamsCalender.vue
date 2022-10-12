@@ -502,18 +502,6 @@ export default defineComponent({
       selectedMonth.value = month
     }
 
-    const setCalendarMonth = (selectedMonth) => {
-      const month = monthList.value.indexOf(selectedMonth)
-      const shamsi = `${calendarYear.value}-${month + 1}-01`
-      moment.loadPersian()
-      if (selectedMonth === thisMonth.value) {
-        loadCalendar(Time.now(), false)
-      } else {
-        const newDate = moment(shamsi, 'jYYYY/jM/jD').format('YYYY-M-D HH:MM:SS')
-        loadCalendar(newDate, false)
-      }
-    }
-
     const loadCalendar = (date, first) => {
       // assign variables data
       let dayCounter = 1
@@ -532,6 +520,7 @@ export default defineComponent({
       if (first) {
         thisMonth.value = calendarMonth.value
       }
+      selectedMonth.value = calendarMonth.value
 
       for (let w = 0; w < 6; w++) {
         for (let col = 0; col < 7; col++) {
@@ -591,7 +580,6 @@ export default defineComponent({
       calendarDialog,
       openCalendarDialog,
       setSelectedMonth,
-      setCalendarMonth,
       loadCalendar,
       setAttr
     }
@@ -610,6 +598,19 @@ export default defineComponent({
           }
         }
       })
+    },
+    setCalendarMonth(selectedMonth) {
+      const month = this.monthList.indexOf(selectedMonth)
+      const shamsi = `${this.calendarYear}-${month + 1}-01`
+      moment.loadPersian()
+      if (selectedMonth === this.thisMonth) {
+        this.loadCalendar(Time.now(), false)
+        this.getEvents()
+      } else {
+        const newDate = moment(shamsi, 'jYYYY/jM/jD').format('YYYY-M-D HH:MM:SS')
+        this.loadCalendar(newDate, false)
+        this.getEvents()
+      }
     }
   },
   created() {
