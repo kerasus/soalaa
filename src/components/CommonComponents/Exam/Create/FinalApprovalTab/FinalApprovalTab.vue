@@ -179,6 +179,27 @@ export default {
       default: () => []
     }
   },
+  watch: {
+    'exam.loading': {
+      handler() {
+        this.loadingQuestion.loading = this.exam.loading
+      }
+    },
+    'exam.questions.list': {
+      deep: true,
+      handler() {
+        this.exam.questions.list.forEach(question => {
+          question.selected = true
+        })
+        this.$nextTick(() => {
+          this.setDifficultyLevelsChart()
+          this.replaceTitle()
+          this.reIndexEamQuestions(this.exam.questions.list)
+          this.questions = new QuestionList({ ...this.exam.questions })
+        })
+      }
+    }
+  },
   mounted() {
     if (!this.exam.loading && this.exam.questions.list.length > 0) {
       this.setDifficultyLevelsChart()
@@ -284,27 +305,6 @@ export default {
         hard: this.exam.questions.list.filter(question => parseInt(question.level) === 3).length,
         medium: this.exam.questions.list.filter(question => parseInt(question.level) === 2).length,
         easy: this.exam.questions.list.filter(question => parseInt(question.level) === 1).length
-      }
-    }
-  },
-  watch: {
-    'exam.loading': {
-      handler() {
-        this.loadingQuestion.loading = this.exam.loading
-      }
-    },
-    'exam.questions.list': {
-      deep: true,
-      handler() {
-        this.exam.questions.list.forEach(question => {
-          question.selected = true
-        })
-        this.$nextTick(() => {
-          this.setDifficultyLevelsChart()
-          this.replaceTitle()
-          this.reIndexEamQuestions(this.exam.questions.list)
-          this.questions = new QuestionList({ ...this.exam.questions })
-        })
       }
     }
   },
