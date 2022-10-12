@@ -7,25 +7,27 @@
     <q-card-section class="question-card-header row">
       <div class="question-info col-xl-9 col-sm-8 col-xs-12">
         <div
-          v-if="listConfig.questionId"
           class="question-card-chip-id"
         >
-          <q-chip class="question-id ">
-            سوال
-            <q-skeleton
-              v-if="question.loading"
-              class="chip-dynamic-text"
-              type="text"
-              width="110px"
-            />
-            <span class="chip-dynamic-text ellipsis">
-              {{ question.code }}
-            </span>
-          </q-chip>
+          <q-skeleton
+            v-if="question.loading"
+            class="chip-dynamic-text"
+            type="text"
+            width="110px"
+          />
+          <div v-else-if="question.code">
+            <q-chip class="question-id ">
+              سوال
+              <span
+                class="chip-dynamic-text ellipsis">
+                {{ question.code }}
+              </span>
+            </q-chip>
+          </div>
         </div>
 
         <div
-          v-if="listConfig.questionLevel"
+          v-if="listConfig.questionLevel || question.loading "
           class="question-level"
         >
           <div
@@ -67,7 +69,7 @@
       </div>
 
       <div
-        v-if="listConfig.questionSource"
+        v-if="listConfig.questionSource || question.loading "
         class="question-source col-xl-3 col-sm-4 col-xs-6"
       >
         <div
@@ -134,22 +136,24 @@
         </div>
       </div>
       <div
-        v-if="listConfig.questionInfo && question.tags.list.length > 0"
+        v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
         class="question-tags ellipsis col-sm-12 col-xs-6"
       >
+        <div v-for="i in 3"
+             :key="i">
+          <q-skeleton
+            v-if="question.loading"
+            class="info-title q-mx-sm"
+            type="text"
+            width="80px"
+          />
+        </div>
         <div
           v-for="(item, index) in question.tags.list"
           :key="index"
           class="question-tag"
         >
-          <q-skeleton
-            v-if="question.loading"
-            class="info-title"
-            type="text"
-            width="80px"
-          />
           <div
-            v-else
             class="tag-box no-wrap flex items-center"
           >
             <div class="tag-title ellipsis">{{ item.title }}</div>
@@ -180,6 +184,7 @@
       <div class="question full-width">
         <question
           ref="questionComponent"
+          :loading="question.loading"
           :question="question"
         />
       </div>
