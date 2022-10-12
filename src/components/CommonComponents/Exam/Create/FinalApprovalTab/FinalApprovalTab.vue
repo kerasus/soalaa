@@ -372,8 +372,21 @@ export default {
       this.$emit('detachQuestion', [question])
     },
 
+    isValid() {
+      let error = false
+      const messages = []
+      if (this.draftExam.questions.list.length === 0) {
+        error = true
+        messages.push('هیچ سوالی انتخاب نشده است.')
+      }
+
+      return { error, messages }
+    },
+
     goToPrevious() {
-      this.$emit('previousStep')
+      if (this.isValid()) {
+        this.$emit('previousStep')
+      }
     },
 
     confirmExam() {
