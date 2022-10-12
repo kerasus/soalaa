@@ -375,9 +375,7 @@ export default {
       this.$emit('lastTab')
     },
     goToNextStep () {
-      if (this.isValid.error) {
-        this.$emit('nextTab')
-      }
+      this.$emit('nextTab')
     },
     onFilter (filterData) {
       this.$emit('onFilter', filterData)
