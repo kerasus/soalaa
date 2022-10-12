@@ -375,7 +375,7 @@ export default {
       this.$emit('lastTab')
     },
     goToNextStep () {
-      if (this.isValid.error) {
+      if (!this.isValid.error) {
         this.$emit('nextTab')
       }
     },
