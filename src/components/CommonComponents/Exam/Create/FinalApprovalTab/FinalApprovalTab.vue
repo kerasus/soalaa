@@ -181,11 +181,9 @@ export default {
   },
   mounted() {
     if (!this.exam.loading && this.exam.questions.list.length > 0) {
-      this.$nextTick(() => {
-        this.setDifficultyLevelsChart()
-        this.replaceTitle()
-        this.reIndexEamQuestions(this.exam.questions.list)
-      })
+      this.setDifficultyLevelsChart()
+      this.replaceTitle()
+      this.reIndexEamQuestions(this.exam.questions.list)
     }
   },
   data: () => ({
