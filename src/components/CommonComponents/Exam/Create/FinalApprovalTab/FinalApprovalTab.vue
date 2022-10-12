@@ -384,13 +384,13 @@ export default {
     },
 
     goToPrevious() {
-      if (this.isValid()) {
-        this.$emit('previousStep')
-      }
+      this.$emit('previousStep')
     },
 
     confirmExam() {
-      this.$emit('confirmExam')
+      if (this.isValid()) {
+        this.$emit('confirmExam')
+      }
     },
 
     reIndexEamQuestions (list) {
