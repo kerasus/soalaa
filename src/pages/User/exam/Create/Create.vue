@@ -22,7 +22,7 @@
                    name="chooseQuestion">
         <question-selection-tab ref="chooseQuestion"
                                 v-model:exam="draftExam"
-                                @lessonChanged="onLessonChanged"
+                                @update:exam="onSecondTabUpdate"
                                 @nextTab="goToNextStep"
                                 @lastTab="goToPrevStep"
                                 @addQuestionToExam="bulkAttachQuestionsOfDraftExam"
@@ -323,6 +323,9 @@ export default {
         this.showMessagesInNotify(['مشکلی رخ داده است'])
       })
     },
+    onSecondTabUpdate() {
+      this.updateExam('chooseQuestion')
+    },
     onLessonChanged(lessonId) {
       this.updateExam('chooseQuestion')
     },
@@ -429,6 +432,7 @@ export default {
           major: this.draftExam.temp.major,
           lesson: this.draftExam.temp.lesson,
           grade: this.draftExam.temp.grade,
+          tags: this.draftExam.temp.tags,
           level: newStep === 'createPage' ? 1 : newStep === 'chooseQuestion' ? 2 : 3
         }
       })

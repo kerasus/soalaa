@@ -29,6 +29,7 @@
         :root-node-id-to-load="rootNodeIdInFilter"
         :node-ids-to-tick="selectedNodesIds"
         :initial-load-mode="false"
+        @tagsChanged="setSelectedTags"
         @onFilter="onFilter"
         @delete-filter="deleteFilterItem"
       />
@@ -158,7 +159,6 @@ export default {
     'nextTab',
     'addQuestionToExam',
     'deleteQuestionFromExam',
-    'lessonChanged',
     'update:exam'
   ],
   props: {
@@ -197,6 +197,7 @@ export default {
           value: 'DESC'
         }
       ],
+      selectedTags: [],
       initialLesson: new TreeNode(),
       treeModalValue: false,
       allSubjects: {},
@@ -279,7 +280,7 @@ export default {
     // this.getQuestionData()
     this.getFilterOptions()
     this.getReportOptions()
-    this.setSelectedQuestionInCurrentMetaPage()
+    this.setSelectedQuestionOfCurrentMetaPage()
   },
   mounted() {
     let rootToLoad = {
@@ -344,6 +345,9 @@ export default {
       this.$refs.filter.changeFilterData('tags', tagsToFilter)
     },
     setupTreeModal() {
+      if (this.providedExam.temp.tags && this.providedExam.temp.tags[0]) {
+        this.fillAllSubjectsFromResponse()
+      }
       this.toggleTreeModal()
       this.showLoading()
       this.getLessonsList(new TreeNode({
@@ -419,7 +423,6 @@ export default {
       }
     },
     onClickedCheckQuestionBtn (question) {
-      // this.toggleQuestionSelected(question)
       this.questionHandle(question)
     },
     addQuestionToExam (question) {
@@ -477,8 +480,9 @@ export default {
           this.paginationMeta = response.data.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
-          this.setSelectedQuestionInCurrentMetaPage()
+          this.setSelectedQuestionOfCurrentMetaPage()
           this.setQuestionsInfoCheckBoxStatus()
+          this.setExamTags(this.selectedTags)
           this.hideLoading()
         })
         .catch((err) => {
@@ -518,7 +522,7 @@ export default {
     onLessonChanged (item) {
       if (this.isSelectedLessonNew(item)) {
         this.providedExam.temp.lesson = item.id
-        this.$emit('lessonChanged', item.id)
+        this.$emit('update:exam', this.providedExam)
         if (this.providedExam.questions.list.length > 0) {
           this.detachAllQuestionsFromExam()
         }
@@ -526,7 +530,6 @@ export default {
       this.setFilterTreeLesson(item)
     },
     isSelectedLessonNew(lesson) {
-      // this.providedExam.questions.list
       return this.providedExam.temp.lesson !== lesson.id
     },
     detachAllQuestionsFromExam() {
@@ -589,9 +592,31 @@ export default {
       }) &&
       parentArray.length >= childArray.length
     },
-    setSelectedQuestionInCurrentMetaPage() {
+    setSelectedQuestionOfCurrentMetaPage() {
       const questionListIds = this.questions.list.map(question => question.id)
       this.selectedQuestions = this.providedExam.questions.list.filter(question => questionListIds.includes(question.id))
+    },
+    fillAllSubjectsFromResponse () {
+      this.providedExam.temp.tags.forEach((tag, index) => {
+        const lastAncestors = tag.ancestors[tag.ancestors.length - 1]
+        if (!this.allSubjects[lastAncestors.id]) {
+          this.allSubjects[lastAncestors.id] = {
+            nodes: []
+          }
+        }
+        Object.assign(this.allSubjects[lastAncestors.id].nodes, { [index]: { ...tag } })
+      })
+    },
+    setSelectedTags(allTags) {
+      this.selectedTags = allTags
+    },
+    setExamTags(selectedTags) {
+      this.providedExam.temp.tags = selectedTags.map(node => ({
+        ancestors: node.ancestors,
+        id: node.id,
+        title: node.title
+      }))
+      this.$emit('update:exam', this.providedExam)
     },
     isValid () {
       let error = false

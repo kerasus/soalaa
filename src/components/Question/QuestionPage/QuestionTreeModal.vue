@@ -38,7 +38,7 @@
               <tree
                 ref="tree"
                 :key="treeKey"
-                :no-nodes-label="' '"
+                :no-nodes-label="'لطفا یک درس را انتخاب کنید'"
                 tick-strategy="strict"
                 :get-node-by-id="getNodeById"
                 @ticked="updateNodes"
