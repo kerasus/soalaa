@@ -12,4 +12,36 @@
       text-align: left;
     }
   }
+  .rlap {
+    & > .inner {
+      /*rtl:ignore*/
+      left: 0;
+    }
+  }
+  .brace-left {
+    /*rtl:ignore*/
+    left: 0;
+    right: auto;
+  }
+  .brace-right {
+    /*rtl:ignore*/
+    right: 0;
+    left: auto;
+  }
+  .vlist-t2 {
+    /*rtl:ignore*/
+    margin-right: -2px;
+  }
+  .llap {
+    & >.inner {
+      /*rtl:ignore*/
+      right:0;
+      /*rtl:ignore*/
+      left: auto;
+    }
+  }
+  .msupsub {
+    /*rtl:ignore*/
+    text-align: left;
+  }
 }

@@ -128,7 +128,13 @@ export default {
 
 .html-katex {
   width: 100%;
+
+  // ToDo:we must fix this
   font-family: KaTeX_Main, Times New Roman, serif !important;
+  .mrel, .mop, .mord {
+    font-family: KaTeX_Main, Times New Roman, serif !important;
+  }
+
   & > p {
     direction: inherit;
     &:first-child {
