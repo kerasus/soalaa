@@ -187,6 +187,11 @@ export default {
       }
     }
   },
+  emits: [
+    'onFilter',
+    'tagsChanged',
+    'deleteFilter'
+  ],
   data () {
     return {
       customSearch: false,
@@ -308,6 +313,7 @@ export default {
       this.changeFilterData('majors', value)
     },
     tickedData (value) {
+      this.$emit('tagsChanged', value)
       this.changeFilterData('tags', value)
       // this.filtersData.tags = value
       // value.forEach(val => {
