@@ -3,43 +3,47 @@
               class="full-width slider-loading"
               height="520px" />
   <div v-else
-       class="feature-box page-width">
-    <div class="content">
-      <div>
-        <div class="title">
-          {{featureData.head }}
+       class="page-width">
+    <div
+      class="feature-box ">
+      <div class="content">
+        <div>
+          <div class="title">
+            {{featureData.head }}
+          </div>
+          <div class="sub-title ellipsis">
+            {{featureData.title}}
+          </div>
+          <div v-for="(item, index) in featureData.value"
+               :key="index"
+               class="soalaa-item">
+            <q-icon size="7px"
+                    class="badge"
+                    name="circle" />
+            <div class="ellipsis">{{item}}</div>
+          </div>
         </div>
-        <div class="sub-title ellipsis">
-          {{featureData.title}}
-        </div>
-        <div v-for="(item, index) in featureData.value"
-             :key="index"
-             class="soalaa-item">
-          <q-icon size="7px"
-                  class="badge"
-                  name="circle" />
-          <div class="ellipsis">{{item}}</div>
+        <div v-if="featureData.button?.url"
+             class="more-details text-right">
+          <q-btn
+            unelevated
+            color="primary"
+            :href="featureData.button?.url"
+            style="color: #8075DC"
+            class="btn q-ma-none"
+            padding="7px 15px 7px 15px"
+            icon-right="west"
+            :label="featureData.button?.text" />
         </div>
       </div>
-      <div v-if="featureData.button?.url"
-           class="more-details text-right">
-        <q-btn
-          unelevated
-          color="primary"
-          :href="featureData.button?.url"
-          style="color: #8075DC"
-          class="btn q-ma-none"
-          padding="7px 15px 7px 15px"
-          icon-right="west"
-          :label="featureData.button?.text" />
+      <div class="img-box">
+        <q-img
+          class="img"
+          :src="featureData.image?.link" />
       </div>
-    </div>
-    <div class="img-box">
-      <q-img
-        class="img"
-        :src="featureData.image?.link" />
     </div>
   </div>
+
 </template>
 
 <script>
@@ -100,6 +104,8 @@ export default {
   }
   @media screen and (max-width:599px ){
     width: 100%;
+    padding-left: 19px;
+    padding-right: 19px;
   }
 }
 .feature-box{
@@ -108,40 +114,42 @@ export default {
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
   border-radius: 24px;
   margin-bottom: 80px;
-  display: flex;
+  display: grid;
+  grid-template-columns:587px 400px;
+  column-gap: 135px;
   @media screen and (max-width: 1439px) {
+    grid-template-columns:533px 280px;
     padding: 50px 40px;
     margin-bottom: 60px;
+    column-gap: 61px;
   }
   @media screen and (max-width: 1023px){
-    flex-direction: column;
+    grid-template-columns: 480px;
     padding: 40px 30px;
     margin-bottom: 40px;
   }
   @media screen and (max-width: 599px){
+    grid-template-columns: 100%;
     padding: 20px 16px;
     border-radius: 16px;
+    column-gap: 0;
   }
   .content{
-    margin-right: 135px;
-    width: 587px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding-top: 42px;
     padding-bottom: 20px;
     @media screen and (max-width: 1439px){
-      padding-top: 0px;
+      padding-top: 0;
       padding-bottom: 0;
     }
     @media screen and (max-width: 1023px){
       flex-direction: column;
-      width: 100%;
       margin-right: 0;
       margin-bottom: 20px ;
     }
     @media screen and (max-width: 599px){
-      width: 100%;
     }
     .title{
       font-style: normal;
@@ -169,7 +177,7 @@ export default {
       font-size: 22px;
       line-height: 34px;
       letter-spacing: -0.03em;
-      color: #6D708B;
+      color: var(--Text-2);
       margin-bottom: 10px;
       @media screen and (max-width: 1439px) {
         font-size: 18px;
@@ -187,7 +195,7 @@ export default {
       font-size: 16px;
       line-height: 25px;
       letter-spacing: -0.03em;
-      color: #6D708B;
+      color: var(--Text-2);
       margin-bottom: 6px;
       display: flex;
       @media screen and (max-width: 599px) {
@@ -214,28 +222,34 @@ export default {
             margin-left: 5px;
           }
         }
+        margin-top: 26px;
+        @media screen and  (max-width: 1439px){
+          margin-top: 23px;
+        }
         @media screen and  (max-width: 1023px){
-          margin-top: 10px;
+          margin-top: 30px;
+        }
+        @media screen and  (max-width: 599px){
+          margin-top: 14px;
         }
       }
     }
   }
   .img-box{
     width: 400px;
-    height: 400px;
+    height: auto;
+    @media screen and (max-width: 1439px) {
+      width: 280px;
+    }
     @media screen and (max-width: 1023px) {
       width: 349px;
-      height: 349px;
-      margin: auto;
+      justify-self: center;
     }
     @media screen and (max-width: 599px){
       width: 200px;
-      height: 200px;
-
     }
     .img{
       width: 100%;
-      height: 100%;
     }
   }
 }
