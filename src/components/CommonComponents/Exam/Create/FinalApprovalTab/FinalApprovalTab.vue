@@ -117,8 +117,8 @@
       </div>
       <div class="col-lg-9 col-xs-12">
         <div class="question-item-content">
-          <!--          <question-item v-if="exam.loading"-->
-          <!--                         :question="loadingQuestion" />-->
+          <question-item v-if="exam.loading"
+                         :question="loadingQuestion" />
           <template v-if="exam.questions.list.length > 0">
             <q-virtual-scroll
               ref="scroller"
@@ -192,7 +192,6 @@ export default {
     'exam.questions.list': {
       deep: true,
       handler(val) {
-        console.log('val :', val)
         this.reIndexEamQuestions(this.exam.questions.list)
         this.questions = new QuestionList({ ...this.exam.questions })
         this.$nextTick(() => {
@@ -393,7 +392,6 @@ export default {
     },
 
     reIndexEamQuestions (list) {
-      console.log('reIndexEamQuestions')
       list.map((item, index) => {
         item.selected = true
         item.order = index + 1
