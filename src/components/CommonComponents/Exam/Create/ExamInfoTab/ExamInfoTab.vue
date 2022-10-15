@@ -119,6 +119,7 @@ export default {
           placeholder: ' ',
           value: 'کنکور',
           options: [],
+          behavior: 'menu',
           disable: true,
           col: 'col-12 col-md-3 col-sm-6',
           icon: 'isax:arrow-right-3',
@@ -130,6 +131,7 @@ export default {
           responseKey: 'data.temp.major',
           label: 'رشته تحصیلی',
           placeholder: ' ',
+          behavior: 'menu',
           col: 'col-12 col-md-3 col-sm-6',
           dropdownIcon: 'isax:arrow-down-1',
           options: []
@@ -140,6 +142,7 @@ export default {
           responseKey: 'data.temp.grade',
           label: 'پایه تحصیلی',
           placeholder: ' ',
+          behavior: 'menu',
           col: 'col-12 col-md-3 col-sm-6',
           dropdownIcon: 'isax:arrow-down-1',
           options: []
