@@ -5,8 +5,8 @@
       <div
         :hidden="$q.screen.lt.sm"
         class="exam-detail-container col-xs-12 col-lg-3">
-        <q-skeleton v-if="questions.loading"
-                    width="330px"
+        <q-skeleton v-if="exam.loading"
+                    width="300px"
                     height="400px"
                     class="q-ml-xs" />
         <div v-else
@@ -79,7 +79,8 @@
                     </div>
                   </div>
                   <div class="chart-b col-md-8 col-sm-12">
-                    <chart class="row justify-center"
+                    <chart ref="chart"
+                           class="row justify-center"
                            :options="chartOptions" />
                   </div>
                 </div>
@@ -116,9 +117,9 @@
       </div>
       <div class="col-lg-9 col-xs-12">
         <div class="question-item-content">
-          <question-item v-if="exam.loading"
-                         :question="loadingQuestion" />
-          <template v-else-if="exam.questions.list.length > 0">
+          <!--          <question-item v-if="exam.loading"-->
+          <!--                         :question="loadingQuestion" />-->
+          <template v-if="exam.questions.list.length > 0">
             <q-virtual-scroll
               ref="scroller"
               :items="exam.questions.list"
@@ -130,7 +131,6 @@
                   :key="item.id"
                   :question="item"
                   :questionIndex="index"
-                  :loading="exam.loading"
                   :questionsLength="exam.questions.list.length"
                   pageStrategy="question-bank"
                   final-approval-mode
@@ -163,7 +163,11 @@ import { Exam } from 'src/models/Exam'
 import { Chart } from 'highcharts-vue'
 export default {
   name: 'FinalApprovalTab',
-  components: { QuestionItem, Chart, QuestionsGeneralInfo },
+  components: {
+    QuestionItem,
+    Chart,
+    QuestionsGeneralInfo
+  },
   emits: ['detachQuestion'],
   props: {
     exam: {
@@ -187,16 +191,13 @@ export default {
     },
     'exam.questions.list': {
       deep: true,
-      handler() {
-        // reflow
-        this.exam.questions.list.forEach(question => {
-          question.selected = true
-        })
+      handler(val) {
+        console.log('val :', val)
+        this.reIndexEamQuestions(this.exam.questions.list)
+        this.questions = new QuestionList({ ...this.exam.questions })
         this.$nextTick(() => {
           this.setDifficultyLevelsChart()
           this.replaceTitle()
-          this.reIndexEamQuestions(this.exam.questions.list)
-          this.questions = new QuestionList({ ...this.exam.questions })
         })
       }
     }
@@ -205,7 +206,7 @@ export default {
     if (!this.exam.loading && this.exam.questions.list.length > 0) {
       this.setDifficultyLevelsChart()
       this.replaceTitle()
-      this.reIndexEamQuestions(this.exam.questions.list)
+      // this.reIndexEamQuestions(this.exam.questions.list)
     }
   },
   data: () => ({
@@ -380,7 +381,6 @@ export default {
         error = true
         messages.push('هیچ سوالی انتخاب نشده است.')
       }
-
       return { error, messages }
     },
 
@@ -393,6 +393,7 @@ export default {
     },
 
     reIndexEamQuestions (list) {
+      console.log('reIndexEamQuestions')
       list.map((item, index) => {
         item.selected = true
         item.order = index + 1
