@@ -73,6 +73,8 @@ export default {
   }
   @media screen and (max-width:599px ){
     width: 100%;
+    padding-left: 19px;
+    padding-right: 19px;
   }
 }
 .slider{
