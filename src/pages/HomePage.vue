@@ -27,8 +27,8 @@ export default {
                 }
               ],
               options: {
-                boxed: true,
-                boxedWidth: 1362
+                // boxed: true,
+                // boxedWidth: 1362
               }
             },
             {
@@ -42,8 +42,8 @@ export default {
                 }
               ],
               options: {
-                boxed: true,
-                boxedWidth: 1362
+                // boxed: true,
+                // boxedWidth: 1362
               }
             },
             {
@@ -61,8 +61,8 @@ export default {
                 }
               ],
               options: {
-                boxed: true,
-                boxedWidth: 1362
+                // boxed: true,
+                // boxedWidth: 1362
               }
             },
             {
@@ -76,8 +76,8 @@ export default {
                 }
               ],
               options: {
-                boxed: true,
-                boxedWidth: 1362
+                // boxed: true,
+                // boxedWidth: 1362
               }
             },
             {
@@ -98,8 +98,8 @@ export default {
                 }
               ],
               options: {
-                boxed: true,
-                boxedWidth: 1362
+                // boxed: true,
+                // boxedWidth: 1362
               }
             },
             {
