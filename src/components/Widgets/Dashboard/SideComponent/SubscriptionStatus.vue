@@ -42,6 +42,15 @@
           <highcharts class="flex flex-center"
                       :options="chartOptionsExam"
           />
+          <div v-if="subscribe.abilities_n.exam !== -1"
+               class="subscription-status-test-tab-info">
+            <span><q-icon name="circle"
+                          color="warning"
+                          size="12px" /></span>
+            <span class="text-tab-info-text">
+              شما {{subscribe.made.exam }} آزمون از {{subscribe.abilities_n.exam }} آزمون اختصاص یافته در اشتراک خود را استفاده کردید اید.
+            </span>
+          </div>
         </q-tab-panel>
         <q-tab-panel name="pdf"
                      class="subscription-status-test-tab">
@@ -51,6 +60,14 @@
           <highcharts class="flex flex-center"
                       :options="chartOptionsPdf"
           />
+          <div class="subscription-status-test-tab-info">
+            <span><q-icon name="circle"
+                          color="warning"
+                          size="12px" /></span>
+            <span class="text-tab-info-text">
+              شما {{subscribe.made.pdf_questions }} PDF از {{subscribe.abilities_n.pdf_questions }} PDF اختصاص یافته در اشتراک خود را استفاده کردید اید.
+            </span>
+          </div>
         </q-tab-panel>
       </q-tab-panels>
     </div>
@@ -257,7 +274,7 @@ export default {
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
   border-radius: 16px;
   height: 489px;
-  padding: 20px 30px 30px;
+  padding: 20px 30px;
 
   .subscription-title {
     font-style: normal;
@@ -322,7 +339,19 @@ export default {
       line-height: 25px;
       letter-spacing: -0.03em;
       color: #6D708B;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
+    }
+    .subscription-status-test-tab-info {
+      display: flex;
+      margin: 15px 0;
+      .text-tab-info-text {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+        letter-spacing: -0.03em;
+        margin-left: 8px;
+      }
     }
   }
   @media screen and (max-width: 1439px) {
