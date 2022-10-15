@@ -6,7 +6,7 @@
         v-for="(item, index) in info"
         :key="index"
         dense
-        :default-opened="index === 1 ? true : false"
+        :default-opened="index === 0 ? true : false"
         icon="format_quote"
         class="faq-item"
       >
@@ -76,10 +76,18 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding-bottom: 24px;
+      padding: 60px 0 24px;
       color: #434765;
+
+      @media screen and (max-width: 1023px) {
+        padding: 60px 0 24px;
+      }
+
+      @media screen and (max-width: 599px) {
+        padding: 40px 0 24px;
+      }
       @media screen and (max-width: 600px) {
-        padding-bottom: 20px;
+        padding: 40px 0 20px;
         font-weight: 600;
         font-size: 16px;
         line-height: 25px;
@@ -99,7 +107,7 @@ export default {
         background: #FFFFFF;
         box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
         border-radius: 12px;
-        margin: 16PX 0;
+        margin: 8px 0;
 
         &:deep(.q-item) {
           min-height: 64px;

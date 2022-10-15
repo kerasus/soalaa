@@ -463,11 +463,5 @@ margin: 30px 0;
       padding-left: 0px !important;
     }
   }
-  .subscription-status {
-    padding-right: 15px;
-    @media screen and (max-width: 1023px) {
-      padding-right: 0 !important;
-    }
-  }
 }
 </style>
