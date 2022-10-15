@@ -130,14 +130,14 @@ export default {
           active: false,
           children: []
         },
-        {
-          title: 'ساخت آزمون',
-          icon: 'isax:task-square',
-          routeName: 'User.Create.Exam',
-          permission: 'all',
-          active: false,
-          children: []
-        },
+        // {
+        //   title: 'ساخت آزمون',
+        //   icon: 'isax:task-square',
+        //   routeName: 'User.Create.Exam',
+        //   permission: 'all',
+        //   active: false,
+        //   children: []
+        // },
         {
           title: 'سفارش‌ های من',
           icon: 'isax:clipboard-text',
@@ -155,8 +155,8 @@ export default {
           children: []
         },
         {
-          title: 'تیکت',
-          icon: 'isax:clipboard-text',
+          title: 'تیکت پشتیبانی',
+          icon: 'isax:message-question',
           routeName: 'User.Ticket.Index',
           permission: 'all',
           active: false,
