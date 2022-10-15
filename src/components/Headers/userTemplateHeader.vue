@@ -45,15 +45,15 @@
             />
           </div>
           <div class="logo-pic">
-            <q-btn flat
-                   :to="{name: 'HomePage'}"
-                   class="homepage"
+            <div
+              class="homepage"
             >
               <q-img
                 class="logo-pic-img"
                 src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
+                @click="routeTo('HomePage')"
               />
-            </q-btn>
+            </div>
           </div>
         </div>
         <!--        -----------------------------------------------------Tabs Section--------------------------------------------   -->
@@ -188,11 +188,9 @@
                           </q-expansion-item>
                           <q-item
                             v-else
-                            v-model="clickedItem"
                             :to="(item.routeName) ? {name: item.routeName} : null"
                             class="item-list"
-                            :class="{ 'alone-item': !item.children.length , 'alone-item-mode-drawer' : mode === 'drawer'}"
-                            :exact-active-class="getQItemExactActiveClass"
+                            :class="{ 'alone-item': !item.children.length }"
                           >
                             <div class="section-title">
                               <q-item-section class="list-section title-icon"
@@ -263,12 +261,12 @@
 </template>
 
 <script>
-
-import { mapGetters, mapMutations } from 'vuex'
-import { User } from 'src/models/User'
+import UserLayoutHeader from 'src/mixin/UserLayoutHeader'
+// import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'UserTemplateHeader',
+  mixins: [UserLayoutHeader],
   data () {
     return {
       selected: '',
@@ -351,42 +349,34 @@ export default {
       ]
     }
   },
-  computed: {
-    ...mapGetters('Auth', [
-      'user'
-    ]),
-    ...mapGetters('AppLayout', [
-      'layoutLeftDrawerVisible'
-    ]),
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
+  watch: {
+    'windowSize.x': {
+      handler() {
+        if (this.windowSize.x > 599) {
+          this.updateLayoutLeftDrawerWidth(285)
+        } else if (this.windowSize.x <= 599) {
+          this.updateLayoutLeftDrawerWidth(180)
+        }
       }
-      return new User()
-    },
+    }
+  },
+  computed: {
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
     },
-    isRouteSelected () {
-      return (itemName) => {
-        return (this.$route.name === itemName)
-      }
-    },
-    showMenuItem () {
-      return (item) => {
-        return (item.permission === 'all' || this.user.hasPermission(item.permission))
-      }
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
     }
   },
   mounted() {
     this.addAdminItem()
   },
   methods: {
-    ...mapMutations('AppLayout', [
-      'updateLayoutLeftDrawerVisible'
-    ]),
     toggleLeftDrawer () {
-      this.updateLayoutLeftDrawerVisible(true)
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
+    },
+    updateLayoutLeftDrawerWidth(value) {
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', value)
     },
     addAdminItem () {
       if (this.user.hasPermission('examStore')) {
@@ -402,6 +392,9 @@ export default {
     },
     goToLogin() {
       this.$router.push({ name: 'login' })
+    },
+    routeTo(name) {
+      this.$router.push({ name })
     }
   }
 }
@@ -429,7 +422,7 @@ export default {
     padding-left: 30px;
     padding-right: 30px;
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 599px) {
     padding-left: 20px;
     padding-right: 20px;
   }
@@ -498,10 +491,7 @@ export default {
           @media screen and (max-width: 1023px) {
             height: 64px;
           }
-          :deep(.homepage.q-btn) {
-            .q-btn__content {
-              margin: 0;
-            }
+          :deep(.homepage) {
             .logo-pic-img {
               height: 72px;
               width: 72px;
