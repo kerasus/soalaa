@@ -200,6 +200,7 @@ export default {
   }
   :deep(.q-field--focused .q-field__control) {
     background: #fff !important;
+    //background: #f10e0e !important;
     border: 1px solid #FFB74D;
     box-shadow: 0 0 0 2px #FFEDD2;
     border-radius: 8px;

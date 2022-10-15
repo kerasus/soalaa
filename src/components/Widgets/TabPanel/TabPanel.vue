@@ -12,6 +12,8 @@
         inline-label
         outside-arrows
         mobile-arrows
+        left-icon="isax:arrow-left-2"
+        right-icon="isax:arrow-right-3"
         indicator-color="transparent"
         active-class="active-tab"
         class="tab-box"
@@ -107,6 +109,8 @@ export default {
   }
   @media screen and (max-width:599px ){
     width: 100%;
+    padding-left: 19px;
+    padding-right: 19px;
   }
   .why-soalaa{
     text-align: center;
@@ -174,6 +178,10 @@ export default {
       color: #9690E4;
     }
     .tab-box{
+      :deep(.q-icon){
+        font-size: 20px;
+        color: var(--Text-2);
+      }
       @media screen and (max-width: 1023px){
         width: 265px;
         margin: auto auto 16px;
@@ -228,6 +236,7 @@ export default {
         display: flex;
         @media screen and (max-width: 1439px){
           flex-direction: column;
+          align-items: center;
         }
         .content{
           margin-right: 40px;
@@ -316,19 +325,15 @@ export default {
         }
         .img-box{
           width:576px;
-          height: 360px;
           border-radius: 20px;
           @media screen and (max-width: 1439px){
-            width: 100%;
-            height: 314px;
+            width: 502px;
             border-radius: 16px;
           }
           @media screen and (max-width: 1023px){
-            height: 308px;
-
+            width: 492px;
           }
           @media screen and (max-width: 599px){
-            height: 169px;
             border-radius: 12px;
           }
           .img{
