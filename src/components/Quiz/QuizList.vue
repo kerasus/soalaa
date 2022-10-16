@@ -3,7 +3,7 @@
     <div v-if="exams.list.length > 0"
          class="quiz-list-container">
       <div class="row q-pt-md">
-        <div class="col-12 col-md-6">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
 
           <div class="search-bar">
             <q-input v-model="searchInExams"
@@ -20,7 +20,7 @@
             </q-input>
           </div>
         </div>
-        <div class="col-12 col-md-6 filter-btn-col">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 filter-btn-col">
           <q-btn
             v-if="quizType === 'myExam'"
             unelevated
@@ -594,6 +594,10 @@ export default defineComponent({
 
         &::before{
           border: none;
+        }
+
+        @media only screen and (max-width: 390px){
+          width: 100%;
         }
       }
 

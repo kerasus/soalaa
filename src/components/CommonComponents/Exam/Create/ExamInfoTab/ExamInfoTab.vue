@@ -108,7 +108,7 @@ export default {
           name: 'title',
           responseKey: 'data.title',
           label: 'عنوان آزمون',
-          placeholder: ' ',
+          placeholder: 'وارد کنید',
           col: 'col-12 col-md-3 col-sm-6'
         },
         {
@@ -130,7 +130,7 @@ export default {
           name: 'temp.major',
           responseKey: 'data.temp.major',
           label: 'رشته تحصیلی',
-          placeholder: ' ',
+          placeholder: 'انتخاب کنید',
           behavior: 'menu',
           col: 'col-12 col-md-3 col-sm-6',
           dropdownIcon: 'isax:arrow-down-1',
@@ -141,7 +141,7 @@ export default {
           name: 'temp.grade',
           responseKey: 'data.temp.grade',
           label: 'پایه تحصیلی',
-          placeholder: ' ',
+          placeholder: 'انتخاب کنید',
           behavior: 'menu',
           col: 'col-12 col-md-3 col-sm-6',
           dropdownIcon: 'isax:arrow-down-1',
