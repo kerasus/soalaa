@@ -119,8 +119,8 @@ export default {
 //rtl change bug fix
 [dir="rtl"] .html-katex {
   @include katex-rtl-fix;
-  font-size: 1.2rem;
-  line-height: 4rem;
+  font-size: var(--katexFontSize);
+  line-height: var(--katexLineHeight);
   .katex {
     font-size: 1.9rem;
   }

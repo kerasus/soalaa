@@ -1,11 +1,13 @@
 <template>
   <div class="choice-box">
-    <div
-      name="question-choice-number"
-      class="question-choice-number"
-      :class="[choice.answer ? 'correct-answer' : 'wrong-answer', isLtr ? 'ltr-margin' : 'rtl-margin']"
-    >
-      {{ choice.number }}
+    <div class="choice-number-box">
+      <div
+        name="question-choice-number"
+        class="question-choice-number"
+        :class="[choice.answer ? 'correct-answer' : 'wrong-answer', isLtr ? 'ltr-margin' : 'rtl-margin']"
+      >
+        {{ choice.number }}
+      </div>
     </div>
     <div
       name="answer-text"
@@ -49,6 +51,11 @@ export default {
 
   @media only screen and (max-width: 1023px) {
     margin-bottom: 12px;
+  }
+  .choice-number-box{
+    height: var(--katexLineHeight);
+    display: flex;
+    align-items: center;
   }
   .answer-text {
     &:deep(.html-katex) {

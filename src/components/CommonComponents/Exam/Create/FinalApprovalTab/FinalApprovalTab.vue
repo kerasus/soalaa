@@ -15,7 +15,7 @@
 
             <div class="col-lg-12 col-md-8 col-sm-6">
               <div class="exam-details row q-col-gutter-x-lg">
-                <div class="col-12 exam-specifications q-mb-md flex justify-between">
+                <div class="col-12 exam-specifications">
                   <div class="header-title"> مشخصات آزمون </div>
                   <div class=" exam-title">
                     <p class="ellipsis">
@@ -119,7 +119,7 @@
         <div class="question-item-content">
           <question-item v-if="exam.loading"
                          :question="loadingQuestion" />
-          <template v-if="exam.questions.list.length > 0">
+          <template v-else-if="exam.questions.list.length > 0">
             <q-virtual-scroll
               ref="scroller"
               :items="exam.questions.list"
@@ -319,16 +319,16 @@ export default {
 
     setChartWidth() {
       const windowSize = this.$store.getters['AppLayout/windowSize']
-      if (windowSize.x > 1020) {
+      if (windowSize.x > 1439) {
         return
       }
       this.chartOptions.chart = {
-        height: '125',
-        width: '125',
+        height: '130',
+        width: '130',
         type: 'pie',
         plotShadow: false
       }
-      this.chartOptions.plotOptions.borderWidth = 15
+      this.chartOptions.plotOptions.pie.borderWidth = 15
     },
 
     examMajor() {
@@ -472,6 +472,17 @@ export default {
       }
       .exam-specifications{
         padding-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        @media screen and (max-width: 1439px ){
+          justify-content: flex-start;
+          margin-bottom: 21px;
+        }
+        @media screen and (max-width: 1023px ){
+          justify-content: space-between;
+          margin-bottom: 16px;
+        }
         .header-title{
           font-style: normal;
           font-weight: 500;
@@ -493,10 +504,22 @@ export default {
             max-width: 95px;
             margin-bottom: 0;
           }
+          @media screen and (max-width: 1439px ){
+            margin-left: 12px;
+          }
+          @media screen and (max-width: 599px ){
+            margin-left: 0;
+          }
         }
       }
       .exam-details{
         margin-bottom: 10px;
+        @media screen and (max-width: 1439px){
+          margin-right: 27px;
+        }
+        @media screen and (max-width: 1023px){
+          margin-right: 0;
+        }
         .exam-detail-item{
           display: flex;
           justify-content: space-between;
@@ -544,7 +567,6 @@ export default {
             position: absolute;
             top: 0;
             line-height: 25px;
-
           }
           @media screen and (max-width: 1023px){
             position: relative;
@@ -557,6 +579,7 @@ export default {
           margin-bottom: 20px ;
           @media screen and (max-width: 1439px){
             align-items: flex-end;
+            margin-bottom: 16px;
           }
           @media screen and (max-width: 1023px){
             justify-content: center;
@@ -600,7 +623,7 @@ export default {
               color: #23263B;
             }
             @media screen and (max-width: 1439px){
-              margin-top: 12px;
+              //margin-top: 12px;
             }
             @media screen and (max-width: 1023px){
               order: 0;
