@@ -675,8 +675,32 @@ const routes = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component:
-  () => import('pages/Error404.vue')
+    component: () => import('layouts/MainLayout.vue'),
+    layoutConfig: {
+      layoutHeaderVisible: true,
+      layoutHeaderType: 'default',
+      layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
+      layoutPageContainerCustomClass: 'main-layout-container'
+    },
+    children: [
+      {
+        path: '',
+        name: '404',
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false,
+          layoutLeftDrawerOverlay: true
+        },
+        component: () => import('layouts/UserPanelLayouts/UserPanelBareLayout'),
+        children: [{
+          path: '',
+          name: 'notFound',
+          component: () => import('pages/Error404.vue')
+        }
+        ]
+      }
+    ]
   }
 ]
 
