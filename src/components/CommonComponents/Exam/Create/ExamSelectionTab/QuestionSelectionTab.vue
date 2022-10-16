@@ -13,7 +13,7 @@
             :selectedQuestions="providedExam.questions.list"
             @remove="RemoveChoice"
             @nextTab="goToNextStep"
-            @lastTab="goToLastStep"
+            @lastTab="goToPrevStep"
             @deselectAllQuestions="deleteAllQuestions"
             @selectAllQuestions="selectAllQuestions"
           />
@@ -50,7 +50,7 @@
             :selectedQuestions="providedExam.questions.list"
             @remove="RemoveChoice"
             @nextTab="goToNextStep"
-            @lastTab="goToLastStep"
+            @lastTab="goToPrevStep"
             @deselectAllQuestions="deleteAllQuestions"
             @selectAllQuestions="selectAllQuestions"
           />
@@ -132,7 +132,22 @@
     single-list-choice-mode
     :initial-lesson="initialLesson"
     @lessonSelected="onLessonChanged"
-  />
+  >
+    <template v-slot:tree-dialog-action-box>
+      <q-btn
+        unelevated
+        label="بازگشت"
+        class="go-back-tree-tab"
+        @click="goToPrevStep"
+      />
+      <q-btn
+        v-close-popup
+        unelevated
+        class="close-tree-tab"
+        label="تایید"
+      />
+    </template>
+  </question-tree-modal>
 </template>
 
 <script>
@@ -383,7 +398,7 @@ export default {
           this.reportTypeList = response.data.data
         })
     },
-    goToLastStep () {
+    goToPrevStep () {
       this.$emit('lastTab')
     },
     goToNextStep () {
@@ -750,5 +765,31 @@ export default {
 @media only screen and (max-width: 1023px) {
 }
 @media only screen and (max-width: 599px) {
+}
+
+.go-back-tree-tab {
+  width: 144px;
+  height: 40px;
+  background: var(--Neutral-2);
+  border-radius: 8px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: -0.03em;
+  color: #6D708B;
+  margin-right: 10px;
+}
+.close-tree-tab {
+  width: 144px;
+  height: 40px;
+  background: var(--Primary-main);
+  border-radius: 8px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
 }
 </style>
