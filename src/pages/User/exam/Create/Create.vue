@@ -516,11 +516,11 @@ export default {
     confirmValidation() {
       let error = false
       const messages = []
-      if (!this.exam.title) {
+      if (!this.draftExam.title) {
         error = true
         messages.push('عنوان آزمون مشخص نشده است.')
       }
-      if (this.exam.questions.list.length === 0) {
+      if (this.draftExam.questions.list.length === 0) {
         error = true
         messages.push('هیچ سوالی انتخاب نشده است.')
       }

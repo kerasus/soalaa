@@ -1,5 +1,5 @@
 <template>
-  <div class="row user-panel-layout">
+  <div class="row user-panel-layout q-col-gutter-lg">
     <div
       v-if="hasNavigationBar"
       class="user-side-bar col-xl-3 col-lg-3 col-md-3"
