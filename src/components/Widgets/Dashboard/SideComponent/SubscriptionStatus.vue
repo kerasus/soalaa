@@ -323,8 +323,8 @@ export default {
       .subscription-type-value-duration {
         font-style: normal;
         font-weight: 600;
-        font-size: 12px;
-        line-height: 19px;
+        font-size: 16px;
+        line-height: 25px;
         letter-spacing: -0.03em;
         color: #E86562;
       }

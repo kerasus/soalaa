@@ -65,7 +65,8 @@
             <upcoming-exams-calender :calendarTitle="'آزمون های پیش‌رو'"
                                      :calendarIcon="'isax:calendar-1'" />
           </div>
-          <div class="col-12 col-lg-4 subscription-col"
+          <div v-if="lastSubscribeDate !== null"
+               class="col-12 col-lg-4 subscription-col"
           >
             <subscription-status :subscribe="lastSubscribeDate" />
           </div>
