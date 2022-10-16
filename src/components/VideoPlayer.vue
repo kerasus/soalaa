@@ -161,6 +161,16 @@ export default {
   border-radius: inherit;
   &:deep(.video-js){
     border-radius: inherit;
+
+    .vjs-brand-container {
+      .vjs-brand-container-link {
+        img {
+          height: 25px;
+          padding-top: 3px;
+        }
+      }
+    }
+
     #my-video_html5_api {
       border-radius: inherit;
     }
@@ -204,15 +214,6 @@ export default {
   .vjs-volume-panel {
     .vjs-volume-control {
       right: -45px !important;
-    }
-  }
-}
-
-.vjs-brand-container {
-  .vjs-brand-container-link {
-    img {
-      height: 25px;
-      padding-top: 3px;
     }
   }
 }
