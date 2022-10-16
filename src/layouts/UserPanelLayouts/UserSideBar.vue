@@ -59,10 +59,9 @@
     >
       <user-panel-base-menu />
     </div>
-    <!--     Todo : usage of :mode="'drawer'" for panel in mobile size , default is 'sideBar'-->
-    <!--    <div class="bg-white">-->
-    <!--      <user-panel-base-menu :mode="'drawer'" />-->
-    <!--    </div>-->
+  </div>
+  <div class="user-panel-side-drawer-container">
+    <user-panel-side-drawer />
   </div>
 </template>
 
@@ -70,9 +69,10 @@
 
 import { User } from 'src/models/User'
 import UserPanelBaseMenu from 'layouts/UserPanelLayouts/UserPanelBaseMenu'
+import UserPanelSideDrawer from 'layouts/UserPanelLayouts/UserPanelSideDrawer'
 export default {
   name: 'UserSideBar',
-  components: { UserPanelBaseMenu },
+  components: { UserPanelSideDrawer, UserPanelBaseMenu },
   data () {
     return {
       clickedItem: null
@@ -104,6 +104,9 @@ export default {
 
 <style lang="scss" scoped>
 .user-panel-side-bar {
+  @media screen and (max-width: 1023px) {
+    display: none;
+  }
   .profile-box {
     font-style: normal;
     font-weight: 400;
@@ -241,5 +244,10 @@ export default {
     }
   }
 }
-
+.user-panel-side-drawer-container {
+  display: none;
+  @media screen and (max-width: 1023px) {
+    display: block;
+  }
+}
 </style>
