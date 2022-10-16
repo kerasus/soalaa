@@ -83,9 +83,9 @@ export default {
         { type: 'input', value: 'دانش آموز', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'نوع کاربری', placeholder: ' ', disable: true },
         { type: 'select', name: 'major', label: 'رشته تحصیلی', responseKey: 'major.title', dropdownIcon: 'isax:arrow-down-1', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
         { type: 'select', name: 'grade', responseKey: 'grade.title', dropdownIcon: 'isax:arrow-down-1', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'پایه تحصیلی', placeholder: ' ' },
-        { type: 'select', name: 'province', responseKey: 'province.title', dropdownIcon: 'isax:arrow-down-1', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'استان', placeholder: ' ' },
-        { type: 'select', name: 'city', responseKey: 'city.title', dropdownIcon: 'isax:arrow-down-1', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'شهر', placeholder: ' ' },
-        { type: 'input', name: 'school', responseKey: 'school', label: 'مدرسه', options: {}, col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' }
+        { type: 'select', name: 'province', responseKey: 'province.title', dropdownIcon: 'isax:arrow-down-1', col: 'province-option col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'استان', placeholder: ' ' },
+        { type: 'select', name: 'city', responseKey: 'city.title', dropdownIcon: 'isax:arrow-down-1', col: 'city-option col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', label: 'شهر', placeholder: ' ' },
+        { type: 'input', name: 'school', responseKey: 'school', label: 'مدرسه', options: {}, col: 'school-option col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' }
       ],
       find: null,
       genders: null,
@@ -294,11 +294,20 @@ export default {
     //}
   }
   .profile-btn {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    color: #434765;
+    @media screen and (max-width: 599px) {
+      margin-bottom: 6px;
+    }
     :deep(.q-btn) {
       font-weight: 600 !important;
       font-size: 16px !important;
       line-height: 25px !important;
+      color: #434765 !important;
+      @media screen and (max-width: 599px) {
+        font-size: 14px !important;
+        line-height: 22px !important;
+      }
       .profile-card-title-2 {
         padding-left: 8px;
       }
@@ -440,6 +449,21 @@ export default {
         }
       }
 
+    }
+  }
+  :deep(.province-option){
+    @media screen and (max-width: 1023px) {
+      order: 2;
+    }
+  }
+  :deep(.city-option){
+    @media screen and (max-width: 1023px) {
+      order: 3;
+    }
+  }
+  &:deep(.school-option){
+    @media screen and (max-width: 1023px) {
+      order: 1;
     }
   }
 }
