@@ -301,13 +301,12 @@ export default {
   watch: {
     'windowSize.x': {
       handler() {
-        if (this.windowSize.x > 599) {
-          this.updateLayoutLeftDrawerWidth(285)
-        } else if (this.windowSize.x <= 599) {
-          this.updateLayoutLeftDrawerWidth(180)
-        }
+        this.updateLayout()
       }
     }
+  },
+  mounted() {
+    this.updateLayout()
   },
   computed: {
     isUserLogin() {
@@ -320,6 +319,15 @@ export default {
   methods: {
     toggleLeftDrawer () {
       this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
+    },
+    updateLayout() {
+      if (this.$route.name === 'HomePage') {
+        if (this.windowSize.x > 599) {
+          this.updateLayoutLeftDrawerWidth(285)
+        } else if (this.windowSize.x <= 599) {
+          this.updateLayoutLeftDrawerWidth(180)
+        }
+      }
     },
     updateLayoutLeftDrawerWidth(value) {
       this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', value)
@@ -395,9 +403,13 @@ export default {
       padding-right: 35px;
     }
     @media screen and (max-width: 1023px) {
+      padding-left: 30px;
+      padding-right: 30px;
+      height: 64px;
+    }
+    @media screen and (max-width: 599px) {
       padding-left: 20px;
       padding-right: 20px;
-      height: 64px;
     }
     .user-header-section {
       display: grid;
@@ -447,6 +459,10 @@ export default {
           @media screen and (max-width: 1023px) {
             display: block;
             margin-right: 20px;
+            margin-left: -8px;
+          }
+          @media screen and (max-width: 599px) {
+            margin-left: 0;
           }
         }
         .drawer-btn {

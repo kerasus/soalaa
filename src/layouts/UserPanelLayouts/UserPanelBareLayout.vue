@@ -32,18 +32,18 @@ export default {
     max-width: 100%;
   }
   @media screen and (max-width: 1439px) {
-    padding-left: 32px;
-    padding-right: 32px;
+    padding-left: 35px;
+    padding-right: 35px;
   }
-  @media screen and (max-width: 1148px) {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+  //@media screen and (max-width: 1148px) {
+  //  padding-left: 20px;
+  //  padding-right: 20px;
+  //}
   @media screen and (max-width: 1023px) {
     padding-left: 30px;
     padding-right: 30px;
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 599px) {
     padding-left: 20px;
     padding-right: 20px;
   }
