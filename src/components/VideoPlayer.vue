@@ -171,6 +171,16 @@ export default {
       }
     }
 
+    .vjs-control-bar {
+      border-bottom-left-radius: inherit;
+      border-bottom-right-radius: inherit;
+      .vjs-volume-panel {
+        .vjs-volume-control {
+          right: -45px !important;
+        }
+      }
+    }
+
     #my-video_html5_api {
       border-radius: inherit;
     }
@@ -206,14 +216,6 @@ export default {
           box-shadow: none !important;
         }
       }
-    }
-  }
-}
-
-.vjs-control-bar {
-  .vjs-volume-panel {
-    .vjs-volume-control {
-      right: -45px !important;
     }
   }
 }
