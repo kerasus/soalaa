@@ -12,6 +12,7 @@
             <q-btn flat
                    rounded
                    color="primary"
+                   class="delete-all"
                    @click="deleteAllFilters">
               حذف همه
             </q-btn>
@@ -342,15 +343,26 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+.custom-card {
+  border-radius: 16px;
+  @media only screen and (max-width: 1023px) {
+      border-radius: 12px !important;
+  }
+  @media only screen and (max-width: 599px) {
+    border-radius: 8px !important;
+  }
+}
 .filter-card-container {
   padding: 20px 23px 16px 24px;
   margin-bottom: 24px;
 
   .filter-header {
     padding-bottom: 11px;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 76px;
+    @media only screen and (max-width: 1439px) {
+      grid-template-columns: auto 68px;
+    }
 
     .delete-all-container {
       font-style: normal;
@@ -359,6 +371,9 @@ export default {
       line-height: 21px;
       position: relative;
       top: -5px;
+      .delete-all {
+        padding: 0;
+      }
     }
 
     .header-title-container {
@@ -387,7 +402,7 @@ export default {
   .filter-option-container {
     width: 500px;
     display: flex;
-    padding: 20px 24px 20px 24px;
+    //padding: 20px 24px 20px 24px;
     justify-content: space-between;
 
     .filter-option-title {
@@ -407,7 +422,7 @@ export default {
 
 @media only screen and (max-width: 1439px) {
   .filter-card-container {
-    padding: 16px 16px 8px 16px !important;
+    padding: 20px 16px !important;
 
     .filter-header {
       .delete-all-container {
@@ -419,7 +434,7 @@ export default {
 
 @media only screen and (max-width: 1023px) {
   .filter-card-container {
-    padding: 16px 0 8px 16px !important;
+    padding: 20px 16px !important;
   }
   .filter-options-section {
     display: none;
@@ -428,7 +443,7 @@ export default {
 
 @media only screen and (max-width: 599px) {
   .filter-card-container {
-    padding: 20px 0 16px 16px !important;
+    padding: 12px 16px !important;
   }
 }
 </style>

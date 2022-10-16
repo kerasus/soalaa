@@ -64,14 +64,14 @@
               <q-input
                 v-model="searchInput"
                 filled
-                class="backGround-gray-input search-input"
+                class="bg-white search-input"
                 placeholder="جستجو در سوالات..."
               >
                 <template v-slot:append>
                   <q-btn
                     flat
                     rounded
-                    icon="isax:search-normal"
+                    icon="isax:search-normal-1"
                     class="search"
                     @click="filterByStatement"
                   />
@@ -684,6 +684,20 @@ export default {
     .search-section {
       .search-input {
         width: 300px;
+        background-color: white;
+        &:deep(.q-field__append){
+          padding-right: 8px !important;
+          .q-icon{
+            color: #6D708B;
+            cursor: pointer;
+          }
+        }
+        &:deep(.q-field__control){
+          background-color: white;
+        }
+        //&:deep(.q-field--filled .q-field__inner .q-field__control .q-field__append, .q-field--filled .q-field__inner .q-field__control .q-field__prepend ){
+        //
+        //}
         @media only screen and (max-width: 1023px) {
           width: 352px;
         }
