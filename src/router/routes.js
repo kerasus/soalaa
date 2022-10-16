@@ -174,6 +174,7 @@ const routes = [
           {
 
             path: '',
+            name: 'User.First.Layout',
             component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
             children: [
               {

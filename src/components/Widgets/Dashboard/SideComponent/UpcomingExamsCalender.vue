@@ -156,7 +156,8 @@
         </div>
       </div>
     </div>
-    <q-dialog v-model="calendarDialog">
+    <q-dialog v-model="calendarDialog"
+              persistent>
       <q-card class="calendar-dialog">
         <q-card-section class="row items-center content-section">
           <div class="calendar-dialog-header">

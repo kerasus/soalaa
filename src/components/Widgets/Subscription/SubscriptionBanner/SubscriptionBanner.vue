@@ -39,16 +39,16 @@ export default {
 <style lang="scss" scoped>
   .banner-wrapper {
     width: 100%;
-    height: 280px;
     background: #FFFFFF;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 60px;
+    padding-bottom: 80px;
 
     .banner-title {
       margin-bottom: 30px;
+      padding-top: 40px;
       font-style: normal;
       font-weight: 600;
       font-size: 20px;
@@ -57,13 +57,19 @@ export default {
       letter-spacing: -0.03em;
       color: #6D708B;
 
-      @media screen and (max-width: 600px) {
-        margin-top: 40px;
+      @media screen and (max-width: 1023px) {
+        padding-top: 40px;
+        margin-bottom: 20px;
+      }
+      @media screen and (max-width: 599px) {
+        padding-top: 40px;
+        margin-bottom: 20px;
       }
       @media screen and (max-width: 390px) {
         font-size: 16px;
         line-height: 25px;
-        margin-top: 40px;
+        padding-top: 40px;
+        margin-bottom: 16px;
       }
     }
 
@@ -81,20 +87,25 @@ export default {
         max-width: 90%;
       }
 
-      @media screen and (max-width: 600px) {
+      @media screen and (max-width: 599px) {
         max-width: 90%;
-        margin-bottom: 50px;
       }
       @media screen and (max-width: 390px) {
         max-width: 90%;
         font-size: 14px;
         line-height: 22px;
-        margin-bottom: 50px;
       }
     }
 
-    @media screen and (max-width: 600px) {
-      height: auto;
+    @media screen and (max-width: 1023px) {
+      padding-bottom: 60px;
+    }
+
+    @media screen and (max-width: 599px) {
+      padding-bottom: 50px;
+    }
+    @media screen and (max-width: 390px) {
+      padding-bottom: 50px;
     }
   }
 </style>

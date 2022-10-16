@@ -169,6 +169,12 @@ export default {
     @media screen and (max-width: 599px) {
       width:30%;
     }
+    @media screen and (max-width: 1023px) and (min-width: 600px) {
+      width:40%;
+    }
+    @media screen and (max-width: 1200px) and (min-width: 1024px) {
+      width:43%;
+    }
   }
 
   .step-2{
@@ -183,8 +189,11 @@ export default {
     @media screen and (max-width: 599px) {
       width:30%;
     }
-    @media screen and (max-width: 1200px) and (min-width: 600px) {
-      width:35%;
+    @media screen and (max-width: 1023px) and (min-width: 600px) {
+      width:40%;
+    }
+    @media screen and (max-width: 1200px) and (min-width: 1024px) {
+      width:43%;
     }
   }
 
@@ -201,8 +210,11 @@ export default {
     @media screen and (max-width: 599px) {
       width:10%;
     }
-    @media screen and (max-width: 1200px) and (min-width: 600px){
-      width:20%;
+    @media screen and (max-width: 1023px) and (min-width: 600px) {
+      width:17%;
+    }
+    @media screen and (max-width: 1200px) and (min-width: 1024px) {
+      width:12%;
     }
   }
 
@@ -215,12 +227,14 @@ export default {
       .line {
         width: 440px;
 
-        @media screen and (max-width: 1439px) {
-          width: 237px;
+        @media screen and (max-width: 1023px) and (min-width: 600px) {
+          width:200px;
         }
-
-        @media screen and (max-width: 1023px) {
-          width: 70px;
+        @media screen and (max-width: 1200px) and (min-width: 1024px) {
+          width: 300px;
+        }
+        @media screen and (max-width: 1439px) and (min-width: 1201px){
+          width: 337px;
         }
       }
     }
@@ -247,12 +261,14 @@ export default {
       background: #8075DC;
     }
 
-    @media screen and (max-width: 1439px) {
-      width: 237px;
+    @media screen and (max-width: 1023px) and (min-width: 600px) {
+      width:200px;
     }
-
-    @media screen and (max-width: 1023px) {
-      width: 70px;
+    @media screen and (max-width: 1200px) and (min-width: 1024px) {
+      width: 300px;
+    }
+    @media screen and (max-width: 1439px) and (min-width: 1201px){
+      width: 337px;
     }
   }
   .current-step{
