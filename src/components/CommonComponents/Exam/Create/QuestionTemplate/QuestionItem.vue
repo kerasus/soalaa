@@ -4,7 +4,7 @@
     :class="{ 'selected': ( selected || question.selected) && !finalApprovalMode }"
   >
     <q-resize-observer @resize="onResize" />
-    <q-card-section class="question-card-header row">
+    <q-card-section class="question-card-header items-center row">
       <div class="question-info col-xl-9 col-sm-8 col-xs-12">
         <div
           class="question-card-chip-id"
@@ -175,11 +175,14 @@
         <div class="question-number">{{ finalApprovalMode ? questionIndex + 1 : question.order }}</div>
       </div>
 
-      <div
-        v-else
-        class="question-icon"
-        :class="isLtrQuestion() ? 'order-last' : ''"
-      />
+      <div v-else>
+        <div class="question-icon-box">
+          <div
+            class="question-icon"
+            :class="isLtrQuestion() ? 'order-last' : ''"
+          />
+        </div>
+      </div>
 
       <div class="question full-width">
         <question
@@ -753,6 +756,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: left;
+       min-height: 36px;
 
       @media only screen and (max-width: 599px) {
         order: 2;
@@ -768,6 +772,9 @@ export default {
             line-height: 19px;
             color: #434765;
             text-align: right;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             .source-date {
               text-align: end;
             }
@@ -880,6 +887,11 @@ export default {
           left: -30px;
         }
       }
+    }
+    .question-icon-box{
+      height: var(--katexLineHeight);
+      display: flex;
+      align-items: center;
     }
 
     .question-icon {
