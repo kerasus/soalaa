@@ -131,7 +131,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { mixinAuth, mixinGetQuizData, mixinQuiz } from 'src/mixin/Mixins'
@@ -190,7 +189,7 @@ export default {
       }
     },
     getLessons () {
-      return axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.examId))
+      return this.$axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.examId))
     },
     redirect (link) {
     },
@@ -219,7 +218,7 @@ export default {
         return
       }
       subcategory.loading = true
-      axios.post(API_ADDRESS.questionSubcategory.updateOrder, {
+      this.$axios.post(API_ADDRESS.questionSubcategory.updateOrder, {
         sub_category_id: subcategory.id,
         order: subcategory.order,
         exam_id: this.examId

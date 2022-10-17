@@ -5,7 +5,6 @@ import { QuestCategoryList } from '../models/QuestCategory'
 import { QuestSubcategoryList } from '../models/QuestSubcategory'
 import { CheckingTimeList } from '../models/CheckingTime'
 import Assistant from '../plugins/assistant'
-import axios from 'axios'
 import API_ADDRESS from '../api/Addresses'
 
 class Exam extends Model {
@@ -352,25 +351,6 @@ class Exam extends Model {
     })
   }
 
-  sendAnswersAndFinishExam () {
-    const answers = []
-    this.questions.list.forEach((item) => {
-      const answeredChoice = item.getAnsweredChoice()
-      if (answeredChoice) {
-        answers.push({
-          question_id: item.id,
-          choice_id: answeredChoice.id,
-          selected_at: answeredChoice.answered_at
-        })
-      }
-    })
-    return axios.post(API_ADDRESS.exam.sendAnswers, {
-      exam_user_id: this.user_exam_id,
-      finish: true,
-      questions: answers
-    })
-  }
-
   mergeDbAnswerToLocalstorage (dbAnswers) {
     this.questions.list.forEach((item) => {
       const dbAnswer = dbAnswers.find((answerItem) => answerItem.question_id === item.id)
@@ -379,47 +359,6 @@ class Exam extends Model {
         item.state = dbAnswer.status
         item.bookmarked = dbAnswer.bookmark
       }
-    })
-  }
-
-  getAnswerOfUserInExam () {
-    // return axios.get(API_ADDRESS.exam.getAnswerOfUser(this.user_exam_id))
-    return axios.get(API_ADDRESS.exam.getAllAnswerOfUser(this.user_exam_id))
-  }
-
-  getAnswerOfUserInResultPage () {
-    const that = this
-    return new Promise(function (resolve, reject) {
-      axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(that.user_exam_id))
-        .then((response) => {
-          const questions_file_url = response.data.data.exam.questions_file_url
-          const examTitle = response.data.data.exam.title
-          const answers = response.data.data.answers
-          that.questions_file_url = questions_file_url
-          that.title = examTitle
-          that.loadQuestionsFromFile()
-            .then(() => {
-              that.mergeDbAnswerToLocalstorage(answers)
-              resolve()
-            })
-            .catch(({
-              jqXHR,
-              textStatus,
-              errorThrown
-            }) => {
-              // eslint-disable-next-line prefer-promise-reject-errors
-              reject({
-                jqXHR,
-                textStatus,
-                errorThrown
-              })
-            })
-        })
-        .catch(() => {
-          Assistant.reportErrors('exam.js -> getAnswerOfUserInResultPage() -> axios.get.catch')
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject(null)
-        })
     })
   }
 }
