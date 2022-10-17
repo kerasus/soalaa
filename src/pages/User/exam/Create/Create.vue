@@ -146,7 +146,7 @@
         <q-card-section class="flex column items-center">
           <div class="exam-icon">
             <q-icon size="70px"
-                    name="error_outline" />
+                    name="isax:info-circle" />
           </div>
           <div class="exam-slogan">
             یک آزمون نیمه تمام دارید، آیا می خواهید آن را تکمیل کنید؟
