@@ -99,7 +99,7 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionList } from 'src/models/Question'
 import { Exam } from 'src/models/Exam'
 import API_ADDRESS from 'src/api/Addresses'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
+import QuestionItem from 'components/Question/QuestionTemplate/QuestionItem'
 import { copyToClipboard } from 'quasar'
 
 export default {
