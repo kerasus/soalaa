@@ -341,7 +341,7 @@ const routes = [
               },
               {
                 name: 'Admin.Exam.video.set',
-                path: 'video/set/:examId/:subcategory_id',
+                path: 'video/set/examId/:examId/subcategory/:subcategory_id',
                 component: () => import('src/pages/Admin/exam/SetVideo.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionVideos')

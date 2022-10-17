@@ -92,14 +92,16 @@
                       </q-btn>
                     </div>
                     <div class="col-6">
-                      <q-btn
-
-                        class="q-mx-sm"
-                        size="12px"
-                        :style="{ 'width':'90%' , 'height':'90%' }"
-                        dark-percentage
-                        color="blue"
-                        @click="goVideoSet(subcategory.id)"
+                      <q-btn class="q-mx-sm"
+                             size="12px"
+                             :style="{ 'width':'90%' , 'height':'90%' }"
+                             dark-percentage
+                             color="blue"
+                             :to="{ name: 'Admin.Exam.video.set',
+                                    params: {
+                                      subcategory_id: subcategory.id,
+                                      examId: examId
+                                    }}"
                       >
                         <q-icon
                           name="mdi-video"
