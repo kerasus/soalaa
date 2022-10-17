@@ -1,5 +1,8 @@
 <template>
-  <div class="user-panel-side-bar">
+  <div
+    v-if="$route.name !== 'HomePage'"
+    class="user-panel-side-bar"
+  >
     <div v-if="isUserLogin"
          class="bg-primary profile-box">
       <div class="profile-detail">
@@ -60,7 +63,10 @@
       <user-panel-base-menu />
     </div>
   </div>
-  <div class="user-panel-side-drawer-container">
+  <div
+    v-else
+    class="user-panel-side-drawer-container"
+  >
     <user-panel-side-drawer />
   </div>
 </template>
@@ -97,6 +103,9 @@ export default {
       return (item) => {
         return (item.permission === 'all' || this.user.hasPermission(item.permission))
       }
+    },
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
     }
   }
 }
@@ -105,7 +114,7 @@ export default {
 <style lang="scss" scoped>
 .user-panel-side-bar {
   @media screen and (max-width: 1023px) {
-    display: none;
+    //display: none;
   }
   .profile-box {
     font-style: normal;

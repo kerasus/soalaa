@@ -169,8 +169,11 @@ export default {
     @media screen and (max-width: 599px) {
       width:30%;
     }
-    @media screen and (max-width: 1023px) and (min-width: 600px) {
-      width:40%;
+    @media screen and (max-width: 820px) and (min-width: 600px) {
+      width:38%;
+    }
+    @media screen and (max-width: 1023px) and (min-width: 821px) {
+      width:45%;
     }
     @media screen and (max-width: 1200px) and (min-width: 1024px) {
       width:43%;
@@ -210,8 +213,11 @@ export default {
     @media screen and (max-width: 599px) {
       width:10%;
     }
-    @media screen and (max-width: 1023px) and (min-width: 600px) {
-      width:17%;
+    @media screen and (max-width: 820px) and (min-width: 600px) {
+      width:22%;
+    }
+    @media screen and (max-width: 1023px) and (min-width: 821px) {
+      width:15%;
     }
     @media screen and (max-width: 1200px) and (min-width: 1024px) {
       width:12%;
