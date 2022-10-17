@@ -6,7 +6,6 @@
       <sticky-both-sides>
         <user-side-bar />
       </sticky-both-sides>
-
     </div>
     <div class="col-xl-9 col-lg-9 col-md-9 col-12 user-panel-content">
       <Router :include="keepAliveComponents" />

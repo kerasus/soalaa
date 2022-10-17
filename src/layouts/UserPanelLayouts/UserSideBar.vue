@@ -124,15 +124,12 @@ export default {
     text-align: left;
     color: #FFFFFF;
 
-    width: 277px;
+    width: 100%;
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 16px;
-    @media screen and (max-width: 1919px) {
-      width: 273px;
-    }
+
     @media screen and (max-width: 1439px) {
-      width: 220px;
       font-weight: 400;
       font-size: 12px;
       line-height: 19px;
@@ -220,17 +217,15 @@ export default {
     }
   }
   .side-menu-main-layout {
-    width: 277px;
+    width: 100%;
     min-height: 480px;
     border-radius: 20px;
     padding: 24px;
     display: grid;
     @media screen and (max-width: 1919px) {
-      width: 273px;
       min-height: 480px;
     }
     @media screen and (max-width: 1439px) {
-      width: 220px;
       border-radius: 16px;
       padding-right: 16px;
       padding-left: 16px;
