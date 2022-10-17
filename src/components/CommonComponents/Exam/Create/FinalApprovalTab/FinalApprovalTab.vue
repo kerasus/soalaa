@@ -84,30 +84,30 @@
                            :options="chartOptions" />
                   </div>
                 </div>
-                <div class="row q-col-gutter-sm action-btn">
-                  <div class=" confirm-b col-lg-12 col-sm-6">
-                    <q-btn
-                      unelevated
-                      color="primary"
-                      :disable="exam.loading"
-                      class="full-width confirm q-mr-xl"
-                      @click="confirmExam"
-                    >
-                      تایید نهایی
-                      <span :hidden="$q.screen.lt.lg">و ساخت آزمون</span>
-                    </q-btn>
-                  </div>
-                  <div class="previous-b col-lg-12 col-sm-6">
-                    <q-btn
-                      unelevated
-                      :disable="exam.loading"
-                      class="full-width q-mr-xl previous"
-                      @click="goToPrevious"
-                    >
-                      بازگشت
-                    </q-btn>
-                  </div>
-                </div>
+              </div>
+            </div>
+            <div class="action-btn">
+              <div class=" confirm-b ">
+                <q-btn
+                  unelevated
+                  color="primary"
+                  :disable="exam.loading"
+                  class="full-width confirm q-mr-xl"
+                  @click="confirmExam"
+                >
+                  تایید نهایی
+                  <span :hidden="$q.screen.lt.lg">و ساخت آزمون</span>
+                </q-btn>
+              </div>
+              <div class="previous-b ">
+                <q-btn
+                  unelevated
+                  :disable="exam.loading"
+                  class="full-width q-mr-xl previous"
+                  @click="goToPrevious"
+                >
+                  بازگشت
+                </q-btn>
               </div>
             </div>
             <!--          <q-separator class="q-my-lg" />-->
@@ -438,7 +438,15 @@ export default {
       padding-right: 0;
     }
     .action-btn{
+      width: 100%;
+      @media screen and(max-width: 1439px) {
+        display: grid;
+        justify-content: flex-end;
+        grid-template-columns: 140px 140px;
+        column-gap: 12px;
+      }
       .confirm-b{
+        margin-bottom: 12px;
         @media screen and (max-width: 1439px) {
           order:1
         }
