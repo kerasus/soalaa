@@ -71,20 +71,20 @@
         <!--        -----------------------------------------------------Actions Section--------------------------------------------   -->
         <div class="user-action">
           <div>
-            <q-btn
-              icon="isax:notification"
-              unelevated
-              rounded
-              size="12px"
-              class="action-btn"
-            />
-            <q-btn
-              icon="isax:shopping-bag"
-              unelevated
-              rounded
-              size="12px"
-              class="action-btn"
-            />
+            <!--            <q-btn-->
+            <!--              icon="isax:notification"-->
+            <!--              unelevated-->
+            <!--              rounded-->
+            <!--              size="12px"-->
+            <!--              class="action-btn"-->
+            <!--            />-->
+            <!--            <q-btn-->
+            <!--              icon="isax:shopping-bag"-->
+            <!--              unelevated-->
+            <!--              rounded-->
+            <!--              size="12px"-->
+            <!--              class="action-btn"-->
+            <!--            />-->
           </div>
           <q-btn
             flat
@@ -119,26 +119,27 @@ export default {
           title: 'آزمون ها',
           to: 'User.Exam.List'
         },
-        {
-          selected: 'questionBank',
-          title: 'بانک سوال',
-          to: ''
-        },
-        {
-          selected: 'soalaMag',
-          title: 'سوالامگ',
-          to: ''
-        },
+        // {
+        //   selected: 'questionBank',
+        //   title: 'بانک سوال',
+        //   to: ''
+        // },
+        // {
+        //   selected: 'soalaMag',
+        //   title: 'سوالامگ',
+        //   to: ''
+        // },
         {
           selected: 'askedQuestions',
           title: 'سوالات متداول',
-          to: ''
-        },
-        {
-          selected: 'contactUs',
-          title: 'تماس با ما',
-          to: ''
+          to: 'faq'
         }
+        // {
+        //   selected: 'contactUs',
+        //   title: 'تماس با ما',
+        //   to: ''
+        // }
+
       ]
     }
   },
@@ -156,12 +157,24 @@ export default {
       return new User()
     }
   },
+  mounted() {
+    this.addAdminItem()
+  },
   methods: {
     ...mapMutations('AppLayout', [
       'updateLayoutLeftDrawerVisible'
     ]),
     toggleLeftDrawer () {
       this.updateLayoutLeftDrawerVisible(true)
+    },
+    addAdminItem () {
+      if (this.user.hasPermission('examStore')) {
+        this.headerItems.push({
+          selected: 'contactUs',
+          title: 'پنل ادمین',
+          to: 'Admin.Exam.Index'
+        })
+      }
     }
   }
 }

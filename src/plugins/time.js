@@ -2,6 +2,7 @@ import moment from 'moment'
 import { getServerDate } from '@nodeguy/server-date'
 import Assistant from '../plugins/assistant'
 import API_ADDRESS from 'src/api/Addresses'
+import process from 'process'
 
 const Time = (function () {
   async function synchronizeTime () {
@@ -50,6 +51,9 @@ const Time = (function () {
   }
   function now () {
     if (!window.serverDate?.offset) {
+      if (!window.serverDate) {
+        window.serverDate = {}
+      }
       window.serverDate.offset = 0
     }
     const serverDate = new Date(Date.now() + window.serverDate.offset)
@@ -93,7 +97,7 @@ const Time = (function () {
   }
 
   function setStateOfExamCategories (categories, newState) {
-    categories.list.forEach((category, index, categories) => {
+    categories.forEach((category, index, categories) => {
       if (newState === true) {
         category.is_active = true
 
@@ -123,17 +127,21 @@ const Time = (function () {
 
   function getCurrentCategoryAcceptAt (categories) {
     const currentCat = categories.list.find((item) => item.is_active)
-    const lastCat = categories[categories.length - 1]
+    const lastCat = categories.list[categories.list.length - 1]
+    const isAllCategoryActive = categories.list.filter(item => item.is_active).length === categories.list
 
     if (lastCat && getPassedTime(lastCat.accept_at, false) > 0) {
       return false
-    } else if (currentCat && getRemainTime(currentCat.accept_at, false) > 0) {
+    } else if (currentCat && (getRemainTime(currentCat.accept_at, false) > 0 || isAllCategoryActive)) {
       return currentCat
     }
+
+    return null
   }
 
   function setStateOfQuestionsBasedOnActiveCategory (quiz, questions) {
     const currentActiveCategory = getCurrentCategoryAcceptAt(quiz.categories)
+    const ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
     if (!currentActiveCategory) {
       for (const questionId in questions) {
         questions[questionId].in_active_category = true
@@ -141,7 +149,9 @@ const Time = (function () {
       return
     }
     for (const questionId in questions) {
-      questions[questionId].in_active_category = Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id)
+      const questionCategory = quiz.categories.list.find(category => category.id === questions[questionId].sub_category.category_id)
+      const activeStatus = questionCategory.is_active || Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id) || ACTIVE_ALL_CATEGORIES_IN_EXAM
+      questions[questionId].in_active_category = activeStatus
     }
   }
 

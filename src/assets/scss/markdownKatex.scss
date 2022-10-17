@@ -40,23 +40,21 @@
   }
 
   .beit {
-    display: inline-block;
+    //display: inline-block;
     width: 100%;
 
     .mesra {
-      width: 50%;
-      float: right;
+      //width: 50%;
+      float: left;
+      &:first-child {
+        margin-right: 20px;
+        max-width: calc( 50% - 20px );
+      }
       p {
         position: relative;
         margin: 0;
       }
     }
-
-    .mesra:first-child {
-      margin-left: 20px;
-      width: calc( 50% - 20px );
-    }
-
   }
 
   .mesra {

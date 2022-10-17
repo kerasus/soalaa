@@ -96,7 +96,7 @@ export default {
         height: max-content;
         width: 100%;
         color: #777;
-        padding-left: 30px;
+        /*padding-left: 30px;*/
         display: flex;
     }
     .answer-text.ltr {
@@ -133,5 +133,11 @@ export default {
 
     .choice-number {
       font-weight: bold;
+      font-size: 1.4rem;
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      margin-left: 10px;
+      line-height: 3rem;
     }
 </style>

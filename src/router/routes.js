@@ -87,7 +87,7 @@ const routes = [
       layoutLeftDrawerElevated: false,
       layoutLeftDrawerBordered: false,
       layoutLeftDrawerWidth: 325,
-      layoutLeftDrawerBehavior: 'panel',
+      layoutLeftDrawerBehavior: 'default',
       layoutPageContainer: true,
       layoutRightDrawer: false,
       layoutFooter: false,
@@ -99,6 +99,30 @@ const routes = [
       {
         path: '',
         name: 'HomePage',
+        layoutConfig: {
+          layoutHeader: false,
+          layoutHeaderVisible: false
+          // layoutHeaderType: 'panel',
+          // layoutLeftDrawerVisible: true,
+          // layoutLeftSideBarType: 'panel',
+          // layoutView: 'lHh Lpr lFf',
+          // layoutHeader: true,
+          // layoutHeaderReveal: false,
+          // layoutHeaderElevated: false,
+          // layoutHeaderBordered: false,
+          // layoutLeftDrawer: true,
+          // layoutLeftDrawerOverlay: false,
+          // layoutLeftDrawerElevated: false,
+          // layoutLeftDrawerBordered: false,
+          // layoutLeftDrawerWidth: 325,
+          // layoutLeftDrawerBehavior: 'default',
+          // layoutPageContainer: true,
+          // layoutRightDrawer: false,
+          // layoutFooter: false,
+          // layoutHeaderCustomClass: '',
+          // layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
+          // layoutPageContainerCustomClass: 'main-layout-container'
+        },
         component: () => import('pages/User/landing/landing')
       },
       {
@@ -156,11 +180,44 @@ const routes = [
             breadcrumbs: { title: 'سفارش های من' }
           },
           {
-            path: '/user_exam_list',
+            path: 'user_exam_list',
             name: 'User.Exam.List',
-            component: () => import('pages/User/exam/List'),
-            middleware: [
-              Permissions.hasPermission('examStore')
+            layoutConfig: {
+              layoutLeftDrawerVisible: false
+            },
+            component: () => import('pages/User/exam/List')
+          },
+          {
+            path: '/faq',
+            name: 'faq',
+            layoutConfig: {
+              layoutLeftDrawerVisible: false
+            },
+            component: () => import('src/pages/CommonQuestions/list')
+          },
+          {
+            path: 'ticket',
+            component: () => import('layouts/bareLayout.vue'),
+            meta: {
+              middlewares: [auth]
+            },
+            name: 'User.Ticket',
+            children: [
+              {
+                path: '',
+                name: 'User.Ticket.Index',
+                component: () => import('pages/User/Ticket/Index.vue')
+              },
+              {
+                path: ':id',
+                name: 'User.Ticket.Show',
+                component: () => import('pages/User/Ticket/Show.vue')
+              },
+              {
+                path: 'create',
+                name: 'User.Ticket.Create',
+                component: () => import('pages/User/Ticket/Create.vue')
+              }
             ]
           }
         ]
@@ -284,7 +341,7 @@ const routes = [
               },
               {
                 name: 'Admin.Exam.video.set',
-                path: 'video/set/:examId/:subcategory_id',
+                path: 'video/set/examId/:examId/subcategory/:subcategory_id',
                 component: () => import('src/pages/Admin/exam/SetVideo.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionVideos')
@@ -465,6 +522,32 @@ const routes = [
             component: () => import('pages/Admin/KnowledgeTree/index'),
             breadcrumbs: { title: 'درخت دانش' }
           },
+
+          {
+            path: 'ticket',
+            component: () => import('layouts/bareLayout.vue'),
+            meta: {
+              middlewares: [auth]
+            },
+            name: 'Admin.Ticket',
+            children: [
+              {
+                path: '',
+                name: 'Admin.Ticket.Index',
+                component: () => import('pages/Admin/Ticket/Index.vue')
+              },
+              {
+                path: ':id',
+                name: 'Admin.Ticket.Show',
+                component: () => import('pages/Admin/Ticket/Show.vue')
+              },
+              {
+                path: 'create',
+                name: 'Admin.Ticket.Create',
+                component: () => import('pages/Admin/Ticket/Create.vue')
+              }
+            ]
+          },
           { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings'), breadcrumbs: { title: 'تنظیمات' } }
         ]
       },
@@ -475,18 +558,22 @@ const routes = [
         middleware: [auth]
       },
       {
-        path: '/faq',
-        name: 'faq',
-        component: () => import('src/pages/CommonQuestions/list'),
+        path: '/onlineQuiz/alaaView/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView',
+        component: () => import('pages/User/exam/participate/AlaaView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
         meta: {
-          middlewares: [
-            auth
-          ]
+          middlewares: [auth]
         }
       },
       {
-        path: '/onlineQuiz/alaaView/:quizId/:questNumber',
-        name: 'onlineQuiz.alaaView',
+        path: '/onlineQuiz/alaaView/retake/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView.retake',
         component: () => import('pages/User/exam/participate/AlaaView'),
         layoutConfig: {
           layoutHeaderVisible: true,
