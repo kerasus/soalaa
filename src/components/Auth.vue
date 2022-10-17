@@ -21,6 +21,8 @@
           v-model="username"
           bottom-slots
           hide-bottom-space
+          autocomplete="off"
+          onfocus="this.removeAttribute('readonly');"
           name="userName"
           placeholder=" - - - - - - - - - 09"
           @keydown.enter="getEnter('pass')"
@@ -34,7 +36,6 @@
         <q-input
           ref="pass"
           v-model="password"
-          bottom-slots
           name="pass"
           hide-bottom-space
           type="password"
@@ -182,7 +183,7 @@ export default {
     margin-bottom: 56px;
   }
 :deep(.q-field--focused) {
-  //appearance: none;
+  appearance: none;
 }
   &:deep(.q-field--focused .q-field__control) {
     background-color: rgba(255,255,255,0) !important;
@@ -203,10 +204,11 @@ export default {
     font-weight: 400;
     font-size: 14px;
     line-height: 22px;
-    color: #6D708B;
+    color: #6D708B !important;
   }
   :deep(.q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input){
     padding: 8px 16px;
+    border-radius: 8px
   }
 
   :deep(.q-field__control){
