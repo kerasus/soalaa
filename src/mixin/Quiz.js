@@ -690,7 +690,9 @@ const mixinQuiz = {
     },
     goToCategory (categoryId) {
       const currentExamQuestionsInArray = this.getCurrentExamQuestionsInArray()
-      const firstQuestionOfCategory = currentExamQuestionsInArray.find((item) => Assistant.getId(item.sub_category.category_id) === Assistant.getId(categoryId))
+      const currentQuestionCategoryId = this.currentQuestion.sub_category.category_id
+      const currentQuestionCategoryIsSameCategory = currentQuestionCategoryId === categoryId
+      const firstQuestionOfCategory = (currentQuestionCategoryIsSameCategory) ? this.currentQuestion : currentExamQuestionsInArray.find((item) => Assistant.getId(item.sub_category.category_id) === Assistant.getId(categoryId))
       if (!firstQuestionOfCategory) {
         return
       }

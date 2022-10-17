@@ -7,6 +7,7 @@
             color="primary"
             class="full-width"
             label="ساخت فایل سوالات"
+            :loading="generateJsonFileLoading"
             @click="generateJsonFile(entityId, false)"
           />
         </div>
@@ -15,6 +16,7 @@
             color="primary"
             class="full-width"
             label="ساخت فایل سوالات با جواب"
+            :loading="generateJsonFileLoading"
             @click="generateJsonFile(entityId, true)"
           />
         </div>
@@ -24,34 +26,19 @@
                       expand-separator
                       class="q-mt-md"
     >
-      <portlet>
-        <template v-slot:title><span></span></template>
-        <template v-slot:content>
-          <edit-exam-report />
-        </template>
-      </portlet>
+      <edit-exam-report />
     </q-expansion-item>
     <q-expansion-item label="آپلود فایل سوالات و جواب ها"
                       expand-separator
                       class="q-mt-md"
     >
-      <portlet>
-        <template v-slot:title><span></span></template>
-        <template v-slot:content>
-          <upload />
-        </template>
-      </portlet>
+      <upload />
     </q-expansion-item>
     <q-expansion-item label="اصلاح ضرایب"
                       expand-separator
                       class="q-mt-md"
     >
-      <portlet>
-        <template v-slot:title><span></span></template>
-        <template v-slot:content>
-          <edit-coefficients />
-        </template>
-      </portlet>
+      <edit-coefficients />
     </q-expansion-item>
   </div>
 </template>
@@ -60,19 +47,24 @@
 import EditExamReport from 'pages/Admin/exam/editExamReport'
 import Upload from 'pages/Admin/exam/Upload'
 import EditCoefficients from 'pages/Admin/exam/editCoefficients'
-import { Portlet } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
+
 export default {
   name: 'MoreActions',
   components: {
     // EntityShow,
     EditCoefficients,
     Upload,
-    EditExamReport,
-    Portlet
+    EditExamReport
+  },
+  data () {
+    return {
+      generateJsonFileLoading: false
+    }
   },
   methods: {
     generateJsonFile (id, withAnswer) {
+      this.generateJsonFileLoading = true
       const that = this
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.post(API_ADDRESS.exam.generateExamFile(id, withAnswer))
@@ -83,9 +75,11 @@ export default {
             position: 'top'
           })
           this.$store.dispatch('loading/linearLoading', false)
+          this.generateJsonFileLoading = false
         })
         .catch(() => {
           this.$store.dispatch('loading/linearLoading', false)
+          this.generateJsonFileLoading = false
         })
     }
   },
@@ -106,9 +100,12 @@ export default {
     width: 100%;
   }
 }
-.q-expansion-item {
-  background: #DBDBDB;
+:deep(.q-expansion-item) {
+  background: white;
   border-radius: 16px;
+  .q-expansion-item__content {
+    padding: 20px;
+  }
 }
 .q-focus-helper, .q-focusable, .q-manual-focusable, .q-hoverable {
   border-radius: 16px;
