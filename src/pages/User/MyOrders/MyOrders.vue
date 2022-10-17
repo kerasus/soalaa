@@ -41,13 +41,13 @@
         :table="table"
         :table-keys="tableKeys"
         :default-layout="false"
-        :table-grid-size="$q.screen.lt.sm"
+        :table-grid-size="$q.screen.lt.md"
         :create-route-name="'Admin.Exam.Create'"
         @onPageChanged="onPageChange"
       >
         <template v-slot:before-index-table="">
           <div class="row items-center search-box">
-            <div class="col-lg-4 col-xl-4 col-md-6 col-xs-9 text-left">
+            <div class="col-lg-4 col-xl-4 col-sm-6 col-xs-9 text-left">
               <q-input v-model="searchInput"
                        filled
                        placeholder="جستجو..."
@@ -59,7 +59,7 @@
                 </template>
               </q-input>
             </div>
-            <div class="col-lg-8 col-xl-8 col-md-6 col-xs-3 text-right">
+            <div class="col-lg-8 col-xl-8 col-sm-6 col-xs-3 text-right">
               <q-btn unelevated
                      class="filter-toggle"
                      :class="filterExpanded? 'gray-bg': 'bg-white'"
@@ -131,43 +131,87 @@
         <template v-slot:table-item-cell="{inputData}">
           <q-card class="details-table-mobile">
             <div class="details-info">
-              <div class="first-col">
+              <div class="item">
                 <div class="order first-col-item">
                   شماره سفارش:
                   <span class="order-id">{{inputData.props.row.id}}</span>
                 </div>
-                <div class="first-col-item">وضعیت پرداخت:</div>
-                <div class="first-col-item">مبلغ:</div>
-                <div class="first-col-item">تاریخ سفارش:</div>
-              </div>
-              <div class="second-col">
-                <q-btn round
-                       flat
-                       dense
-                       size="md"
-                       class="details-btn"
-                       @click="toggleDetailsCard(inputData.props.row)"
+                <div
+                  class="details-btn toggle"
+                  @click="toggleDetailsCard(inputData.props.row)"
                 >
                   جزئیات
                   <q-icon color="primary"
                           :name="detailsCardToggle[inputData.props.row.id] ? 'isax:arrow-up-2' : 'isax:arrow-down-1' " />
-                </q-btn>
-                <div class="min-h"
-                     :class="{ 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
-                               'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
-                               'payment-installment' : inputData.props.row.paymentstatus.id === 4 }"
+                </div>
+                <div
+                  class="details-btn dialog"
+                  @click="showDetailsDialog(inputData.props.row)"
+                >
+                  مشاهده جزییات
+                </div>
+              </div>
+              <div class="item">
+                <div class="first-col-item">وضعیت پرداخت:</div>
+                <div
+                  :class="{ 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
+                            'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
+                            'payment-installment' : inputData.props.row.paymentstatus.id === 4 }"
                 >
                   <!--                پرداخت نشده-->
                   {{inputData.props.row.paymentstatus.name}}
                 </div>
-                <div class="min-h">
+              </div>
+              <div class="item">
+                <div class="first-col-item">مبلغ:</div>
+                <div class="value">
                   {{inputData.props.row.price ? toman(inputData.props.row.price) : 0 }}
                 </div>
-                <div class="min-h">
+              </div>
+              <div class="item">
+                <div class="first-col-item">تاریخ سفارش:</div>
+                <div class="value">
                   {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}
                   <!--                {{ getCurrentOrderCompletedAt('1401/09/25') }}-->
                 </div>
               </div>
+              <!--              <div class="first-col">-->
+              <!--                <div class="order first-col-item">-->
+              <!--                  شماره سفارش:-->
+              <!--                  <span class="order-id">{{inputData.props.row.id}}</span>-->
+              <!--                </div>-->
+              <!--                <div class="first-col-item">وضعیت پرداخت:</div>-->
+              <!--                <div class="first-col-item">مبلغ:</div>-->
+              <!--                <div class="first-col-item">تاریخ سفارش:</div>-->
+              <!--              </div>-->
+              <!--              <div class="second-col">-->
+              <!--                <q-btn round-->
+              <!--                       flat-->
+              <!--                       dense-->
+              <!--                       size="md"-->
+              <!--                       class="details-btn"-->
+              <!--                       @click="toggleDetailsCard(inputData.props.row)"-->
+              <!--                >-->
+              <!--                  جزئیات-->
+              <!--                  <q-icon color="primary"-->
+              <!--                          :name="detailsCardToggle[inputData.props.row.id] ? 'isax:arrow-up-2' : 'isax:arrow-down-1' " />-->
+              <!--                </q-btn>-->
+              <!--                <div class="min-h"-->
+              <!--                     :class="{ 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,-->
+              <!--                               'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,-->
+              <!--                               'payment-installment' : inputData.props.row.paymentstatus.id === 4 }"-->
+              <!--                >-->
+              <!--                  &lt;!&ndash;                پرداخت نشده&ndash;&gt;-->
+              <!--                  {{inputData.props.row.paymentstatus.name}}-->
+              <!--                </div>-->
+              <!--                <div class="min-h">-->
+              <!--                  {{inputData.props.row.price ? toman(inputData.props.row.price) : 0 }}-->
+              <!--                </div>-->
+              <!--                <div class="min-h">-->
+              <!--                  {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}-->
+              <!--                  &lt;!&ndash;                {{ getCurrentOrderCompletedAt('1401/09/25') }}&ndash;&gt;-->
+              <!--                </div>-->
+              <!--              </div>-->
             </div>
             <order-details-card v-if="windowSize.x < 600"
                                 v-model:toggleValue="detailsCardToggle[inputData.props.row.id]"
@@ -608,14 +652,17 @@ export default {
             font-size: 16px;
             line-height: 25px;
             color: #6D708B;
-            //background: white;
             padding: 23px 40px;
+            @media screen and (max-width: 1439px){
+              padding: 20px 30px;
+            }
           }
 
           tbody{
             tr{
               &:nth-child(2n + 1) {
                 background: #F6F9FF;
+                border-radius: 16px;
               }
             }
           }
@@ -631,10 +678,12 @@ export default {
               font-size: 14px;
               line-height: 22px;
               letter-spacing: -0.03em;
+              @media screen and (max-width: 1439px){
+                padding: 2px 30px;
+              }
             }
 
             :not(:last-child) > td {
-
               border-bottom-width: 0 !important;
             }
           }
@@ -692,53 +741,53 @@ export default {
       font-weight: 400;
       font-size: 14px;
       line-height: 22px;
-      text-align: left;
       letter-spacing: -0.03em;
-      display: flex;
-      justify-content: space-between;
-      color: #434765;
       @media screen and (max-width: 599px){
         padding: 15px 18px;
       }
-      .first-col {
-        color: #6D708B;
-        div {
-          padding-top: 5px;
-          padding-bottom: 5px;
+      .item{
+        color: var(--Text-2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 25px;
+        @media screen and (max-width: 599px){
+          margin-bottom: 10px;
+          font-size: 14px;
+          line-height: 22px;
+        }
+        .value{
+          color: var(--Text-1);
         }
         .order {
           .order-id {
             padding-left: 8px;
+            color: var(--Text-1);
           }
-        }
-      }
-      //
-      .second-col {
-        text-align: right;
-        div {
-          padding-top: 5px;
-          padding-bottom: 5px;
         }
         .details-btn {
           color:#8075DC ;
+          cursor: pointer;
           :deep(.q-icon ){
             font-size: 14px;
             font-weight: 600;
             margin-left: 6px;
           }
-          :deep(.q-btn__content){
-            margin-right: 0;
+          &.dialog{
+            @media screen and (max-width: 599px) {
+              display: none;
+            }
+          }
+          &.toggle{
+            display: none;
+            @media screen and (max-width: 599px) {
+              display: block;
+            }
           }
         }
-
-        .min-h{
-          min-height: 32px;
-        }
-        //:deep(.q-btn) {
-        //  .q-btn__content {
-        //    margin: 0;
-        //  }
-        //}
       }
     }
   }
