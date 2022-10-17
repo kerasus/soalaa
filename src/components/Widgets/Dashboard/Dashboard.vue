@@ -59,13 +59,14 @@
         </div>
         <dashboard-header />
         <next-exam />
-        <div class="board-container row">
+        <div class="board-container row q-col-gutter-lg">
           <div class="col-12 col-lg-8 calendar-col"
           >
             <upcoming-exams-calender :calendarTitle="'آزمون های پیش‌رو'"
                                      :calendarIcon="'isax:calendar-1'" />
           </div>
-          <div class="col-12 col-lg-4 subscription-col"
+          <div v-if="lastSubscribeDate !== null"
+               class="col-12 col-lg-4 subscription-col"
           >
             <subscription-status :subscribe="lastSubscribeDate" />
           </div>
@@ -296,25 +297,24 @@ export default {
 <style scoped lang="scss">
 .dashboard-container {
   .calendar-col {
-    padding-right: 0;
-    margin-bottom: 0;
-    @media screen and (min-width: 1439px) {
-      padding-right: 15px;
-    }
+    padding-left: 0;
 
-    @media screen and (max-width: 1439px) {
-      margin-bottom: 15px;
+    @media screen and (max-width: 1023px) {
+      padding-top: 10px;
     }
   }
   .subscription-col {
-    padding-left: 0;
-    margin-top: 0;
-    @media screen and (min-width: 1439px) {
-      padding-left: 15px;
+    @media screen and (max-width: 1439px) {
+      padding-left: 0;
+      padding-top: 120px;
     }
-
-    @media screen and (max-width: 1439px) and (min-width: 1200px) {
-      margin-top: 85px;
+    @media screen and (max-width: 1200px) {
+      padding-left: 0;
+      padding-top: 30px;
+    }
+    @media screen and (max-width: 1023px) {
+      padding-left: 0;
+      padding-top: 10px;
     }
   }
   .profile-box {
@@ -452,7 +452,7 @@ export default {
   }
 }
 .board-container {
-margin: 30px 0;
+margin:0;
   @media screen and (max-width: 1023px) {
     margin: 20px 0;
     //margin-bottom: 20px;
@@ -461,12 +461,6 @@ margin: 30px 0;
     padding-left: 15px;
     @media screen and (max-width: 1023px) {
       padding-left: 0px !important;
-    }
-  }
-  .subscription-status {
-    padding-right: 15px;
-    @media screen and (max-width: 1023px) {
-      padding-right: 0 !important;
     }
   }
 }

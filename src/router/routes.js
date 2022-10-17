@@ -174,6 +174,7 @@ const routes = [
           {
 
             path: '',
+            name: 'User.First.Layout',
             component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
             children: [
               {
@@ -233,8 +234,15 @@ const routes = [
           },
           {
             path: 'exam/create',
-            name: 'User.Create.Exam',
-            component: () => import('pages/User/exam/Create/Create')
+            name: 'User.Create',
+            component: () => import('layouts/boxedLayout'),
+            children: [
+              {
+                path: '',
+                name: 'User.Create.Exam',
+                component: () => import('pages/User/exam/Create/Create')
+              }
+            ]
           }
         ]
       },
@@ -674,8 +682,32 @@ const routes = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component:
-  () => import('pages/Error404.vue')
+    component: () => import('layouts/MainLayout.vue'),
+    layoutConfig: {
+      layoutHeaderVisible: true,
+      layoutHeaderType: 'default',
+      layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
+      layoutPageContainerCustomClass: 'main-layout-container'
+    },
+    children: [
+      {
+        path: '',
+        name: '404',
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false,
+          layoutLeftDrawerOverlay: true
+        },
+        component: () => import('layouts/UserPanelLayouts/UserPanelBareLayout'),
+        children: [{
+          path: '',
+          name: 'notFound',
+          component: () => import('pages/Error404.vue')
+        }
+        ]
+      }
+    ]
   }
 ]
 

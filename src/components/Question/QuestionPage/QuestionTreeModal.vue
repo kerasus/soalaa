@@ -38,6 +38,7 @@
               <tree
                 ref="tree"
                 :key="treeKey"
+                :no-nodes-label="'لطفا یک درس را انتخاب کنید'"
                 tick-strategy="strict"
                 :get-node-by-id="getNodeById"
                 @ticked="updateNodes"
@@ -80,14 +81,16 @@
               </div>
             </div>
           </div>
-          <div class="close-btn-box text-right">
-            <q-btn
-              v-close-popup
-              class="close-btn"
-              label="بستن"
-              color="primary"
-              :disable="persistent"
-            />
+          <div class="action-btn-box text-right">
+            <slot name="tree-dialog-action-box">
+              <q-btn
+                v-close-popup
+                class="close-btn"
+                label="بستن"
+                color="primary"
+                :disable="persistent"
+              />
+            </slot>
           </div>
         </div>
       </div>
@@ -322,8 +325,8 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-.close-btn-box {
-  padding-top: 30px;
+.action-btn-box {
+  padding-top: 20px;
   .close-btn {
     color: #FFFFFF;
     font-weight: 500;
@@ -335,6 +338,11 @@ export default {
     height: 40px;
     margin: auto 0 auto auto;
   }
+  @media screen and (max-width: 880px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 .q-card {
   min-width: 830px;
@@ -342,8 +350,10 @@ export default {
   background: #FFFFFF;
   border-radius: 15px;
   padding: 30px;
-  @media screen and (max-width: 1024px) {
+  width: 830px;
+  @media screen and (max-width: 880px) {
     min-width: 350px;
+    width: 350px;
     .tree-inner-container {
       display: flex;
       flex-direction: column;
@@ -358,7 +368,7 @@ export default {
   line-height: 28px;
   text-align: right #{"/* rtl:ignore */"};
   color: #23263B;
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 880px) {
     width: 100%;
   }
   .tree-chips-box {
@@ -367,15 +377,16 @@ export default {
     background: #F4F5F6;
     border-radius: 10px;
     padding: 16px;
+    overflow-x: scroll;
     .tree-chips {
       background: #FFFFFF;
       margin-right: 10px;
     }
   }
   .question-tree {
-    height: 382px;
+    height: 378px;
     overflow-x: scroll;
-    margin-top: 2px;
+    margin-top: 10px;
   }
   .default-details-container {
     .detail-box {
@@ -457,7 +468,7 @@ export default {
     }
   }
 }
-@media screen and (min-width: 1240px) {
+@media screen and (min-width: 881px) {
   .choose-tree-box {
     padding-right: 15px;
   }

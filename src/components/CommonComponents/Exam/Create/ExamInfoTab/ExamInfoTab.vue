@@ -108,7 +108,7 @@ export default {
           name: 'title',
           responseKey: 'data.title',
           label: 'عنوان آزمون',
-          placeholder: ' ',
+          placeholder: 'وارد کنید',
           col: 'col-12 col-md-3 col-sm-6'
         },
         {
@@ -119,6 +119,7 @@ export default {
           placeholder: ' ',
           value: 'کنکور',
           options: [],
+          behavior: 'menu',
           disable: true,
           col: 'col-12 col-md-3 col-sm-6',
           icon: 'isax:arrow-right-3',
@@ -129,7 +130,8 @@ export default {
           name: 'temp.major',
           responseKey: 'data.temp.major',
           label: 'رشته تحصیلی',
-          placeholder: ' ',
+          placeholder: 'انتخاب کنید',
+          behavior: 'menu',
           col: 'col-12 col-md-3 col-sm-6',
           dropdownIcon: 'isax:arrow-down-1',
           options: []
@@ -139,7 +141,8 @@ export default {
           name: 'temp.grade',
           responseKey: 'data.temp.grade',
           label: 'پایه تحصیلی',
-          placeholder: ' ',
+          placeholder: 'انتخاب کنید',
+          behavior: 'menu',
           col: 'col-12 col-md-3 col-sm-6',
           dropdownIcon: 'isax:arrow-down-1',
           options: []
@@ -260,6 +263,25 @@ export default {
 
     loadMajorInput (options) {
       this.loadSelectInputOptions('temp.major', options)
+    },
+
+    isValid () {
+      let error = false
+      const messages = []
+      if (!this.exam.title) {
+        error = true
+        messages.push('عنوان آزمون مشخص نشده است.')
+      }
+      if (!this.exam.temp.major) {
+        error = true
+        messages.push('رشته آزمون مشخص نشده است.')
+      }
+      if (!this.exam.temp.grade) {
+        error = true
+        messages.push('پایه آزمون مشخص نشده است.')
+      }
+
+      return { error, messages }
     },
     goToNextStep () {
       this.$emit('nextTab')

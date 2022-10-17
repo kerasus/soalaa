@@ -45,33 +45,42 @@
             />
           </div>
           <div class="logo-pic">
-            <q-btn flat
-                   :to="{name: 'HomePage'}"
-                   class="homepage"
+            <div
+              class="homepage"
             >
               <q-img
                 class="logo-pic-img"
                 src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
+                @click="routeTo('HomePage')"
               />
-            </q-btn>
+            </div>
           </div>
         </div>
         <!--        -----------------------------------------------------Tabs Section--------------------------------------------   -->
         <div class="user-tab-section">
           <q-list class="flex tabs-list">
-            <q-item
-              v-for="(item, index) in headerItems"
+            <div
+              v-for="(item , index) in headerItems"
               :key="index"
-              v-ripple
-              clickable
-              :active="isRouteSelected(item.to)"
-              active-class="active-item"
-              :to="{ name: item.to }"
+              class="tabs-list-container"
             >
-              <q-item-section class="tab-title">
-                {{ item.title }}
-              </q-item-section>
-            </q-item>
+              <div
+                v-if="showMenuItem(item)"
+                class="self-center"
+              >
+                <q-item
+                  v-ripple
+                  clickable
+                  :active="isRouteSelected(item.to)"
+                  active-class="active-item"
+                  :to="{ name: item.to }"
+                >
+                  <q-item-section class="tab-title">
+                    {{ item.title }}
+                  </q-item-section>
+                </q-item>
+              </div>
+            </div>
           </q-list>
         </div>
         <!--        -----------------------------------------------------Actions Section--------------------------------------------   -->
@@ -179,11 +188,9 @@
                           </q-expansion-item>
                           <q-item
                             v-else
-                            v-model="clickedItem"
                             :to="(item.routeName) ? {name: item.routeName} : null"
                             class="item-list"
-                            :class="{ 'alone-item': !item.children.length , 'alone-item-mode-drawer' : mode === 'drawer'}"
-                            :exact-active-class="getQItemExactActiveClass"
+                            :class="{ 'alone-item': !item.children.length }"
                           >
                             <div class="section-title">
                               <q-item-section class="list-section title-icon"
@@ -254,42 +261,15 @@
 </template>
 
 <script>
-
-import { mapGetters, mapMutations } from 'vuex'
-import { User } from 'src/models/User'
+import UserLayoutHeader from 'src/mixin/UserLayoutHeader'
+// import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'UserTemplateHeader',
+  mixins: [UserLayoutHeader],
   data () {
     return {
       selected: '',
-      headerItems: [
-        {
-          selected: 'exams',
-          title: 'آزمون های سه‌آ',
-          to: 'User.Exam.List'
-        },
-        {
-          selected: 'questionBank',
-          title: 'بانک سوالا',
-          to: 'User.Create.Exam'
-        }
-        // {
-        //   selected: 'soalaMag',
-        //   title: 'سوالامگ',
-        //   to: ''
-        // },
-        // {
-        //   selected: 'askedQuestions',
-        //   title: 'سوالات متداول',
-        //   to: ''
-        // },
-        // {
-        //   selected: 'contactUs',
-        //   title: 'تماس با ما',
-        //   to: ''
-        // }
-      ],
       titlesList: [
         {
           title: 'پروفایل',
@@ -318,45 +298,48 @@ export default {
       ]
     }
   },
-  computed: {
-    ...mapGetters('Auth', [
-      'user'
-    ]),
-    ...mapGetters('AppLayout', [
-      'layoutLeftDrawerVisible'
-    ]),
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    },
-    isUserLogin() {
-      return this.$store.getters['Auth/isUserLogin']
-    },
-    isRouteSelected () {
-      return (itemName) => {
-        return (this.$route.name === itemName)
-      }
-    },
-    showMenuItem () {
-      return (item) => {
-        return (item.permission === 'all' || this.user.hasPermission(item.permission))
+  watch: {
+    'windowSize.x': {
+      handler() {
+        this.updateLayout()
       }
     }
   },
+  mounted() {
+    this.updateLayout()
+  },
+  computed: {
+    isUserLogin() {
+      return this.$store.getters['Auth/isUserLogin']
+    },
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    }
+  },
   methods: {
-    ...mapMutations('AppLayout', [
-      'updateLayoutLeftDrawerVisible'
-    ]),
     toggleLeftDrawer () {
-      this.updateLayoutLeftDrawerVisible(true)
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
+    },
+    updateLayout() {
+      if (this.$route.name === 'HomePage') {
+        if (this.windowSize.x > 599) {
+          this.updateLayoutLeftDrawerWidth(285)
+        } else if (this.windowSize.x <= 599) {
+          this.updateLayoutLeftDrawerWidth(180)
+        }
+      }
+    },
+    updateLayoutLeftDrawerWidth(value) {
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', value)
     },
     logOut () {
       return this.$store.dispatch('Auth/logOut')
     },
     goToLogin() {
       this.$router.push({ name: 'login' })
+    },
+    routeTo(name) {
+      this.$router.push({ name })
     }
   }
 }
@@ -384,7 +367,7 @@ export default {
     padding-left: 30px;
     padding-right: 30px;
   }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 599px) {
     padding-left: 20px;
     padding-right: 20px;
   }
@@ -420,9 +403,13 @@ export default {
       padding-right: 35px;
     }
     @media screen and (max-width: 1023px) {
+      padding-left: 30px;
+      padding-right: 30px;
+      height: 64px;
+    }
+    @media screen and (max-width: 599px) {
       padding-left: 20px;
       padding-right: 20px;
-      height: 64px;
     }
     .user-header-section {
       display: grid;
@@ -453,10 +440,7 @@ export default {
           @media screen and (max-width: 1023px) {
             height: 64px;
           }
-          :deep(.homepage.q-btn) {
-            .q-btn__content {
-              margin: 0;
-            }
+          :deep(.homepage) {
             .logo-pic-img {
               height: 72px;
               width: 72px;
@@ -475,6 +459,10 @@ export default {
           @media screen and (max-width: 1023px) {
             display: block;
             margin-right: 20px;
+            margin-left: -8px;
+          }
+          @media screen and (max-width: 599px) {
+            margin-left: 0;
           }
         }
         .drawer-btn {
@@ -492,6 +480,9 @@ export default {
             font-weight: 400;
             font-size: 16px;
             line-height: 25px;
+          }
+          .tabs-list-container{
+            display: grid;
           }
         }
         @media screen and (max-width: 1023px) {

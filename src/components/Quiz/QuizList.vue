@@ -3,7 +3,7 @@
     <div v-if="exams.list.length > 0"
          class="quiz-list-container">
       <div class="row q-pt-md">
-        <div class="col-12 col-md-6">
+        <div :class="quizType === 'myExam' ? 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6' : 'col-xs-10 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
 
           <div class="search-bar">
             <q-input v-model="searchInExams"
@@ -20,7 +20,8 @@
             </q-input>
           </div>
         </div>
-        <div class="col-12 col-md-6 filter-btn-col">
+        <div class="filter-btn-col"
+             :class="quizType === 'myExam' ? 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6' : 'col-xs-2 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
           <q-btn
             v-if="quizType === 'myExam'"
             unelevated
@@ -97,7 +98,7 @@
             <q-item-section>
               <div class="row quiz-list-item-row">
                 <div class="quiz-list-item-name ellipses"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-4 col-md-5 col-lg-5 col-xl-5' : 'col-xs-12 col-sm-4 col-md-5 col-lg-5 col-xl-5'">
+                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-5 col-md-5 col-lg-5 col-xl-5' : 'col-xs-12 col-sm-4 col-md-5 col-lg-5 col-xl-5'">
                   <span v-if="$q.screen.lt.sm"
                         class="quiz-list-res-title">
                     عنوان آزمون :
@@ -114,7 +115,7 @@
                   {{item.type.value === 'konkur' ? 'تست' : 'شخصیت شناسی'}}
                 </div>
                 <div class="quiz-list-item-schedule ellipses"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-2 col-lg-2 col-xl-2' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'"
+                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'"
                 >
                   <span v-if="$q.screen.lt.sm"
                         class="quiz-list-res-title time">
@@ -128,7 +129,7 @@
                   </div>
                 </div>
                 <div class="quiz-list-item-action"
-                     :class="{'has-secondary':getExamActons(item).secondary,'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3': quizType === 'myExam','col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-3': quizType === 'exam' }"
+                     :class="{'has-secondary':getExamActons(item).secondary,'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2': quizType === 'myExam','col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-3': quizType === 'exam' }"
                 >
                   <q-btn v-if="getExamActons(item).primary"
                          class="quiz-action-btn"
@@ -594,6 +595,10 @@ export default defineComponent({
 
         &::before{
           border: none;
+        }
+
+        @media only screen and (max-width: 390px){
+          width: 100%;
         }
       }
 

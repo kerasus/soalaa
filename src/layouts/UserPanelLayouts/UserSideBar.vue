@@ -1,5 +1,8 @@
 <template>
-  <div class="user-panel-side-bar">
+  <div
+    v-if="$route.name !== 'HomePage'"
+    class="user-panel-side-bar"
+  >
     <div v-if="isUserLogin"
          class="bg-primary profile-box">
       <div class="profile-detail">
@@ -59,10 +62,12 @@
     >
       <user-panel-base-menu />
     </div>
-    <!--     Todo : usage of :mode="'drawer'" for panel in mobile size , default is 'sideBar'-->
-    <!--    <div class="bg-white">-->
-    <!--      <user-panel-base-menu :mode="'drawer'" />-->
-    <!--    </div>-->
+  </div>
+  <div
+    v-else
+    class="user-panel-side-drawer-container"
+  >
+    <user-panel-side-drawer />
   </div>
 </template>
 
@@ -70,9 +75,10 @@
 
 import { User } from 'src/models/User'
 import UserPanelBaseMenu from 'layouts/UserPanelLayouts/UserPanelBaseMenu'
+import UserPanelSideDrawer from 'layouts/UserPanelLayouts/UserPanelSideDrawer'
 export default {
   name: 'UserSideBar',
-  components: { UserPanelBaseMenu },
+  components: { UserPanelSideDrawer, UserPanelBaseMenu },
   data () {
     return {
       clickedItem: null
@@ -97,6 +103,9 @@ export default {
       return (item) => {
         return (item.permission === 'all' || this.user.hasPermission(item.permission))
       }
+    },
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
     }
   }
 }
@@ -104,6 +113,9 @@ export default {
 
 <style lang="scss" scoped>
 .user-panel-side-bar {
+  @media screen and (max-width: 1023px) {
+    //display: none;
+  }
   .profile-box {
     font-style: normal;
     font-weight: 400;
@@ -112,15 +124,12 @@ export default {
     text-align: left;
     color: #FFFFFF;
 
-    width: 277px;
+    width: 100%;
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 16px;
-    @media screen and (max-width: 1919px) {
-      width: 273px;
-    }
+
     @media screen and (max-width: 1439px) {
-      width: 220px;
       font-weight: 400;
       font-size: 12px;
       line-height: 19px;
@@ -208,17 +217,15 @@ export default {
     }
   }
   .side-menu-main-layout {
-    width: 277px;
+    width: 100%;
     min-height: 480px;
     border-radius: 20px;
     padding: 24px;
     display: grid;
     @media screen and (max-width: 1919px) {
-      width: 273px;
       min-height: 480px;
     }
     @media screen and (max-width: 1439px) {
-      width: 220px;
       border-radius: 16px;
       padding-right: 16px;
       padding-left: 16px;
@@ -241,5 +248,10 @@ export default {
     }
   }
 }
-
+.user-panel-side-drawer-container {
+  display: none;
+  @media screen and (max-width: 1023px) {
+    display: block;
+  }
+}
 </style>

@@ -19,9 +19,10 @@
         <q-input
           ref="userName"
           v-model="username"
-          filled
           bottom-slots
           hide-bottom-space
+          autocomplete="off"
+          onfocus="this.removeAttribute('readonly');"
           name="userName"
           placeholder=" - - - - - - - - - 09"
           @keydown.enter="getEnter('pass')"
@@ -35,8 +36,6 @@
         <q-input
           ref="pass"
           v-model="password"
-          filled
-          bottom-slots
           name="pass"
           hide-bottom-space
           type="password"
@@ -180,42 +179,42 @@ export default {
   .national-code{
     margin-bottom: 56px;
   }
-  :deep(.q-field__control){
-    &::after{
-      height: 0;
-    }
-  }
-  :deep(.q-field ) {
-    margin: 0 ;
-
-  }
-  :deep(.q-field .q-field__control) {
-    height: 40px;
-    border-radius: 8px;
-    color:#6D708B!important;
-
-  }
-  :deep(.q-field--focused .q-field__control) {
-    background: #fff !important;
+:deep(.q-field--focused) {
+  appearance: none;
+}
+  &:deep(.q-field--focused .q-field__control) {
+    background-color: rgba(255,255,255,0) !important;
+    appearance: none;
     border: 1px solid #FFB74D;
     box-shadow: 0 0 0 2px #FFEDD2;
     border-radius: 8px;
-
   }
 
-  :deep(.q-field--focused .q-field__inner){
-    background: #FFFFFF !important;
+  &:deep(.q-field .q-field__control) {
+    height: 40px;
+    background: #F2F5F9;
+    border-radius: 8px;
   }
 
-    //.q-field .q-field__control
-
-  :deep(.q-field__native) {
+  &:deep(.q-field__native) {
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 22px;
-    //color: #6D708B;
-    padding:11px 16px !important;
+    color: #6D708B !important;
+  }
+  :deep(.q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input){
+    padding: 8px 16px;
+    border-radius: 8px
+  }
+
+  :deep(.q-field__control){
+    &::after{
+      height: 0;
+    }
+    &::before{
+      border-bottom: none;
+    }
   }
 }
 @media only screen and (max-width: 1023px){

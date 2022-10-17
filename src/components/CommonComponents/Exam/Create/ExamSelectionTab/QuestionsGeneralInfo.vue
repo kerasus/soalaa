@@ -30,7 +30,7 @@
           <div class="chosen-questions-general-info">
             <div class="check-all">
               <q-checkbox
-                v-model="checkbox"
+                v-model="checkBoxValue"
                 class="check-all-checkbox"
                 label="انتخاب همه"
                 indeterminate-value="maybe"
@@ -180,7 +180,7 @@
              class="chosen-questions-general-info">
           <div class="check-all">
             <q-checkbox
-              v-model="checkbox"
+              v-model="checkBoxValue"
               class="check-all-checkbox"
               label="انتخاب همه"
               :disable="loading"
@@ -336,7 +336,7 @@ export default {
       default: false
     },
     checkBox: {
-      type: Boolean,
+      type: [Boolean, String],
       default () {
         return false
       }
@@ -345,8 +345,8 @@ export default {
 
   data () {
     return {
+      checkBoxValue: false,
       selectAllCheckbox: false,
-      checkbox: this.checkBox,
       questions: new QuestionList(),
       ToolbarDialog: false,
       chartOptions: {
@@ -407,6 +407,9 @@ export default {
       this.setDifficultyLevelsChart()
       this.numberOfQuestions()
       this.replaceTitle()
+    },
+    checkBox (newVal) {
+      this.checkBoxValue = newVal
     }
   },
 
@@ -442,7 +445,8 @@ export default {
     'deselectAllQuestions',
     'remove',
     'nextTab',
-    'lastTab'
+    'lastTab',
+    'update:checkbox'
   ],
 
   created () {
@@ -468,7 +472,7 @@ export default {
     },
 
     selectAllQuestions () {
-      if (this.checkbox) {
+      if (this.checkBoxValue) {
         this.$emit('selectAllQuestions')
         return
       }

@@ -4,28 +4,30 @@
     :class="{ 'selected': ( selected || question.selected) && !finalApprovalMode }"
   >
     <q-resize-observer @resize="onResize" />
-    <q-card-section class="question-card-header row">
+    <q-card-section class="question-card-header items-center row">
       <div class="question-info col-xl-9 col-sm-8 col-xs-12">
         <div
-          v-if="listConfig.questionId"
           class="question-card-chip-id"
         >
-          <q-chip class="question-id ">
-            سوال
-            <q-skeleton
-              v-if="question.loading"
-              class="chip-dynamic-text"
-              type="text"
-              width="110px"
-            />
-            <span class="chip-dynamic-text ellipsis">
-              {{ question.code }}
-            </span>
-          </q-chip>
+          <q-skeleton
+            v-if="question.loading"
+            class="chip-dynamic-text"
+            type="text"
+            width="110px"
+          />
+          <div v-else-if="question.code">
+            <q-chip class="question-id ">
+              سوال
+              <span
+                class="chip-dynamic-text ellipsis">
+                {{ question.code }}
+              </span>
+            </q-chip>
+          </div>
         </div>
 
         <div
-          v-if="listConfig.questionLevel"
+          v-if="listConfig.questionLevel || question.loading "
           class="question-level"
         >
           <div
@@ -67,7 +69,7 @@
       </div>
 
       <div
-        v-if="listConfig.questionSource"
+        v-if="listConfig.questionSource || question.loading "
         class="question-source col-xl-3 col-sm-4 col-xs-6"
       >
         <div
@@ -134,22 +136,24 @@
         </div>
       </div>
       <div
-        v-if="listConfig.questionInfo && question.tags.list.length > 0"
+        v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
         class="question-tags ellipsis col-sm-12 col-xs-6"
       >
+        <div v-for="i in 3"
+             :key="i">
+          <q-skeleton
+            v-if="question.loading"
+            class="info-title q-mx-sm"
+            type="text"
+            width="80px"
+          />
+        </div>
         <div
           v-for="(item, index) in question.tags.list"
           :key="index"
           class="question-tag"
         >
-          <q-skeleton
-            v-if="question.loading"
-            class="info-title"
-            type="text"
-            width="80px"
-          />
           <div
-            v-else
             class="tag-box no-wrap flex items-center"
           >
             <div class="tag-title ellipsis">{{ item.title }}</div>
@@ -168,18 +172,24 @@
         v-if="finalApprovalMode || showQuestionNumber"
         class="question-index"
       >
-        <div class="question-number">{{ finalApprovalMode ? questionIndex + 1 : question.order }}</div>
+        <div class="question-number-box">
+          <div class="question-number">{{ finalApprovalMode ? questionIndex + 1 : question.order }}</div>
+        </div>
       </div>
 
-      <div
-        v-else
-        class="question-icon"
-        :class="isLtrQuestion() ? 'order-last' : ''"
-      />
+      <div v-else>
+        <div class="question-icon-box">
+          <div
+            class="question-icon"
+            :class="isLtrQuestion() ? 'order-last' : ''"
+          />
+        </div>
+      </div>
 
       <div class="question full-width">
         <question
           ref="questionComponent"
+          :loading="question.loading"
           :question="question"
         />
       </div>
@@ -748,6 +758,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: left;
+       min-height: 36px;
 
       @media only screen and (max-width: 599px) {
         order: 2;
@@ -763,6 +774,9 @@ export default {
             line-height: 19px;
             color: #434765;
             text-align: right;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             .source-date {
               text-align: end;
             }
@@ -855,10 +869,21 @@ export default {
 
     .question-index {
       position: relative;
-
-      .question-number {
+      background: #00bcd4;
+      .question-number-box{
         position: absolute;
         left: -44px;
+        width: 34px;
+        height: var(--katexLineHeight);
+        display: flex;
+        align-items: center;
+        @media only screen and (max-width: 1023px) {
+          width: 26px;
+          left: -30px;
+        }
+      }
+
+      .question-number {
         width: 34px;
         height: 36px;
         background: var(--3a-Primary);
@@ -872,9 +897,13 @@ export default {
         @media only screen and (max-width: 1023px) {
           width: 26px;
           height: 28px;
-          left: -30px;
         }
       }
+    }
+    .question-icon-box{
+      height: var(--katexLineHeight);
+      display: flex;
+      align-items: center;
     }
 
     .question-icon {
@@ -1119,6 +1148,23 @@ export default {
   padding: 12px 24px 20px 24px;
   width: 348px;
   height: 496px;
+  .problem-type{
+    .report-select-type{
+      :deep(.q-field__native){
+        span{
+          max-width: 250px;
+          max-height: 21px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          line-clamp: 1;
+          -webkit-box-orient: vertical;
+        }
+      }
+    }
+
+  }
 
   .header-section {
     padding: 0;
