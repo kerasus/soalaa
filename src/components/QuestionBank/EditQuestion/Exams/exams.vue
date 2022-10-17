@@ -142,9 +142,6 @@
 </template>
 
 <script>
-/* eslint-disable */
-
-import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
@@ -189,9 +186,8 @@ export default {
   },
   methods: {
     attachQuestionOnEditMode () {
-      console.log('attachQuestionOnEditMode :')
       this.attachLoading = true
-      axios.post(API_ADDRESS.question.attach, {
+      this.$axios.post(API_ADDRESS.question.attach, {
         // order: this.attachOrder,
         // exam_id: this.attachExamID,
         question_id: this.$route.params.id
@@ -199,7 +195,6 @@ export default {
       })
         .then(response => {
           this.updateAttachList(response.data.data.exams)
-          console.log('response for attach :', response)
           this.attachLoading = false
           this.dialog = false
         })
@@ -214,11 +209,10 @@ export default {
     attach () {
       if (this.chooseExam && this.chooseLesson && this.examOrder) {
         const exam = this.examList.list.find(examItem => examItem.id === this.chooseExam.id)
-        // eslint-disable-next-line camelcase
-        const sub_category = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson.id)
+        const subCategory = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson.id)
         const emitData = {
           exam,
-          sub_category,
+          sub_category: subCategory,
           order: this.examOrder
         }
         this.$emit('attach', emitData)

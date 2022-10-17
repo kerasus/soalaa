@@ -70,7 +70,6 @@
 import { mixinGetQuizData } from 'src/mixin/Mixins'
 import { Exam } from 'src/models/Exam'
 import { QuestCategoryList } from 'src/models/QuestCategory'
-import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 // import CategoryList from 'components/Category/categoryList'
@@ -126,7 +125,7 @@ export default {
       }
     },
     getLessons () {
-      return axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.examId))
+      return this.$axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.examId))
     },
     goToSubCategoryList (id) {
       this.$router.push({
