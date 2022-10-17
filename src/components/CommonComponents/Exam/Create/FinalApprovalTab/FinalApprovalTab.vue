@@ -15,101 +15,101 @@
                class="exam-detail-content">
             <div class="row q-col-gutter-x-lg">
 
-              <div class="col-lg-12 col-md-8 col-sm-6">
-                <div class="exam-details row q-col-gutter-x-lg">
-                  <div class="col-12 exam-specifications">
-                    <div class="header-title"> مشخصات آزمون</div>
-                    <div class=" exam-title">
-                      <p class="ellipsis">
-                        آزمون {{ exam.id }}
-                      </p>
+            <div class="col-lg-12 col-md-8 col-sm-6">
+              <div class="exam-details row q-col-gutter-x-lg">
+                <div class="col-12 exam-specifications">
+                  <div class="header-title"> مشخصات آزمون </div>
+                  <div class=" exam-title">
+                    <p class="ellipsis">
+                      آزمون  {{exam.id}}
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-md-6 col-sm-12">
+                  <div class=" exam-detail-item">
+                    <div class="field">نوع آزمون:</div>
+                    <div class="value">
+                      عادی
                     </div>
                   </div>
-                  <div class="col-lg-12 col-md-6 col-sm-12">
-                    <div class=" exam-detail-item">
-                      <div class="field">نوع آزمون:</div>
-                      <div class="value">
-                        عادی
-                      </div>
+                </div>
+                <div class="col-lg-12 col-md-6 col-sm-12">
+                  <div class="exam-detail-item">
+                    <div class="field">عنوان آزمون: </div>
+                    <div class="value exam-title ellipsis">
+                      {{ exam.title }}
                     </div>
                   </div>
-                  <div class="col-lg-12 col-md-6 col-sm-12">
-                    <div class="exam-detail-item">
-                      <div class="field">عنوان آزمون:</div>
-                      <div class="value exam-title ellipsis">
-                        {{ exam.title }}
-                      </div>
+                </div>
+                <div class="col-lg-12 col-md-6 col-sm-12">
+                  <div class="exam-detail-item">
+                    <div class="field">رشته تحصیلی:</div>
+                    <div class="value">
+                      {{ examMajor() }}
                     </div>
                   </div>
-                  <div class="col-lg-12 col-md-6 col-sm-12">
-                    <div class="exam-detail-item">
-                      <div class="field">رشته تحصیلی:</div>
-                      <div class="value">
-                        {{ examMajor() }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-12 col-md-6 col-sm-12">
-                    <div class="exam-detail-item">
-                      <div class="field">پایه تحصیلی:</div>
-                      <div class="value">
-                        {{ examGrade() }}
-                      </div>
+                </div>
+                <div class="col-lg-12 col-md-6 col-sm-12">
+                  <div class="exam-detail-item">
+                    <div class="field">پایه تحصیلی:</div>
+                    <div class="value">
+                      {{ examGrade() }}
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-lg-12 col-md-4 col-sm-6">
-                <div class="selected-questions">
-                  <div class="title"> سوالات انتخابی</div>
-                  <div class="chart-box row ">
-                    <div class="col-md-4 col-sm-12 type-box">
-                      <div class="chart-titles">
-                        <q-badge class="titles-icon hard"
-                                 rounded />
-                        <div>سخت</div>
-                      </div>
-                      <div class="chart-titles">
-                        <q-badge class="titles-icon medium"
-                                 rounded></q-badge>
-                        <div>متوسط</div>
-                      </div>
-                      <div class="chart-titles">
-                        <q-badge class="titles-icon easy"
-                                 rounded></q-badge>
-                        <div>آسان</div>
-                      </div>
+            </div>
+            <div class="col-lg-12 col-md-4 col-sm-6">
+              <div class="selected-questions">
+                <div class="title"> سوالات انتخابی</div>
+                <div class="chart-box row ">
+                  <div class="col-md-4 col-sm-12 type-box">
+                    <div class="chart-titles">
+                      <q-badge class="titles-icon hard"
+                               rounded />
+                      <div>سخت</div>
                     </div>
-                    <div class="chart-b col-md-8 col-sm-12">
-                      <chart ref="chart"
-                             class="row justify-center"
-                             :options="chartOptions" />
+                    <div class="chart-titles">
+                      <q-badge class="titles-icon medium"
+                               rounded></q-badge>
+                      <div>متوسط</div>
+                    </div>
+                    <div class="chart-titles">
+                      <q-badge class="titles-icon easy"
+                               rounded></q-badge>
+                      <div>آسان</div>
                     </div>
                   </div>
-                  <div class="row q-col-gutter-sm action-btn">
-                    <div class=" confirm-b col-lg-12 col-sm-6">
-                      <q-btn
-                        unelevated
-                        color="primary"
-                        :disable="exam.loading"
-                        class="full-width confirm q-mr-xl"
-                        @click="confirmExam"
-                      >
-                        تایید نهایی
-                        <span :hidden="$q.screen.lt.lg">و ساخت آزمون</span>
-                      </q-btn>
-                    </div>
-                    <div class="previous-b col-lg-12 col-sm-6">
-                      <q-btn
-                        unelevated
-                        :disable="exam.loading"
-                        class="full-width q-mr-xl previous"
-                        @click="goToPrevious"
-                      >
-                        بازگشت
-                      </q-btn>
-                    </div>
+                  <div class="chart-b col-md-8 col-sm-12">
+                    <chart ref="chart"
+                           class="row justify-center"
+                           :options="chartOptions" />
                   </div>
+                </div>
+              </div>
+            </div>
+            <div class="action-btn">
+              <div class=" confirm-b ">
+                <q-btn
+                  unelevated
+                  color="primary"
+                  :disable="exam.loading"
+                  class="full-width confirm q-mr-xl"
+                  @click="confirmExam"
+                >
+                  تایید نهایی
+                  <span :hidden="$q.screen.lt.lg">و ساخت آزمون</span>
+                </q-btn>
+              </div>
+              <div class="previous-b ">
+                <q-btn
+                  unelevated
+                  :disable="exam.loading"
+                  class="full-width q-mr-xl previous"
+                  @click="goToPrevious"
+                >
+                  بازگشت
+                </q-btn>
                 </div>
               </div>
               <!--          <q-separator class="q-my-lg" />-->
@@ -452,7 +452,15 @@ export default {
     }
 
     .action-btn {
+      width: 100%;
+      @media screen and(max-width: 1439px) {
+        display: grid;
+        justify-content: flex-end;
+        grid-template-columns: 140px 140px;
+        column-gap: 12px;
+      }
       .confirm-b {
+        margin-bottom: 12px;
         @media screen and (max-width: 1439px) {
           order: 1
         }
