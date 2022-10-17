@@ -3,7 +3,7 @@
     <div v-if="exams.list.length > 0"
          class="quiz-list-container">
       <div class="row q-pt-md">
-        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <div :class="quizType === 'myExam' ? 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6' : 'col-xs-10 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
 
           <div class="search-bar">
             <q-input v-model="searchInExams"
@@ -20,7 +20,8 @@
             </q-input>
           </div>
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 filter-btn-col">
+        <div class="filter-btn-col"
+             :class="quizType === 'myExam' ? 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6' : 'col-xs-2 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
           <q-btn
             v-if="quizType === 'myExam'"
             unelevated

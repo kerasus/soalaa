@@ -117,12 +117,12 @@ export default {
             innerSize: '98%',
             startAngle: 0,
             endAngle: 0,
-            borderWidth: 13,
+            borderWidth: 20,
             center: ['50%', '52%'],
             size: '150%',
             borderColor: null,
             backgroundColor: '#F2F5F9',
-            slicedOffset: 15,
+            slicedOffset: 16,
             dataLabels: {
               connectorWidth: 0
             }
@@ -131,7 +131,8 @@ export default {
         title: {
           y: 20,
           style: {
-            useHTML: true
+            useHTML: true,
+            fontSize: '12px'
           },
           verticalAlign: 'middle',
           floating: true,
@@ -170,12 +171,12 @@ export default {
             innerSize: '98%',
             startAngle: 0,
             endAngle: 0,
-            borderWidth: 13,
+            borderWidth: 20,
             center: ['50%', '52%'],
             size: '150%',
             borderColor: null,
             backgroundColor: '#F2F500',
-            slicedOffset: 15,
+            slicedOffset: 16,
             dataLabels: {
               connectorWidth: 0
             }
@@ -184,7 +185,8 @@ export default {
         title: {
           y: 20,
           style: {
-            useHTML: true
+            useHTML: true,
+            fontSize: '12px'
           },
           verticalAlign: 'middle',
           floating: true,
@@ -218,7 +220,7 @@ export default {
       }
 
       this.chartOptionsExam.plotOptions.pie.endAngle = ((this.subscribe.abilities_n.exam - this.subscribe.made.exam) * 360) / this.subscribe.abilities_n.exam
-      this.chartOptionsExam.title.text = `${((this.subscribe.abilities_n.exam - this.subscribe.made.exam) * 360) / this.subscribe.abilities_n.pdf_questions}<br>آزمون باقی‌مانده`
+      this.chartOptionsExam.title.text = `${(this.subscribe.abilities_n.exam - this.subscribe.made.exam)}<br>آزمون باقی‌مانده`
       this.chartOptionsExam.series[0].data[0].y = (this.subscribe.abilities_n.exam - this.subscribe.made.exam)
     },
     updateChartOptionsPdf () {
@@ -227,8 +229,8 @@ export default {
       }
 
       this.chartOptionsPdf.plotOptions.pie.endAngle = ((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions
-      this.chartOptionsPdf.title.text = `PDF ${((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions} باقی‌مانده`
-      this.chartOptionsPdf.series[0].data[0].y = ((this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions) * 360) / this.subscribe.abilities_n.pdf_questions
+      this.chartOptionsPdf.title.text = `PDF ${(this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions)} باقی‌مانده`
+      this.chartOptionsPdf.series[0].data[0].y = (this.subscribe.abilities_n.pdf_questions - this.subscribe.made.pdf_questions)
     }
   }
 }
