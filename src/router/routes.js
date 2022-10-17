@@ -253,8 +253,15 @@ const routes = [
           },
           {
             path: 'exam/create',
-            name: 'User.Create.Exam',
-            component: () => import('pages/User/exam/Create/Create')
+            name: 'User.Create',
+            component: () => import('layouts/UserPanelLayouts/UserPanelNoNavigationLayout'),
+            children: [
+              {
+                path: '',
+                name: 'User.Create.Exam',
+                component: () => import('pages/User/exam/Create/Create')
+              }
+            ]
           }
         ]
       },
