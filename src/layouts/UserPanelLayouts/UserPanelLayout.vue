@@ -65,18 +65,30 @@ export default {
 <style scoped lang="scss">
 .user-panel-layout {
   display: grid;
-  grid-template-columns: 277px auto;
+  justify-content: center;
+  grid-template-columns: 277px 1050px;
   column-gap:35px;
+  @media screen and (max-width: 1439px) {
+    grid-template-columns: 220px 708px;
+    column-gap: 32px
+  }
+  @media screen and (max-width: 1023px) {
+    grid-template-columns: 100%;
+  }
+
   &.full-content-size{
-    grid-template-columns: 100%;
+    grid-template-columns: 1362px;
+    @media screen and (max-width: 1439px) {
+      grid-template-columns: 964px;
+    }
+    @media screen and (max-width: 1023px) {
+      grid-template-columns: 540px;
+    }
+    @media screen and (max-width: 599px) {
+      grid-template-columns: 100%;
+    }
   }
-  @media screen and (max-width: 1439px){
-    grid-template-columns: 220px auto;
-    column-gap: 32px;
-  }
-  @media screen and (max-width: 1023px){
-    grid-template-columns: 100%;
-  }
+
   .side-bar-box{
     @media screen and (max-width: 1023px){
       display: none;
