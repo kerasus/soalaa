@@ -3,6 +3,7 @@
     & > .root {
       /*rtl:ignore*/
       margin-left:.27777778em;
+      /*rtl:ignore*/
       margin-right:-.55555556em
     }
   }
@@ -21,11 +22,13 @@
   .brace-left {
     /*rtl:ignore*/
     left: 0;
+    /*rtl:ignore*/
     right: auto;
   }
   .brace-right {
     /*rtl:ignore*/
     right: 0;
+    /*rtl:ignore*/
     left: auto;
   }
   .vlist-t2 {
