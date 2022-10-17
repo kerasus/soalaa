@@ -254,7 +254,7 @@ const routes = [
           {
             path: 'exam/create',
             name: 'User.Create',
-            component: () => import('layouts/UserPanelLayouts/UserPanelNoNavigationLayout'),
+            component: () => import('layouts/boxedLayout'),
             children: [
               {
                 path: '',
