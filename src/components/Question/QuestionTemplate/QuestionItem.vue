@@ -377,7 +377,7 @@
 
 <script>
 import VueKatex from 'src/components/VueKatex'
-import question from 'components/CommonComponents/Exam/Create/QuestionTemplate/Question'
+import question from 'components/Question/QuestionTemplate/Question'
 // import VideoPlayer from 'src/components/VideoPlayer'
 import { Question } from 'src/models/Question'
 import API_ADDRESS from 'src/api/Addresses'
@@ -869,10 +869,10 @@ export default {
 
     .question-index {
       position: relative;
-      background: #00bcd4;
+      width: 15px;
       .question-number-box{
         position: absolute;
-        left: -44px;
+        left: -25px;
         width: 34px;
         height: var(--katexLineHeight);
         display: flex;

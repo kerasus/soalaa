@@ -73,7 +73,7 @@
 
 <script>
 import VueKatex from 'src/components/VueKatex'
-import MultipleChoicesTemplate from 'components/CommonComponents/Exam/Create/QuestionTemplate/MultipleChoicesTemplate'
+import MultipleChoicesTemplate from 'components/Question/QuestionTemplate/MultipleChoicesTemplate'
 import { Question } from 'src/models/Question'
 
 export default {
