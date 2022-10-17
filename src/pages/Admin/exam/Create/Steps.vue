@@ -178,6 +178,9 @@ export default {
     @media screen and (max-width: 1200px) and (min-width: 1024px) {
       width:43%;
     }
+    @media screen and (max-width: 1439px) and (min-width: 1201px){
+      width: 40%;
+    }
   }
 
   .step-2{
@@ -197,6 +200,9 @@ export default {
     }
     @media screen and (max-width: 1200px) and (min-width: 1024px) {
       width:43%;
+    }
+    @media screen and (max-width: 1439px) and (min-width: 1201px){
+      width: 45%;
     }
   }
 
@@ -221,6 +227,9 @@ export default {
     }
     @media screen and (max-width: 1200px) and (min-width: 1024px) {
       width:12%;
+    }
+    @media screen and (max-width: 1439px) and (min-width: 1201px){
+      width: 15%;
     }
   }
 
