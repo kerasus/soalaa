@@ -663,6 +663,8 @@ export default defineComponent({
 
           @media screen and (max-width: 600px) {
             padding: 7px 7px;
+            position: absolute;
+            top: -35px;
           }
         }
 
@@ -742,6 +744,9 @@ export default defineComponent({
         @media screen and (max-width: 600px) {
           flex-direction: column;
           height: 120px;
+          position: absolute;
+          right: 5%;
+          top: 31%;
         }
       }
 
@@ -899,6 +904,9 @@ export default defineComponent({
     @media screen and (max-width: 1200px) {
       margin-right: 0;
       height: auto;
+    }
+    @media screen and (max-width: 600px) {
+      padding-top: 120px;
     }
   }
 }
