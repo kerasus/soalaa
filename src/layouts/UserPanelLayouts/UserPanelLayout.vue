@@ -1,17 +1,16 @@
 <template>
-  <div class="row user-panel-layout q-col-gutter-lg">
+  <div class="user-panel-layout"
+       :class="{'full-content-size' : !hasNavigationBar}"
+  >
     <div
       v-if="hasNavigationBar"
-      class="user-side-bar col-xl-3 col-lg-3 col-md-3"
+      class="side-bar-box"
     >
       <sticky-both-sides>
         <user-side-bar />
       </sticky-both-sides>
-
     </div>
-
-    <div class=" user-panel-content"
-         :class="hasNavigationBar ? 'col-xl-9 col-lg-9 col-md-9 col-12 ' : 'col-12'"
+    <div class="user-panel-content"
     >
       <Router :include="keepAliveComponents" />
     </div>
@@ -65,9 +64,22 @@ export default {
 
 <style scoped lang="scss">
 .user-panel-layout {
-  .user-side-bar {
-    @media screen and (max-width: 1023px) {
-     display: none;
+  display: grid;
+  grid-template-columns: 277px auto;
+  column-gap:35px;
+  &.full-content-size{
+    grid-template-columns: 100%;
+  }
+  @media screen and (max-width: 1439px){
+    grid-template-columns: 220px auto;
+    column-gap: 32px;
+  }
+  @media screen and (max-width: 1023px){
+    grid-template-columns: 100%;
+  }
+  .side-bar-box{
+    @media screen and (max-width: 1023px){
+      display: none;
     }
   }
 }

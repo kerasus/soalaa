@@ -1,6 +1,6 @@
 <template>
   <div class="container-box text-center">
-    <div class="img-box">
+    <div class="img-box text-center">
       <q-img class="img"
              src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/404.png"></q-img>
     </div>
@@ -37,7 +37,7 @@ export default {
   padding-top: 230px;
   .img-box{
     width: 462px;
-    margin-bottom: 50px;
+    margin: 0 auto 50px;
     @media screen and(max-width: 1439px) {
       width: 299px;
     }

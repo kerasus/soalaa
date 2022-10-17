@@ -1,6 +1,6 @@
 <template>
   <div class="login-page row items-center justify-center">
-    <div class="col-lg-4 col-md-5 col-sm-6 col-xs-10">
+    <div class="col-12">
       <auth />
     </div>
   </div>
