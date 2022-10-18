@@ -76,14 +76,14 @@
                 dense
         >
           <q-item-section>
+            <!--            :sub-category="quizData.sub_categories"-->
+            <!--            :exam-id="$route.params.quizId"-->
+            <!--            :consider-active-category="false"-->
+            <!--            :questions-column="$refs.questionsColumn"-->
             <question-item pageStrategy="lesson-detail"
                            :question="item"
                            :confirmLoading="confirmQLoading"
                            :listOptions="questionsOptions"
-                           :consider-active-category="false"
-                           :questions-column="$refs.questionsColumn"
-                           :exam-id="$route.params.quizId"
-                           :sub-category="quizData.sub_categories"
                            :final-approval-mode="false"
                            :show-question-number="true"
                            @detachQuestion="detachQuestion"
