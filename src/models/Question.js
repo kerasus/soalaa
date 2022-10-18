@@ -25,6 +25,7 @@ class Question extends Model {
       { key: 'id' },
       { key: '_id' },
       { key: 'title' },
+      { key: 'code' },
       { key: 'index' },
       {
         key: 'statement',
