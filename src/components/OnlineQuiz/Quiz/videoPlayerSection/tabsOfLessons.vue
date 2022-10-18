@@ -121,18 +121,16 @@
     </div>
   </div>
 </template>
-<script>
-/* eslint-disable camelcase */
 
+<script>
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 require('@silvermine/videojs-quality-selector')(videojs)
 import fa from 'video.js/dist/lang/fa.json'
-// eslint-disable-next-line no-unused-vars
-import hotkeys from 'videojs-hotkeys'
 import Assistant from 'src/plugins/assistant'
 import { AlaaSet } from 'src/models/AlaaSet'
 import { AlaaContent } from 'src/models/AlaaContent'
+import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'tabsOfLessons',
@@ -209,28 +207,29 @@ export default {
     })
   },
   methods: {
-    getContent (contentId, sub_categoryIndex) {
+    getContent (contentId, subCategoryIndex) {
       const that = this
-      this.alaaContent.show(contentId)
+      this.$axios.get(API_ADDRESS.content.base + '/' + contentId)
+      // this.alaaContent.show(contentId)
         .then((response) => {
           that.currentVideoContent = response.data.data
-          that.initVideoJs(that.currentVideoContent.file.video, sub_categoryIndex)
+          that.initVideoJs(that.currentVideoContent.file.video, subCategoryIndex)
         })
         .catch((error) => {
           Assistant.reportErrors(error)
           that.currentVideoContent = null
         })
     },
-    initVideoJs (srcs, sub_categoryIndex) {
-      if (!this.$refs['videoPlayer' + sub_categoryIndex]) {
+    initVideoJs (srcs, subCategoryIndex) {
+      if (!this.$refs['videoPlayer' + subCategoryIndex]) {
         return
       }
       const that = this
-      this.player = videojs(that.$refs['videoPlayer' + sub_categoryIndex][0], this.options,
+      this.player = videojs(that.$refs['videoPlayer' + subCategoryIndex][0], this.options,
         function onPlayerReady () {
           // console.log('onPlayerReady', this)
         })
-      this.updateTimepointsHeights(sub_categoryIndex)
+      this.updateTimepointsHeights(subCategoryIndex)
       this.updateVideoSrc(srcs)
     },
     updateVideoSrc (srcs) {
@@ -239,8 +238,8 @@ export default {
       this.player.src(updatedSrcs)
       this.player.load()
     },
-    updateTimepointsHeights (sub_categoryIndex) {
-      this.timepointsHeights = this.$refs['videoPlayer' + sub_categoryIndex][0].clientHeight
+    updateTimepointsHeights (subCategoryIndex) {
+      this.timepointsHeights = this.$refs['videoPlayer' + subCategoryIndex][0].clientHeight
     },
     playTimePoint (index) {
       this.player.pause()
@@ -306,6 +305,7 @@ export default {
   }
 }
 </script>
+
 <style scoped lang="scss">
 .video-js .vjs-current-time, .vjs-no-flex .vjs-current-time {
   display: block;

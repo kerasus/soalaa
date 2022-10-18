@@ -279,7 +279,7 @@ export default {
     },
     getContent (contentId, subCategoryIndex) {
       const that = this
-      this.$axios.get(API_ADDRESS.content.base, contentId)
+      this.$axios.get(API_ADDRESS.content.base + '/' + contentId)
         .then((response) => {
           that.currentVideo = response.data.data
           that.initVideoJs(that.currentVideo.file.video, subCategoryIndex)
