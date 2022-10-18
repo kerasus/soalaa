@@ -55,11 +55,20 @@
         </div>
       </div>
     </q-card>
-    <q-virtual-scroll ref="scroller"
-                      :key="questionListKey"
-                      class="konkoor-view-scroll q-pa-md q-mt-md"
-                      :items="filteredQuestions"
-                      @virtual-scroll="onScroll"
+    <div  v-if="pageLoading"
+          class="text-center ">
+      <q-spinner-ball
+        class="q-my-xl"
+        color="primary"
+        size="5em"
+      />
+    </div>
+    <q-virtual-scroll  v-else
+                       ref="scroller"
+                       :key="questionListKey"
+                       class="konkoor-view-scroll q-pa-md q-mt-md"
+                       :items="filteredQuestions"
+                       @virtual-scroll="onScroll"
     >
       <template v-slot="{ item, index }">
         <q-item :key="index"
@@ -106,6 +115,7 @@ export default {
   mixins: [mixinAuth, mixinQuiz],
   data () {
     return {
+      pageLoading: false,
       confirmQLoading: false,
       questionsOptions: {
         copy: true,
@@ -283,11 +293,13 @@ export default {
       this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
     },
     async loadQuizDataAndSubCategories (reload = false) {
+      this.pageLoading = true
       try {
         const response = await this.getQuizDataAndSubCategories()
         if (response.data.data.length) {
           this.firstQuestionOrder = response.data.data[0].order
           this.loadSubCategories(response, reload)
+          this.pageLoading = false
         } else {
           // this.$router.push({ name: 'Admin.Exam.Index' })
           this.$q.notify({
@@ -295,8 +307,10 @@ export default {
             message: 'دیتای مورد نظر یافت نشد'
           })
         }
+        this.pageLoading = false
       } catch (e) {
         console.error('err ', e)
+        this.pageLoading = false
       }
     },
     getQuizDataAndSubCategories () {
