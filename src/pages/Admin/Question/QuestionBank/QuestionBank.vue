@@ -32,6 +32,7 @@
               v-for="question in questions.list"
               :key="question.id"
               :question="question"
+              :listOptions="questionsOptions"
               pageStrategy="question-bank"
               @checkSelect="onClickedCheckQuestionBtn"
             />
@@ -91,6 +92,13 @@ export default {
       questionId: [],
       loadingQuestion: new Question(),
       questions: new QuestionList(),
+      questionsOptions: {
+        copy: true,
+        detachQuestion: true,
+        deleteQuestionFromDb: true,
+        editQuestion: true,
+        switch: true
+      },
       disablePagination: false,
       paginationMeta: {
         current_page: 1,
