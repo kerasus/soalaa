@@ -73,7 +73,7 @@
               pageStrategy="lesson-detail"
               :question="item"
               :confirmLoading="confirmQLoading"
-              :questionListOptions="questionsOptions"
+              :listOptions="questionsOptions"
               :consider-active-category="false"
               :questions-column="$refs.questionsColumn"
               :exam-id="$route.params.quizId"
@@ -116,6 +116,7 @@ export default {
         detachQuestion: true,
         deleteQuestionFromDb: true,
         editQuestion: true,
+        selectQuestion: false,
         switch: true
       },
       questionListKey: 0,
