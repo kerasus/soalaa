@@ -71,9 +71,8 @@
                           </q-list>
                         </div>
                         <div class="video-box">
-                          <video
-                            :ref="'videoPlayer'+ index"
-                            class="video-js vjs-default-skin vjs-16-9 vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause"
+                          <video-player :sources="contentSources"
+                                        :poster="contentPoster"
                           />
                         </div>
                       </div>
@@ -123,17 +122,16 @@
 </template>
 
 <script>
-import videojs from 'video.js'
-import 'video.js/dist/video-js.css'
-require('@silvermine/videojs-quality-selector')(videojs)
-import fa from 'video.js/dist/lang/fa.json'
 import Assistant from 'src/plugins/assistant'
 import { AlaaSet } from 'src/models/AlaaSet'
 import { AlaaContent } from 'src/models/AlaaContent'
 import API_ADDRESS from 'src/api/Addresses'
+import VideoPlayer from 'src/components/VideoPlayer.vue'
+import { PlayerSourceList } from 'src/models/PlayerSource'
 
 export default {
   name: 'tabsOfLessons',
+  components: { VideoPlayer },
   props: {
     report: {
       type: Object,
@@ -149,55 +147,13 @@ export default {
       tabPanelDisabled: false,
       innerTab: this.report.sub_category[0].sub_category,
       splitterModel: 20,
-      player: null,
-      options: {
-        controlBar: {
-          // currentTimeDisplay: true,
-          TimeDivider: true,
-          children: [
-            'playToggle',
-            'PlaybackRateMenuButton',
-            'CurrentTimeDisplay',
-            'progressControl',
-            'TimeDivider',
-            'RemainingTimeDisplay',
-            'volumePanel',
-            'SubtitlesButton',
-            'qualitySelector',
-            'fullscreenToggle',
-            'PictureInPictureToggle'
-          ],
-          volumePanel: {
-            inline: false,
-            vertical: true
-          }
-        },
-        language: 'fa',
-        languages: {
-          fa
-        },
-        autoplay: false,
-        controls: true,
-        playbackRates: [0.25, 0.5, 1, 1.5, 2, 2.5, 3, 4],
-        nativeControlsForTouch: true,
-        sources: [],
-        poster: null,
-        plugins: {
-          hotkeys: {
-            enableModifiersForNumbers: false,
-            seekStep: 5,
-            enableMute: true,
-            enableVolumeScroll: true,
-            enableHoverScroll: true,
-            enableFullscreen: true
-          }
-        }
-      },
       currentVideoContent: null,
       alaaVideos: null,
       alaaContent: new AlaaContent(),
       alaaSet: new AlaaSet(),
-      videoLesson: null
+      videoLesson: null,
+      contentSources: new PlayerSourceList(),
+      contentPoster: null
     }
   },
   created () {},
@@ -213,51 +169,22 @@ export default {
       // this.alaaContent.show(contentId)
         .then((response) => {
           that.currentVideoContent = response.data.data
-          that.initVideoJs(that.currentVideoContent.file.video, subCategoryIndex)
+          that.initVideoJs(that.currentVideoContent.file.video, that.currentVideoContent.photo, subCategoryIndex)
         })
         .catch((error) => {
           Assistant.reportErrors(error)
           that.currentVideoContent = null
         })
     },
-    initVideoJs (srcs, subCategoryIndex) {
-      if (!this.$refs['videoPlayer' + subCategoryIndex]) {
-        return
-      }
-      const that = this
-      this.player = videojs(that.$refs['videoPlayer' + subCategoryIndex][0], this.options,
-        function onPlayerReady () {
-          // console.log('onPlayerReady', this)
-        })
-      this.updateTimepointsHeights(subCategoryIndex)
-      this.updateVideoSrc(srcs)
-    },
-    updateVideoSrc (srcs) {
-      const updatedSrcs = this.getVideoSrcs(srcs)
-      this.player.pause()
-      this.player.src(updatedSrcs)
-      this.player.load()
-    },
-    updateTimepointsHeights (subCategoryIndex) {
-      this.timepointsHeights = this.$refs['videoPlayer' + subCategoryIndex][0].clientHeight
+    initVideoJs (srcs, poster) {
+      this.contentSources = new PlayerSourceList(srcs)
+      this.contentPoster = poster
     },
     playTimePoint (index) {
-      this.player.pause()
-      this.player.currentTime(this.currentVideoContent.timepoints[index].time)
-      this.player.play()
-    },
-    getVideoSrcs (srcs) {
-      const updatedSrcs = []
-      srcs.forEach(video => {
-        updatedSrcs.push({
-          src: video.link,
-          type: 'video/' + video.ext,
-          res: video.res,
-          default: (video.res === '240p'),
-          label: video.caption
-        })
-      })
-      return updatedSrcs
+      // ToDo: changePlayer time
+      // this.player.pause()
+      // this.player.currentTime(this.currentVideoContent.timepoints[index].time)
+      // this.player.play()
     },
     loadFirstVideoTab () {
       // Todo : i need loading here
@@ -273,9 +200,7 @@ export default {
         that.loadingVisibility = false
         that.tabPanelDisabled = false
       }, 1000)
-      if (this.player) {
-        this.player.pause()
-      }
+
       if (this.report && this.report.sub_category[tabIndex].video_url[0]) {
         const parsed = this.report.sub_category[tabIndex].video_url[0].split('/')
         let contentId = parsed[parsed.length - 1]
@@ -295,7 +220,6 @@ export default {
       } else {
         this.currentVideoContent = null
       }
-      // this.loadingVisibility = false
     }
   },
   computed: {
