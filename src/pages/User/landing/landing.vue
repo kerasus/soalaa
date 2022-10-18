@@ -3,6 +3,7 @@
     <nav-bar @onClickRegisterBtn="scrollToExamsTable"
              @onClickConditionsBtn="scrollToExamRules"
              @onClickFaqsBtn="scrollToFaqs"
+             @onClickUserExamListBtn="goToUserExamList"
     />
     <landing-header @onClickRegisterBtn="scrollToExamsTable" />
     <why class="landing-width" />
@@ -48,6 +49,11 @@ export default {
     this.closeSidBarAndAppbar()
   },
   methods: {
+    goToUserExamList () {
+      this.$router.push({
+        name: 'User.Exam.List'
+      })
+    },
     scrollToExamsTable () {
       this.scrollTo('SubmitTable')
     },
