@@ -162,7 +162,7 @@ export default {
       padding: 3px 5px;
       vertical-align: top;
       box-sizing: border-box;
-      position: relative;
+      position: static;
       > * {
         margin-bottom: 0;
       }
