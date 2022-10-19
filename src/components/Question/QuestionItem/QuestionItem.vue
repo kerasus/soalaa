@@ -525,6 +525,7 @@ export default {
   },
   created () {
     this.setPageConfig()
+    // console.log('this.question ', this.question)
   },
   mounted () {
     this.setQuestionLevel()
