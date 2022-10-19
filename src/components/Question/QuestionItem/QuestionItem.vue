@@ -969,8 +969,7 @@ export default {
 
       .description-answer {
         padding: 20px 24px;
-        max-width: 620px;
-        width: 100%;
+        width: 60%;
         background: #F6F9FF;
         border-radius: 16px;
         margin-right: 30px;
@@ -983,10 +982,12 @@ export default {
           padding: 16px;
           margin-right: 24px;
           height: 200px;
+          width: 50%;
         }
 
         @media only screen and (max-width: 599px) {
           max-width: 100%;
+          width: 100%;
           height: 310px;
           margin-bottom: 20px;
 
@@ -1015,9 +1016,22 @@ export default {
       }
 
       .description-answer-video {
+        min-height: 176px;
+        width: 40%;
+        @media screen and(max-width: 1439px) {
+          width: 38%;
+          height: 130px;
+        }
+        @media screen and(max-width: 1023px) {
+          width: 48%;
+        }
+        @media screen and(max-width: 599px) {
+          width: 100%;
+          height: 158px;
+        }
         .answer-video {
-          width: 316px;
-          height: 176px;
+          height: 100%;
+          width: 100%;
           background: #f6f9ff;
           border-radius: 16px;
           margin-bottom: 10px;
@@ -1030,17 +1044,14 @@ export default {
           }
 
           @media only screen and (max-width: 1439px) {
-            width: 230px;
-            height: 130px;
+
           }
 
           @media only screen and (max-width: 1023px) {
-            width: 238px;
           }
 
           @media only screen and (max-width: 599px) {
-            width: 100%;
-            height: 158px;
+
           }
         }
 
