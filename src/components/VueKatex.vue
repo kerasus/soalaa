@@ -10,7 +10,6 @@
 <script>
 import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
 // import 'katex/dist/katex.min.css'
-import katex from 'katex'
 
 export default {
   name: 'VueKatex',
@@ -45,57 +44,11 @@ export default {
     },
     computedKatex() {
       let string = this.input
-      string = mixinConvertToTiptap.methods.convertToTiptap(string)
-      // const regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms
-      const regex = /(\${1}((?!\$).)+?\${1})|(\${2}((?!\$).)+?\${2})|(\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\[\\((?! ).){1}((?!\$).)*?((?! ).){1}\]\\)/gms
-      string = string.replace(regex, (match) => {
-        let finalMatch
-        if (match.includes('$$')) {
-          finalMatch = match.slice(2, -2)
-        } else if (match.includes('$')) {
-          finalMatch = match.slice(1, -1)
-        } else {
-          finalMatch = match.slice(2, -2)
-        }
-        return katex.renderToString(finalMatch, {
-          throwOnError: false,
-          strict: 'warn'
-        })
-      })
+      if (string === null || typeof string === 'undefined') {
+        return ''
+      }
+      string = mixinConvertToTiptap.methods.renderKatexToHTML(string)
       return string
-
-      // let string = this.input
-      //
-      // if (string === null || typeof string === 'undefined') {
-      //   return ''
-      // }
-      // string = string.replaceAll('¬', '&#8202;')
-      // string = string.replaceAll('­', '&#8202;')
-      //
-      // string = string.replaceAll('\\[ ', '\\[')
-      // string = string.replaceAll(' \\]', '\\]')
-      // string = string.replaceAll(' $', '$')
-      // string = string.replaceAll('$ ', '$')
-      // // string = string.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&')
-      // const regex = /(\${1}((?!\$).)+?\${1})|(\${2}((?!\$).)+?\${2})|(\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\[\\((?! ).){1}((?!\$).)*?((?! ).){1}\]\\)/gms
-      // string = string.replace(regex, (match) => {
-      //   let finalMatch
-      //   if (match.includes('$$')) {
-      //     finalMatch = match.slice(2, -2)
-      //   } else if (match.includes('$')) {
-      //     finalMatch = match.slice(1, -1)
-      //   } else {
-      //     finalMatch = match.slice(2, -2)
-      //   }
-      //   return katex.renderToString(finalMatch, {
-      //     throwOnError: false,
-      //     strict: 'warn'
-      //   })
-      // })
-      // string = string.replaceAll('&lt;', '<')
-      // string = string.replaceAll('&gt;', '>')
-      //
-      // return string
     }
   },
   mounted () {

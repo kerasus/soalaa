@@ -70,7 +70,8 @@ export default {
   watch: {},
   mounted() {
     if (this.$refs.tiptap) {
-      this.$refs.tiptap.setContent(this.html)
+      const input = this.getModifiedContent(this.html)
+      this.$refs.tiptap.setContent(input)
     }
   },
   methods: {
@@ -85,6 +86,14 @@ export default {
       }
       this.html = html
       this.loading = false
+    },
+    getModifiedContent (input) {
+      // first modifying method
+      return this.removeImageWithLocalSrc(input)
+    },
+    removeImageWithLocalSrc (html) {
+      const regex = /<img src="file:.*?".*?\/?>/gms
+      return html.replaceAll(regex, '')
     }
   }
 }
