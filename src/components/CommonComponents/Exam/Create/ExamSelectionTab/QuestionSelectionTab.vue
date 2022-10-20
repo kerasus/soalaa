@@ -20,19 +20,21 @@
         </div>
       </div>
     </div>
-
     <div class="col-md-3 col-xs-12 question-bank-filter">
-      <question-filter
-        ref="filter"
-        :show-major-list="false"
-        :filterQuestions="filterQuestions"
-        :root-node-id-to-load="rootNodeIdInFilter"
-        :node-ids-to-tick="selectedNodesIds"
-        :initial-load-mode="false"
-        @tagsChanged="setSelectedTags"
-        @onFilter="onFilter"
-        @delete-filter="deleteFilterItem"
-      />
+      <sticky-both-sides :scrollInfo="scrollInfo"
+                         :width="340">
+        <question-filter
+          ref="filter"
+          :show-major-list="false"
+          :filterQuestions="filterQuestions"
+          :root-node-id-to-load="rootNodeIdInFilter"
+          :node-ids-to-tick="selectedNodesIds"
+          :initial-load-mode="false"
+          @tagsChanged="setSelectedTags"
+          @onFilter="onFilter"
+          @delete-filter="deleteFilterItem"
+        />
+      </sticky-both-sides>
     </div>
 
     <div
@@ -161,10 +163,11 @@ import QuestionsGeneralInfo from 'components/CommonComponents/Exam/Create/ExamSe
 import QuestionTreeModal from 'components/Question/QuestionPage/QuestionTreeModal'
 import mixinTree from 'src/mixin/Tree'
 import { TreeNode } from 'src/models/TreeNode'
+import StickyBothSides from 'components/Utils/StickyBothSides'
 
 export default {
   name: 'QuestionSelectionTab',
-  components: { QuestionTreeModal, QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
+  components: { StickyBothSides, QuestionTreeModal, QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
   mixins: [
     mixinTree
   ],
@@ -177,6 +180,12 @@ export default {
     'update:exam'
   ],
   props: {
+    scrollInfo: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
     questionLoading: {
       type: Boolean,
       default: false
@@ -195,7 +204,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       searchInput: '',
       searchSelector: {
@@ -265,7 +274,7 @@ export default {
   },
   watch: {
     'providedExam.loading': {
-      handler (newValue) {
+      handler(newValue) {
         if (newValue) {
           this.showLoading()
           return
@@ -274,7 +283,7 @@ export default {
       }
     },
     allSubjects: {
-      handler () {
+      handler() {
         this.updateLessonsTitles()
         this.getTheLastSelectedNode()
       },
@@ -286,12 +295,12 @@ export default {
       }
     },
     getSelectedQuestionIds: {
-      handler (newVal) {
+      handler(newVal) {
         this.setQuestionsInfoCheckBoxStatus()
       }
     }
   },
-  created () {
+  created() {
     // this.getQuestionData()
     this.getFilterOptions()
     this.getReportOptions()
@@ -311,29 +320,29 @@ export default {
   },
   computed: {
     providedExam: {
-      get () {
+      get() {
         return this.exam
       },
-      set (value) {
+      set(value) {
         this.$emit('update:exam', value)
       }
     },
-    isQuestionSelected () {
+    isQuestionSelected() {
       return (id) => {
         return !!(this.providedExam.questions.list.find(question => question.id === id))
       }
     },
-    doesExamHaveLesson () {
+    doesExamHaveLesson() {
       return !!this.providedExam.temp.lesson
     },
     getSelectedQuestionIds() {
       return this.providedExam.questions.list.map(question => question.id)
     },
     selectedQuestionInCurrentMetaPage: {
-      get () {
+      get() {
         return this.selectedQuestions
       },
-      set (value) {
+      set(value) {
         const questionListIds = this.questions.list.map(question => question.id)
         this.selectedQuestions = this.providedExam.questions.list.filter(question => questionListIds.includes(question.id))
       }
@@ -353,7 +362,7 @@ export default {
       const questionIndex = this.providedExam.questions.list.indexOf(question => question.id === questionId)
       this.providedExam.questions.list[questionIndex].selected = value
     },
-    updateTreeFilter () {
+    updateTreeFilter() {
       const foundedLesson = this.treeModalLessonsList.find(item => item.id === this.providedExam.temp.lesson)
       const tagsToFilter = this.lastSelectedNodes.length > 0 ? this.lastSelectedNodes : [foundedLesson]
       this.selectedNodesIds = this.lastSelectedNodes.map(node => node.id)
@@ -398,13 +407,13 @@ export default {
           this.reportTypeList = response.data.data
         })
     },
-    goToPrevStep () {
+    goToPrevStep() {
       this.$emit('lastTab')
     },
-    goToNextStep () {
+    goToNextStep() {
       this.$emit('nextTab')
     },
-    onFilter (filterData) {
+    onFilter(filterData) {
       this.$emit('onFilter', filterData)
       this.filterData = this.getFiltersForRequest(filterData)
       this.getQuestionData(1, this.filterData)
@@ -415,7 +424,7 @@ export default {
     sortByCreatedAt() {
       this.$refs.filter.changeFilterData('sort_type', [this.searchSelector.value])
     },
-    RemoveChoice (title) {
+    RemoveChoice(title) {
       const target = this.selectedQuestions.filter(question => question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
       if (target.length) {
         target.forEach(question => {
@@ -425,10 +434,10 @@ export default {
         })
       }
     },
-    toggleQuestionSelected (question) {
+    toggleQuestionSelected(question) {
       question.selected = !question.selected
     },
-    questionHandle (question) {
+    questionHandle(question) {
       if (!this.providedExam.questions.list.find(item => item.id === question.id)) {
         this.addQuestionToSelectedList(question)
         this.addQuestionToExam(question)
@@ -437,23 +446,23 @@ export default {
         this.deleteQuestionFromExam(question)
       }
     },
-    onClickedCheckQuestionBtn (question) {
+    onClickedCheckQuestionBtn(question) {
       this.questionHandle(question)
     },
-    addQuestionToExam (question) {
+    addQuestionToExam(question) {
       const arrayOfQuestion = []
       arrayOfQuestion.push(question)
       this.$emit('addQuestionToExam', arrayOfQuestion)
     },
-    deleteQuestionFromExam (question) {
+    deleteQuestionFromExam(question) {
       const arrayOfQuestion = []
       arrayOfQuestion.push(question)
       this.$emit('deleteQuestionFromExam', arrayOfQuestion)
     },
-    addQuestionToSelectedList (question) {
+    addQuestionToSelectedList(question) {
       this.selectedQuestions.push(question)
     },
-    deleteQuestionFromSelectedList (question) {
+    deleteQuestionFromSelectedList(question) {
       const target = this.selectedQuestions.findIndex(questionItem => questionItem.id === question.id)
       if (target === -1) {
         return
@@ -461,13 +470,13 @@ export default {
       this.selectedQuestions.splice(target, 1)
       this.deleteQuestionFromExam(question)
     },
-    updatePage (page) {
+    updatePage(page) {
       this.getQuestionData(page, this.filterData)
     },
-    deleteFilterItem (filter) {
+    deleteFilterItem(filter) {
       // this.$refs.filter.setTicked('tree', filter.id, false)
     },
-    getFiltersForRequest (filterData) {
+    getFiltersForRequest(filterData) {
       return {
         tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
         level: (filterData.level) ? filterData.level.map(item => item.value) : [],
@@ -479,7 +488,7 @@ export default {
         sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value
       }
     },
-    getQuestionData (page, filters) {
+    getQuestionData(page, filters) {
       if (!page) {
         page = 1
       }
@@ -507,7 +516,7 @@ export default {
           this.hideLoading()
         })
     },
-    getFilterOptions () {
+    getFilterOptions() {
       this.$axios.get(API_ADDRESS.option.userIndex)
         .then((response) => {
           response.data.data.forEach(option => {
@@ -521,20 +530,20 @@ export default {
           })
         })
     },
-    selectAllQuestions () {
+    selectAllQuestions() {
       this.selectedQuestions = []
       this.questions.list.forEach(question => {
         this.selectedQuestions.push(question)
       })
       this.$emit('addQuestionToExam', this.selectedQuestions)
     },
-    deleteAllQuestions () {
+    deleteAllQuestions() {
       this.$emit('deleteQuestionFromExam', this.selectedQuestions)
       this.questions.list.forEach(question => {
         this.selectedQuestions.splice(question)
       })
     },
-    onLessonChanged (item) {
+    onLessonChanged(item) {
       if (this.isSelectedLessonNew(item)) {
         this.providedExam.temp.lesson = item.id
         this.$emit('update:exam', this.providedExam)
@@ -553,10 +562,10 @@ export default {
     setFilterTreeLesson(item) {
       this.rootNodeIdInFilter = item.id
     },
-    getLessonsList (item) {
+    getLessonsList(item) {
       return this.getNode(item.id)
     },
-    updateLessonsTitles () {
+    updateLessonsTitles() {
       const fieldText = []
       const flatSelectedNodes = []
       if (Object.keys(this.allSubjects).length !== 0) {
@@ -572,7 +581,7 @@ export default {
       this.allSubjectsFlat = flatSelectedNodes
       this.lessonsTitles = fieldText
     },
-    getTheLastSelectedNode () {
+    getTheLastSelectedNode() {
       const foundedNodes = []
       let cleaned = []
       this.allSubjectsFlat.forEach((selectedNode) => {
@@ -587,14 +596,14 @@ export default {
         return !(cleaned.find(item => item.id === selectedNode.id))
       })
     },
-    getUniqueListBy (arr, key) {
+    getUniqueListBy(arr, key) {
       return [...new Map(arr.map(item => [item[key], item])).values()]
     },
-    AreAllQuestionsSelected () {
+    AreAllQuestionsSelected() {
       const questionListIds = this.questions.list.map(question => question.id)
       return this.doesFirstArrayIncludeTheSecondOne(this.getSelectedQuestionIds, questionListIds)
     },
-    setQuestionsInfoCheckBoxStatus () {
+    setQuestionsInfoCheckBoxStatus() {
       if (this.AreAllQuestionsSelected()) {
         this.checkBox = true
         return
@@ -605,13 +614,13 @@ export default {
       return childArray.every(element => {
         return parentArray.includes(element)
       }) &&
-      parentArray.length >= childArray.length
+        parentArray.length >= childArray.length
     },
     setSelectedQuestionOfCurrentMetaPage() {
       const questionListIds = this.questions.list.map(question => question.id)
       this.selectedQuestions = this.providedExam.questions.list.filter(question => questionListIds.includes(question.id))
     },
-    fillAllSubjectsFromResponse () {
+    fillAllSubjectsFromResponse() {
       this.providedExam.temp.tags.forEach((tag, index) => {
         const lastAncestors = tag.ancestors[tag.ancestors.length - 1]
         if (!this.allSubjects[lastAncestors.id]) {
@@ -633,7 +642,7 @@ export default {
       }))
       this.$emit('update:exam', this.providedExam)
     },
-    isValid () {
+    isValid() {
       let error = false
       const messages = []
       if (this.providedExam.questions.list.length === 0) {
@@ -657,6 +666,7 @@ export default {
   @media only screen and (max-width: 1023px) {
     padding-bottom: 16px;
   }
+
   .filter-card {
     display: flex;
     flex-direction: row;
@@ -668,33 +678,42 @@ export default {
       align-items: center;
       width: 100%;
     }
+
     &:deep(.q-card__section) {
       padding: 0;
+
       .q-field--filled .q-field__inner .q-field__control {
         background: #FFFFFF;
       }
+
       .q-field--filled .q-field__inner .q-field__control .q-field__append, .q-field--filled .q-field__inner .q-field__control .q-field__prepend {
         padding-right: 16px;
         padding-left: 12px;
       }
+
       @media only screen and (max-width: 599px) {
         width: 100%;
       }
     }
+
     .search-section {
       .search-input {
         width: 300px;
         background-color: white;
-        &:deep(.q-field__append){
+
+        &:deep(.q-field__append) {
           padding-right: 8px !important;
-          .q-icon{
+
+          .q-icon {
             color: #6D708B;
             cursor: pointer;
           }
         }
-        &:deep(.q-field__control){
+
+        &:deep(.q-field__control) {
           background-color: white;
         }
+
         //&:deep(.q-field--filled .q-field__inner .q-field__control .q-field__append, .q-field--filled .q-field__inner .q-field__control .q-field__prepend ){
         //
         //}
@@ -704,25 +723,31 @@ export default {
         @media only screen and (max-width: 599px) {
           width: 100%;
         }
+
         .search {
           color: #6D708B;
+
           :deep(.q-field__inner .q-field__control .q-field__append .q-icon) {
             color: #6D708B;
           }
         }
       }
     }
+
     .filter-section {
       display: flex;
       flex-direction: row;
+
       :deep(.q-field--filled .q-field__inner .q-field__control .q-field__label) {
         margin-top: -10px;
       }
+
       :deep(.q-field--filled .q-field__inner .q-field__control .q-field__native, .q-field--filled .q-field__inner .q-field__control .q-field__prefix, .q-field--filled .q-field__inner .q-field__control .q-field__suffix, .q-field--filled .q-field__inner .q-field__control .q-field__input) {
-       padding-left: 16px;
+        padding-left: 16px;
         padding-right: 0;
         min-height: 40px;
       }
+
       .filter-input {
         width: 160px;
         @media only screen and (max-width: 1023px) {
@@ -737,6 +762,7 @@ export default {
     }
   }
 }
+
 .q-checkbox__bg {
   border: 1px solid #65677F;
   box-sizing: border-box;
@@ -744,7 +770,8 @@ export default {
 }
 
 .main-container {
-  .question-bank-filter {}
+  .question-bank-filter {
+  }
 
   .question-list {
     margin-left: 30px;
@@ -752,6 +779,7 @@ export default {
     @media only screen and (max-width: 1023px) {
       margin-left: 0;
     }
+
     .question-bank-toolbar {
       padding-bottom: 24px;
       @media only screen and (max-width: 600px) {
@@ -769,15 +797,19 @@ export default {
   }
 
 }
+
 @media only screen and (max-width: 1919px) {
 }
+
 @media only screen and (max-width: 1439px) {
   .question-bank-toolbar {
     padding-bottom: 20px;
   }
 }
+
 @media only screen and (max-width: 1023px) {
 }
+
 @media only screen and (max-width: 599px) {
 }
 
@@ -794,6 +826,7 @@ export default {
   color: #6D708B;
   margin-right: 10px;
 }
+
 .close-tree-tab {
   width: 144px;
   height: 40px;
