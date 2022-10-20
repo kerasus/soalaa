@@ -1,17 +1,20 @@
 <template>
-  <q-img v-if="width && height"
-         ref="LazyImage"
-         :src="lazyImageSrc"
-         :width="computedWidth+'px'"
-         :height="computedHeight+'px'"
-         :ratio="ratio"
-         fit="contain"
-         class="full-width"
-         position="0 0"
-  />
-  <q-img v-else
-         :src="src"
-  />
+  <div :class="customClass">
+    <q-resize-observer @resize="onresize" />
+    <q-img v-if="width && height"
+           ref="LazyImage"
+           :src="lazyImageSrc"
+           :width="computedWidth+'px'"
+           :height="computedHeight+'px'"
+           :ratio="ratio"
+           fit="contain"
+           class="full-width"
+           position="0 0"
+    />
+    <q-img v-else
+           :src="src"
+    />
+  </div>
 </template>
 
 <script>
@@ -19,6 +22,10 @@ export default {
   name: 'LazyImage',
   props: {
     src: {
+      type: String,
+      default: null
+    },
+    class: {
       type: String,
       default: null
     },
@@ -39,6 +46,9 @@ export default {
     }
   },
   computed: {
+    customClass () {
+      return this.class
+    },
     normalizedSizeWithPx () {
       return {
         w: this.normalizedSizeInNumber.w + 'px',
@@ -74,6 +84,9 @@ export default {
     }
   },
   methods: {
+    onresize () {
+      this.updateLazyImageSrc()
+    },
     updateLazyImageSrc () {
       this.computedWidth = Math.floor(this.getOffsetWidth())
       this.computedHeight = Math.floor(this.getOffsetHeight())
