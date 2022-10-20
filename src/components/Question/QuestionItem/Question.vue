@@ -11,12 +11,22 @@
         v-if="question.statement"
         :input="question.statement"
       />
-      <div v-else-if="question.statement_photo?.length>0">
+      <div v-else-if="question.statement_photo?.length > 0">
         <div
           v-for="(photo, index) in question.statement_photo"
           :key="index"
+          class="img-container"
         >
-          <q-img :src="photo" />
+          <q-img class="img"
+                 :src="photo">
+            <template v-slot:error>
+              <div class="error-img">
+                <div class="content bg-negative text-white q-pa-md">
+                  عکس لود نمیشود
+                </div>
+              </div>
+            </template>
+          </q-img>
         </div>
       </div>
     </div>
@@ -63,8 +73,19 @@
         <div
           v-for="(photo, index) in question.answer_photos"
           :key="index"
+          class="img-container"
         >
-          <q-img :src="photo" />
+          <q-img  class="img"
+                  :src="photo"
+          >
+            <template v-slot:error>
+              <div class="error-img">
+                <div class="content bg-negative text-white q-pa-md">
+                  عکس لود نمیشود
+                </div>
+              </div>
+            </template>
+          </q-img>
         </div>
       </div>
     </div>
@@ -147,6 +168,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.error-img{
+  max-height: 100px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  background: transparent;
+  .content{
+    border-radius: 15px;
+  }
+}
+.img-container{
+  min-height: 50px;
+  :deep(.q-img){
+    width: 100%;
+    div{
+      //padding-bottom: 0!important;
+    }
+  }
+}
+
 .question-component {
   font-style: normal;
   font-weight: 400;
@@ -165,10 +207,24 @@ export default {
       justify-content: center;
       margin-right: 15px;
     }
+
+    .img-container{
+      height: max-content;
+      .img{
+        max-height: 100%;
+      }
+    }
   }
 
   .question-container {
     margin-bottom: 20px;
+
+    .img-container{
+      height: max-content;
+      .img{
+        max-height: 100%;
+      }
+    }
 
     @media only screen and (max-width: 1439px) {
       margin-bottom: 24px;
@@ -183,6 +239,7 @@ export default {
         margin-bottom: 0;
       }
     }
+
   }
 }
 </style>
