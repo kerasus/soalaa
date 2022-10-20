@@ -28,11 +28,12 @@
           <div class="search-box">
             <div>
               <q-input
-                v-model.number="questionSearchNumber"
+                v-model="searchedQuestionOrder"
                 type="number"
                 outlined
                 dense
                 label="شماره سوال"
+                @keydown.enter="scrollToQuestion"
               >
                 <template v-slot:append>
                   <div @click="scrollToQuestion">
@@ -75,7 +76,7 @@
                 class="question-field no-padding q-mb-md"
                 dense
         >
-          <q-item-section>
+          <q-item-section class="no-wrap">
             <!--            :sub-category="quizData.sub_categories"-->
             <!--            :exam-id="$route.params.quizId"-->
             <!--            :consider-active-category="false"-->
@@ -149,6 +150,7 @@ export default {
       ],
       inView: [],
       questionSearchNumber: 0,
+      searchedQuestionOrder: 0,
       firstQuestionOrder: 0
     }
   },
@@ -279,7 +281,16 @@ export default {
       return this.$axios.get(API_ADDRESS.question.confirm(question.id))
     },
     scrollToQuestion () {
-      this.scrollTo(null, this.questionSearchNumber)
+      const questionIndex = this.filteredQuestions.findIndex(question => question.order.toString() === this.searchedQuestionOrder.toString())
+      if (questionIndex === -1) {
+        this.searchedQuestionOrder = 0
+        this.$q.notify({
+          message: 'سوال پیدا نشد.',
+          type: 'negative'
+        })
+        return
+      }
+      this.$refs.scroller.scrollTo(questionIndex, 'start-force')
     },
     questionListHeight () {
       // box is a col-7 with 12px padding
