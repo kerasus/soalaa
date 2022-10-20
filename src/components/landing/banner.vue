@@ -3,24 +3,63 @@
     <div class="banner-section">
       <a href="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Binder1.pdf"
          target="_blank">
-        <q-img class="extra-large"
-               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/seA_Desktop.png"></q-img>
-        <q-img class="large"
-               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Desktop_HD.png"></q-img>
-        <q-img class="medium"
-               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Tablet_(Medium).png"></q-img>
-        <q-img class="small"
-               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Tablet_(Small).png"></q-img>
-        <q-img  class="extra-small"
-                src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Mobile_(Extra_small).png"></q-img>
+
+        <lazy-image v-if="!lazy"
+                    class="extra-large"
+                    src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/seA_Desktop.png"
+                    width="3520"
+                    height="977"
+        />
+        <lazy-image v-if="!lazy"
+                    class="large"
+                    src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Desktop_HD.png"
+                    width="3519"
+                    height="1006"
+        />
+        <lazy-image v-if="!lazy"
+                    class="medium"
+                    src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Tablet_(Medium).png"
+                    width="2875"
+                    height="1072"
+        />
+        <lazy-image v-if="!lazy"
+                    class="small"
+                    src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Tablet_(Small).png"
+                    width="2113"
+                    height="822"
+        />
+        <lazy-image v-if="!lazy"
+                    class="extra-small"
+                    src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Mobile_(Extra_small).png"
+                    width="352"
+                    height="399"
+        />
+
+        <!--        <q-img class="extra-large"-->
+        <!--               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/seA_Desktop.png"></q-img>-->
+        <!--        <q-img class="large"-->
+        <!--               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Desktop_HD.png"></q-img>-->
+        <!--        <q-img class="medium"-->
+        <!--               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Tablet_(Medium).png"></q-img>-->
+        <!--        <q-img class="small"-->
+        <!--               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Tablet_(Small).png"></q-img>-->
+        <!--        <q-img  class="extra-small"-->
+        <!--                src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Mobile_(Extra_small).png"></q-img>-->
       </a>
     </div>
   </div>
 </template>
 
 <script>
+import LazyImage from 'components/LazyImage'
 export default {
-  name: 'banner'
+  name: 'banner',
+  components: { LazyImage },
+  data() {
+    return {
+      lazy: false
+    }
+  }
 }
 </script>
 
