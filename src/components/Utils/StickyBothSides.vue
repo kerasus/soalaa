@@ -1,11 +1,10 @@
 <template>
   <div
     ref="sticky"
-    class="sticky"
-    data-top-gap="100"
-    data-bottom-gap="30"
+    class="position-fix"
+    :top-gap="topGap"
+    :bottom-gap="bottomGap"
   >
-    <q-scroll-observer @scroll="positionStickySidebar" />
     <slot></slot>
   </div>
 </template>
@@ -13,61 +12,81 @@
 <script>
 export default {
   name: 'StickyBothSides',
+  props: {
+    scrollInfo: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    width: {
+      type: Number,
+      default: 0
+    },
+    topGap: {
+      type: Number,
+      default: 85
+    },
+    bottomGap: {
+      type: Number,
+      default: 0
+    }
+  },
   data() {
     return {
-      stickyElement: null,
-      startPosition: 0,
-      endScroll: 0,
-      currPos: 0,
-      topGap: 0,
-      bottomGap: 0
+      start: 0,
+      currentPosition: 0
     }
   },
   mounted() {
-    this.stickyElement = this.$refs.sticky
-    this.startPosition = this.stickyElement.getBoundingClientRect().top
-    this.currPos = window.scrollY
-    if (this.stickyElement.hasAttribute('data-top-gap')) {
-      const dataTopGap = this.stickyElement.getAttribute('data-top-gap')
-      this.topGap = String(dataTopGap) === 'auto' ? this.startPosition : parseInt(dataTopGap)
+    this.getStartFixElementPosition()
+  },
+  computed: {
+    stickyElement() {
+      return this.$refs.sticky
     }
-    if (this.stickyElement.hasAttribute('data-bottom-gap')) {
-      this.bottomGap = parseInt(this.stickyElement.getAttribute('data-bottom-gap'))
+  },
+  watch: {
+    scrollInfo(newValue) {
+      this.updateScroll(newValue)
     }
-    this.stickyElement.style.top = this.topGap + 'px'
   },
   methods: {
-    positionStickySidebar(info) {
-      this.endScroll = window.innerHeight - this.stickyElement.offsetHeight - this.bottomGap
-      const stickyElementTop = parseInt(this.stickyElement.style.top.replace('px;', ''))
-      if (this.stickyElement.offsetHeight + this.topGap + this.bottomGap > window.innerHeight) {
-        if (info.direction === 'up') {
-          // Scroll up
-          if (stickyElementTop < this.topGap) {
-            this.stickyElement.style.top = (stickyElementTop + this.currPos - window.scrollY) + 'px'
-          } else if (stickyElementTop > this.topGap && stickyElementTop !== this.topGap) {
-            this.stickyElement.style.top = this.topGap + 'px'
-          }
-        } else {
-          // Scroll down
-          if (stickyElementTop > this.endScroll) {
-            this.stickyElement.style.top = (stickyElementTop + this.currPos - window.scrollY) + 'px'
-          } else if (stickyElementTop < (this.endScroll) && stickyElementTop !== this.endScroll) {
-            this.stickyElement.style.top = this.endScroll + 'px'
-          }
-        }
-      } else {
-        this.stickyElement.style.top = this.topGap + 'px'
+    getStartFixElementPosition() {
+      this.start = this.$refs.sticky.getBoundingClientRect().top - this.topGap
+    },
+    getScrollY() {
+      return window.scrollY
+    },
+    stickyElementToTop(stickyElementTop) {
+      if (this.getScrollY() < this.start) {
+        this.stickyElement.style.position = 'static'
       }
-      this.currPos = window.scrollY
+    },
+    stickyElementToBottom(stickyElementTop) {
+      this.stickyElement.style.position = 'fixed'
+      this.stickyElement.style.top = this.topGap + 'px'
+      this.stickyElement.style.right = 85 + 'px'
+      this.stickyElement.style.width = this.width + 'px'
+    },
+    updateScroll(info) {
+      const stickyElementTop = parseInt(this.stickyElement.style.top.replace('px', ''))
+      if (info.direction === 'up') {
+        this.stickyElementToTop(stickyElementTop)
+      } else if (info.direction === 'down' && this.getScrollY() >= this.start) {
+        this.stickyElementToBottom(stickyElementTop)
+      }
+      this.currentPosition = this.getScrollY()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.sticky {
-  position: sticky;
-  height: fit-content;
+.position-fix {
+  position: static;
+  //left: 100px;
+  //width: 340px
 }
+
 </style>
