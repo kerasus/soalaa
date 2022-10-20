@@ -1,5 +1,6 @@
 <template>
   <div class="exam-create-panel">
+    <q-scroll-observer @scroll="onScroll" />
     <steps v-model:step="currentTab"
            :loading="draftExam.loading"
            :isConfirmd="draftExamIsConfirmed"
@@ -22,6 +23,7 @@
                    name="chooseQuestion">
         <question-selection-tab ref="chooseQuestion"
                                 v-model:exam="draftExam"
+                                :scrollInfo="scrollInfo"
                                 @update:exam="onSecondTabUpdate"
                                 @nextTab="goToNextStep"
                                 @lastTab="goToPrevStep"
@@ -35,6 +37,7 @@
                             v-model:exam="draftExam"
                             :majors="majorList"
                             :grades="gradesList"
+                            :scrollInfo="scrollInfo"
                             @detachQuestion="bulkDetachQuestionsOfDraftExam"
                             @updateOrders="replaceQuestionsOfDraftExam"
                             @previousStep="goToPrevStep"
@@ -54,11 +57,12 @@
                     cy="145.5"
                     r="122.5"
                     fill="url(#paint0_linear_2989_11788)" />
-            <path d="M145 235C194.5 235 235 194.5 235 145C235 95.5 194.5 55 145 55C95.5 55 55 95.5 55 145C55 194.5 95.5 235 145 235Z"
-                  stroke="#4CAF50"
-                  stroke-width="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round" />
+            <path
+              d="M145 235C194.5 235 235 194.5 235 145C235 95.5 194.5 55 145 55C95.5 55 55 95.5 55 145C55 194.5 95.5 235 145 235Z"
+              stroke="#4CAF50"
+              stroke-width="10"
+              stroke-linecap="round"
+              stroke-linejoin="round" />
             <path d="M106.75 145L132.22 170.47L183.25 119.53"
                   stroke="#4CAF50"
                   stroke-width="10"
@@ -152,9 +156,9 @@
             یک آزمون نیمه تمام دارید، آیا می خواهید آن را تکمیل کنید؟
           </div>
           <div class="exam-info">
-            <div class="exam-title">نام آزمون: {{draftExam.title}}</div>
-            <div class="exam-major">رشته: {{draftMajor}}</div>
-            <div class="exam-grade">پایه: {{draftGrade}}</div>
+            <div class="exam-title">نام آزمون: {{ draftExam.title }}</div>
+            <div class="exam-major">رشته: {{ draftMajor }}</div>
+            <div class="exam-grade">پایه: {{ draftGrade }}</div>
           </div>
         </q-card-section>
         <q-card-actions class="flex flex-center">
@@ -201,6 +205,7 @@ export default {
   ],
   data() {
     return {
+      scrollInfo: {},
       subscribed: true,
       draftExamIsConfirmed: false,
       draftExam: new Exam(),
@@ -251,7 +256,10 @@ export default {
     }
   },
   methods: {
-    getData () {
+    onScroll(info) {
+      this.scrollInfo = info
+    },
+    getData() {
       this.draftExam.loading = true
       this.getOptions()
         .then(() => {
@@ -269,10 +277,10 @@ export default {
             })
         })
     },
-    getDraftExam () {
+    getDraftExam() {
       return this.$axios.get(API_ADDRESS.exam.user.draft())
     },
-    getOptions () {
+    getOptions() {
       return Promise.all([
         this.getGradesList(),
         this.loadMajorList()
@@ -281,7 +289,7 @@ export default {
     checkSubscription() {
       return this.$axios.get(API_ADDRESS.user.feature('exam'))
     },
-    getGradesList () {
+    getGradesList() {
       return new Promise((resolve, reject) => {
         this.getRootNode('test')
           .then(response => {
@@ -292,7 +300,7 @@ export default {
           })
       })
     },
-    loadMajorList () {
+    loadMajorList() {
       return new Promise((resolve, reject) => {
         this.$axios.get(API_ADDRESS.option.user('major_type'))
           .then((response) => {
@@ -303,17 +311,17 @@ export default {
           })
       })
     },
-    loadDraftExam (draftExam) {
+    loadDraftExam(draftExam) {
       this.draftExam = new Exam(draftExam)
       if (this.draftExam.id) {
         this.loadAttachedQuestions()
       }
     },
-    setDraftExam () {
+    setDraftExam() {
       this.currentTab = this.allTabs[this.draftExam.temp.level - 1]
       this.continueWithOldDraftExamConfirmationDialog = false
     },
-    clearDraftExam () {
+    clearDraftExam() {
       this.$axios.delete(API_ADDRESS.exam.user.draft()).then((res) => {
         this.draftExam = new Exam()
         this.goToFirstStep()
@@ -329,31 +337,31 @@ export default {
     onLessonChanged(lessonId) {
       this.updateExam('chooseQuestion')
     },
-    getNextTabName () {
+    getNextTabName() {
       return this.allTabs[this.getTabIndex(this.currentTab) + 1]
     },
-    getPrevTabName () {
+    getPrevTabName() {
       return this.allTabs[this.getTabIndex(this.currentTab) - 1]
     },
-    getTabIndex (tab) {
+    getTabIndex(tab) {
       return this.allTabs.indexOf(tab)
     },
-    getFirstStepName () {
+    getFirstStepName() {
       return this.allTabs[0]
     },
-    getlastStepName () {
+    getlastStepName() {
       return this.allTabs[this.allTabs.length - 1]
     },
-    goToFirstStep () {
+    goToFirstStep() {
       this.currentTab = this.getFirstStepName()
     },
-    goToPrevStep () {
+    goToPrevStep() {
       this.currentTab = this.getPrevTabName()
     },
-    goToLastStep () {
+    goToLastStep() {
       this.currentTab = this.getlastStepName()
     },
-    goToNextStep () {
+    goToNextStep() {
       const nextStep = this.getNextTabName()
       if (!nextStep) {
         this.goToLastStep()
@@ -362,7 +370,7 @@ export default {
 
       this.currentTab = nextStep
     },
-    onChangeTab (newStep) {
+    onChangeTab(newStep) {
       const stepValidation = this.$refs[`${this.oldTab}`].isValid()
       const currentTabIndex = this.getTabIndex(this.currentTab)
       const oldTabIndex = this.getTabIndex(this.oldTab)
@@ -412,7 +420,7 @@ export default {
 
       return true
     },
-    createExam () {
+    createExam() {
       this.draftExam.loading = true
       // return this.$axios.post(API_ADDRESS.exam.user.draftExam.create, this.draftExam.loadApiResource())
       return this.$axios.post(API_ADDRESS.exam.user.draftExam.create, {
@@ -424,7 +432,7 @@ export default {
         }
       })
     },
-    updateExam (newStep) {
+    updateExam(newStep) {
       return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), {
         enable: this.draftExam.enable,
         title: this.draftExam.title,
@@ -437,7 +445,7 @@ export default {
         }
       })
     },
-    loadAttachedQuestions () {
+    loadAttachedQuestions() {
       this.draftExam.loading = true
       return this.$axios.post(API_ADDRESS.exam.user.draftExam.getAttachedQuestions(this.draftExam.id))
         .then((response) => {
@@ -527,7 +535,7 @@ export default {
 
       return { error, messages }
     },
-    confirmDraftExam () {
+    confirmDraftExam() {
       this.draftExam.loading = true
       const confirmValidation = this.confirmValidation()
       if (confirmValidation.error) {
@@ -643,28 +651,31 @@ export default {
       }
     }
   }
+
   .confirmed-draft-exam-page {
     display: flex;
     flex-flow: column;
     align-items: center;
     justify-content: center;
     margin-top: 50px;
+
     .icon-section {
       width: 245px;
       height: 245px;
-      @media screen and (max-width: 1439px){
+      @media screen and (max-width: 1439px) {
         width: 194px;
         height: 194px;
       }
-      @media screen and (max-width: 1023px){
+      @media screen and (max-width: 1023px) {
         width: 245px;
         height: 245px;
       }
-      @media screen and (max-width: 599px){
+      @media screen and (max-width: 599px) {
         width: 168px;
         height: 168px;
       }
     }
+
     .message {
       font-weight: 700;
       font-size: 24px;
@@ -672,20 +683,22 @@ export default {
       text-align: center;
       letter-spacing: -0.03em;
       color: #6D708B;
-      @media  screen and (max-width: 1023px){
+      @media screen and (max-width: 1023px) {
         font-size: 22px;
         line-height: 34px;
       }
-      @media  screen and (max-width: 599px){
+      @media screen and (max-width: 599px) {
         font-size: 18px;
         line-height: 28px;
       }
     }
+
     .actions-section {
       display: flex;
       flex-flow: column;
       align-items: center;
       justify-content: center;
+
       .q-btn {
         font-size: 18px;
         line-height: 28px;
@@ -694,7 +707,7 @@ export default {
         color: #8075DC;
         font-weight: 600;
         margin-top: 5px;
-        @media  screen and (max-width: 599px){
+        @media screen and (max-width: 599px) {
           font-size: 14px;
           line-height: 22px;
         }
@@ -718,11 +731,12 @@ export default {
       color: #6D708B;
       margin-bottom: 100px;
     }
-    @media  screen and (max-width: 1023px){
+
+    @media screen and (max-width: 1023px) {
       font-size: 22px;
       line-height: 34px;
     }
-    @media  screen and (max-width: 599px){
+    @media screen and (max-width: 599px) {
       font-size: 18px;
       line-height: 28px;
     }
@@ -759,6 +773,7 @@ export default {
 
   .exam-info {
     margin: 10px 0 20px;
+
     .exam-title {
       font-style: normal;
       font-weight: 400;
