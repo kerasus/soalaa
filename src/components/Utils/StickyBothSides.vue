@@ -89,18 +89,16 @@ export default {
         if (this.getScrollY() <= this.start) {
           this.stickyElement.style.position = 'static'
         }
-        // } else {
-        //   console.log(this.getScrollY(), this.start)
-        //   if (this.getScrollY() > this.start) {
-        //     stickyElementTop += this.previousPosition - this.getScrollY()
-        //     this.stickyElement.style.top = stickyElementTop + 'px'
-        //   } else {
-        //     this.stickyElement.style.position = 'static'
-        //   }
+      } else {
+        if (this.stickyElement.getBoundingClientRect().top <= this.topGap) {
+          stickyElementTop += this.previousPosition - this.getScrollY()
+          this.stickyElement.style.top = stickyElementTop + 'px'
+        } else if (this.getScrollY() <= this.start) {
+          this.stickyElement.style.position = 'static'
+        }
       }
-      console.log(stickyElementTop)
     },
-    stickyElementToBottom(stickyElementBottom) {
+    stickyElementToBottom(stickyElementTop) {
       if (this.stickyElement.offsetHeight <= window.innerHeight) {
         if (this.getScrollY() >= this.start) {
           this.stickyElement.style.position = 'fixed'
@@ -112,16 +110,18 @@ export default {
           this.stickyElement.style.position = 'fixed'
           this.stickyElement.style.top = window.innerHeight - this.stickyElement.offsetHeight + 'px'
           this.stickyElement.style.width = this.stickyElementWidth + 'px'
+        } else if (stickyElementTop > window.innerHeight - this.stickyElement.offsetHeight) {
+          stickyElementTop = stickyElementTop - (this.getScrollY() - this.previousPosition)
+          this.stickyElement.style.top = stickyElementTop + 'px'
         }
       }
     },
     updateScroll(info) {
       const stickyElementTop = parseInt(this.stickyElement.style.top.replace('px', ''))
-      const stickyElementBottom = parseInt(this.stickyElement.style.bottom.replace('px', ''))
       if (info.direction === 'up') {
         this.stickyElementToTop(stickyElementTop)
       } else if (info.direction === 'down') {
-        this.stickyElementToBottom(stickyElementBottom)
+        this.stickyElementToBottom(stickyElementTop)
       }
       this.previousPosition = this.getScrollY()
     }
