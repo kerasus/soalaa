@@ -254,6 +254,20 @@
         پرداخت
       </div>
     </div>
+    <q-dialog v-model="transition"
+              persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <span class="q-ml-lg">در حال انتقال به درگاه پرداخت،لطفا منتظر بمانید</span>
+        </q-card-section>
+        <q-linear-progress
+          query
+          rounded
+          color="positive"
+          class="q-mt-sm"
+        />
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -281,7 +295,8 @@ export default {
       },
       selectedBank: true,
       shoppingDescription: '',
-      loading: false
+      loading: false,
+      transition: false
     }
   },
 
@@ -330,12 +345,21 @@ export default {
       if (!this.selectedBank) {
         return
       }
+      this.transition = true
       this.$store.commit('loading/loading', true)
-
       this.$store.dispatch('Cart/paymentCheckout')
         .then((response) => {
-          window.open(response.data.data.url, '_self')
-          this.$store.commit('loading/loading', false)
+          if (response.data.data.url !== undefined) {
+            window.open(response.data.data.url, '_self')
+            this.$store.commit('loading/loading', false)
+          } else {
+            this.$q.notify({
+              type: 'negative',
+              message: 'در انتقال به درگاه مشکلی پیش آمده (لینک درگاه شناسایی نشد)',
+              position: 'top'
+            })
+            this.$store.commit('loading/loading', false)
+          }
         }).catch(() => {
           this.$store.commit('loading/loading', false)
         })
