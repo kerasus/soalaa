@@ -6,7 +6,7 @@
         :hidden="$q.screen.lt.sm"
         class="exam-detail-container col-xs-12 col-lg-3">
         <sticky-both-sides :scroll-info="scrollInfo"
-                           :width="316">
+                           :max-width="1440">
           <q-skeleton v-if="exam.loading"
                       width="300px"
                       height="400px"
@@ -14,7 +14,6 @@
           <div v-else
                class="exam-detail-content">
             <div class="row q-col-gutter-x-lg">
-
               <div class="col-lg-12 col-md-8 col-sm-6">
                 <div class="exam-details row q-col-gutter-x-lg">
                   <div class="col-12 exam-specifications">
