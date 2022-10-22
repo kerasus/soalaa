@@ -5,115 +5,118 @@
       <div
         :hidden="$q.screen.lt.sm"
         class="exam-detail-container col-xs-12 col-lg-3">
-        <q-skeleton v-if="exam.loading"
-                    width="300px"
-                    height="400px"
-                    class="q-ml-xs" />
-        <div v-else
-             class="exam-detail-content">
-          <div class="row q-col-gutter-x-lg">
+        <sticky-both-sides :scroll-info="scrollInfo"
+                           :width="316">
+          <q-skeleton v-if="exam.loading"
+                      width="300px"
+                      height="400px"
+                      class="q-ml-xs" />
+          <div v-else
+               class="exam-detail-content">
+            <div class="row q-col-gutter-x-lg">
 
-            <div class="col-lg-12 col-md-8 col-sm-6">
-              <div class="exam-details row q-col-gutter-x-lg">
-                <div class="col-12 exam-specifications">
-                  <div class="header-title"> مشخصات آزمون </div>
-                  <div class=" exam-title">
-                    <p class="ellipsis">
-                      آزمون  {{exam.id}}
-                    </p>
-                  </div>
-                </div>
-                <div class="col-lg-12 col-md-6 col-sm-12">
-                  <div class=" exam-detail-item">
-                    <div class="field">نوع آزمون:</div>
-                    <div class="value">
-                      عادی
+              <div class="col-lg-12 col-md-8 col-sm-6">
+                <div class="exam-details row q-col-gutter-x-lg">
+                  <div class="col-12 exam-specifications">
+                    <div class="header-title"> مشخصات آزمون</div>
+                    <div class=" exam-title">
+                      <p class="ellipsis">
+                        آزمون {{ exam.id }}
+                      </p>
                     </div>
                   </div>
-                </div>
-                <div class="col-lg-12 col-md-6 col-sm-12">
-                  <div class="exam-detail-item">
-                    <div class="field">عنوان آزمون: </div>
-                    <div class="value exam-title ellipsis">
-                      {{ exam.title }}
+                  <div class="col-lg-12 col-md-6 col-sm-12">
+                    <div class=" exam-detail-item">
+                      <div class="field">نوع آزمون:</div>
+                      <div class="value">
+                        عادی
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-lg-12 col-md-6 col-sm-12">
-                  <div class="exam-detail-item">
-                    <div class="field">رشته تحصیلی:</div>
-                    <div class="value">
-                      {{ examMajor() }}
+                  <div class="col-lg-12 col-md-6 col-sm-12">
+                    <div class="exam-detail-item">
+                      <div class="field">عنوان آزمون:</div>
+                      <div class="value exam-title ellipsis">
+                        {{ exam.title }}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-lg-12 col-md-6 col-sm-12">
-                  <div class="exam-detail-item">
-                    <div class="field">پایه تحصیلی:</div>
-                    <div class="value">
-                      {{ examGrade() }}
+                  <div class="col-lg-12 col-md-6 col-sm-12">
+                    <div class="exam-detail-item">
+                      <div class="field">رشته تحصیلی:</div>
+                      <div class="value">
+                        {{ examMajor() }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-12 col-md-6 col-sm-12">
+                    <div class="exam-detail-item">
+                      <div class="field">پایه تحصیلی:</div>
+                      <div class="value">
+                        {{ examGrade() }}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-lg-12 col-md-4 col-sm-6">
-              <div class="selected-questions">
-                <div class="title"> سوالات انتخابی</div>
-                <div class="chart-box row ">
-                  <div class="col-md-4 col-sm-12 type-box">
-                    <div class="chart-titles">
-                      <q-badge class="titles-icon hard"
-                               rounded />
-                      <div>سخت</div>
+              <div class="col-lg-12 col-md-4 col-sm-6">
+                <div class="selected-questions">
+                  <div class="title"> سوالات انتخابی</div>
+                  <div class="chart-box row ">
+                    <div class="col-md-4 col-sm-12 type-box">
+                      <div class="chart-titles">
+                        <q-badge class="titles-icon hard"
+                                 rounded />
+                        <div>سخت</div>
+                      </div>
+                      <div class="chart-titles">
+                        <q-badge class="titles-icon medium"
+                                 rounded></q-badge>
+                        <div>متوسط</div>
+                      </div>
+                      <div class="chart-titles">
+                        <q-badge class="titles-icon easy"
+                                 rounded></q-badge>
+                        <div>آسان</div>
+                      </div>
                     </div>
-                    <div class="chart-titles">
-                      <q-badge class="titles-icon medium"
-                               rounded></q-badge>
-                      <div>متوسط</div>
-                    </div>
-                    <div class="chart-titles">
-                      <q-badge class="titles-icon easy"
-                               rounded></q-badge>
-                      <div>آسان</div>
+                    <div class="chart-b col-md-8 col-sm-12">
+                      <chart ref="chart"
+                             class="row justify-center"
+                             :options="chartOptions" />
                     </div>
                   </div>
-                  <div class="chart-b col-md-8 col-sm-12">
-                    <chart ref="chart"
-                           class="row justify-center"
-                           :options="chartOptions" />
-                  </div>
-                </div>
-                <div class="row q-col-gutter-sm action-btn">
-                  <div class=" confirm-b col-lg-12 col-sm-6">
-                    <q-btn
-                      unelevated
-                      color="primary"
-                      :disable="exam.loading"
-                      class="full-width confirm q-mr-xl"
-                      @click="confirmExam"
-                    >
-                      تایید نهایی
-                      <span :hidden="$q.screen.lt.lg">و ساخت آزمون</span>
-                    </q-btn>
-                  </div>
-                  <div class="previous-b col-lg-12 col-sm-6">
-                    <q-btn
-                      unelevated
-                      :disable="exam.loading"
-                      class="full-width q-mr-xl previous"
-                      @click="goToPrevious"
-                    >
-                      بازگشت
-                    </q-btn>
+                  <div class="row q-col-gutter-sm action-btn">
+                    <div class=" confirm-b col-lg-12 col-sm-6">
+                      <q-btn
+                        unelevated
+                        color="primary"
+                        :disable="exam.loading"
+                        class="full-width confirm q-mr-xl"
+                        @click="confirmExam"
+                      >
+                        تایید نهایی
+                        <span :hidden="$q.screen.lt.lg">و ساخت آزمون</span>
+                      </q-btn>
+                    </div>
+                    <div class="previous-b col-lg-12 col-sm-6">
+                      <q-btn
+                        unelevated
+                        :disable="exam.loading"
+                        class="full-width q-mr-xl previous"
+                        @click="goToPrevious"
+                      >
+                        بازگشت
+                      </q-btn>
+                    </div>
                   </div>
                 </div>
               </div>
+              <!--          <q-separator class="q-my-lg" />-->
             </div>
-            <!--          <q-separator class="q-my-lg" />-->
+
           </div>
-
-        </div>
+        </sticky-both-sides>
       </div>
       <div class="col-lg-9 col-xs-12">
         <div class="question-item-content">
@@ -161,15 +164,24 @@ import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTempla
 import { Exam } from 'src/models/Exam'
 
 import { Chart } from 'highcharts-vue'
+import StickyBothSides from 'components/Utils/StickyBothSides'
+
 export default {
   name: 'FinalApprovalTab',
   components: {
+    StickyBothSides,
     QuestionItem,
     Chart,
     QuestionsGeneralInfo
   },
   emits: ['detachQuestion'],
   props: {
+    scrollInfo: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
     exam: {
       type: Exam,
       default: new Exam()
@@ -287,7 +299,7 @@ export default {
       total: 0
     }
   }),
-  created () {
+  created() {
     this.initPageData()
   },
   computed: {
@@ -300,7 +312,7 @@ export default {
         grade: this.examGrade()
       }
     },
-    questionLvl () {
+    questionLvl() {
       if (this.exam.questions.list.length < 1) return
       return {
         hard: this.exam.questions.list.filter(question => parseInt(question.level) === 3).length,
@@ -310,7 +322,7 @@ export default {
     }
   },
   methods: {
-    async initPageData () {
+    async initPageData() {
       this.questions = new QuestionList({ ...this.exam.questions })
       this.reIndexEamQuestions(this.exam.questions.list)
       this.reIndexEamQuestions(this.questions.list)
@@ -339,7 +351,7 @@ export default {
       return this.grades.find(item => item.id === this.exam.temp.grade).title
     },
 
-    changeSelectedQuestionOrder (value) {
+    changeSelectedQuestionOrder(value) {
       const fromIndex = this.questions.list.findIndex(item => item.id === value.question.id)
       // if (value.mode === 'down') {
       //   this.questions.list[fromIndex].order++
@@ -369,7 +381,7 @@ export default {
       this.$emit('updateOrders', this.questions.list)
     },
 
-    onClickedCheckQuestionBtn (question) {
+    onClickedCheckQuestionBtn(question) {
       this.$emit('detachQuestion', [question])
     },
 
@@ -391,7 +403,7 @@ export default {
       this.$emit('confirmExam')
     },
 
-    reIndexEamQuestions (list) {
+    reIndexEamQuestions(list) {
       list.map((item, index) => {
         item.selected = true
         item.order = index + 1
@@ -421,7 +433,7 @@ export default {
       // )
     },
 
-    replaceTitle () {
+    replaceTitle() {
       this.chartOptions.title.text = '<span class="title-1"> ' + this.exam.questions.list.length + '<br>' + '<br>' + '</span>' + '<span dy="-8" class="title-2">سوال</span>'
     }
   }
@@ -432,23 +444,27 @@ export default {
 .main-container {
 
   padding: 0;
-  .exam-detail-container{
+
+  .exam-detail-container {
     padding-right: 24px;
-    @media screen and (max-width: 1439px){
+    @media screen and (max-width: 1439px) {
       padding-right: 0;
     }
-    .action-btn{
-      .confirm-b{
+
+    .action-btn {
+      .confirm-b {
         @media screen and (max-width: 1439px) {
-          order:1
+          order: 1
         }
       }
+
       .previous-b {
         @media screen and (max-width: 1439px) {
-          order:0
+          order: 0
         }
       }
-      .previous{
+
+      .previous {
         background: #F2F5F9;
         color: #6D708B;
         //margin-top: 12px;
@@ -456,41 +472,46 @@ export default {
           margin-top: 0;
         }
       }
-      .confirm{
+
+      .confirm {
         font-weight: 700;
       }
 
     }
-    .exam-detail-content{
+
+    .exam-detail-content {
       margin-bottom: 16px;
       box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       border-radius: 20px;
       background: #FFFFFF;
       padding: 20px 24px 24px 24px;
-      @media screen and (max-width: 1023px){
-          padding: 16px 20px 20px 20px;
+      @media screen and (max-width: 1023px) {
+        padding: 16px 20px 20px 20px;
       }
-      .exam-specifications{
+
+      .exam-specifications {
         padding-bottom: 8px;
         display: flex;
         justify-content: space-between;
         margin-bottom: 8px;
-        @media screen and (max-width: 1439px ){
+        @media screen and (max-width: 1439px) {
           justify-content: flex-start;
           margin-bottom: 21px;
         }
-        @media screen and (max-width: 1023px ){
+        @media screen and (max-width: 1023px) {
           justify-content: space-between;
           margin-bottom: 16px;
         }
-        .header-title{
+
+        .header-title {
           font-style: normal;
           font-weight: 500;
           font-size: 16px;
           line-height: 28px;
           color: #23263B;
         }
-        .exam-title{
+
+        .exam-title {
           padding: 1px 9px 1px 7px;
           background: #F4F5F6;
           border-radius: 10px 12px 12px 10px;
@@ -500,93 +521,105 @@ export default {
           color: #23263B;
           display: flex;
           align-items: center;
+
           p {
             max-width: 95px;
             margin-bottom: 0;
           }
-          @media screen and (max-width: 1439px ){
+
+          @media screen and (max-width: 1439px) {
             margin-left: 12px;
           }
-          @media screen and (max-width: 599px ){
+          @media screen and (max-width: 599px) {
             margin-left: 0;
           }
         }
       }
-      .exam-details{
+
+      .exam-details {
         margin-bottom: 10px;
-        @media screen and (max-width: 1439px){
+        @media screen and (max-width: 1439px) {
           margin-right: 27px;
         }
-        @media screen and (max-width: 1023px){
+        @media screen and (max-width: 1023px) {
           margin-right: 0;
         }
-        .exam-detail-item{
+
+        .exam-detail-item {
           display: flex;
           justify-content: space-between;
           margin-bottom: 6px;
         }
-        p{
+
+        p {
           margin-bottom: 4px;
           font-weight: 400;
           font-size: 14px;
           line-height: 24px;
           color: #23263B;
         }
-        .field{
+
+        .field {
           font-style: normal;
           font-weight: 400;
           font-size: 14px;
           line-height: 22px;
           color: #23263B;
         }
-        .value{
+
+        .value {
           font-style: normal;
           font-weight: 400;
           font-size: 14px;
           line-height: 22px;
           color: #6D708B;
         }
-        .exam-title{
+
+        .exam-title {
 
         }
       }
-      .selected-questions{
-        @media screen and (max-width: 1439px){
+
+      .selected-questions {
+        @media screen and (max-width: 1439px) {
           position: relative;
         }
-        .title{
+
+        .title {
           font-weight: 500;
           font-size: 16px;
           line-height: 28px;
           color: #23263B;
           border-top: 1px solid #E4E8EF;
           padding-top: 13px;
-          @media screen and (max-width: 1439px){
+          @media screen and (max-width: 1439px) {
             border-top: none;
             padding-top: 0;
             position: absolute;
             top: 0;
             line-height: 25px;
           }
-          @media screen and (max-width: 1023px){
+          @media screen and (max-width: 1023px) {
             position: relative;
           }
 
         }
-        .chart-box{
+
+        .chart-box {
           align-items: center;
           justify-content: space-around;
-          margin-bottom: 20px ;
-          @media screen and (max-width: 1439px){
+          margin-bottom: 20px;
+          @media screen and (max-width: 1439px) {
             align-items: flex-end;
             margin-bottom: 16px;
           }
-          @media screen and (max-width: 1023px){
+          @media screen and (max-width: 1023px) {
             justify-content: center;
-            margin-bottom:0 ;
+            margin-bottom: 0;
           }
-          .type-box{
-            @media screen and (max-width: 1023px){
+
+          .type-box {
+            @media screen and (max-width: 1023px) {
               display: flex;
               justify-content: center;
               order: 1;
@@ -595,7 +628,7 @@ export default {
             }
           }
 
-          .chart-b{
+          .chart-b {
             &:deep( .myTooltip) {
               border-radius: 10px;
               direction: ltr;
@@ -622,13 +655,15 @@ export default {
               text-align: center;
               color: #23263B;
             }
-            @media screen and (max-width: 1439px){
+
+            @media screen and (max-width: 1439px) {
               //margin-top: 12px;
             }
-            @media screen and (max-width: 1023px){
+            @media screen and (max-width: 1023px) {
               order: 0;
             }
           }
+
           .chart-titles {
             font-style: normal;
             font-weight: 400;
@@ -638,7 +673,7 @@ export default {
             display: flex;
             align-items: center;
             margin-bottom: 8px;
-            @media screen and (max-width: 1023px){
+            @media screen and (max-width: 1023px) {
               margin-right: 10px;
             }
 
@@ -664,26 +699,32 @@ export default {
 
       }
     }
-    .exam-categories{
+
+    .exam-categories {
       box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       border-radius: 20px;
       background: #FFFFFF;
       padding: 20px 24px 24px 24px;
-      .title-show-categories{
+
+      .title-show-categories {
         font-weight: 500;
         font-size: 16px;
         line-height: 28px;
         color: #23263B;
       }
+
       .attached-exam-box {
         margin-bottom: 10px;
         overflow: auto;
+
         .exam-result-box {
           margin-top: 16px;
           margin-bottom: 8px;
+
           :first-child {
             margin-left: 0px !important;
           }
+
           .exam-result-title {
             font-weight: 400;
             font-size: 12px;
@@ -692,25 +733,30 @@ export default {
             color: #9092A7;
           }
         }
+
         .attached-exam {
           align-items: center;
+
           .attached-exam-title {
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
             margin-left: 0px !important;
           }
+
           .detach-box {
             margin-left: 16px;
             margin-bottom: 16px;
             color: #E86562;
           }
+
           .detach-btn {
             background: #F4F5F6;
             border-radius: 10px;
             width: 40px;
             height: 40px;
           }
+
           .exam-result {
             padding: 0;
             margin-left: 10px;
@@ -722,6 +768,7 @@ export default {
             color: #65677F;
             margin-bottom: 16px;
           }
+
           .order-exam-title {
             padding: 8px;
           }
@@ -729,6 +776,7 @@ export default {
       }
     }
   }
+
   .question-item-content {
     margin-bottom: 16px;
   }
@@ -743,6 +791,7 @@ export default {
     padding-right: 20px;
   }
 }
+
 @media only screen and (max-width: 1439px) {
   .main-container {
     padding-left: 0
@@ -759,11 +808,13 @@ export default {
     padding-bottom: 20px;
   }
 }
+
 @media only screen and (max-width: 1023px) {
   .question-bank-filter {
     padding-right: 0px;
   }
 }
+
 @media only screen and (max-width: 599px) {
   .question-bank-toolbar {
     padding-bottom: 0;
