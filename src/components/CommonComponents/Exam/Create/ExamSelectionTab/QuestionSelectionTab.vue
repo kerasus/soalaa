@@ -22,7 +22,7 @@
     </div>
     <div class="col-md-3 col-xs-12 question-bank-filter">
       <sticky-both-sides :scrollInfo="scrollInfo"
-                         :width="340">
+                         :max-width="1024">
         <question-filter
           ref="filter"
           :show-major-list="false"
