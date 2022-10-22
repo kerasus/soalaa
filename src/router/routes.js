@@ -100,6 +100,8 @@ const routes = [
       layoutRightDrawer: false,
       layoutFooter: false,
       layoutHeaderCustomClass: '',
+      layoutBreadcrumbsElements: [],
+      layoutBreadcrumbs: false,
       layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
       layoutPageContainerCustomClass: 'main-layout-container'
     },
@@ -259,6 +261,26 @@ const routes = [
               {
                 path: '',
                 name: 'User.Create.Exam',
+                layoutConfig: {
+                  layoutBreadcrumbs: {
+                    separator: 'isax:arrow-right-3'
+                  },
+                  layoutBreadcrumbsElements: [
+                    {
+                      title: 'صفحه اصلی',
+                      route: {
+                        name: 'HomePage'
+                      }
+                    },
+                    {
+                      title: 'آزمون ها',
+                      route: {
+                        name: 'User.Exam.List'
+                      }
+                    },
+                    { title: 'ساخت آزمون' }
+                  ]
+                },
                 component: () => import('pages/User/exam/Create/Create')
               }
             ]
