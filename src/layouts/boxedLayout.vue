@@ -1,5 +1,6 @@
 <template>
   <div class="user-panel-no-navigation-container">
+    <breadcrumbs />
     <Router :include="keepAliveComponents" />
   </div>
 </template>
@@ -7,10 +8,12 @@
 <script>
 import Router from 'src/router/Router'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import { Breadcrumbs } from 'quasar-template-builder'
 export default {
   name: 'userPanelNoNavigationLayout',
   components: {
-    Router
+    Router,
+    Breadcrumbs
   },
   data: () => ({
     keepAliveComponents: KeepAliveComponents
