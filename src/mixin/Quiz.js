@@ -445,21 +445,22 @@ const mixinQuiz = {
       return new Promise((resolve, reject) => {
         let userExamId
         const examData = new ExamData(this.$axios)
-        if (that.needToLoadQuizData() || retake) {
-          that.saveCurrentExamQuestions([])
-          that.$store.commit('Exam/cleanCurrentQuestion')
-          that.bookletsDialog = true
-          that.$store.commit('loading/overlay', true)
+        const needToLoadQuizData = this.needToLoadQuizData()
+        if (needToLoadQuizData || retake) {
+          this.saveCurrentExamQuestions([])
+          this.$store.commit('Exam/cleanCurrentQuestion')
+          this.bookletsDialog = true
+          this.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId, personal, retake)
           examData.loadQuestionsFromFile()
         } else {
-          userExamId = that.quiz.user_exam_id
+          userExamId = this.quiz.user_exam_id
         }
         examData.getUserExamData(userExamId)
           .run()
           .then((result) => {
             try {
-              if (that.needToLoadQuizData() || retake) {
+              if (needToLoadQuizData || retake) {
                 // save questions in localStorage
                 that.saveCurrentExamQuestions(examData.exam.questions.list)
                 // save exam info in vuex store (remove questions of exam then save in store)
@@ -524,7 +525,8 @@ const mixinQuiz = {
         })
     },
     needToLoadQuizData () {
-      return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
+      return true
+      // return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
     },
     setQuestionsLtr (question) {
       question.ltr = !this.isLtrString(question.statement)

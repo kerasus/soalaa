@@ -119,7 +119,9 @@ export default {
     },
     sendAnswersAndFinishExam () {
       const that = this
-      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id)
+      const isPersonalExam = this.$route.name === 'onlineQuiz.alaaView.personal'
+      const finishExam = isPersonalExam
+      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id, finishExam)
         .then(() => {
           // that.$notify({
           //   group: 'notifs',
