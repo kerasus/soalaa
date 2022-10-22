@@ -217,10 +217,12 @@ export default {
   methods: {
     startExamProcess () {
       const that = this
-      // this.updateOverlay(true)
-      this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
+      const isPersonalExam = this.$route.name === 'onlineQuiz.konkoorView.personal'
+      const retake = false
+
+      this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView', isPersonalExam, retake)
         .then(() => {
-          that.questions = that.getCurrentExamQuestionsInArray()
+          this.questions = this.getCurrentExamQuestionsInArray()
           const callbacks = {
             'question.file-link:update': {
               afterReload () {
@@ -228,13 +230,13 @@ export default {
               }
             }
           }
-          that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
+          this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id, callbacks)
           // this.updateOverlay(false)
         })
         .catch((error) => {
           Assistant.reportErrors(error)
           // this.updateOverlay(false)
-          that.$router.push({ name: 'User.Exam.List' })
+          this.$router.push({ name: 'User.Exam.List' })
         })
     },
     timerOpen (value) {
@@ -276,24 +278,21 @@ export default {
         })
     },
     sendAnswersAndFinishExam () {
-      const that = this
-      this.quiz.sendAnswersAndFinishExam()
+      const isPersonalExam = this.$route.name === 'onlineQuiz.konkoorView.personal'
+      const finishExam = isPersonalExam
+      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id, finishExam)
         .then(() => {
-          that.$store.commit('Exam/clearExamData', that.quiz.user_exam_id)
-          that.$q.notify({
-            message: 'اطلاعات آزمون شما ثبت شد.',
-            type: 'positive'
-          })
-          that.$router.push({ name: 'User.Exam.List' })
+          this.$store.commit('clearExamData', this.quiz.user_exam_id)
+          this.$router.push({ name: 'User.Exam.List' })
         })
         .catch(() => {
-          that.$q.notify({
+          this.$q.notify({
             title: 'توجه!',
             message: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
             type: 'warning',
             duration: 30000
           })
-          that.$router.push({ name: 'User.Exam.List' })
+          this.$router.push({ name: 'User.Exam.List' })
         })
     },
     isInView (payload) {
