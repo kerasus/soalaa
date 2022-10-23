@@ -335,7 +335,7 @@ export default {
       if (!this.questions[details.index]) {
         return
       }
-      this.changeQuestion(this.questions[details.index].id, 'onlineQuiz.konkoorView')
+      this.changeQuestion(this.questions[details.index].id, this.$route.name)
 
       // startIndex, endIndex
       // this.updateLtr()
@@ -353,7 +353,7 @@ export default {
       if (firstInViewQuestion.id === this.currentQuestion.id) {
         return
       }
-      this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
+      this.changeQuestion(firstInViewQuestion.id, this.$route.name)
     },
     scrollTo (questionId) {
       if (!this.$refs.scroller) {
@@ -386,7 +386,7 @@ export default {
     },
     choiceClicked (questionId) {
       this.scrollTo(questionId)
-      this.changeQuestion(questionId)
+      this.changeQuestion(questionId, this.$route.name)
     },
     view () {
       if (this.windowSize.x > 1024) {
