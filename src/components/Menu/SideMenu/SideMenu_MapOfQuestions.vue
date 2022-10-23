@@ -42,7 +42,7 @@
                 class="questions-btn"
                 :class="{ active: currentQuestion.id === question.id }"
                 block
-                @click="changeQuestion(question.id)"
+                @click="changeQuestion(question.id, getAlaaViewRouteName())"
               >
                 تست شماره
                 {{ getQuestionNumberFromIndex(question.index) }}
@@ -95,6 +95,19 @@ export default {
     }, 1000)
   },
   methods: {
+    getAlaaViewRouteName () {
+      const isPersonalExam = this.$route.name === 'onlineQuiz.alaaView.personal'
+      const retake = this.$route.name === 'onlineQuiz.alaaView.retake'
+
+      if (isPersonalExam) {
+        return 'onlineQuiz.alaaView.personal'
+      }
+      if (retake) {
+        return 'onlineQuiz.alaaView.retake'
+      }
+
+      return 'onlineQuiz.alaaView'
+    },
     getUserQuestionData (questionId) {
       if (!this.quiz.user_exam_id || !questionId || !this.userQuizListData[this.quiz.user_exam_id]) {
         return false
