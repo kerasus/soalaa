@@ -39,6 +39,21 @@
           </template>
         </div>
 
+        <q-banner v-if="showSearchResultReport && !questions.loading"
+                  inline-actions
+                  rounded
+                  class="bg-orange text-white">
+          تعداد سوالات حاصل سرچ شما:
+          <span class="text-bold text-h6">
+            {{ paginationMeta.total }}
+          </span>
+          <template v-slot:action>
+            <q-btn flat
+                   label="بستن"
+                   @click="showSearchResultReport = false"
+            />
+          </template>
+        </q-banner>
         <div class="pagination">
           <pagination
             :meta="paginationMeta"
@@ -66,6 +81,7 @@ export default {
   components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data () {
     return {
+      showSearchResultReport: true,
       filterData: null,
       checkBox: false,
       filterQuestions: {
@@ -221,6 +237,7 @@ export default {
           this.paginationMeta = response.data.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
+          this.showSearchResultReport = true
         })
         .catch(function (error) {
           console.error(error)
