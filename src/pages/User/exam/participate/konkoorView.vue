@@ -266,7 +266,9 @@ export default {
         })
     },
     confirmSendingAllAnswers () {
-      this.syncUserAnswersWithDBAndSendAnswersToServerInExamTime(this.quiz.user_exam_id, false)
+      const isPersonalExam = this.$route.name === 'onlineQuiz.alaaView.personal' || this.$route.name === 'onlineQuiz.konkoorView.personal'
+      const finishExam = isPersonalExam
+      this.syncUserAnswersWithDBAndSendAnswersToServerInExamTime(this.quiz.user_exam_id, finishExam)
         .then(() => {
           this.$router.push({ name: 'User.Exam.List' })
           this.confirmationBubbleSheet = true
