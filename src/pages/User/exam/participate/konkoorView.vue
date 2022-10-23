@@ -37,7 +37,7 @@
           color="grey"
           flat
           fab-mini
-          @click="changeView('alaa')"
+          @click="changeView(getAlaaViewRouteName())"
         />
         <q-btn-dropdown
           class="dropdown-button"
@@ -189,12 +189,10 @@ export default {
       this.setHeights()
     }
   },
-  created () {
-  },
   mounted () {
-    if (this.$route.name === 'konkoorView') {
-      this.changeAppBarAndDrawer(false)
-    }
+    // if (this.$route.name === 'konkoorView') {
+    //   this.changeAppBarAndDrawer(false)
+    // }
     this.startExamProcess()
     this.setHeights()
     this.view()
@@ -220,7 +218,7 @@ export default {
       const isPersonalExam = this.$route.name === 'onlineQuiz.konkoorView.personal'
       const retake = false
 
-      this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView', isPersonalExam, retake)
+      this.startExam(this.$route.params.quizId, this.$route.name, isPersonalExam, retake)
         .then(() => {
           this.questions = this.getCurrentExamQuestionsInArray()
           const callbacks = {
@@ -399,6 +397,19 @@ export default {
           params: { quizId: this.$route.params.quizId, questNumber: 1 }
         })
       }
+    },
+    getAlaaViewRouteName () {
+      const isPersonalExam = this.$route.name === 'onlineQuiz.konkoorView.personal'
+      const retake = this.$route.name === 'onlineQuiz.konkoorView.retake'
+
+      if (isPersonalExam) {
+        return 'onlineQuiz.alaaView.personal'
+      }
+      if (retake) {
+        return 'onlineQuiz.alaaView.retake'
+      }
+
+      return 'onlineQuiz.alaaView'
     },
     setHeights () {
       if (this.$refs.scroller.$el) {

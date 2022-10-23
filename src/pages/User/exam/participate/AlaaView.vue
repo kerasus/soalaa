@@ -193,7 +193,7 @@ export default {
       const isPersonalExam = this.$route.name === 'onlineQuiz.alaaView.personal'
       const retake = this.$route.name === 'onlineQuiz.alaaView.retake'
 
-      this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView', isPersonalExam, retake)
+      this.startExam(this.$route.params.quizId, this.$route.name, isPersonalExam, retake)
         .then(() => {
           this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
           this.updateOverlay(false)
