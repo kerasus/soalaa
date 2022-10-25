@@ -40,10 +40,16 @@
     >
       <edit-coefficients />
     </q-expansion-item>
+    <q-btn color="primary"
+           class="full-width q-mt-md"
+           label="کپی کردن لینک شرکت در آزمون"
+           @click="copyExamLink"
+    />
   </div>
 </template>
 
 <script>
+import { copyToClipboard } from 'quasar'
 import EditExamReport from 'pages/Admin/exam/editExamReport'
 import Upload from 'pages/Admin/exam/Upload'
 import EditCoefficients from 'pages/Admin/exam/editCoefficients'
@@ -80,6 +86,25 @@ export default {
         .catch(() => {
           this.$store.dispatch('loading/linearLoading', false)
           this.generateJsonFileLoading = false
+        })
+    },
+    copyExamLink () {
+      const examId = this.$route.params.id
+      const props = this.$router.resolve({
+        name: 'onlineQuiz.alaaView',
+        params: { quizId: examId, questNumber: 1 }
+      })
+      const examPageUrl = window.location.origin + props.path
+      copyToClipboard(examPageUrl)
+        .then(() => {
+          this.$q.notify({
+            type: 'positive',
+            message: 'لینک آزمون کپی شد.',
+            position: 'top'
+          })
+        })
+        .catch(() => {
+          // fail
         })
     }
   },
