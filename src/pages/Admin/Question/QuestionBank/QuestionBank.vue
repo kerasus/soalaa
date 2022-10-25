@@ -32,12 +32,28 @@
               v-for="question in questions.list"
               :key="question.id"
               :question="question"
+              :listOptions="questionsOptions"
               pageStrategy="question-bank"
               @checkSelect="onClickedCheckQuestionBtn"
             />
           </template>
         </div>
 
+        <q-banner v-if="showSearchResultReport && !questions.loading"
+                  inline-actions
+                  rounded
+                  class="bg-orange text-white">
+          تعداد سوالات حاصل سرچ شما:
+          <span class="text-bold text-h6">
+            {{ paginationMeta.total }}
+          </span>
+          <template v-slot:action>
+            <q-btn flat
+                   label="بستن"
+                   @click="showSearchResultReport = false"
+            />
+          </template>
+        </q-banner>
         <div class="pagination">
           <pagination
             :meta="paginationMeta"
@@ -65,6 +81,7 @@ export default {
   components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data () {
     return {
+      showSearchResultReport: true,
       filterData: null,
       checkBox: false,
       filterQuestions: {
@@ -91,6 +108,13 @@ export default {
       questionId: [],
       loadingQuestion: new Question(),
       questions: new QuestionList(),
+      questionsOptions: {
+        copy: true,
+        detachQuestion: true,
+        deleteQuestionFromDb: true,
+        editQuestion: true,
+        switch: true
+      },
       disablePagination: false,
       paginationMeta: {
         current_page: 1,
@@ -213,6 +237,7 @@ export default {
           this.paginationMeta = response.data.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
+          this.showSearchResultReport = true
         })
         .catch(function (error) {
           console.error(error)
