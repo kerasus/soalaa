@@ -88,6 +88,7 @@ export default {
         major_type: [],
         reference_type: [],
         year_type: [],
+        statuses: [],
         levels: [
           {
             id: '1',
@@ -221,6 +222,7 @@ export default {
         level: (filterData.level) ? filterData.level.map(item => item.id) : [],
         years: (filterData.years) ? filterData.years.map(item => item.id) : [],
         majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
+        statuses: (filterData.statuses) ? filterData.statuses.map(item => item.id) : [],
         reference: (filterData.reference) ? filterData.reference.map(item => item.id) : []
       }
     },
@@ -257,6 +259,13 @@ export default {
               this.filterQuestions.major_type.push(option)
             }
           })
+        })
+      this.getQuestionStatuses()
+    },
+    getQuestionStatuses () {
+      this.$axios.get(API_ADDRESS.question.status.base)
+        .then(response => {
+          this.filterQuestions.statuses = response.data.data
         })
     },
     selectAllQuestions () {
