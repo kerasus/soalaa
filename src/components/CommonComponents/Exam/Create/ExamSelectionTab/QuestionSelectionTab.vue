@@ -21,8 +21,7 @@
       </div>
     </div>
     <div class="col-md-3 col-xs-12 question-bank-filter">
-      <sticky-both-sides :scrollInfo="scrollInfo"
-                         :max-width="1024">
+      <sticky-both-sides :max-width="1024">
         <question-filter
           ref="filter"
           :show-major-list="false"
@@ -180,12 +179,6 @@ export default {
     'update:exam'
   ],
   props: {
-    scrollInfo: {
-      type: Object,
-      default() {
-        return {}
-      }
-    },
     questionLoading: {
       type: Boolean,
       default: false

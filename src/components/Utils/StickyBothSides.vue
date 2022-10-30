@@ -16,12 +16,6 @@
 export default {
   name: 'StickyBothSides',
   props: {
-    scrollInfo: {
-      type: Object,
-      default() {
-        return {}
-      }
-    },
     maxWidth: {
       type: Number,
       default: 0
@@ -33,6 +27,12 @@ export default {
     bottomGap: {
       type: Number,
       default: 15
+    }
+  },
+  inject: {
+    scrollInfo: {
+      from: 'scrollInfo',
+      default: {}
     }
   },
   data() {
@@ -64,6 +64,7 @@ export default {
   },
   watch: {
     scrollInfo(newValue) {
+      console.log(newValue)
       if (!this.disableSticky) {
         this.updateScroll(newValue)
       } else {
