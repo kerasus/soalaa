@@ -5,8 +5,7 @@
       <div
         :hidden="$q.screen.lt.sm"
         class="exam-detail-container col-xs-12 col-lg-3">
-        <sticky-both-sides :scroll-info="scrollInfo"
-                           :max-width="1440">
+        <sticky-both-sides :max-width="1440">
           <q-skeleton v-if="exam.loading"
                       width="300px"
                       height="400px"
@@ -175,12 +174,6 @@ export default {
   },
   emits: ['detachQuestion'],
   props: {
-    scrollInfo: {
-      type: Object,
-      default() {
-        return {}
-      }
-    },
     exam: {
       type: Exam,
       default: new Exam()
