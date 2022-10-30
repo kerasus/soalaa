@@ -24,6 +24,45 @@
             @selectAllQuestions="selectAllQuestions"
           />
         </div>
+        <div class="col-12 filter-card-container">
+          <q-card
+            class="filter-card"
+            flat
+          >
+            <q-card-section class="search-section">
+              <q-input
+                v-model="searchInput"
+                filled
+                class="bg-white search-input"
+                placeholder="جستجو در سوالات..."
+              >
+                <template v-slot:append>
+                  <q-btn
+                    flat
+                    rounded
+                    icon="isax:search-normal-1"
+                    class="search"
+                    @click="filterByStatement"
+                  />
+                </template>
+              </q-input>
+            </q-card-section>
+
+            <q-card-section class="filter-section">
+              <q-select
+                v-model="searchSelector"
+                filled
+                dropdown-icon="isax:arrow-down-1"
+                option-value="value"
+                option-label="title"
+                :options="searchInputOptions"
+                class="backGround-gray-input filter-input"
+                @update:model-value="sortByCreatedAt"
+              >
+              </q-select>
+            </q-card-section>
+          </q-card>
+        </div>
         <div class="question-bank-content">
           <question-item v-if="questions.loading"
                          :question="loadingQuestion"
@@ -83,6 +122,21 @@ export default {
   components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data() {
     return {
+      searchInput: '',
+      searchSelector: {
+        title: 'جدید ترین',
+        value: 'ASC'
+      },
+      searchInputOptions: [
+        {
+          title: 'جدید ترین',
+          value: 'ASC'
+        },
+        {
+          title: 'قدیمی ترین',
+          value: 'DESC'
+        }
+      ],
       showSearchResultReport: true,
       filterData: null,
       checkBox: false,
@@ -267,9 +321,13 @@ export default {
     getFiltersForRequest(filterData) {
       return {
         tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
-        level: (filterData.level) ? filterData.level.map(item => item.id) : [],
+        level: (filterData.level) ? filterData.level.map(item => item.value) : [],
         years: (filterData.years) ? filterData.years.map(item => item.id) : [],
         majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
+        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
+        statement: (filterData.statement) ? filterData.statement[0] : '',
+        sort_by: (this.searchSelector.value) ? 'created_at' : '',
+        sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value
         statuses: (filterData.statuses) ? filterData.statuses.map(item => item.id) : [],
         reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
@@ -317,6 +375,12 @@ export default {
           this.filterQuestions.statuses = response.data.data
         })
     },
+    filterByStatement() {
+      this.$refs.filter.changeFilterData('statement', [this.searchInput])
+    },
+    sortByCreatedAt() {
+      this.$refs.filter.changeFilterData('sort_type', [this.searchSelector.value])
+    },
     selectAllQuestions() {
       this.checkBox = !this.checkBox
       if (this.selectedQuestions.length) {
@@ -352,6 +416,110 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.filter-card-container {
+  padding-bottom: 24px;
+  @media only screen and (max-width: 1439px) {
+    padding-bottom: 20px;
+  }
+  @media only screen and (max-width: 1023px) {
+    padding-bottom: 16px;
+  }
+
+  .filter-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: #f4f6f9;
+    @media only screen and (max-width: 599px) {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    &:deep(.q-card__section) {
+      padding: 0;
+
+      .q-field--filled .q-field__inner .q-field__control {
+        background: #FFFFFF;
+      }
+
+      .q-field--filled .q-field__inner .q-field__control .q-field__append, .q-field--filled .q-field__inner .q-field__control .q-field__prepend {
+        padding-right: 16px;
+        padding-left: 12px;
+      }
+
+      @media only screen and (max-width: 599px) {
+        width: 100%;
+      }
+    }
+
+    .search-section {
+      .search-input {
+        width: 300px;
+        background-color: white;
+
+        &:deep(.q-field__append) {
+          padding-right: 8px !important;
+
+          .q-icon {
+            color: #6D708B;
+            cursor: pointer;
+          }
+        }
+
+        &:deep(.q-field__control) {
+          background-color: white;
+        }
+
+        //&:deep(.q-field--filled .q-field__inner .q-field__control .q-field__append, .q-field--filled .q-field__inner .q-field__control .q-field__prepend ){
+        //
+        //}
+        @media only screen and (max-width: 1023px) {
+          width: 352px;
+        }
+        @media only screen and (max-width: 599px) {
+          width: 100%;
+        }
+
+        .search {
+          color: #6D708B;
+
+          :deep(.q-field__inner .q-field__control .q-field__append .q-icon) {
+            color: #6D708B;
+          }
+        }
+      }
+    }
+
+    .filter-section {
+      display: flex;
+      flex-direction: row;
+
+      :deep(.q-field--filled .q-field__inner .q-field__control .q-field__label) {
+        margin-top: -10px;
+      }
+
+      :deep(.q-field--filled .q-field__inner .q-field__control .q-field__native, .q-field--filled .q-field__inner .q-field__control .q-field__prefix, .q-field--filled .q-field__inner .q-field__control .q-field__suffix, .q-field--filled .q-field__inner .q-field__control .q-field__input) {
+        padding-left: 16px;
+        padding-right: 0;
+        min-height: 40px;
+      }
+
+      .filter-input {
+        width: 160px;
+        @media only screen and (max-width: 1023px) {
+          width: 164px;
+        }
+        @media only screen and (max-width: 599px) {
+          width: 100%;
+          padding-top: 16px;
+        }
+      }
+
+    }
+  }
+}
 
 .q-checkbox__bg {
   border: 1px solid #65677F;
