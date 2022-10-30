@@ -445,21 +445,22 @@ const mixinQuiz = {
       return new Promise((resolve, reject) => {
         let userExamId
         const examData = new ExamData(this.$axios)
-        if (that.needToLoadQuizData() || retake) {
-          that.saveCurrentExamQuestions([])
-          that.$store.commit('Exam/cleanCurrentQuestion')
-          that.bookletsDialog = true
-          that.$store.commit('loading/overlay', true)
+        const needToLoadQuizData = this.needToLoadQuizData()
+        if (needToLoadQuizData || retake) {
+          this.saveCurrentExamQuestions([])
+          this.$store.commit('Exam/cleanCurrentQuestion')
+          this.bookletsDialog = true
+          this.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId, personal, retake)
           examData.loadQuestionsFromFile()
         } else {
-          userExamId = that.quiz.user_exam_id
+          userExamId = this.quiz.user_exam_id
         }
         examData.getUserExamData(userExamId)
           .run()
           .then((result) => {
             try {
-              if (that.needToLoadQuizData() || retake) {
+              if (needToLoadQuizData || retake) {
                 // save questions in localStorage
                 that.saveCurrentExamQuestions(examData.exam.questions.list)
                 // save exam info in vuex store (remove questions of exam then save in store)
@@ -524,7 +525,8 @@ const mixinQuiz = {
         })
     },
     needToLoadQuizData () {
-      return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
+      return true
+      // return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
     },
     setQuestionsLtr (question) {
       question.ltr = !this.isLtrString(question.statement)
@@ -777,21 +779,20 @@ const mixinQuiz = {
         this.loadExamPageByViewType(this.quiz.id, questNumber, viewType)
       }
     },
-    loadExamPageByViewType (examId, questNumber, viewType) {
-      if (!viewType) {
-        viewType = 'onlineQuiz.alaaView'
+    loadExamPageByViewType (examId, questNumber, routeName) {
+      if (!routeName) {
+        routeName = 'onlineQuiz.alaaView'
       }
-      this.$router.push({ name: viewType, params: { quizId: examId, questNumber } })
+      this.$router.push({ name: routeName, params: { quizId: examId, questNumber } })
     },
-    // ToDo: change argument (type, questNumber)
-    changeView (type) {
-      if (type === 'alaa') {
+    changeView (routeName) {
+      if (routeName.search('onlineQuiz.alaaView') !== -1) {
         const questionNumber = this.getQuestionNumberFromId(this.currentQuestion.id)
         this.$router.push({
-          name: 'onlineQuiz.alaaView',
+          name: routeName,
           params: { quizId: this.quiz.id, questNumber: questionNumber }
         })
-      } else if (type === 'konkoor') {
+      } else if (routeName.search('onlineQuiz.konkoorView') !== -1) {
         this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
         setTimeout(() => {
           this.$router.push({ name: 'konkoorView', params: { quizId: this.quiz.id } })

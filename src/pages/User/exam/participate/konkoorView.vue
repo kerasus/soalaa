@@ -37,7 +37,7 @@
           color="grey"
           flat
           fab-mini
-          @click="changeView('alaa')"
+          @click="changeView(getAlaaViewRouteName())"
         />
         <q-btn-dropdown
           class="dropdown-button"
@@ -189,12 +189,10 @@ export default {
       this.setHeights()
     }
   },
-  created () {
-  },
   mounted () {
-    if (this.$route.name === 'konkoorView') {
-      this.changeAppBarAndDrawer(false)
-    }
+    // if (this.$route.name === 'konkoorView') {
+    //   this.changeAppBarAndDrawer(false)
+    // }
     this.startExamProcess()
     this.setHeights()
     this.view()
@@ -217,10 +215,12 @@ export default {
   methods: {
     startExamProcess () {
       const that = this
-      // this.updateOverlay(true)
-      this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
+      const isPersonalExam = this.$route.name === 'onlineQuiz.konkoorView.personal'
+      const retake = false
+
+      this.startExam(this.$route.params.quizId, this.$route.name, isPersonalExam, retake)
         .then(() => {
-          that.questions = that.getCurrentExamQuestionsInArray()
+          this.questions = this.getCurrentExamQuestionsInArray()
           const callbacks = {
             'question.file-link:update': {
               afterReload () {
@@ -228,13 +228,13 @@ export default {
               }
             }
           }
-          that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
+          this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id, callbacks)
           // this.updateOverlay(false)
         })
         .catch((error) => {
           Assistant.reportErrors(error)
           // this.updateOverlay(false)
-          that.$router.push({ name: 'User.Exam.List' })
+          this.$router.push({ name: 'User.Exam.List' })
         })
     },
     timerOpen (value) {
@@ -266,7 +266,9 @@ export default {
         })
     },
     confirmSendingAllAnswers () {
-      this.syncUserAnswersWithDBAndSendAnswersToServerInExamTime(this.quiz.user_exam_id, false)
+      const isPersonalExam = this.$route.name === 'onlineQuiz.alaaView.personal' || this.$route.name === 'onlineQuiz.konkoorView.personal'
+      const finishExam = isPersonalExam
+      this.syncUserAnswersWithDBAndSendAnswersToServerInExamTime(this.quiz.user_exam_id, finishExam)
         .then(() => {
           this.$router.push({ name: 'User.Exam.List' })
           this.confirmationBubbleSheet = true
@@ -276,24 +278,21 @@ export default {
         })
     },
     sendAnswersAndFinishExam () {
-      const that = this
-      this.quiz.sendAnswersAndFinishExam()
+      const isPersonalExam = this.$route.name === 'onlineQuiz.konkoorView.personal'
+      const finishExam = isPersonalExam
+      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id, finishExam)
         .then(() => {
-          that.$store.commit('Exam/clearExamData', that.quiz.user_exam_id)
-          that.$q.notify({
-            message: 'اطلاعات آزمون شما ثبت شد.',
-            type: 'positive'
-          })
-          that.$router.push({ name: 'User.Exam.List' })
+          this.$store.commit('clearExamData', this.quiz.user_exam_id)
+          this.$router.push({ name: 'User.Exam.List' })
         })
         .catch(() => {
-          that.$q.notify({
+          this.$q.notify({
             title: 'توجه!',
             message: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
             type: 'warning',
             duration: 30000
           })
-          that.$router.push({ name: 'User.Exam.List' })
+          this.$router.push({ name: 'User.Exam.List' })
         })
     },
     isInView (payload) {
@@ -338,7 +337,7 @@ export default {
       if (!this.questions[details.index]) {
         return
       }
-      this.changeQuestion(this.questions[details.index].id, 'onlineQuiz.konkoorView')
+      this.changeQuestion(this.questions[details.index].id, this.$route.name)
 
       // startIndex, endIndex
       // this.updateLtr()
@@ -356,7 +355,7 @@ export default {
       if (firstInViewQuestion.id === this.currentQuestion.id) {
         return
       }
-      this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
+      this.changeQuestion(firstInViewQuestion.id, this.$route.name)
     },
     scrollTo (questionId) {
       if (!this.$refs.scroller) {
@@ -389,7 +388,7 @@ export default {
     },
     choiceClicked (questionId) {
       this.scrollTo(questionId)
-      this.changeQuestion(questionId)
+      this.changeQuestion(questionId, this.$route.name)
     },
     view () {
       if (this.windowSize.x > 1024) {
@@ -400,6 +399,19 @@ export default {
           params: { quizId: this.$route.params.quizId, questNumber: 1 }
         })
       }
+    },
+    getAlaaViewRouteName () {
+      const isPersonalExam = this.$route.name === 'onlineQuiz.konkoorView.personal'
+      const retake = this.$route.name === 'onlineQuiz.konkoorView.retake'
+
+      if (isPersonalExam) {
+        return 'onlineQuiz.alaaView.personal'
+      }
+      if (retake) {
+        return 'onlineQuiz.alaaView.retake'
+      }
+
+      return 'onlineQuiz.alaaView'
     },
     setHeights () {
       if (this.$refs.scroller.$el) {

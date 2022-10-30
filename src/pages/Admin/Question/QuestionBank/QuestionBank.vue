@@ -63,7 +63,7 @@ import QuestionBankHeader from 'components/Question/QuestionBank/components/Ques
 export default {
   name: 'QuestionBank',
   components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
-  data () {
+  data() {
     return {
       filterData: null,
       checkBox: false,
@@ -112,25 +112,25 @@ export default {
   },
   watch: {
     'selectedQuestions.length': {
-      handler (newValue, oldValue) {
+      handler(newValue, oldValue) {
         this.exam.questions.list = []
         this.exam.questions.list = this.selectedQuestions
         this.questionListKey = Date.now()
       }
     }
   },
-  created () {
+  created() {
     this.getQuestionData()
     this.getFilterOptions()
   },
   emits: ['onFilter'],
   methods: {
-    onFilter (filterData) {
+    onFilter(filterData) {
       this.$emit('onFilter', filterData)
       this.filterData = this.getFiltersForRequest(filterData)
       this.getQuestionData(1, this.filterData)
     },
-    RemoveChoice (title) {
+    RemoveChoice(title) {
       const target = this.selectedQuestions.filter(question => question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
       if (target.length) {
         target.forEach(question => {
@@ -141,10 +141,10 @@ export default {
         })
       }
     },
-    toggleQuestionSelected (question) {
+    toggleQuestionSelected(question) {
       question.selected = !question.selected
     },
-    questionHandle (question) {
+    questionHandle(question) {
       if (question.selected) {
         this.addQuestionToSelectedList(question)
         // this.addQuestionToExam(question)
@@ -153,26 +153,26 @@ export default {
         // this.deleteQuestionFromExam(question)
       }
     },
-    onClickedCheckQuestionBtn (question) {
+    onClickedCheckQuestionBtn(question) {
       this.toggleQuestionSelected(question)
       this.questionHandle(question)
     },
-    addQuestionToExam (question) {
+    addQuestionToExam(question) {
       this.$emit('addQuestionToExam', question)
       this.questionListKey = Date.now()
     },
-    deleteQuestionFromExam (question) {
+    deleteQuestionFromExam(question) {
       this.$emit('deleteQuestionFromExam', question)
       this.questionListKey = Date.now()
     },
-    addQuestionToSelectedList (question) {
+    addQuestionToSelectedList(question) {
       this.selectedQuestions.push(question)
       if (this.selectedQuestions.length === this.questions.list.length) {
         this.checkBox = true
       } else this.checkBox = 'maybe'
       this.questionListKey = Date.now()
     },
-    deleteQuestionFromSelectedList (question) {
+    deleteQuestionFromSelectedList(question) {
       if (this.checkBox) {
         this.checkBox = false
       }
@@ -185,13 +185,13 @@ export default {
       this.questionListKey = Date.now()
     },
 
-    updatePage (page) {
+    updatePage(page) {
       this.getQuestionData(page, this.filterData)
     },
-    deleteFilterItem (filter) {
+    deleteFilterItem(filter) {
       // this.$refs.filter.setTicked('tree', filter.id, false)
     },
-    getFiltersForRequest (filterData) {
+    getFiltersForRequest(filterData) {
       return {
         tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
         level: (filterData.level) ? filterData.level.map(item => item.id) : [],
@@ -201,7 +201,7 @@ export default {
       }
     },
 
-    getQuestionData (page, filters) {
+    getQuestionData(page, filters) {
       if (!page) {
         page = 1
       }
@@ -220,7 +220,7 @@ export default {
           this.questions.loading = false
         })
     },
-    getFilterOptions () {
+    getFilterOptions() {
       this.$axios.get(API_ADDRESS.option.base)
         .then((response) => {
           response.data.data.forEach(option => {
@@ -234,7 +234,7 @@ export default {
           })
         })
     },
-    selectAllQuestions () {
+    selectAllQuestions() {
       this.checkBox = !this.checkBox
       if (this.selectedQuestions.length) {
         this.questions.list.forEach(question => {
@@ -254,7 +254,7 @@ export default {
         })
       }
     },
-    deleteAllQuestions () {
+    deleteAllQuestions() {
       if (this.checkBox) {
         this.checkBox = false
       }
@@ -292,11 +292,13 @@ export default {
 
   .question-bank-content {
     margin-bottom: 16px;
+
     :deep(.question-card) {
       margin-bottom: 16px;
     }
   }
 }
+
 @media only screen and (max-width: 1919px) {
   .main-container {
     padding-left: 0;
@@ -306,6 +308,7 @@ export default {
     padding-right: 20px;
   }
 }
+
 @media only screen and (max-width: 1439px) {
   .main-container {
     padding-left: 30px;
@@ -322,11 +325,13 @@ export default {
     padding-bottom: 20px;
   }
 }
+
 @media only screen and (max-width: 1023px) {
   .question-bank-filter {
     padding-right: 0px;
   }
 }
+
 @media only screen and (max-width: 599px) {
   .question-bank-toolbar {
     padding-bottom: 0;
