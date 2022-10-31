@@ -267,7 +267,11 @@ export default {
     notExistingSubcategories () {
       return (subGroup) => {
         const that = this
-        return that.subCategoriesList.list.filter(subCategory => !subGroup.sub_category.find(item => item.sub_category_title === subCategory.title))
+        const selectedCategoryObj = this.categoryList.list.find(category => category.title === this.selectedCategory)
+        if (!selectedCategoryObj) {
+          return []
+        }
+        return that.subCategoriesList.list.filter(subCategory => !subGroup.sub_category.find(item => item.sub_category_title === subCategory.title) && parseInt(subCategory.category_id) === parseInt(selectedCategoryObj.id))
       }
     }
   },
