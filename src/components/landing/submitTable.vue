@@ -1435,8 +1435,9 @@ export default {
   methods: {
     async addToCart() {
       // console.log('addToCart :', this.selectedProductId)
+      const data = [this.selectedProductId]
       try {
-        await this.$store.dispatch('Cart/addToCart', this.selectedProductId)
+        await this.$store.dispatch('Cart/addToCart', data)
         // uninstall and install router :)
         this.$router.push({ name: 'cart' })
       } catch (e) {

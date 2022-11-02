@@ -593,7 +593,8 @@ const routes = [
         //     Permissions.hasPermission('examStore')]
         // },
         layoutConfig: {
-          layoutHeaderVisible: false,
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
           layoutLeftDrawerVisible: false
         }
       },

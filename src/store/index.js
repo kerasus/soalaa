@@ -33,7 +33,8 @@ export default store(function (/* { ssrContext } */) {
           'userQuizListData',
           'Auth',
           'psychometricAnswer',
-          'AppLayout'
+          'AppLayout',
+          'Cart'
         ],
         // keep state.count in localStorage
         namespace: 'vuex-localstorage'

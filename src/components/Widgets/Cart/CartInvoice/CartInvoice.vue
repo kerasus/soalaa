@@ -259,6 +259,7 @@
 
 <script>
 import Widgets from 'src/components/PageBuilder/Widgets'
+import { Cart } from 'src/models/Cart'
 
 export default {
   name: 'CartInvoice',
@@ -269,6 +270,10 @@ export default {
       default() {
         return {}
       }
+    },
+    cart: {
+      type: Object,
+      default: () => new Cart()
     }
   },
 
@@ -288,10 +293,6 @@ export default {
   created() {},
 
   computed: {
-    cart() {
-      return this.$store.getters['Cart/cart']
-    },
-
     totalFinalPrice() {
       return this.getPriceFormat('final') ? this.getPriceFormat('final') : 0
     },
