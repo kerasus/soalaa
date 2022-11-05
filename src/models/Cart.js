@@ -52,7 +52,17 @@ class Cart extends Model {
   }
 
   removeItem (cartId) {
-    this.items.list = this.items.list.filter(item => item.grand.id !== cartId)
+    for (let product = 0; product < this.items.list.length; product++) {
+      this.items.list[product].order_product.list.forEach(order => {
+        if (order.id === cartId) {
+          this.items.list[product].order_product.list = this.items.list[product].order_product.list.filter(item => item.id !== cartId)
+        }
+      })
+
+      if (this.items.list[product].grand.id !== null && this.items.list[product].order_product.list.length === 0) {
+        this.items.list.splice(product, 1)
+      }
+    }
     this.changeCartItems()
   }
 
