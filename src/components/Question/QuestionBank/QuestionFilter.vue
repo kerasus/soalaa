@@ -113,6 +113,23 @@
         <div v-if="filterQuestions.levels.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
 
       </question-filter-expansion>
+
+      <question-filter-expansion
+        header-title="وضعیت سوال"
+      >
+        <q-option-group v-model="selectedQuestionStatuses"
+                        type="checkbox"
+                        :options="filterQuestions.statuses.map(option => {
+                          return {
+                            label: option.display_title,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeQuestionStatuses"
+        />
+        <div v-if="filterQuestions.levels.length === 0"> هیچ وضعیتی ایجاد نشده است.</div>
+
+      </question-filter-expansion>
     </div>
   </div>
 </template>
@@ -141,6 +158,7 @@ export default {
       selectedYears: [],
       selectedMajors: [],
       selectedLevels: [],
+      selectedQuestionStatuses: [],
       selectedTags: [],
       filtersData: {
         tags: []
@@ -185,6 +203,9 @@ export default {
     },
     onChangeLevels (value) {
       this.changeFilterData('level', value)
+    },
+    onChangeQuestionStatuses (value) {
+      this.changeFilterData('statuses', value)
     },
     onChangeYears (value) {
       this.changeFilterData('years', value)

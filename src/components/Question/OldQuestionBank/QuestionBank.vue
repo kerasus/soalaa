@@ -315,7 +315,6 @@
 <script>
 import QuestionCard from 'src/components/Question/OldQuestionBank/QuestionCard'
 import API_ADDRESS from 'src/api/Addresses'
-import axios from 'axios'
 
 export default {
   name: 'QuestionBank',
@@ -362,7 +361,7 @@ export default {
     getData () {
       const that = this
       that.loading = true
-      axios.get('https://cdn.alaatv.com/upload/knowledgeTree.json', {
+      this.$axios.get('https://cdn.alaatv.com/upload/knowledgeTree.json', {
         transformRequest: (data, headers) => {
           delete headers.common.Authorization
           return data

@@ -28,11 +28,12 @@
           <div class="search-box">
             <div>
               <q-input
-                v-model.number="questionSearchNumber"
+                v-model="searchedQuestionOrder"
                 type="number"
                 outlined
                 dense
                 label="شماره سوال"
+                @keydown.enter="scrollToQuestion"
               >
                 <template v-slot:append>
                   <div @click="scrollToQuestion">
@@ -55,35 +56,41 @@
         </div>
       </div>
     </q-card>
-    <q-virtual-scroll
-      ref="scroller"
-      :key="questionListKey"
-      class="konkoor-view-scroll q-pa-md q-mt-md"
-      :items="filteredQuestions"
-      @virtual-scroll="onScroll"
+    <div  v-if="pageLoading"
+          class="text-center ">
+      <q-spinner-ball
+        class="q-my-xl"
+        color="primary"
+        size="5em"
+      />
+    </div>
+    <q-virtual-scroll  v-else
+                       ref="scroller"
+                       :key="questionListKey"
+                       class="konkoor-view-scroll q-pa-md q-mt-md"
+                       :items="filteredQuestions"
+                       @virtual-scroll="onScroll"
     >
       <template v-slot="{ item, index }">
-        <q-item
-          :key="index"
-          class="question-field no-padding q-mb-md"
-          dense
+        <q-item :key="index"
+                class="question-field no-padding q-mb-md"
+                dense
         >
-          <q-item-section>
-            <question-item
-              pageStrategy="lesson-detail"
-              :question="item"
-              :confirmLoading="confirmQLoading"
-              :questionListOptions="questionsOptions"
-              :consider-active-category="false"
-              :questions-column="$refs.questionsColumn"
-              :exam-id="$route.params.quizId"
-              :sub-category="quizData.sub_categories"
-              :final-approval-mode="false"
-              :show-question-number="true"
-              @detachQuestion="detachQuestion"
-              @deleteQuestion="deleteQuestion"
-              @copyIdToClipboard="copyIdToClipboard"
-              @confirmQuestion="confirmQuestion"
+          <q-item-section class="no-wrap">
+            <!--            :sub-category="quizData.sub_categories"-->
+            <!--            :exam-id="$route.params.quizId"-->
+            <!--            :consider-active-category="false"-->
+            <!--            :questions-column="$refs.questionsColumn"-->
+            <question-item pageStrategy="lesson-detail"
+                           :question="item"
+                           :confirmLoading="confirmQLoading"
+                           :listOptions="questionsOptions"
+                           :final-approval-mode="false"
+                           :show-question-number="true"
+                           @detachQuestion="detachQuestion"
+                           @deleteQuestion="deleteQuestion"
+                           @copyIdToClipboard="copyIdToClipboard"
+                           @confirmQuestion="confirmQuestion"
             />
           </q-item-section>
         </q-item>
@@ -101,7 +108,6 @@ import { Exam } from 'src/models/Exam'
 import API_ADDRESS from 'src/api/Addresses'
 import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { copyToClipboard } from 'quasar'
-
 export default {
   name: 'SubCategoryQuestions',
   components: {
@@ -110,6 +116,7 @@ export default {
   mixins: [mixinAuth, mixinQuiz],
   data () {
     return {
+      pageLoading: false,
       confirmQLoading: false,
       questionsOptions: {
         copy: true,
@@ -143,6 +150,7 @@ export default {
       ],
       inView: [],
       questionSearchNumber: 0,
+      searchedQuestionOrder: 0,
       firstQuestionOrder: 0
     }
   },
@@ -273,7 +281,16 @@ export default {
       return this.$axios.get(API_ADDRESS.question.confirm(question.id))
     },
     scrollToQuestion () {
-      this.scrollTo(null, this.questionSearchNumber)
+      const questionIndex = this.filteredQuestions.findIndex(question => question.order.toString() === this.searchedQuestionOrder.toString())
+      if (questionIndex === -1) {
+        this.searchedQuestionOrder = 0
+        this.$q.notify({
+          message: 'سوال پیدا نشد.',
+          type: 'negative'
+        })
+        return
+      }
+      this.$refs.scroller.scrollTo(questionIndex, 'start-force')
     },
     questionListHeight () {
       // box is a col-7 with 12px padding
@@ -287,11 +304,13 @@ export default {
       this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
     },
     async loadQuizDataAndSubCategories (reload = false) {
+      this.pageLoading = true
       try {
         const response = await this.getQuizDataAndSubCategories()
         if (response.data.data.length) {
           this.firstQuestionOrder = response.data.data[0].order
           this.loadSubCategories(response, reload)
+          this.pageLoading = false
         } else {
           // this.$router.push({ name: 'Admin.Exam.Index' })
           this.$q.notify({
@@ -299,8 +318,10 @@ export default {
             message: 'دیتای مورد نظر یافت نشد'
           })
         }
+        this.pageLoading = false
       } catch (e) {
         console.error('err ', e)
+        this.pageLoading = false
       }
     },
     getQuizDataAndSubCategories () {
@@ -393,7 +414,6 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
 .search-box{
   display: flex;

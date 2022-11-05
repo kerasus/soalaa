@@ -100,11 +100,14 @@ export default {
         })
         return
       }
-      let routeNameToRedirect = window.localStorage.getItem('redirectTo') || window.localStorage.getItem('routeNameToRedirect')
-      if (!routeNameToRedirect || routeNameToRedirect === 'login') {
-        routeNameToRedirect = ''
+      const redirectTo = this.$store.getters['Auth/redirectTo']
+      const defaultRoute = { name: 'User.Exam.List' }
+      if (!redirectTo) {
+        this.$router.push(defaultRoute)
+        return
       }
-      this.$router.push({ name: routeNameToRedirect })
+      this.$store.commit('Auth/updateRedirectTo', null)
+      this.$router.push(redirectTo)
     },
 
     handleErr (err) {
@@ -136,12 +139,12 @@ export default {
         mobile: this.username,
         password: this.password
       })
-        .then((response) => {
+        .then(() => {
           this.loadingList = false
-          // this.$axios.defaults.headers.common.Authorization = 'Bearer ' + this.$store.getters['Auth/accessToken']
+          // const accessToken = response.data.data.access_token
+          // this.$axios.defaults.headers.common.Authorization = 'Bearer ' + accessToken
+          // this.$store.commit('Auth/updateUser', response.data.data.user)
           this.redirectTo()
-          this.$store.commit('Auth/updateUser', response.data.data.user)
-          // this.getUserData().then(() => { this.redirectTo() })
         })
         .catch(err => {
           this.handleErr(err.response)

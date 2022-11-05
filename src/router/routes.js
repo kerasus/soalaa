@@ -182,7 +182,18 @@ const routes = [
           {
             path: 'user_exam_list',
             name: 'User.Exam.List',
+            layoutConfig: {
+              layoutLeftDrawerVisible: false
+            },
             component: () => import('pages/User/exam/List')
+          },
+          {
+            path: '/faq',
+            name: 'faq',
+            layoutConfig: {
+              layoutLeftDrawerVisible: false
+            },
+            component: () => import('src/pages/CommonQuestions/list')
           },
           {
             path: 'ticket',
@@ -330,7 +341,7 @@ const routes = [
               },
               {
                 name: 'Admin.Exam.video.set',
-                path: 'video/set/:examId/:subcategory_id',
+                path: 'video/set/examId/:examId/subcategory/:subcategory_id',
                 component: () => import('src/pages/Admin/exam/SetVideo.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionVideos')
@@ -547,18 +558,22 @@ const routes = [
         middleware: [auth]
       },
       {
-        path: '/faq',
-        name: 'faq',
-        component: () => import('src/pages/CommonQuestions/list'),
+        path: '/onlineQuiz/alaaView/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView',
+        component: () => import('pages/User/exam/participate/AlaaView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
         meta: {
-          middlewares: [
-            auth
-          ]
+          middlewares: [auth]
         }
       },
       {
-        path: '/onlineQuiz/alaaView/:quizId/:questNumber',
-        name: 'onlineQuiz.alaaView',
+        path: '/onlineQuiz/alaaView/retake/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView.retake',
         component: () => import('pages/User/exam/participate/AlaaView'),
         layoutConfig: {
           layoutHeaderVisible: true,

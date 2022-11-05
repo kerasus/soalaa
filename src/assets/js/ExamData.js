@@ -4,6 +4,7 @@ import { Exam } from 'src/models/Exam'
 import { QuestionList } from 'src/models/Question'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+// import { axios } from 'src/boot/axios'
 
 class ShuffleQuestions {
   constructor (questionList) {
@@ -188,7 +189,7 @@ class ExamData {
     return this
   }
 
-  getExamDataAndParticipate (examId) {
+  getExamDataAndParticipate (examId, retake) {
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!examId && !that.exam) {
@@ -198,7 +199,11 @@ class ExamData {
       if (!examId) {
         examId = that.exam.id
       }
-      this.$axios.post(API_ADDRESS.exam.examUser, { exam_id: examId })
+      const data = { exam_id: examId }
+      if (retake) {
+        data.retake = true
+      }
+      this.$axios.post(API_ADDRESS.exam.examUser, data)
         .then(response => {
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id

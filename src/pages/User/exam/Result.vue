@@ -165,6 +165,7 @@ import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statist
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe'
 import ExamData from 'src/assets/js/ExamData'
 import TabsOfLessons from 'components/OnlineQuiz/Quiz/videoPlayerSection/tabsOfLessons'
+import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'Result',
@@ -231,8 +232,8 @@ export default {
         })
     },
     goToExamList () {
-      if (this.$route.name !== 'user.exam.list') {
-        this.$router.push({ name: 'user.exam.list' })
+      if (this.$route.name !== 'User.Exam.List') {
+        this.$router.push({ name: 'User.Exam.List' })
       }
     },
     loadKarname (report) {
@@ -278,7 +279,7 @@ export default {
     },
     getContent (contentId, subCategoryIndex) {
       const that = this
-      this.alaaContent.show(contentId)
+      this.$axios.get(API_ADDRESS.content.base + '/' + contentId)
         .then((response) => {
           that.currentVideo = response.data.data
           that.initVideoJs(that.currentVideo.file.video, subCategoryIndex)

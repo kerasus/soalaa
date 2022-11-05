@@ -19,6 +19,7 @@
     />
   </div>
 </template>
+
 <script>
 import API_ADDRESS from 'src/api/Addresses'
 import { Question } from 'src/models/Question'
@@ -69,7 +70,8 @@ export default {
   watch: {},
   mounted() {
     if (this.$refs.tiptap) {
-      this.$refs.tiptap.setContent(this.html)
+      const input = this.getModifiedContent(this.html)
+      this.$refs.tiptap.setContent(input)
     }
   },
   methods: {
@@ -84,6 +86,14 @@ export default {
       }
       this.html = html
       this.loading = false
+    },
+    getModifiedContent (input) {
+      // first modifying method
+      return this.removeImageWithLocalSrc(input)
+    },
+    removeImageWithLocalSrc (html) {
+      const regex = /<img src="file:.*?".*?\/?>/gms
+      return html.replaceAll(regex, '')
     }
   }
 }
@@ -104,16 +114,139 @@ export default {
 }
 
 // ToDo: check this styles in scoped style tag
-#mathfield .ML__cmr,
-.katex .mtight {
-  font-family: IRANSans;
+
+</style>
+<style lang="scss">
+/*rtl:ignore*/
+@import "katex/dist/katex.min.css";
+@import "src/css/katex-rtl-fix.scss";
+//rtl change bug fix
+[dir="rtl"] .katex {
+  @include katex-rtl-fix
+}
+[dir="rtl"] .type-section {
+  @include katex-rtl-fix;
+  font-size: 1.2rem;
+  line-height: 4rem;
+  .katex {
+    font-size: 1.9rem;
+  }
 }
 
+.type-section.katex * {
+  //font-family: KaTeX_Main, Times New Roman, serif !important;
+}
+#mathfield .ML__cmr,
+.katex .mtight {
+  font-family: yekanbakh,serif;
+}
 .inline .v-btn.blue--text {
   display: none;
 }
 
 .tiptap-plus-container.focused {
   border: solid 1px #dedede;
+}
+.type-section {
+  .katex {
+    font-family: KaTeX_Main, Times New Roman, serif;
+    .mord, .mrel {
+      font-family: KaTeX_Main, Times New Roman, serif;
+    }
+    * {
+      //font-family: KaTeX_Main, Times New Roman, serif !important;
+    }
+  }
+  width: 100%;
+
+  // ToDo:we must fix this
+  font-family: KaTeX_Main, Times New Roman, serif !important;
+  .mrel, .mop, .mord {
+    font-family: KaTeX_Main, Times New Roman, serif !important;
+  }
+
+  & > p {
+    direction: inherit;
+    &:first-child {
+      display: inline-block;
+    }
+  }
+  table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    td,
+    th {
+      min-width: 1em;
+      border: 2px solid #ced4da;
+      padding: 3px 5px;
+      vertical-align: top;
+      box-sizing: border-box;
+      position: static;
+      > * {
+        margin-bottom: 0;
+      }
+    }
+    th {
+      font-weight: bold;
+      text-align: left;
+      background-color: #f1f3f5;
+    }
+    .selectedCell:after {
+      z-index: 2;
+      position: absolute;
+      content: "";
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: rgba(200, 200, 255, 0.4);
+      pointer-events: none;
+    }
+    .column-resize-handle {
+      position: absolute;
+      right: -2px;
+      top: 0;
+      bottom: -2px;
+      width: 4px;
+      background-color: #adf;
+      pointer-events: none;
+    }
+  }
+  .beit {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    @media only screen and (max-width: 500px) {
+      flex-direction: column;
+    }
+    .mesra {
+      position: relative;
+      width: 100%;
+      min-height: 1px;
+      padding-right: 15px;
+      padding-left: 15px;
+      -ms-flex-preferred-size: 0;
+      flex-basis: 0;
+      -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+      flex-grow: 1;
+      max-width: 100%;
+      white-space: nowrap;
+      @media only screen and (max-width: 500px) {
+        white-space: normal;
+        flex-basis: auto;
+      }
+    }
+  }
+}
+.katex .svg-align {
+  text-align: right !important;
 }
 </style>
