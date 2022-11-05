@@ -48,7 +48,8 @@ export default store(function (/* { ssrContext } */) {
           'Auth.accessToken',
           'Auth.user',
           'psychometricAnswer',
-          'AppLayout'
+          'AppLayout',
+          'Cart'
         ]
       })
     ],
