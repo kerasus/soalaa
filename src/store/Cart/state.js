@@ -1,5 +1,7 @@
+import { Cart } from 'src/models/Cart'
+
 export default function () {
   return {
-    cart: {}
+    cart: new Cart()
   }
 }
