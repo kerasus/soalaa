@@ -6,33 +6,34 @@
   <!--    />-->
   <!--  </div>-->
   <div
-    v-if="count > 0"
+    v-if="cart.count > 0"
     class="cart-count">
-    سبدخرید شما ({{count}} محصول)
+    سبدخرید شما ({{cart.count}} محصول)
   </div>
   <div
     v-else
     class="cart-count"
   >
-    سبدخرید شما ({{count}})
+    سبدخرید شما ({{cart.count}})
   </div>
   <div class="cart-template row">
     <div
-      v-if="count !== 0"
+      v-if="cart.count !== 0"
       class="cart-item col-md-8 col-12"
     >
-      <cart-view />
+      <cart-view :cart="cart"
+                 @cartReview="cartReview" />
     </div>
 
     <div
-      v-if="count"
+      v-if="cart.count"
       class="side-invoice col-md-4 col-12"
     >
-      <cart-invoice />
+      <cart-invoice :cart="cart" />
     </div>
 
     <div
-      v-if="count === 0"
+      v-if="cart.count === 0"
       class="empty-cart col-12"
     >
       <cart-empty />
@@ -46,6 +47,8 @@
 import cartInvoice from 'components/Widgets/Cart/CartInvoice/CartInvoice'
 import cartView from 'components/Widgets/Cart/CartView/CartView'
 import cartEmpty from 'components/Widgets/Cart/CartEmpty/CartEmpty'
+import { Cart } from 'src/models/Cart'
+
 export default {
   name: 'Cart',
   components: {
@@ -56,28 +59,22 @@ export default {
 
   data() {
     return {
+      cart: new Cart()
     }
   },
 
   created () {
-    // this.$axios.get(API_ADDRESS.cart.product)
-    //   .then((res) => {
-    //     console.log(res)
-    //   })
     this.cartReview()
   },
 
   computed: {
-    count() {
-      return this.$store.getters['Cart/cart'].count
+    isUserLogin() {
+      return this.$store.getters['Auth/isUserLogin']
     }
   },
 
   methods: {
     add () {
-      // console.log('1 cart', this.$store.getters['Cart/cart'])
-      // this.$store.getters['Cart/cart'].addToCart({ id: 489 })
-      // console.log('2 cart', this.$store.getters['Cart/cart'])
       this.$store.dispatch('Cart/addToCart', {
         product: { id: 901 },
         products: [903]
@@ -89,9 +86,27 @@ export default {
     cartReview() {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('Cart/reviewCart')
-        .then(() => {
+        .then((response) => {
+          const invoice = response.data.data
+
+          const cart = new Cart(invoice)
+
+          if (invoice.count > 0) {
+            invoice.items[0].order_product.forEach((order) => {
+              cart.items.list.push(order)
+            })
+          }
+
+          // if (product) {
+          //   const isExist = cart.items.list.find(
+          //     (item) => item.id === product.id
+          //   )
+          //   if (!isExist) {
+          //     cart.items.list.push(product)
+          //   }
+          // }
+          this.cart = cart
           this.$store.dispatch('loading/overlayLoading', false)
-          // console.log('cart', this.$store.getters['Cart/cart'])
         })
     }
   }

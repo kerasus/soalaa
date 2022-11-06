@@ -1,72 +1,92 @@
 import API_ADDRESS from 'src/api/Addresses'
-import { Cart } from 'src/models/Cart'
 import { axios } from 'src/boot/axios'
 import CookieCart from 'src/assets/js/CookieCart'
 import { Notify } from 'quasar'
+import { Cart } from 'src/models/Cart'
+import { CartItem } from 'src/models/CartItem'
+import { OrderProduct } from 'src/models/OrderProduct'
 
 export function addToCart (context, data) {
-  // const isUserLogin = !!this.getters['Auth/isUserLogin']
-  // const cart = context.getters.cart
-
+  const isUserLogin = !!this.getters['Auth/isUserLogin']
   return new Promise((resolve, reject) => {
-    // if (isUserLogin) {
-    axios
-      .post(API_ADDRESS.cart.orderproduct.add, { product_id: data.product.id, products: data.products, attribute: data.attribute, seller: 2 })
-      .then((response) => {
-        Notify.create({
-          type: 'positive',
-          color: 'positive',
-          timeout: 5000,
-          position: 'top',
-          message: 'محصول به سبد خرید اضافه شد.',
-          icon: 'report_problem'
+    if (isUserLogin) {
+      axios
+        .post(API_ADDRESS.cart.orderproduct.add, { product_id: data[0].product.id, products: data[0].products, attribute: data[0].attribute, seller: 2 })
+        .then((response) => {
+          Notify.create({
+            type: 'positive',
+            color: 'positive',
+            timeout: 5000,
+            position: 'top',
+            message: 'محصول به سبد خرید اضافه شد.',
+            icon: 'report_problem'
+          })
+          return resolve(response)
         })
-        return resolve(response)
+        .catch((error) => {
+          return reject(error)
+        })
+    } else {
+      const cart = context.getters.cart
+      data.forEach(element => {
+        const product = new CartItem()
+        const orderProducts = []
+
+        if (element.product !== undefined) {
+          product.grand.id = element.product.id
+        }
+        if (element.products !== undefined) {
+          element.products.forEach(order => {
+            const orderProduct = new OrderProduct()
+            orderProduct.id = order
+            orderProducts.push(orderProduct)
+          })
+          product.order_product.list = orderProducts
+        }
+        cart.items.list.push(product)
       })
-      .catch((error) => {
-        return reject(error)
-      })
-    // } else {
-    //   cart.addToCart(data.product)
-    //   context.commit('updateCart', cart)
-    //   return resolve(true)
-    // }
+      context.commit('updateCart', cart)
+      return resolve(true)
+    }
   })
 }
 
 export function reviewCart (context, product) {
-  const isUserLogin = !!this.getters['Auth/isUserLogin']
-  const currentCart = context.getters.cart
-
-  if (!isUserLogin) {
-    CookieCart.addToCartInCookie(currentCart)
+  const isUserLogin = this.getters['Auth/isUserLogin']
+  const currentCart = this.getters['Cart/cart']
+  const orders = []
+  if (currentCart.items.list !== undefined && currentCart.items.list.length > 0) {
+    currentCart.items.list.forEach(item => {
+      orders.push({
+        product_id: item.grand.id,
+        products: item.order_product.list
+      })
+    })
   }
 
   return new Promise((resolve, reject) => {
     axios
-      .get(API_ADDRESS.cart.review)
-      .then((response) => {
-        const invoice = response.data.data
-
-        const cart = new Cart(invoice)
-
-        if (invoice.count > 0) {
-          invoice.items[0].order_product.forEach((order) => {
-            cart.items.list.push(order)
-          })
-        }
-
-        if (product) {
-          const isExist = cart.items.list.find(
-            (item) => item.id === product.id
-          )
-          if (!isExist) {
-            cart.items.list.push(product)
+      .get(API_ADDRESS.cart.review, {
+        params: {
+          seller: 2,
+          cartItems: orders
+        },
+        paramsSerializer: params => {
+          const q = new URLSearchParams()
+          q.set('seller', params.seller)
+          for (let item = 0; item < params.cartItems.length; item++) {
+            q.set(`cartItems[${item}][product_id]`, params.cartItems[item].product_id)
+            for (let product = 0; product < params.cartItems[item].products.length; product++) {
+              q.set(`cartItems[${item}][products][${product}]`, params.cartItems[item].products[product].id)
+            }
           }
+          return q
         }
-
-        context.commit('updateCart', cart)
-
+      })
+      .then((response) => {
+        if (isUserLogin) {
+          context.commit('updateCart', new Cart())
+        }
         return resolve(response)
       })
       .catch((error) => {
@@ -89,7 +109,7 @@ export function paymentCheckout (context) {
 }
 
 export function removeItemFromCart (context, productId) {
-  const isUserLogin = !!this.getters['Auth/isUserLogin']
+  const isUserLogin = this.getters['Auth/isUserLogin']
 
   return new Promise((resolve, reject) => {
     if (isUserLogin) {
@@ -110,13 +130,10 @@ export function removeItemFromCart (context, productId) {
           return reject(error)
         })
     } else {
-      const cart = context.getters.cart
-
+      const cart = this.getters['Cart/cart']
       cart.removeItem(productId)
       context.commit('updateCart', cart)
-
-      CookieCart.removeCartItemFromCookieCart(productId)
-      return resolve(true)
+      return resolve()
     }
   })
 }

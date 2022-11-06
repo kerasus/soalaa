@@ -134,11 +134,9 @@ export default {
 }
 
 .type-section.katex * {
-  //font-family: KaTeX_Main, Times New Roman, serif !important;
 }
 #mathfield .ML__cmr,
 .katex .mtight {
-  font-family: yekanbakh,serif;
 }
 .inline .v-btn.blue--text {
   display: none;
@@ -148,22 +146,7 @@ export default {
   border: solid 1px #dedede;
 }
 .type-section {
-  .katex {
-    font-family: KaTeX_Main, Times New Roman, serif;
-    .mord, .mrel {
-      font-family: KaTeX_Main, Times New Roman, serif;
-    }
-    * {
-      //font-family: KaTeX_Main, Times New Roman, serif !important;
-    }
-  }
   width: 100%;
-
-  // ToDo:we must fix this
-  font-family: KaTeX_Main, Times New Roman, serif !important;
-  .mrel, .mop, .mord {
-    font-family: KaTeX_Main, Times New Roman, serif !important;
-  }
 
   & > p {
     direction: inherit;

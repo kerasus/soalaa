@@ -1,3 +1,3 @@
 export function updateCart (state, newValue) {
-  Object.assign(state.cart, newValue)
+  state.cart = newValue
 }
