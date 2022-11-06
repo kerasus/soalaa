@@ -88,12 +88,20 @@ export default {
       this.loading = false
     },
     getModifiedContent (input) {
-      // first modifying method
-      return this.removeImageWithLocalSrc(input)
+      let modifiedValue = this.removeImageWithLocalSrc(input)
+      modifiedValue = this.fixWidehatProblemFromLatex(modifiedValue)
+      return modifiedValue
     },
     removeImageWithLocalSrc (html) {
       const regex = /<img src="file:.*?".*?\/?>/gms
       return html.replaceAll(regex, '')
+    },
+    fixWidehatProblemFromLatex (input) {
+      const regex = /({\\widehat)(.*?)(\})/gms
+      return input.replaceAll(regex, (result) => {
+        const charUnderWidehat = result.replace('{\\widehat', '').replace('}', '')
+        return '\\widehat{' + charUnderWidehat + '}'
+      })
     }
   }
 }
@@ -228,8 +236,5 @@ export default {
       }
     }
   }
-}
-.katex .svg-align {
-  text-align: right !important;
 }
 </style>
