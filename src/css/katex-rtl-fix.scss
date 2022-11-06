@@ -1,4 +1,10 @@
 @mixin katex-rtl-fix {
+  .halfarrow-right {
+    /*rtl:ignore*/
+    right: 0;
+    /*rtl:ignore*/
+    left: auto;
+  }
   .sqrt {
     & > .root {
       /*rtl:ignore*/
