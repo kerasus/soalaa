@@ -23,7 +23,6 @@
                    name="chooseQuestion">
         <question-selection-tab ref="chooseQuestion"
                                 v-model:exam="draftExam"
-                                :scrollInfo="scrollInfo"
                                 @update:exam="onSecondTabUpdate"
                                 @nextTab="goToNextStep"
                                 @lastTab="goToPrevStep"
@@ -37,7 +36,6 @@
                             v-model:exam="draftExam"
                             :majors="majorList"
                             :grades="gradesList"
-                            :scrollInfo="scrollInfo"
                             @detachQuestion="bulkDetachQuestionsOfDraftExam"
                             @updateOrders="replaceQuestionsOfDraftExam"
                             @previousStep="goToPrevStep"
@@ -186,6 +184,7 @@ import Steps from 'pages/Admin/exam/Create/Steps'
 import ExamInfoTab from 'components/CommonComponents/Exam/Create/ExamInfoTab/ExamInfoTab'
 import FinalApprovalTab from 'components/CommonComponents/Exam/Create/FinalApprovalTab/FinalApprovalTab'
 import QuestionSelectionTab from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionSelectionTab'
+import { computed } from 'vue'
 
 export default {
   name: 'Create',
@@ -198,6 +197,11 @@ export default {
   props: {
     userRule: {
       type: String
+    }
+  },
+  provide() {
+    return {
+      scrollInfo: computed(() => this.scrollInfo)
     }
   },
   mixins: [
