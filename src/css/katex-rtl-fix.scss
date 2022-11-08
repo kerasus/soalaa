@@ -5,6 +5,12 @@
     /*rtl:ignore*/
     left: auto;
   }
+  .halfarrow-left {
+    /*rtl:ignore*/
+    left: 0;
+    /*rtl:ignore*/
+    right: auto;
+  }
   .sqrt {
     & > .root {
       /*rtl:ignore*/
@@ -52,6 +58,10 @@
     }
   }
   .msupsub {
+    /*rtl:ignore*/
+    text-align: left;
+  }
+  .svg-align {
     /*rtl:ignore*/
     text-align: left;
   }
