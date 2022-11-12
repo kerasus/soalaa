@@ -129,7 +129,8 @@ const API_ADDRESS = {
     },
     examBookletUpload (examId) {
       return lumenServer + '/exam-question/booklet-file/' + examId
-    }
+    },
+    detachCategory: (examId, categoryId) => lumenServer + '/exam/detach/category/' + examId + '/' + categoryId
   },
   question: {
     photo (type, id) {
