@@ -93,6 +93,7 @@ export default {
       modifiedValue = this.modifyPrimeWithPower(modifiedValue)
       modifiedValue = this.modifySinus(modifiedValue)
       modifiedValue = this.modifyCosinus(modifiedValue)
+      modifiedValue = this.removeEmptyDataKatexElements(modifiedValue)
       return modifiedValue
     },
     removeImageWithLocalSrc (html) {
@@ -126,6 +127,9 @@ export default {
         const char = result.replace('{\\cos', '').replace('}', '')
         return '{\\cos ' + char + '}'
       })
+    },
+    removeEmptyDataKatexElements (input) {
+      return input.replaceAll('<span data-katex="true">$$</span>', '').replaceAll('<span data-katex="true"></span>', '')
     }
   }
 }
