@@ -88,12 +88,44 @@ export default {
       this.loading = false
     },
     getModifiedContent (input) {
-      // first modifying method
-      return this.removeImageWithLocalSrc(input)
+      let modifiedValue = this.removeImageWithLocalSrc(input)
+      modifiedValue = this.fixWidehatProblemFromLatex(modifiedValue)
+      modifiedValue = this.modifyPrimeWithPower(modifiedValue)
+      modifiedValue = this.modifySinus(modifiedValue)
+      modifiedValue = this.modifyCosinus(modifiedValue)
+      return modifiedValue
     },
     removeImageWithLocalSrc (html) {
       const regex = /<img src="file:.*?".*?\/?>/gms
       return html.replaceAll(regex, '')
+    },
+    fixWidehatProblemFromLatex (input) {
+      const regex = /({\\widehat)(.*?)(\})/gms
+      return input.replaceAll(regex, (result) => {
+        const charUnderWidehat = result.replace('{\\widehat', '').replace('}', '')
+        return '\\widehat{' + charUnderWidehat + '}'
+      })
+    },
+    modifyPrimeWithPower (input) {
+      const regex = /(\{\\prime}\^.)/gms
+      return input.replaceAll(regex, (result) => {
+        const char = result.replace('{\\prime}^', '')
+        return '{\\prime' + char + '}'
+      })
+    },
+    modifySinus (input) {
+      const regex = /(\{\\sin\w*\})/gms
+      return input.replaceAll(regex, (result) => {
+        const char = result.replace('{\\sin', '').replace('}', '')
+        return '{\\sin ' + char + '}'
+      })
+    },
+    modifyCosinus (input) {
+      const regex = /(\{\\cos\w*\})/gms
+      return input.replaceAll(regex, (result) => {
+        const char = result.replace('{\\cos', '').replace('}', '')
+        return '{\\cos ' + char + '}'
+      })
     }
   }
 }
@@ -134,11 +166,9 @@ export default {
 }
 
 .type-section.katex * {
-  //font-family: KaTeX_Main, Times New Roman, serif !important;
 }
 #mathfield .ML__cmr,
 .katex .mtight {
-  font-family: yekanbakh,serif;
 }
 .inline .v-btn.blue--text {
   display: none;
@@ -148,22 +178,7 @@ export default {
   border: solid 1px #dedede;
 }
 .type-section {
-  .katex {
-    font-family: KaTeX_Main, Times New Roman, serif;
-    .mord, .mrel {
-      font-family: KaTeX_Main, Times New Roman, serif;
-    }
-    * {
-      //font-family: KaTeX_Main, Times New Roman, serif !important;
-    }
-  }
   width: 100%;
-
-  // ToDo:we must fix this
-  font-family: KaTeX_Main, Times New Roman, serif !important;
-  .mrel, .mop, .mord {
-    font-family: KaTeX_Main, Times New Roman, serif !important;
-  }
 
   & > p {
     direction: inherit;
@@ -245,8 +260,5 @@ export default {
       }
     }
   }
-}
-.katex .svg-align {
-  text-align: right !important;
 }
 </style>
