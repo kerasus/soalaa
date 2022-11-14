@@ -44,7 +44,6 @@ export default {
     return {
       value: 'What you see is <b>what</b> you get.',
       html: '',
-      test: 'test data',
       loading: false
     }
   },
@@ -94,6 +93,7 @@ export default {
       modifiedValue = this.modifySinus(modifiedValue)
       modifiedValue = this.modifyCosinus(modifiedValue)
       modifiedValue = this.removeEmptyDataKatexElements(modifiedValue)
+      modifiedValue = this.modifyCombination(modifiedValue)
       return modifiedValue
     },
     removeImageWithLocalSrc (html) {
@@ -130,6 +130,14 @@ export default {
     },
     removeEmptyDataKatexElements (input) {
       return input.replaceAll('<span data-katex="true">$$</span>', '').replaceAll('<span data-katex="true"></span>', '')
+    },
+    modifyCombination (input) {
+      const regex = /(\\left\( \\begin\{align})(.*?)(\\end{align} \\right\))/gms
+      return input.replaceAll(regex, (result) => {
+        const numberRegex = /\d+/g
+        const arrayOfNumbers = result.match(numberRegex)
+        return '{{' + arrayOfNumbers[0] + '\\choose ' + arrayOfNumbers[1] + '}}'
+      })
     }
   }
 }
