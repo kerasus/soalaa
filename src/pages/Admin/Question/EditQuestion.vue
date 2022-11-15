@@ -210,8 +210,8 @@ export default {
         message: 'سوال به تغییرات انتخاب شده بازگردانی شد',
         position: 'top'
       })
-      console.log('question', this.question.statement)
-      console.log('question', this.question.descriptive_answer)
+      console.log('question statement', this.question.statement)
+      console.log('question descriptive_answer', this.question.descriptive_answer)
     }
   },
   computed: {
