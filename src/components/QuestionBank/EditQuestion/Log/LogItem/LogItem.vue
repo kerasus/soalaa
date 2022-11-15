@@ -26,6 +26,18 @@
       </div>
       <div class="col-6 log-btn-box">
         <q-btn
+          v-if="(log.properties.new.descriptive_answer || log.properties.new.statement) && mode ==='edit'"
+          icon="history"
+          class="icon-type log-comment-btn"
+          flat
+          @click="restoreQuestion"
+        >
+          <q-tooltip anchor="top middle"
+                     self="bottom middle">
+            بازگردانی سوال به این تغییرات
+          </q-tooltip>
+        </q-btn>
+        <q-btn
           v-if="true"
           icon="add_comment"
           class="icon-type log-comment-btn"
@@ -66,6 +78,12 @@ export default {
       default () {
         return new Log()
       }
+    },
+    mode: {
+      type: String,
+      default () {
+        return ''
+      }
     }
   },
   data () {
@@ -81,6 +99,9 @@ export default {
       this.$emit('addComment', { text: this.commentText, logId: this.log.id })
       this.commentText = ''
       this.canComment = false
+    },
+    restoreQuestion() {
+      this.$emit('restoreQuestion', this.log.properties.new)
     }
   }
 }

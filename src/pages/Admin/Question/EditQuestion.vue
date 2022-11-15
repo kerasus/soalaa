@@ -35,6 +35,7 @@
           v-if="question.type"
           v-bind="allProps"
           ref="currentEditComponent"
+          :key="editComponentKey"
           :class="{ 'col-7': !imgFloatMode}"
         />
       </div>
@@ -76,7 +77,9 @@
     >
       <log-list-component
         :logs="question.logs"
+        :mode="'edit'"
         @addComment="addComment"
+        @restoreQuestion="restoreQuestion"
       />
     </div>
   </div>
@@ -133,7 +136,8 @@ export default {
       categoryList: new QuestCategoryList(),
       isPanelOpened: false,
       imgFloatMode: false,
-      totalLoading: false
+      totalLoading: false,
+      editComponentKey: 0
     }
   },
   created () {
@@ -192,6 +196,22 @@ export default {
     },
     disableLoading () {
       this.totalLoading = false
+    },
+    restoreQuestion(eventData) {
+      if (eventData.statement) {
+        this.question.statement = eventData.statement
+      }
+      if (eventData.descriptive_answer) {
+        this.question.descriptive_answer = eventData.descriptive_answer
+      }
+      this.editComponentKey++
+      this.$q.notify({
+        type: 'positive',
+        message: 'سوال به تغییرات انتخاب شده بازگردانی شد',
+        position: 'top'
+      })
+      console.log('question', this.question.statement)
+      console.log('question', this.question.descriptive_answer)
     }
   },
   computed: {
