@@ -180,7 +180,7 @@
         class="question-index"
       >
         <div class="question-number-box">
-          <div class="question-number">{{ finalApprovalMode ? questionIndex + 1 : question.order }}</div>
+          <div class="question-number">{{ finalApprovalMode ? questionIndex + 1 : question.in_subcategory_order }}</div>
         </div>
       </div>
 

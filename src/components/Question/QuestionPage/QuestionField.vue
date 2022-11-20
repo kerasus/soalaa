@@ -91,7 +91,7 @@ export default {
       modifiedValue = this.fixWidehatProblemFromLatex(modifiedValue)
       modifiedValue = this.modifyPrimeWithPower(modifiedValue)
       modifiedValue = this.modifySinus(modifiedValue)
-      modifiedValue = this.modifyCosinus(modifiedValue)
+      modifiedValue = this.modifyCosine(modifiedValue)
       modifiedValue = this.removeEmptyDataKatexElements(modifiedValue)
       modifiedValue = this.modifyCombination(modifiedValue)
       return modifiedValue
@@ -115,17 +115,17 @@ export default {
       })
     },
     modifySinus (input) {
-      const regex = /(\{\\sin\w*\})/gms
+      const regex = /(\\sin\w*)/gms
       return input.replaceAll(regex, (result) => {
-        const char = result.replace('{\\sin', '').replace('}', '')
-        return '{\\sin ' + char + '}'
+        const char = result.replace('\\sin', '')
+        return '\\sin ' + char
       })
     },
-    modifyCosinus (input) {
-      const regex = /(\{\\cos\w*\})/gms
+    modifyCosine (input) {
+      const regex = /(\\cos\w*)/gms
       return input.replaceAll(regex, (result) => {
-        const char = result.replace('{\\cos', '').replace('}', '')
-        return '{\\cos ' + char + '}'
+        const char = result.replace('\\cos', '')
+        return '\\cos ' + char
       })
     },
     removeEmptyDataKatexElements (input) {
