@@ -11,7 +11,7 @@
           </div>
           <div class="col-12">
             <div class="flex justify-between items-center">
-              <q-checkbox v-model="pafConfig.hasTitle">
+              <q-checkbox v-model="pdfConfig.examTitle">
                 عنوان آزمون
               </q-checkbox>
               <div class="value">
@@ -21,7 +21,7 @@
           </div>
           <div class="col-12">
             <div class="flex justify-between items-center">
-              <q-checkbox v-model="pafConfig.hasMajor">
+              <q-checkbox v-model="pdfConfig.major">
                 رشته تحصیلی
               </q-checkbox>
               <div class="value">
@@ -31,7 +31,7 @@
           </div>
           <div class="col-12">
             <div class="flex justify-between items-center">
-              <q-checkbox v-model="pafConfig.hasGrade">
+              <q-checkbox v-model="pdfConfig.grade">
                 پایه تحصیلی
               </q-checkbox>
               <div class="value">
@@ -39,14 +39,14 @@
               </div>
             </div>
           </div>
-          <div class="col-12">
-            <q-checkbox v-model="pafConfig.hasCreator">
+          <!-- <div class="col-12">
+            <q-checkbox v-model="pdfConfig.hasCreator">
               منبع / طراح سوال
             </q-checkbox>
           </div>
-          <q-checkbox v-model="pafConfig.hasCreator">
+          <q-checkbox v-model="pdfConfig.hasCreator">
             سال طراحی سوال
-          </q-checkbox>
+          </q-checkbox> -->
         </div>
         <q-separator class="separator-margin" />
         <div class="spaces">
@@ -56,26 +56,26 @@
           </div>
           <div class="sub-title">حاشیه اطراف کاغذ</div>
           <div class="l-t flex justify-between">
-            <q-input v-model="number"
+            <q-input v-model="pdfConfig.rightMargin"
                      filled
                      class="side-input"
-                     prefix=" cm | "
+                     prefix=" mm | "
             >
               <template v-slot:before>
                 راست
               </template>
             </q-input>
-            <q-input v-model="number"
+            <q-input v-model="pdfConfig.leftMargin"
                      filled
                      class="side-input"
-                     prefix=" cm | "
+                     prefix=" mm | "
             >
               <template v-slot:before>
                 چـــــپ
               </template>
             </q-input>
           </div>
-          <div class="u-p flex justify-between">
+          <!-- <div class="u-p flex justify-between">
             <q-input v-model="number"
                      filled
                      class="side-input"
@@ -94,14 +94,14 @@
                 پاییـن
               </template>
             </q-input>
-          </div>
+          </div> -->
           <div class="sub-sub-title">
             فاصله بین سوالات
           </div>
-          <q-input v-model="number"
+          <q-input v-model="pdfConfig.spaceBetweenQuestion"
                    type="number"
                    filled
-                   prefix=" cm | "
+                   prefix=" mm | "
           />
 
         </div>
@@ -111,42 +111,41 @@
             <div class="title">شماره گذاری</div>
             <div class="disable-all"> حدف همه</div>
           </div>
-          <div class="sub-title">
+          <!-- <div class="sub-title">
             شماره شروع سوالات
           </div>
           <q-input v-model="number"
                    type="number"
                    filled
-                   prefix=" cm | "
-          />
+          /> -->
 
           <div class="sub-title">
             صفحه بندی سوالات
           </div>
           <div class="radio-btn">
-            <q-radio v-model="radioOne"
-                     val=""
+            <q-radio v-model="pdfConfig.paginateExists"
+                     :val="true"
                      label="بله" />
 
-            <q-radio v-model="radioTow"
-                     val=""
+            <q-radio v-model="pdfConfig.paginateExists"
+                     :val="false"
                      label="خیر" />
           </div>
 
           <div class="sub-title">
             شماره اولین صفحه سوال
           </div>
-          <q-input v-model="number"
+          <q-input v-model="pdfConfig.paginateStart"
                    type="number"
                    filled
-                   prefix=" cm | "
           />
         </div>
 
         <q-btn
           unelevated
           color="primary"
-          class="submit-btn full-width">
+          class="submit-btn full-width"
+          @click="requestPdf">
           <span class="btn-label">
             اعمال
           </span>
@@ -175,7 +174,7 @@
               تعداد کل سوالات : 50
             </div>
             <div class="pages">
-              تعداد کل صفحات : 14
+              تعداد کل صفحات : {{ pageCount }}
             </div>
             <div class="action-box full-width flex justify-between items-end">
               <div class="description">
@@ -192,9 +191,14 @@
               </div>
             </div>
           </div>
-          pageCount : {{ pageCount }}
           <div class="pdf-container">
+            <div v-if="loading"
+                 class="loading">
+              <q-skeleton height="900px"
+                          class="pdf-skeleton" />
+            </div>
             <vue-pdf-embed
+              v-else
               ref="pdfRef"
               :page="page"
               class="pdf"
@@ -219,27 +223,38 @@
 </template>
 
 <script>
-
+import API_ADDRESS from 'src/api/Addresses'
 import VuePdfEmbed from 'vue-pdf-embed'
+
 export default {
   name: 'DownloadExam',
   components: {
     VuePdfEmbed
   },
+  props: {
+    examId: {
+      type: String,
+      required: true
+    }
+  },
   data: () => ({
     tab: 'questions',
     pageCount: 0,
     page: 1,
-    pdfSrc: 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase4moshavere.pdf',
+    pdfSrc: '',
     radioOne: false,
     radioTow: false,
-    pafConfig: {
-      hasTitle: false,
-      hasMajor: true,
-      hasGrade: true,
-      hasCreator: true,
-      space: 0
-    }
+    pdfConfig: {
+      examTitle: false,
+      major: false,
+      grade: false,
+      paginateExists: false,
+      paginateStart: 1,
+      spaceBetweenQuestion: 1,
+      rightMargin: 1,
+      leftMargin: 1
+    },
+    loading: false
   }),
   methods: {
     handleDocumentRender(data) {
@@ -247,6 +262,19 @@ export default {
     },
     onChangePage(value) {
       // console.log('value :', value)
+    },
+    requestPdf() {
+      this.loading = true
+      this.pdfSrc = ''
+      this.$axios.post(API_ADDRESS.exam.user.pdf(this.$route.params.examId), this.pdfConfig).then((response) => {
+        this.pdfSrc = response.data.data.link
+        this.loading = false
+      }).catch(() => {
+        this.loading = false
+      })
+    },
+    replacePdf() {
+      this.pdfSrc = 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase1moshavere.pdf'
     }
   }
 }
@@ -392,6 +420,14 @@ export default {
           }
         }
       }
+    }
+  }
+
+  .loading {
+    width: 100%;
+
+    .pdf-skeleton {
+      border-radius: 15px;
     }
   }
 
