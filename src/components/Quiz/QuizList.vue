@@ -375,7 +375,7 @@ export default defineComponent({
           disable: true,
           to: { name: 'User.Exam.Download' },
           icon: 'isax:import',
-          action: () => {}
+          action: () => this.$router.push({ name: 'User.Exam.Download', params: { examId: exam.id } })
         })
       }
       if (exam.holding_status) {
