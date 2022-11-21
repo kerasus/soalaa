@@ -41,6 +41,8 @@
                 v-for="(item, index) in logs.list"
                 :key="index"
                 :log="item"
+                :mode="mode"
+                @restoreQuestion="restoreQuestion"
               />
             </div>
           </q-scroll-area>
@@ -74,6 +76,12 @@ export default {
       default () {
         return new LogList()
       }
+    },
+    mode: {
+      type: String,
+      default () {
+        return ''
+      }
     }
   },
   data () {
@@ -89,6 +97,9 @@ export default {
   methods: {
     addComment (eventData) {
       this.$emit('addComment', eventData)
+    },
+    restoreQuestion(eventData) {
+      this.$emit('restoreQuestion', eventData)
     }
   }
 }

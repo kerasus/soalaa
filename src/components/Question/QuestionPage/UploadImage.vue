@@ -120,6 +120,9 @@ export default {
 }
 
 .image-upload-parent {
+  .filepond--root {
+    font-family: yekanbakh, "Arial", "-apple-system", "Helvetica Neue", Helvetica, sans-serif;
+  }
   .filepond--file-info {
     transform: none !important;
     margin-left: 2.5em #{"/* rtl:ignore */"} !important;

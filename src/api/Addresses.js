@@ -129,7 +129,8 @@ const API_ADDRESS = {
     },
     examBookletUpload (examId) {
       return lumenServer + '/exam-question/booklet-file/' + examId
-    }
+    },
+    detachCategory: (examId, categoryId) => lumenServer + '/exam/detach/category/' + examId + '/' + categoryId
   },
   question: {
     photo (type, id) {
@@ -280,7 +281,7 @@ const API_ADDRESS = {
       add: apiV2Server + '/orderproduct',
       delete (productId) { return apiV2Server + '/orderproduct/' + productId }
     },
-    review: apiV2Server + '/checkout/review?seller=2',
+    review: apiV2Server + '/checkout/review',
     getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2',
     orderWithTransaction (orderId) { return apiV2Server + '/orderWithTransaction/' + orderId }
   },

@@ -82,12 +82,6 @@ export default {
 .html-katex {
   width: 100%;
 
-  // ToDo:we must fix this
-  font-family: KaTeX_Main, Times New Roman, serif !important;
-  .mrel, .mop, .mord {
-    font-family: KaTeX_Main, Times New Roman, serif !important;
-  }
-
   & > p {
     direction: inherit;
     &:first-child {
@@ -95,9 +89,6 @@ export default {
     }
   }
   .katex {
-    * {
-      //font-family: KaTeX_Main, Times New Roman, serif;
-    }
     /*rtl:ignore*/
     direction: ltr !important;
     /*rtl:ignore*/
@@ -180,7 +171,6 @@ export default {
 
 #mathfield .ML__cmr,
 .katex .mtight {
-  font-family: yekanbakh,serif;
 }
 
 </style>

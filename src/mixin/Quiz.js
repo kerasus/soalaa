@@ -497,7 +497,14 @@ const mixinQuiz = {
         })
     },
     needToLoadQuizData () {
-      return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
+      // ToDo: any change on exam make a problem (ex: change category time). because use on local device can't find that change
+      return true
+      // return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
+      // return (
+      //   !Assistant.getId(this.quiz.id) ||
+      //   !Assistant.getId(this.quiz.user_exam_id) ||
+      //   Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id)
+      // )
     },
     setQuestionsLtr (question) {
       question.ltr = !this.isLtrString(question.statement)
