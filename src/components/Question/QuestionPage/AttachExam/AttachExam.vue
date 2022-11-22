@@ -69,7 +69,7 @@
               </div>
               <div class="col-3">
                 <div class="detail-box box-order">
-                  <div class="detail-box-title">ترتیب</div>
+                  <div class="detail-box-title">ترتیب در درس</div>
                   <q-input
                     v-model="order"
                     borderless
@@ -98,7 +98,7 @@
                   درس
                 </div>
                 <div class="col-1 exam-result-title">
-                  ترتیب
+                  ترتیب در درس
                 </div>
               </div>
               <div v-if="exams && lessons.list.length"
