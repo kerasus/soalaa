@@ -34,6 +34,8 @@
               :question="question"
               :listOptions="questionsOptions"
               pageStrategy="question-bank"
+              @deleteFromExam="deleteQuestion"
+              @deleteFromDb="deleteQuestionFromDataBase"
               @checkSelect="onClickedCheckQuestionBtn"
             />
           </template>
@@ -113,6 +115,7 @@ export default {
         copy: true,
         detachQuestion: true,
         deleteQuestionFromDb: true,
+        deleteQuestionFromExam: true,
         editQuestion: true,
         switch: true
       },
@@ -209,7 +212,28 @@ export default {
       this.deleteQuestionFromExam(question)
       this.questionListKey = Date.now()
     },
+    async deleteQuestion() {
+      try {
+        const response = this.callDeleteQuestion()
+        console.log(response)
+      } catch (e) {
 
+      }
+    },
+    async deleteQuestionFromDataBase() {
+      try {
+        const response = this.callDeleteQuestionFromDb()
+        console.log(response)
+      } catch (e) {
+
+      }
+    },
+    callDeleteQuestion() {
+
+    },
+    callDeleteQuestionFromDb() {
+
+    },
     updatePage (page) {
       this.getQuestionData(page, this.filterData)
     },
