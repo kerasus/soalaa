@@ -11,7 +11,7 @@
         ></q-btn>
         <q-btn
           unelevated
-          :loading="saveBtnLoading"
+          :loading="totalLoading"
           color="primary"
           label="ذخیره سوال"
           class="save-btn default-detail-btn"
@@ -23,8 +23,10 @@
 </template>
 
 <script>
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 export default {
   name: 'BtnBox',
+  mixins: [AdminActionOnQuestion],
   props: {
     imgPanelVisibility: {
       type: Boolean,
