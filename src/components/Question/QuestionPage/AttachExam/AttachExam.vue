@@ -130,6 +130,7 @@
           </div>
           <div class="text-right close-btn-box">
             <q-btn
+              unelevated
               class="close-btn"
               label="بستن"
               color="primary"
@@ -239,7 +240,9 @@ export default {
               data: []
             },
             inputs: [
-              { type: 'input', name: 'id', value: null, label: 'شناسه', col: 'col-md-3' }
+              { type: 'input', name: 'statement', placeholder: 'عنوان', col: 'col-md-3' },
+              { type: 'date', name: 'start_at_from', col: 'col-md-4', placeholder: 'تاریخ شروع از' },
+              { type: 'date', name: 'start_at_till', col: 'col-md-4', placeholder: 'تاریخ شروع تا' }
             ],
             itemIdentifyKey: 'id'
           },
