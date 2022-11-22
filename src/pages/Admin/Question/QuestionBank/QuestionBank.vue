@@ -223,7 +223,8 @@ export default {
         years: (filterData.years) ? filterData.years.map(item => item.id) : [],
         majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
         statuses: (filterData.statuses) ? filterData.statuses.map(item => item.id) : [],
-        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : []
+        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
+        ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
 
