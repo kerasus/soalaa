@@ -114,8 +114,8 @@ export default {
       questionsOptions: {
         copy: true,
         detachQuestion: true,
-        deleteQuestionFromDb: true,
-        deleteQuestionFromExam: true,
+        deleteQuestionFromDb: false,
+        deleteQuestionFromExam: false,
         editQuestion: true,
         switch: true
       },

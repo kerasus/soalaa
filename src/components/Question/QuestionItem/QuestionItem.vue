@@ -267,9 +267,7 @@
                color="primary"
                icon="isax:trash"
                class="question-item-button"
-               :to="{name: 'Admin.Question.Edit', params: {
-                 question_id: question.id
-               }}"
+               @click="deleteQuestion"
         >
           <q-tooltip anchor="top middle"
                      self="bottom middle"
@@ -282,9 +280,7 @@
                color="primary"
                icon="folder_delete"
                class="question-item-button"
-               :to="{name: 'Admin.Question.Edit', params: {
-                 question_id: question.id
-               }}"
+               @click="deleteQuestionFromDb"
         >
           <q-tooltip anchor="top middle"
                      self="bottom middle"
@@ -674,6 +670,12 @@ export default {
     },
     emitAdminActions (action, data) {
       this.$emit(action, data)
+    },
+    deleteQuestion() {
+      this.$emit('deleteFromExam', this.question)
+    },
+    deleteQuestionFromDb() {
+      this.$emit('deleteFromDb', this.question)
     },
     async reportProblem() {
       const params = {
