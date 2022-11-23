@@ -212,8 +212,9 @@ export default {
           // save exam info in vuex store (remove questions of exam then save in store)
           that.$store.commit('Exam/updateQuiz', examData.exam)
           that.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
+            force: true,
             dbAnswers: examData.userExamData,
-            exam_id: examData.exam.id
+            user_exam_id: examData.exam.user_exam_id
           })
           that.report = examData.studentReport
           that.loadKarname(examData.studentReport)
