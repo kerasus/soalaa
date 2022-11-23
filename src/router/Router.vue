@@ -1,5 +1,8 @@
 <template>
-  <router-view>
+  <router-view v-slot="{ Component }">
+    <keep-alive include="Admin.Exam.Index">
+      <component :is="Component" />
+    </keep-alive>
   </router-view>
 </template>
 
@@ -17,5 +20,6 @@ export default {
       required: false
     }
   }
+
 }
 </script>
