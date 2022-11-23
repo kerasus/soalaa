@@ -36,6 +36,12 @@
       <question-filter-expansion
         header-title="درس و مبحث"
       >
+        <q-checkbox
+          v-model="customSearch"
+          label="جستجوی تک گره"
+          class="q-ml-md"
+          @update:model-value="onCustomSearch"
+        />
         <tree-component
           ref="tree"
           tick-strategy="strict"
@@ -153,6 +159,7 @@ export default {
   },
   data () {
     return {
+      customSearch: false,
       check: false,
       selectedReference: [],
       selectedYears: [],
@@ -171,12 +178,14 @@ export default {
       const titles = []
       filtersDataKey.forEach(key => {
         const filterGroup = this.filtersData[key]
+        if (typeof this.filtersData[key] !== 'object') {
+          return
+        }
         filterGroup.forEach(filterItem => {
           const title = filterItem.title ? filterItem.title : filterItem.value
           titles.push(title)
         })
       })
-
       return titles
     }
   },
@@ -190,6 +199,10 @@ export default {
   methods: {
     getFilters () {
       return this.filtersData
+    },
+    onCustomSearch(data) {
+      this.filtersData.tags_with_childrens = data ? 0 : 1
+      this.onUpdateFilterData()
     },
     onUpdateFilterData () {
       this.$emit('onFilter', this.filtersData)

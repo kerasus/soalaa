@@ -262,6 +262,32 @@
                  question_id: question.id
                }}"
         />
+        <q-btn v-if="listOptions.deleteQuestionFromExam"
+               unelevated
+               color="primary"
+               icon="isax:trash"
+               class="question-item-button"
+               @click="deleteQuestion"
+        >
+          <q-tooltip anchor="top middle"
+                     self="bottom middle"
+                     :offset="[10, 10]">
+            حدف سوال از آزمون
+          </q-tooltip>
+        </q-btn>
+        <q-btn v-if="listOptions.deleteQuestionFromDb"
+               unelevated
+               color="primary"
+               icon="folder_delete"
+               class="question-item-button"
+               @click="deleteQuestionFromDb"
+        >
+          <q-tooltip anchor="top middle"
+                     self="bottom middle"
+                     :offset="[10, 10]">
+            حدف سوال از پایگاه داده
+          </q-tooltip>
+        </q-btn>
         <q-btn
           v-if="listConfig.selectQuestion"
           unelevated
@@ -427,7 +453,8 @@ export default {
         return {
           copy: true,
           detachQuestion: true,
-          deleteQuestionFromDb: true,
+          deleteQuestionFromDb: false,
+          deleteQuestionFromExam: false,
           editQuestion: false,
           switch: true
         }
@@ -458,7 +485,7 @@ export default {
       default: false
     }
   },
-  emits: ['checkSelect', 'changeOrder', 'detachQuestion', 'deleteQuestion', 'copyIdToClipboard', 'confirmQuestion'],
+  emits: ['checkSelect', 'changeOrder', 'detachQuestion', 'deleteQuestionFromExam', 'copyIdToClipboard', 'confirmQuestion'],
   data () {
     return {
       questionChoiceList: [],
@@ -589,6 +616,8 @@ export default {
         questionLevel: true,
         questionSource: true,
         questionInfo: true,
+        deleteQuestionFromDb: false,
+        deleteQuestionFromExam: false,
         editQuestion: true,
         selectQuestion: false,
         reportProblem: true,
@@ -609,6 +638,8 @@ export default {
         ...baseConf
       }
       if (this.pageStrategy === 'question-bank') {
+        finalConf.deleteQuestionFromExam = true
+        finalConf.deleteQuestionFromDb = true
         // return finalConf
       }
       if (this.pageStrategy === 'lesson-detail') {
@@ -639,6 +670,12 @@ export default {
     },
     emitAdminActions (action, data) {
       this.$emit(action, data)
+    },
+    deleteQuestion() {
+      this.$emit('deleteFromExam', this.question)
+    },
+    deleteQuestionFromDb() {
+      this.$emit('deleteFromDb', this.question)
     },
     async reportProblem() {
       const params = {
