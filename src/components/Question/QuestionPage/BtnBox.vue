@@ -5,6 +5,14 @@
            :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <q-btn
           unelevated
+          :loading="totalLoading"
+          color="primary"
+          label="حذف از پایگاه داده"
+          class=" q-mr-sm default-detail-btn"
+          @click="emitAction('deletefromDb')"
+        />
+        <q-btn
+          unelevated
           :loading="draftBtnLoading"
           label="پیش نویس"
           class="draft-btn default-detail-btn"
@@ -15,7 +23,7 @@
           color="primary"
           label="ذخیره سوال"
           class="save-btn default-detail-btn"
-          @click="saveQuestion"
+          @click="emitAction('saveQuestion')"
         />
       </div>
     </div>
@@ -33,6 +41,10 @@ export default {
       default () {
         return false
       }
+    },
+    editeQuestion: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -47,8 +59,8 @@ export default {
     }
   },
   methods: {
-    saveQuestion () {
-      this.$emit('saveQuestion')
+    emitAction(action) {
+      this.$emit(action)
     }
   }
 }

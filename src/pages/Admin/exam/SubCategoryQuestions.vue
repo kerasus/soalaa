@@ -184,11 +184,6 @@ export default {
       const routeData = this.$router.resolve({ name: 'Admin.Exam.Lessons.PrintQuestions', params: { quizId: this.$route.params.exam_id, lessonId: this.$route.params.subcategory_id } })
       window.open(routeData.href, '_blank')
     },
-    closeConfirmModal () {
-      this.$store.commit('AppLayout/showConfirmDialog', {
-        show: false
-      })
-    },
     copyIdToClipboard (data) {
       copyToClipboard(data)
     },
@@ -407,6 +402,7 @@ export default {
               })
               this.reload()
             } catch (e) {
+              this.reload()
               this.closeConfirmModal()
             }
           }
@@ -419,6 +415,11 @@ export default {
           exam_id: this.examId,
           sub_category_id: this.$route.params.subcategory_id
         }]
+      })
+    },
+    closeConfirmModal () {
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        show: false
       })
     }
   }
