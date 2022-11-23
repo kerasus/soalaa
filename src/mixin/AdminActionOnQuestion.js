@@ -12,6 +12,7 @@ import { Notify } from 'quasar'
 const AdminActionOnQuestion = {
   data () {
     return {
+      typeIdLoading: false,
       optionQuestionId: '',
       questionStatusId_draft: null,
       questionStatusId_pending_to_type: null,
@@ -28,6 +29,9 @@ const AdminActionOnQuestion = {
   computed: {
     loadingState () {
       return !!(this.totalLoading || this.examList.loading || this.subCategoriesList.loading || this.questionStatuses.loading)
+    },
+    totalLoading() {
+      return this.examList?.loading || this.typeIdLoading || this.categoryList?.loading || this.subCategoriesList?.loading
     }
   },
   methods: {
@@ -42,8 +46,8 @@ const AdminActionOnQuestion = {
       // const that = this
       // Todo : for createImg
       // question.apiResource.sendType = 'form-data'
-      this.$store.dispatch('loading/overlayLoading', true)
-      this.$store.dispatch('loading/overlayLoading', false)
+      // this.$store.dispatch('loading/overlayLoading', true)
+      // this.$store.dispatch('loading/overlayLoading', false)
       // .loadApiResource()
       this.$axios.post(API_ADDRESS.question.create, question)
         .then(response => {
@@ -55,10 +59,10 @@ const AdminActionOnQuestion = {
           })
           // window.open('Admin.Question.Create', '_blank').focus()
           this.redirectToShowPage(response.data.data.id)
-          this.$store.dispatch('loading/overlayLoading', false)
+          // this.$store.dispatch('loading/overlayLoading', false)
         })
         .catch(er => {
-          this.$store.dispatch('loading/overlayLoading', false)
+          // this.$store.dispatch('loading/overlayLoading', false)
         })
     },
     getQuestionById (questionId, question, types) {
@@ -243,39 +247,57 @@ const AdminActionOnQuestion = {
           }
         })
     },
-    getQuestionType (question) {
+    async getQuestionType (question) {
       const that = this
-      this.$axios.get(API_ADDRESS.option.base + '?type=question_type')
-        .then(function (response) {
-          const types = new TypeList(response.data.data)
-          const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
-          if (!optionQuestion) {
-            return this.$q.notify({
-              message: ' API با مشکل مواجه شد!',
-              color: 'negative'
-            })
-          }
-          if (that.doesHaveQuestionMode()) {
-            that.setCurrentQuestionType(question, types)
-          } else {
-            that.allTypes = types
-          }
+      this.typeIdLoading = true
+      try {
+        const response = await this.callTypeIdRequest()
+        const types = new TypeList(response.data.data)
+        const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
+        if (!optionQuestion) {
+          return this.$q.notify({
+            message: ' API با مشکل مواجه شد!',
+            color: 'negative'
+          })
+        }
+        if (that.doesHaveQuestionMode()) {
+          that.setCurrentQuestionType(question, types)
+        } else {
+          that.allTypes = types
+        }
+        this.typeIdLoading = false
+      } catch (e) {
+        this.typeIdLoading = false
+        this.$q.notify({
+          message: ' type id با مشکل مواجه شد!',
+          color: 'negative'
         })
+      }
     },
-    getQuestionTypeForTypeId (question) {
-      const that = this
-      this.$axios.get(API_ADDRESS.option.base + '?type=question_type')
-        .then(function (response) {
-          const types = new TypeList(response.data.data)
-          const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
-          if (!optionQuestion) {
-            return this.$q.notify({
-              message: ' API با مشکل مواجه شد!',
-              color: 'negative'
-            })
-          }
-          that.getQuestionById(that.getCurrentQuestionId(), question, types)
+    callTypeIdRequest() {
+      return this.$axios.get(API_ADDRESS.option.base + '?type=question_type')
+    },
+    async getQuestionTypeForTypeId (question) {
+      this.typeIdLoading = true
+      try {
+        const response = await this.callTypeIdRequest()
+        const types = new TypeList(response.data.data)
+        const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
+        if (!optionQuestion) {
+          return this.$q.notify({
+            message: ' API با مشکل مواجه شد!',
+            color: 'negative'
+          })
+        }
+        this.getQuestionById(this.getCurrentQuestionId(), question, types)
+        this.typeIdLoading = false
+      } catch (e) {
+        this.typeIdLoading = false
+        this.$q.notify({
+          message: ' type id با مشکل مواجه شد!',
+          color: 'negative'
         })
+      }
     },
     readRouteFullPath () {
       return this.$route.fullPath

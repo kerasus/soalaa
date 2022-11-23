@@ -1,8 +1,10 @@
 <template>
-  <router-view></router-view>
+  <router-view>
+  </router-view>
 </template>
 
 <script>
+// ToDo use include
 export default {
   name: 'Router',
   props: {
@@ -17,7 +19,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -34,6 +34,8 @@
               :question="question"
               :listOptions="questionsOptions"
               pageStrategy="question-bank"
+              @deleteFromExam="deleteQuestion"
+              @deleteFromDb="deleteQuestionFromDataBase"
               @checkSelect="onClickedCheckQuestionBtn"
             />
           </template>
@@ -112,7 +114,8 @@ export default {
       questionsOptions: {
         copy: true,
         detachQuestion: true,
-        deleteQuestionFromDb: true,
+        deleteQuestionFromDb: false,
+        deleteQuestionFromExam: false,
         editQuestion: true,
         switch: true
       },
@@ -209,7 +212,28 @@ export default {
       this.deleteQuestionFromExam(question)
       this.questionListKey = Date.now()
     },
+    async deleteQuestion() {
+      try {
+        const response = this.callDeleteQuestion()
+        console.log(response)
+      } catch (e) {
 
+      }
+    },
+    async deleteQuestionFromDataBase() {
+      try {
+        const response = this.callDeleteQuestionFromDb()
+        console.log(response)
+      } catch (e) {
+
+      }
+    },
+    callDeleteQuestion() {
+
+    },
+    callDeleteQuestionFromDb() {
+
+    },
     updatePage (page) {
       this.getQuestionData(page, this.filterData)
     },
@@ -223,7 +247,8 @@ export default {
         years: (filterData.years) ? filterData.years.map(item => item.id) : [],
         majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
         statuses: (filterData.statuses) ? filterData.statuses.map(item => item.id) : [],
-        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : []
+        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
+        ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
 
