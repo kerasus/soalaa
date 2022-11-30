@@ -21,7 +21,7 @@ class ModifiersSupplement {
   }
 
   textConvertor (text) {
-    if (!this.textDetector(text)) {
+    if (!this.textDetector(text) && !this.updateNeeded) {
       return text
     }
     return this.convertorBaseMethod(text)

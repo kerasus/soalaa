@@ -17,7 +17,6 @@ class OddNumberOfDollarSigns extends ModifiersSupplement {
     document.querySelectorAll('p').forEach(paragraphEl => {
       const paragraphElOddNumberOfDollarSigns = paragraphEl.innerHTML.match(/\$\$|\$/g)
       if (paragraphElOddNumberOfDollarSigns && paragraphElOddNumberOfDollarSigns.length % 2 !== 0) {
-        console.log('paragraphElOddNumberOfDollarSigns.length', paragraphElOddNumberOfDollarSigns.length)
         isDetected = true
       }
     })
