@@ -5,7 +5,7 @@ class ElementsWithWrongCombination extends ModifiersSupplement {
     super({
       question,
       regex: /(\\left\( \\begin\{align})(.*?)(\\end{align} \\right\))/gms,
-      updateNeeded: false,
+      updateNeeded: true,
       flagName: 'ElementsWithWrongCombination'
     })
   }

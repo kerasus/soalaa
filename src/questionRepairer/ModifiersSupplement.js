@@ -9,7 +9,7 @@ class ModifiersSupplement {
   }
 
   needUpdate () {
-    return this.questionConverted
+    return this.questionConverted && this.updateNeeded
   }
 
   textDetector (text) {

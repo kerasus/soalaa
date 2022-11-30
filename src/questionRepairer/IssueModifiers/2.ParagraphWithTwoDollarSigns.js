@@ -5,7 +5,7 @@ class ParagraphWithTwoDollarSigns extends ModifiersSupplement {
     super({
       question,
       regex: null,
-      updateNeeded: false,
+      updateNeeded: true,
       flagName: 'ParagraphWithTwoDollarSigns'
     })
   }

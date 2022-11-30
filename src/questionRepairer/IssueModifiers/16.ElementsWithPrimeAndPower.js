@@ -5,7 +5,7 @@ class ElementsWithPrimeAndPower extends ModifiersSupplement {
     super({
       question,
       regex: /(\{\\prime}\^.)/gms,
-      updateNeeded: false,
+      updateNeeded: true,
       flagName: 'ElementsWithPrimeAndPower'
     })
   }

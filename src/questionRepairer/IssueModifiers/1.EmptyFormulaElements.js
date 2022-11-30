@@ -5,7 +5,7 @@ class EmptyFormulaElements extends ModifiersSupplement {
     super({
       question,
       regex: null,
-      updateNeeded: false,
+      updateNeeded: true,
       flagName: 'EmptyFormulaElements'
     })
   }

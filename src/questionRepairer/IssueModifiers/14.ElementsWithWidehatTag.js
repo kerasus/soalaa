@@ -5,7 +5,7 @@ class ElementsWithWidehatTag extends ModifiersSupplement {
     super({
       question,
       regex: /({\\widehat)(.*?)(\})/gms,
-      updateNeeded: false,
+      updateNeeded: true,
       flagName: 'ElementsWithWidehatTag'
     })
   }
