@@ -33,7 +33,7 @@ class QuestionModifier {
 
   inspectAllScenarios () {
     this.inspectForEmptyFormulaElements()
-      // .inspectForEmptyForParagraphWithTwoDollarSigns()
+      .inspectForEmptyForParagraphWithTwoDollarSigns()
       .inspectForEmptyForDataKatexElInTwoDollarSigns()
       .inspectForEmptyForOddNumberOfDollarSigns()
       .inspectForEmptyForUnclosedFormulaBracket()
