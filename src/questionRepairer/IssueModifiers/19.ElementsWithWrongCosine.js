@@ -5,7 +5,7 @@ class ElementsWithWrongCosine extends ModifiersSupplement {
     super({
       question,
       regex: /(\\cos\w*)/gms,
-      updateNeeded: false,
+      updateNeeded: true,
       flagName: 'ElementsWithWrongCosine'
     })
   }

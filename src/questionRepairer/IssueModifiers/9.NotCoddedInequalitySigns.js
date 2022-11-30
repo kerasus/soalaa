@@ -5,7 +5,7 @@ class NotCoddedInequalitySigns extends ModifiersSupplement {
     super({
       question,
       regex: null,
-      updateNeeded: false,
+      updateNeeded: true,
       flagName: 'NotCoddedInequalitySigns'
     })
   }

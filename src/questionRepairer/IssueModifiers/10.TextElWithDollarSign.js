@@ -1,21 +1,21 @@
-import ModifiersSupplement from "../ModifiersSupplement.js";
+import ModifiersSupplement from '../ModifiersSupplement.js'
 
 class TextElWithDollarSign extends ModifiersSupplement {
   constructor(question) {
     super({
       question,
       regex: null,
-      updateNeeded: false,
+      updateNeeded: true,
       flagName: 'TextElWithDollarSign'
     })
   }
 
   textDetector (htmlElement) {
-    let parser = new DOMParser()
-    let document = parser.parseFromString(htmlElement, 'text/html')
+    const parser = new DOMParser()
+    const document = parser.parseFromString(htmlElement, 'text/html')
     let isDetected = false
     document.querySelectorAll('span[data-katex]').forEach(spanEl => {
-      if (spanEl.innerHTML.includes('$')){
+      if (spanEl.innerHTML.includes('$')) {
         isDetected = true
       }
     })
@@ -23,8 +23,8 @@ class TextElWithDollarSign extends ModifiersSupplement {
   }
 
   convertorBaseMethod (htmlElement) {
-    let parser = new DOMParser()
-    let document = parser.parseFromString(htmlElement, 'text/html')
+    const parser = new DOMParser()
+    const document = parser.parseFromString(htmlElement, 'text/html')
     document.querySelectorAll('p').forEach(spanEl => {
       console.log('spanEl', spanEl)
       let doesHaveTextEl = false
@@ -32,15 +32,14 @@ class TextElWithDollarSign extends ModifiersSupplement {
         // forEach
       //  spanEl.childNodes.find(el => el.nodeName === '#text') &&
         spanEl.childNodes.forEach(el => {
-          if (el.nodeName === '#text'){
+          if (el.nodeName === '#text') {
             doesHaveTextEl = true
-            let txt = el.nodeValue.replaceAll('$','&#x24;').toString()
+            const txt = el.nodeValue.replaceAll('$', '&#x24;').toString()
             console.log('txt', txt)
             el.nodeValue = txt
             console.log('el.nodeValue', el.nodeValue)
             console.log('el', el)
             console.log('spanEl', spanEl)
-
           }
         })
       }

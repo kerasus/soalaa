@@ -5,7 +5,7 @@ class ElementsWithWrongSinus extends ModifiersSupplement {
     super({
       question,
       regex: /(\\sin\w*)/gms,
-      updateNeeded: false,
+      updateNeeded: true,
       flagName: 'ElementsWithWrongSinus'
     })
   }
