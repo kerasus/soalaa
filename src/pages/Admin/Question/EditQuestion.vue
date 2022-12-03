@@ -213,8 +213,8 @@ export default {
         message: 'سوال به تغییرات انتخاب شده بازگردانی شد',
         position: 'top'
       })
-      console.log('question statement', this.question.statement)
-      console.log('question descriptive_answer', this.question.descriptive_answer)
+      console.warn('question statement', this.question.statement)
+      console.warn('question descriptive_answer', this.question.descriptive_answer)
     },
     deleteQuestion () {
       this.$store.dispatch('AppLayout/showConfirmDialog', {
