@@ -195,7 +195,7 @@ export default {
             updated_at: '2022-11-12 20:07:41',
             created_at: '2022-05-21 12:47:07'
           }, {
-            id: '6288a0038d2697d26d0607bb',
+            id: '6288a0038d2697d266565d0607bb',
             statement: '<p dir="auto" style="text-align: right">در مثلث ABC، نیمساز داخلی زاویۀ A ضلع<span data-katex="true">$\\overline {BC}$</span>را در نقطۀ D قطع می‌کند. کدام نامساوی همواره صحیح است؟</p>',
             choices: [
               {

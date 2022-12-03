@@ -165,7 +165,6 @@ class QuestionHandler {
     if (hasPendingQuestion) {
       return
     }
-    this.pushQuestionToExamAttachList(modifiedQuestion)
     this.attachAllQuestionsToExams()
   }
 
@@ -178,18 +177,19 @@ class QuestionHandler {
     modifiedQuestion.inspectAllScenarios().updateIfNeeded()
       .then(() => {
         this.updateQuestionRequestStatuses(question.id, false)
+        this.pushQuestionToExamAttachList(modifiedQuestion)
         this.checkAllQuestionsRequestsAreFinished(modifiedQuestion)
       })
       .catch(() => {
         this.updateQuestionRequestStatuses(question.id, false)
+        this.pushQuestionToExamAttachList(modifiedQuestion)
         this.checkAllQuestionsRequestsAreFinished(modifiedQuestion)
       })
   }
 
   pushQuestionToExamAttachList (modifiedQuestion) {
     if (modifiedQuestion.updateFailed) {
-      this.attachExamList[this.attachExamList.length - 1].questions.push(modifiedQuestion)
-      return
+      this.attachExamList[this.attachExamList.length - 1].questions.push(modifiedQuestion.question)
     }
     if (modifiedQuestion.questionsFlags.length > 0) {
       modifiedQuestion.questionsFlags.forEach(flag => {
@@ -201,11 +201,9 @@ class QuestionHandler {
 
   checkAllAttachRequestsAreFinished () {
     const hasPendingExam = this.attachExamList.find(obj => obj.isPending)
-    console.log('hasPendingExam', hasPendingExam)
     if (hasPendingExam) {
       return
     }
-
     const fileName = 'result.json'
     const fileToSave = new Blob([JSON.stringify(this.attachExamList)], {
       type: 'application/json'
