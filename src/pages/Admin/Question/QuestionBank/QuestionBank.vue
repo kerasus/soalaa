@@ -26,7 +26,8 @@
         </div>
         <div class="question-bank-content">
           <question-item v-if="questions.loading"
-                         :question="loadingQuestion" />
+                         :question="loadingQuestion"
+          />
           <template v-else>
             <question-item
               v-for="question in questions.list"
@@ -34,7 +35,6 @@
               :question="question"
               :listOptions="questionsOptions"
               pageStrategy="question-bank"
-              @deleteFromExam="deleteQuestion"
               @deleteFromDb="deleteQuestionFromDataBase"
               @checkSelect="onClickedCheckQuestionBtn"
             />
@@ -114,7 +114,7 @@ export default {
       questionsOptions: {
         copy: true,
         detachQuestion: true,
-        deleteQuestionFromDb: false,
+        deleteQuestionFromDb: true,
         deleteQuestionFromExam: false,
         editQuestion: true,
         switch: true
@@ -214,24 +214,48 @@ export default {
     },
     async deleteQuestion() {
       try {
-        const response = this.callDeleteQuestion()
-        console.log(response)
+        await this.callDeleteQuestion()
       } catch (e) {
 
       }
     },
-    async deleteQuestionFromDataBase() {
-      try {
-        const response = this.callDeleteQuestionFromDb()
-        console.log(response)
-      } catch (e) {
-
-      }
+    deleteQuestionReq (questionId) {
+      return this.$axios.delete(API_ADDRESS.question.delete(questionId))
+    },
+    closeConfirmModal () {
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        show: false
+      })
+    },
+    async deleteQuestionFromDataBase(question) {
+      await this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
+        message: 'از حذف کامل سوال از پایگاه داد و حذف از تمامی آزمون ها اطمینان دارید؟',
+        buttons: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: async (confirm) => {
+          if (!confirm) {
+            this.closeConfirmModal()
+            return
+          }
+          try {
+            this.closeConfirmModal()
+            await this.deleteQuestionReq(question.id)
+            this.$q.notify({
+              message: 'سوال از پایگاه داده حذف شد.',
+              type: 'positive'
+            })
+            this.getQuestionData()
+            // this.$router.go(-1)
+          } catch (e) {
+            this.closeConfirmModal()
+          }
+        }
+      })
     },
     callDeleteQuestion() {
-
-    },
-    callDeleteQuestionFromDb() {
 
     },
     updatePage (page) {
