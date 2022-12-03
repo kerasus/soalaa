@@ -131,6 +131,7 @@ const AdminActionOnQuestion = {
       this.$refs.questionIdentifier.getIdentifierData(false)
     },
     updateQuestion (question) {
+      console.log('updateQuestion')
       const that = this
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
       // this.$refs.questionIdentifier.getIdentifierData(false)

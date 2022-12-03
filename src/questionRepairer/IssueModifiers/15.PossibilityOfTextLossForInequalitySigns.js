@@ -11,6 +11,9 @@ class PossibilityOfTextLossForInequalitySigns extends ModifiersSupplement {
   }
 
   textDetector (htmlElement) {
+    if (!htmlElement) {
+      return false
+    }
     const parser = new DOMParser()
     const document = parser.parseFromString(htmlElement, 'text/html')
     let isDetected = false
