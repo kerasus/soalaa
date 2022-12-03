@@ -24,6 +24,7 @@
 import API_ADDRESS from 'src/api/Addresses'
 import { Question } from 'src/models/Question'
 import VueTiptapKatex from 'vue3-tiptap-katex'
+import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
 
 export default {
   name: 'QuestionField',
@@ -94,6 +95,7 @@ export default {
       modifiedValue = this.modifyCosine(modifiedValue)
       modifiedValue = this.removeEmptyDataKatexElements(modifiedValue)
       modifiedValue = this.modifyCombination(modifiedValue)
+      modifiedValue = this.removeFirstAndLastBracket(modifiedValue)
       return modifiedValue
     },
     removeImageWithLocalSrc (html) {
@@ -138,6 +140,27 @@ export default {
         const arrayOfNumbers = result.match(numberRegex)
         return '{{' + arrayOfNumbers[0] + '\\choose ' + arrayOfNumbers[1] + '}}'
       })
+    },
+    removeFirstAndLastBracket (input) {
+      const regexPatternForFormula = mixinConvertToTiptap.methods.getRegexPatternForFormula()
+      const regex = /\\\[.*\\]/gms
+      let string = input
+      string = string.replace(regexPatternForFormula, (match) => {
+        let finalMatch
+        if (match.includes('$')) {
+          finalMatch = match.slice(1, -1)
+        } else {
+          finalMatch = match.slice(2, -2)
+        }
+        finalMatch = finalMatch.replace(regex, (bracketMatch) => {
+          if (finalMatch.indexOf('\\[') === 0 && finalMatch.indexOf('\\]') === finalMatch.length - 2) {
+            return bracketMatch.replace('\\[', '').replace('\\]', '')
+          }
+          return bracketMatch
+        })
+        return '$' + finalMatch + '$'
+      })
+      return string
     }
   }
 }

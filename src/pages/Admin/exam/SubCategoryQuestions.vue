@@ -87,8 +87,8 @@
                            :listOptions="questionsOptions"
                            :final-approval-mode="false"
                            :show-question-number="true"
-                           @detachQuestion="detachQuestion"
-                           @deleteQuestion="deleteQuestion"
+                           @deleteFromExam="detachQuestion"
+                           @deleteFromDb="deleteQuestion"
                            @copyIdToClipboard="copyIdToClipboard"
                            @confirmQuestion="confirmQuestion"
             />
@@ -122,6 +122,7 @@ export default {
         copy: true,
         detachQuestion: true,
         deleteQuestionFromDb: true,
+        deleteQuestionFromExam: true,
         editQuestion: true,
         switch: true
       },
@@ -182,68 +183,6 @@ export default {
     printQuestions () {
       const routeData = this.$router.resolve({ name: 'Admin.Exam.Lessons.PrintQuestions', params: { quizId: this.$route.params.exam_id, lessonId: this.$route.params.subcategory_id } })
       window.open(routeData.href, '_blank')
-    },
-    detachQuestion (questionId) {
-      this.$store.dispatch('AppLayout/showConfirmDialog', {
-        show: true,
-        message: 'از حذف سوال از آزمون اطمینان دارید؟',
-        buttons: {
-          no: 'خیر',
-          yes: 'بله'
-        },
-        callback: async (confirm) => {
-          if (!confirm) {
-            this.closeConfirmModal()
-          } else {
-            try {
-              this.closeConfirmModal()
-              await this.detachQuestionReq(questionId)
-              this.reload()
-            } catch (e) {
-              this.closeConfirmModal()
-            }
-          }
-        }
-      })
-    },
-    closeConfirmModal () {
-      this.$store.commit('AppLayout/showConfirmDialog', {
-        show: false
-      })
-    },
-    detachQuestionReq (questionId) {
-      return this.$axios.post(API_ADDRESS.question.detach(questionId), {
-        exams: [this.examId]
-      })
-    },
-    deleteQuestion (questionId) {
-      this.$store.dispatch('AppLayout/showConfirmDialog', {
-        show: true,
-        message: 'از حذف کامل سوال از پایگاه داد و حذف از تمامی آزمون ها اطمینان دارید؟',
-        buttons: {
-          no: 'خیر',
-          yes: 'بله'
-        },
-        callback: async (confirm) => {
-          if (!confirm) {
-            this.closeConfirmModal()
-            return
-          }
-          try {
-            this.closeConfirmModal()
-            await this.deleteQuestionReq(questionId)
-            this.reload()
-          } catch (e) {
-            this.reload()
-            this.closeConfirmModal()
-          }
-        }
-      })
-    },
-    deleteQuestionReq (questionId) {
-      return this.$axios.delete(API_ADDRESS.question.delete(questionId), {
-        exams: [this.examId]
-      })
     },
     copyIdToClipboard (data) {
       copyToClipboard(data)
@@ -410,6 +349,78 @@ export default {
       } else {
         return false
       }
+    },
+    deleteQuestion (question) {
+      this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
+        message: 'از حذف کامل سوال از پایگاه داد و حذف از تمامی آزمون ها اطمینان دارید؟',
+        buttons: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: async (confirm) => {
+          if (!confirm) {
+            this.closeConfirmModal()
+            return
+          }
+          try {
+            this.closeConfirmModal()
+            await this.deleteQuestionReq(question.id)
+            this.$q.notify({
+              message: 'سوال از پایگاه داده حذف شد.',
+              type: 'positive'
+            })
+            this.reload()
+          } catch (e) {
+            this.reload()
+            this.closeConfirmModal()
+          }
+        }
+      })
+    },
+    deleteQuestionReq (questionId) {
+      return this.$axios.delete(API_ADDRESS.question.delete(questionId))
+    },
+    detachQuestion (question) {
+      this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
+        message: 'از حذف سوال از آزمون اطمینان دارید؟',
+        buttons: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: async (confirm) => {
+          if (!confirm) {
+            this.closeConfirmModal()
+          } else {
+            try {
+              this.closeConfirmModal()
+              await this.detachQuestionReq(question.id)
+              this.$q.notify({
+                message: 'سوال از آزمون حذف شد.',
+                type: 'positive'
+              })
+              this.reload()
+            } catch (e) {
+              this.reload()
+              this.closeConfirmModal()
+            }
+          }
+        }
+      })
+    },
+    detachQuestionReq (questionId) {
+      return this.$axios.post(API_ADDRESS.question.detach(questionId), {
+        detaches: [{
+          exam_id: this.examId,
+          sub_category_id: this.$route.params.subcategory_id
+        }]
+      })
+    },
+    closeConfirmModal () {
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        show: false
+      })
     }
   }
 }

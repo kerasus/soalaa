@@ -69,7 +69,7 @@
               </div>
               <div class="col-3">
                 <div class="detail-box box-order">
-                  <div class="detail-box-title">ترتیب</div>
+                  <div class="detail-box-title">ترتیب در درس</div>
                   <q-input
                     v-model="order"
                     borderless
@@ -98,7 +98,7 @@
                   درس
                 </div>
                 <div class="col-1 exam-result-title">
-                  ترتیب
+                  ترتیب در درس
                 </div>
               </div>
               <div v-if="exams && lessons.list.length"
@@ -130,6 +130,7 @@
           </div>
           <div class="text-right close-btn-box">
             <q-btn
+              unelevated
               class="close-btn"
               label="بستن"
               color="primary"
@@ -239,7 +240,9 @@ export default {
               data: []
             },
             inputs: [
-              { type: 'input', name: 'id', value: null, label: 'شناسه', col: 'col-md-3' }
+              { type: 'input', name: 'statement', placeholder: 'عنوان', col: 'col-md-3' },
+              { type: 'date', name: 'start_at_from', col: 'col-md-4', placeholder: 'تاریخ شروع از' },
+              { type: 'date', name: 'start_at_till', col: 'col-md-4', placeholder: 'تاریخ شروع تا' }
             ],
             itemIdentifyKey: 'id'
           },

@@ -142,6 +142,31 @@
                 </div>
               </div>
             </q-card>
+            <div class="questionsList">
+              <q-virtual-scroll
+                ref="scroller"
+                class="konkoor-view-scroll"
+                :items="questions"
+                :virtual-scroll-item-size="450"
+                :virtual-scroll-slice-size="5"
+              >
+                <template v-slot="{ item, index }">
+                  <q-item
+                    :key="index"
+                    class="question-field"
+                    dense
+                  >
+                    <q-item-section>
+                      <question-item
+                        :source="item"
+                        :questions-column="$refs.questionsColumn"
+                        :show-with-answer="true"
+                      />
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </q-virtual-scroll>
+            </div>
           </q-tab-panel>
           <q-tab-panel name="videos"
                        class="video-tab">
@@ -154,6 +179,7 @@
 </template>
 
 <script>
+import QuestionItem from 'src/components/OnlineQuiz/Quiz/question/questionField'
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info'
 import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
@@ -169,7 +195,7 @@ import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'Result',
-  components: { TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult },
+  components: { TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult, QuestionItem },
   mixins: [
     mixinAuth,
     mixinQuiz
@@ -184,6 +210,7 @@ export default {
     alaaVideos: null,
     report: null,
     tab2: null,
+    questions: [],
     innerTab: 'innerMails',
     splitterModel: 20
   }),
@@ -212,13 +239,15 @@ export default {
           // save exam info in vuex store (remove questions of exam then save in store)
           that.$store.commit('Exam/updateQuiz', examData.exam)
           that.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
+            force: true,
             dbAnswers: examData.userExamData,
-            exam_id: examData.exam.id
+            user_exam_id: examData.exam.user_exam_id
           })
           that.report = examData.studentReport
           that.loadKarname(examData.studentReport)
           this.tab = 'result'
           this.$store.commit('AppLayout/updateLinearLoading', false)
+          that.questions = that.getCurrentExamQuestionsInArray()
         })
         .catch((error) => {
           this.$store.commit('AppLayout/updateLinearLoading', false)
@@ -442,5 +471,11 @@ export default {
 /*TODO : TEMP */
 .q-tab-panel {
   padding: 0;
+}
+
+.questionsList {
+  max-height: 100vh;
+  height: 100vh;
+  min-height: 100vh;
 }
 </style>
