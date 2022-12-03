@@ -123,6 +123,7 @@ const API_ADDRESS = {
       getReport (userExamId) {
         return lumenServer + '/exam-report/show?user_exam_id=' + userExamId
       },
+      adminGetReport: lumenServer + '/exam-report/show/admin',
       updateReportOptions (examId) {
         return lumenServer + '/exam/config/' + examId
       }
