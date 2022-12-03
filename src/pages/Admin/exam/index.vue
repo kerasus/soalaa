@@ -120,7 +120,7 @@ import { EntityIndex } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 import moment from 'moment-jalaali'
 export default {
-  name: 'index',
+  name: 'Admin.Exam.Index',
   components: { EntityIndex },
   data () {
     return {
