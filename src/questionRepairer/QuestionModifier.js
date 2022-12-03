@@ -19,12 +19,23 @@ import ElementsWithWrongSinus from './IssueModifiers/18.ElementsWithWrongSinus.j
 import ElementsWithWrongCosine from './IssueModifiers/19.ElementsWithWrongCosine.js'
 import ElementWithCurlyBrackets from './IssueModifiers/20.ElementWithCurlyBrackets.js'
 import ElementsWithWidehatTag from './IssueModifiers/14.ElementsWithWidehatTag.js'
+import API_ADDRESS from 'src/api/Addresses'
 
 class QuestionModifier {
-  constructor (question = {}) {
+  constructor (question = {}, axios) {
     this.updateNeeded = false
+    this.updateFailed = false
     this.question = question
     this.questionsFlags = []
+    this.$axios = axios
+    this.timesAllowedToUpdateQuestion = 5
+    this.timesQuestionHasBeenUpdated = 0
+    if (question._id) {
+      this.question.id = question._id
+    }
+    if (!question.type.type_id && question.type.value === 'konkur') {
+      this.question.type_id = '6225f4828044517f52500c04'
+    }
   }
 
   flagQuestion (modifier) {
@@ -186,18 +197,33 @@ class QuestionModifier {
     return this
   }
 
+  updateQuestion () {
+    if (this.timesQuestionHasBeenUpdated === this.timesAllowedToUpdateQuestion) {
+      return
+    }
+    return new Promise((resolve, reject) => {
+      this.$axios.put(API_ADDRESS.question.update(this.question.id), this.question)
+        .then((response) => {
+          this.timesQuestionHasBeenUpdated++
+          this.updateFailed = false
+          resolve(response)
+        })
+        .catch((err) => {
+          this.timesQuestionHasBeenUpdated++
+          this.updateFailed = true
+          if (this.timesQuestionHasBeenUpdated === this.timesAllowedToUpdateQuestion) {
+            reject(err)
+          }
+          resolve(this.updateQuestion())
+        })
+    })
+  }
+
   updateIfNeeded () {
     if (!this.updateNeeded) {
       return
     }
-    // axios.put(`http://office.alaa.tv:3000/api/v1/question/${this.question._id}` , this.question)
-    //   .then(function (response) {
-    //     // console.log(response)
-    //   })
-    //   .catch(function (error) {
-    //     // console.log(error)
-    //   })
-    return this
+    return this.updateQuestion()
   }
 }
 export default QuestionModifier
