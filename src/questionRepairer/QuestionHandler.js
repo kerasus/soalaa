@@ -131,7 +131,7 @@ class QuestionHandler {
 
   attachQuestionToExamRequest (attachExamObj) {
     return this.$axios.post(API_ADDRESS.exam.bulkAttachQuestions(attachExamObj.examId), {
-      questions: attachExamObj.questions
+      questions: attachExamObj.questions.map(questionModifier => questionModifier.question.id)
     })
   }
 
@@ -189,12 +189,12 @@ class QuestionHandler {
 
   pushQuestionToExamAttachList (modifiedQuestion) {
     if (modifiedQuestion.updateFailed) {
-      this.attachExamList[this.attachExamList.length - 1].questions.push(modifiedQuestion.question)
+      this.attachExamList[this.attachExamList.length - 1].questions.push(modifiedQuestion)
     }
     if (modifiedQuestion.questionsFlags.length > 0) {
       modifiedQuestion.questionsFlags.forEach(flag => {
         const indexOfExam = this.attachExamList.findIndex(attachExamObj => attachExamObj.examName === flag)
-        this.attachExamList[indexOfExam].questions.push(modifiedQuestion.question)
+        this.attachExamList[indexOfExam].questions.push(modifiedQuestion)
       })
     }
   }
