@@ -24,6 +24,7 @@
     "cropperjs": "^1.5.12",
     "crud": "^0.0.28",
     "dotenv": "^16.0.3",
+    "file-saver": "^2.0.5",
     "filepond": "^4.30.3",
     "filepond-plugin-image-preview": "^4.6.10",
     "firebase": "^9.8.1",
