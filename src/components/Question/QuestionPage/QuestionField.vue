@@ -24,6 +24,7 @@
 import API_ADDRESS from 'src/api/Addresses'
 import { Question } from 'src/models/Question'
 import VueTiptapKatex from 'vue3-tiptap-katex'
+import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
 
 export default {
   name: 'QuestionField',
@@ -91,9 +92,10 @@ export default {
       modifiedValue = this.fixWidehatProblemFromLatex(modifiedValue)
       modifiedValue = this.modifyPrimeWithPower(modifiedValue)
       modifiedValue = this.modifySinus(modifiedValue)
-      modifiedValue = this.modifyCosinus(modifiedValue)
+      modifiedValue = this.modifyCosine(modifiedValue)
       modifiedValue = this.removeEmptyDataKatexElements(modifiedValue)
       modifiedValue = this.modifyCombination(modifiedValue)
+      modifiedValue = this.removeFirstAndLastBracket(modifiedValue)
       return modifiedValue
     },
     removeImageWithLocalSrc (html) {
@@ -115,17 +117,17 @@ export default {
       })
     },
     modifySinus (input) {
-      const regex = /(\{\\sin\w*\})/gms
+      const regex = /(\\sin\w*)/gms
       return input.replaceAll(regex, (result) => {
-        const char = result.replace('{\\sin', '').replace('}', '')
-        return '{\\sin ' + char + '}'
+        const char = result.replace('\\sin', '')
+        return '\\sin ' + char
       })
     },
-    modifyCosinus (input) {
-      const regex = /(\{\\cos\w*\})/gms
+    modifyCosine (input) {
+      const regex = /(\\cos\w*)/gms
       return input.replaceAll(regex, (result) => {
-        const char = result.replace('{\\cos', '').replace('}', '')
-        return '{\\cos ' + char + '}'
+        const char = result.replace('\\cos', '')
+        return '\\cos ' + char
       })
     },
     removeEmptyDataKatexElements (input) {
@@ -138,6 +140,27 @@ export default {
         const arrayOfNumbers = result.match(numberRegex)
         return '{{' + arrayOfNumbers[0] + '\\choose ' + arrayOfNumbers[1] + '}}'
       })
+    },
+    removeFirstAndLastBracket (input) {
+      const regexPatternForFormula = mixinConvertToTiptap.methods.getRegexPatternForFormula()
+      const regex = /\\\[.*\\]/gms
+      let string = input
+      string = string.replace(regexPatternForFormula, (match) => {
+        let finalMatch
+        if (match.includes('$')) {
+          finalMatch = match.slice(1, -1)
+        } else {
+          finalMatch = match.slice(2, -2)
+        }
+        finalMatch = finalMatch.replace(regex, (bracketMatch) => {
+          if (finalMatch.indexOf('\\[') === 0 && finalMatch.indexOf('\\]') === finalMatch.length - 2) {
+            return bracketMatch.replace('\\[', '').replace('\\]', '')
+          }
+          return bracketMatch
+        })
+        return '$' + finalMatch + '$'
+      })
+      return string
     }
   }
 }

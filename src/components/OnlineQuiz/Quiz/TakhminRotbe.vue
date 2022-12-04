@@ -396,7 +396,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped >
+<style lang="scss" scoped>
     .subColsPaddingRight {
         padding-right: 5px #{"/* rtl:ignore */"};
     }

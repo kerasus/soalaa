@@ -123,6 +123,7 @@ const API_ADDRESS = {
       getReport (userExamId) {
         return lumenServer + '/exam-report/show?user_exam_id=' + userExamId
       },
+      adminGetReport: lumenServer + '/exam-report/show/admin',
       updateReportOptions (examId) {
         return lumenServer + '/exam/config/' + examId
       }
@@ -141,15 +142,19 @@ const API_ADDRESS = {
       page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
     },
     index (filters, page) {
-      let newFilter = (filters) ? JSON.parse(JSON.stringify(filters)) : {}
+      const newFilter = filters ? JSON.parse(JSON.stringify(filters)) : {}
       function setQueryParams (paramKey) {
-        if (!newFilter) {
-          newFilter = {}
+        if (typeof newFilter[paramKey] === 'undefined') {
+          return
         }
-        newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
-        newFilter[paramKey] = newFilter[paramKey].join('&' + paramKey + '[]=')
-        if (newFilter[paramKey]) {
-          newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
+        // newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
+        if (typeof newFilter[paramKey] === 'object') {
+          newFilter[paramKey] = newFilter[paramKey].join('&' + paramKey + '[]=')
+          if (newFilter[paramKey]) {
+            newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
+          }
+        } else {
+          newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
         }
       }
       setQueryParams('statuses')
@@ -158,13 +163,13 @@ const API_ADDRESS = {
       setQueryParams('reference')
       setQueryParams('tags')
       setQueryParams('level')
+      setQueryParams('tags_with_childrens')
 
       if (typeof page !== 'undefined') {
         page = '&page=' + page
       } else {
         page = ''
       }
-
       let queryParam = page
       // const examQuesry = '&exam=0'
       // queryParam += examQuesry

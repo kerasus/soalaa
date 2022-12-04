@@ -140,7 +140,7 @@ class ExamData {
     return this
   }
 
-  getUserExamDataReport (userExamId) {
+  getUserExamDataReport (userExamId, isAdmin = false) {
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!userExamId && !that.exam) {
@@ -151,14 +151,28 @@ class ExamData {
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
       }
-      this.$axios.get(API_ADDRESS.exam.report.getReport(userExamId))
-        .then(response => {
-          that.studentReport = response.data.data
-          resolve(response)
-        })
-        .catch(error => {
-          reject(error)
-        })
+      if (isAdmin) {
+        const params = {
+          user_exam_id: userExamId
+        }
+        this.$axios.get(API_ADDRESS.exam.report.adminGetReport, { params })
+          .then(response => {
+            that.studentReport = response.data.data
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      } else {
+        this.$axios.get(API_ADDRESS.exam.report.getReport(userExamId))
+          .then(response => {
+            that.studentReport = response.data.data
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      }
     })
     )
     return this

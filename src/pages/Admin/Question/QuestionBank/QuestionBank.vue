@@ -26,7 +26,8 @@
         </div>
         <div class="question-bank-content">
           <question-item v-if="questions.loading"
-                         :question="loadingQuestion" />
+                         :question="loadingQuestion"
+          />
           <template v-else>
             <question-item
               v-for="question in questions.list"
@@ -34,6 +35,7 @@
               :question="question"
               :listOptions="questionsOptions"
               pageStrategy="question-bank"
+              @deleteFromDb="deleteQuestionFromDataBase"
               @checkSelect="onClickedCheckQuestionBtn"
             />
           </template>
@@ -113,6 +115,7 @@ export default {
         copy: true,
         detachQuestion: true,
         deleteQuestionFromDb: true,
+        deleteQuestionFromExam: false,
         editQuestion: true,
         switch: true
       },
@@ -209,7 +212,52 @@ export default {
       this.deleteQuestionFromExam(question)
       this.questionListKey = Date.now()
     },
+    async deleteQuestion() {
+      try {
+        await this.callDeleteQuestion()
+      } catch (e) {
 
+      }
+    },
+    deleteQuestionReq (questionId) {
+      return this.$axios.delete(API_ADDRESS.question.delete(questionId))
+    },
+    closeConfirmModal () {
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        show: false
+      })
+    },
+    async deleteQuestionFromDataBase(question) {
+      await this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
+        message: 'از حذف کامل سوال از پایگاه داد و حذف از تمامی آزمون ها اطمینان دارید؟',
+        buttons: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: async (confirm) => {
+          if (!confirm) {
+            this.closeConfirmModal()
+            return
+          }
+          try {
+            this.closeConfirmModal()
+            await this.deleteQuestionReq(question.id)
+            this.$q.notify({
+              message: 'سوال از پایگاه داده حذف شد.',
+              type: 'positive'
+            })
+            this.getQuestionData()
+            // this.$router.go(-1)
+          } catch (e) {
+            this.closeConfirmModal()
+          }
+        }
+      })
+    },
+    callDeleteQuestion() {
+
+    },
     updatePage (page) {
       this.getQuestionData(page, this.filterData)
     },
@@ -223,7 +271,8 @@ export default {
         years: (filterData.years) ? filterData.years.map(item => item.id) : [],
         majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
         statuses: (filterData.statuses) ? filterData.statuses.map(item => item.id) : [],
-        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : []
+        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
+        ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
 

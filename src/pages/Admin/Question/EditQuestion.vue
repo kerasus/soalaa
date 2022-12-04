@@ -65,7 +65,10 @@
       </div>
       <btn-box
         class="col-12"
+        editeQuestion
         @saveQuestion="saveQuestion"
+        @detachQuestion="detachQuestion"
+        @deletefromDb="deleteQuestion"
       />
       <status-change
         :statuses="questionStatuses"
@@ -210,8 +213,43 @@ export default {
         message: 'سوال به تغییرات انتخاب شده بازگردانی شد',
         position: 'top'
       })
-      console.log('question statement', this.question.statement)
-      console.log('question descriptive_answer', this.question.descriptive_answer)
+      console.warn('question statement', this.question.statement)
+      console.warn('question descriptive_answer', this.question.descriptive_answer)
+    },
+    deleteQuestion () {
+      this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
+        message: 'از حذف کامل سوال از پایگاه داد و حذف از تمامی آزمون ها اطمینان دارید؟',
+        buttons: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: async (confirm) => {
+          if (!confirm) {
+            this.closeConfirmModal()
+            return
+          }
+          try {
+            this.closeConfirmModal()
+            await this.deleteQuestionReq(this.question.id)
+            this.$q.notify({
+              message: 'سوال از پایگاه داده حذف شد.',
+              type: 'positive'
+            })
+            this.$router.go(-1)
+          } catch (e) {
+            this.closeConfirmModal()
+          }
+        }
+      })
+    },
+    deleteQuestionReq (questionId) {
+      return this.$axios.delete(API_ADDRESS.question.delete(questionId))
+    },
+    closeConfirmModal () {
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        show: false
+      })
     }
   },
   computed: {
