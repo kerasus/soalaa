@@ -220,7 +220,7 @@ export default {
       return this.$axios.get(API_ADDRESS.question.confirm(question.id))
     },
     scrollToQuestion () {
-      const questionIndex = this.filteredQuestions.findIndex(question => question.order.toString() === this.searchedQuestionOrder.toString())
+      const questionIndex = this.filteredQuestions.findIndex(question => question.in_subcategory_order.toString() === this.searchedQuestionOrder.toString())
       if (questionIndex === -1) {
         this.searchedQuestionOrder = 0
         this.$q.notify({
