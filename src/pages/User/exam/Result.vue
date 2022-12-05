@@ -231,7 +231,7 @@ export default {
       examData.getUserExamWithCorrectAnswers(userExamId, examId)
         .loadQuestionsFromFile()
         .getUserExamData(userExamId)
-        .getUserExamDataReport(userExamId, true)
+        .getUserExamDataReport(userExamId, this.user.hasPermission('examStore'))
         .run()
         .then(() => {
           // save questions in localStorage
