@@ -173,6 +173,7 @@ export default {
         }
       }).then(response => {
         this.question = new Question(response.data.data)
+        this.question.type_id = response.data.data.type?.id
       })
     },
     chosenComponent () {
