@@ -14,6 +14,10 @@
           headers: {
             Authorization: getAuthorizationCode
           }
+        },
+        persianKeyboard: true,
+        mathliveOptions: {
+          locale: 'fa',
         }
       }"
     />
