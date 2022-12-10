@@ -125,13 +125,35 @@ class QuestionHandler {
         examId: '638b6604426ad5e8ad008bdb',
         questions: [],
         isPending: false
+      },
+      {
+        examName: 'ElementWithWrongTag',
+        examId: '639490421e536a80ff052bbd',
+        questions: [],
+        isPending: false
       }
     ]
   }
 
+  // {
+  //   "exam_id": "{{exam_id}}",
+  //   "questions": [
+  //     {
+  //       "question_id": "5ffdd6ad077f6b34e529bc28",
+  //       "sub_category_id": "60b7875428f350277f04c5e8",
+  //       "order": "{{random_int}}"
+  //     },
+  // }
   attachQuestionToExamRequest (attachExamObj) {
-    return this.$axios.post(API_ADDRESS.exam.bulkAttachQuestions(attachExamObj.examId), {
-      questions: attachExamObj.questions.map(questionModifier => questionModifier.question.id)
+    return this.$axios.post(API_ADDRESS.exam.bulkAttachQuestions(), {
+      exam_Id: attachExamObj.examId,
+      questions: attachExamObj.questions.map((questionModifier, index) => {
+        return {
+          order: index,
+          sub_category_id: '60b7875428f350277f04c5e3',
+          question_id: questionModifier.question.id
+        }
+      })
     })
   }
 
@@ -377,7 +399,7 @@ class QuestionHandler {
       //   }
       //   this.initQuestionModifier(q.data)
       // }
-      this.arrayOfQuestions.forEach(question => {
+      this.arrayOfQuestions.forEach((question) => {
         this.initQuestionModifier(question)
       })
       resolve()
