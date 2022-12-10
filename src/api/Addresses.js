@@ -82,8 +82,8 @@ const API_ADDRESS = {
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
     analysisVideo: lumenServer + '/exam-question/attach/sub-category',
-    bulkAttachQuestions: (examId) => lumenServer + '/exam-question/user/attach/bulk/' + examId,
-    bulkDetachQuestions: (examId) => lumenServer + '/exam-question/user/detach/bulk/' + examId,
+    bulkAttachQuestions: (examId) => lumenServer + '/exam-question/attach/bulk',
+    bulkDetachQuestions: (examId) => lumenServer + '/exam-question/detach/bulk/' + examId,
     getAnalysisVideo (examId) {
       return lumenServer + '/exam-question/videos/' + examId
     },
