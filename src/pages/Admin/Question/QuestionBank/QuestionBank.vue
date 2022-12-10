@@ -6,12 +6,14 @@
         <QuestionBankHeader />
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
-        <question-filter
-          ref="filter"
-          :filterQuestions="filterQuestions"
-          @onFilter="onFilter"
-          @delete-filter="deleteFilterItem"
-        />
+        <sticky-both-sides :max-width="1024">
+          <question-filter
+            ref="filter"
+            :filterQuestions="filterQuestions"
+            @onFilter="onFilter"
+            @delete-filter="deleteFilterItem"
+          />
+        </sticky-both-sides>
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
@@ -98,10 +100,18 @@ import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
 import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
+import StickyBothSides from 'components/Utils/StickyBothSides'
 
 export default {
   name: 'QuestionBank',
-  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
+  components: {
+    StickyBothSides,
+    QuestionBankHeader,
+    QuestionToolBar,
+    QuestionFilter,
+    QuestionItem,
+    pagination
+  },
   data() {
     return {
       searchInput: '',
@@ -223,7 +233,9 @@ export default {
       this.selectedQuestions.push(question)
       if (this.selectedQuestions.length === this.questions.list.length) {
         this.checkBox = true
-      } else this.checkBox = 'maybe'
+      } else {
+        this.checkBox = 'maybe'
+      }
       this.questionListKey = Date.now()
     },
     deleteQuestionFromSelectedList(question) {
@@ -261,6 +273,13 @@ export default {
     getQuestionData(page, filters) {
       if (!page) {
         page = 1
+      }
+      if (!filters) {
+        filters = {
+          sort_by: 'created_at',
+          sort_type: this.searchSelector.value,
+          statement: ''
+        }
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true

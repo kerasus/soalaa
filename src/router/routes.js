@@ -201,11 +201,6 @@ const routes = [
                 component: () => import('pages/User/exam/List')
               },
               {
-                name: 'User.Exam.Download',
-                path: 'download_exam',
-                component: () => import('pages/User/exam/Download/Download')
-              },
-              {
                 path: 'ticket',
                 component: () => import('layouts/bareLayout.vue'),
                 name: 'User.Ticket',
@@ -231,6 +226,18 @@ const routes = [
                 path: '/onlineQuiz/results/:exam_id/:user_exam_id',
                 name: 'user.exam.results',
                 component: () => import('pages/User/exam/Result')
+              }
+            ]
+          },
+          {
+            path: 'download_exam/:examId',
+            name: 'User.Download',
+            component: () => import('layouts/boxedLayout'),
+            children: [
+              {
+                name: 'User.Exam.Download',
+                path: '',
+                component: () => import('pages/User/exam/Download/Download')
               }
             ]
           },
