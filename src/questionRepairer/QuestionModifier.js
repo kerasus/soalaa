@@ -36,6 +36,24 @@ class QuestionModifier {
     if (!question.type.type_id && question.type.value === 'konkur') {
       this.question.type_id = '6225f4828044517f52500c04'
     }
+    if (this.question.tags && this.question.tags.length > 0) {
+      this.question.tags = this.question.tags.map(item => item.id)
+    }
+    if (this.question.designers && this.question.designers.length > 0) {
+      this.question.designers = this.question.designers.map(item => item.id)
+    }
+    if (this.question.reference && this.question.reference.length > 0) {
+      this.question.reference = this.question.reference.map(item => item.id)
+    }
+    if (this.question.years && this.question.years.length > 0) {
+      this.question.years = this.question.years.map(item => item.id)
+    }
+    if (this.question.majors && this.question.majors.length > 0) {
+      this.question.majors = this.question.majors.map(item => item.id)
+    }
+    if (this.question.targets && this.question.targets.length > 0) {
+      this.question.targets = this.question.targets.map(item => item.id)
+    }
   }
 
   flagQuestion (modifier) {
