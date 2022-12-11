@@ -145,11 +145,16 @@ class QuestionHandler {
   //     },
   // }
   attachQuestionToExamRequest (attachExamObj) {
+    if (!(attachExamObj.questions.length > 0)) {
+      return new Promise((resolve, reject) => {
+        resolve()
+      })
+    }
     return this.$axios.post(API_ADDRESS.exam.bulkAttachQuestions(), {
-      exam_Id: attachExamObj.examId,
+      exam_id: attachExamObj.examId,
       questions: attachExamObj.questions.map((questionModifier, index) => {
         return {
-          order: index,
+          order: index + 1,
           sub_category_id: '60b7875428f350277f04c5e3',
           question_id: questionModifier.question.id
         }
