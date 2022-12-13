@@ -5,17 +5,18 @@ class ElementsWithWrongSinus extends ModifiersSupplement {
     super({
       question,
       regex: /(\\sin\w*)/gms,
-      updateNeeded: true,
+      updateNeeded: false,
       flagName: 'ElementsWithWrongSinus'
     })
   }
 
-  convertorBaseMethod (input) {
-    const regex = this.regex
-    return input.replaceAll(regex, (result) => {
-      const char = result.replace('\\sin', '')
-      return '\\sin ' + char
-    })
-  }
+  // convertorBaseMethod (input) {
+  //   const regex = this.regex
+  //   return input.replaceAll(regex, (result) => {
+  //     console.log('result', result)
+  //     const char = result.replace('\\sin', '')
+  //     return '\\sin ' + char
+  //   })
+  // }
 }
 export default ElementsWithWrongSinus
