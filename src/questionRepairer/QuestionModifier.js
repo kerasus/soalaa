@@ -24,7 +24,7 @@ import API_ADDRESS from 'src/api/Addresses'
 class QuestionModifier {
   constructor (question = {}, axios) {
     this.updateNeeded = false
-    this.updateFailed = false
+    this.updateFailed = true
     this.question = question
     this.questionsFlags = []
     this.$axios = axios
@@ -33,26 +33,56 @@ class QuestionModifier {
     if (question._id) {
       this.question.id = question._id
     }
-    if (!question.type.type_id && question.type.value === 'konkur') {
+    if (!question.type.type_id && (question.type.value === 'konkur' || question.type === 'konkur')) {
       this.question.type_id = '6225f4828044517f52500c04'
     }
     if (this.question.tags && this.question.tags.length > 0) {
-      this.question.tags = this.question.tags.map(item => item.id)
+      this.question.tags = this.question.tags.map(item => {
+        if (item.id) {
+          return item.id
+        }
+        return item
+      })
     }
     if (this.question.designers && this.question.designers.length > 0) {
-      this.question.designers = this.question.designers.map(item => item.id)
+      this.question.designers = this.question.designers.map(item => {
+        if (item.id) {
+          return item.id
+        }
+        return item
+      })
     }
     if (this.question.reference && this.question.reference.length > 0) {
-      this.question.reference = this.question.reference.map(item => item.id)
+      this.question.reference = this.question.reference.map(item => {
+        if (item.id) {
+          return item.id
+        }
+        return item
+      })
     }
     if (this.question.years && this.question.years.length > 0) {
-      this.question.years = this.question.years.map(item => item.id)
+      this.question.years = this.question.years.map(item => {
+        if (item.id) {
+          return item.id
+        }
+        return item
+      })
     }
     if (this.question.majors && this.question.majors.length > 0) {
-      this.question.majors = this.question.majors.map(item => item.id)
+      this.question.majors = this.question.majors.map(item => {
+        if (item.id) {
+          return item.id
+        }
+        return item
+      })
     }
     if (this.question.targets && this.question.targets.length > 0) {
-      this.question.targets = this.question.targets.map(item => item.id)
+      this.question.targets = this.question.targets.map(item => {
+        if (item.id) {
+          return item.id
+        }
+        return item
+      })
     }
   }
 
@@ -62,7 +92,7 @@ class QuestionModifier {
 
   inspectAllScenarios () {
     this.inspectForEmptyFormulaElements()
-      .inspectForEmptyForParagraphWithTwoDollarSigns()
+      // .inspectForEmptyForParagraphWithTwoDollarSigns()
       .inspectForEmptyForDataKatexElInTwoDollarSigns()
       .inspectForEmptyForOddNumberOfDollarSigns()
       .inspectForEmptyForUnclosedFormulaBracket()
@@ -81,7 +111,9 @@ class QuestionModifier {
       .inspectForElementsWithWrongSinus()
       .inspectForElementsWithWrongCosine()
       .inspectForElementWithCurlyBrackets()
-
+    if (this.questionsFlags.length > 0) {
+      window.countOfFlags++
+    }
     return this
   }
 
@@ -220,6 +252,7 @@ class QuestionModifier {
       return
     }
     return new Promise((resolve, reject) => {
+      window.countOfUR++
       this.$axios.put(API_ADDRESS.question.update(this.question.id), this.question)
         .then((response) => {
           this.timesQuestionHasBeenUpdated++
@@ -239,7 +272,9 @@ class QuestionModifier {
 
   updateIfNeeded () {
     if (!this.updateNeeded) {
-      return
+      return new Promise((resolve) => {
+        resolve()
+      })
     }
     return this.updateQuestion()
   }
