@@ -1,7 +1,9 @@
 <template>
   <h5>THIS COMPONENT IS JUST FOR TEST</h5>
   <!--  <div class="text-center flex justify-center items-center">-->
-  <q-btn @click="fixQuestions">fixQuestions</q-btn>
+  <q-btn @click="run">fixQuestions</q-btn>
+  ------------------------------------------
+  <q-btn @click="doesHaveFailedQuestion">doesHaveFailedQuestion</q-btn>
   ------------------------------------------
   <!--  <q-btn @click="fixQuestions">fixQuestions</q-btn>-->
   <q-btn @click="fixQuestions(0)">attach1</q-btn>
@@ -105,17 +107,27 @@ export default {
         .then((res) => {
           this.allQuestions = res.data
           // (this.allQuestions.length)
-          const a = new QuestionHandler(this.allQuestions.slice(60001, (this.allQuestions.length)), this.$axios)
+          const a = new QuestionHandler(this.allQuestions.slice(77000, (this.allQuestions.length)), this.$axios)
           a.run()
           // console.log('res.data.length', res.data.length)
         })
     },
     getFile () {
-      this.$axios.get('result7.json')
+      this.$axios.get('resultTest.json')
         .then((res) => {
           this.allResult = res.data
           console.log('file loaded')
         })
+    },
+    doesHaveFailedQuestion () {
+      const allFailedQuestions = this.allResult.map(attachExamObj => {
+        const failedQuestions = attachExamObj.questions.filter(question => question.updateFailed)
+        if (failedQuestions && failedQuestions.length > 0) {
+          return failedQuestions
+        }
+        return null
+      }).filter(attachExamObj => attachExamObj)
+      console.log('allFailedQuestions', allFailedQuestions)
     }
   },
   computed: {

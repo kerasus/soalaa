@@ -272,6 +272,7 @@ class QuestionModifier {
 
   updateIfNeeded () {
     if (!this.updateNeeded) {
+      this.updateFailed = false
       return new Promise((resolve) => {
         resolve()
       })
