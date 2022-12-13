@@ -34,13 +34,13 @@ class ModifiersSupplement {
   questionDetector () {
     return this.textDetector(this.question.descriptive_answer) ||
       this.textDetector(this.question.statement) ||
-      this.question.choices.find(choice => this.textDetector(choice.title) === true)
+      this.question.choices?.find(choice => this.textDetector(choice.title) === true)
   }
 
   questionConvertor () {
     this.question.descriptive_answer = this.textConvertor(this.question.descriptive_answer)
     this.question.statement = this.textConvertor(this.question.statement)
-    this.question.choices = this.question.choices.map(choice => {
+    this.question.choices = this.question.choices?.map(choice => {
       return {
         ...choice,
         title: this.textConvertor(choice.title)
