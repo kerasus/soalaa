@@ -5,37 +5,26 @@
   ------------------------------------------
   <q-btn @click="doesHaveFailedQuestion">doesHaveFailedQuestion</q-btn>
   ------------------------------------------
-  <!--  <q-btn @click="fixQuestions">fixQuestions</q-btn>-->
-  <q-btn @click="fixQuestions(0)">attach1</q-btn>
-  <q-btn @click="fixQuestions(1)">attach2</q-btn>
-  <q-btn @click="fixQuestions(2)">attach3</q-btn>
-  <q-btn @click="fixQuestions(3)">attach4</q-btn>
-  <q-btn @click="fixQuestions(4)">attach5</q-btn>
-  <q-btn @click="fixQuestions(5)">attach6</q-btn>
-  <q-btn @click="fixQuestions(6)">attach7</q-btn>
-  <q-btn @click="fixQuestions(7)">attach8</q-btn>
-  <q-btn @click="fixQuestions(8)">attach9</q-btn>
-  <q-btn @click="fixQuestions(9)">attach10</q-btn>
-  <q-btn @click="fixQuestions(10)">attach11</q-btn>
-  <q-btn @click="fixQuestions(11)">attach12</q-btn>
-  <q-btn @click="fixQuestions(12)">attach13</q-btn>
-  <q-btn @click="fixQuestions(13)">attach14</q-btn>
-  <q-btn @click="fixQuestions(14)">attach15</q-btn>
-  <q-btn @click="fixQuestions(15)">attach16</q-btn>
-  <q-btn @click="fixQuestions(16)">attach17</q-btn>
-  <q-btn @click="fixQuestions(17)">attach18</q-btn>
-  <q-btn @click="fixQuestions(18)">attach19</q-btn>
-  <q-btn @click="fixQuestions(19)">attach20</q-btn>
-<!--  <div>-->
-<!--    from q {{this.index }} to q {{(this.index * this.count) + 10000}}-->
-<!--  </div>-->
-  <!--    <div class="video-player-container ">-->
-  <!--      <video-player-->
-  <!--        :sources="videosSrc"-->
-  <!--        poster="https://nodes.alaatv.com/upload/vast/videos/3A_LANDING/video%20tubmail.jpg" />-->
-  <!--    </div>-->
-
-<!--  </div>-->
+<!--  <q-btn @click="fixQuestions(0)">attach1</q-btn>-->
+<!--  <q-btn @click="fixQuestions(1)">attach2</q-btn>-->
+<!--  <q-btn @click="fixQuestions(2)">attach3</q-btn>-->
+<!--  <q-btn @click="fixQuestions(3)">attach4</q-btn>-->
+<!--  <q-btn @click="fixQuestions(4)">attach5</q-btn>-->
+<!--  <q-btn @click="fixQuestions(5)">attach6</q-btn>-->
+<!--  <q-btn @click="fixQuestions(6)">attach7</q-btn>-->
+<!--  <q-btn @click="fixQuestions(7)">attach8</q-btn>-->
+<!--  <q-btn @click="fixQuestions(8)">attach9</q-btn>-->
+<!--  <q-btn @click="fixQuestions(9)">attach10</q-btn>-->
+<!--  <q-btn @click="fixQuestions(10)">attach11</q-btn>-->
+<!--  <q-btn @click="fixQuestions(11)">attach12</q-btn>-->
+<!--  <q-btn @click="fixQuestions(12)">attach13</q-btn>-->
+<!--  <q-btn @click="fixQuestions(13)">attach14</q-btn>-->
+<!--  <q-btn @click="fixQuestions(14)">attach15</q-btn>-->
+<!--  <q-btn @click="fixQuestions(15)">attach16</q-btn>-->
+<!--  <q-btn @click="fixQuestions(16)">attach17</q-btn>-->
+<!--  <q-btn @click="fixQuestions(17)">attach18</q-btn>-->
+<!--  <q-btn @click="fixQuestions(18)">attach19</q-btn>-->
+<!--  <q-btn @click="fixQuestions(19)">attach20</q-btn>-->
 </template>
 
 <script>
@@ -43,6 +32,7 @@
 // import { PlayerSourceList } from 'src/models/PlayerSource'
 import QuestionHandler from 'src/questionRepairer/QuestionHandler'
 // import API_ADDRESS from 'src/api/Addresses'
+// import { saveAs } from 'file-saver'
 
 export default {
   name: 'Test',
@@ -106,18 +96,73 @@ export default {
       this.$axios.get('allquestions.json')
         .then((res) => {
           this.allQuestions = res.data
-          // (this.allQuestions.length)
-          const a = new QuestionHandler(this.allQuestions.slice(77000, (this.allQuestions.length)), this.$axios)
+          const a = new QuestionHandler(this.allQuestions.slice(70000, (this.allQuestions.length)), this.$axios)
           a.run()
           // console.log('res.data.length', res.data.length)
         })
     },
     getFile () {
-      this.$axios.get('resultTest.json')
-        .then((res) => {
-          this.allResult = res.data
-          console.log('file loaded')
-        })
+      // this.$axios.get('result8.json')
+      //   .then((res) => {
+      //     this.allResult = res.data
+      //     console.log('file loaded')
+      //   })
+
+      const promise1 = this.$axios.get('result1.json')
+      const promise2 = this.$axios.get('result2.json')
+      const promise3 = this.$axios.get('result3.json')
+      const promise4 = this.$axios.get('result4.json')
+      const promise5 = this.$axios.get('result5.json')
+      const promise6 = this.$axios.get('result6.json')
+      const promise7 = this.$axios.get('result7.json')
+      const promise8 = this.$axios.get('result8.json')
+
+      Promise.all([promise1, promise2, promise3, promise4, promise5, promise6, promise7, promise8]).then((res) => {
+        this.fillAllResult(res[0].data)
+        this.fillAllResult(res[1].data)
+        this.fillAllResult(res[2].data)
+        this.fillAllResult(res[3].data)
+        this.fillAllResult(res[4].data)
+        this.fillAllResult(res[5].data)
+        this.fillAllResult(res[6].data)
+        this.fillAllResult(res[7].data)
+        // const fileName = 'allResult.json'
+        // const fileToSave = new Blob([JSON.stringify(this.allResult)], {
+        //   type: 'application/json'
+        // })
+        // saveAs(fileToSave, fileName)
+        console.log('file loaded', this.allResult)
+      })
+    },
+    fillAllResult(fileData) {
+      const fileDataArray = [
+        ...fileData
+      ]
+      fileDataArray.forEach(attachExamObj => {
+        const foundedExamIndex = this.allResult.findIndex(examObj => examObj.exam_id === attachExamObj.examId)
+        if (foundedExamIndex === -1) {
+          console.log('foundedExamIndex', foundedExamIndex)
+          this.allResult.push({
+            exam_id: attachExamObj.examId,
+            questions: attachExamObj.questions.map((questionModifier, index) => {
+              return {
+                order: index + 1,
+                sub_category_id: '60b7875428f350277f04c5e3',
+                question_id: questionModifier.question.id
+              }
+            })
+          })
+        } else {
+          console.log('this.allResult[foundedExamIndex]', this.allResult[foundedExamIndex])
+          this.allResult[foundedExamIndex].questions.push(...attachExamObj.questions.map((questionModifier, index) => {
+            return {
+              order: index + 1,
+              sub_category_id: '60b7875428f350277f04c5e3',
+              question_id: questionModifier.question.id
+            }
+          }))
+        }
+      })
     },
     doesHaveFailedQuestion () {
       const allFailedQuestions = this.allResult.map(attachExamObj => {
@@ -132,6 +177,11 @@ export default {
   },
   computed: {
 
+  },
+  mounted() {
+    window.countOfUR = 0
+    window.countOfFlags = 0
+    // this.getFile()
   },
   beforeRouteEnter () {
     // console.log('debug beforeRouteEnter')
@@ -158,11 +208,6 @@ export default {
   // }
   // console.log('debug mounted')
   // },
-  mounted() {
-    window.countOfUR = 0
-    window.countOfFlags = 0
-    this.getFile()
-  },
   watch: {
     testValue: {
       handler () {},
