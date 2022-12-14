@@ -131,7 +131,7 @@ export default {
         //   type: 'application/json'
         // })
         // saveAs(fileToSave, fileName)
-        console.log('file loaded', this.allResult)
+        console.log('file loaded')
       })
     },
     fillAllResult(fileData) {
@@ -141,7 +141,6 @@ export default {
       fileDataArray.forEach(attachExamObj => {
         const foundedExamIndex = this.allResult.findIndex(examObj => examObj.exam_id === attachExamObj.examId)
         if (foundedExamIndex === -1) {
-          console.log('foundedExamIndex', foundedExamIndex)
           this.allResult.push({
             exam_id: attachExamObj.examId,
             questions: attachExamObj.questions.map((questionModifier, index) => {
@@ -153,7 +152,6 @@ export default {
             })
           })
         } else {
-          console.log('this.allResult[foundedExamIndex]', this.allResult[foundedExamIndex])
           this.allResult[foundedExamIndex].questions.push(...attachExamObj.questions.map((questionModifier, index) => {
             return {
               order: index + 1,
