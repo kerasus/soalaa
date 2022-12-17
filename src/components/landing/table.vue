@@ -150,7 +150,7 @@
 
 <script>
 export default {
-  name: 'table',
+  name: 'ExamTable',
   data: () => ({
 
   }),

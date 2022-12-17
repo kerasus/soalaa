@@ -26,7 +26,6 @@ export function changeTemplateLeftSideBarType (state, newInfo) {
 export function changeTemplateRightSideBarType (state, newInfo) {
   state.templateRightSideBarType = newInfo
 }
-
 export function showConfirmDialog (state, newInfo) {
   state.confirmDialog = newInfo
 }

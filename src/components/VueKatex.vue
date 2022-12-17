@@ -47,7 +47,31 @@ export default {
       if (string === null || typeof string === 'undefined') {
         return ''
       }
+      string = this.removeFirstAndLastBracket(string)
       string = mixinConvertToTiptap.methods.renderKatexToHTML(string)
+      return string
+    }
+  },
+  methods: {
+    removeFirstAndLastBracket (input) {
+      const regexPatternForFormula = mixinConvertToTiptap.methods.getRegexPatternForFormula()
+      const regex = /\\\[.*\\]/gms
+      let string = input
+      string = string.replace(regexPatternForFormula, (match) => {
+        let finalMatch
+        if (match.includes('$')) {
+          finalMatch = match.slice(1, -1)
+        } else {
+          finalMatch = match.slice(2, -2)
+        }
+        finalMatch = finalMatch.replace(regex, (bracketMatch) => {
+          if (finalMatch.indexOf('\\[') === 0 && finalMatch.indexOf('\\]') === finalMatch.length - 2) {
+            return bracketMatch.replace('\\[', '').replace('\\]', '')
+          }
+          return bracketMatch
+        })
+        return '$' + finalMatch + '$'
+      })
       return string
     }
   },
@@ -82,12 +106,6 @@ export default {
 .html-katex {
   width: 100%;
 
-  // ToDo:we must fix this
-  font-family: KaTeX_Main, Times New Roman, serif !important;
-  .mrel, .mop, .mord {
-    font-family: KaTeX_Main, Times New Roman, serif !important;
-  }
-
   & > p {
     direction: inherit;
     &:first-child {
@@ -95,9 +113,6 @@ export default {
     }
   }
   .katex {
-    * {
-      //font-family: KaTeX_Main, Times New Roman, serif;
-    }
     /*rtl:ignore*/
     direction: ltr !important;
     /*rtl:ignore*/
@@ -180,7 +195,6 @@ export default {
 
 #mathfield .ML__cmr,
 .katex .mtight {
-  font-family: yekanbakh,serif;
 }
 
 </style>
