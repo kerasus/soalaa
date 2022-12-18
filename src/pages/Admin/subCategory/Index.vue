@@ -1,67 +1,81 @@
 <template>
   <div>
     <!--    v-model:value="inputs"-->
-    <entity-index
-      title="لیست دروس"
-      :api="api"
-      :table="table"
-      :table-keys="tableKeys"
-      :create-route-name="'Admin.subCategory.Create'"
-    >
-      <template #table-cell="{inputData, showConfirmRemoveDialog}">
-        <q-td :props="inputData.props">
-          <template v-if="inputData.props.col.name === 'icon'">
-            <q-avatar
-              size="40px"
-              round
-              text-color="white"
-              :color="iconPicker(inputData.props.row.title).color"
-              :icon="iconPicker(inputData.props.row.title).icon"
-            />
-          </template>
-          <template v-if="inputData.props.col.name === 'actions'">
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="info"
-                   icon="info"
-                   :to="{name:'Admin.subCategory.Show', params: {id: inputData.props.row.id}}">
-              <q-tooltip>
-                مشاهده
-              </q-tooltip>
-            </q-btn>
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="purple"
-                   icon="edit"
-                   :to="{name:'Admin.subCategory.Edit', params: {id: inputData.props.row.id}}">
-              <q-tooltip>
-                ویرایش
-              </q-tooltip>
-            </q-btn>
-            <q-btn v-if="false"
-                   round
-                   flat
-                   dense
-                   size="md"
-                   color="negative"
-                   icon="delete"
-                   class="q-ml-md"
-                   @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
-              <q-tooltip>
-                حذف
-              </q-tooltip>
-            </q-btn>
-          </template>
-          <template v-else>
-            {{ inputData.props.value }}
-          </template>
-        </q-td>
-      </template>
-    </entity-index>
+    <template v-if="loading">
+      <div class="text-center q-mt-xl">
+        <q-spinner-ball
+          color="primary"
+          size="5em"
+        />
+      </div>
+    </template>
+    <template v-else>
+      <entity-index
+        title="لیست دروس"
+        :api="api"
+        :table="table"
+        :table-keys="tableKeys"
+        :create-route-name="'Admin.subCategory.Create'"
+      >
+        <template #table-cell="{inputData, showConfirmRemoveDialog}">
+          <q-td :props="inputData.props">
+            <template v-if="inputData.props.col.name === 'icon'">
+              <q-avatar
+                size="40px"
+                round
+                text-color="white"
+                :color="iconPicker(inputData.props.row.title).color"
+                :icon="iconPicker(inputData.props.row.title).icon"
+              />
+            </template>
+            <template v-if="inputData.props.col.name === 'actions'">
+              <q-btn round
+                     flat
+                     dense
+                     size="md"
+                     color="info"
+                     icon="info"
+                     :to="{name:'Admin.subCategory.Show', params: {id: inputData.props.row.id}}">
+                <q-tooltip>
+                  مشاهده
+                </q-tooltip>
+              </q-btn>
+              <q-btn round
+                     flat
+                     dense
+                     size="md"
+                     color="purple"
+                     icon="edit"
+                     :to="{name:'Admin.subCategory.Edit', params: {id: inputData.props.row.id}}">
+                <q-tooltip>
+                  ویرایش
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                round
+                flat
+                dense
+                size="md"
+                color="negative"
+                icon="delete"
+                class="q-ml-md"
+                @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
+                <q-tooltip>
+                  حذف درس
+                </q-tooltip>
+              </q-btn>
+            </template>
+            <!--          <template v-if="inputData.props.col.name === 'category_id'">-->
+            <!--            {{}}-->
+            <!--          </template>-->
+            <template v-else>
+              {{ inputData.props.value }}
+            </template>
+          </q-td>
+        </template>
+      </entity-index>
+    </template>
+
   </div>
 </template>
 
@@ -74,6 +88,7 @@ export default {
   components: { EntityIndex },
   data () {
     return {
+      loading: false,
       expanded: true,
       categoryResponse: null,
       api: API_ADDRESS.questionSubcategory.base,
@@ -213,19 +228,25 @@ export default {
   },
   methods: {
     getRemoveMessage (row) {
-      const title = row.title
-      const categoryTitle = row.category_info.title
-      return 'آیا از حذف ' + title + ' در درسته ' + categoryTitle + ' اطمینان دارید؟'
+      // const title = row.title
+      // const categoryTitle = row.category_info.title
+      // return 'آیا از حذف ' + title + ' در درسته ' + categoryTitle + ' اطمینان دارید؟'
+      return 'ایا از حذف درس  ' + row.title + ' اطمینان دارید؟ '
     },
-    loadCategories () {
-      const that = this
-      that.$axios.get(API_ADDRESS.questionCategory.base)
-        .then(function (response) {
-          that.categoryResponse = response.data.data
+    async loadCategories () {
+      this.loading = true
+      try {
+        const response = await this.$axios.get(API_ADDRESS.questionCategory.base)
+        this.categoryResponse = response.data.data
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+        this.$q.notify({
+          type: 'negative',
+          message: 'مشکلی در دریافت دفترچه به وجود آمده',
+          position: 'top'
         })
-        .catch(function (error) {
-          console.error(error)
-        })
+      }
     },
     setCategoryTitle (id) {
       let title = ''

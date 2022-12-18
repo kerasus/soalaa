@@ -1,8 +1,13 @@
 <template>
-  <router-view></router-view>
+  <router-view v-slot="{ Component }">
+    <keep-alive include="Admin.Exam.Index">
+      <component :is="Component" />
+    </keep-alive>
+  </router-view>
 </template>
 
 <script>
+// ToDo use include
 export default {
   name: 'Router',
   props: {
@@ -15,9 +20,6 @@ export default {
       required: false
     }
   }
+
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -26,18 +26,36 @@
         </div>
         <div class="question-bank-content">
           <question-item v-if="questions.loading"
-                         :question="loadingQuestion" />
+                         :question="loadingQuestion"
+          />
           <template v-else>
             <question-item
               v-for="question in questions.list"
               :key="question.id"
               :question="question"
+              :listOptions="questionsOptions"
               pageStrategy="question-bank"
+              @deleteFromDb="deleteQuestionFromDataBase"
               @checkSelect="onClickedCheckQuestionBtn"
             />
           </template>
         </div>
 
+        <q-banner v-if="showSearchResultReport && !questions.loading"
+                  inline-actions
+                  rounded
+                  class="bg-orange text-white">
+          تعداد سوالات حاصل سرچ شما:
+          <span class="text-bold text-h6">
+            {{ paginationMeta.total }}
+          </span>
+          <template v-slot:action>
+            <q-btn flat
+                   label="بستن"
+                   @click="showSearchResultReport = false"
+            />
+          </template>
+        </q-banner>
         <div class="pagination">
           <pagination
             :meta="paginationMeta"
@@ -65,12 +83,14 @@ export default {
   components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data () {
     return {
+      showSearchResultReport: true,
       filterData: null,
       checkBox: false,
       filterQuestions: {
         major_type: [],
         reference_type: [],
         year_type: [],
+        statuses: [],
         levels: [
           {
             id: '1',
@@ -91,6 +111,14 @@ export default {
       questionId: [],
       loadingQuestion: new Question(),
       questions: new QuestionList(),
+      questionsOptions: {
+        copy: true,
+        detachQuestion: true,
+        deleteQuestionFromDb: true,
+        deleteQuestionFromExam: false,
+        editQuestion: true,
+        switch: true
+      },
       disablePagination: false,
       paginationMeta: {
         current_page: 1,
@@ -184,7 +212,52 @@ export default {
       this.deleteQuestionFromExam(question)
       this.questionListKey = Date.now()
     },
+    async deleteQuestion() {
+      try {
+        await this.callDeleteQuestion()
+      } catch (e) {
 
+      }
+    },
+    deleteQuestionReq (questionId) {
+      return this.$axios.delete(API_ADDRESS.question.delete(questionId))
+    },
+    closeConfirmModal () {
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        show: false
+      })
+    },
+    async deleteQuestionFromDataBase(question) {
+      await this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
+        message: 'از حذف کامل سوال از پایگاه داد و حذف از تمامی آزمون ها اطمینان دارید؟',
+        buttons: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: async (confirm) => {
+          if (!confirm) {
+            this.closeConfirmModal()
+            return
+          }
+          try {
+            this.closeConfirmModal()
+            await this.deleteQuestionReq(question.id)
+            this.$q.notify({
+              message: 'سوال از پایگاه داده حذف شد.',
+              type: 'positive'
+            })
+            this.getQuestionData()
+            // this.$router.go(-1)
+          } catch (e) {
+            this.closeConfirmModal()
+          }
+        }
+      })
+    },
+    callDeleteQuestion() {
+
+    },
     updatePage (page) {
       this.getQuestionData(page, this.filterData)
     },
@@ -197,7 +270,9 @@ export default {
         level: (filterData.level) ? filterData.level.map(item => item.id) : [],
         years: (filterData.years) ? filterData.years.map(item => item.id) : [],
         majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
-        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : []
+        statuses: (filterData.statuses) ? filterData.statuses.map(item => item.id) : [],
+        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
+        ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
 
@@ -213,6 +288,7 @@ export default {
           this.paginationMeta = response.data.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
+          this.showSearchResultReport = true
         })
         .catch(function (error) {
           console.error(error)
@@ -232,6 +308,13 @@ export default {
               this.filterQuestions.major_type.push(option)
             }
           })
+        })
+      this.getQuestionStatuses()
+    },
+    getQuestionStatuses () {
+      this.$axios.get(API_ADDRESS.question.status.base)
+        .then(response => {
+          this.filterQuestions.statuses = response.data.data
         })
     },
     selectAllQuestions () {

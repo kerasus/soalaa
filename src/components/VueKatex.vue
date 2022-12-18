@@ -10,7 +10,6 @@
 <script>
 import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
 // import 'katex/dist/katex.min.css'
-import katex from 'katex'
 
 export default {
   name: 'VueKatex',
@@ -45,57 +44,35 @@ export default {
     },
     computedKatex() {
       let string = this.input
-      string = mixinConvertToTiptap.methods.convertToTiptap(string)
-      // const regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms
-      const regex = /(\${1}((?!\$).)+?\${1})|(\${2}((?!\$).)+?\${2})|(\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\[\\((?! ).){1}((?!\$).)*?((?! ).){1}\]\\)/gms
-      string = string.replace(regex, (match) => {
+      if (string === null || typeof string === 'undefined') {
+        return ''
+      }
+      string = this.removeFirstAndLastBracket(string)
+      string = mixinConvertToTiptap.methods.renderKatexToHTML(string)
+      return string
+    }
+  },
+  methods: {
+    removeFirstAndLastBracket (input) {
+      const regexPatternForFormula = mixinConvertToTiptap.methods.getRegexPatternForFormula()
+      const regex = /\\\[.*\\]/gms
+      let string = input
+      string = string.replace(regexPatternForFormula, (match) => {
         let finalMatch
-        if (match.includes('$$')) {
-          finalMatch = match.slice(2, -2)
-        } else if (match.includes('$')) {
+        if (match.includes('$')) {
           finalMatch = match.slice(1, -1)
         } else {
           finalMatch = match.slice(2, -2)
         }
-        return katex.renderToString(finalMatch, {
-          throwOnError: false,
-          strict: 'warn'
+        finalMatch = finalMatch.replace(regex, (bracketMatch) => {
+          if (finalMatch.indexOf('\\[') === 0 && finalMatch.indexOf('\\]') === finalMatch.length - 2) {
+            return bracketMatch.replace('\\[', '').replace('\\]', '')
+          }
+          return bracketMatch
         })
+        return '$' + finalMatch + '$'
       })
       return string
-
-      // let string = this.input
-      //
-      // if (string === null || typeof string === 'undefined') {
-      //   return ''
-      // }
-      // string = string.replaceAll('¬', '&#8202;')
-      // string = string.replaceAll('­', '&#8202;')
-      //
-      // string = string.replaceAll('\\[ ', '\\[')
-      // string = string.replaceAll(' \\]', '\\]')
-      // string = string.replaceAll(' $', '$')
-      // string = string.replaceAll('$ ', '$')
-      // // string = string.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&')
-      // const regex = /(\${1}((?!\$).)+?\${1})|(\${2}((?!\$).)+?\${2})|(\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\[\\((?! ).){1}((?!\$).)*?((?! ).){1}\]\\)/gms
-      // string = string.replace(regex, (match) => {
-      //   let finalMatch
-      //   if (match.includes('$$')) {
-      //     finalMatch = match.slice(2, -2)
-      //   } else if (match.includes('$')) {
-      //     finalMatch = match.slice(1, -1)
-      //   } else {
-      //     finalMatch = match.slice(2, -2)
-      //   }
-      //   return katex.renderToString(finalMatch, {
-      //     throwOnError: false,
-      //     strict: 'warn'
-      //   })
-      // })
-      // string = string.replaceAll('&lt;', '<')
-      // string = string.replaceAll('&gt;', '>')
-      //
-      // return string
     }
   },
   mounted () {
@@ -118,12 +95,17 @@ export default {
 
 //rtl change bug fix
 [dir="rtl"] .html-katex {
-  @include katex-rtl-fix
+  @include katex-rtl-fix;
+  font-size: 1.2rem;
+  line-height: 4rem;
+  .katex {
+    font-size: 1.9rem;
+  }
 }
 
 .html-katex {
   width: 100%;
-  font-family: KaTeX_Main, Times New Roman, serif !important;
+
   & > p {
     direction: inherit;
     &:first-child {
@@ -131,9 +113,6 @@ export default {
     }
   }
   .katex {
-    * {
-      font-family: KaTeX_Main, Times New Roman, serif !important;
-    }
     /*rtl:ignore*/
     direction: ltr !important;
     /*rtl:ignore*/
@@ -151,7 +130,7 @@ export default {
       padding: 3px 5px;
       vertical-align: top;
       box-sizing: border-box;
-      position: relative;
+      position: static;
       > * {
         margin-bottom: 0;
       }
@@ -216,7 +195,6 @@ export default {
 
 #mathfield .ML__cmr,
 .katex .mtight {
-  font-family: yekanbakh,serif;
 }
 
 </style>

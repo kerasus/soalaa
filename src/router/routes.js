@@ -341,7 +341,7 @@ const routes = [
               },
               {
                 name: 'Admin.Exam.video.set',
-                path: 'video/set/:examId/:subcategory_id',
+                path: 'video/set/examId/:examId/subcategory/:subcategory_id',
                 component: () => import('src/pages/Admin/exam/SetVideo.vue'),
                 middlewares: [
                   Permissions.hasPermission('examquestionVideos')
@@ -572,6 +572,20 @@ const routes = [
         }
       },
       {
+        path: '/onlineQuiz/alaaView/retake/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView.retake',
+        component: () => import('pages/User/exam/participate/AlaaView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
         path: '/onlineQuiz/konkoorView/:quizId',
         name: 'konkoorView',
         component: () => import('pages/User/exam/participate/konkoorView'),
@@ -594,7 +608,8 @@ const routes = [
         //     Permissions.hasPermission('examStore')]
         // },
         layoutConfig: {
-          layoutHeaderVisible: false,
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
           layoutLeftDrawerVisible: false
         }
       },

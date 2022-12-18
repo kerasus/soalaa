@@ -120,7 +120,7 @@ import { EntityIndex } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 import moment from 'moment-jalaali'
 export default {
-  name: 'index',
+  name: 'Admin.Exam.Index',
   components: { EntityIndex },
   data () {
     return {
@@ -181,10 +181,9 @@ export default {
         pageKey: 'page'
       },
       inputs: [
-        { type: 'input', name: 'title', label: 'عنوان', responseKey: 'data.title', col: 'col-md-3', placeholder: ' ', filled: true },
-        // { type: 'input', name: 'type', label: 'نوع', responseKey: 'data.type', col: 'col-md-3', placeholder: ' ', filled: true },
-        { type: 'date', name: 'started_from', label: '', col: 'col-md-3', placeholder: 'تاریخ شروع از' },
-        { type: 'date', name: 'started_till', label: '', col: 'col-md-3', placeholder: 'تاریخ شروع تا' }
+        { type: 'input', name: 'statement', col: 'col-md-4', placeholder: 'عنوان' },
+        { type: 'date', name: 'start_at_from', col: 'col-md-4', placeholder: 'تاریخ شروع از' },
+        { type: 'date', name: 'start_at_till', col: 'col-md-4', placeholder: 'تاریخ شروع تا' }
       ]
     }
   },

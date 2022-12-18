@@ -101,7 +101,6 @@
 
 <script>
 import { Exam, ExamList } from 'src/models/Exam'
-import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 
 export default {
@@ -121,11 +120,10 @@ export default {
     })
     this.examId = this.$route.params.id
     const that = this
-    axios.get(API_ADDRESS.option.base + '?type=exam_type')
+    this.$axios.get(API_ADDRESS.option.base + '?type=exam_type')
       .then(function (response) {
         const optionQuestion = response.data.data.find(item => (item.value === 'psychometric'))
         if (!optionQuestion) {
-          // beterek
           return this.$q.notify({
             message: ' API با مشکل مواجه شد!',
             type: 'error'
@@ -136,7 +134,6 @@ export default {
         that.items = itemstype
         that.loading = false
       })
-    this.examItem = this.exam
     this.getExam(this.examId)
     this.overlayLoading()
   },
@@ -155,22 +152,18 @@ export default {
     getExam (id) {
       this.$store.dispatch('loading/linearLoading', true)
       const that = this
-      axios.get(API_ADDRESS.exam.base())
+      this.$axios.get(API_ADDRESS.exam.base() + '/' + id)
         .then(function (response) {
-          that.examList = new ExamList(response.data.data)
-          that.exam = new Exam(that.examList.list.find(item => item.id === id))
+          that.exam = new Exam(response.data.data)
+          that.examItem = that.exam
           that.$store.dispatch('loading/linearLoading', false)
-          response.data.data.forEach(item => {
-            if (item.id === that.$route.params.id) {
-              that.examTitle = item.title
-            }
-          })
+          that.examTitle = that.exam.title
           that.addBreadcrumb()
         })
     },
     save () {
       const that = this
-      axios.post(API_ADDRESS.exam.report.updateReportOptions(this.exam.id), this.exam.report_config)
+      this.$axios.post(API_ADDRESS.exam.report.updateReportOptions(this.exam.id), this.exam.report_config)
         .then(() => {
           that.$q.notify({
             message: 'اطلاعات آزمون شما ثبت شد.',

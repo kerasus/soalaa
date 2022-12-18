@@ -34,7 +34,7 @@ export default {
             message: 'اطلاعات آزمون شما ثبت شد.',
             type: 'positive'
           })
-          that.$router.push({ name: 'user.exam.list' })
+          that.$router.push({ name: 'User.Exam.List' })
         })
         .catch(() => {
           that.$q.notify({
@@ -43,7 +43,7 @@ export default {
             type: 'warn',
             duration: 30000
           })
-          that.$router.push({ name: 'user.exam.list' })
+          that.$router.push({ name: 'User.Exam.List' })
         })
     }
   }

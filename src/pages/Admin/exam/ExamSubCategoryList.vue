@@ -92,14 +92,16 @@
                       </q-btn>
                     </div>
                     <div class="col-6">
-                      <q-btn
-
-                        class="q-mx-sm"
-                        size="12px"
-                        :style="{ 'width':'90%' , 'height':'90%' }"
-                        dark-percentage
-                        color="blue"
-                        @click="goVideoSet(subcategory.id)"
+                      <q-btn class="q-mx-sm"
+                             size="12px"
+                             :style="{ 'width':'90%' , 'height':'90%' }"
+                             dark-percentage
+                             color="blue"
+                             :to="{ name: 'Admin.Exam.video.set',
+                                    params: {
+                                      subcategory_id: subcategory.id,
+                                      examId: examId
+                                    }}"
                       >
                         <q-icon
                           name="mdi-video"
@@ -129,7 +131,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { mixinAuth, mixinGetQuizData, mixinQuiz } from 'src/mixin/Mixins'
@@ -188,7 +189,7 @@ export default {
       }
     },
     getLessons () {
-      return axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.examId))
+      return this.$axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.examId))
     },
     redirect (link) {
     },
@@ -217,7 +218,7 @@ export default {
         return
       }
       subcategory.loading = true
-      axios.post(API_ADDRESS.questionSubcategory.updateOrder, {
+      this.$axios.post(API_ADDRESS.questionSubcategory.updateOrder, {
         sub_category_id: subcategory.id,
         order: subcategory.order,
         exam_id: this.examId

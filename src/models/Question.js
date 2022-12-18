@@ -25,6 +25,7 @@ class Question extends Model {
       { key: 'id' },
       { key: '_id' },
       { key: 'title' },
+      { key: 'code' },
       { key: 'index' },
       {
         key: 'statement',
@@ -35,6 +36,7 @@ class Question extends Model {
       { key: 'in_active_category' },
       { key: 'photo' },
       { key: 'order' },
+      { key: 'in_subcategory_order' },
       { key: 'major' }, // ToDo: must remove
       { key: 'majors' },
       {

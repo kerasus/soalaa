@@ -36,6 +36,12 @@
       <question-filter-expansion
         header-title="درس و مبحث"
       >
+        <q-checkbox
+          v-model="customSearch"
+          label="جستجوی تک گره"
+          class="q-ml-md"
+          @update:model-value="onCustomSearch"
+        />
         <tree-component
           ref="tree"
           tick-strategy="strict"
@@ -113,6 +119,23 @@
         <div v-if="filterQuestions.levels.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
 
       </question-filter-expansion>
+
+      <question-filter-expansion
+        header-title="وضعیت سوال"
+      >
+        <q-option-group v-model="selectedQuestionStatuses"
+                        type="checkbox"
+                        :options="filterQuestions.statuses.map(option => {
+                          return {
+                            label: option.display_title,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeQuestionStatuses"
+        />
+        <div v-if="filterQuestions.levels.length === 0"> هیچ وضعیتی ایجاد نشده است.</div>
+
+      </question-filter-expansion>
     </div>
   </div>
 </template>
@@ -136,11 +159,13 @@ export default {
   },
   data () {
     return {
+      customSearch: false,
       check: false,
       selectedReference: [],
       selectedYears: [],
       selectedMajors: [],
       selectedLevels: [],
+      selectedQuestionStatuses: [],
       selectedTags: [],
       filtersData: {
         tags: []
@@ -153,12 +178,14 @@ export default {
       const titles = []
       filtersDataKey.forEach(key => {
         const filterGroup = this.filtersData[key]
+        if (typeof this.filtersData[key] !== 'object') {
+          return
+        }
         filterGroup.forEach(filterItem => {
           const title = filterItem.title ? filterItem.title : filterItem.value
           titles.push(title)
         })
       })
-
       return titles
     }
   },
@@ -173,6 +200,10 @@ export default {
     getFilters () {
       return this.filtersData
     },
+    onCustomSearch(data) {
+      this.filtersData.tags_with_childrens = data ? 0 : 1
+      this.onUpdateFilterData()
+    },
     onUpdateFilterData () {
       this.$emit('onFilter', this.filtersData)
     },
@@ -185,6 +216,9 @@ export default {
     },
     onChangeLevels (value) {
       this.changeFilterData('level', value)
+    },
+    onChangeQuestionStatuses (value) {
+      this.changeFilterData('statuses', value)
     },
     onChangeYears (value) {
       this.changeFilterData('years', value)

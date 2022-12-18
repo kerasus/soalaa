@@ -3,12 +3,11 @@
     v-intersection="inView"
     class="question-field"
   >
-    <q-card
-      v-if="considerActiveCategory && !source.in_active_category"
-      class="alert-sheet shadow-2"
-      :class="currentQuestion.id === source.id ? 'red-sheet' : 'orange-sheet'"
-      rounded
-      dark
+    <q-card v-if="considerActiveCategory && !source.in_active_category && !showWithAnswer"
+            class="alert-sheet shadow-2"
+            :class="currentQuestion.id === source.id ? 'red-sheet' : 'orange-sheet'"
+            rounded
+            dark
     >
       <q-card-section class="alert-sheet-text">
         (
@@ -19,10 +18,9 @@
         در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
       </q-card-section>
     </q-card>
-    <div
-      v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
-      class="question-box"
-      :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
+    <div v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || showWithAnswer"
+         class="question-box"
+         :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
     >
       <div class="question-head">
         <p
@@ -44,6 +42,7 @@
             icon="mdi-checkbox-blank-circle-outline"
             flat
             fab-mini
+            :disable="showWithAnswer"
             @click="changeStatus(source.id, 'o')"
           />
           <q-btn
@@ -52,6 +51,7 @@
             text-color="yellow"
             flat
             fab-mini
+            :disable="showWithAnswer"
             @click="changeStatus(source.id, 'o')"
           />
           <q-btn
@@ -60,6 +60,7 @@
             icon="mdi-close"
             flat
             fab-mini
+            :disable="showWithAnswer"
             @click="changeStatus(source.id ,'x')"
           />
           <q-btn
@@ -68,6 +69,7 @@
             icon="mdi-close"
             flat
             fab-mini
+            :disable="showWithAnswer"
             @click="changeStatus(source.id ,'x')"
           />
           <q-btn
@@ -76,6 +78,7 @@
             icon="mdi-bookmark"
             flat
             fab-mini
+            :disable="showWithAnswer"
             @click="changeBookmark(source.id)"
           />
           <q-btn
@@ -84,6 +87,7 @@
             icon="mdi-bookmark-outline"
             flat
             fab-mini
+            :disable="showWithAnswer"
             @click="changeBookmark(source.id)"
           />
         </div>
@@ -116,6 +120,13 @@
           </q-item-section>
         </q-item>
       </q-list>
+      <div v-if="source.descriptive_answer">
+        <p class="answer-body"
+           :class="{ ltr: isRtl }"
+        >
+          <vue-katex :input="'پاسخ تشریحی) ' + source.descriptive_answer" />
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -138,6 +149,10 @@ export default {
     considerActiveCategory: { // index of current source
       type: Boolean,
       default: true
+    },
+    showWithAnswer: {
+      type: Boolean,
+      default: false
     },
     // questionsColumn: { // here is: {uid: 'unique_1', text: 'abc'}
     //   default () {
@@ -245,6 +260,9 @@ export default {
       })
     },
     clickOnAnswer (payload) {
+      if (this.showWithAnswer) {
+        return
+      }
       this.answerClicked(payload)
     },
     intersectionObserver (entries) {

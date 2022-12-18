@@ -144,13 +144,6 @@ module.exports = configure(function (ctx) {
       }
     },
 
-    // Full list of options: https://quasar.dev/quasar-cli-vite/quasar-config-js#sourcefiles
-    sourceFiles: {
-      pwaRegisterServiceWorker: './src-pwa/register-service-worker.js',
-      pwaServiceWorker: './src-pwa/firebase-messaging-sw.js'
-      // pwaManifestFile?: string;
-    },
-
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: false,
@@ -259,7 +252,22 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
-      workboxOptions: {}, // only for GenerateSW
+      injectPwaMetaTags: true,
+      swFilename: 'sw.js',
+      manifestFilename: 'manifest.json',
+      useCredentialsForManifestTag: false,
+      extendGenerateSWOptions (cfg) {
+        // configure workbox on generateSW
+      },
+      extendInjectManifestOptions (cfg) {
+        // configure workbox on injectManifest
+      },
+      extendManifestJson (json) {},
+      extendPWACustomSWConf (esbuildConf) {},
+
+      workboxOptions: {
+        exclude: [/\.html$/]
+      }, // only for GenerateSW
 
       // https://quasar.dev/quasar-cli-webpack/developing-pwa/configuring-pwa#reload-and-update-automatically
       skipWaiting: true,
@@ -308,6 +316,17 @@ module.exports = configure(function (ctx) {
           }
         ]
       }
+    },
+
+    // Full list of options: https://quasar.dev/quasar-cli-vite/quasar-config-js#sourcefiles
+    sourceFiles: {
+      pwaRegisterServiceWorker: 'src-pwa/register-service-worker',
+      pwaServiceWorker: 'src-pwa/custom-service-worker',
+      pwaManifestFile: 'src-pwa/manifest.json'
+
+      // pwaRegisterServiceWorker: './src-pwa/register-service-worker.js',
+      // pwaServiceWorker: './src-pwa/firebase-messaging-sw.js'
+      // pwaManifestFile?: string;
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova

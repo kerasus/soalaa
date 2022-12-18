@@ -22,6 +22,7 @@ export function updateUserQuizListDataExam (state, newInfo) {
 
 export function mergeDbAnswersIntoLocalstorage (state, payload) {
   const serverAnswers = payload.dbAnswers
+  const force = !!payload.force
   const userExamId = Assistant.getId(payload.user_exam_id)
 
   if (!userExamId) {
@@ -31,7 +32,7 @@ export function mergeDbAnswersIntoLocalstorage (state, payload) {
     state.userQuizListData[userExamId] = {}
   }
 
-  function merge (serverCollection, localSelectedAtKey, changeLocalDataFunction) {
+  function merge (serverCollection, localSelectedAtKey, changeLocalDataFunction, force) {
     serverCollection.forEach((item) => {
       const questionId = Assistant.getId(item.question_id)
       if (!questionId) {
@@ -47,7 +48,8 @@ export function mergeDbAnswersIntoLocalstorage (state, payload) {
       const localSelectedAt = state.userQuizListData[userExamId][questionId][localSelectedAtKey]
       if (
         (serverSelectedAt && localSelectedAt && Time.diff(serverSelectedAt, localSelectedAt) > 0) ||
-        !localSelectedAt
+        !localSelectedAt ||
+        force
       ) {
         changeLocalDataFunction(item, questionId)
       }
@@ -77,19 +79,19 @@ export function mergeDbAnswersIntoLocalstorage (state, payload) {
     state.userQuizListData[userExamId][questionId].answered_at = serverItem.selected_at
     state.userQuizListData[userExamId][questionId].answered_choice_id = serverItem.choice_id
     state.userQuizListData[userExamId][questionId].check_in_times = checkInTimes
-  })
+  }, force)
 
   // merge bookmarks
   merge(serverAnswers.bookmarks, 'change_bookmarked_at', (serverItem, questionId) => {
     state.userQuizListData[userExamId][questionId].bookmarked = serverItem.bookmark
     state.userQuizListData[userExamId][questionId].change_bookmarked_at = serverItem.selected_at
-  })
+  }, force)
 
   // merge statuses
   merge(serverAnswers.statuses, 'change_status_at', (serverItem, questionId) => {
     state.userQuizListData[userExamId][questionId].status = serverItem.status
     state.userQuizListData[userExamId][questionId].change_status_at = serverItem.selected_at
-  })
+  }, force)
 }
 
 export function createEmptyQuestionIfNotExistInLocal (state, payload) {
@@ -271,7 +273,7 @@ export function setActiveStateOfExamCategories (state, newInfo) {
   if (!state.quiz) {
     return
   }
-  Time.setStateOfExamCategories(state.quiz.categories, newInfo)
+  Time.setStateOfExamCategories(state.quiz.categories.list, !!newInfo)
 }
 
 export function setActiveStateOfQuestionsBasedOnActiveCategory (state) {

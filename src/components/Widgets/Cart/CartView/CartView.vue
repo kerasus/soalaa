@@ -224,6 +224,7 @@
 
 <script>
 import Widgets from 'components/PageBuilder/Widgets'
+import { Cart } from 'src/models/Cart'
 import { Product } from 'src/models/Product'
 
 export default {
@@ -241,18 +242,18 @@ export default {
   props: {
     getData: {
       type: Function
+    },
+    cart: {
+      type: Object,
+      default: () => new Cart()
     }
   },
-
+  emits: ['cartReview'],
   created() {
     this.loading = true
   },
 
   computed: {
-    cart() {
-      return this.$store.getters['Cart/cart']
-    },
-
     orderList () {
       return this.getOrderedList(this.cart.items.list)
     },
@@ -286,9 +287,9 @@ export default {
       const customItems = []
 
       cartItems.forEach((item, i) => {
-        if (item.grand.id) {
+        if (item.grand !== undefined && item.grand.id) {
           customItems.push(item)
-        } else if (!item.grand.id && item.order_product.list.length > 0) {
+        } else if (item.grand !== undefined && !item.grand.id && item.order_product.list.length > 0) {
           item.order_product.list.forEach(order => {
             customItems.push({ grand: new Product(order.product), orderProductId: order.id })
           })
@@ -302,7 +303,7 @@ export default {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('Cart/removeItemFromCart', order)
         .then(() => {
-          this.cartReview()
+          this.$emit('cartReview')
           this.$store.dispatch('loading/overlayLoading', false)
           this.changeDialogState(false)
         }).catch(() => {

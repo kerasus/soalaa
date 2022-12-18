@@ -92,8 +92,6 @@
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import navBar from 'components/QuestionBank/EditQuestion/NavBar/navBar'
 import MbtiQuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/mbti_question_layout'
-// eslint-disable-next-line camelcase
-import attach_list from 'components/QuestionBank/EditQuestion/Exams/exams'
 import StatusComponent from 'components/QuestionBank/EditQuestion/StatusComponent/status'
 import { Question } from 'src/models/Question'
 import { Log, LogList } from 'src/models/Log'
@@ -102,16 +100,14 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import API_ADDRESS from 'src/api/Addresses'
 import Assistant from 'src/plugins/assistant'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
-import axios from 'axios'
-/* eslint-disable */
+
 export default {
   name: 'NewMBTIPage',
   components: {
     navBar,
     MbtiQuestionLayout,
     StatusComponent,
-    LogListComponent,
-    attach_list
+    LogListComponent
   },
   data() {
     return {
@@ -179,7 +175,7 @@ export default {
   },
   created() {
     const that = this
-    axios.get(API_ADDRESS.option.base + '?type=question_type')
+    this.$axios.get(API_ADDRESS.option.base + '?type=question_type')
       .then(function (response) {
         const optionQuestion = response.data.data.find(item => (item.value === 'psychometric'))
         if (!optionQuestion) {
@@ -193,8 +189,8 @@ export default {
         that.optionQuestionId = optionQuestion.id
         that.loading = false
       })
-      .catch(function (error) {
-        console.log(error)
+      .catch(() => {
+        that.loading = false
       })
     this.setPageStatus()
     this.checkUrl()
@@ -214,7 +210,7 @@ export default {
       this.checkNavbarVisibilityOnCreatPage()
     },
     addComment(eventData) {
-      axios.post(API_ADDRESS.log.addComment(eventData.logId), {comment: eventData.text})
+      this.$axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
         .then(response => {
           // iterating over the array to find the log that has changed
           for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
@@ -255,16 +251,16 @@ export default {
             color: 'green',
             icon: 'thumb_up'
           })
-          this.$router.push({name: 'Admin.Question.Show', params: {question_id: this.$route.params.question_id}})
+          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
         })
     },
 
     navBarAction_cancel() {
-      this.$router.push({name: 'Admin.Question.Show', params: {question_id: this.$route.params.question_id}})
+      this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
     },
 
     navBarAction_edit() {
-      this.$router.push({name: 'question.mbti.edit', params: {question_id: this.$route.params.question_id}})
+      this.$router.push({ name: 'question.mbti.edit', params: { question_id: this.$route.params.question_id } })
     },
 
     navBarAction_remove() {
@@ -279,30 +275,30 @@ export default {
           if (!confirm) {
             return
           }
-          axios.delete(API_ADDRESS.question.delete(this.$route.params.question_id))
+          this.$axios.delete(API_ADDRESS.question.delete(this.$route.params.question_id))
             .then(() => {
-              that.$router.push({name: 'question.list'})
+              that.$router.push({ name: 'question.list' })
             })
         }
       })
     },
 
     setQuestionPhotos(statusId) { // یاس
-      this.$store.dispatch('loading/overlayLoading', {loading: true, message: 'کمی صبر کنید...'})
+      this.$store.dispatch('loading/overlayLoading', { loading: true, message: 'کمی صبر کنید...' })
       const formData = new FormData()
       formData.append('status_id', statusId)
       formData.append('statement_photo', this.currentQuestion.statement_photo)
       this.currentQuestion.answer_photos.forEach((item, key) => {
         formData.append('answer_photos[' + key + ']', item)
       })
-      axios.post(API_ADDRESS.question.create, formData)
+      this.$axios.post(API_ADDRESS.question.create, formData)
         .then((response) => {
           const questionId = response.data.data.id
-          this.$router.push({name: 'Admin.Question.Show', params: {question_id: questionId}})
-          this.$store.dispatch('loading/overlayLoading', {loading: false, message: ''})
+          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
+          this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         }).catch(() => {
-        this.$store.dispatch('loading/overlayLoading', {loading: false, message: ''})
-      })
+          this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+        })
     },
 
     setPageStatus() {
@@ -356,7 +352,7 @@ export default {
 
     changeStatus(newStatus) {
       const that = this
-      axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
+      this.$axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
         status_id: newStatus.changeState,
         comment: newStatus.commentAdded
       })
@@ -376,7 +372,7 @@ export default {
 
     attachQuestionOnEditMode(item) {
       this.attachLoading = true
-      axios.post(API_ADDRESS.question.attach, {
+      this.$axios.post(API_ADDRESS.question.attach, {
         order: item.order,
         exam_id: item.exam.id,
         question_id: this.$route.params.question_id,
@@ -426,7 +422,7 @@ export default {
 
     detachQuestionOnEditMode(item) {
       this.attachLoading = true
-      axios.post(API_ADDRESS.question.detach(this.$route.params.question_id), {
+      this.$axios.post(API_ADDRESS.question.detach(this.$route.params.question_id), {
         detaches: [{
           exam_id: item.exam.id,
           order: item.order,
@@ -589,9 +585,9 @@ export default {
       currentQuestion
         .create(null, API_ADDRESS.question.createAndAttach())
         .then((response) => {
-          this.$store.dispatch('loading/overlayLoading', {loading: false, message: ''})
+          this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
           const questionId = response.data.data.id
-          this.$router.push({name: 'question.mbti.show', params: {question_id: questionId}})
+          this.$router.push({ name: 'question.mbti.show', params: { question_id: questionId } })
           this.questionType = 'typeText'
           this.currentQuestion.statement = ''
           this.currentQuestion.choices.list.forEach((item) => {
