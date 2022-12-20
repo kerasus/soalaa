@@ -23,7 +23,11 @@ const AdminActionOnQuestion = {
       majorList: null,
       authorshipDatesList: null,
       questionAuthorsList: null,
-      questionTargetList: null
+      questionTargetList: null,
+      examList: new ExamList(),
+      subCategoriesList: new QuestSubcategoryList(),
+      questionStatuses: new QuestionStatusList(),
+      categoryList: new QuestCategoryList()
     }
   },
   computed: {
