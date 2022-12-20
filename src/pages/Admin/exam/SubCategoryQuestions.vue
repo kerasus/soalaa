@@ -124,7 +124,8 @@ export default {
         deleteQuestionFromDb: true,
         deleteQuestionFromExam: true,
         editQuestion: true,
-        switch: true
+        switch: true,
+        questionAnswerExpanded: true
       },
       questionListKey: 0,
       options: {
