@@ -76,7 +76,7 @@
 <script>
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 /* eslint-disable no-var */
-import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
+import LogListComponent from 'components/Question/QuestionPage/Log/LogList'
 import { computed, defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question'
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
