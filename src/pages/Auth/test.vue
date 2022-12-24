@@ -1,6 +1,5 @@
 <template>
   <h5>THIS COMPONENT IS JUST FOR TEST</h5>
-
 </template>
 
 <script>
@@ -24,7 +23,14 @@ export default {
     }
   },
   methods: {},
-  computed: {},
+  computed: {
+    test1 () {
+      return API_ADDRESS.question.uploadImage('dfbdgbdgbgfnhfn')
+    },
+    test2 () {
+      return 'Bearer ' + this.$store.getters['Auth/accessToken']
+    }
+  },
   beforeRouteEnter () {
     // console.log('debug beforeRouteEnter')
   },
