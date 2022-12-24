@@ -4,6 +4,8 @@
 
 <script>
 
+import API_ADDRESS from 'src/api/Addresses'
+
 export default {
   name: 'Test',
   mixins: [],
