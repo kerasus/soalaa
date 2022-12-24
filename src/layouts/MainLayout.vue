@@ -78,7 +78,7 @@
 <script>
 
 import { defineAsyncComponent } from 'vue'
-import { QuasarTemplateBuilder } from 'quasar-template-builder'
+import QuasarTemplateBuilder from 'quasar-template-builder/src/quasar-template-builder.vue'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 // import templateHeader from 'components/Headers/templateHeader'
 // import onlineQuizTemplateHeader from 'components/Headers/onlineQuizTemplateHeader'
