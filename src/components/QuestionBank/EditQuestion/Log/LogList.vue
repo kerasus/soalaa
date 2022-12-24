@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import LogItem from 'components/Question/QuestionPage/Log/LogItem/LogItem'
+import LogItem from 'src/components/QuestionBank/EditQuestion/Log/LogItem/LogItem'
 import { LogList } from 'src/models/Log'
 
 export default {

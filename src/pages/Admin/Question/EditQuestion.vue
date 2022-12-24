@@ -90,7 +90,7 @@
 
 <script>
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
-import LogListComponent from 'components/Question/QuestionPage/Log/LogList'
+import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 // detachUnsavedExam
 /* eslint-disable no-var */
 import { computed, defineAsyncComponent } from 'vue'
