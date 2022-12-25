@@ -69,11 +69,6 @@ export default {
     goToPage () {
       this.$refs.pagination.set(this.pageToGoTo)
     }
-  },
-  watch: {
-    checkedStyle: function (val) {
-      console.log('checkedStyle', val)
-    }
   }
 
 }
