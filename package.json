@@ -50,7 +50,7 @@
     "vue-router": "^4.1.6",
     "vue-tiptap-katex-core": "^1.0.47",
     "vue-upload-component": "^3.1.6",
-    "vue3-tiptap-katex": "^1.0.45",
+    "vue3-tiptap-katex": "^1.0.44",
     "vuex": "^4.1.0",
     "vuex-persistedstate": "^4.1.0",
     "webpack": "^5.75.0"
