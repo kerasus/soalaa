@@ -2974,7 +2974,7 @@
   dependencies:
     "follow-redirects" "^1.14.8"
 
-"axios@^1.2.1", "axios@^1.2.2":
+"axios@^1.2.2":
   "integrity" "sha512-bz/J4gS2S3I7mpN/YZfGFTqhXTYzRho8Ay38w2otuuDR322KzFIWm/4W2K6gIwvWaws5n+mnb7D1lN9uD+QH6Q=="
   "resolved" "https://registry.npmjs.org/axios/-/axios-1.2.2.tgz"
   "version" "1.2.2"
@@ -7986,23 +7986,23 @@
   dependencies:
     "side-channel" "^1.0.4"
 
-"quasar-crud@^0.2.75":
-  "integrity" "sha512-LUEADKD9HRbygbVDqVBcuTMFcewni21AfbMvNDLeJQC0pcb1t7GmNUCxe0T6vQL32Yt3YmeqVDGVy4vhzp7b4w=="
-  "resolved" "https://registry.npmjs.org/quasar-crud/-/quasar-crud-0.2.75.tgz"
-  "version" "0.2.75"
+"quasar-crud@^0.2.79":
+  "integrity" "sha512-uKfnazM5+YK8x5jbyze28KkxZrcYFWDL063Y5P+vtiCOB/0d3xFOiRakuvzRNWGlEVGe9AOitihadwJ+AxaNSw=="
+  "resolved" "https://registry.npmjs.org/quasar-crud/-/quasar-crud-0.2.79.tgz"
+  "version" "0.2.79"
   dependencies:
     "@quasar/extras" "^1.15.9"
     "axios" "^1.2.2"
     "core-js" "^3.27.1"
     "moment-jalaali" "^0.9.6"
     "quasar" "^2.11.3"
-    "quasar-form-builder" "^0.1.61"
+    "quasar-form-builder" "^0.1.62"
     "vue" "^3.2.45"
 
-"quasar-form-builder@^0.1.61":
-  "integrity" "sha512-fsIjbOs+yzsYmFaLd73GaBWSJbLL/QqMI/zoVhkscCn0497s+2tOp92gqioyUaxq7g/4h30nFq+6+cgPoOaGPg=="
-  "resolved" "https://registry.npmjs.org/quasar-form-builder/-/quasar-form-builder-0.1.61.tgz"
-  "version" "0.1.61"
+"quasar-form-builder@^0.1.62":
+  "integrity" "sha512-UK53RkyGLK4eC+g8D7ZhHwrivWYh7mQc/YaG5u3NuvJnUP47NZN4Jv2XADKuAMvcztRz9Xlg5hHg8YwfYb/FVg=="
+  "resolved" "https://registry.npmjs.org/quasar-form-builder/-/quasar-form-builder-0.1.62.tgz"
+  "version" "0.1.62"
   dependencies:
     "@quasar/extras" "^1.15.8"
     "core-js" "^3.26.1"
@@ -9903,7 +9903,7 @@
   "resolved" "https://registry.npmjs.org/vue-upload-component/-/vue-upload-component-3.1.6.tgz"
   "version" "3.1.6"
 
-"vue@^2.0.0", "vue@^2.5.17":
+"vue@^2.0.0", "vue@^2.5.17", "vue@^3.0.11":
   "integrity" "sha512-b2qkFyOM0kwqWFuQmgd4o+uHGU7T+2z3T+WQp8UBjADfEv2n4FEMffzBmCKNP0IGzOEEfYjvtcC62xaSKeQDrQ=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-2.7.14.tgz"
   "version" "2.7.14"
@@ -9919,7 +9919,7 @@
     "@vue/compiler-sfc" "2.7.14"
     "csstype" "^3.1.0"
 
-"vue@^3.0.0", "vue@^3.0.11", "vue@^3.2.0", "vue@^3.2.29", "vue@^3.2.41", "vue@^3.2.45", "vue@>=1.0.0", "vue@>=3 < 4", "vue@3.2.45":
+"vue@^3.0.0", "vue@^3.2.0", "vue@^3.2.29", "vue@^3.2.41", "vue@^3.2.45", "vue@>=1.0.0", "vue@>=3 < 4", "vue@3.2.45":
   "integrity" "sha512-9Nx/Mg2b2xWlXykmCwiTUCWHbWIj53bnkizBxKai1g61f2Xit700A1ljowpTIM11e3uipOeiPcSqnmBg6gyiaA=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-3.2.45.tgz"
   "version" "3.2.45"
@@ -9935,7 +9935,7 @@
   "resolved" "https://registry.npmjs.org/vue3-drag-resize/-/vue3-drag-resize-2.0.5.tgz"
   "version" "2.0.5"
 
-"vue3-tiptap-katex@^1.0.40":
+"vue3-tiptap-katex@^1.0.40", "vue3-tiptap-katex@~1.0.40":
   "integrity" "sha512-kzwCFS22ssr6JEfDy+H4tVBhrshOKiaq6brXxcYJbjW3J/sL4WlcSuAgz6Q4eb7uKfk/znezSNRAgaOVgqFCow=="
   "resolved" "https://registry.npmjs.org/vue3-tiptap-katex/-/vue3-tiptap-katex-1.0.40.tgz"
   "version" "1.0.40"
