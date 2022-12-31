@@ -1917,11 +1917,6 @@
   "resolved" "https://registry.npmjs.org/@tiptap/extension-code/-/extension-code-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
 
-"@tiptap/extension-color@^2.0.0-beta.209":
-  "integrity" "sha512-AJfVaudk7acdgHrmz0xYVufh+W7x5oaekb6WN49WIyi0+4/BVmIJMdSl38fYE8ZWezmTn33+9pTUFmy7cL9CZA=="
-  "resolved" "https://registry.npmjs.org/@tiptap/extension-color/-/extension-color-2.0.0-beta.209.tgz"
-  "version" "2.0.0-beta.209"
-
 "@tiptap/extension-document@^2.0.0-beta.13", "@tiptap/extension-document@^2.0.0-beta.209":
   "integrity" "sha512-ZRTC5j0J6fNTtIcU6UnxJm5KZrfJI2pygCJ172mMNzwE89upJMhRSP0CvPWTY7nf0odmQTJ5vD99QDR4CdOTng=="
   "resolved" "https://registry.npmjs.org/@tiptap/extension-document/-/extension-document-2.0.0-beta.209.tgz"
@@ -1939,7 +1934,7 @@
   dependencies:
     "tippy.js" "^6.3.7"
 
-"@tiptap/extension-focus@^2.0.0-beta.209", "@tiptap/extension-focus@^2.0.0-beta.26":
+"@tiptap/extension-focus@^2.0.0-beta.26":
   "integrity" "sha512-V60Oimkf8+10zHfiYcknKHYtS89ctpuz9W8Sxhn0gvQS37W6QzUR2DH2ReG9c3O+OE7in0A2ql7rPCsgykfpxA=="
   "resolved" "https://registry.npmjs.org/@tiptap/extension-focus/-/extension-focus-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
@@ -1959,7 +1954,7 @@
   "resolved" "https://registry.npmjs.org/@tiptap/extension-heading/-/extension-heading-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
 
-"@tiptap/extension-highlight@^2.0.0-beta.15", "@tiptap/extension-highlight@^2.0.0-beta.209":
+"@tiptap/extension-highlight@^2.0.0-beta.15":
   "integrity" "sha512-uy0Zu1dU2VcozvqpECb7+mxiazxstlb6w7jQQx8n4PAwIfN2LGv1UIil+VKRkc9amjBVwz+knm9psXEeJfjiBw=="
   "resolved" "https://registry.npmjs.org/@tiptap/extension-highlight/-/extension-highlight-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
@@ -1999,17 +1994,17 @@
   "resolved" "https://registry.npmjs.org/@tiptap/extension-strike/-/extension-strike-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
 
-"@tiptap/extension-table-cell@^2.0.0-beta.14", "@tiptap/extension-table-cell@^2.0.0-beta.209":
+"@tiptap/extension-table-cell@^2.0.0-beta.14":
   "integrity" "sha512-wKCD4IY2VJa9775h6c7KBZPcTnqtM6T/YpHCm4WHSXyNG+zcMMIb8aT3U8NbpOGKdK9wvQTWq6QDa/YOdkrCfA=="
   "resolved" "https://registry.npmjs.org/@tiptap/extension-table-cell/-/extension-table-cell-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
 
-"@tiptap/extension-table-header@^2.0.0-beta.16", "@tiptap/extension-table-header@^2.0.0-beta.209":
+"@tiptap/extension-table-header@^2.0.0-beta.16":
   "integrity" "sha512-EIVO41tgS9C0i1auXuHeX1zV6Oipfoz0HzwuIDzLR8Fww2/VTiXyMno+8yglSUOXLCIjc/888EVpho7OOnN5oA=="
   "resolved" "https://registry.npmjs.org/@tiptap/extension-table-header/-/extension-table-header-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
 
-"@tiptap/extension-table-row@^2.0.0-beta.14", "@tiptap/extension-table-row@^2.0.0-beta.209":
+"@tiptap/extension-table-row@^2.0.0-beta.14":
   "integrity" "sha512-Ofsmscr8PiReLBIgpIvqTaeSrbqrgFWeFmzoPBNsnztDJdy/HtahYin+a7dNppwVqP975fezWM2uDfjGQJJ7bQ=="
   "resolved" "https://registry.npmjs.org/@tiptap/extension-table-row/-/extension-table-row-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
@@ -2019,14 +2014,9 @@
   "resolved" "https://registry.npmjs.org/@tiptap/extension-table/-/extension-table-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
 
-"@tiptap/extension-text-align@^2.0.0-beta.209", "@tiptap/extension-text-align@^2.0.0-beta.22":
+"@tiptap/extension-text-align@^2.0.0-beta.22":
   "integrity" "sha512-PbCYNkhxi0oR1N6PgRnG8JoaSJXOvgF8gpEW1RzG8VJNCJPLrhR9/pryHfkszD55XGc4o1F5L+CryRsBJeqsIw=="
   "resolved" "https://registry.npmjs.org/@tiptap/extension-text-align/-/extension-text-align-2.0.0-beta.209.tgz"
-  "version" "2.0.0-beta.209"
-
-"@tiptap/extension-text-style@^2.0.0-beta.193", "@tiptap/extension-text-style@^2.0.0-beta.209":
-  "integrity" "sha512-KNIkY0/Cbun1UOCa+gVM6+0Fa6Nsugd7jy8+GfWnrshElxBZyrHgxvtjMMLTwT8P/lReN/8kwJUPFAlX8BqhFw=="
-  "resolved" "https://registry.npmjs.org/@tiptap/extension-text-style/-/extension-text-style-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
 
 "@tiptap/extension-text@^2.0.0-beta.13", "@tiptap/extension-text@^2.0.0-beta.209":
@@ -2034,7 +2024,7 @@
   "resolved" "https://registry.npmjs.org/@tiptap/extension-text/-/extension-text-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
 
-"@tiptap/extension-underline@^2.0.0-beta.16", "@tiptap/extension-underline@^2.0.0-beta.209":
+"@tiptap/extension-underline@^2.0.0-beta.16":
   "integrity" "sha512-xCW0GvCE883l8+YLvDkj5lNdVpqL15uJFMvWP9v79rqlMVZGIFd49saMyAPQworZqepnhnndFOELZ0pHcCV4vQ=="
   "resolved" "https://registry.npmjs.org/@tiptap/extension-underline/-/extension-underline-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
@@ -2050,7 +2040,7 @@
     "prosemirror-transform" "^1.2.1"
     "prosemirror-view" "^1.13.3"
 
-"@tiptap/starter-kit@^2.0.0-beta.101", "@tiptap/starter-kit@^2.0.0-beta.209":
+"@tiptap/starter-kit@^2.0.0-beta.101":
   "integrity" "sha512-uR68ZfDZ5PeygGey3xc9ZuFIP+K7VRElrABnZcM6t9/Crrs70UFwSTNlkS0ezx9woj8h+8N78a6r8W1YC04TOw=="
   "resolved" "https://registry.npmjs.org/@tiptap/starter-kit/-/starter-kit-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
@@ -2075,7 +2065,7 @@
     "@tiptap/extension-strike" "^2.0.0-beta.209"
     "@tiptap/extension-text" "^2.0.0-beta.209"
 
-"@tiptap/vue-3@^2.0.0-beta.209", "@tiptap/vue-3@^2.0.0-beta.48":
+"@tiptap/vue-3@^2.0.0-beta.48":
   "integrity" "sha512-v0GUO6mcRgDfT6bNX3fHJds9QIpYqFBiGaanvTDVlOhErOSgrOx2+QuEieG0F9nUQ1az9h0kj5NZxvP9CeTlcQ=="
   "resolved" "https://registry.npmjs.org/@tiptap/vue-3/-/vue-3-2.0.0-beta.209.tgz"
   "version" "2.0.0-beta.209"
@@ -2627,13 +2617,6 @@
   "integrity" "sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ=="
   "resolved" "https://registry.npmjs.org/@xtuc/long/-/long-4.2.2.tgz"
   "version" "4.2.2"
-
-"a11y-dialog@^7.5.2":
-  "integrity" "sha512-zfWtVvrbGbP3AFnEJ1aJFtu7GvedgjOEKbkyEUSeaNWDzmFJk9O5nuolDQrRDyRDE5fqSJRiBJtD5bUYKveoUg=="
-  "resolved" "https://registry.npmjs.org/a11y-dialog/-/a11y-dialog-7.5.2.tgz"
-  "version" "7.5.2"
-  dependencies:
-    "focusable-selectors" "^0.4.0"
 
 "abbrev@1":
   "integrity" "sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q=="
@@ -4965,11 +4948,6 @@
   "resolved" "https://registry.npmjs.org/flatted/-/flatted-3.2.7.tgz"
   "version" "3.2.7"
 
-"focusable-selectors@^0.4.0":
-  "integrity" "sha512-tc/236hUU3xemsRLu1RKhRQ5UWHjRM9iJTli1zdac43h7b1biRSgG0mILM0qrcsKaGCHcOPJ6NKbk12ouKHLpw=="
-  "resolved" "https://registry.npmjs.org/focusable-selectors/-/focusable-selectors-0.4.0.tgz"
-  "version" "0.4.0"
-
 "follow-redirects@^1.0.0", "follow-redirects@^1.14.4", "follow-redirects@^1.14.8", "follow-redirects@^1.15.0":
   "integrity" "sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA=="
   "resolved" "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.2.tgz"
@@ -6625,11 +6603,6 @@
     "braces" "^3.0.2"
     "picomatch" "^2.3.1"
 
-"micromodal@^0.4.10":
-  "integrity" "sha512-BUrEnzMPFBwK8nOE4xUDYHLrlGlLULQVjpja99tpJQPSUEWgw3kTLp1n1qv0HmKU29AiHE7Y7sMLiRziDK4ghQ=="
-  "resolved" "https://registry.npmjs.org/micromodal/-/micromodal-0.4.10.tgz"
-  "version" "0.4.10"
-
 "mime-db@>= 1.43.0 < 2", "mime-db@1.52.0":
   "integrity" "sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg=="
   "resolved" "https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz"
@@ -7831,7 +7804,7 @@
   dependencies:
     "prosemirror-state" "^1.0.0"
 
-"prosemirror-commands@^1.1.10", "prosemirror-commands@^1.1.4", "prosemirror-commands@^1.3.1", "prosemirror-commands@^1.5.0":
+"prosemirror-commands@^1.1.10", "prosemirror-commands@^1.1.4", "prosemirror-commands@^1.3.1":
   "integrity" "sha512-zL0Fxbj3fh71GPNHn5YdYgYGX2aU2XLecZYk2ekEF0oOD259HcXtM+96VjPVi5o3h4sGUdDfEEhGiREXW6U+4A=="
   "resolved" "https://registry.npmjs.org/prosemirror-commands/-/prosemirror-commands-1.5.0.tgz"
   "version" "1.5.0"
@@ -8013,23 +7986,23 @@
   dependencies:
     "side-channel" "^1.0.4"
 
-"quasar-crud@^0.2.73":
-  "integrity" "sha512-DcieQZn2pgfBcJB+fwLZ3RcL44uQE3Z16HUsl5PcLca/YnXZBTA16B9sDangBmfjWeTMn6s1HEcbQoHGKZ8S+g=="
-  "resolved" "https://registry.npmjs.org/quasar-crud/-/quasar-crud-0.2.73.tgz"
-  "version" "0.2.73"
+"quasar-crud@^0.2.75":
+  "integrity" "sha512-LUEADKD9HRbygbVDqVBcuTMFcewni21AfbMvNDLeJQC0pcb1t7GmNUCxe0T6vQL32Yt3YmeqVDGVy4vhzp7b4w=="
+  "resolved" "https://registry.npmjs.org/quasar-crud/-/quasar-crud-0.2.75.tgz"
+  "version" "0.2.75"
   dependencies:
     "@quasar/extras" "^1.15.9"
     "axios" "^1.2.2"
     "core-js" "^3.27.1"
     "moment-jalaali" "^0.9.6"
     "quasar" "^2.11.3"
-    "quasar-form-builder" "^0.1.60"
+    "quasar-form-builder" "^0.1.61"
     "vue" "^3.2.45"
 
-"quasar-form-builder@^0.1.60":
-  "integrity" "sha512-PG6gz+n89XYoR9sSvypPCYg8MxhtqfQIPctKmBZgzg/5l/Ni4JP06arUAzguqa3JWK0VYfAtlq3oV3GXfwX8NQ=="
-  "resolved" "https://registry.npmjs.org/quasar-form-builder/-/quasar-form-builder-0.1.60.tgz"
-  "version" "0.1.60"
+"quasar-form-builder@^0.1.61":
+  "integrity" "sha512-fsIjbOs+yzsYmFaLd73GaBWSJbLL/QqMI/zoVhkscCn0497s+2tOp92gqioyUaxq7g/4h30nFq+6+cgPoOaGPg=="
+  "resolved" "https://registry.npmjs.org/quasar-form-builder/-/quasar-form-builder-0.1.61.tgz"
+  "version" "0.1.61"
   dependencies:
     "@quasar/extras" "^1.15.8"
     "core-js" "^3.26.1"
@@ -9897,25 +9870,6 @@
     "vue-upload-component" "^2.8.22"
 
 "vue-tiptap-katex-core@^1.0.41":
-  "integrity" "sha512-x46kj5qPyK0OkmJt2TGPkn9fIPTLcD6/Qw+iMbQg1Ja5Fy7EizqQYCDPS5CVxUvFjiGLCAoSTLCsmQB4ShoVnQ=="
-  "resolved" "https://registry.npmjs.org/vue-tiptap-katex-core/-/vue-tiptap-katex-core-1.0.49.tgz"
-  "version" "1.0.49"
-  dependencies:
-    "@mdi/font" "^6.9.96"
-    "@tiptap/core" "^2.0.0-beta.209"
-    "@tiptap/extension-table" "^2.0.0-beta.209"
-    "core-js" "^3.26.1"
-    "mathlive" "^0.86.0"
-    "tippy.js" "^6.3.7"
-    "tiptap-extensions" "^1.35.2"
-    "tiptap-text-direction-extension" "^1.0.7"
-    "turndown" "^7.1.1"
-    "vue" "^2.5.17"
-    "vue-drag-resize" "^1.5.4"
-    "vue-notification" "^1.3.20"
-    "vue-upload-component" "^2.8.23"
-
-"vue-tiptap-katex-core@^1.0.49":
   "integrity" "sha512-x46kj5qPyK0OkmJt2TGPkn9fIPTLcD6/Qw+iMbQg1Ja5Fy7EizqQYCDPS5CVxUvFjiGLCAoSTLCsmQB4ShoVnQ=="
   "resolved" "https://registry.npmjs.org/vue-tiptap-katex-core/-/vue-tiptap-katex-core-1.0.49.tgz"
   "version" "1.0.49"

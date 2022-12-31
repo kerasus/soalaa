@@ -273,7 +273,6 @@ export default {
       try {
         const response = await this.getQuizDataAndSubCategories(pageNumber)
         if (response.data.data.length) {
-          console.log('response.data.meta', response.data.meta)
           this.paginationMeta = response.data.meta
           // this.paginationKey++
           this.firstQuestionOrder = response.data.data[0].order
