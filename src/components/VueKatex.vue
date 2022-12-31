@@ -9,7 +9,6 @@
 
 <script>
 import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
-// import 'katex/dist/katex.min.css'
 
 export default {
   name: 'VueKatex',
@@ -90,7 +89,7 @@ export default {
 
 <style lang="scss">
 /*rtl:ignore*/
-@import "katex/dist/katex.min.css";
+@import "vue-tiptap-katex-core/css/base";
 @import "src/css/katex-rtl-fix.scss";
 
 //rtl change bug fix
