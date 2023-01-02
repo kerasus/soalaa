@@ -87,9 +87,15 @@ class ExamData {
       } else if (!that.questionsFileUrl && !questionsFileUrl) {
         that.questionsFileUrl = that.exam.questions_file_url
       }
-      this.$axios.get(that.questionsFileUrl, {
+      that.$axios.get(that.questionsFileUrl, {
         transformRequest: (data, headers) => {
-          delete headers.common.Authorization
+          if (headers.common && headers.common.Authorization) {
+            delete headers.common.Authorization
+          }
+          if (headers.Authorization) {
+            delete headers.Authorization
+          }
+
           return data
         }
       })

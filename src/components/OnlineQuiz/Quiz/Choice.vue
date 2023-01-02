@@ -8,6 +8,7 @@
            :class="{'ltr' : !isRtl}"
       >
         <vue-katex
+          class="vue-katex"
           :input="choice.title"
           :ltr="!isRtl"
         />
@@ -68,8 +69,17 @@ export default {
     }
 </style>
 
-<style scoped>
-
+<style scoped lang="scss">
+    .vue-katex {
+     :deep(.html-katex) {
+       & > p {
+         direction: inherit;
+         &:first-child {
+           display: inline-block;
+         }
+       }
+     }
+    }
     .answer-box {
         display: flex;
         justify-content: center;
