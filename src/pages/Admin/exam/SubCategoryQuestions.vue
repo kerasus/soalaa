@@ -24,27 +24,27 @@
             @click="printQuestions"
           />
         </div>
-        <div class="col-4 flex justify-between">
-          <div class="search-box">
-            <div>
-              <q-input
-                v-model="searchedQuestionOrder"
-                type="number"
-                outlined
-                dense
-                label="شماره سوال"
-                @keydown.enter="scrollToQuestion"
-              >
-                <template v-slot:append>
-                  <div @click="scrollToQuestion">
-                    <i class="fi fi-rr-search search-icon cursor-pointer"></i>
-                  </div>
-                </template>
-              </q-input>
-            </div>
-            <i class="fi fi-rr-refresh refresh-icon cursor-pointer q-ml-md"
-               @click="reload"></i>
-          </div>
+        <div class="col-4 flex justify-end">
+          <!--          <div class="search-box">-->
+          <!--            <div>-->
+          <!--              <q-input-->
+          <!--                v-model="searchedQuestionOrder"-->
+          <!--                type="number"-->
+          <!--                outlined-->
+          <!--                dense-->
+          <!--                label="شماره سوال"-->
+          <!--                @keydown.enter="scrollToQuestion"-->
+          <!--              >-->
+          <!--                <template v-slot:append>-->
+          <!--                  <div @click="scrollToQuestion">-->
+          <!--                    <i class="fi fi-rr-search search-icon cursor-pointer"></i>-->
+          <!--                  </div>-->
+          <!--                </template>-->
+          <!--              </q-input>-->
+          <!--            </div>-->
+          <!--            <i class="fi fi-rr-refresh refresh-icon cursor-pointer q-ml-md"-->
+          <!--               @click="reload"></i>-->
+          <!--          </div>-->
           <q-btn
             round
             color="primary"
@@ -64,38 +64,49 @@
         size="5em"
       />
     </div>
-    <q-virtual-scroll  v-else
-                       ref="scroller"
-                       :key="questionListKey"
-                       class="konkoor-view-scroll q-pa-md q-mt-md"
-                       :items="filteredQuestions"
-                       @virtual-scroll="onScroll"
-    >
-      <template v-slot="{ item, index }">
-        <q-item :key="index"
-                class="question-field no-padding q-mb-md"
-                dense
-        >
-          <q-item-section class="no-wrap">
-            <!--            :sub-category="quizData.sub_categories"-->
-            <!--            :exam-id="$route.params.quizId"-->
-            <!--            :consider-active-category="false"-->
-            <!--            :questions-column="$refs.questionsColumn"-->
-            <question-item pageStrategy="lesson-detail"
-                           :question="item"
-                           :confirmLoading="confirmQLoading"
-                           :listOptions="questionsOptions"
-                           :final-approval-mode="false"
-                           :show-question-number="true"
-                           @deleteFromExam="detachQuestion"
-                           @deleteFromDb="deleteQuestion"
-                           @copyIdToClipboard="copyIdToClipboard"
-                           @confirmQuestion="confirmQuestion"
-            />
-          </q-item-section>
-        </q-item>
-      </template>
-    </q-virtual-scroll>
+    <template v-else>
+      <q-virtual-scroll
+        ref="scroller"
+        :key="questionListKey"
+        class="konkoor-view-scroll q-pa-md q-mt-md"
+        :items="filteredQuestions"
+        @virtual-scroll="onScroll"
+      >
+        <template v-slot="{ item, index }">
+          <q-item :key="index"
+                  class="question-field no-padding q-mb-md"
+                  dense
+          >
+            <q-item-section class="no-wrap">
+              <!--            :sub-category="quizData.sub_categories"-->
+              <!--            :exam-id="$route.params.quizId"-->
+              <!--            :consider-active-category="false"-->
+              <!--            :questions-column="$refs.questionsColumn"-->
+              <question-item pageStrategy="lesson-detail"
+                             :question="item"
+                             :confirmLoading="confirmQLoading"
+                             :listOptions="questionsOptions"
+                             :final-approval-mode="false"
+                             :show-question-number="true"
+                             @deleteFromExam="detachQuestion"
+                             @deleteFromDb="deleteQuestion"
+                             @copyIdToClipboard="copyIdToClipboard"
+                             @confirmQuestion="confirmQuestion"
+              />
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-virtual-scroll>
+    </template>
+    <div class="pagination">
+      <pagination
+        :key="paginationKey"
+        :meta="paginationMeta"
+        :disable="pageLoading"
+        @updateCurrentPage="updateQuizData"
+      />
+    </div>
+
   </div>
 </template>
 
@@ -108,9 +119,11 @@ import { Exam } from 'src/models/Exam'
 import API_ADDRESS from 'src/api/Addresses'
 import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { copyToClipboard } from 'quasar'
+import Pagination from 'components/Question/QuestionBank/Pagination'
 export default {
   name: 'SubCategoryQuestions',
   components: {
+    Pagination,
     QuestionItem
   },
   mixins: [mixinAuth, mixinQuiz],
@@ -124,7 +137,8 @@ export default {
         deleteQuestionFromDb: true,
         deleteQuestionFromExam: true,
         editQuestion: true,
-        switch: true
+        switch: true,
+        questionAnswerExpanded: true
       },
       questionListKey: 0,
       options: {
@@ -152,7 +166,19 @@ export default {
       inView: [],
       questionSearchNumber: 0,
       searchedQuestionOrder: 0,
-      firstQuestionOrder: 0
+      firstQuestionOrder: 0,
+      disablePagination: false,
+      paginationMeta: {
+        current_page: 1,
+        from: 0,
+        last_page: 1,
+        links: [],
+        path: '',
+        per_page: 0,
+        to: 0,
+        total: 0
+      },
+      paginationKey: 0
     }
   },
   created () {
@@ -242,11 +268,13 @@ export default {
     changeAppBarAndDrawer (state) {
       this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
     },
-    async loadQuizDataAndSubCategories (reload = false) {
+    async loadQuizDataAndSubCategories (reload = false, pageNumber = 1) {
       this.pageLoading = true
       try {
-        const response = await this.getQuizDataAndSubCategories()
+        const response = await this.getQuizDataAndSubCategories(pageNumber)
         if (response.data.data.length) {
+          this.paginationMeta = response.data.meta
+          // this.paginationKey++
           this.firstQuestionOrder = response.data.data[0].order
           this.loadSubCategories(response, reload)
           this.pageLoading = false
@@ -263,8 +291,8 @@ export default {
         this.pageLoading = false
       }
     },
-    getQuizDataAndSubCategories () {
-      return this.$axios.post(API_ADDRESS.exam.examQuestion(this.examId), {
+    getQuizDataAndSubCategories (pageNumber) {
+      return this.$axios.post(API_ADDRESS.exam.examQuestion(this.examId, pageNumber), {
         sub_categories: [this.$route.params.subcategory_id]
       })
     },
@@ -421,6 +449,9 @@ export default {
       this.$store.commit('AppLayout/showConfirmDialog', {
         show: false
       })
+    },
+    updateQuizData (page) {
+      this.loadQuizDataAndSubCategories(false, page)
     }
   }
 }
@@ -452,6 +483,6 @@ export default {
   }
 }
 .konkoor-view-scroll {
-  max-height: calc(100vh - 260px);
+  max-height: calc(100vh - 323px);
 }
 </style>

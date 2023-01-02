@@ -116,9 +116,9 @@
 </template>
 
 <script>
-import { EntityIndex } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
 import moment from 'moment-jalaali'
+import { EntityIndex } from 'quasar-crud'
+import API_ADDRESS from 'src/api/Addresses.js'
 export default {
   name: 'Admin.Exam.Index',
   components: { EntityIndex },
