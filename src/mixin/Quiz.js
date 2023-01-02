@@ -373,20 +373,25 @@ const mixinQuiz = {
 
     getCurrentExamQuestionsInArray () {
       let currentExamQuestionsArray = []
-      if (this.quiz !== {}) {
-        const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
-        const currentExamQuestions = this.getCurrentExamQuestions()
-        if (!currentExamQuestionIndexes) {
-          return currentExamQuestionsArray
-        }
-        const currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
-        currentExamQuestionIndexesArray.forEach((item) => {
-          const questionId = currentExamQuestionIndexes[item]
-          currentExamQuestionsArray.push(currentExamQuestions[questionId])
-        })
-      } else {
+      if (this.quiz === {}) {
         currentExamQuestionsArray = this.quiz
+        return currentExamQuestionsArray
       }
+
+      const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
+      const currentExamQuestions = this.getCurrentExamQuestions()
+      if (!currentExamQuestionIndexes ||
+        currentExamQuestionIndexes === {} ||
+        Object.keys(currentExamQuestionIndexes).length === 0 ||
+        (Array.isArray(currentExamQuestionIndexes) && currentExamQuestionIndexes.length === 0)) {
+        return currentExamQuestionsArray
+      }
+      const currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
+      currentExamQuestionIndexesArray.forEach((item) => {
+        const questionId = currentExamQuestionIndexes[item]
+        currentExamQuestionsArray.push(currentExamQuestions[questionId])
+      })
+
       return currentExamQuestionsArray
     },
     getCurrentExamQuestions () {
