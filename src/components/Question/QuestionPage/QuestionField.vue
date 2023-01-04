@@ -201,8 +201,6 @@ export default {
     modifyMultilineWithFormatConvertor(input) {
       const regex = /(begin{align})(.*?)(end{align})/gms
       return input.replaceAll(regex, (result) => {
-        console.log('result', result)
-        debugger
         return result.replace('begin{align}', 'begin{array}{l}').replace('end{align}', 'end{array}')
       })
     },
