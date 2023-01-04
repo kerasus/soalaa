@@ -104,7 +104,9 @@ export default {
 
 .html-katex {
   width: 100%;
-
+  & > p {
+    direction: inherit;
+  }
   .katex {
     /*rtl:ignore*/
     direction: ltr !important;
