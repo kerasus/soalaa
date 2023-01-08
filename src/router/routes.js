@@ -332,7 +332,7 @@ const routes = [
                 ]
               },
               {
-                path: ':exam_id/sub-category/:subcategory_id/questions',
+                path: ':exam_id/sub-category/:subcategory_id/questions/:page',
                 name: 'Admin.Exam.SubCategory.Questions',
                 component: () => import('pages/Admin/exam/SubCategoryQuestions'),
                 middleware: [

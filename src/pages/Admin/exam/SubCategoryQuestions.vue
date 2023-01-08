@@ -183,7 +183,7 @@ export default {
     }
   },
   created () {
-    this.loadQuizDataAndSubCategories()
+    this.loadQuizDataAndSubCategories(false, this.$route.params.page)
   },
   computed: {
     filteredQuestions () {
@@ -279,6 +279,16 @@ export default {
     },
     async loadQuizDataAndSubCategories (reload = false, pageNumber = 1, callback) {
       this.pageLoading = true
+      if (this.$route.params.page !== pageNumber.toString()) {
+        this.$router.push({
+          name: 'Admin.Exam.SubCategory.Questions',
+          params: {
+            page: pageNumber,
+            exam_id: this.$route.params.exam_id,
+            subcategory_id: this.$route.params.subcategory_id
+          }
+        })
+      }
       try {
         const response = await this.getQuizDataAndSubCategories(pageNumber)
         if (response.data.data.length) {
@@ -346,7 +356,7 @@ export default {
       // this.changeQuestion(questionId)
     },
     reload () {
-      this.loadQuizDataAndSubCategories(true)
+      this.loadQuizDataAndSubCategories(true, this.$route.params.page)
     },
     onScroll (startIndex, endIndex) {
       // this.updateLtr()
