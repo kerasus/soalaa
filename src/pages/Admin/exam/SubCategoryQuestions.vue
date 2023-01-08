@@ -3,29 +3,29 @@
     <q-card class="top-menu q-pa-lg">
       <div class="row items-center">
         <div class="col-8">
-          <q-btn-toggle
-            v-model="questionFilterMethod"
-            unelevated
-            no-caps
-            toggle-color="primary"
-            color="white"
-            text-color="black"
-            :options="[
-              {label: 'نمایش همه', value:'not-filtered'},
-              {label: ' کلا تایید نشده', value:'not-confirmed-at-all'},
-              {label: 'من تایید نکردم', value:'not-confirmed-by-me'}
-            ]"
+          <q-btn-toggle v-if="false"
+                        v-model="questionFilterMethod"
+                        unelevated
+                        no-caps
+                        toggle-color="primary"
+                        color="white"
+                        text-color="black"
+                        :options="[
+                          {label: 'نمایش همه', value:'not-filtered'},
+                          {label: ' کلا تایید نشده', value:'not-confirmed-at-all'},
+                          {label: 'من تایید نکردم', value:'not-confirmed-by-me'}
+                        ]"
           />
-          <q-btn
-            round
-            color="primary"
-            unelevated
-            icon="isax:printer"
-            @click="printQuestions"
+          <q-btn v-if="false"
+                 round
+                 color="primary"
+                 unelevated
+                 icon="isax:printer"
+                 @click="printQuestions"
           />
         </div>
         <div class="col-4 flex justify-end">
-          <div class="search-box">
+          <div class="search-box q-pr-md">
             <div>
               <q-input
                 v-model="searchedQuestionOrder"
