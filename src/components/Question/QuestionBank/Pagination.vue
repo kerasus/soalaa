@@ -16,10 +16,9 @@
     <!--        dense-->
     <!--      />-->
     <!--    </div>-->
-    {{ this.checkedStyle }}
     <q-pagination
       ref="pagination"
-      v-model="checkedStyle"
+      v-model="localCurrentPage"
       input
       direction-links
       color="black"
@@ -57,9 +56,19 @@ export default {
   },
   data() {
     return {
-      checkedStyle: 1,
+      localCurrentPage: 1,
       disableValue: false,
       pageToGoTo: ''
+    }
+  },
+  computed: {
+    currentPage () {
+      return this.meta?.current_page
+    }
+  },
+  watch: {
+    currentPage (newValue) {
+      this.localCurrentPage = newValue
     }
   },
   methods: {
