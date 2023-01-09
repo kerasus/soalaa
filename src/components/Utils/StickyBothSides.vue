@@ -64,7 +64,6 @@ export default {
   },
   watch: {
     scrollInfo(newValue) {
-      console.log(newValue)
       if (!this.disableSticky) {
         this.updateScroll(newValue)
       } else {
