@@ -197,14 +197,18 @@
               <q-skeleton height="900px"
                           class="pdf-skeleton" />
             </div>
-            <vue-pdf-embed
-              v-else
-              ref="pdfRef"
-              :page="page"
-              class="pdf"
-              :source="pdfSrc"
-              @rendered="handleDocumentRender"
+            <p-d-f-container
+              v-else-if="doesHaveQuestion"
+              :questions="questions"
             />
+            <!--            <vue-pdf-embed-->
+            <!--              v-else-->
+            <!--              ref="pdfRef"-->
+            <!--              :page="page"-->
+            <!--              class="pdf"-->
+            <!--              :source="pdfSrc"-->
+            <!--              @rendered="handleDocumentRender"-->
+            <!--            />-->
           </div>
         </q-tab-panel>
       </q-card>
@@ -224,12 +228,14 @@
 
 <script>
 import API_ADDRESS from 'src/api/Addresses'
-import VuePdfEmbed from 'vue-pdf-embed'
+import PDFContainer from 'components/Utils/PDF/PDFContainer'
+// import VuePdfEmbed from 'vue-pdf-embed'
 
 export default {
   name: 'DownloadExam',
   components: {
-    VuePdfEmbed
+    PDFContainer
+    // VuePdfEmbed
   },
   props: {
     examId: {
@@ -254,7 +260,9 @@ export default {
       rightMargin: 1,
       leftMargin: 1
     },
-    loading: false
+    loading: false,
+    doesHaveQuestion: false,
+    questions: []
   }),
   methods: {
     handleDocumentRender(data) {
@@ -266,8 +274,19 @@ export default {
     requestPdf() {
       this.loading = true
       this.pdfSrc = ''
-      this.$axios.post(API_ADDRESS.exam.user.pdf(this.$route.params.examId), this.pdfConfig).then((response) => {
-        this.pdfSrc = response.data.data.link
+      // this.$axios.post(API_ADDRESS.exam.user.pdf(this.$route.params.examId), this.pdfConfig).then((response) => {
+      //   this.pdfSrc = response.data.data.link
+      //   this.loading = false
+      // }).catch(() => {
+      //   this.loading = false
+      // })
+      /// 63a97fa06305df820e063c41/sub-category/6397239011d2324bc4c97902/questions
+      this.$axios.post(API_ADDRESS.exam.examQuestion('63a97fa06305df820e063c41'), {
+        sub_categories: ['6397239011d2324bc4c97902']
+      }).then((response) => {
+        this.questions = response.data.data
+        this.doesHaveQuestion = true
+        // console.log('response', response)
         this.loading = false
       }).catch(() => {
         this.loading = false

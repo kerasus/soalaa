@@ -1,6 +1,6 @@
 <template>
   <div
-    className="html-katex"
+    class="html-katex"
     style="overflow: hidden"
     :dir="!isLtrString ? 'rtl' : 'ltr'"
     v-html="computedKatex"
