@@ -65,14 +65,20 @@ const PrintElements = (function () {
     }
   }
 
-  const _hideCustomClasses = function () {
+  const _addCustomClassNamesToHide = function () {
     _hide(document.querySelector('.q-header'))
     _hide(document.querySelector('.download-exam .form'))
+    _hide(document.querySelector('.q-breadcrumbs'))
+    _hide(document.querySelector('.download-exam .pdf .tabs-box'))
+    _hide(document.querySelector('.download-exam .pdf .question-info'))
   }
 
-  const _showHiddenClasses = function () {
+  const _removeHiddenCustomClassNames = function () {
     _clean(document.querySelector('.q-header'))
     _clean(document.querySelector('.download-exam .form'))
+    _clean(document.querySelector('.q-breadcrumbs'))
+    _clean(document.querySelector('.download-exam .pdf .tabs-box'))
+    _clean(document.querySelector('.download-exam .pdf .question-info'))
   }
 
   const _print = function (elements) {
@@ -80,12 +86,12 @@ const PrintElements = (function () {
     for (i = 0; i < elements.length; i++) {
       _walkTree(elements[i], _attachPrintClasses)
     }
-    _hideCustomClasses()
+    _addCustomClassNamesToHide()
     window.print()
     for (i = 0; i < elements.length; i++) {
       _walkTree(elements[i], _cleanup)
     }
-    _showHiddenClasses()
+    _removeHiddenCustomClassNames()
   }
 
   return {
