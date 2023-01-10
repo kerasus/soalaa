@@ -116,8 +116,8 @@ const API_ADDRESS = {
     },
     registerExam: lumenServer + '/user/registerExam',
     examUser: lumenServer + '/exam-user',
-    examQuestion (quizId) {
-      return lumenServer + '/exam-question/attach/show/' + quizId
+    examQuestion (quizId, page = 1) {
+      return lumenServer + '/exam-question/attach/show/' + quizId + '?page=' + page
     },
     report: {
       getReport (userExamId) {

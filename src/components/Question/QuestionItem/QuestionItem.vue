@@ -204,7 +204,7 @@
 
     <q-card-section class="answer-section">
       <q-expansion-item
-        v-model="descriptiveAnswerExpanded"
+        v-model="listConfig.questionAnswerExpanded"
         header-class="hideExpansionHeader"
       >
         <div class="description-answer-body">
@@ -331,11 +331,11 @@
           flat
           role="presentation"
           class="see-answer-button no-padding"
-          :label="descriptiveAnswerExpanded ? '' : ''"
-          :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-          @click="descriptiveAnswerExpanded = !descriptiveAnswerExpanded"
+          :label="listConfig.questionAnswerExpanded ? '' : ''"
+          :icon-right="listConfig.questionAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
+          @click="listConfig.questionAnswerExpanded = !listConfig.questionAnswerExpanded"
         >
-          <span v-if="descriptiveAnswerExpanded">
+          <span v-if="listConfig.questionAnswerExpanded">
             پاسخ تشریحی
             <!--            بستن پاسخ تشریحی-->
           </span>
@@ -456,7 +456,8 @@ export default {
           deleteQuestionFromDb: false,
           deleteQuestionFromExam: false,
           editQuestion: false,
-          switch: true
+          switch: true,
+          questionAnswerExpanded: false
         }
       }
     },
@@ -485,12 +486,20 @@ export default {
       default: false
     }
   },
-  emits: ['checkSelect', 'changeOrder', 'detachQuestion', 'deleteQuestionFromExam', 'copyIdToClipboard', 'confirmQuestion'],
+  emits: [
+    'checkSelect',
+    'changeOrder',
+    'detachQuestion',
+    'deleteQuestionFromExam',
+    'copyIdToClipboard',
+    'confirmQuestion',
+    'deleteFromExam',
+    'deleteFromDb'
+  ],
   data () {
     return {
       questionChoiceList: [],
       confirmQuestion: false,
-      descriptiveAnswerExpanded: false,
       questionLevel: 2,
       listConfig: {
         questionId: false,
@@ -504,6 +513,7 @@ export default {
         questionRate: true,
         questionComment: true,
         descriptiveAnswer: true,
+        questionAnswerExpanded: false,
         menu: {
           show: true,
           items: {
@@ -624,6 +634,7 @@ export default {
         questionRate: true,
         questionComment: true,
         descriptiveAnswer: true,
+        questionAnswerExpanded: false,
         menu: {
           show: true,
           items: {
@@ -643,6 +654,8 @@ export default {
         // return finalConf
       }
       if (this.pageStrategy === 'lesson-detail') {
+        // todo : temp
+        finalConf.questionAnswerExpanded = true
         // return finalConf
       }
       return finalConf
@@ -1012,20 +1025,20 @@ export default {
         margin-right: 30px;
 
         @media only screen and (max-width: 1439px) {
-          height: 230px;
+          //height: 230px;
         }
 
         @media only screen and (max-width: 1023px) {
           padding: 16px;
           margin-right: 24px;
-          height: 200px;
+          //height: 200px;
           width: 50%;
         }
 
         @media only screen and (max-width: 599px) {
           max-width: 100%;
           width: 100%;
-          height: 310px;
+          //height: 310px;
           margin-bottom: 20px;
 
         }

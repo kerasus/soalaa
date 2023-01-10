@@ -67,7 +67,6 @@
         class="col-12"
         editeQuestion
         @saveQuestion="saveQuestion"
-        @detachQuestion="detachQuestion"
         @deletefromDb="deleteQuestion"
       />
       <status-change
@@ -139,7 +138,6 @@ export default {
       categoryList: new QuestCategoryList(),
       isPanelOpened: false,
       imgFloatMode: false,
-      totalLoading: false,
       editComponentKey: 0
     }
   },
@@ -196,10 +194,10 @@ export default {
       this.$refs.currentEditComponent.saveQuestion()
     },
     enableLoading () {
-      this.totalLoading = true
+      this.question.loading = true
     },
     disableLoading () {
-      this.totalLoading = false
+      this.question.loading = false
     },
     restoreQuestion(eventData) {
       if (eventData.statement) {
