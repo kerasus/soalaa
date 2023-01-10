@@ -21,9 +21,15 @@ const PrintElements = (function () {
   }
 
   const _clean = function (element) {
-    element.classList.remove(hideFromPrintClass)
-    element.classList.remove(preservePrintClass)
-    element.classList.remove(preserveAncestorClass)
+    if (element.classList.contains(hideFromPrintClass)) {
+      element.classList.remove(hideFromPrintClass)
+    }
+    if (element.classList.contains(preservePrintClass)) {
+      element.classList.remove(preservePrintClass)
+    }
+    if (element.classList.contains(preserveAncestorClass)) {
+      element.classList.remove(preserveAncestorClass)
+    }
   }
 
   const _walkSiblings = function (element, callback) {
@@ -59,14 +65,27 @@ const PrintElements = (function () {
     }
   }
 
+  const _hideCustomClasses = function () {
+    _hide(document.querySelector('.q-header'))
+    _hide(document.querySelector('.download-exam .form'))
+  }
+
+  const _showHiddenClasses = function () {
+    _clean(document.querySelector('.q-header'))
+    _clean(document.querySelector('.download-exam .form'))
+  }
+
   const _print = function (elements) {
-    for (var i = 0; i < elements.length; i++) {
+    let i
+    for (i = 0; i < elements.length; i++) {
       _walkTree(elements[i], _attachPrintClasses)
     }
+    _hideCustomClasses()
     window.print()
     for (i = 0; i < elements.length; i++) {
       _walkTree(elements[i], _cleanup)
     }
+    _showHiddenClasses()
   }
 
   return {
