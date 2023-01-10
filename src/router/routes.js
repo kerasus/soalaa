@@ -82,9 +82,9 @@ const routes = [
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     layoutConfig: {
       layoutHeaderVisible: true,
-      layoutHeaderType: 'default',
+      layoutHeaderType: 'panel',
       layoutLeftDrawerVisible: true,
-      layoutLeftSideBarType: 'default',
+      layoutLeftSideBarType: 'panel',
       layoutView: 'lHh Lpr lFf',
       layoutHeader: true,
       layoutHeaderReveal: false,
@@ -100,8 +100,6 @@ const routes = [
       layoutRightDrawer: false,
       layoutFooter: false,
       layoutHeaderCustomClass: '',
-      layoutBreadcrumbsElements: [],
-      layoutBreadcrumbs: false,
       layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
       layoutPageContainerCustomClass: 'main-layout-container'
     },
@@ -133,7 +131,7 @@ const routes = [
           // layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
           // layoutPageContainerCustomClass: 'main-layout-container'
         },
-        component: () => import('pages/HomePage')
+        component: () => import('pages/User/landing/landing')
       },
       {
         path: 'landing',
@@ -157,7 +155,9 @@ const routes = [
           layoutHeaderType: 'panel',
           layoutLeftDrawerVisible: true,
           layoutLeftSideBarType: 'panel'
-
+        },
+        meta: {
+          middlewares: [auth]
         }
       },
       {
@@ -183,10 +183,9 @@ const routes = [
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
-          layoutLeftDrawerVisible: true,
-          layoutLeftDrawer: false,
+          layoutLeftDrawerVisible: false,
           layoutLeftSideBarType: 'default',
-          layoutLeftDrawerOverlay: false
+          layoutLeftDrawerOverlay: true
         },
         meta: {
           middlewares: [auth]
@@ -217,6 +216,10 @@ const routes = [
               {
                 path: 'user_exam_list',
                 name: 'User.Exam.List',
+                layoutConfig: {
+                  layoutHeaderVisible: true,
+                  layoutHeaderType: 'default'
+                },
                 component: () => import('pages/User/exam/List')
               },
               {
@@ -630,16 +633,6 @@ const routes = [
         middleware: [auth]
       },
       {
-        path: '/faq',
-        name: 'faq',
-        component: () => import('src/pages/CommonQuestions/list'),
-        meta: {
-          middlewares: [
-            auth
-          ]
-        }
-      },
-      {
         path: '/onlineQuiz/alaaView/:quizId/:questNumber',
         name: 'onlineQuiz.alaaView',
         component: () => import('pages/User/exam/participate/AlaaView'),
@@ -668,36 +661,8 @@ const routes = [
         }
       },
       {
-        path: '/onlineQuiz/alaaView/personal/:quizId/:questNumber',
-        name: 'onlineQuiz.alaaView.personal',
-        component: () => import('pages/User/exam/participate/AlaaView'),
-        layoutConfig: {
-          layoutHeaderVisible: true,
-          layoutHeaderType: 'quiz',
-          layoutLeftDrawerVisible: true,
-          layoutLeftSideBarType: 'quiz'
-        },
-        meta: {
-          middlewares: [auth]
-        }
-      },
-      {
         path: '/onlineQuiz/konkoorView/:quizId',
-        name: 'onlineQuiz.konkoorView',
-        component: () => import('pages/User/exam/participate/konkoorView'),
-        layoutConfig: {
-          layoutHeaderVisible: true,
-          layoutHeaderType: 'quiz',
-          layoutLeftDrawerVisible: true,
-          layoutLeftSideBarType: 'quiz'
-        },
-        meta: {
-          middlewares: [auth]
-        }
-      },
-      {
-        path: '/onlineQuiz/konkoorView/personal/:quizId',
-        name: 'onlineQuiz.konkoorView.personal',
+        name: 'konkoorView',
         component: () => import('pages/User/exam/participate/konkoorView'),
         layoutConfig: {
           layoutHeaderVisible: true,
@@ -720,9 +685,7 @@ const routes = [
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
-          layoutLeftDrawerVisible: false,
-          layoutLeftSideBarType: 'default',
-          layoutLeftDrawerOverlay: true
+          layoutLeftDrawerVisible: false
         }
       },
       {
@@ -776,32 +739,8 @@ const routes = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('layouts/MainLayout.vue'),
-    layoutConfig: {
-      layoutHeaderVisible: true,
-      layoutHeaderType: 'default',
-      layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
-      layoutPageContainerCustomClass: 'main-layout-container'
-    },
-    children: [
-      {
-        path: '',
-        name: '404',
-        layoutConfig: {
-          layoutHeaderVisible: true,
-          layoutHeaderType: 'default',
-          layoutLeftDrawerVisible: false,
-          layoutLeftDrawerOverlay: true
-        },
-        component: () => import('layouts/UserPanelLayouts/UserPanelBareLayout'),
-        children: [{
-          path: '',
-          name: 'notFound',
-          component: () => import('pages/Error404.vue')
-        }
-        ]
-      }
-    ]
+    component:
+      () => import('pages/Error404.vue')
   }
 ]
 

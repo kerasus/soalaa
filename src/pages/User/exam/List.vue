@@ -45,8 +45,8 @@ export default {
     }
   },
   created() {
-    this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
-    this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
+    // this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
+    // this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
   },
   computed: {
     calculateHeightStyle() {

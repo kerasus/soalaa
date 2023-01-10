@@ -279,23 +279,19 @@
 import { User } from 'src/models/User'
 
 export default {
+  // eslint-disable-next-line vue/no-reserved-component-names
   name: 'Footer',
   methods: {
     scrollToTop() {
       document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
-     }
-     },
+    }
+  },
   computed: {
     user () {
       if (this.$store.getters['Auth/user']) {
         return this.$store.getters['Auth/user']
       }
       return new User()
-    }
-  }
-  methods: {
-    scrollToTop() {
-      document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }
 }

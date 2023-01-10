@@ -288,7 +288,6 @@ export default {
           title: 'پنل ادمین',
           to: 'Admin.Exam.Index',
           permission: 'examStore'
-          to: ''
         },
         {
           selected: 'soalaMag',
@@ -358,6 +357,7 @@ export default {
   },
   mounted() {
     this.updateLayout()
+    this.addAdminItem()
   },
   computed: {
     isUserLogin() {
@@ -366,9 +366,6 @@ export default {
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']
     }
-  },
-  mounted() {
-    this.addAdminItem()
   },
   methods: {
     toggleLeftDrawer () {

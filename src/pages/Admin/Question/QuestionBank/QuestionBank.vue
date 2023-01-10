@@ -339,9 +339,8 @@ export default {
         reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
         statement: (filterData.statement) ? filterData.statement[0] : '',
         sort_by: (this.searchSelector.value) ? 'created_at' : '',
-        sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value
+        sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value,
         statuses: (filterData.statuses) ? filterData.statuses.map(item => item.id) : [],
-        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
