@@ -7,7 +7,7 @@ const PrintElements = (function () {
   const bodyElementName = 'BODY'
 
   const _hide = function (element) {
-    if (!element.classList.contains(preservePrintClass)) {
+    if (element && !element.classList.contains(preservePrintClass)) {
       element.classList.add(hideFromPrintClass)
     }
   }
@@ -21,6 +21,9 @@ const PrintElements = (function () {
   }
 
   const _clean = function (element) {
+    if (!element) {
+      return
+    }
     if (element.classList.contains(hideFromPrintClass)) {
       element.classList.remove(hideFromPrintClass)
     }
