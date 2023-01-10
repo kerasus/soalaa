@@ -49,7 +49,7 @@ const Time = (function () {
     window.serverDate = { date, offset, uncertainty }
     // console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:` + offset)
   }
-  function now () {
+  function now (justDate) {
     if (!window.serverDate?.offset) {
       if (!window.serverDate) {
         window.serverDate = {}
@@ -57,6 +57,9 @@ const Time = (function () {
       window.serverDate.offset = 0
     }
     const serverDate = new Date(Date.now() + window.serverDate.offset)
+    if (justDate) {
+      return moment(serverDate).format('YYYY-MM-DD')
+    }
     return moment(serverDate).format('YYYY-MM-DD HH:mm:ss.SSS')
   }
 
@@ -98,7 +101,7 @@ const Time = (function () {
 
   function setStateOfExamCategories (categories, newState) {
     categories.forEach((category, index, categories) => {
-      if (newState === true) {
+      if (newState === true || !category.accept_at) {
         category.is_active = true
 
         return category
@@ -128,7 +131,7 @@ const Time = (function () {
   function getCurrentCategoryAcceptAt (categories) {
     const currentCat = categories.list.find((item) => item.is_active)
     const lastCat = categories.list[categories.list.length - 1]
-    const isAllCategoryActive = categories.list.filter(item => item.is_active).length === categories.list
+    const isAllCategoryActive = categories.list.filter(item => item.is_active).length === categories.list.length
 
     if (lastCat && getPassedTime(lastCat.accept_at, false) > 0) {
       return false
@@ -150,7 +153,7 @@ const Time = (function () {
     }
     for (const questionId in questions) {
       const questionCategory = quiz.categories.list.find(category => category.id === questions[questionId].sub_category.category_id)
-      const activeStatus = questionCategory.is_active || Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id) || ACTIVE_ALL_CATEGORIES_IN_EXAM
+      const activeStatus = (questionCategory && questionCategory.is_active) || Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id) || ACTIVE_ALL_CATEGORIES_IN_EXAM
       questions[questionId].in_active_category = activeStatus
     }
   }

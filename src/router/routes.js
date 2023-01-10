@@ -48,6 +48,14 @@ const entityCrudRouteConfigs = [
 
   },
   {
+    path: 'questionReport',
+    baseRouteName: 'Admin.QuestionReport',
+    componentPath: 'pages/Admin/QuestionReport',
+    breadcrumbs: { title: 'گزارش خطا سوال' },
+    permissions: ['optionIndex', 'optionStore', 'optionShow', 'optionUpdate']
+
+  },
+  {
     path: 'QuestionTarget',
     baseRouteName: 'Admin.QuestionTarget',
     componentPath: 'pages/Admin/QuestionTarget.vue',
@@ -158,65 +166,132 @@ const routes = [
         component: () => import('pages/Auth/Login.vue')
       },
       {
-        path: 'user',
-        name: 'User',
-        component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
+        path: 'subscription',
+        name: 'subscription',
+        component: () => import('pages/User/Subscription'),
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
-          layoutLeftDrawerVisible: true,
-          layoutLeftDrawer: false,
+          layoutLeftDrawerVisible: false,
+          layoutLeftSideBarType: 'default'
+        }
+      },
+      {
+        path: 'user',
+        name: 'User',
+        component: () => import('layouts/UserPanelLayouts/UserPanelBareLayout'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false,
           layoutLeftSideBarType: 'default',
-          layoutLeftDrawerOverlay: false
+          layoutLeftDrawerOverlay: true
         },
         meta: {
           middlewares: [auth]
         },
         children: [
           {
-            path: 'my-orders',
-            name: 'User.MyOrders',
-            component: () => import('pages/User/MyOrders/MyOrders'),
-            breadcrumbs: { title: 'سفارش های من' }
+
+            path: '',
+            name: 'User.First.Layout',
+            component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
+            children: [
+              {
+                path: 'profile',
+                name: 'User.Profile',
+                component: () => import('pages/User/profile/profile')
+              },
+              {
+                path: 'dashboard',
+                name: 'User.Dashboard',
+                component: () => import('pages/User/Dashboard/Dashboard')
+              },
+              {
+                path: 'my-orders',
+                name: 'User.MyOrders',
+                component: () => import('pages/User/MyOrders/MyOrders'),
+                breadcrumbs: { title: 'سفارش های من' }
+              },
+              {
+                path: 'user_exam_list',
+                name: 'User.Exam.List',
+                layoutConfig: {
+                  layoutHeaderVisible: true,
+                  layoutHeaderType: 'default'
+                },
+                component: () => import('pages/User/exam/List')
+              },
+              {
+                path: 'ticket',
+                component: () => import('layouts/bareLayout.vue'),
+                name: 'User.Ticket',
+                children: [
+                  {
+                    path: '',
+                    name: 'User.Ticket.Index',
+                    component: () => import('pages/User/Ticket/Index.vue')
+                  },
+                  {
+                    path: ':id',
+                    name: 'User.Ticket.Show',
+                    component: () => import('pages/User/Ticket/Show.vue')
+                  },
+                  {
+                    path: 'create',
+                    name: 'User.Ticket.Create',
+                    component: () => import('pages/User/Ticket/Create.vue')
+                  }
+                ]
+              },
+              {
+                path: '/onlineQuiz/results/:exam_id/:user_exam_id',
+                name: 'user.exam.results',
+                component: () => import('pages/User/exam/Result')
+              }
+            ]
           },
           {
-            path: 'user_exam_list',
-            name: 'User.Exam.List',
-            layoutConfig: {
-              layoutLeftDrawerVisible: false
-            },
-            component: () => import('pages/User/exam/List')
+            path: 'download_exam/:examId',
+            name: 'User.Download',
+            component: () => import('layouts/boxedLayout'),
+            children: [
+              {
+                name: 'User.Exam.Download',
+                path: '',
+                component: () => import('pages/User/exam/Download/Download')
+              }
+            ]
           },
           {
-            path: '/faq',
-            name: 'faq',
-            layoutConfig: {
-              layoutLeftDrawerVisible: false
-            },
-            component: () => import('src/pages/CommonQuestions/list')
-          },
-          {
-            path: 'ticket',
-            component: () => import('layouts/bareLayout.vue'),
-            meta: {
-              middlewares: [auth]
-            },
-            name: 'User.Ticket',
+            path: 'exam/create',
+            name: 'User.Create',
+            component: () => import('layouts/boxedLayout'),
             children: [
               {
                 path: '',
-                name: 'User.Ticket.Index',
-                component: () => import('pages/User/Ticket/Index.vue')
-              },
-              {
-                path: ':id',
-                name: 'User.Ticket.Show',
-                component: () => import('pages/User/Ticket/Show.vue')
-              },
-              {
-                path: 'create',
-                name: 'User.Ticket.Create',
-                component: () => import('pages/User/Ticket/Create.vue')
+                name: 'User.Create.Exam',
+                layoutConfig: {
+                  layoutBreadcrumbs: {
+                    separator: 'isax:arrow-right-3'
+                  },
+                  layoutBreadcrumbsElements: [
+                    {
+                      title: 'صفحه اصلی',
+                      route: {
+                        name: 'HomePage'
+                      }
+                    },
+                    {
+                      title: 'آزمون ها',
+                      route: {
+                        name: 'User.Exam.List'
+                      }
+                    },
+                    { title: 'ساخت آزمون' }
+                  ]
+                },
+                component: () => import('pages/User/exam/Create/Create')
               }
             ]
           }
@@ -665,7 +740,7 @@ const routes = [
   {
     path: '/:catchAll(.*)*',
     component:
-  () => import('pages/Error404.vue')
+      () => import('pages/Error404.vue')
   }
 ]
 

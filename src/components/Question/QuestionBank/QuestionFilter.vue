@@ -12,6 +12,7 @@
             <q-btn flat
                    rounded
                    color="primary"
+                   class="delete-all"
                    @click="deleteAllFilters">
               حذف همه
             </q-btn>
@@ -20,14 +21,15 @@
         <div>
           <q-card-actions class="filter-container q-pa-none">
             <q-chip
-              v-for="item in selectedFiltersTitle"
-              :key="item"
+              v-for="(item, index) in selectedFiltersTitle"
+              :key="index"
+              v-model="selectedFiltersTitle[index]"
               class="filter-items"
-              icon-remove="mdi-close"
               removable
               @remove="deleteFilterObject(item)"
-              v-text="item"
-            />
+            >
+              {{item}}
+            </q-chip>
           </q-card-actions>
         </div>
       </div>
@@ -36,22 +38,18 @@
       <question-filter-expansion
         header-title="درس و مبحث"
       >
-        <q-checkbox
-          v-model="customSearch"
-          label="جستجوی تک گره"
-          class="q-ml-md"
-          @update:model-value="onCustomSearch"
-        />
         <tree-component
           ref="tree"
+          :key="treeKey"
           tick-strategy="strict"
           :get-node-by-id="getNodeById"
           @ticked="tickedData"
+          @lazy-loaded="getExpandedTree"
         />
       </question-filter-expansion>
-
+      <!--      header-title="مرجع"-->
       <question-filter-expansion
-        header-title="مرجع"
+        header-title="طراح سوال"
       >
         <q-option-group
           v-model="selectedReference"
@@ -85,6 +83,7 @@
       </question-filter-expansion>
 
       <question-filter-expansion
+        v-if="showMajorList"
         header-title="رشته تحصیلی"
       >
         <q-option-group
@@ -110,30 +109,13 @@
           type="checkbox"
           :options="filterQuestions.levels.map(option => {
             return {
-              label: option.value,
+              label: option.label,
               value: option
             }
           })"
           @update:model-value="onChangeLevels"
         />
         <div v-if="filterQuestions.levels.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
-
-      </question-filter-expansion>
-
-      <question-filter-expansion
-        header-title="وضعیت سوال"
-      >
-        <q-option-group v-model="selectedQuestionStatuses"
-                        type="checkbox"
-                        :options="filterQuestions.statuses.map(option => {
-                          return {
-                            label: option.display_title,
-                            value: option
-                          }
-                        })"
-                        @update:model-value="onChangeQuestionStatuses"
-        />
-        <div v-if="filterQuestions.levels.length === 0"> هیچ وضعیتی ایجاد نشده است.</div>
 
       </question-filter-expansion>
     </div>
@@ -147,6 +129,8 @@ import QuestionFilterExpansion from 'components/Question/QuestionBank/QuestionFi
 
 export default {
   name: 'QuestionBankFilter',
+  components: { QuestionFilterExpansion, TreeComponent },
+  mixins: [mixinTree],
   props: {
     filterQuestions: {
       type: Object,
@@ -155,20 +139,79 @@ export default {
           reference_type: null
         }
       }
+    },
+    rootNodeIdToLoad: {
+      type: String,
+      default: () => {
+        return ''
+      }
+    },
+    nodeIdsToTick: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+    initialLoadMode: {
+      type: Boolean,
+      default: () => {
+        return true
+      }
+    },
+    showMajorList: {
+      type: Boolean,
+      default: () => {
+        return true
+      }
     }
   },
+  emits: [
+    'onFilter',
+    'tagsChanged',
+    'deleteFilter'
+  ],
   data () {
     return {
-      customSearch: false,
+      treeKey: 0,
       check: false,
       selectedReference: [],
       selectedYears: [],
       selectedMajors: [],
       selectedLevels: [],
-      selectedQuestionStatuses: [],
       selectedTags: [],
       filtersData: {
-        tags: []
+        tags: [],
+        reference: [],
+        majors: [],
+        level: [],
+        years: []
+      }
+    }
+  },
+  watch: {
+    'selectedQuestions.length': {
+      handler(newValue, oldValue) {
+        this.exam.questions.list = []
+        this.exam.questions.list = this.selectedQuestions
+        this.questionListKey = Date.now()
+      }
+    },
+    rootNodeIdToLoad: {
+      deep: true,
+      handler(newVal) {
+        this.showTreeModalNode(newVal)
+      }
+    },
+    nodeIdsToTick: {
+      deep: true,
+      handler(newVal) {
+        // console.log('nodeIdsToTick')
+        // const tags = newVal.map(function(key) {
+        //   return {
+        //     id: key
+        //   }
+        // })
+        // this.changeFilterData('tags', tags)
       }
     }
   },
@@ -178,31 +221,44 @@ export default {
       const titles = []
       filtersDataKey.forEach(key => {
         const filterGroup = this.filtersData[key]
-        if (typeof this.filtersData[key] !== 'object') {
-          return
-        }
         filterGroup.forEach(filterItem => {
-          const title = filterItem.title ? filterItem.title : filterItem.value
+          const title = filterItem.title || filterItem.label || filterItem.value
           titles.push(title)
         })
       })
+
       return titles
     }
   },
-  mixins: [mixinTree],
-  components: { QuestionFilterExpansion, TreeComponent },
   created () {
-    this.showTree('tree', this.getRootNode('test'))
-      .then(() => {
-      })
+    if (this.initialLoadMode) {
+      this.showTreeModalNode(this.rootNodeIdToLoad)
+    }
   },
   methods: {
+    setNodesTicked (nodeIds) {
+      this.$refs.tree.setNodesTicked(nodeIds, true)
+    },
+    getExpandedTree(tree) {
+      const currentTreeNodeIds = tree.map(node => node.id)
+      const availableIdsToTick = []
+      this.nodeIdsToTick.forEach(idToTick => {
+        const foundedIds = currentTreeNodeIds.filter(key => key === idToTick)
+        availableIdsToTick.push(...foundedIds)
+      })
+      if (availableIdsToTick.length > 0) {
+        this.setNodesTicked(availableIdsToTick)
+      }
+    },
+    showTreeModalNode (NodeId) {
+      const nodeToLoadTreeFrom = NodeId ? this.getNode(NodeId) : this.getRootNode('test')
+      this.treeKey += 1
+      this.showTree('tree', nodeToLoadTreeFrom)
+        .then(() => {
+        })
+    },
     getFilters () {
       return this.filtersData
-    },
-    onCustomSearch(data) {
-      this.filtersData.tags_with_childrens = data ? 0 : 1
-      this.onUpdateFilterData()
     },
     onUpdateFilterData () {
       this.$emit('onFilter', this.filtersData)
@@ -217,9 +273,6 @@ export default {
     onChangeLevels (value) {
       this.changeFilterData('level', value)
     },
-    onChangeQuestionStatuses (value) {
-      this.changeFilterData('statuses', value)
-    },
     onChangeYears (value) {
       this.changeFilterData('years', value)
     },
@@ -227,6 +280,7 @@ export default {
       this.changeFilterData('majors', value)
     },
     tickedData (value) {
+      this.$emit('tagsChanged', value)
       this.changeFilterData('tags', value)
       // this.filtersData.tags = value
       // value.forEach(val => {
@@ -243,22 +297,38 @@ export default {
     },
     deleteAllFilters () {
       this.filtersData.tags.splice(0, this.filtersData.tags.length)
-      this.QuestionFilters.splice(0, this.QuestionFilters.length)
+      this.filtersData.reference.splice(0, this.filtersData.reference.length)
+      this.filtersData.level.splice(0, this.filtersData.level.length)
+      this.filtersData.years.splice(0, this.filtersData.years.length)
+      this.filtersData.majors.splice(0, this.filtersData.majors.length)
+      this.showTreeModalNode(this.rootNodeIdToLoad)
+      // this.QuestionFilters.splice(0, this.QuestionFilters.length)
       this.onUpdateFilterData()
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-
+.custom-card {
+  border-radius: 16px;
+  @media only screen and (max-width: 1023px) {
+    border-radius: 12px !important;
+  }
+  @media only screen and (max-width: 599px) {
+    border-radius: 8px !important;
+  }
+}
 .filter-card-container {
   padding: 20px 23px 16px 24px;
   margin-bottom: 24px;
 
   .filter-header {
     padding-bottom: 11px;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 76px;
+    @media only screen and (max-width: 1439px) {
+      grid-template-columns: auto 68px;
+    }
 
     .delete-all-container {
       font-style: normal;
@@ -267,6 +337,9 @@ export default {
       line-height: 21px;
       position: relative;
       top: -5px;
+      .delete-all {
+        padding: 0;
+      }
     }
 
     .header-title-container {
@@ -295,7 +368,7 @@ export default {
   .filter-option-container {
     width: 500px;
     display: flex;
-    padding: 20px 24px 20px 24px;
+    //padding: 20px 24px 20px 24px;
     justify-content: space-between;
 
     .filter-option-title {
@@ -315,7 +388,7 @@ export default {
 
 @media only screen and (max-width: 1439px) {
   .filter-card-container {
-    padding: 16px 16px 8px 16px !important;
+    padding: 20px 16px !important;
 
     .filter-header {
       .delete-all-container {
@@ -327,7 +400,7 @@ export default {
 
 @media only screen and (max-width: 1023px) {
   .filter-card-container {
-    padding: 16px 0 8px 16px !important;
+    padding: 20px 16px !important;
   }
   .filter-options-section {
     display: none;
@@ -336,7 +409,7 @@ export default {
 
 @media only screen and (max-width: 599px) {
   .filter-card-container {
-    padding: 20px 0 16px 16px !important;
+    padding: 12px 16px !important;
   }
 }
 </style>
