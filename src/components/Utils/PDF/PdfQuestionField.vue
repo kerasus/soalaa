@@ -35,6 +35,7 @@
             :input="'<span class='+'number'+'>'+ (index + 1) +') </span>' + source.statement"
           />
         </p>
+        <div class="PDF-LINE-BREAK" />
       </div>
       <q-list class="choices-box row">
         <!--        index-->
@@ -66,6 +67,7 @@
           </q-item-section>
         </q-item>
       </q-list>
+      <div class="PDF-LINE-BREAK" />
     </div>
   </div>
 </template>
