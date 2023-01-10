@@ -187,7 +187,9 @@
                 <q-btn unelevated
                        color="primary"
                        class="btn"
-                       label="دانلود PDF"></q-btn>
+                       label="دانلود PDF"
+                       @click="generatePDF"
+                ></q-btn>
               </div>
             </div>
           </div>
@@ -199,6 +201,7 @@
             </div>
             <p-d-f-container
               v-else-if="doesHaveQuestion"
+              id="pdf-container"
               :questions="questions"
             />
             <!--            <vue-pdf-embed-->
@@ -230,7 +233,8 @@
 import API_ADDRESS from 'src/api/Addresses'
 import PDFContainer from 'components/Utils/PDF/PDFContainer'
 // import VuePdfEmbed from 'vue-pdf-embed'
-
+import 'src/Utils/PrintElements/print.css'
+import PrintElements from 'src/Utils/PrintElements/print_elements'
 export default {
   name: 'DownloadExam',
   components: {
@@ -294,6 +298,9 @@ export default {
     },
     replacePdf() {
       this.pdfSrc = 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase1moshavere.pdf'
+    },
+    generatePDF () {
+      PrintElements.print(document.getElementById('pdf-container'))
     }
   }
 }
