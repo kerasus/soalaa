@@ -10,4 +10,8 @@
         border: none !important;
         box-shadow: none !important;
     }
+
+   .download-exam .pdf-container {
+      margin-left: 100px;
+    }
 }
