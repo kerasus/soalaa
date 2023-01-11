@@ -112,7 +112,12 @@ export default defineComponent({
       position: absolute;
       top: 55px;
       right: 70px;
+      height: 67px;
+      width: 23px;
       font-size: 10px;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
       .subject {
         font-weight: 500;
         font-size: 10px;
