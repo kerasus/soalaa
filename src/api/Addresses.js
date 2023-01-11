@@ -1,5 +1,6 @@
 import process from 'process'
 const lumenServer = process.env.AAA_API
+const lumenServerProduction = process.env.AAA_API_PRODUCTION
 const authServer = process.env.AUTH_API
 const timeServer = process.env.GET_TIME_SERVER
 const socketServer = process.env.SOCKET_SERVER
@@ -83,16 +84,16 @@ const API_ADDRESS = {
   },
   exam: {
     exportExcel: lumenServer + '/exam?excel_export=1',
-    showExam: (examId) => lumenServer + '/exam/' + examId,
-    editExam: lumenServer + '/exam',
-    copyCoefficient: lumenServer + '/exam-question/zirgorooh/copy',
-    sendAnswers: lumenServer + '/temp-exam/answer/choice',
-    sendStatus: lumenServer + '/temp-exam/answer/status',
-    sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
-    sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
-    userExamsList: lumenServer + '/examAndUser',
-    takhminRotbe: lumenServer + '/exam-report/rankSimulator',
-    analysisVideo: lumenServer + '/exam-question/attach/sub-category',
+    showExam: (examId) => lumenServerProduction + '/exam/' + examId,
+    editExam: lumenServerProduction + '/exam',
+    copyCoefficient: lumenServerProduction + '/exam-question/zirgorooh/copy',
+    sendAnswers: lumenServerProduction + '/temp-exam/answer/choice',
+    sendStatus: lumenServerProduction + '/temp-exam/answer/status',
+    sendBookmark: lumenServerProduction + '/temp-exam/answer/bookmark',
+    sendUnBookmark: lumenServerProduction + '/temp-exam/answer/unbookmark',
+    userExamsList: lumenServerProduction + '/examAndUser',
+    takhminRotbe: lumenServerProduction + '/exam-report/rankSimulator',
+    analysisVideo: lumenServerProduction + '/exam-question/attach/sub-category',
     userExamList: {
       base () {
         return lumenServer + '/examAndUser'
@@ -107,13 +108,13 @@ const API_ADDRESS = {
 
     },
     getAnalysisVideo (examId) {
-      return lumenServer + '/exam-question/videos/' + examId
+      return lumenServerProduction + '/exam-question/videos/' + examId
     },
     examReportIndex (type) {
-      return lumenServer + '/exam-report/index/' + type
+      return lumenServerProduction + '/exam-report/index/' + type
     },
     pdf (examId) {
-      return lumenServer + '/exam-question/booklet-file/' + examId
+      return lumenServerProduction + '/exam-question/booklet-file/' + examId
     },
     base (pageNumber) {
       if (pageNumber) {
@@ -122,18 +123,26 @@ const API_ADDRESS = {
         return lumenServer + '/exam'
       }
     },
+    // todo : temporary, MUST BE DELETED
+    baseProduction (pageNumber) {
+      if (pageNumber) {
+        return lumenServerProduction + '/exam?with_pagination=1&page=' + pageNumber
+      } else {
+        return lumenServerProduction + '/exam'
+      }
+    },
     generateExamFile (examId, withAnswer) {
-      const baseFileRoute = lumenServer + '/exam-question/file/' + examId
+      const baseFileRoute = lumenServerProduction + '/exam-question/file/' + examId
       return withAnswer ? (baseFileRoute + '/with_answer') : baseFileRoute
     },
     getAnswerOfUser (userExamId) {
       return lumenServer + '/temp-exam/answer/' + userExamId
     },
     getAllAnswerOfUser (userExamId) {
-      return lumenServer + '/temp-exam/allAnswer/' + userExamId
+      return lumenServerProduction + '/temp-exam/allAnswer/' + userExamId
     },
     getSubCategoriesWithPermissions (examId) {
-      return lumenServer + '/exam-question/show/sub-categories/' + examId
+      return lumenServerProduction + '/exam-question/show/sub-categories/' + examId
     },
     getAnswerOfUserWithCorrect (userExamId) {
       return lumenServer + '/temp-exam/answer/' + userExamId + '/withCorrect'
@@ -145,7 +154,7 @@ const API_ADDRESS = {
       personal: (examId) => lumenServer + '/exam-user/personal/' + examId
     },
     examQuestion (quizId, page = 1) {
-      return lumenServer + '/exam-question/attach/show/' + quizId + '?page=' + page
+      return lumenServerProduction + '/exam-question/attach/show/' + quizId + '?page=' + page
     },
     report: {
       getReport (userExamId) {
@@ -157,9 +166,9 @@ const API_ADDRESS = {
       }
     },
     examBookletUpload (examId) {
-      return lumenServer + '/exam-question/booklet-file/' + examId
+      return lumenServerProduction + '/exam-question/booklet-file/' + examId
     },
-    detachCategory: (examId, categoryId) => lumenServer + '/exam/detach/category/' + examId + '/' + categoryId ,
+    detachCategory: (examId, categoryId) => lumenServer + '/exam/detach/category/' + examId + '/' + categoryId,
     user: {
       draft () { return lumenServer + '/exam/user/draft' },
       reportType: lumenServer + '/option/user?type=question_report_type',
@@ -234,7 +243,7 @@ const API_ADDRESS = {
       if (queryParam.length > 0) {
         queryParam = queryParam.substr(1)
       }
-      return lumenServer + '/question?' + queryParam
+      return lumenServerProduction + '/question?' + queryParam
     },
     status: {
       base: lumenServer + '/question/statuses',
@@ -347,24 +356,6 @@ const API_ADDRESS = {
     review: apiV2Server + '/checkout/review?seller=2',
     getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2',
     orderWithTransaction (orderId) { return apiV2Server + '/orderWithTransaction/' + orderId }
-  },
-  ticket: {
-    create: {
-      base: authServer + '/ticket'
-    },
-    index: {
-      base: authServer + '/ticket'
-    },
-    show: {
-      base: authServer + '/ticket',
-      statusNotice: (ticketId) =>
-        authServer + '/ticket/' + ticketId + '/sendTicketStatusNotice',
-      batchExtend: authServer + '/orderproduct/batchExtend',
-      ticketMessage: authServer + '/ticketMessage',
-      reportMessage: (ticketId) =>
-        authServer + '/ticketMessage/' + ticketId + '/report'
-    },
-    ticketRate: (ticketId) => authServer + '/ticket/' + ticketId + '/rate'
   },
   subscription: {
     landing: lumenServer + '/subscribe/landing',
