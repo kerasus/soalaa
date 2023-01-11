@@ -31,6 +31,13 @@ class Exam extends Model {
       { key: 'booklet_url' },
       { key: 'total_question_number' },
       {
+        key: 'temp',
+        default: {
+          grade: null,
+          major: null
+        }
+      },
+      {
         key: 'is_open',
         default: false
       },
@@ -137,6 +144,7 @@ class Exam extends Model {
         { key: 'enable' },
         { key: 'is_free' },
         { key: 'confirm' },
+        { key: 'temp' },
         { key: 'generate_questions_automatically' },
         { key: 'type_id' },
         { key: 'start_at' },

@@ -223,6 +223,15 @@ const mixinQuiz = {
 
       return this.$axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: userExamId, finish: finishExam, questions: answers })
     },
+    actionOnNoQuestionInExam () {
+      this.$q.notify({
+        type: 'negative',
+        message: 'آزمون سوالی ندارد',
+        position: 'top'
+      })
+      this.$store.commit('Exam/clearExamData', this.userExamId)
+      this.$router.push({ name: 'User.Exam.List' })
+    },
     reloadQuestionFile (questionsFileUrl, viewType, examId) {
       if (!Assistant.getId(examId)) {
         return
@@ -256,6 +265,13 @@ const mixinQuiz = {
                 exam_id: examData.exam.id
               })
               setTimeout(() => { that.refreshFailedLists(examData.exam.user_exam_id) }, 0)
+
+              if (this.getCurrentExamQuestionsInArray().length === 0) {
+                this.actionOnNoQuestionInExam()
+                reject(result)
+                return
+              }
+
               resolve(result)
             } catch (error) {
               console.error(error)
@@ -434,21 +450,22 @@ const mixinQuiz = {
       return new Promise((resolve, reject) => {
         let userExamId
         const examData = new ExamData(this.$axios)
-        if (that.needToLoadQuizData() || retake) {
-          that.saveCurrentExamQuestions([])
-          that.$store.commit('Exam/cleanCurrentQuestion')
-          that.bookletsDialog = true
-          that.$store.commit('loading/overlay', true)
+        const needToLoadQuizData = this.needToLoadQuizData()
+        if (needToLoadQuizData || retake) {
+          this.saveCurrentExamQuestions([])
+          this.$store.commit('Exam/cleanCurrentQuestion')
+          this.bookletsDialog = true
+          this.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId, retake)
           examData.loadQuestionsFromFile()
         } else {
-          userExamId = that.quiz.user_exam_id
+          userExamId = this.quiz.user_exam_id
         }
         examData.getUserExamData(userExamId)
           .run()
           .then((result) => {
             try {
-              if (that.needToLoadQuizData() || retake) {
+              if (needToLoadQuizData || retake) {
                 // save questions in localStorage
                 that.saveCurrentExamQuestions(examData.exam.questions.list)
                 // save exam info in vuex store (remove questions of exam then save in store)
@@ -469,14 +486,25 @@ const mixinQuiz = {
                 user_exam_id: examData.exam.user_exam_id
               })
               setTimeout(() => { that.refreshFailedLists(examData.exam.user_exam_id) }, 0)
+
+              if (this.getCurrentExamQuestionsInArray().length === 0) {
+                this.actionOnNoQuestionInExam()
+                reject(result)
+                return
+              }
+
               resolve(result)
             } catch (error) {
-              console.error(error)
               that.$router.push({ name: 'User.Exam.List' })
               reject(error)
             }
           })
           .catch((error) => {
+            this.$q.notify({
+              type: 'negative',
+              message: error.message,
+              position: 'top'
+            })
             reject(error)
             that.$router.push({ name: 'User.Exam.List' })
           })
@@ -762,21 +790,20 @@ const mixinQuiz = {
         this.loadExamPageByViewType(this.quiz.id, questNumber, viewType)
       }
     },
-    loadExamPageByViewType (examId, questNumber, viewType) {
-      if (!viewType) {
-        viewType = 'onlineQuiz.alaaView'
+    loadExamPageByViewType (examId, questNumber, routeName) {
+      if (!routeName) {
+        routeName = 'onlineQuiz.alaaView'
       }
-      this.$router.push({ name: viewType, params: { quizId: examId, questNumber } })
+      this.$router.push({ name: routeName, params: { quizId: examId, questNumber } })
     },
-    // ToDo: change argument (type, questNumber)
-    changeView (type) {
-      if (type === 'alaa') {
+    changeView (routeName) {
+      if (routeName.search('onlineQuiz.alaaView') !== -1) {
         const questionNumber = this.getQuestionNumberFromId(this.currentQuestion.id)
         this.$router.push({
-          name: 'onlineQuiz.alaaView',
+          name: routeName,
           params: { quizId: this.quiz.id, questNumber: questionNumber }
         })
-      } else if (type === 'konkoor') {
+      } else if (routeName.search('onlineQuiz.konkoorView') !== -1) {
         this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
         setTimeout(() => {
           this.$router.push({ name: 'konkoorView', params: { quizId: this.quiz.id } })

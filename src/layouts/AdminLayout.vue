@@ -1,5 +1,6 @@
 <template>
   <div class="admin-layout">
+    <q-scroll-observer @scroll="onscroll" />
     <Router :include="keepAliveComponents" />
   </div>
 </template>
@@ -7,11 +8,24 @@
 <script>
 import Router from 'src/router/Router'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import { computed } from 'vue'
+
 export default {
   components: { Router },
-  data () {
+  data() {
     return {
-      keepAliveComponents: KeepAliveComponents
+      keepAliveComponents: KeepAliveComponents,
+      scrollInfo: {}
+    }
+  },
+  provide() {
+    return {
+      scrollInfo: computed(() => this.scrollInfo)
+    }
+  },
+  methods: {
+    onscroll(info) {
+      this.scrollInfo = info
     }
   }
 }
