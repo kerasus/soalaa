@@ -1,6 +1,9 @@
 <template>
   <div class="col-md-5 right-side">
-    <div v-if="pageChunks.length === 0">
+    <div v-if="pageChunks.length === 0"
+         :style="{ width: pageSize.w + 'px' }"
+         class="prepare-question-section"
+    >
       <pdf-question-field v-for="(question, questionIndex) in questions"
                           :key="'question-item-'+question.id"
                           v-model:height="question.height"
@@ -64,8 +67,8 @@ export default {
     return {
       pageChunks: [],
       pageSize: {
-        w: 794,
-        h: 1123
+        w: 724,
+        h: 900
       }
     }
   },
@@ -113,5 +116,7 @@ export default {
 </script>
 
 <style scoped>
-
+.prepare-question-section {
+  margin: auto;
+}
 </style>
