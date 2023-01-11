@@ -15,7 +15,7 @@
                 عنوان آزمون
               </q-checkbox>
               <div class="value">
-                gtgytr
+                {{ examInfo.title }}
               </div>
             </div>
           </div>
@@ -25,7 +25,7 @@
                 رشته تحصیلی
               </q-checkbox>
               <div class="value">
-                gtgytr
+                {{ examInfo.majorTitle }}
               </div>
             </div>
           </div>
@@ -35,7 +35,7 @@
                 پایه تحصیلی
               </q-checkbox>
               <div class="value">
-                gtgytr
+                {{ examInfo.gradeTitle }}
               </div>
             </div>
           </div>
@@ -171,7 +171,8 @@
                      name="questions">
           <div class="question-info flex">
             <div class="question-count">
-              تعداد کل سوالات : 50
+              تعداد کل سوالات :
+              {{ examInfo.n_questions }}
             </div>
             <div class="pages">
               تعداد کل صفحات : {{ pageCount }}
@@ -202,6 +203,7 @@
             <p-d-f-container
               v-else-if="doesHaveQuestion"
               id="pdf-container"
+              :exam="examInfo"
               :questions="questions"
             />
             <!--            <vue-pdf-embed-->
@@ -246,6 +248,12 @@ export default {
     pageCount: 0,
     page: 1,
     pdfSrc: '',
+    examInfo: {
+      title: '',
+      gradeTitle: 'دوازدهم',
+      majorTitle: 'ریاضی',
+      n_questions: 0
+    },
     radioOne: false,
     radioTow: false,
     pdfConfig: {
@@ -262,6 +270,10 @@ export default {
     doesHaveQuestion: false,
     questions: []
   }),
+  mounted() {
+    this.requestPdf()
+    this.getExamInfo()
+  },
   methods: {
     handleDocumentRender(data) {
       this.pageCount = this.$refs.pdfRef.pageCount
@@ -269,17 +281,33 @@ export default {
     onChangePage(value) {
       // console.log('value :', value)
     },
+    getExamInfo () {
+      this.loading = true
+      this.$axios.get(API_ADDRESS.exam.user.examInfo(this.$route.params.examId))
+        .then((response) => {
+          // this.pdfSrc = response.data.data.link
+          this.examInfo.title = response.data.data.title
+          this.examInfo.n_questions = response.data.data.n_questions
+          // this.questions = response.data.data
+          // this.doesHaveQuestion = true
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
     requestPdf() {
       this.loading = true
       this.pdfSrc = ''
-      this.$axios.post(API_ADDRESS.exam.user.pdf2(this.$route.params.examId), this.pdfConfig).then((response) => {
+      this.$axios.post(API_ADDRESS.exam.user.questionsWithAnswer(this.$route.params.examId), this.pdfConfig)
+        .then((response) => {
         // this.pdfSrc = response.data.data.link
-        this.questions = response.data.data
-        this.doesHaveQuestion = true
-        this.loading = false
-      }).catch(() => {
-        this.loading = false
-      })
+          this.questions = response.data.data
+          this.doesHaveQuestion = true
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
       /// 63a97fa06305df820e063c41/sub-category/6397239011d2324bc4c97902/questions
       // this.$axios.post(API_ADDRESS.exam.examQuestion('63a97fa06305df820e063c41'), {
       //   sub_categories: ['6397239011d2324bc4c97902']
@@ -298,9 +326,6 @@ export default {
     generatePDF () {
       PrintElements.print(document.getElementById('pdf-container'))
     }
-  },
-  mounted() {
-    this.requestPdf()
   }
 }
 </script>
