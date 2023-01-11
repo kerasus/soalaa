@@ -1,22 +1,45 @@
 <template>
   <div class="col-md-5 right-side">
-    <pdf-question-field v-for="(question, questionIndex) in questions"
-                        :key="'question-item-'+question.id"
-                        v-model:height="question.height"
-                        :source="question"
-                        :index="questionIndex"
-                        @questionLoaded="onQuestionLoaded(question)"
-    />
+    <div v-if="pageChunks.length === 0">
+      <pdf-question-field v-for="(question, questionIndex) in questions"
+                          :key="'question-item-'+question.id"
+                          v-model:height="question.height"
+                          :source="question"
+                          :index="questionIndex"
+                          @questionLoaded="onQuestionLoaded(question)"
+      />
+    </div>
+    <div v-else>
+      <PDFPage v-for="(page, pageIndex) in pageChunks"
+               :key="pageIndex"
+               :title="'تست'"
+               :grade="'تست'"
+               :major="'تست'"
+               :page="pageIndex+1"
+      >
+        <template v-slot:body>
+          <div v-for="(pageQuestions, chunkIndex) in page"
+               :key="'chunk-index-'+chunkIndex"
+          >
+            <pdf-question-field v-if="pageQuestions"
+                                :source="pageQuestions"
+                                :index="questionIndex"
+            />
+          </div>
+        </template>
+      </PDFPage>
+    </div>
   </div>
 </template>
 
 <script>
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
 import PdfQuestionField from 'components/Utils/PDF/PdfQuestionField'
+import PDFPage from './PDFPage.vue'
 // import QuestionField from 'components/Question/QuestionPage/QuestionField'
 export default {
   name: 'PDFContainer',
-  components: { PdfQuestionField },
+  components: { PdfQuestionField, PDFPage },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion],
   props: {
     questions: {
@@ -69,7 +92,7 @@ export default {
         sumHeight = 0
         pageQuestions = []
       }
-
+      this.pageChunks = pages
       console.log('pages', pages)
     },
     onQuestionLoaded (question) {
