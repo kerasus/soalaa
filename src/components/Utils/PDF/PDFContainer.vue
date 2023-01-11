@@ -4,16 +4,16 @@
          :style="{ width: pageSize.w + 'px' }"
          class="prepare-question-section"
     >
-      <pdf-question-field v-for="(question, questionIndex) in questions"
+      <pdf-question-field v-for="question in questions"
                           :key="'question-item-'+question.id"
                           v-model:height="question.height"
-                          :source="question"
-                          :index="questionIndex"
+                          :question="question"
+                          :order="question.order"
                           @questionLoaded="onQuestionLoaded(question)"
       />
     </div>
     <div v-else>
-      <pdf-page v-for="(page, pageIndex) in pageChunks"
+      <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
                 :key="pageIndex"
                 :title="exam.title"
                 :grade="exam.gradeTitle"
@@ -21,12 +21,12 @@
                 :page="(pageIndex+1).toString()"
       >
         <template v-slot:body>
-          <div v-for="(pageQuestions, chunkIndex) in page"
-               :key="'chunk-index-'+chunkIndex"
+          <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
+               :key="'chunk-index-'+pageQuestionIndex"
           >
-            <pdf-question-field v-if="pageQuestions"
-                                :source="pageQuestions"
-                                :index="chunkIndex"
+            <pdf-question-field v-if="pageQuestion"
+                                :question="pageQuestion"
+                                :order="pageQuestion.order"
             />
           </div>
         </template>
@@ -63,6 +63,7 @@ export default {
       }
     }
   },
+  emits: ['loaded'],
   data () {
     return {
       pageChunks: [],
@@ -106,7 +107,9 @@ export default {
         pageQuestions = []
       }
       this.pageChunks = pages
-      console.log('pages', pages)
+      this.$nextTick(() => {
+        this.$emit('loaded', this.pageChunks)
+      })
     },
     onQuestionLoaded (question) {
       question.loaded = true

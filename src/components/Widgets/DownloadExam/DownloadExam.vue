@@ -167,45 +167,48 @@
           <q-tab name="keyAnswer"
                  label="پاسخنامه کلیدی" />
         </q-tabs>
-        <q-tab-panel class="tab-panel-style"
-                     name="questions">
-          <div class="question-info flex">
-            <div class="question-count">
-              تعداد کل سوالات :
-              {{ examInfo.n_questions }}
-            </div>
-            <div class="pages">
-              تعداد کل صفحات : {{ pageCount }}
-            </div>
-            <div class="action-box full-width flex justify-between items-end">
-              <div class="description">
-                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،
+        <q-tab-panels v-model="tab"
+                      animated>
+          <q-tab-panel class="tab-panel-style"
+                       name="questions">
+            <div class="question-info flex">
+              <div class="question-count">
+                تعداد کل سوالات :
+                {{ examInfo.n_questions }}
               </div>
-              <div class="action-btn">
-                <q-btn unelevated
-                       class="btn cancel"
-                       label="انصراف"></q-btn>
-                <q-btn unelevated
-                       color="primary"
-                       class="btn"
-                       label="دانلود PDF"
-                       @click="generatePDF"
-                ></q-btn>
+              <div class="pages">
+                تعداد کل صفحات : {{ questionPagesCount }}
+              </div>
+              <div class="action-box full-width flex justify-between items-end">
+                <div class="description">
+                  لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،
+                </div>
+                <div class="action-btn">
+                  <q-btn unelevated
+                         class="btn cancel"
+                         label="انصراف"></q-btn>
+                  <q-btn unelevated
+                         color="primary"
+                         class="btn"
+                         label="دانلود PDF"
+                         @click="generatePDF"
+                  ></q-btn>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="pdf-container">
-            <div v-if="loading"
-                 class="loading">
-              <q-skeleton height="900px"
-                          class="pdf-skeleton" />
-            </div>
-            <p-d-f-container
-              v-else-if="doesHaveQuestion"
-              id="pdf-container"
-              :exam="examInfo"
-              :questions="questions"
-            />
+            <div class="pdf-container">
+              <div v-if="loading"
+                   class="loading">
+                <q-skeleton height="900px"
+                            class="pdf-skeleton" />
+              </div>
+              <p-d-f-container
+                v-else-if="doesHaveQuestion"
+                id="pdf-container"
+                :exam="examInfo"
+                :questions="questions"
+                @loaded="onQuestionsLoaded"
+              />
             <!--            <vue-pdf-embed-->
             <!--              v-else-->
             <!--              ref="pdfRef"-->
@@ -214,8 +217,58 @@
             <!--              :source="pdfSrc"-->
             <!--              @rendered="handleDocumentRender"-->
             <!--            />-->
-          </div>
-        </q-tab-panel>
+            </div>
+          </q-tab-panel>
+          <q-tab-panel class="tab-panel-style"
+                       name="descriptiveAnswer">
+            <div class="question-info flex">
+              <div class="question-count">
+                تعداد کل سوالات :
+                {{ examInfo.n_questions }}
+              </div>
+              <div class="pages">
+                تعداد کل صفحات : {{ pageCount }}
+              </div>
+              <div class="action-box full-width flex justify-between items-end">
+                <div class="description">
+                  لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،
+                </div>
+                <div class="action-btn">
+                  <q-btn unelevated
+                         class="btn cancel"
+                         label="انصراف"></q-btn>
+                  <q-btn unelevated
+                         color="primary"
+                         class="btn"
+                         label="دانلود PDF"
+                         @click="generatePDF"
+                  ></q-btn>
+                </div>
+              </div>
+            </div>
+            <div class="pdf-container">
+              <div v-if="loading"
+                   class="loading">
+                <q-skeleton height="900px"
+                            class="pdf-skeleton" />
+              </div>
+              <p-d-f-container
+                v-else-if="doesHaveQuestion"
+                id="pdf-container"
+                :exam="examInfo"
+                :questions="questions"
+              />
+            <!--            <vue-pdf-embed-->
+            <!--              v-else-->
+            <!--              ref="pdfRef"-->
+            <!--              :page="page"-->
+            <!--              class="pdf"-->
+            <!--              :source="pdfSrc"-->
+            <!--              @rendered="handleDocumentRender"-->
+            <!--            />-->
+            </div>
+          </q-tab-panel>
+        </q-tab-panels>
       </q-card>
       <div class="row text-center justify-center pagination-box">
         <q-pagination
@@ -245,6 +298,7 @@ export default {
   },
   data: () => ({
     tab: 'questions',
+    questionPagesCount: 0,
     pageCount: 0,
     page: 1,
     pdfSrc: '',
@@ -275,6 +329,9 @@ export default {
     this.getExamInfo()
   },
   methods: {
+    onQuestionsLoaded (pages) {
+      this.questionPagesCount = pages.length
+    },
     handleDocumentRender(data) {
       this.pageCount = this.$refs.pdfRef.pageCount
     },
