@@ -2,15 +2,24 @@
   <div class="page-wrapper">
     <div class="page-header">
       <div class="title">
-        <span class="subject">: عنوان آزمون</span>
+        <span class="subject">
+          عنوان آزمون
+          :
+        </span>
         {{ title }}
       </div>
       <div class="major">
-        <span class="subject">: رشته تحصیلی</span>
+        <span class="subject">
+          رشته تحصیلی
+          :
+        </span>
         {{ major }}
       </div>
       <div class="grade">
-        <span class="subject">: پایه تحصیلی</span>
+        <span class="subject">
+          پایه تحصیلی
+          :
+        </span>
         {{ grade }}
       </div>
       <div class="pagination">
@@ -85,6 +94,7 @@ export default defineComponent({
       position: absolute;
       top: 55px;
       left: 180px;
+      direction: ltr;
 
       .subject {
         font-weight: 500;
@@ -94,6 +104,7 @@ export default defineComponent({
       position: absolute;
       top: 95px;
       left: 180px;
+      direction: ltr;
 
       .subject {
         font-weight: 500;
@@ -103,6 +114,7 @@ export default defineComponent({
       position: absolute;
       top: 95px;
       left: 445px;
+      direction: ltr;
 
       .subject {
         font-weight: 500;
@@ -118,6 +130,7 @@ export default defineComponent({
       display: flex;
       flex-flow: column;
       align-items: center;
+      justify-content: center;
       .subject {
         font-weight: 500;
         font-size: 10px;
