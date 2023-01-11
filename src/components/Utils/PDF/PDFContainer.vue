@@ -31,6 +31,7 @@
           </div>
         </template>
       </pdf-page>
+      <div class="page-break"></div>
     </div>
   </div>
 </template>
@@ -118,5 +119,13 @@ export default {
 <style scoped>
 .prepare-question-section {
   margin: auto;
+}
+</style>
+<style>
+@media print {
+  .page-break {
+    clear: both;
+    page-break-before: always;
+  }
 }
 </style>

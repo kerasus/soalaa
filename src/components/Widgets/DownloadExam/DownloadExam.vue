@@ -236,7 +236,6 @@ import API_ADDRESS from 'src/api/Addresses'
 import PDFContainer from 'components/Utils/PDF/PDFContainer'
 // import VuePdfEmbed from 'vue-pdf-embed'
 import 'src/Utils/PrintElements/print.css'
-import PrintElements from 'src/Utils/PrintElements/print_elements'
 export default {
   name: 'DownloadExam',
   components: {
@@ -324,12 +323,30 @@ export default {
       this.pdfSrc = 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase1moshavere.pdf'
     },
     generatePDF () {
-      PrintElements.print(document.getElementById('pdf-container'))
+      window.print()
     }
   }
 }
 </script>
-
+<style>
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #pdf-container, #pdf-container * {
+    visibility: visible;
+  }
+  #pdf-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .page-break {
+    clear: both;
+    page-break-before: always;
+  }
+}
+</style>
 <style scoped lang="scss">
 .download-exam {
   :deep(.q-col-gutter-y-sm) {
