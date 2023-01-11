@@ -1,36 +1,12 @@
 <template>
-  <div
-    id="questions"
-    ref="questionsColumn"
-    class="col-md-5 right-side"
-  >
-    <q-virtual-scroll
-      ref="scroller"
-      class="konkoor-view-scroll"
-      :items="questions"
-      :virtual-scroll-item-size="450"
-      :virtual-scroll-slice-size="5"
-      @virtual-scroll="onScroll"
-    >
-      <template v-slot="{ item, index }">
-        <q-item
-          :key="index"
-          class="question-field"
-          dense
-        >
-
-          <q-item-section>
-            <pdf-question-field
-              :source="item"
-              :index="index"
-              :questions-column="$refs.questionsColumn"
-              @inView="isInView"
-            />
-
-          </q-item-section>
-        </q-item>
-      </template>
-    </q-virtual-scroll>
+  <div class="col-md-5 right-side">
+    <pdf-question-field v-for="(question, questionIndex) in questions"
+                        :key="'question-item-'+question.id"
+                        v-model:height="question.height"
+                        :source="question"
+                        :index="questionIndex"
+                        @questionLoaded="onQuestionLoaded(question)"
+    />
   </div>
 </template>
 
@@ -52,10 +28,53 @@ export default {
   },
   data () {
     return {
-      inView: []
+      pageChunks: [],
+      pageSize: {
+        w: 794,
+        h: 1123
+      }
+    }
+  },
+  computed: {
+    allQuestionLoaded () {
+      const notLoaded = this.questions.find(question => !question.loaded)
+      return !notLoaded
+    }
+  },
+  watch: {
+    allQuestionLoaded () {
+      console.log('allQuestionLoaded')
+      this.createPageChunks(this.pageSize.h)
     }
   },
   methods: {
+    createPageChunks (pageHeight) {
+      let sumHeight = 0
+      let pageQuestions = []
+      const pages = []
+      this.questions.forEach((question, questionIndex) => {
+        if (pageHeight > (sumHeight + question.height)) {
+          sumHeight += question.height
+          pageQuestions.push(question)
+        } else {
+          pages.push(pageQuestions)
+          sumHeight = 0
+          pageQuestions = []
+          sumHeight += question.height
+          pageQuestions.push(question)
+        }
+      })
+      if (pageQuestions.length > 0) {
+        pages.push(pageQuestions)
+        sumHeight = 0
+        pageQuestions = []
+      }
+
+      console.log('pages', pages)
+    },
+    onQuestionLoaded (question) {
+      question.loaded = true
+    },
     onScroll (details) {
       if (!this.questions[details.index]) {
         return
@@ -72,22 +91,6 @@ export default {
     //   this.scrollState = 'scrolling'
     // }
     // this.timePassedSinceLastScroll = 0
-    },
-    isInView (payload) {
-      if (payload.isInView) {
-        for (let i = 0; i < this.inView.length; i++) {
-          if (this.inView[i] === payload.number) {
-            return
-          }
-        }
-        this.inView.push(payload.number)
-      } else {
-        for (let i = 0; i < this.inView.length; i++) {
-          if (this.inView[i] === payload.number) {
-            this.inView.splice(i, 1)
-          }
-        }
-      }
     }
   }
 }

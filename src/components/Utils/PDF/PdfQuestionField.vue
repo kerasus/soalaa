@@ -1,7 +1,6 @@
 <template>
-  <div
-    v-intersection="inView"
-    class="question-field"
+  <div ref="questionField"
+       class="question-field"
   >
     <!--    <q-card-->
     <!--      v-if="considerActiveCategory && !source.in_active_category"-->
@@ -19,26 +18,22 @@
     <!--        در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد-->
     <!--      </q-card-section>-->
     <!--    </q-card>-->
-    <div
-      v-if="true"
-      class="question-box"
-      :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
+    <div class="question-box"
+         :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
     >
       <div class="question-head">
-        <p
-          :id="'question' + source.id"
-          class="question-body"
-          :class="{ ltr: isRtl }"
+        <p :id="'question' + source.id"
+           class="question-body"
+           :class="{ ltr: isRtl }"
         >
-          <vue-katex
-            class="vue-katex"
-            :input="'<span class='+'number'+'>'+ (index + 1) +') </span>' + source.statement"
+          <vue-katex class="vue-katex"
+                     :input="'<span class='+'number'+'>'+ (index + 1) +') </span>' + source.statement"
+                     @loaded="onStatementLoaded"
           />
         </p>
         <div class="PDF-LINE-BREAK" />
       </div>
       <q-list class="choices-box row">
-        <!--        index-->
         <q-item
           v-for="(choice) in source.choices"
           :key="choice.id"
@@ -62,6 +57,7 @@
                 class="vue-katex"
                 :input="'<span class='+'number'+'>'+ choice.order +') </span>' + choice.title"
                 :ltr="isLtrQuestion"
+                @loaded="onChoiceLoaded(choice)"
               />
             </div>
           </q-item-section>
@@ -91,11 +87,10 @@ export default {
       type: Boolean,
       default: true
     },
-    // questionsColumn: { // here is: {uid: 'unique_1', text: 'abc'}
-    //   default () {
-    //     return null
-    //   }
-    // },
+    height: {
+      type: Number,
+      default: 0
+    },
     source: { // here is: {uid: 'unique_1', text: 'abc'}
       default () {
         return {}
@@ -104,6 +99,7 @@ export default {
   },
   data () {
     return {
+      statementLoaded: false,
       isRtl: false,
       observer: null,
       choiceNumber: {
@@ -114,9 +110,14 @@ export default {
       }
     }
   },
-  created () {
-  },
   computed: {
+    allChoiceLoaded () {
+      const notLoadedChoice = this.source.choices.find(choice => !choice.loaded)
+      return !notLoadedChoice
+    },
+    questionLoaded () {
+      return this.allChoiceLoaded && this.statementLoaded
+    },
     isLtrQuestion () {
       const string = this.source.statement
       if (!string) {
@@ -153,6 +154,12 @@ export default {
       return 'col-md-3'
     }
   },
+  watch: {
+    questionLoaded () {
+      this.$emit('questionLoaded')
+      this.$emit('update:height', this.$refs.questionField.clientHeight)
+    }
+  },
   mounted () {
     this.observer = new IntersectionObserver(this.intersectionObserver, { threshold: [0.7, 0.75, 0.8] })
     this.observer.observe(this.$el)
@@ -161,6 +168,12 @@ export default {
     this.observer.disconnect()
   },
   methods: {
+    onStatementLoaded () {
+      this.statementLoaded = true
+    },
+    onChoiceLoaded (choice) {
+      choice.loaded = true
+    },
     getChoiceStatus () {
       const userQuestionData = this.getUserQuestionData(this.quiz.user_exam_id, this.source.id)
       if (!userQuestionData) {
