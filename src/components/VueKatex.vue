@@ -32,6 +32,7 @@ export default {
       default: null
     }
   },
+  emits: ['loaded'],
   data() {
     return {
       rtl: true
@@ -112,6 +113,7 @@ export default {
       document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
         item.setAttribute('dir', 'ltr')
       })
+      this.$emit('loaded')
     }, 1000)
   },
   created() {

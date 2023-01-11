@@ -2,7 +2,7 @@
   <page-builder
     :sections="sections"
     :options="options"
-  ></page-builder>
+  />
 </template>
 
 <script>

@@ -241,12 +241,6 @@ export default {
     PDFContainer
     // VuePdfEmbed
   },
-  props: {
-    examId: {
-      type: String,
-      required: true
-    }
-  },
   data: () => ({
     tab: 'questions',
     pageCount: 0,
