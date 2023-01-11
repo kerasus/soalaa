@@ -18,7 +18,9 @@
         {{ page }}
       </div>
     </div>
-    <div class="page-body">
+    <div class="page-body"
+         :style="{paddingRight: paddingRight + 'px', paddingLeft: paddingLeft + 'px', paddingTop:paddingTop + 'px', paddingBottom:paddingBottom + 'px'}"
+    >
       <slot name="body"></slot>
     </div>
   </div>
@@ -44,6 +46,22 @@ export default defineComponent({
     page: {
       type: String,
       default: ''
+    },
+    paddingRight: {
+      type: Number,
+      default: 35
+    },
+    paddingLeft: {
+      type: Number,
+      default: 35
+    },
+    paddingTop: {
+      type: Number,
+      default: 0
+    },
+    paddingBottom: {
+      type: Number,
+      default: 0
     }
   }
 })
@@ -53,9 +71,9 @@ export default defineComponent({
 .page-wrapper {
   width: 794px;
   height: 1123px;
-  background: url(../../../../public/img/PdfBackground.png);
-  background-repeat: no-repeat;
+  background: url(../../../../public/img/PdfBackground.png) no-repeat;
   background-size: cover;
+  margin: auto;
 
   .page-header {
     position: relative;
