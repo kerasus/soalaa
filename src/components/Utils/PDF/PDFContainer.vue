@@ -60,6 +60,8 @@ export default {
           pages.push(pageQuestions)
           sumHeight = 0
           pageQuestions = []
+          sumHeight += question.height
+          pageQuestions.push(question)
         }
       })
       if (pageQuestions.length > 0) {
