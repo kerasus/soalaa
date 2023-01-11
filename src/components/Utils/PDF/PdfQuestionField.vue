@@ -328,7 +328,7 @@ export default {
     //  display: inline-flex;
     //}
     :nth-child(2) {
-      display: inline-block;
+      display: contents;
     }
     &> p {
       direction: inherit;
