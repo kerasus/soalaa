@@ -189,7 +189,8 @@ const API_ADDRESS = {
         bulkDetachQuestions: (examId) => lumenServer + '/exam-question/user/detach/bulk/' + examId,
         replaceQuestions: (examId) => lumenServer + '/exam-question/user/replace-questions/' + examId
       },
-      pdf: (examId) => lumenServer + `/exam/user/pdf/${examId}`
+      pdf: (examId) => lumenServer + `/exam/user/pdf/${examId}`,
+      pdf2: (examId) => lumenServer + `/exam-question/user/attach/show/${examId}`
     }
   },
   question: {
