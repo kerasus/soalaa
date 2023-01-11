@@ -278,23 +278,25 @@ export default {
     requestPdf() {
       this.loading = true
       this.pdfSrc = ''
-      // this.$axios.post(API_ADDRESS.exam.user.pdf(this.$route.params.examId), this.pdfConfig).then((response) => {
-      //   this.pdfSrc = response.data.data.link
-      //   this.loading = false
-      // }).catch(() => {
-      //   this.loading = false
-      // })
-      /// 63a97fa06305df820e063c41/sub-category/6397239011d2324bc4c97902/questions
-      this.$axios.post(API_ADDRESS.exam.examQuestion('63a97fa06305df820e063c41'), {
-        sub_categories: ['6397239011d2324bc4c97902']
-      }).then((response) => {
+      this.$axios.post(API_ADDRESS.exam.user.pdf2(this.$route.params.examId), this.pdfConfig).then((response) => {
+        // this.pdfSrc = response.data.data.link
         this.questions = response.data.data
         this.doesHaveQuestion = true
-        // console.log('response', response)
         this.loading = false
       }).catch(() => {
         this.loading = false
       })
+      /// 63a97fa06305df820e063c41/sub-category/6397239011d2324bc4c97902/questions
+      // this.$axios.post(API_ADDRESS.exam.examQuestion('63a97fa06305df820e063c41'), {
+      //   sub_categories: ['6397239011d2324bc4c97902']
+      // }).then((response) => {
+      //   this.questions = response.data.data
+      //   this.doesHaveQuestion = true
+      //   // console.log('response', response)
+      //   this.loading = false
+      // }).catch(() => {
+      //   this.loading = false
+      // })
     },
     replacePdf() {
       this.pdfSrc = 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase1moshavere.pdf'
@@ -302,6 +304,9 @@ export default {
     generatePDF () {
       PrintElements.print(document.getElementById('pdf-container'))
     }
+  },
+  mounted() {
+    this.requestPdf()
   }
 }
 </script>

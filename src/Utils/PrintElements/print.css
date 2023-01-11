@@ -1,4 +1,4 @@
-@media print {
+@media print and (color) {
     .pe-no-print {
         display: none !important;
     }
@@ -12,6 +12,42 @@
     }
 
    .download-exam .pdf-container {
-      margin-left: 100px;
+      margin-left: 0px;
+    }
+
+    #pdf-container{
+      direction: ltr;
+      margin-right: -500px;
+    }
+
+    .choice {
+      direction: rtl;
+      text-align: right;
+    }
+
+    body {
+      background-image: url(../../../public/img/PdfBackground.png) !important;
+      background-repeat:no-repeat !important;
+      background-position: right top !important;
+      background-attachment:fixed !important;
+      width: 100% !important;
+      height: 100% !important;
+      margin: 0;
+    }
+
+
+    @page {
+      margin: 0;
+      background-image: url(../../../public/img/PdfBackground.png) !important;
+      background-repeat:no-repeat !important;
+      background-position: right top !important;
+      background-attachment:fixed !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    * {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
     }
 }
