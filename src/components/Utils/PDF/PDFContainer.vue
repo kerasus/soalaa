@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-5 right-side">
     <div v-if="pageChunks.length === 0"
-         :style="{ width: pageSize.w + 'px', paddingRight:parseInt(pdfConfig.leftMargin)+'px', paddingLeft: parseInt(pdfConfig.rightMargin)+'px' }"
+         :style="{ width: pageSize.w + 'px', paddingRight:parseInt(pdfConfig.rightMargin)+'px', paddingLeft: parseInt(pdfConfig.leftMargin)+'px' }"
          class="prepare-question-section"
     >
       <pdf-question-field v-for="question in questions"
@@ -26,8 +26,8 @@
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
                   :page="pdfConfig.paginateExists ? (pageIndex+pdfConfig.paginateStart).toString(): ''"
-                  :paddingRight="parseInt(pdfConfig.leftMargin)+35"
-                  :paddingLeft="parseInt(pdfConfig.rightMargin)+35"
+                  :paddingRight="parseInt(pdfConfig.rightMargin)+35"
+                  :paddingLeft="parseInt(pdfConfig.leftMargin)+35"
         >
           <template v-slot:body>
             <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
