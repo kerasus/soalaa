@@ -129,25 +129,6 @@ export default {
     }
   },
   methods: {
-    getQuestionsBasedOnCurrentMode () {
-      const val = this.questions.map(question => {
-        if (this.mode === 'onlyDescriptiveAnswers') {
-          return {
-            ...question,
-            statement: null,
-            choices: null,
-            answer: question.choices.findIndex(choice => choice.answer) + 1
-          }
-        } else {
-          return {
-            ...question,
-            descriptive_answer: null
-          }
-        }
-      })
-      console.log('val', val)
-      return val
-    },
     createPageChunks (pageHeight) {
       let sumHeight = 0
       let pageQuestions = []
@@ -170,7 +151,6 @@ export default {
         pageQuestions = []
       }
       this.pageChunks = pages
-      console.log('this.pageChunks', this.pageChunks)
       this.$nextTick(() => {
         this.$emit('loaded', this.pageChunks)
       })

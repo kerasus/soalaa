@@ -143,10 +143,7 @@ export default {
       return this.question.choices.filter(choice => choice.answer)
     },
     getQuestionAnswerIndex () {
-      if (this.question.choices) {
-        return this.question.choices.findIndex(choice => choice.answer) + 1
-      }
-      return this.question.answer
+      return this.question.choices.findIndex(choice => choice.answer) + 1
     },
     allChoiceLoaded () {
       const notLoadedChoice = this.question.choices.find(choice => !choice.loaded)
