@@ -288,6 +288,7 @@
 import API_ADDRESS from 'src/api/Addresses'
 import PDFContainer from 'components/Utils/PDF/PDFContainer'
 // import VuePdfEmbed from 'vue-pdf-embed'
+import html2pdf from 'html2pdf.js'
 import 'src/Utils/PrintElements/print.css'
 export default {
   name: 'DownloadExam',
@@ -380,13 +381,18 @@ export default {
       this.pdfSrc = 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase1moshavere.pdf'
     },
     generatePDF () {
-      window.print()
+      const element = document.getElementById('pdf-container')
+      // Choose the element and save the PDF for your user.
+      html2pdf().from(element).save()
     }
   }
 }
 </script>
 <style>
 @media print {
+  /* * {
+    visibility: hidden;
+  } */
   body * {
     visibility: hidden;
   }
@@ -394,7 +400,6 @@ export default {
     visibility: visible;
   }
   #pdf-container {
-    position: absolute;
     left: 0;
     top: 0;
   }
