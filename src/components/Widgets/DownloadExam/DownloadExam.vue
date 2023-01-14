@@ -159,6 +159,7 @@
           class="tabs-box"
           active-color="secondary"
           align="left"
+          @update:model-value="requestPdf"
         >
           <q-tab name="questions"
                  label="سوالات" />
@@ -168,8 +169,8 @@
                  label="پاسخنامه کلیدی" />
         </q-tabs>
         <q-tab-panels v-model="tab"
-                      keep-alive
-                      animated>
+                      animated
+        >
           <q-tab-panel class="tab-panel-style"
                        name="questions">
             <div class="question-info flex">
