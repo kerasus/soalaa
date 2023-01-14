@@ -183,7 +183,7 @@
               </div>
               <div class="action-box full-width flex justify-between items-end">
                 <div class="description">
-                  لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،
+                  توضیحات: ندارد.
                 </div>
                 <div class="action-btn">
                   <q-btn unelevated
@@ -229,7 +229,7 @@
                 {{ examInfo.n_questions }}
               </div>
               <div class="pages">
-                تعداد کل صفحات : {{ pageCount }}
+                تعداد کل صفحات : {{ questionPagesCount }}
               </div>
               <div class="action-box full-width flex justify-between items-end">
                 <div class="description">
@@ -280,11 +280,11 @@
                 {{ examInfo.n_questions }}
               </div>
               <div class="pages">
-                تعداد کل صفحات : {{ pageCount }}
+                تعداد کل صفحات : {{ questionPagesCount }}
               </div>
               <div class="action-box full-width flex justify-between items-end">
                 <div class="description">
-                  لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،
+                  توضیحات : ندارد
                 </div>
                 <div class="action-btn">
                   <q-btn unelevated
@@ -310,6 +310,7 @@
                                          :info="{
                                            type: 'pasokh-nameh'
                                          }"
+                                         @loaded="onQuestionsLoaded"
                   />
                 </template>
               </pdf-page>
@@ -382,6 +383,10 @@ export default {
   },
   methods: {
     onQuestionsLoaded (pages) {
+      if (!pages) {
+        this.questionPagesCount = 0
+        return
+      }
       this.questionPagesCount = pages.length
     },
     handleDocumentRender(data) {
@@ -396,7 +401,7 @@ export default {
         .then((response) => {
           this.examInfo.title = response.data.data.title
           this.examInfo.gradeTitle = response.data.data.temp.grade.title
-          this.examInfo.majorTitle = response.data.data.temp.major.title
+          this.examInfo.majorTitle = response.data.data.temp.major?.title
           this.examInfo.n_questions = response.data.data.n_questions
           this.loading = false
         })
@@ -685,6 +690,7 @@ export default {
       }
 
       .action-box{
+        margin-bottom: 25px;
         .description{
           font-weight: 400;
           font-size: 14px;
