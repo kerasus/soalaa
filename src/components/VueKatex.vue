@@ -132,6 +132,9 @@ export default {
       this.convertImagesToBase64()
     },
     convertImagesToBase64 () {
+      if (!this.$refs.HtmlKatex) {
+        return
+      }
       const images = this.$refs.HtmlKatex.getElementsByTagName('img')
       images.forEach(image => {
         this.toDataURL(image.src, function(dataUrl) {
@@ -140,6 +143,9 @@ export default {
       })
     },
     convertSvgToBase64 () {
+      if (!this.$refs.HtmlKatex) {
+        return
+      }
       const svgs = this.$refs.HtmlKatex.getElementsByTagName('svg')
       svgs.forEach(svg => {
         // Convert the SVG node to HTML.

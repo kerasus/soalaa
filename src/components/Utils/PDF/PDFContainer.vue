@@ -130,10 +130,16 @@ export default {
   },
   mounted() {
     if (this.allQuestionLoaded) {
-      this.createPageChunks(this.pageSize.h)
+      this.calcQuestionsHeight()
     }
   },
   methods: {
+    calcQuestionsHeight () {
+      this.pageChunks = []
+      this.questions.forEach(question => {
+        question.loaded = false
+      })
+    },
     createPageChunks (pageHeight) {
       let sumHeight = 0
       let pageQuestions = []
