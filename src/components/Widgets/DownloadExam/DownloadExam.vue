@@ -59,7 +59,7 @@
             <q-input v-model="pdfConfig.rightMargin"
                      filled
                      class="side-input"
-                     prefix=" mm | "
+                     prefix=" px | "
             >
               <template v-slot:before>
                 راست
@@ -68,7 +68,7 @@
             <q-input v-model="pdfConfig.leftMargin"
                      filled
                      class="side-input"
-                     prefix=" mm | "
+                     prefix=" px | "
             >
               <template v-slot:before>
                 چـــــپ
@@ -101,7 +101,7 @@
           <q-input v-model="pdfConfig.spaceBetweenQuestion"
                    type="number"
                    filled
-                   prefix=" mm | "
+                   prefix=" px | "
           />
 
         </div>
@@ -209,6 +209,7 @@
                 v-else-if="doesHaveQuestion"
                 :exam="examInfo"
                 :questions="questions"
+                :pdfConfig="pdfConfig"
                 @loaded="onQuestionsLoaded"
               />
             <!--            <vue-pdf-embed-->
@@ -259,6 +260,7 @@
                 v-else-if="doesHaveQuestion"
                 :exam="examInfo"
                 :questions="questions"
+                :pdfConfig="pdfConfig"
                 :mode="'onlyDescriptiveAnswers'"
                 @loaded="onQuestionsLoaded"
               />
