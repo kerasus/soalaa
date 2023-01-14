@@ -368,7 +368,7 @@ export default {
       examTitle: false,
       major: false,
       grade: false,
-      paginateExists: false,
+      paginateExists: true,
       paginateStart: 1,
       spaceBetweenQuestion: 1,
       rightMargin: 1,
