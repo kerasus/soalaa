@@ -1,10 +1,12 @@
 <template>
-  <div
-    class="html-katex"
-    style="overflow: hidden"
-    :dir="!isLtrString ? 'rtl' : 'ltr'"
-    v-html="computedKatex"
+  <div ref="HtmlKatex"
+       class="html-katex"
+       style="overflow: hidden"
+       :dir="!isLtrString ? 'rtl' : 'ltr'"
+       v-html="computedKatex"
   />
+<!--  <canvas v-show="false"-->
+<!--          ref="convertor" />-->
 </template>
 
 <script>
@@ -30,6 +32,10 @@ export default {
     ltr: {
       type: Boolean,
       default: null
+    },
+    base64: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['loaded'],
@@ -61,6 +67,20 @@ export default {
       string = this.renderKatexToHTML(string)
       return string
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
+        item.setAttribute('dir', 'ltr')
+      })
+      this.$emit('loaded')
+      if (this.base64) {
+        this.convertPhotosToBase64()
+      }
+    }, 1000)
+  },
+  created() {
+    // this.rtl = !this.isLtrString(this.input)
   },
   methods: {
     removeFirstAndLastBracket(input) {
@@ -106,18 +126,51 @@ export default {
         return katex.renderToString(finalMatch, katexConfig)
       })
       return string
-    }
-  },
-  mounted() {
-    setTimeout(() => {
-      document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
-        item.setAttribute('dir', 'ltr')
+    },
+    convertPhotosToBase64 () {
+      this.convertSvgToBase64()
+      this.convertImagesToBase64()
+    },
+    convertImagesToBase64 () {
+      const images = this.$refs.HtmlKatex.getElementsByTagName('img')
+      images.forEach(image => {
+        this.toDataURL(image.src, function(dataUrl) {
+          image.src = dataUrl
+        })
       })
-      this.$emit('loaded')
-    }, 1000)
-  },
-  created() {
-    // this.rtl = !this.isLtrString(this.input)
+    },
+    convertSvgToBase64 () {
+      const svgs = this.$refs.HtmlKatex.getElementsByTagName('svg')
+      svgs.forEach(svg => {
+        const s = new XMLSerializer().serializeToString(svg)
+        const img = new Image()
+        img.src = 'data:image/svg+xml;base64,' + window.btoa(s)
+        img.style.position = 'absolute'
+        img.style.display = 'block'
+        img.style.width = '100%'
+        img.style.height = 'inherit'
+        svg.parentNode.insertBefore(img, svg.nextSibling)
+        // svg.remove()
+      })
+    },
+    toDataURL(src, callback, outputFormat) {
+      const img = new Image()
+      img.crossOrigin = 'Anonymous'
+      img.onload = function() {
+        const canvas = document.createElement('CANVAS')
+        const ctx = canvas.getContext('2d')
+        canvas.height = this.naturalHeight
+        canvas.width = this.naturalWidth
+        ctx.drawImage(this, 0, 0)
+        const dataURL = canvas.toDataURL(outputFormat)
+        callback(dataURL)
+      }
+      img.src = src + '?test=123'
+      if (img.complete || img.complete === undefined) {
+        img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='
+        img.src = src
+      }
+    }
   }
 }
 </script>
