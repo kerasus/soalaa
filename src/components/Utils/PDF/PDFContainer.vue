@@ -9,6 +9,9 @@
                           v-model:height="question.height"
                           :question="question"
                           :order="question.order"
+                          :display-choices="mode === 'questionsNoAnswer'"
+                          :display-statement="mode === 'questionsNoAnswer'"
+                          :display-descriptive-answer="mode === 'onlyDescriptiveAnswers'"
                           @questionLoaded="onQuestionLoaded(question)"
       />
     </div>
@@ -30,11 +33,9 @@
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
-                                  :options="{
-                                    displayStatement: true,
-                                    displayChoices: true,
-                                    displayDescriptiveAnswer: false
-                                  }"
+                                  display-choices
+                                  display-statement
+                                  :display-descriptive-answer="false"
               />
             </div>
           </template>
@@ -58,11 +59,9 @@
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
-                                  :options="{
-                                    displayStatement: false,
-                                    displayChoices: false,
-                                    displayDescriptiveAnswer: true
-                                  }"
+                                  :display-choices="false"
+                                  :display-statement="false"
+                                  display-descriptive-answer
               />
             </div>
           </template>
@@ -126,7 +125,7 @@ export default {
   },
   watch: {
     allQuestionLoaded () {
-      this.createPageChunks(this.pageSize.h)
+      this.createPageChunks(this.pageSize.h - 20)
     }
   },
   methods: {
