@@ -33,7 +33,7 @@
                                   :options="{
                                     displayStatement: true,
                                     displayChoices: true,
-                                    displayDescriptiveAnswer: true
+                                    displayDescriptiveAnswer: false
                                   }"
               />
             </div>
