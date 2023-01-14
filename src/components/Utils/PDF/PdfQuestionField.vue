@@ -61,7 +61,7 @@
           :class="{ ltr: isRtl }"
         >
           <vue-katex class="vue-katex"
-                     :input="getQuestionCompleteAnswerInput(order, question.statement)"
+                     :input="getQuestionCompleteAnswerInput(order, question.descriptive_answer)"
                      @loaded="onDescriptiveAnswerLoaded"
           />
         </p>
@@ -136,7 +136,7 @@ export default {
   computed: {
     getQuestionCompleteAnswerInput () {
       return (order, input) => {
-        return '<span class=' + 'number-descriptive' + '>' + order + ')' + ' (گزینه ' + this.getQuestionAnswerIndex + ')' + '_</span>' + input
+        return '<span class=' + 'number-descriptive' + '>' + order + ')' + ' (گزینه ' + this.getQuestionAnswerIndex + ')' + ' </span><br>' + input
       }
     },
     getQuestionAnswer () {

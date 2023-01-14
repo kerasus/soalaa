@@ -125,7 +125,7 @@ export default {
   },
   watch: {
     allQuestionLoaded () {
-      this.createPageChunks(this.pageSize.h)
+      this.createPageChunks(this.pageSize.h - 20)
     }
   },
   methods: {
