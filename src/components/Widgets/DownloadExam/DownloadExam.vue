@@ -168,8 +168,9 @@
                  label="پاسخنامه کلیدی" />
         </q-tabs>
         <q-tab-panels v-model="tab"
-                      keep-alive
-                      animated>
+                      animated
+                      @update:model-value="requestPdf"
+        >
           <q-tab-panel class="tab-panel-style"
                        name="questions">
             <div class="question-info flex">
