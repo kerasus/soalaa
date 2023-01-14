@@ -68,6 +68,7 @@ export default {
     mixinQuiz,
     mixinUserActionOnQuestion
   ],
+  emits: ['loaded'],
   props: {
     questions: {
       default: null
@@ -113,6 +114,9 @@ export default {
     }
   },
   methods: {
+    onBubbleSheetLoaded () {
+      this.$emit('loaded')
+    },
     setBubbleSheetHeight () {
       const that = this
       setTimeout(() => {
@@ -120,6 +124,7 @@ export default {
           that.$refs.bubbleSheet.style.height = that.sheetsListHeight() - 24 + 'px'
         }
         that.overlay = false
+        that.onBubbleSheetLoaded()
       }, this.delayTime)
     },
     sheetsListHeight () {
