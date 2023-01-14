@@ -401,7 +401,9 @@ export default {
         .then((response) => {
           this.examInfo.title = response.data.data.title
           this.examInfo.gradeTitle = response.data.data.temp.grade.title
-          this.examInfo.majorTitle = response.data.data.temp.major?.title
+          if (response.data.data.temp.major) {
+            this.examInfo.majorTitle = response.data.data.temp.major.title
+          }
           this.examInfo.n_questions = response.data.data.n_questions
           this.loading = false
         })
@@ -514,6 +516,7 @@ export default {
       font-weight: 400;
       font-size: 14px;
       line-height: 22px;
+      min-height: 40px;
     }
 
     .exam-info {
