@@ -352,8 +352,8 @@ export default {
     pdfSrc: '',
     examInfo: {
       title: '',
-      gradeTitle: 'دوازدهم',
-      majorTitle: 'ریاضی',
+      gradeTitle: '',
+      majorTitle: '',
       n_questions: 0
     },
     radioOne: false,
@@ -391,6 +391,8 @@ export default {
       this.$axios.get(API_ADDRESS.exam.user.examInfo(this.$route.params.examId))
         .then((response) => {
           this.examInfo.title = response.data.data.title
+          this.examInfo.gradeTitle = response.data.data.temp.grade.title
+          this.examInfo.majorTitle = response.data.data.temp.major.title
           this.examInfo.n_questions = response.data.data.n_questions
           this.loading = false
         })
