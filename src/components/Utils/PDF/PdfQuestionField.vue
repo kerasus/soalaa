@@ -1,46 +1,41 @@
 <template>
-  <div
-    v-intersection="inView"
-    class="question-field"
+  <div ref="questionField"
+       class="question-field"
   >
     <!--    <q-card-->
-    <!--      v-if="considerActiveCategory && !source.in_active_category"-->
+    <!--      v-if="considerActiveCategory && !question.in_active_category"-->
     <!--      class="alert-sheet shadow-2"-->
-    <!--      :class="currentQuestion.id === source.id ? 'red-sheet' : 'orange-sheet'"-->
+    <!--      :class="currentQuestion.id === question.id ? 'red-sheet' : 'orange-sheet'"-->
     <!--      rounded-->
     <!--      dark-->
     <!--    >-->
     <!--      <q-card-section class="alert-sheet-text">-->
     <!--        (-->
     <!--        سوال شماره-->
-    <!--        {{ getQuestionNumberFromId(source.id) }}-->
+    <!--        {{ getQuestionNumberFromId(question.id) }}-->
     <!--        )-->
     <!--        <br>-->
     <!--        در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد-->
     <!--      </q-card-section>-->
     <!--    </q-card>-->
-    <div
-      v-if="true"
-      class="question-box"
-      :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
+    <div class="question-box"
+         :class="{ 'current-question': this.currentQuestion.id === question.id, ltr: isLtrQuestion}"
     >
       <div class="question-head">
-        <p
-          :id="'question' + source.id"
-          class="question-body"
-          :class="{ ltr: isRtl }"
+        <p :id="'question' + question.id"
+           class="question-body"
+           :class="{ ltr: isRtl }"
         >
-          <vue-katex
-            class="vue-katex"
-            :input="'<span class='+'number'+'>'+ (index + 1) +') </span>' + source.statement"
+          <vue-katex class="vue-katex"
+                     :input="'<span class='+'number'+'>'+ order +') </span>' + question.statement"
+                     @loaded="onStatementLoaded"
           />
         </p>
         <div class="PDF-LINE-BREAK" />
       </div>
       <q-list class="choices-box row">
-        <!--        index-->
         <q-item
-          v-for="(choice) in source.choices"
+          v-for="(choice) in question.choices"
           :key="choice.id"
           class="choices"
           :class="choiceClass"
@@ -48,8 +43,7 @@
           <q-item-section
             ref="choices"
             class="choice"
-            :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
-            @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
+            :class="{ltr: isRtl}"
           >
             <div class="choice-inside">
               <q-icon
@@ -62,6 +56,7 @@
                 class="vue-katex"
                 :input="'<span class='+'number'+'>'+ choice.order +') </span>' + choice.title"
                 :ltr="isLtrQuestion"
+                @loaded="onChoiceLoaded(choice)"
               />
             </div>
           </q-item-section>
@@ -79,24 +74,21 @@ import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
 
 export default {
   name: 'PdfQuestionField',
-  components: {
-    VueKatex
-  },
+  components: { VueKatex },
   mixins: [mixinQuiz, mixinUserActionOnQuestion],
   props: {
-    index: { // index of current source
+    order: {
       type: Number
     },
-    considerActiveCategory: { // index of current source
+    considerActiveCategory: {
       type: Boolean,
       default: true
     },
-    // questionsColumn: { // here is: {uid: 'unique_1', text: 'abc'}
-    //   default () {
-    //     return null
-    //   }
-    // },
-    source: { // here is: {uid: 'unique_1', text: 'abc'}
+    height: {
+      type: Number,
+      default: 0
+    },
+    question: { // here is: {uid: 'unique_1', text: 'abc'}
       default () {
         return {}
       }
@@ -104,6 +96,7 @@ export default {
   },
   data () {
     return {
+      statementLoaded: false,
       isRtl: false,
       observer: null,
       choiceNumber: {
@@ -114,11 +107,16 @@ export default {
       }
     }
   },
-  created () {
-  },
   computed: {
+    allChoiceLoaded () {
+      const notLoadedChoice = this.question.choices.find(choice => !choice.loaded)
+      return !notLoadedChoice
+    },
+    questionLoaded () {
+      return this.allChoiceLoaded && this.statementLoaded
+    },
     isLtrQuestion () {
-      const string = this.source.statement
+      const string = this.question.statement
       if (!string) {
         return false
       }
@@ -126,8 +124,8 @@ export default {
       return !string.match(persianRegex)
     },
     isRtlString () {
-      const source = this.source
-      const string = source.statement
+      const question = this.question
+      const string = question.statement
       if (!string) {
         return false
       }
@@ -138,8 +136,8 @@ export default {
       return this.$store.getters['AppLayout/windowSize']
     },
     choiceClass () {
-      const source = this.source
-      const largestChoice = this.getLargestChoice(source.choices)
+      const question = this.question
+      const largestChoice = this.getLargestChoice(question.choices)
       const largestChoiceWidth = this.windowSize.x / largestChoice
       if (largestChoiceWidth < 24) {
         return 'col-md-12'
@@ -153,55 +151,18 @@ export default {
       return 'col-md-3'
     }
   },
-  mounted () {
-    this.observer = new IntersectionObserver(this.intersectionObserver, { threshold: [0.7, 0.75, 0.8] })
-    this.observer.observe(this.$el)
-  },
-  unmounted () {
-    this.observer.disconnect()
+  watch: {
+    questionLoaded () {
+      this.$emit('questionLoaded')
+      this.$emit('update:height', this.$refs.questionField.clientHeight)
+    }
   },
   methods: {
-    getChoiceStatus () {
-      const userQuestionData = this.getUserQuestionData(this.quiz.user_exam_id, this.source.id)
-      if (!userQuestionData) {
-        return false
-      }
-      return userQuestionData.status
+    onStatementLoaded () {
+      this.statementLoaded = true
     },
-    getChoiceBookmark () {
-      if (
-        !this.userQuizListData ||
-        !this.userQuizListData[this.quiz.user_exam_id] ||
-        !this.userQuizListData[this.quiz.user_exam_id][this.source.id]
-      ) {
-        return false
-      }
-
-      return this.userQuizListData[this.quiz.user_exam_id][this.source.id].bookmarked
-    },
-    getAnsweredChoiceId () {
-      if (
-        !this.userQuizListData ||
-        !this.userQuizListData[this.quiz.user_exam_id] ||
-        !this.userQuizListData[this.quiz.user_exam_id][this.source.id]
-      ) {
-        return false
-      }
-
-      return this.userQuizListData[this.quiz.user_exam_id][this.source.id].answered_choice_id
-    },
-    inView (payload) {
-      this.$emit('inView', {
-        isInView: payload.isIntersecting,
-        number: this.getQuestionNumberFromId(this.source.id)
-      })
-    },
-    clickOnAnswer (payload) {
-      this.answerClicked(payload)
-    },
-    intersectionObserver (entries) {
-      // eslint-disable-next-line vue/no-mutating-props
-      this.source.isInView = entries[0].intersectionRatio >= 0.75
+    onChoiceLoaded (choice) {
+      choice.loaded = true
     },
     removeErab (string) {
       if (!string || string.length === 0) {
@@ -220,9 +181,9 @@ export default {
     },
     getLargestChoice (choices) {
       let largestChoice = 0
-      choices.forEach((source) => {
-        if (source.title.length > largestChoice) {
-          largestChoice = this.removeErab(source.title).length
+      choices.forEach((question) => {
+        if (question.title.length > largestChoice) {
+          largestChoice = this.removeErab(question.title).length
         }
       })
       return largestChoice
@@ -315,7 +276,7 @@ export default {
     //  display: inline-flex;
     //}
     :nth-child(2) {
-      display: inline-block;
+      display: contents;
     }
     &> p {
       direction: inherit;

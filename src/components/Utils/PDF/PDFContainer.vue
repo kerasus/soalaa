@@ -1,48 +1,61 @@
 <template>
-  <div
-    id="questions"
-    ref="questionsColumn"
-    class="col-md-5 right-side"
-  >
-    <q-virtual-scroll
-      ref="scroller"
-      class="konkoor-view-scroll"
-      :items="questions"
-      :virtual-scroll-item-size="450"
-      :virtual-scroll-slice-size="5"
-      @virtual-scroll="onScroll"
+  <div class="col-md-5 right-side">
+    <div v-if="pageChunks.length === 0"
+         :style="{ width: pageSize.w + 'px' }"
+         class="prepare-question-section"
     >
-      <template v-slot="{ item, index }">
-        <q-item
-          :key="index"
-          class="question-field"
-          dense
-        >
-
-          <q-item-section>
-            <pdf-question-field
-              :source="item"
-              :index="index"
-              :questions-column="$refs.questionsColumn"
-              @inView="isInView"
+      <pdf-question-field v-for="question in questions"
+                          :key="'question-item-'+question.id"
+                          v-model:height="question.height"
+                          :question="question"
+                          :order="question.order"
+                          @questionLoaded="onQuestionLoaded(question)"
+      />
+    </div>
+    <div v-else>
+      <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
+                :key="pageIndex"
+                :title="exam.title"
+                :grade="exam.gradeTitle"
+                :major="exam.majorTitle"
+                :page="(pageIndex+1).toString()"
+      >
+        <template v-slot:body>
+          <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
+               :key="'chunk-index-'+pageQuestionIndex"
+          >
+            <pdf-question-field v-if="pageQuestion"
+                                :question="pageQuestion"
+                                :order="pageQuestion.order"
             />
-
-          </q-item-section>
-        </q-item>
-      </template>
-    </q-virtual-scroll>
+          </div>
+        </template>
+      </pdf-page>
+    </div>
   </div>
 </template>
 
 <script>
-import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
-import PdfQuestionField from 'components/Utils/PDF/PdfQuestionField'
+import PdfPage from './PDFPage.vue'
+import PdfQuestionField from 'src/components/Utils/PDF/PdfQuestionField.vue'
+import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
 // import QuestionField from 'components/Question/QuestionPage/QuestionField'
 export default {
   name: 'PDFContainer',
-  components: { PdfQuestionField },
+  components: { PdfQuestionField, PdfPage },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion],
   props: {
+    exam: {
+      type: Object,
+      default () {
+        return {
+          title: '',
+          gradeTitle: 'دوازدهم',
+          majorTitle: 'ریاضی',
+          n_questions: 0
+        }
+      }
+    },
     questions: {
       type: Array,
       default () {
@@ -50,49 +63,63 @@ export default {
       }
     }
   },
+  emits: ['loaded'],
   data () {
     return {
-      inView: []
+      pageChunks: [],
+      pageSize: {
+        w: 724,
+        h: 900
+      }
+    }
+  },
+  computed: {
+    allQuestionLoaded () {
+      const notLoaded = this.questions.find(question => !question.loaded)
+      return !notLoaded
+    }
+  },
+  watch: {
+    allQuestionLoaded () {
+      this.createPageChunks(this.pageSize.h)
     }
   },
   methods: {
-    onScroll (details) {
-      if (!this.questions[details.index]) {
-        return
+    createPageChunks (pageHeight) {
+      let sumHeight = 0
+      let pageQuestions = []
+      const pages = []
+      this.questions.forEach((question, questionIndex) => {
+        if (pageHeight > (sumHeight + question.height)) {
+          sumHeight += question.height
+          pageQuestions.push(question)
+        } else {
+          pages.push(pageQuestions)
+          sumHeight = 0
+          pageQuestions = []
+          sumHeight += question.height
+          pageQuestions.push(question)
+        }
+      })
+      if (pageQuestions.length > 0) {
+        pages.push(pageQuestions)
+        sumHeight = 0
+        pageQuestions = []
       }
-      this.changeQuestion(this.questions[details.index].id, this.$route.name)
-
-    // startIndex, endIndex
-    // this.updateLtr()
-    // this.renderedQuestions = { startIndex, endIndex }
-    // if (this.scrollState === 'not scrolling') {
-    //   this.setIntervalCallback = setInterval(() => {
-    //     this.changeCurrentQuestionIfScrollingIsDone()
-    //   }, 250)
-    //   this.scrollState = 'scrolling'
-    // }
-    // this.timePassedSinceLastScroll = 0
+      this.pageChunks = pages
+      this.$nextTick(() => {
+        this.$emit('loaded', this.pageChunks)
+      })
     },
-    isInView (payload) {
-      if (payload.isInView) {
-        for (let i = 0; i < this.inView.length; i++) {
-          if (this.inView[i] === payload.number) {
-            return
-          }
-        }
-        this.inView.push(payload.number)
-      } else {
-        for (let i = 0; i < this.inView.length; i++) {
-          if (this.inView[i] === payload.number) {
-            this.inView.splice(i, 1)
-          }
-        }
-      }
+    onQuestionLoaded (question) {
+      question.loaded = true
     }
   }
 }
 </script>
 
 <style scoped>
-
+.prepare-question-section {
+  margin: auto;
+}
 </style>
