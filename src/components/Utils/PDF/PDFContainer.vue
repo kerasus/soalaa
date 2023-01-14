@@ -9,34 +9,71 @@
                           v-model:height="question.height"
                           :question="question"
                           :order="question.order"
+                          :display-choices="mode === 'questionsNoAnswer'"
+                          :display-statement="mode === 'questionsNoAnswer'"
+                          :display-descriptive-answer="mode === 'onlyDescriptiveAnswers'"
                           @questionLoaded="onQuestionLoaded(question)"
       />
     </div>
     <div v-else>
-      <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
-                :key="pageIndex"
-                :title="exam.title"
-                :grade="exam.gradeTitle"
-                :major="exam.majorTitle"
-                :page="(pageIndex+1).toString()"
-      >
-        <template v-slot:body>
-          <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
-               :key="'chunk-index-'+pageQuestionIndex"
-          >
-            <pdf-question-field v-if="pageQuestion"
-                                :question="pageQuestion"
-                                :order="pageQuestion.order"
-            />
-          </div>
-        </template>
-      </pdf-page>
-      <div class="page-break"></div>
+      <div
+        v-if="mode === 'questionsNoAnswer'"
+        class="questionsNoAnswer-mode">
+        <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
+                  :key="pageIndex"
+                  :title="exam.title"
+                  :grade="exam.gradeTitle"
+                  :major="exam.majorTitle"
+                  :page="(pageIndex+1).toString()"
+        >
+          <template v-slot:body>
+            <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
+                 :key="'chunk-index-'+pageQuestionIndex"
+            >
+              <pdf-question-field v-if="pageQuestion"
+                                  :question="pageQuestion"
+                                  :order="pageQuestion.order"
+                                  display-choices
+                                  display-statement
+                                  :display-descriptive-answer="false"
+              />
+            </div>
+          </template>
+        </pdf-page>
+        <div class="page-break"></div>
+      </div>
+      <div
+        v-if="mode === 'onlyDescriptiveAnswers'"
+        class="onlyDescriptiveAnswers-mode">
+        <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
+                  :key="pageIndex"
+                  :title="exam.title"
+                  :grade="exam.gradeTitle"
+                  :major="exam.majorTitle"
+                  :page="(pageIndex+1).toString()"
+        >
+          <template v-slot:body>
+            <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
+                 :key="'chunk-index-'+pageQuestionIndex"
+            >
+              <pdf-question-field v-if="pageQuestion"
+                                  :question="pageQuestion"
+                                  :order="pageQuestion.order"
+                                  :display-choices="false"
+                                  :display-statement="false"
+                                  display-descriptive-answer
+              />
+            </div>
+          </template>
+        </pdf-page>
+        <div class="page-break"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+// /onlyDescriptiveAnswers
 import PdfPage from './PDFPage.vue'
 import PdfQuestionField from 'src/components/Utils/PDF/PdfQuestionField.vue'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
@@ -62,6 +99,12 @@ export default {
       default () {
         return []
       }
+    },
+    mode: {
+      type: String,
+      default () {
+        return 'questionsNoAnswer'
+      }
     }
   },
   emits: ['loaded'],
@@ -82,7 +125,7 @@ export default {
   },
   watch: {
     allQuestionLoaded () {
-      this.createPageChunks(this.pageSize.h)
+      this.createPageChunks(this.pageSize.h - 20)
     }
   },
   methods: {
