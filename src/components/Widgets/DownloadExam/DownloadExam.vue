@@ -268,6 +268,49 @@
             <!--            />-->
             </div>
           </q-tab-panel>
+          <q-tab-panel class="tab-panel-style"
+                       name="keyAnswer">
+            <div class="question-info flex">
+              <div class="question-count">
+                تعداد کل سوالات :
+                {{ examInfo.n_questions }}
+              </div>
+              <div class="pages">
+                تعداد کل صفحات : {{ pageCount }}
+              </div>
+              <div class="action-box full-width flex justify-between items-end">
+                <div class="description">
+                  لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،
+                </div>
+                <div class="action-btn">
+                  <q-btn unelevated
+                         class="btn cancel"
+                         label="انصراف"></q-btn>
+                  <q-btn unelevated
+                         color="primary"
+                         class="btn"
+                         label="دانلود PDF"
+                         @click="generatePDF"
+                  ></q-btn>
+                </div>
+              </div>
+            </div>
+            <div>
+              <pdf-page :title="examInfo.title"
+                        :grade="examInfo.gradeTitle"
+                        :major="examInfo.majorTitle"
+                        :page="1"
+              >
+                <template v-slot:body>
+                  <paginate-bubble-sheet :questions="questions"
+                                         :info="{
+                                           type: 'pasokh-nameh'
+                                         }"
+                  />
+                </template>
+              </pdf-page>
+            </div>
+          </q-tab-panel>
         </q-tab-panels>
       </q-card>
       <div class="row text-center justify-center pagination-box">
@@ -285,14 +328,18 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import PDFContainer from 'components/Utils/PDF/PDFContainer'
+import API_ADDRESS from 'src/api/Addresses.js'
+import PdfPage from 'src/components/Utils/PDF/PDFPage.vue'
+import PDFContainer from 'src/components/Utils/PDF/PDFContainer.vue'
 // import VuePdfEmbed from 'vue-pdf-embed'
 import html2pdf from 'html2pdf.js'
 import 'src/Utils/PrintElements/print.css'
+import PaginateBubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/paginateBubbleSheet.vue'
 export default {
   name: 'DownloadExam',
   components: {
+    PaginateBubbleSheet,
+    PdfPage,
     PDFContainer
     // VuePdfEmbed
   },
@@ -342,11 +389,8 @@ export default {
       this.loading = true
       this.$axios.get(API_ADDRESS.exam.user.examInfo(this.$route.params.examId))
         .then((response) => {
-          // this.pdfSrc = response.data.data.link
           this.examInfo.title = response.data.data.title
           this.examInfo.n_questions = response.data.data.n_questions
-          // this.questions = response.data.data
-          // this.doesHaveQuestion = true
           this.loading = false
         })
         .catch(() => {
@@ -358,24 +402,12 @@ export default {
       this.pdfSrc = ''
       this.$axios.post(API_ADDRESS.exam.user.questionsWithAnswer(this.$route.params.examId), this.pdfConfig)
         .then((response) => {
-        // this.pdfSrc = response.data.data.link
           this.questions = response.data.data
           this.doesHaveQuestion = true
           this.loading = false
         }).catch(() => {
           this.loading = false
         })
-      /// 63a97fa06305df820e063c41/sub-category/6397239011d2324bc4c97902/questions
-      // this.$axios.post(API_ADDRESS.exam.examQuestion('63a97fa06305df820e063c41'), {
-      //   sub_categories: ['6397239011d2324bc4c97902']
-      // }).then((response) => {
-      //   this.questions = response.data.data
-      //   this.doesHaveQuestion = true
-      //   // console.log('response', response)
-      //   this.loading = false
-      // }).catch(() => {
-      //   this.loading = false
-      // })
     },
     replacePdf() {
       this.pdfSrc = 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase1moshavere.pdf'
