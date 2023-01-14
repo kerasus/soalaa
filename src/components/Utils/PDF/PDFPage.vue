@@ -71,6 +71,18 @@ export default defineComponent({
     paddingBottom: {
       type: Number,
       default: 0
+    },
+    pdfConfig: {
+      type: Object,
+      default () {
+        return {
+          paginateExists: true,
+          paginateStart: 1,
+          spaceBetweenQuestion: 1,
+          rightMargin: 1,
+          leftMargin: 1
+        }
+      }
     }
   }
 })

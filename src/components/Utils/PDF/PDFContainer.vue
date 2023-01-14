@@ -1,12 +1,13 @@
 <template>
   <div class="col-md-5 right-side">
     <div v-if="pageChunks.length === 0"
-         :style="{ width: pageSize.w + 'px' }"
+         :style="{ width: pageSize.w + 'px', paddingRight:parseInt(pdfConfig.leftMargin)+'px', paddingLeft: parseInt(pdfConfig.rightMargin)+'px' }"
          class="prepare-question-section"
     >
       <pdf-question-field v-for="question in questions"
                           :key="'question-item-'+question.id"
                           v-model:height="question.height"
+                          :style="{marginBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'px'}"
                           :question="question"
                           :order="question.order"
                           :display-choices="mode === 'questionsNoAnswer'"
@@ -24,7 +25,9 @@
                   :title="exam.title"
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
-                  :page="(pageIndex+1).toString()"
+                  :page="pdfConfig.paginateExists ? (pageIndex+pdfConfig.paginateStart).toString(): ''"
+                  :paddingRight="parseInt(pdfConfig.leftMargin)+35"
+                  :paddingLeft="parseInt(pdfConfig.rightMargin)+35"
         >
           <template v-slot:body>
             <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
@@ -33,6 +36,7 @@
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
+                                  :style="{marginBottom: pdfConfig.spaceBetweenQuestion}"
                                   display-choices
                                   display-statement
                                   :display-descriptive-answer="false"
@@ -50,7 +54,7 @@
                   :title="exam.title"
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
-                  :page="(pageIndex+1).toString()"
+                  :page="(pageIndex+pdfConfig.paginateStart).toString()"
         >
           <template v-slot:body>
             <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
@@ -83,6 +87,18 @@ export default {
   components: { PdfQuestionField, PdfPage },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion],
   props: {
+    pdfConfig: {
+      type: Object,
+      default () {
+        return {
+          paginateExists: true,
+          paginateStart: 1,
+          spaceBetweenQuestion: 1,
+          rightMargin: 1,
+          leftMargin: 1
+        }
+      }
+    },
     exam: {
       type: Object,
       default () {
