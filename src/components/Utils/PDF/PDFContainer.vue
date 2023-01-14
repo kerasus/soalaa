@@ -113,7 +113,7 @@ export default {
       pageChunks: [],
       pageSize: {
         w: 724,
-        h: 900
+        h: 880
       }
     }
   },
@@ -125,10 +125,21 @@ export default {
   },
   watch: {
     allQuestionLoaded () {
-      this.createPageChunks(this.pageSize.h - 20)
+      this.createPageChunks(this.pageSize.h)
+    }
+  },
+  mounted() {
+    if (this.allQuestionLoaded) {
+      this.calcQuestionsHeight()
     }
   },
   methods: {
+    calcQuestionsHeight () {
+      this.pageChunks = []
+      this.questions.forEach(question => {
+        question.loaded = false
+      })
+    },
     createPageChunks (pageHeight) {
       let sumHeight = 0
       let pageQuestions = []

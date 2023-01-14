@@ -132,6 +132,9 @@ export default {
       this.convertImagesToBase64()
     },
     convertImagesToBase64 () {
+      if (!this.$refs.HtmlKatex) {
+        return
+      }
       const images = this.$refs.HtmlKatex.getElementsByTagName('img')
       images.forEach(image => {
         this.toDataURL(image.src, function(dataUrl) {
@@ -140,17 +143,19 @@ export default {
       })
     },
     convertSvgToBase64 () {
+      if (!this.$refs.HtmlKatex) {
+        return
+      }
       const svgs = this.$refs.HtmlKatex.getElementsByTagName('svg')
       svgs.forEach(svg => {
-        const s = new XMLSerializer().serializeToString(svg)
-        const img = new Image()
-        img.src = 'data:image/svg+xml;base64,' + window.btoa(s)
-        img.style.position = 'absolute'
-        img.style.display = 'block'
-        img.style.width = '100%'
-        img.style.height = 'inherit'
-        svg.parentNode.insertBefore(img, svg.nextSibling)
-        // svg.remove()
+        // Convert the SVG node to HTML.
+        const div = document.createElement('div')
+        div.appendChild(svg.cloneNode(true))
+
+        // Encode the SVG as base64
+        const b64 = 'data:image/svg+xml;base64,' + window.btoa(div.innerHTML)
+        const url = 'url("' + b64 + '")'
+        svg.style.backgroundImage = url
       })
     },
     toDataURL(src, callback, outputFormat) {

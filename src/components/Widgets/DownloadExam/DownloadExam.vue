@@ -202,12 +202,11 @@
                 <q-skeleton height="900px"
                             class="pdf-skeleton" />
               </div>
-              <p-d-f-container
-                v-else-if="doesHaveQuestion"
-                id="questionsPdf"
-                :exam="examInfo"
-                :questions="questions"
-                @loaded="onQuestionsLoaded"
+              <p-d-f-container v-else-if="doesHaveQuestion"
+                               id="questionsPdf"
+                               :exam="examInfo"
+                               :questions="questions"
+                               @loaded="onQuestionsLoaded"
               />
             <!--            <vue-pdf-embed-->
             <!--              v-else-->
