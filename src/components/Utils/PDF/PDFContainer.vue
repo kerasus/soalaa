@@ -36,7 +36,7 @@
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
-                                  :style="{marginBottom: pdfConfig.spaceBetweenQuestion}"
+                                  :style="{marginBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'px'}"
                                   display-choices
                                   display-statement
                                   :display-descriptive-answer="false"
