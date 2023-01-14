@@ -6,7 +6,7 @@
          :class="{ 'current-question': this.currentQuestion.id === question.id, ltr: isLtrQuestion}"
     >
       <div
-        v-if="options.displayStatement"
+        v-if="displayStatement"
         class="question-head"
       >
         <p :id="'question' + question.id"
@@ -20,7 +20,7 @@
         <div class="PDF-LINE-BREAK" />
       </div>
       <q-list
-        v-if="options.displayChoices"
+        v-if="displayChoices"
         class="choices-box row"
       >
         <q-item
@@ -52,7 +52,7 @@
         </q-item>
       </q-list>
       <div
-        v-if="options.displayDescriptiveAnswer"
+        v-if="displayDescriptiveAnswer"
         class="question-descriptiveAnswer"
       >
         <p
@@ -98,16 +98,25 @@ export default {
         return {}
       }
     },
-    options: {
-      type: Object,
-      default () {
-        return {
-          displayStatement: true,
-          displayChoices: true,
-          displayTrueChoice: true,
-          displayDescriptiveAnswer: true
-        }
-      }
+    displayDescriptiveAnswer: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    displayStatement: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    displayChoices: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    displayTrueChoice: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data () {
@@ -134,7 +143,10 @@ export default {
       return this.question.choices.filter(choice => choice.answer)
     },
     getQuestionAnswerIndex () {
-      return this.question.choices.findIndex(choice => choice.answer) + 1
+      if (this.question.choices) {
+        return this.question.choices.findIndex(choice => choice.answer) + 1
+      }
+      return this.question.answer
     },
     allChoiceLoaded () {
       const notLoadedChoice = this.question.choices.find(choice => !choice.loaded)
@@ -164,9 +176,6 @@ export default {
       return this.$store.getters['AppLayout/windowSize']
     },
     choiceClass () {
-      if (!this.options.displayChoices) {
-        return 'col-md-3'
-      }
       const question = this.question
       const largestChoice = this.getLargestChoice(question.choices)
       const largestChoiceWidth = this.windowSize.x / largestChoice

@@ -9,6 +9,9 @@
                           v-model:height="question.height"
                           :question="question"
                           :order="question.order"
+                          :display-choices="mode === 'questionsNoAnswer'"
+                          :display-statement="mode === 'questionsNoAnswer'"
+                          :display-descriptive-answer="mode === 'onlyDescriptiveAnswers'"
                           @questionLoaded="onQuestionLoaded(question)"
       />
     </div>
@@ -30,11 +33,9 @@
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
-                                  :options="{
-                                    displayStatement: true,
-                                    displayChoices: true,
-                                    displayDescriptiveAnswer: false
-                                  }"
+                                  display-choices
+                                  display-statement
+                                  :display-descriptive-answer="false"
               />
             </div>
           </template>
@@ -58,11 +59,9 @@
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
-                                  :options="{
-                                    displayStatement: false,
-                                    displayChoices: false,
-                                    displayDescriptiveAnswer: true
-                                  }"
+                                  :display-choices="false"
+                                  :display-statement="false"
+                                  display-descriptive-answer
               />
             </div>
           </template>
@@ -130,6 +129,25 @@ export default {
     }
   },
   methods: {
+    getQuestionsBasedOnCurrentMode () {
+      const val = this.questions.map(question => {
+        if (this.mode === 'onlyDescriptiveAnswers') {
+          return {
+            ...question,
+            statement: null,
+            choices: null,
+            answer: question.choices.findIndex(choice => choice.answer) + 1
+          }
+        } else {
+          return {
+            ...question,
+            descriptive_answer: null
+          }
+        }
+      })
+      console.log('val', val)
+      return val
+    },
     createPageChunks (pageHeight) {
       let sumHeight = 0
       let pageQuestions = []
@@ -152,6 +170,7 @@ export default {
         pageQuestions = []
       }
       this.pageChunks = pages
+      console.log('this.pageChunks', this.pageChunks)
       this.$nextTick(() => {
         this.$emit('loaded', this.pageChunks)
       })
