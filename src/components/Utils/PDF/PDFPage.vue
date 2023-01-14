@@ -75,7 +75,13 @@ export default defineComponent({
   }
 })
 </script>
-
+<style>
+@media print {
+  .page-wrapper{
+    margin: 0 !important;
+  }
+}
+</style>
 <style lang="scss" scoped>
 .page-wrapper {
   width: 794px;

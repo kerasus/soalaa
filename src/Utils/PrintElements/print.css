@@ -17,7 +17,7 @@
 
     #pdf-container{
       direction: ltr;
-      margin-right: -500px;
+
     }
 
     .choice {
@@ -26,22 +26,12 @@
     }
 
     body {
-      background-image: url(../../../public/img/PdfBackground.png) !important;
-      background-repeat:no-repeat !important;
-      background-position: right top !important;
-      background-attachment:fixed !important;
-      width: 100% !important;
-      height: 100% !important;
       margin: 0;
     }
 
 
     @page {
       margin: 0;
-      background-image: url(../../../public/img/PdfBackground.png) !important;
-      background-repeat:no-repeat !important;
-      background-position: right top !important;
-      background-attachment:fixed !important;
       width: 100% !important;
       height: 100% !important;
     }
