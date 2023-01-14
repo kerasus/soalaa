@@ -275,8 +275,9 @@ export default {
     //&:first-child {
     //  display: inline-flex;
     //}
-    :nth-child(2) {
-      display: contents;
+    p:nth-child(2) {
+      display: initial;
+      //display: contents;
     }
     &> p {
       direction: inherit;
