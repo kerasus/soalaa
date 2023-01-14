@@ -13,30 +13,68 @@
       />
     </div>
     <div v-else>
-      <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
-                :key="pageIndex"
-                :title="exam.title"
-                :grade="exam.gradeTitle"
-                :major="exam.majorTitle"
-                :page="(pageIndex+1).toString()"
-      >
-        <template v-slot:body>
-          <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
-               :key="'chunk-index-'+pageQuestionIndex"
-          >
-            <pdf-question-field v-if="pageQuestion"
-                                :question="pageQuestion"
-                                :order="pageQuestion.order"
-            />
-          </div>
-        </template>
-      </pdf-page>
-      <div class="page-break"></div>
+      <div
+        v-if="mode === 'questionsNoAnswer'"
+        class="questionsNoAnswer-mode">
+        <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
+                  :key="pageIndex"
+                  :title="exam.title"
+                  :grade="exam.gradeTitle"
+                  :major="exam.majorTitle"
+                  :page="(pageIndex+1).toString()"
+        >
+          <template v-slot:body>
+            <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
+                 :key="'chunk-index-'+pageQuestionIndex"
+            >
+              <pdf-question-field v-if="pageQuestion"
+                                  :question="pageQuestion"
+                                  :order="pageQuestion.order"
+                                  :options="{
+                                    displayStatement: true,
+                                    displayChoices: true,
+                                    displayDescriptiveAnswer: false
+                                  }"
+              />
+            </div>
+          </template>
+        </pdf-page>
+        <div class="page-break"></div>
+      </div>
+      <div
+        v-if="mode === 'onlyDescriptiveAnswers'"
+        class="onlyDescriptiveAnswers-mode">
+        <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
+                  :key="pageIndex"
+                  :title="exam.title"
+                  :grade="exam.gradeTitle"
+                  :major="exam.majorTitle"
+                  :page="(pageIndex+1).toString()"
+        >
+          <template v-slot:body>
+            <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
+                 :key="'chunk-index-'+pageQuestionIndex"
+            >
+              <pdf-question-field v-if="pageQuestion"
+                                  :question="pageQuestion"
+                                  :order="pageQuestion.order"
+                                  :options="{
+                                    displayStatement: false,
+                                    displayChoices: false,
+                                    displayDescriptiveAnswer: true
+                                  }"
+              />
+            </div>
+          </template>
+        </pdf-page>
+        <div class="page-break"></div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+// /onlyDescriptiveAnswers
 import PdfPage from './PDFPage.vue'
 import PdfQuestionField from 'src/components/Utils/PDF/PdfQuestionField.vue'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
@@ -61,6 +99,12 @@ export default {
       type: Array,
       default () {
         return []
+      }
+    },
+    mode: {
+      type: String,
+      default () {
+        return 'questionsNoAnswer'
       }
     }
   },
