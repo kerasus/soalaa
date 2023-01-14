@@ -2,29 +2,15 @@
   <div ref="questionField"
        class="question-field"
   >
-    <!--    <q-card-->
-    <!--      v-if="considerActiveCategory && !question.in_active_category"-->
-    <!--      class="alert-sheet shadow-2"-->
-    <!--      :class="currentQuestion.id === question.id ? 'red-sheet' : 'orange-sheet'"-->
-    <!--      rounded-->
-    <!--      dark-->
-    <!--    >-->
-    <!--      <q-card-section class="alert-sheet-text">-->
-    <!--        (-->
-    <!--        سوال شماره-->
-    <!--        {{ getQuestionNumberFromId(question.id) }}-->
-    <!--        )-->
-    <!--        <br>-->
-    <!--        در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد-->
-    <!--      </q-card-section>-->
-    <!--    </q-card>-->
     <div class="question-box"
          :class="{ 'current-question': this.currentQuestion.id === question.id, ltr: isLtrQuestion}"
     >
-      <div class="question-head">
+      <div
+        v-if="options.displayStatement"
+        class="question-head"
+      >
         <p :id="'question' + question.id"
            class="question-body"
-           :class="{ ltr: isRtl }"
         >
           <vue-katex class="vue-katex"
                      :input="'<span class='+'number'+'>'+ order +') </span>' + question.statement"
@@ -33,9 +19,12 @@
         </p>
         <div class="PDF-LINE-BREAK" />
       </div>
-      <q-list class="choices-box row">
+      <q-list
+        v-if="options.displayChoices"
+        class="choices-box row"
+      >
         <q-item
-          v-for="(choice) in question.choices"
+          v-for="(choice, index) in question.choices"
           :key="choice.id"
           class="choices"
           :class="choiceClass"
@@ -54,7 +43,7 @@
               />
               <vue-katex
                 class="vue-katex"
-                :input="'<span class='+'number'+'>'+ choice.order +') </span>' + choice.title"
+                :input="'<span class='+'number'+'>'+ (index + 1) +') </span>' + choice.title"
                 :ltr="isLtrQuestion"
                 @loaded="onChoiceLoaded(choice)"
               />
@@ -62,6 +51,22 @@
           </q-item-section>
         </q-item>
       </q-list>
+      <div
+        v-if="options.displayDescriptiveAnswer"
+        class="question-descriptiveAnswer"
+      >
+        <p
+          :id="'question' + question.id"
+          class="question-body"
+          :class="{ ltr: isRtl }"
+        >
+          <vue-katex class="vue-katex"
+                     :input="getQuestionCompleteAnswerInput(order, question.statement)"
+                     @loaded="onDescriptiveAnswerLoaded"
+          />
+        </p>
+        <div class="PDF-LINE-BREAK" />
+      </div>
       <div class="PDF-LINE-BREAK" />
     </div>
   </div>
@@ -92,11 +97,23 @@ export default {
       default () {
         return {}
       }
+    },
+    options: {
+      type: Object,
+      default () {
+        return {
+          displayStatement: true,
+          displayChoices: true,
+          displayTrueChoice: true,
+          displayDescriptiveAnswer: true
+        }
+      }
     }
   },
   data () {
     return {
       statementLoaded: false,
+      descriptiveAnswerLoaded: false,
       isRtl: false,
       observer: null,
       choiceNumber: {
@@ -108,12 +125,23 @@ export default {
     }
   },
   computed: {
+    getQuestionCompleteAnswerInput () {
+      return (order, input) => {
+        return '<span class=' + 'number-descriptive' + '>' + order + ')' + ' (گزینه ' + this.getQuestionAnswerIndex + ')' + '_</span>' + input
+      }
+    },
+    getQuestionAnswer () {
+      return this.question.choices.filter(choice => choice.answer)
+    },
+    getQuestionAnswerIndex () {
+      return this.question.choices.findIndex(choice => choice.answer) + 1
+    },
     allChoiceLoaded () {
       const notLoadedChoice = this.question.choices.find(choice => !choice.loaded)
       return !notLoadedChoice
     },
     questionLoaded () {
-      return this.allChoiceLoaded && this.statementLoaded
+      return (this.allChoiceLoaded && this.statementLoaded) || this.descriptiveAnswerLoaded
     },
     isLtrQuestion () {
       const string = this.question.statement
@@ -136,6 +164,9 @@ export default {
       return this.$store.getters['AppLayout/windowSize']
     },
     choiceClass () {
+      if (!this.options.displayChoices) {
+        return 'col-md-3'
+      }
       const question = this.question
       const largestChoice = this.getLargestChoice(question.choices)
       const largestChoiceWidth = this.windowSize.x / largestChoice
@@ -160,6 +191,9 @@ export default {
   methods: {
     onStatementLoaded () {
       this.statementLoaded = true
+    },
+    onDescriptiveAnswerLoaded () {
+      this.descriptiveAnswerLoaded = true
     },
     onChoiceLoaded (choice) {
       choice.loaded = true
@@ -187,6 +221,15 @@ export default {
         }
       })
       return largestChoice
+    },
+    getLargestElementLength (element) {
+      let largestElement = 0
+      element.forEach((item) => {
+        if (item.length > largestElement) {
+          largestElement = this.removeErab(item).length
+        }
+      })
+      return largestElement
     }
   }
 }
@@ -215,6 +258,18 @@ export default {
       background-color: #fffaee;
     }
     .question-head{
+      padding: 0;
+      .question-body {
+        margin-bottom: 20px;
+        line-height: 40px;
+      }
+      .question-icons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+    }
+    .question-descriptiveAnswer{
       padding: 0;
       .question-body {
         margin-bottom: 20px;
@@ -294,6 +349,15 @@ export default {
 .question-field{
   .question-box{
     .question-head{
+      .question-icons{
+        .q-btn--fab-mini {
+          padding: 0;
+          height: 36px;
+          width: 36px;
+        }
+      }
+    }
+    .question-descriptiveAnswer{
       .question-icons{
         .q-btn--fab-mini {
           padding: 0;

@@ -231,7 +231,7 @@
               </div>
               <div class="action-box full-width flex justify-between items-end">
                 <div class="description">
-                  لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است،
+                  توضیحات : ندارد
                 </div>
                 <div class="action-btn">
                   <q-btn unelevated
@@ -257,6 +257,8 @@
                 id="pdf-container"
                 :exam="examInfo"
                 :questions="questions"
+                :mode="'onlyDescriptiveAnswers'"
+                @loaded="onQuestionsLoaded"
               />
             <!--            <vue-pdf-embed-->
             <!--              v-else-->
