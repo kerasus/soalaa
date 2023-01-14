@@ -168,6 +168,7 @@
                  label="پاسخنامه کلیدی" />
         </q-tabs>
         <q-tab-panels v-model="tab"
+                      keep-alive
                       animated>
           <q-tab-panel class="tab-panel-style"
                        name="questions">
@@ -191,22 +192,23 @@
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="generatePDF('questionsPdf')"
+                         @click="generatePDF('questionPdf')"
                   />
                 </div>
               </div>
             </div>
-            <div class="pdf-container">
+            <div ref="questionPdf"
+                 class="pdf-container">
               <div v-if="loading"
                    class="loading">
                 <q-skeleton height="900px"
                             class="pdf-skeleton" />
               </div>
-              <p-d-f-container v-else-if="doesHaveQuestion"
-                               id="questionsPdf"
-                               :exam="examInfo"
-                               :questions="questions"
-                               @loaded="onQuestionsLoaded"
+              <p-d-f-container
+                v-else-if="doesHaveQuestion"
+                :exam="examInfo"
+                :questions="questions"
+                @loaded="onQuestionsLoaded"
               />
             <!--            <vue-pdf-embed-->
             <!--              v-else-->
@@ -245,7 +247,8 @@
                 </div>
               </div>
             </div>
-            <div class="pdf-container">
+            <div ref="descriptiveAnswerPdf"
+                 class="pdf-container">
               <div v-if="loading"
                    class="loading">
                 <q-skeleton height="900px"
@@ -253,7 +256,6 @@
               </div>
               <p-d-f-container
                 v-else-if="doesHaveQuestion"
-                id="descriptiveAnswerPdf"
                 :exam="examInfo"
                 :questions="questions"
                 :mode="'onlyDescriptiveAnswers'"
@@ -292,11 +294,11 @@
                          class="btn"
                          label="دانلود PDF"
                          @click="generatePDF('keyAnswerPdf')"
-                  />
+                  ></q-btn>
                 </div>
               </div>
             </div>
-            <div id="keyAnswerPdf">
+            <div ref="keyAnswerPdf">
               <pdf-page :title="examInfo.title"
                         :grade="examInfo.gradeTitle"
                         :major="examInfo.majorTitle"
@@ -334,6 +336,7 @@ import PdfPage from 'src/components/Utils/PDF/PDFPage.vue'
 import PDFContainer from 'src/components/Utils/PDF/PDFContainer.vue'
 // import VuePdfEmbed from 'vue-pdf-embed'
 import html2pdf from 'html2pdf.js'
+// import html2canvas from 'html2canvas'
 import 'src/Utils/PrintElements/print.css'
 import PaginateBubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/paginateBubbleSheet.vue'
 export default {
@@ -413,42 +416,9 @@ export default {
     replacePdf() {
       this.pdfSrc = 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase1moshavere.pdf'
     },
-    generatePDF (id) {
-      // if (!this.$refs[ref]) {
-      //   return
-      // }
-      // this.$refs[ref].generatePdf()
-      const element = document.getElementById(id)
-      // // Choose the element and save the PDF for your user.
-      // const opt = {
-      //   // margin:       1,
-      //   filename: 'myfile.pdf',
-      //   // image:        { type: 'jpeg', quality: 0.98 },
-      //   html2canvas: {
-      //     useCORS: true
-      //     // onrendered: function () {}
-      //     // allowTaint: true
-      //   // scale: 2
-      //   }
-      //   // jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-      // }
+    generatePDF (ref) {
       html2pdf()
-        .from(element)
-        // .set(opt)
-      //   .set({
-      //   // margin: 0,
-      //   // filename: 'myfile.pdf',
-      //   // image: { type: 'jpeg', quality: 0.98 },
-      //   html2canvas: {
-      //     allowTaint: true
-      //   // scale: 2
-      //   }
-      //   // jsPDF: {
-      //   //   unit: 'in',
-      //   //   format: 'a4'
-      //   //   // orientation: this.setup.orientation
-      //   // }
-      // })
+        .from(this.$refs[ref])
         .save()
     }
   }
