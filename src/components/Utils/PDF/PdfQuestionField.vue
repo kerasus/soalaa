@@ -14,6 +14,7 @@
         >
           <vue-katex class="vue-katex"
                      :input="'<span class='+'number'+'>'+ order +') </span>' + question.statement"
+                     base64
                      @loaded="onStatementLoaded"
           />
         </p>
@@ -45,6 +46,7 @@
                 class="vue-katex"
                 :input="'<span class='+'number'+'>'+ (index + 1) +') </span>' + choice.title"
                 :ltr="isLtrQuestion"
+                base64
                 @loaded="onChoiceLoaded(choice)"
               />
             </div>
