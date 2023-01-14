@@ -191,8 +191,8 @@
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="generatePDF"
-                  ></q-btn>
+                         @click="generatePDF('questionsPdf')"
+                  />
                 </div>
               </div>
             </div>
@@ -204,7 +204,7 @@
               </div>
               <p-d-f-container
                 v-else-if="doesHaveQuestion"
-                id="pdf-container"
+                id="questionsPdf"
                 :exam="examInfo"
                 :questions="questions"
                 @loaded="onQuestionsLoaded"
@@ -241,8 +241,8 @@
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="generatePDF"
-                  ></q-btn>
+                         @click="generatePDF('descriptiveAnswerPdf')"
+                  />
                 </div>
               </div>
             </div>
@@ -254,7 +254,7 @@
               </div>
               <p-d-f-container
                 v-else-if="doesHaveQuestion"
-                id="pdf-container"
+                id="descriptiveAnswerPdf"
                 :exam="examInfo"
                 :questions="questions"
                 :mode="'onlyDescriptiveAnswers'"
@@ -292,12 +292,12 @@
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="generatePDF"
-                  ></q-btn>
+                         @click="generatePDF('keyAnswerPdf')"
+                  />
                 </div>
               </div>
             </div>
-            <div>
+            <div id="keyAnswerPdf">
               <pdf-page :title="examInfo.title"
                         :grade="examInfo.gradeTitle"
                         :major="examInfo.majorTitle"
@@ -414,10 +414,43 @@ export default {
     replacePdf() {
       this.pdfSrc = 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase1moshavere.pdf'
     },
-    generatePDF () {
-      const element = document.getElementById('pdf-container')
-      // Choose the element and save the PDF for your user.
-      html2pdf().from(element).save()
+    generatePDF (id) {
+      // if (!this.$refs[ref]) {
+      //   return
+      // }
+      // this.$refs[ref].generatePdf()
+      const element = document.getElementById(id)
+      // // Choose the element and save the PDF for your user.
+      // const opt = {
+      //   // margin:       1,
+      //   filename: 'myfile.pdf',
+      //   // image:        { type: 'jpeg', quality: 0.98 },
+      //   html2canvas: {
+      //     useCORS: true
+      //     // onrendered: function () {}
+      //     // allowTaint: true
+      //   // scale: 2
+      //   }
+      //   // jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      // }
+      html2pdf()
+        .from(element)
+        // .set(opt)
+      //   .set({
+      //   // margin: 0,
+      //   // filename: 'myfile.pdf',
+      //   // image: { type: 'jpeg', quality: 0.98 },
+      //   html2canvas: {
+      //     allowTaint: true
+      //   // scale: 2
+      //   }
+      //   // jsPDF: {
+      //   //   unit: 'in',
+      //   //   format: 'a4'
+      //   //   // orientation: this.setup.orientation
+      //   // }
+      // })
+        .save()
     }
   }
 }

@@ -6,7 +6,7 @@
          :class="{ 'current-question': this.currentQuestion.id === question.id, ltr: isLtrQuestion}"
     >
       <div
-        v-if="options.displayStatement"
+        v-if="displayStatement"
         class="question-head"
       >
         <p :id="'question' + question.id"
@@ -14,13 +14,14 @@
         >
           <vue-katex class="vue-katex"
                      :input="'<span class='+'number'+'>'+ order +') </span>' + question.statement"
+                     base64
                      @loaded="onStatementLoaded"
           />
         </p>
         <div class="PDF-LINE-BREAK" />
       </div>
       <q-list
-        v-if="options.displayChoices"
+        v-if="displayChoices"
         class="choices-box row"
       >
         <q-item
@@ -45,6 +46,7 @@
                 class="vue-katex"
                 :input="'<span class='+'number'+'>'+ (index + 1) +') </span>' + choice.title"
                 :ltr="isLtrQuestion"
+                base64
                 @loaded="onChoiceLoaded(choice)"
               />
             </div>
@@ -52,7 +54,7 @@
         </q-item>
       </q-list>
       <div
-        v-if="options.displayDescriptiveAnswer"
+        v-if="displayDescriptiveAnswer"
         class="question-descriptiveAnswer"
       >
         <p
@@ -61,7 +63,7 @@
           :class="{ ltr: isRtl }"
         >
           <vue-katex class="vue-katex"
-                     :input="getQuestionCompleteAnswerInput(order, question.statement)"
+                     :input="getQuestionCompleteAnswerInput(order, question.descriptive_answer)"
                      @loaded="onDescriptiveAnswerLoaded"
           />
         </p>
@@ -98,16 +100,25 @@ export default {
         return {}
       }
     },
-    options: {
-      type: Object,
-      default () {
-        return {
-          displayStatement: true,
-          displayChoices: true,
-          displayTrueChoice: true,
-          displayDescriptiveAnswer: true
-        }
-      }
+    displayDescriptiveAnswer: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    displayStatement: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    displayChoices: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    displayTrueChoice: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data () {
@@ -127,7 +138,7 @@ export default {
   computed: {
     getQuestionCompleteAnswerInput () {
       return (order, input) => {
-        return '<span class=' + 'number-descriptive' + '>' + order + ')' + ' (گزینه ' + this.getQuestionAnswerIndex + ')' + '_</span>' + input
+        return '<span class=' + 'number-descriptive' + '>' + order + ')' + ' (گزینه ' + this.getQuestionAnswerIndex + ')' + ' </span><br>' + input
       }
     },
     getQuestionAnswer () {
@@ -164,9 +175,6 @@ export default {
       return this.$store.getters['AppLayout/windowSize']
     },
     choiceClass () {
-      if (!this.options.displayChoices) {
-        return 'col-md-3'
-      }
       const question = this.question
       const largestChoice = this.getLargestChoice(question.choices)
       const largestChoiceWidth = this.windowSize.x / largestChoice
