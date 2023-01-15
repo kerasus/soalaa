@@ -1,18 +1,20 @@
 <template>
   <div class="col-md-5 right-side">
     <div v-if="pageChunks.length === 0"
-         :style="{ width: pageSize.w + 'px', paddingRight:parseInt(pdfConfig.rightMargin)+'px', paddingLeft: parseInt(pdfConfig.leftMargin)+'px' }"
+         :style="{ width: pageSize.w + 'mm', paddingRight:parseInt(pdfConfig.rightMargin)+'mm', paddingLeft: parseInt(pdfConfig.leftMargin)+'mm' }"
          class="prepare-question-section"
     >
       <pdf-question-field v-for="question in questions"
                           :key="'question-item-'+question.id"
                           v-model:height="question.height"
-                          :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'px'}"
+                          :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'mm'}"
                           :question="question"
                           :order="question.order"
                           :display-choices="mode === 'questionsNoAnswer'"
                           :display-statement="mode === 'questionsNoAnswer'"
                           :display-descriptive-answer="mode === 'onlyDescriptiveAnswers'"
+                          :questionAndChoices="pdfConfig.questionAndChoices"
+                          :betweenChoices="pdfConfig.betweenChoices"
                           @questionLoaded="onQuestionLoaded(question)"
       />
     </div>
@@ -26,8 +28,8 @@
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
                   :page="pdfConfig.paginateExists ? (pageIndex+pdfConfig.paginateStart).toString(): ''"
-                  :paddingRight="parseInt(pdfConfig.rightMargin)+35"
-                  :paddingLeft="parseInt(pdfConfig.leftMargin)+35"
+                  :paddingRight="parseInt(pdfConfig.rightMargin)+9"
+                  :paddingLeft="parseInt(pdfConfig.leftMargin)+9"
         >
           <template v-slot:body>
             <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
@@ -36,7 +38,9 @@
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
-                                  :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'px'}"
+                                  :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'mm'}"
+                                  :questionAndChoices="pdfConfig.questionAndChoices"
+                                  :betweenChoices="pdfConfig.betweenChoices"
                                   display-choices
                                   display-statement
                                   :display-descriptive-answer="false"
@@ -66,6 +70,8 @@
                                   :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'px'}"
                                   :display-choices="false"
                                   :display-statement="false"
+                                  :questionAndChoices="pdfConfig.questionAndChoices"
+                                  :betweenChoices="pdfConfig.betweenChoices"
                                   display-descriptive-answer
               />
             </div>
@@ -96,7 +102,9 @@ export default {
           paginateStart: 1,
           spaceBetweenQuestion: 1,
           rightMargin: 1,
-          leftMargin: 1
+          leftMargin: 1,
+          questionAndChoices: 1,
+          betweenChoices: 1
         }
       }
     },

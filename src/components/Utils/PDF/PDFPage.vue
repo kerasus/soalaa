@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="page-body"
-         :style="{paddingRight: paddingRight + 'px', paddingLeft: paddingLeft + 'px', paddingTop:paddingTop + 'px', paddingBottom:paddingBottom + 'px'}"
+         :style="{paddingRight: paddingRight + 'mm', paddingLeft: paddingLeft + 'mm', paddingTop:paddingTop + 'mm', paddingBottom:paddingBottom + 'mm'}"
     >
       <slot name="body"></slot>
     </div>
@@ -58,11 +58,11 @@ export default defineComponent({
     },
     paddingRight: {
       type: Number,
-      default: 35
+      default: 9
     },
     paddingLeft: {
       type: Number,
-      default: 35
+      default: 9
     },
     paddingTop: {
       type: Number,
@@ -80,7 +80,9 @@ export default defineComponent({
           paginateStart: 1,
           spaceBetweenQuestion: 1,
           rightMargin: 1,
-          leftMargin: 1
+          leftMargin: 1,
+          questionAndChoices: 1,
+          betweenChoices: 1
         }
       }
     }

@@ -8,6 +8,7 @@
       <div
         v-if="displayStatement"
         class="question-head"
+        :style="{marginBottom: questionAndChoices + 'mm'}"
       >
         <p :id="'question' + question.id"
            class="question-body"
@@ -29,6 +30,7 @@
           :key="choice.id"
           class="choices"
           :class="choiceClass"
+          :style="{marginBottom: betweenChoices + 'mm'}"
         >
           <q-item-section
             ref="choices"
@@ -92,6 +94,14 @@ export default {
       default: true
     },
     height: {
+      type: Number,
+      default: 0
+    },
+    questionAndChoices: {
+      type: Number,
+      default: 0
+    },
+    betweenChoices: {
       type: Number,
       default: 0
     },
@@ -261,14 +271,12 @@ export default {
     }
   }
   .question-box {
-    padding: 10px 10px 10px 30px;
     &.current-question {
       background-color: #fffaee;
     }
     .question-head{
       padding: 0;
       .question-body {
-        margin-bottom: 20px;
         line-height: 40px;
       }
       .question-icons {
@@ -280,7 +288,6 @@ export default {
     .question-descriptiveAnswer{
       padding: 0;
       .question-body {
-        margin-bottom: 20px;
         line-height: 40px;
       }
       .question-icons {
@@ -293,6 +300,9 @@ export default {
       .choices {
         display: flex;
         flex-direction: row;
+        padding: 0 16px;
+        min-height: 24px;
+
         .choice{
           display: flex;
           flex-direction: row;
