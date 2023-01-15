@@ -430,9 +430,12 @@ export default {
       this.pdfSrc = 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase1moshavere.pdf'
     },
     generatePDF (ref) {
+      this.loading = true
       html2pdf()
         .from(this.$refs[ref])
-        .save()
+        .save().then(() => {
+          this.loading = false
+        })
     }
   }
 }

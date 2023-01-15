@@ -1,5 +1,10 @@
 <template>
   <div class="col-md-5 right-side">
+    <div v-if="pageChunks.length === 0 || loading"
+         class="loading">
+      <q-skeleton height="900px"
+                  class="pdf-skeleton" />
+    </div>
     <div v-if="pageChunks.length === 0"
          :style="{ width: pageSize.w + 'mm', paddingRight:parseInt(pdfConfig.rightMargin)+'mm', paddingLeft: parseInt(pdfConfig.leftMargin)+'mm' }"
          class="prepare-question-section"
@@ -139,6 +144,7 @@ export default {
   emits: ['loaded'],
   data () {
     return {
+      loading: false,
       pageChunks: [],
       pageSize: {
         w: 724,
@@ -158,9 +164,11 @@ export default {
     }
   },
   mounted() {
+    this.loading = true
     if (this.allQuestionLoaded) {
       this.calcQuestionsHeight()
     }
+    this.loading = false
   },
   methods: {
     calcQuestionsHeight () {
@@ -168,6 +176,7 @@ export default {
       this.questions.forEach(question => {
         question.loaded = false
       })
+      this.loading = false
     },
     createPageChunks (pageHeight) {
       let sumHeight = 0
@@ -178,7 +187,9 @@ export default {
           sumHeight += question.height
           pageQuestions.push(question)
         } else {
-          pages.push(pageQuestions)
+          if (pageQuestions.length > 0) {
+            pages.push(pageQuestions)
+          }
           sumHeight = 0
           pageQuestions = []
           sumHeight += question.height
@@ -202,9 +213,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .prepare-question-section {
   margin: auto;
+}
+.loading {
+  width: 100%;
+  z-index: 9999;
+  .pdf-skeleton {
+    border-radius: 15px;
+  }
 }
 </style>
 <style>
