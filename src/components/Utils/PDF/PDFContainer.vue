@@ -32,7 +32,7 @@
                   :title="exam.title"
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
-                  :page="pdfConfig.hasPaginate ? (pageIndex+pdfConfig.paginateStart).toString(): ''"
+                  :page="(pageIndex+parseInt(pdfConfig.paginateStart)).toString()"
                   :paddingRight="parseInt(pdfConfig.rightMargin)+9"
                   :paddingLeft="parseInt(pdfConfig.leftMargin)+9"
                   :pdf-config="pdfConfig"
@@ -64,7 +64,7 @@
                   :title="exam.title"
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
-                  :page="(pageIndex+pdfConfig.paginateStart).toString()"
+                  :page="(pageIndex+parseInt(pdfConfig.paginateStart)).toString()"
                   :pdf-config="pdfConfig"
         >
           <template v-slot:body>
