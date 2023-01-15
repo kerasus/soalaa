@@ -7,7 +7,7 @@
       <pdf-question-field v-for="question in questions"
                           :key="'question-item-'+question.id"
                           v-model:height="question.height"
-                          :style="{marginBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'px'}"
+                          :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'px'}"
                           :question="question"
                           :order="question.order"
                           :display-choices="mode === 'questionsNoAnswer'"
@@ -36,7 +36,7 @@
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
-                                  :style="{marginBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'px'}"
+                                  :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'px'}"
                                   display-choices
                                   display-statement
                                   :display-descriptive-answer="false"
@@ -63,6 +63,7 @@
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
+                                  :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'px'}"
                                   :display-choices="false"
                                   :display-statement="false"
                                   display-descriptive-answer
