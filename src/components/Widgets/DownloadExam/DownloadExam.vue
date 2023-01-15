@@ -11,7 +11,7 @@
           </div>
           <div class="col-12">
             <div class="flex justify-between items-center">
-              <q-checkbox v-model="pdfConfig.examTitle">
+              <q-checkbox v-model="pdfConfig.hasTitle">
                 عنوان آزمون
               </q-checkbox>
               <div class="value">
@@ -21,7 +21,7 @@
           </div>
           <div class="col-12">
             <div class="flex justify-between items-center">
-              <q-checkbox v-model="pdfConfig.major">
+              <q-checkbox v-model="pdfConfig.hasMajor">
                 رشته تحصیلی
               </q-checkbox>
               <div class="value">
@@ -31,7 +31,7 @@
           </div>
           <div class="col-12">
             <div class="flex justify-between items-center">
-              <q-checkbox v-model="pdfConfig.grade">
+              <q-checkbox v-model="pdfConfig.hasGrade">
                 پایه تحصیلی
               </q-checkbox>
               <div class="value">
@@ -123,11 +123,11 @@
             صفحه بندی سوالات
           </div>
           <div class="radio-btn">
-            <q-radio v-model="pdfConfig.paginateExists"
+            <q-radio v-model="pdfConfig.hasPaginate"
                      :val="true"
                      label="بله" />
 
-            <q-radio v-model="pdfConfig.paginateExists"
+            <q-radio v-model="pdfConfig.hasPaginate"
                      :val="false"
                      label="خیر" />
           </div>
@@ -365,10 +365,10 @@ export default {
     radioOne: false,
     radioTow: false,
     pdfConfig: {
-      examTitle: false,
-      major: false,
-      grade: false,
-      paginateExists: true,
+      hasTitle: true,
+      hasMajor: true,
+      hasGrade: true,
+      hasPaginate: true,
       paginateStart: 1,
       spaceBetweenQuestion: 1,
       rightMargin: 1,
