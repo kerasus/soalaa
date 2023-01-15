@@ -75,26 +75,24 @@
               </template>
             </q-input>
           </div>
-          <div class="l-t flex justify-between">
-            <q-input v-model="pdfConfig.questionAndChoices"
-                     filled
-                     class="side-input"
-                     prefix=" mm | "
-            >
-              <template v-slot:before>
-                سوال
-              </template>
-            </q-input>
-            <q-input v-model="pdfConfig.betweenChoices"
-                     filled
-                     class="side-input"
-                     prefix=" mm | "
-            >
-              <template v-slot:before>
-                پاسخ
-              </template>
-            </q-input>
+          <div class="sub-sub-title">
+            فاصله بین صورت سوال و گزینه ها
           </div>
+          <q-input v-model="pdfConfig.questionAndChoices"
+                   type="number"
+                   filled
+                   prefix=" mm | "
+          />
+
+          <div class="sub-sub-title">
+            فاصله بین گزینه ها
+          </div>
+          <q-input v-model="pdfConfig.betweenChoices"
+                   type="number"
+                   filled
+                   prefix=" mm | "
+          />
+
           <div class="sub-sub-title">
             فاصله بین سوالات
           </div>
