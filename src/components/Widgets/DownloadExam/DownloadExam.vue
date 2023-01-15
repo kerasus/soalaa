@@ -59,7 +59,7 @@
             <q-input v-model="pdfConfig.rightMargin"
                      filled
                      class="side-input"
-                     prefix=" px | "
+                     prefix=" mm | "
             >
               <template v-slot:before>
                 راست
@@ -68,40 +68,40 @@
             <q-input v-model="pdfConfig.leftMargin"
                      filled
                      class="side-input"
-                     prefix=" px | "
+                     prefix=" mm | "
             >
               <template v-slot:before>
                 چـــــپ
               </template>
             </q-input>
           </div>
-          <!-- <div class="u-p flex justify-between">
-            <q-input v-model="number"
+          <div class="l-t flex justify-between">
+            <q-input v-model="pdfConfig.questionAndChoices"
                      filled
                      class="side-input"
-                     prefix=" cm | "
+                     prefix=" mm | "
             >
               <template v-slot:before>
-                بـــــــالا
+                سوال
               </template>
             </q-input>
-            <q-input v-model="number"
+            <q-input v-model="pdfConfig.betweenChoices"
                      filled
                      class="side-input"
-                     prefix=" cm | "
+                     prefix=" mm | "
             >
               <template v-slot:before>
-                پاییـن
+                پاسخ
               </template>
             </q-input>
-          </div> -->
+          </div>
           <div class="sub-sub-title">
             فاصله بین سوالات
           </div>
           <q-input v-model="pdfConfig.spaceBetweenQuestion"
                    type="number"
                    filled
-                   prefix=" px | "
+                   prefix=" mm | "
           />
 
         </div>
@@ -372,7 +372,9 @@ export default {
       paginateStart: 1,
       spaceBetweenQuestion: 1,
       rightMargin: 1,
-      leftMargin: 1
+      leftMargin: 1,
+      questionAndChoices: 1,
+      betweenChoices: 1
     },
     loading: false,
     doesHaveQuestion: false,
