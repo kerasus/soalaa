@@ -25,9 +25,10 @@
                   :title="exam.title"
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
-                  :page="pdfConfig.paginateExists ? (pageIndex+pdfConfig.paginateStart).toString(): ''"
+                  :page="pdfConfig.hasPaginate ? (pageIndex+pdfConfig.paginateStart).toString(): ''"
                   :paddingRight="parseInt(pdfConfig.rightMargin)+35"
                   :paddingLeft="parseInt(pdfConfig.leftMargin)+35"
+                  :pdf-config="pdfConfig"
         >
           <template v-slot:body>
             <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
@@ -55,6 +56,7 @@
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
                   :page="(pageIndex+pdfConfig.paginateStart).toString()"
+                  :pdf-config="pdfConfig"
         >
           <template v-slot:body>
             <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
@@ -71,7 +73,6 @@
             </div>
           </template>
         </pdf-page>
-        <div class="page-break"></div>
       </div>
     </div>
   </div>
@@ -92,7 +93,10 @@ export default {
       type: Object,
       default () {
         return {
-          paginateExists: true,
+          hasTitle: true,
+          hasMajor: true,
+          hasGrade: true,
+          hasPaginate: true,
           paginateStart: 1,
           spaceBetweenQuestion: 1,
           rightMargin: 1,
