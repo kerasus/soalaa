@@ -254,6 +254,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.loading {
+  width: 100%;
+  z-index: 9999;
+  .pdf-skeleton {
+    border-radius: 15px;
+  }
+}
 .question-field{
   width: 100% !important;
   .alert-sheet{
