@@ -368,11 +368,11 @@ export default {
       hasGrade: true,
       hasPaginate: true,
       paginateStart: 1,
-      spaceBetweenQuestion: 1,
-      rightMargin: 1,
-      leftMargin: 1,
-      questionAndChoices: 1,
-      betweenChoices: 1
+      spaceBetweenQuestion: 5,
+      rightMargin: 5,
+      leftMargin: 5,
+      questionAndChoices: 5,
+      betweenChoices: 5
     },
     loading: false,
     doesHaveQuestion: false,
