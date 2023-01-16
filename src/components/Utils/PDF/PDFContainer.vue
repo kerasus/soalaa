@@ -1,10 +1,5 @@
 <template>
   <div class="col-md-5 right-side">
-    <div v-if="pageChunks.length === 0 || loading"
-         class="loading">
-      <q-skeleton height="900px"
-                  class="pdf-skeleton" />
-    </div>
     <div v-if="pageChunks.length === 0"
          :style="{ width: pageSize.w + 'mm', paddingRight:parseInt(pdfConfig.rightMargin)+'mm', paddingLeft: parseInt(pdfConfig.leftMargin)+'mm' }"
          class="prepare-question-section"
@@ -74,7 +69,7 @@
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
-                                  :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'px'}"
+                                  :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'mm'}"
                                   :display-choices="false"
                                   :display-statement="false"
                                   :questionAndChoices="pdfConfig.questionAndChoices"

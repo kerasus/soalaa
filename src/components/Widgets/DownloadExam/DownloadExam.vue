@@ -428,12 +428,9 @@ export default {
       this.pdfSrc = 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase1moshavere.pdf'
     },
     generatePDF (ref) {
-      this.loading = true
       html2pdf()
         .from(this.$refs[ref])
-        .save().then(() => {
-          this.loading = false
-        })
+        .save()
     }
   }
 }
@@ -659,21 +656,21 @@ export default {
      padding: 30px 0 0 0;
       border-top: 1px solid #E4E8EF;
 
-      .pdf-container{
-        direction: rtl!important ;
-        :deep(.vue-pdf-embed){
-          direction: rtl!important;
-          canvas{
-            border-radius: 12px !important;
-          }
-        }
-        .pdf{
-          direction: rtl!important;
-          *{
-            direction: rtl!important;
-          }
-        }
-      }
+      // .pdf-container{
+      //   direction: ltr!important ;
+      //   :deep(.vue-pdf-embed){
+      //     direction: rtl!important;
+      //     canvas{
+      //       border-radius: 12px !important;
+      //     }
+      //   }
+      //   .pdf{
+      //     direction: rtl!important;
+      //     *{
+      //       direction: rtl!important;
+      //     }
+      //   }
+      // }
 
       .pagination-box{
           margin-top: 30px;
