@@ -60,6 +60,8 @@
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
                   :page="(pageIndex+parseInt(pdfConfig.paginateStart)).toString()"
+                  :paddingRight="parseInt(pdfConfig.rightMargin)+9"
+                  :paddingLeft="parseInt(pdfConfig.leftMargin)+9"
                   :pdf-config="pdfConfig"
         >
           <template v-slot:body>

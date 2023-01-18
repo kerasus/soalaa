@@ -156,6 +156,7 @@ export default {
         const b64 = 'data:image/svg+xml;base64,' + window.btoa(div.innerHTML)
         const url = 'url("' + b64 + '")'
         svg.style.backgroundImage = url
+        svg.style.backgroundSize = 'cover'
       })
     },
     toDataURL(src, callback, outputFormat) {
