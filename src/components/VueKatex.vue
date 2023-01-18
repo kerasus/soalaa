@@ -157,6 +157,15 @@ export default {
         const url = 'url("' + b64 + '")'
         svg.style.backgroundImage = url
         svg.style.backgroundSize = 'cover'
+        if (svg.parentElement.classList.contains('brace-left')) {
+          svg.style.backgroundPosition = 'left'
+        }
+        if (svg.parentElement.classList.contains('brace-center')) {
+          svg.style.backgroundPosition = 'bottom'
+        }
+        if (svg.parentElement.classList.contains('brace-right')) {
+          svg.style.backgroundPosition = 'right'
+        }
       })
     },
     toDataURL(src, callback, outputFormat) {
