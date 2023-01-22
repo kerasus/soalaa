@@ -74,14 +74,23 @@
         @update="changeStatus"
       />
     </div>
-    <div
-      v-if="question.logs && question.logs.list && question.logs.list.length > 0"
-    >
+    <div v-if="question.logs && question.logs.list && question.logs.list.length > 0">
       <log-list-component
         :logs="question.logs"
         :mode="'edit'"
         @addComment="addComment"
         @restoreQuestion="restoreQuestion"
+      />
+    </div>
+    <div class="q-mt-md">
+      <entity-index
+        v-model:value="logIndexInputs"
+        title="لیست خطا های گزارش شده"
+        :api="logIndexApi"
+        :table="logIndexTable"
+        :table-keys="logIndexTableKeys"
+        :create-route-name="false"
+        :show-search-button="false"
       />
     </div>
   </div>
@@ -107,6 +116,9 @@ import { QuestCategoryList } from 'src/models/QuestCategory'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
 import mixinTree from 'src/mixin/Tree'
+import { EntityIndex } from 'quasar-crud'
+import moment from 'moment-jalaali'
+
 export default {
   name: 'EditQuestion',
   components: {
@@ -117,6 +129,7 @@ export default {
     MultipleChoiceEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/MultipleChoiceQuestion/MultipleChoiceEditQuestion')),
     MBTIEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/MBTIQuestion/MBTIEditQuestion')),
     BtnBox,
+    EntityIndex,
     StatusChange,
     AttachExam,
     LogListComponent
@@ -128,6 +141,39 @@ export default {
   props: {},
   data () {
     return {
+      logIndexInputs: [
+        { type: 'hidden', name: 'question_id', col: 'col-md-12', value: null }
+      ],
+      logIndexTable: {
+        columns: [
+          {
+            name: 'type',
+            label: 'نوع خطا',
+            align: 'left',
+            field: row => row.report.type
+          },
+          {
+            name: 'body',
+            label: 'متن خطا',
+            align: 'left',
+            field: row => row.report.body
+          },
+          {
+            name: 'created_at',
+            label: 'تاریخ ایجاد',
+            align: 'left',
+            field: row => moment(row.report.created_at, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
+          }
+        ]
+      },
+      logIndexTableKeys: {
+        data: 'data',
+        total: 'meta.total',
+        currentPage: 'meta.current_page',
+        perPage: 'meta.per_page',
+        pageKey: 'page'
+      },
+      logIndexApi: API_ADDRESS.question.reportLog,
       questionType: new QuestionType(),
       componentTabs: new TypeList(),
       question: new Question(),
@@ -153,6 +199,7 @@ export default {
     this.loadQuestionTargets()
     this.loadAuthorshipDates()
     this.loadMajorList()
+    this.setlogIndexInputsValues()
   },
   provide () {
     return {
@@ -161,6 +208,12 @@ export default {
   },
   mounted () {},
   methods: {
+    setlogIndexInputsValues () {
+      const questionIdIndex = this.logIndexInputs.findIndex(item => item.name === 'question_id')
+      if (questionIdIndex !== -1) {
+        this.logIndexInputs[questionIdIndex].value = this.question.id
+      }
+    },
     changeImagePAnelMode () {
       this.imgFloatMode = !this.imgFloatMode
     },
