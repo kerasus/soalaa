@@ -208,6 +208,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.SubCategory.Questions',
         params: {
+          page: 1,
           exam_id: examId,
           subcategory_id: id
         }

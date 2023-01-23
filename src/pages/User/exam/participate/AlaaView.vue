@@ -152,11 +152,11 @@
 </template>
 
 <script>
+import Assistant from 'src/plugins/assistant'
 import VueKatex from 'src/components/VueKatex'
 import Choice from 'src/components/OnlineQuiz/Quiz/Choice'
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer } from 'src/mixin/Mixins'
-import Assistant from 'src/plugins/assistant'
 
 export default {
   name: 'AlaaView',
@@ -194,7 +194,7 @@ export default {
       this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView', retake)
         .then(() => {
           this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
-          if (this.getCurrentExamQuestionsInArray().length === 0) {
+          if (!this.getCurrentExamQuestionsInArray() || this.getCurrentExamQuestionsInArray().length === 0) {
             this.$q.notify({
               type: 'negative',
               message: 'مشکلی در دریافت سوالات آزمون رخ داده است.',

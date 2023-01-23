@@ -3,48 +3,49 @@
     <q-card class="top-menu q-pa-lg">
       <div class="row items-center">
         <div class="col-8">
-          <q-btn-toggle
-            v-model="questionFilterMethod"
-            unelevated
-            no-caps
-            toggle-color="primary"
-            color="white"
-            text-color="black"
-            :options="[
-              {label: 'نمایش همه', value:'not-filtered'},
-              {label: ' کلا تایید نشده', value:'not-confirmed-at-all'},
-              {label: 'من تایید نکردم', value:'not-confirmed-by-me'}
-            ]"
+          <q-btn-toggle v-if="false"
+                        v-model="questionFilterMethod"
+                        unelevated
+                        no-caps
+                        toggle-color="primary"
+                        color="white"
+                        text-color="black"
+                        :options="[
+                          {label: 'نمایش همه', value:'not-filtered'},
+                          {label: ' کلا تایید نشده', value:'not-confirmed-at-all'},
+                          {label: 'من تایید نکردم', value:'not-confirmed-by-me'}
+                        ]"
           />
-          <q-btn
-            round
-            color="primary"
-            unelevated
-            icon="isax:printer"
-            @click="printQuestions"
+          <q-btn v-if="false"
+                 round
+                 color="primary"
+                 unelevated
+                 icon="isax:printer"
+                 @click="printQuestions"
           />
         </div>
         <div class="col-4 flex justify-end">
-          <!--          <div class="search-box">-->
-          <!--            <div>-->
-          <!--              <q-input-->
-          <!--                v-model="searchedQuestionOrder"-->
-          <!--                type="number"-->
-          <!--                outlined-->
-          <!--                dense-->
-          <!--                label="شماره سوال"-->
-          <!--                @keydown.enter="scrollToQuestion"-->
-          <!--              >-->
-          <!--                <template v-slot:append>-->
-          <!--                  <div @click="scrollToQuestion">-->
-          <!--                    <i class="fi fi-rr-search search-icon cursor-pointer"></i>-->
-          <!--                  </div>-->
-          <!--                </template>-->
-          <!--              </q-input>-->
-          <!--            </div>-->
-          <!--            <i class="fi fi-rr-refresh refresh-icon cursor-pointer q-ml-md"-->
-          <!--               @click="reload"></i>-->
-          <!--          </div>-->
+          <div class="search-box q-pr-md">
+            <div>
+              <q-input
+                v-model="searchedQuestionOrder"
+                type="number"
+                outlined
+                dense
+                label="شماره سوال"
+                @keydown.enter="paginateToQuestion"
+              >
+                <template v-slot:append>
+                  <div @click="paginateToQuestion">
+                    <i class="fi fi-rr-search search-icon cursor-pointer"></i>
+                  </div>
+                </template>
+              </q-input>
+            </div>
+            <i class="fi fi-rr-refresh refresh-icon cursor-pointer q-ml-md"
+               @click="reload"
+            />
+          </div>
           <q-btn
             round
             color="primary"
@@ -182,7 +183,7 @@ export default {
     }
   },
   created () {
-    this.loadQuizDataAndSubCategories()
+    this.loadQuizDataAndSubCategories(false, this.$route.params.page)
   },
   computed: {
     filteredQuestions () {
@@ -245,17 +246,25 @@ export default {
     sendConfirmReq (question) {
       return this.$axios.get(API_ADDRESS.question.confirm(question.id))
     },
-    scrollToQuestion () {
-      const questionIndex = this.filteredQuestions.findIndex(question => question.in_subcategory_order.toString() === this.searchedQuestionOrder.toString())
-      if (questionIndex === -1) {
-        this.searchedQuestionOrder = 0
-        this.$q.notify({
-          message: 'سوال پیدا نشد.',
-          type: 'negative'
-        })
+    paginateToQuestion () {
+      if (this.paginationMeta.per_page === 0) {
         return
       }
-      this.$refs.scroller.scrollTo(questionIndex, 'start-force')
+      const page = Math.floor(this.searchedQuestionOrder / this.paginationMeta.per_page) + 1
+      this.loadQuizDataAndSubCategories(false, page, () => {
+        this.$nextTick(() => {
+          const questionIndex = this.filteredQuestions.findIndex(question => question.in_subcategory_order.toString() === this.searchedQuestionOrder.toString())
+          if (questionIndex === -1) {
+            this.searchedQuestionOrder = 0
+            this.$q.notify({
+              message: 'سوال پیدا نشد.',
+              type: 'negative'
+            })
+            return
+          }
+          this.$refs.scroller.scrollTo(questionIndex, 'start-force')
+        })
+      })
     },
     questionListHeight () {
       // box is a col-7 with 12px padding
@@ -268,15 +277,25 @@ export default {
     changeAppBarAndDrawer (state) {
       this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
     },
-    async loadQuizDataAndSubCategories (reload = false, pageNumber = 1) {
+    async loadQuizDataAndSubCategories (reload = false, pageNumber = 1, callback) {
       this.pageLoading = true
+      if (this.$route.params.page !== pageNumber.toString()) {
+        this.$router.push({
+          name: 'Admin.Exam.SubCategory.Questions',
+          params: {
+            page: pageNumber,
+            exam_id: this.$route.params.exam_id,
+            subcategory_id: this.$route.params.subcategory_id
+          }
+        })
+      }
       try {
         const response = await this.getQuizDataAndSubCategories(pageNumber)
         if (response.data.data.length) {
           this.paginationMeta = response.data.meta
           // this.paginationKey++
           this.firstQuestionOrder = response.data.data[0].order
-          this.loadSubCategories(response, reload)
+          this.loadSubCategories(response, reload, callback)
           this.pageLoading = false
         } else {
           // this.$router.push({ name: 'Admin.Exam.Index' })
@@ -296,7 +315,7 @@ export default {
         sub_categories: [this.$route.params.subcategory_id]
       })
     },
-    loadSubCategories (quizResponse, reload) {
+    loadSubCategories (quizResponse, reload, callback) {
       const that = this
       this.$axios.get(API_ADDRESS.questionSubcategory.base)
         .then((response) => {
@@ -311,6 +330,9 @@ export default {
           that.sortQuestions(questions)
           that.quizData.questions = new QuestionList(questions)
           this.questionListKey = Date.now()
+          if (typeof callback === 'function') {
+            callback(response)
+          }
         })
     },
     scrollTo (questionId, questionNumber) {
@@ -334,7 +356,7 @@ export default {
       // this.changeQuestion(questionId)
     },
     reload () {
-      this.loadQuizDataAndSubCategories(true)
+      this.loadQuizDataAndSubCategories(true, this.$route.params.page)
     },
     onScroll (startIndex, endIndex) {
       // this.updateLtr()
@@ -456,6 +478,7 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .search-box{
   display: flex;
