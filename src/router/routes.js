@@ -109,9 +109,9 @@ const routes = [
         name: 'HomePage',
         layoutConfig: {
           layoutHeader: false,
-          layoutHeaderVisible: false
+          layoutHeaderVisible: false,
           // layoutHeaderType: 'panel',
-          // layoutLeftDrawerVisible: true,
+          layoutLeftDrawerVisible: false
           // layoutLeftSideBarType: 'panel',
           // layoutView: 'lHh Lpr lFf',
           // layoutHeader: true,
@@ -131,7 +131,7 @@ const routes = [
           // layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
           // layoutPageContainerCustomClass: 'main-layout-container'
         },
-        component: () => import('pages/User/landing/landing')
+        component: () => import('src/pages/HomePage.vue')
       },
       {
         path: 'landing',

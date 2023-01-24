@@ -272,12 +272,10 @@
 </template>
 
 <script>
-import Widgets from 'src/components/PageBuilder/Widgets'
 import { Cart } from 'src/models/Cart'
 
 export default {
   name: 'CartInvoice',
-  mixins: [Widgets],
   props: {
     data: {
       type: Object,

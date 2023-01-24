@@ -265,7 +265,9 @@ export default {
         message: 'سوال به تغییرات انتخاب شده بازگردانی شد',
         position: 'top'
       })
+      // eslint-disable-next-line
       console.warn('question statement', this.question.statement)
+      // eslint-disable-next-line
       console.warn('question descriptive_answer', this.question.descriptive_answer)
     },
     deleteQuestion () {

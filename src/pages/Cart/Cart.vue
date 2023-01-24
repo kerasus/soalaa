@@ -1,19 +1,15 @@
 <template>
   <div class="cart-page">
-    <page-builder
-      :sections="sections"
-      :options="options"
-      :containerFullHeight="calculateHeightStyle"
-    ></page-builder>
+    <q-page-builder v-model:sections="sections"
+                    v-model:options="pageConfig"
+                    :editable="pageBuilderEditable" />
   </div>
 </template>
 
 <script>
-import pageBuilder from 'src/components/PageBuilder/PageBuilder'
 
 export default {
   name: 'Cart',
-  components: { pageBuilder },
   data() {
     return {
       sections: [
@@ -41,11 +37,14 @@ export default {
           options: {}
         }
       ],
-      options: []
+      pageConfig: {}
     }
   },
   created() {},
   computed: {
+    pageBuilderEditable() {
+      return this.$store.getters['AppLayout/pageBuilderEditable']
+    },
     calculateHeightStyle() {
       return this.$store.getters['AppLayout/calculateContainerFullHeight']
     }

@@ -223,13 +223,11 @@
 </template>
 
 <script>
-import Widgets from 'components/PageBuilder/Widgets'
 import { Cart } from 'src/models/Cart'
 import { Product } from 'src/models/Product'
 
 export default {
   name: 'cartView',
-  mixins: [Widgets],
   data() {
     return {
       dialogState: false,
