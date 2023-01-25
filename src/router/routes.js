@@ -108,9 +108,9 @@ const routes = [
         path: '',
         name: 'HomePage',
         layoutConfig: {
-          layoutHeader: false,
-          layoutHeaderVisible: false,
-          // layoutHeaderType: 'panel',
+          layoutHeader: true,
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
           layoutLeftDrawerVisible: false
           // layoutLeftSideBarType: 'panel',
           // layoutView: 'lHh Lpr lFf',

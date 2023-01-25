@@ -31,7 +31,9 @@
       "path": "components/Widgets/FeatureBox",
       "name": "FeatureBox",
       "self_type": "folder",
-      "type": "widget"
+      "type": "widget",
+      "optionPanel": "components/Widgets/FeatureBox/OptionPanel.vue",
+      "optionPanelName": "FeatureBoxOptionPanel"
     },
     {
       "path": "components/Widgets/Footer",
@@ -67,7 +69,9 @@
       "path": "components/Widgets/Slider",
       "name": "Slider",
       "self_type": "folder",
-      "type": "widget"
+      "type": "widget",
+      "optionPanel": "components/Widgets/Slider/OptionPanel.vue",
+      "optionPanelName": "SliderOptionPanel"
     },
     {
       "path": "/home/alaa/WebstormProjects/Question-making-panel/src/components/Widgets/Subscription",
@@ -99,7 +103,9 @@
       "path": "components/Widgets/TabPanel",
       "name": "TabPanel",
       "self_type": "folder",
-      "type": "widget"
+      "type": "widget",
+      "optionPanel": "components/Widgets/TabPanel/OptionPanel.vue",
+      "optionPanelName": "TabPanelOptionPanel"
     },
     {
       "path": "components/Widgets/TestComponent1Widget",
@@ -112,6 +118,14 @@
       "name": "TestComponent2Widget",
       "self_type": "folder",
       "type": "widget"
+    },
+    {
+      "path": "components/Widgets/TextWidget",
+      "name": "TextWidget",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/TextWidget/OptionPanel.vue",
+      "optionPanelName": "TextWidgetOptionPanel"
     },
     {
       "path": "/home/alaa/WebstormProjects/Question-making-panel/src/components/Widgets/readme.md",
