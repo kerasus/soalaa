@@ -2,6 +2,10 @@ export function linearLoading (state) {
   return state.linearLoading
 }
 
+export function pageBuilderEditable (state) {
+  return state.pageBuilderEditable
+}
+
 // export function drawer (state) {
 //   return state.drawer
 // }

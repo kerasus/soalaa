@@ -158,12 +158,10 @@
 </template>
 
 <script>
-import Widgets from 'components/PageBuilder/Widgets'
 import { OrderItem } from 'src/models/OrderItem'
 
 export default {
   name: 'OrderedProducts',
-  mixins: [Widgets],
   data() {
     return {
       dialogState: false,

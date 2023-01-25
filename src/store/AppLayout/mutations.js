@@ -7,6 +7,10 @@ export function updateWindowSize (state, newInfo) {
   state.windowSize.y = newInfo.height
 }
 
+export function updatePageBuilderEditable (state, newInfo) {
+  state.pageBuilderEditable = !!newInfo
+}
+
 export function updateBubbleSize (state, newInfo) {
   state.bubbleSize = newInfo
 }

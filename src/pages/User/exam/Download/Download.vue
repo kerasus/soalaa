@@ -1,18 +1,12 @@
 <template>
-  <page-builder
-    :sections="sections"
-    :options="options"
-  />
+  <q-page-builder v-model:sections="sections"
+                  v-model:options="pageConfig"
+                  :editable="pageBuilderEditable" />
 </template>
 
 <script>
-import PageBuilder from 'components/PageBuilder/PageBuilder'
-
 export default {
   name: 'Download',
-  components: {
-    PageBuilder
-  },
   data() {
     return {
       sections: [
@@ -40,7 +34,12 @@ export default {
           options: {}
         }
       ],
-      options: []
+      pageConfig: {}
+    }
+  },
+  computed: {
+    pageBuilderEditable () {
+      return this.$store.getters['AppLayout/pageBuilderEditable']
     }
   }
 }

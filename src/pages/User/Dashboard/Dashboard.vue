@@ -1,22 +1,15 @@
 <template>
   <div class="dashboard">
-    <page-builder
-      :sections="sections"
-      :options="options"
-      :containerFullHeight="calculateHeightStyle"
-    />
+    <q-page-builder v-model:sections="sections"
+                    v-model:options="pageConfig"
+                    :editable="pageBuilderEditable" />
   </div>
 </template>
 
 <script>
-// import DashboardHeader from 'components/Dashboard/DashboardHeader'
-import pageBuilder from 'src/components/PageBuilder/PageBuilder'
 
 export default {
   name: 'Dashboard',
-  components: {
-    pageBuilder
-  },
   data() {
     return {
       sections: [
@@ -42,10 +35,13 @@ export default {
           options: {}
         }
       ],
-      options: []
+      pageConfig: {}
     }
   },
   computed: {
+    pageBuilderEditable() {
+      return this.$store.getters['AppLayout/pageBuilderEditable']
+    },
     calculateHeightStyle() {
       return this.$store.getters['AppLayout/calculateContainerFullHeight']
     }

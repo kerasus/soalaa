@@ -8,8 +8,10 @@
       class="feature-box ">
       <div class="content">
         <div>
-          <div class="title">
-            {{featureData.head }}
+          <div class="title"
+               style="color: v-bind(titleColor)"
+               :style="options.style">
+            {{ options.title }}
           </div>
           <div class="sub-title ellipsis">
             {{featureData.title}}
@@ -37,9 +39,11 @@
         </div>
       </div>
       <div class="img-box">
-        <q-img
-          class="img"
-          :src="featureData.image?.link" />
+        <a :href="featureData.image?.url">
+          <q-img
+            class="img"
+            :src="featureData.image?.link" />
+        </a>
       </div>
     </div>
   </div>
@@ -52,28 +56,26 @@ import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'FeatureBox',
   data: () => ({
+    titleColor: null,
     loading: false,
     featureData: []
   }),
   props: {
-    getData: {
-      type: Function,
-      default: () => {}
-    },
-    data: {
+    options: {
       type: Object,
       default: () => {}
     }
   },
   created() {
     this.initPageData()
+    this.titleColor = this.options.titleColor
   },
   methods: {
     async initPageData() {
       this.loading = true
       try {
-        const response = await this.getData(API_ADDRESS.homePage.base)
-        this.featureData = response.data.data[this.data.responseKey]
+        const response = await this.$axios(API_ADDRESS.homePage.base)
+        this.featureData = response.data.data[this.options.responseKey]
         this.loading = false
       } catch (e) {
         this.loading = false

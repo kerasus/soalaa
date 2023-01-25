@@ -9,6 +9,7 @@
 /* eslint-env node */
 const ESLintPlugin = require('eslint-webpack-plugin')
 const { configure } = require('quasar/wrappers')
+const { generateWidgetList } = require('./src/widgetListGetter/index')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 // const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
@@ -32,6 +33,7 @@ module.exports = configure(function (ctx) {
       'middleware',
       'icon',
       'breadcrumbs',
+      'registerQPageBuilder',
       'routesLayoutConfigs'
     ],
 
@@ -141,6 +143,13 @@ module.exports = configure(function (ctx) {
         // cfg.plugins.push(new MiniCssExtractPlugin({
         //   ignoreOrder: true
         // }))
+      },
+
+      beforeDev({ quasarConf }) {
+        generateWidgetList('./src/components/Widgets')
+      },
+      beforeBuild({ quasarConf }) {
+        generateWidgetList('./src/components/Widgets')
       }
     },
 
