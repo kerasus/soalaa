@@ -9,21 +9,23 @@
       <div class="content">
         <div>
           <div class="title"
-               style="color: v-bind(titleColor)"
                :style="options.style">
-            {{ options.title }}
+            {{ options.data.head }}
           </div>
-          <div class="sub-title ellipsis">
-            {{featureData.title}}
+          <!--          <div class="sub-title ellipsis">-->
+          <!--            {{options.data.title}}-->
+          <!--          </div>-->
+          <div>
+            <span v-html="options.data.editor"></span>
           </div>
-          <div v-for="(item, index) in featureData.value"
-               :key="index"
-               class="soalaa-item">
-            <q-icon size="7px"
-                    class="badge"
-                    name="circle" />
-            <div class="ellipsis">{{item}}</div>
-          </div>
+          <!--          <div v-for="(item, index) in options.data.value"-->
+          <!--               :key="index"-->
+          <!--               class="soalaa-item">-->
+          <!--            <q-icon size="7px"-->
+          <!--                    class="badge"-->
+          <!--                    name="circle" />-->
+          <!--            <div class="ellipsis">{{item}}</div>-->
+          <!--          </div>-->
         </div>
         <div v-if="featureData.button?.url"
              class="more-details text-right">
@@ -56,6 +58,7 @@ import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'FeatureBox',
   data: () => ({
+    editor: '',
     titleColor: null,
     loading: false,
     featureData: []
@@ -66,9 +69,22 @@ export default {
       default: () => {}
     }
   },
+  watch: {
+    options: {
+      handler() {
+        this.titleColor = this.options.titleColor
+      },
+      deep: true
+    }
+  },
   created() {
     this.initPageData()
     this.titleColor = this.options.titleColor
+  },
+  computed: {
+    pageBuilderEditable () {
+      return this.$store.getters['AppLayout/pageBuilderEditable']
+    }
   },
   methods: {
     async initPageData() {
@@ -90,7 +106,7 @@ export default {
   .feature-box{
     .content{
       .title{
-        color: #FFC107;
+        //color: #FFC107;
       }
     }
   }
@@ -158,7 +174,7 @@ export default {
       font-weight: 800;
       font-size: 40px;
       line-height: 62px;
-      color: #8075DC;
+      color: v-bind(titleColor);
       margin-bottom: 10px;
       @media screen and (max-width: 1439px) {
         font-size: 32px;

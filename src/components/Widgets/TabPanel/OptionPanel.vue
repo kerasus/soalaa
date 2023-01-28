@@ -16,7 +16,7 @@
                      round
                      dense
                      :icon="'edit'"
-                     @click="showFullBanner(props.row.name)" />
+                     @click="showFullBanner(props.row.title)" />
             </q-td>
           </template>
           <template v-slot:body-cell-photo="props">
@@ -25,6 +25,22 @@
                   :props="props"
                   auto-width>
               <lazy-img :src="props.row.photo" />
+            </q-td>
+          </template>
+          <template v-slot:body-cell-icon="props">
+            <q-td key="icon"
+                  class="thumbnail"
+                  :props="props"
+                  auto-width>
+              <lazy-img :src="props.row.icon" />
+            </q-td>
+          </template>
+          <template v-slot:body-cell-icon2="props">
+            <q-td key="icon2"
+                  class="thumbnail"
+                  :props="props"
+                  auto-width>
+              <lazy-img :src="props.row.icon2" />
             </q-td>
           </template>
           <template v-slot:body-cell-remove="props">
@@ -37,11 +53,44 @@
                      round
                      dense
                      :icon="'delete'"
-                     @click="removeBanner(props.row.name)" />
+                     @click="removeBanner(props.row.title)" />
             </q-td>
           </template>
         </q-table>
       </div>
+      <q-dialog v-model="expandBanner"
+                persistent>
+        <q-card v-ripple
+                class="column card"
+                clickable>
+          <div class="row col-12">
+            <q-card-section class="row items-center q-pb-none">
+              <q-btn v-close-popup
+                     icon="close"
+                     flat
+                     round
+                     dense
+                     @click="responsive = ''" />
+            </q-card-section>
+          </div>
+          <div class="col-12 row">
+            <q-card-section class="col-6">
+              <q-input v-model="selectedSlide.title"
+                       label="title" />
+            </q-card-section>
+            <q-card-section class="col-6">
+              <q-input v-model="selectedSlide.link"
+                       label="link" />
+            </q-card-section>
+          </div>
+          <div class="row col-12">
+            <q-card-section class="col-12">
+              <banner-preview v-model:banner="selectedSlide"
+                              @update:src="updateSrc" />
+            </q-card-section>
+          </div>
+        </q-card>
+      </q-dialog>
     </template>
   </option-panel-tabs>
 </template>
@@ -49,10 +98,12 @@
 import { defineComponent } from 'vue'
 import mixinOptionPanel from 'quasar-ui-q-page-builder/src/mixin/OptionPanel.js'
 import OptionPanelTabs from 'quasar-ui-q-page-builder/src/components/OptionPanelComponents/OptionPanelTabs.vue'
+import lazyImg from 'components/lazyImg'
+import { TabPanel } from 'src/models/TabPanel.js'
 
 export default defineComponent({
   name: 'OptionPanel',
-  components: { OptionPanelTabs },
+  components: { OptionPanelTabs, lazyImg },
   mixins: [mixinOptionPanel],
   props: {
     options: {
@@ -80,6 +131,18 @@ export default defineComponent({
           field: row => row.icon
         },
         {
+          name: 'icon2',
+          align: 'center',
+          label: 'آیکن2',
+          field: row => row.icon2
+        },
+        {
+          name: 'photo',
+          align: 'center',
+          label: 'تصویر',
+          field: row => row.icon.photo
+        },
+        {
           name: 'view',
           align: 'center',
           label: 'مشاهده',
@@ -93,6 +156,8 @@ export default defineComponent({
         }
       ],
       rows: [],
+      expandBanner: false,
+      selectedSlide: new TabPanel(),
       defaultOptions: {
         className: '',
         height: 'auto',
@@ -115,14 +180,22 @@ export default defineComponent({
   },
   methods: {
     initTable() {
-      console.log(this.localOptions)
-      // for (let i = 0; i < this.localOptions.list.length; i++) {
-      //   this.rows.push({
-      //     name: i + 1,
-      //     title: this.localOptions.list[i].title,
-      //     photo: this.localOptions.list[i].photo.src ? this.localOptions.list[i].photo.src : this.responsiveFeatures(this.localOptions.list[i].features).src
-      //   })
-      // }
+      for (let i = 0; i < this.localOptions.tabs.length; i++) {
+        this.rows.push({
+          title: this.localOptions.tabs[i].title,
+          icon: this.localOptions.tabs[i].icon,
+          icon2: this.localOptions.tabs[i].icon2,
+          photo: this.localOptions.tabs[i].image
+        })
+      }
+    },
+    showFullBanner(title) {
+      const index = this.localOptions.tabs.findIndex(tab => tab.title === title)
+      this.expandBanner = true
+      this.selectedSlide = new TabPanel(this.localOptions.tabs[index])
+    },
+    removeBanner() {
+
     }
   }
 })

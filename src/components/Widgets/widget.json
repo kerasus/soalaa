@@ -95,6 +95,14 @@
           "name": "SubscriptionPackagesSection",
           "self_type": "folder",
           "type": "widget"
+        },
+        {
+          "path": "components/Widgets/Subscription/Tabs",
+          "name": "Tabs",
+          "self_type": "folder",
+          "type": "widget",
+          "optionPanel": "components/Widgets/Subscription/Tabs/OptionPanel.vue",
+          "optionPanelName": "TabsOptionPanel"
         }
       ],
       "type": "folder"
