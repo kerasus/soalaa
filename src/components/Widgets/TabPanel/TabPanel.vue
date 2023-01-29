@@ -18,23 +18,23 @@
         active-class="active-tab"
         class="tab-box"
       >
-        <q-tab v-for="(tab, index) in tabs"
+        <q-tab v-for="(tab, index) in options.tabs"
                :key="index"
                :name="index"
                :icon="tabIcon(index, tab.icon, tab.icon2)"
                class="tab-style"
-               :label="tab.key"
+               :label="tab.title"
         />
       </q-tabs>
       <q-tab-panels v-model="activeTab"
                     animated
                     class="tab-content">
-        <q-tab-panel v-for="(tabData, index) in tabs"
+        <q-tab-panel v-for="(tabData, index) in options.tabs"
                      :key="index"
                      class="q-pa-none tab-panel-box"
                      :name="index">
           <div class="content">
-            <div class="title"> {{ tabData.key }}</div>
+            <div class="title"> {{ tabData.title }}</div>
             <div class="description">{{ tabData.value }}</div>
             <div v-if="tabData.link"
                  class="more-detail text-right">
@@ -70,14 +70,18 @@ export default {
     activeTab: 0
   }),
   props: {
-    getData: {
-      type: Function,
-      default: () => {
+    options: {
+      type: Object,
+      default () {
+        return {}
       }
     }
   },
   created() {
-    this.initPageData()
+    // this.initPageData()
+    this.$bus.on('changeTab', (newTab) => {
+      this.activeTab = newTab
+    })
   },
   methods: {
     tabIcon(index, icon, icon2) {
