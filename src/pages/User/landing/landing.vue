@@ -77,8 +77,8 @@ export default {
       })
     },
     closeSidBarAndAppbar () {
-      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
-      this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
+      // this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
+      // this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
     }
   }
 }

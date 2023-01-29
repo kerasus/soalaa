@@ -43,10 +43,12 @@
             />
           </div>
           <div class="logo-pic">
-            <q-img
-              class="logo-pic-img"
-              src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
-            />
+            <router-link :to="{name: 'HomePage'}">
+              <q-img
+                class="logo-pic-img"
+                src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
+              />
+            </router-link>
           </div>
         </div>
         <!--        -----------------------------------------------------Tabs Section--------------------------------------------   -->

@@ -101,16 +101,16 @@ const routes = [
         name: 'HomePage',
         layoutConfig: {
           layoutHeader: false,
-          layoutHeaderVisible: false
+          layoutHeaderVisible: false,
           // layoutHeaderType: 'panel',
-          // layoutLeftDrawerVisible: true,
           // layoutLeftSideBarType: 'panel',
           // layoutView: 'lHh Lpr lFf',
           // layoutHeader: true,
           // layoutHeaderReveal: false,
           // layoutHeaderElevated: false,
           // layoutHeaderBordered: false,
-          // layoutLeftDrawer: true,
+          layoutLeftDrawer: false,
+          layoutLeftDrawerVisible: false
           // layoutLeftDrawerOverlay: false,
           // layoutLeftDrawerElevated: false,
           // layoutLeftDrawerBordered: false,

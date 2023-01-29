@@ -146,6 +146,8 @@ export default {
         .profile-photo-img {
           .q-img {
             border-radius: 16px;
+            width: 54px;
+            height: 54px;
           }
         }
         .profile-photo-badge {
