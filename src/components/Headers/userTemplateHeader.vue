@@ -88,11 +88,11 @@
                       clickable
                       :active="false"
                       active-class="active-item">
-                <q-item-section v-if="!pageBuilderEditable"
+                <q-item-section v-if="!pageBuilderEditable && this.user.hasPermission('examStore') && this.$route.name === 'HomePage'"
                                 class="tab-title">
                   ویرایش صفحه
                 </q-item-section>
-                <div v-else>
+                <div v-else-if="this.user.hasPermission('examStore') && this.$route.name === 'HomePage'">
                   <q-btn square
                          color="positive"
                          icon="check"
