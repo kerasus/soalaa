@@ -45,9 +45,6 @@ export default {
     LandingFooter,
     faq
   },
-  created () {
-    this.closeSidBarAndAppbar()
-  },
   methods: {
     goToUserExamList () {
       this.$router.push({
@@ -75,10 +72,6 @@ export default {
         const duration = 500
         scroll.setVerticalScrollPosition(target, offset, duration)
       })
-    },
-    closeSidBarAndAppbar () {
-      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
-      this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
     }
   }
 }
