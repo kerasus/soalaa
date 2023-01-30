@@ -1,12 +1,14 @@
 <template>
-  <q-page-builder v-model:sections="sections"
+  <q-page-builder v-model:sections="currenSections"
                   v-model:options="pageConfig"
                   :editable="pageBuilderEditable" />
 </template>
 
 <script>
+import { mixinPageBuilder } from 'src/mixin/Mixins.js'
 export default {
   name: 'HomePage',
+  mixins: [mixinPageBuilder],
   data: () => ({
     pageConfig: {},
     sections: [
@@ -258,47 +260,77 @@ export default {
                           {
                             id: 1,
                             title: 'آزمون های متنوع',
+                            editor: '<div><span style="color: rgb(67, 71, 101); font-size: 18px; letter-spacing: -0.54px; text-align: justify; background-color: rgba(228, 232, 239, 0.6);">آزمون های سه آ رو از سال 1399 استارت زدیم چون ما همیشه یاد گرفتیم توی تمام جنبه های آموزش آنلاین باید اول باشیم. مگه میشه ی مدرسه معلم داشتنه باشه ولی آزمون نگیره؟! خب آلاء چند سالی بود که تبدیل شده بود به بزرگترین مدرسه آنلاین کشور و حالا وقتش بود بیاد ببینه بچه‌هاش چقدر درس رو یاد گرفتن؟ برای همین جهادی کار رو شروع کردیم. سال 99 فقط برای پایه دوازدهم آزمون داشتیم ولی الان برای تمام پایه های هفتم تا دوازدهم و حتی تیزهوشان ششم و نهم هم آزمون آنلاین برگزار می کنیم.</span><br></div>',
                             value: 'آزمون های سه آ رو از سال 1399 استارت زدیم چون ما همیشه یاد گرفتیم توی تمام جنبه های آموزش آنلاین باید اول باشیم. مگه میشه ی مدرسه معلم داشتنه باشه ولی آزمون نگیره؟! خب آلاء چند سالی بود که تبدیل شده بود به بزرگترین مدرسه آنلاین کشور و حالا وقتش بود بیاد ببینه بچه‌هاش چقدر درس رو یاد گرفتن؟\n                                    برای همین جهادی کار رو شروع کردیم. سال 99 فقط برای پایه دوازدهم آزمون داشتیم ولی الان برای تمام پایه های هفتم تا دوازدهم و حتی تیزهوشان ششم و نهم هم آزمون آنلاین برگزار می کنیم.',
                             image: 'https://picsum.photos/seed/picsum/200/300',
-                            link: '/landing/3a_exams',
                             icon: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/1_on.png',
-                            icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/1.png'
+                            icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/1.png',
+                            button: {
+                              bgColor: '',
+                              color: '#8075DC',
+                              text: 'اطلاعات بیشتر',
+                              url: '/landing/3a_exams'
+                            }
                           },
                           {
                             id: 2,
                             title: 'صفحه آزمون پیشرفته',
+                            editor: '<div><span style="color: rgb(67, 71, 101); font-size: 18px; letter-spacing: -0.54px; text-align: justify; background-color: rgba(228, 232, 239, 0.6);">\n' +
+                              'از ویژگی های خفن آزمون های سوالا، صفحه آزمون پیشرفته و حرفه ای اونه؛ یعنی یه آزمون داری با کلی قابلیت خفن و بدرد بخور که کمکت میکنن آزمونتو بدون دردسر و دغدغه‌های الکی با موفقیت بگذرونی. زمان سنج، دسترسی راحت به دفترچه سوالات، وجود دو حالت نمایش تک سوالی و پاسخنامه کنکوری، امکان نشان کردن سوالات و ... از ویژگی های اصلی و خفن این صفحه آزمون هستن.</span><br></div>',
                             value: 'از ویژگی های خفن آزمون های سوالا، صفحه آزمون پیشرفته و حرفه ای اونه؛ یعنی یه آزمون داری با کلی قابلیت خفن و بدرد بخور که کمکت میکنن آزمونتو بدون دردسر و دغدغه‌های الکی با موفقیت بگذرونی.\n                                    زمان سنج، دسترسی راحت به دفترچه سوالات، وجود دو حالت نمایش تک سوالی و پاسخنامه کنکوری، امکان نشان کردن سوالات و ... از ویژگی های اصلی و خفن این صفحه آزمون هستن.',
                             image: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/pic2.png',
-                            link: null,
                             icon: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/2_on.png',
-                            icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/2.png'
+                            icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/2.png',
+                            button: {
+                              text: 'اطلاعات بیشتر',
+                              bgColor: '',
+                              color: '#8075DC',
+                              url: null
+                            }
                           },
                           {
                             id: 3,
                             title: 'کارنامه جامع و تحلیلی',
+                            editor: '<div><span style="color: rgb(67, 71, 101); font-size: 18px; letter-spacing: -0.54px; text-align: justify; background-color: rgba(228, 232, 239, 0.6);">یکی از مهم ترین ویژگی هایی که آزمون آنلاین داره و آزمون حضوری نداره اینه که در لحظه کارنامه رو صادر می کنیم و بلافاصله بعد از اتمام آزمون میتونی اطلاعات جامع و کاملی دریافت کنی. خب این پایان کار نیست. مگه میشه پای آلاء جایی باز بشه و از فیلم خبری نباشه؟! تمام سوالات آزمون های سه آ فیلم دارن و میتونی ببینی سرگروه درس چجوری سوال رو حل میکنه...</span><br></div>',
                             value: 'یکی از مهم ترین ویژگی هایی که آزمون آنلاین داره و آزمون حضوری نداره اینه که در لحظه کارنامه رو صادر می کنیم و بلافاصله بعد از اتمام آزمون میتونی اطلاعات جامع و کاملی دریافت کنی.\n                                    خب این پایان کار نیست. مگه میشه پای آلاء جایی باز بشه و از فیلم خبری نباشه؟!\n                                    تمام سوالات آزمون های سه آ فیلم دارن و میتونی ببینی سرگروه درس چجوری سوال رو حل میکنه...',
                             image: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/pic3.png',
-                            link: null,
                             icon: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/3_on.png',
-                            icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/3.png'
+                            icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/3.png',
+                            button: {
+                              text: 'اطلاعات بیشتر',
+                              bgColor: '',
+                              color: '#8075DC',
+                              url: null
+                            }
                           },
                           {
                             id: 4,
                             title: 'بانک سوال ارزشمند',
+                            editor: '<div><span style="color: rgb(67, 71, 101); font-size: 18px; letter-spacing: -0.54px; text-align: justify; background-color: rgba(228, 232, 239, 0.6);">ما توی سوالا یک مجموعه تست های بدرد بخور رو گردآوری کردیم و یه بانک سوالی ساختیم که میتونی بری بگردی توش و کلی آزمون بسازی و تمرین کنی یا از خودت آزمون بگیری. حتی میتونی سوالات رو به صورت PDF برای خودت دانلود کنید حالا وقتشه بگیم حدود 4000 تا تست از کجا اومده: 1- تست های آزمون های سه آ، 2- تست های کنکورهای نظام جدید رشته های ریاضی، تجربی و انسانی، 3- گلچینی از بهترین تست های کتاب های کمک درسی، 4- تست های آزمون های تیزهوشان و مدارس نمونه دولتی</span><br></div>',
                             value: 'ما توی سوالا یک مجموعه تست های بدرد بخور رو گردآوری کردیم و یه بانک سوالی ساختیم که میتونی بری بگردی توش و کلی آزمون بسازی و تمرین کنی یا از خودت آزمون بگیری. حتی میتونی سوالات رو به صورت PDF برای خودت دانلود کنید\n                                    حالا وقتشه بگیم حدود 4000 تا تست از کجا اومده: 1- تست های آزمون های سه آ، 2- تست های کنکورهای نظام جدید رشته های ریاضی، تجربی و انسانی، 3- گلچینی از بهترین تست های کتاب های کمک درسی، 4- تست های آزمون های تیزهوشان و مدارس نمونه دولتی',
                             image: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/pic4.png',
-                            link: '/subscription',
                             icon: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/4_on.png',
-                            icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/4.png'
+                            icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/4.png',
+                            button: {
+                              text: 'اطلاعات بیشتر',
+                              bgColor: '',
+                              color: '#8075DC',
+                              url: '/subscription'
+                            }
                           },
                           {
                             id: 5,
                             title: 'هیئت علمی حرفه ای',
+                            editor: '<div><span style="color: rgb(67, 71, 101); font-size: 18px; letter-spacing: -0.54px; text-align: justify; background-color: rgba(228, 232, 239, 0.6);">بازم بگیم سوالا بچه بزرگه آلاء است یا خودتون فهمیدید؟ تمام برنامه ریزی، ساختار، تولید محتوا و ... تحت نظارت بهترین اساتید از هیئت علمی آلاء انجام میشه. آدمایی که مسیر رو چشم بسته هم میرن، کافیه بهشون اعتماد کنی و پابه پا شون راه بیای، بعضی وقت ها هم بدویی! PDF برای خودت دانلود کنید حالا وقتشه بگیم حدود 4000 تا تست از کجا اومده: 1- تست های آزمون های سه آ، 2- تست های کنکورهای نظام جدید رشته های ریاضی، تجربی و انسانی، 3- گلچینی از بهترین تست های کتاب های کمک درسی، 4- تست های آزمون های تیزهوشان و مدارس نمونه دولتی</span><br></div>',
                             value: 'بازم بگیم سوالا بچه بزرگه آلاء است یا خودتون فهمیدید؟\n                                    تمام برنامه ریزی، ساختار، تولید محتوا و ... تحت نظارت بهترین اساتید از هیئت علمی آلاء انجام میشه. آدمایی که مسیر رو چشم بسته هم میرن، کافیه بهشون اعتماد کنی و پابه پا شون راه بیای، بعضی وقت ها هم بدویی!',
                             image: 'https://picsum.photos/seed/picsum/200/300',
-                            link: null,
                             icon: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/5_on.png',
-                            icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/5.png'
+                            icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/5.png',
+                            button: {
+                              text: 'اطلاعات بیشتر',
+                              color: '#8075DC',
+                              url: null
+                            }
                           }
                         ]
 
@@ -339,6 +371,8 @@ export default {
                             },
                             button: {
                               text: 'اطلاعات بیشتر',
+                              bgColor: '#8075DC',
+                              textColor: '#FFFFFF',
                               url: '/subscription'
                             }
                           }
@@ -395,6 +429,8 @@ export default {
                             },
                             button: {
                               text: 'اطلاعات بیشتر',
+                              bgColor: '#8075DC',
+                              textColor: '#FFFFFF',
                               url: '/landing/3a_exams'
                             }
                           }
@@ -453,13 +489,10 @@ export default {
       }
     ]
   }),
-  computed: {
-    pageBuilderEditable () {
-      return this.$store.getters['AppLayout/pageBuilderEditable']
-    }
-  },
-  mounted() {
-    // this.saveTempData()
+  created() {
+    // this.currenSections = this.sections
+    this.$store.dispatch('AppLayout/getPageWidget')
+    // this.$store.commit('AppLayout/updateInitialSections', this.sections)
   },
   methods: {
     saveTempData() {
@@ -467,15 +500,6 @@ export default {
         key: 'homePage',
         value: JSON.stringify(this.sections)
       })
-        .then(r => {
-          console.log(r)
-        })
-        .catch(e => {
-          console.log(e)
-        })
-    },
-    getTempData() {
-      this.$axios.get('alaa/api/v2/setting/show?key=homePage')
         .then(r => {
           console.log(r)
         })

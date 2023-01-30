@@ -27,24 +27,23 @@
           <!--            <div class="ellipsis">{{item}}</div>-->
           <!--          </div>-->
         </div>
-        <div v-if="featureData.button?.url"
+        <div v-if="options.data.button?.url"
              class="more-details text-right">
           <q-btn
             unelevated
-            color="primary"
-            :href="featureData.button?.url"
-            style="color: #8075DC"
+            :href="options.data.button?.url"
+            :style="{background: options.data.button.bgColor, color: options.data.button.textColor}"
             class="btn q-ma-none"
             padding="7px 15px 7px 15px"
             icon-right="west"
-            :label="featureData.button?.text" />
+            :label="options.data.button?.text" />
         </div>
       </div>
       <div class="img-box">
-        <a :href="featureData.image?.url">
+        <a :href="options.data.image?.url">
           <q-img
             class="img"
-            :src="featureData.image?.link" />
+            :src="options.data.image?.link" />
         </a>
       </div>
     </div>

@@ -35,17 +35,18 @@
                      :name="index">
           <div class="content">
             <div class="title"> {{ tabData.title }}</div>
-            <div class="description">{{ tabData.value }}</div>
-            <div v-if="tabData.link"
+            <span class="description"
+                  v-html="tabData.editor"></span>
+            <div v-if="tabData.button.url"
                  class="more-detail text-right">
               <q-btn
                 flat
-                :href="tabData.link"
-                style="color: #8075DC"
+                :href="tabData.button.url"
+                :style="{background: tabData.button.bgColor, color: tabData.button.color}"
                 class="btn"
                 padding="9px 17px"
                 icon-right="west"
-                label="اطلاعات بیشتر" />
+                :label="tabData.button.text" />
             </div>
           </div>
           <div class="img-box">
@@ -320,7 +321,7 @@ export default {
             align-self: flex-end;
 
             .btn {
-              color: #8075DC;
+              //color: #8075DC;
               font-style: normal;
               font-weight: 600;
               font-size: 18px;

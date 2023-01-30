@@ -4,8 +4,13 @@
       <div class="option-panel-container">
         <div
           class="row">
+          <div class="col-md-12">
+            <q-select v-model="responsive"
+                      :options="responsiveOpts"
+                      label="responsive" />
+          </div>
           <div class="col-md-3">
-            <q-select v-model="localOptions.fontStyle"
+            <q-select v-model="localOptions[responsive].fontStyle"
                       :options="fontStyle"
                       label="fontStyle" />
           </div>
@@ -14,11 +19,11 @@
                      label="font family" />
           </div>
           <div class="col-md-3 offset-1">
-            <q-input v-model="localOptions.fontSize"
+            <q-input v-model="localOptions[responsive].fontSize"
                      label="font size" />
           </div>
           <div class="col-md-3">
-            <q-input v-model="localOptions.fontWeight"
+            <q-input v-model="localOptions[responsive].fontWeight"
                      label="font weight" />
           </div>
         </div>
@@ -46,6 +51,8 @@ export default defineComponent({
   data() {
     return {
       fontStyle: ['inherit', 'normal', 'italic'],
+      responsiveOpts: ['xs', 'sm', 'md', 'lg', 'xl'],
+      responsive: 'xs',
       defaultOptions: {
         className: '',
         height: 'auto',
@@ -62,6 +69,9 @@ export default defineComponent({
       },
       deep: true
     }
+  },
+  mounted() {
+    console.log(this.localOptions[this.responsive])
   }
 })
 </script>
