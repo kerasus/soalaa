@@ -69,9 +69,6 @@ export default defineComponent({
       },
       deep: true
     }
-  },
-  mounted() {
-    console.log(this.localOptions[this.responsive])
   }
 })
 </script>
