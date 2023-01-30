@@ -270,11 +270,11 @@ class ExamData {
       if (!examId) {
         examId = that.exam.id
       }
-      const data = { }
+      const data = { exam_id: examId }
       if (retake) {
         data.retake = true
       }
-      this.$axios.post(API_ADDRESS.exam.examUser, data)
+      this.$axios.post(API_ADDRESS.exam.user.participate(examId), data)
         .then(response => {
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
