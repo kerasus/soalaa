@@ -24,8 +24,9 @@ const mixinWidget = {
   },
   created() {
     this.mergeOptionsToDefaultOptions()
+    console.log(this.initialSections)
   },
-  // computed: {
+  computed: {
   //   className() {
   //     if (!this.defaultOptions.className) {
   //       this.defaultOptions.className = ''
@@ -43,7 +44,7 @@ const mixinWidget = {
   //     }
   //     return this.defaultOptions.style
   //   }
-  // },
+  },
   methods: {
     mergeOptionsToDefaultOptions () {
       Object.assign(this.defaultOptions, this.options)

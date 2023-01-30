@@ -61,7 +61,7 @@
       <q-dialog v-model="expandBanner"
                 persistent>
         <q-card v-ripple
-                class="column card"
+                class="column card no-wrap"
                 clickable>
           <div class="row col-12">
             <q-card-section class="row items-center q-pb-none">
@@ -79,16 +79,123 @@
                        label="title" />
             </q-card-section>
             <q-card-section class="col-6">
-              <q-input v-model="selectedSlide.link"
+              <q-input v-model="selectedSlide.button.url"
                        label="link" />
             </q-card-section>
-          </div>
-          <div class="row col-12">
-            <q-card-section class="col-12">
-              <banner-preview v-model:banner="selectedSlide"
-                              @update:src="updateSrc" />
+            <q-card-section class="col-3">
+              <q-input v-model="selectedSlide.button.text"
+                       label="button text" />
+            </q-card-section>
+            <q-card-section class="col-4 offset-1">
+              <q-input v-model="selectedSlide.button.bgColor"
+                       label="button background" />
+            </q-card-section>
+            <q-card-section class="col-3 offset-1">
+              <q-input v-model="selectedSlide.button.color"
+                       label="button color" />
             </q-card-section>
           </div>
+          <div class="col-12 row">
+            <q-editor v-model="selectedSlide.editor"
+                      min-height="10rem"
+                      :toolbar="[
+                        [
+                          {
+                            label: $q.lang.editor.align,
+                            icon: $q.iconSet.editor.align,
+                            fixedLabel: true,
+                            list: 'only-icons',
+                            options: ['left', 'center', 'right', 'justify']
+                          },
+                          'token',
+                          {
+                            label: $q.lang.editor.fontSize,
+                            icon: $q.iconSet.editor.fontSize,
+                            fixedLabel: true,
+                            fixedIcon: true,
+                            list: 'no-icons',
+                            options: [
+                              'size-1',
+                              'size-2',
+                              'size-3',
+                              'size-4',
+                              'size-5',
+                              'size-6',
+                              'size-7'
+                            ]
+                          }
+                        ],
+                        ['bold', 'italic', 'strike', 'underline'],
+                        ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+                        ['viewsource']
+                      ]">
+              <template v-slot:token>
+                <q-btn-dropdown
+                  ref="token"
+                  dense
+                  no-caps
+                  no-wrap
+                  unelevated
+                  color="white"
+                  text-color="primary"
+                  label="Text Color"
+                  size="sm"
+                >
+                  <q-list dense>
+                    <q-item tag="label"
+                            clickable
+                            @click="color('foreColor', foreColor)">
+                      <q-item-section side>
+                        <q-icon name="format_paint" />
+                      </q-item-section>
+                      <q-item-section>
+                        <q-color
+                          v-model="foreColor"
+                          no-header
+                          no-footer
+                          default-view="palette"
+                          class="my-picker"
+                        />
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-btn-dropdown>
+              </template>
+            </q-editor>
+          </div>
+          <div class="col-12 row">
+            <q-card-section class="col-7">
+              <q-input v-model="selectedSlide.icon"
+                       label="icon" />
+            </q-card-section>
+            <q-card-section class="col-5">
+              <lazy-img :src="selectedSlide.icon" />
+            </q-card-section>
+          </div>
+          <div class="col-12 row">
+            <q-card-section class="col-7">
+              <q-input v-model="selectedSlide.icon2"
+                       label="icon2" />
+            </q-card-section>
+            <q-card-section class="col-5">
+              <lazy-img :src="selectedSlide.icon2" />
+            </q-card-section>
+          </div>
+          <div class="col-12 row">
+            <q-card-section class="col-12">
+              <q-input v-model="selectedSlide.image"
+                       label="image" />
+            </q-card-section>
+            <q-card-section class="col-12">
+              <lazy-img :src="selectedSlide.image" />
+            </q-card-section>
+          </div>
+          <!--          <div class="row col-12">-->
+          <!--            <q-card-section class="col-12">-->
+          <!--              <banner-preview v-model:banner="selectedSlide"-->
+          <!--                              @update:src="updateSrc" />-->
+          <!--            </q-card-section>-->
+          <!--          </div>-->
         </q-card>
       </q-dialog>
     </template>
@@ -171,6 +278,14 @@ export default defineComponent({
     localOptions: {
       handler(newVal) {
         this.$emit('update:options', newVal)
+      },
+      deep: true
+    },
+    selectedSlide: {
+      handler(newValue) {
+        const index = this.localOptions.tabs.findIndex(tab => tab.id === this.selectedSlide.id)
+        this.localOptions.tabs[index] = new TabPanel(newValue)
+        console.log(this.localOptions)
       },
       deep: true
     }
