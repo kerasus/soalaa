@@ -319,6 +319,14 @@ export default {
           width: 24px;
           size: 12px;
         }
+        .question-buttons {
+          :deep(.q-btn) {
+            .q-btn__content {
+              margin-top: 0;
+              margin-bottom: 0;
+            }
+          }
+        }
         @media only screen and (max-width: 600px) {
           .question-buttons button {
             margin-left: 0;
