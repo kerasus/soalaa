@@ -70,7 +70,7 @@
                   align="left"
                 >
                   <q-tab name="exam"
-                         label="آزمون ها" />
+                         label="آزمون های سه آ" />
                   <q-tab name="myExam"
                          label="آزمون های من" />
                 </q-tabs>

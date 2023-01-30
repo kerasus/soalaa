@@ -5,7 +5,7 @@
   <div v-else
        class="page-width">
     <div
-      class="feature-box ">
+      class="feature-box">
       <div class="content">
         <div>
           <div class="title"
@@ -111,13 +111,18 @@ export default {
   }
 }
 .page-width{
-  width: 1362px;
+  //width: 1362px;
+  width: 100%;
   margin: auto;
+  display: flex;
+  //justify-content: space-between;
   @media screen and (max-width:1439px ){
-    width: 954px;
+    //width: 954px;
+    width: 100%;
   }
   @media screen and (max-width:1023px ){
-    width: 540px;
+    //width: 540px;
+    width: 100%;
   }
   @media screen and (max-width:599px ){
     width: 100%;
@@ -131,9 +136,12 @@ export default {
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
   border-radius: 24px;
   margin-bottom: 80px;
-  display: grid;
-  grid-template-columns:587px 400px;
-  column-gap: 135px;
+  display: flex;
+  justify-content: space-between;
+  width: inherit;
+  //display: grid;
+  //grid-template-columns:587px 400px;
+  //column-gap: 135px;
   @media screen and (max-width: 1439px) {
     grid-template-columns:533px 280px;
     padding: 50px 40px;

@@ -430,7 +430,6 @@ export default {
     togglePageBuilderEditable () {
       const state = this.pageBuilderEditable
       this.$store.commit('AppLayout/updatePageBuilderEditable', !state)
-      console.log(this.pageBuilderEditable)
     },
     cancelEditPageBuilder() {
       const initialSections = this.$store.getters['AppLayout/initialSections']
