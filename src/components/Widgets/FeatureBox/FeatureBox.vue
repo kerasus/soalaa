@@ -3,6 +3,7 @@
               class="full-width slider-loading"
               height="520px" />
   <div v-else
+       :style="options.style"
        class="page-width">
     <div
       class="feature-box">
@@ -112,20 +113,20 @@ export default {
 }
 .page-width{
   //width: 1362px;
-  width: 100%;
+  //width: 100%;
   margin: auto;
-  display: flex;
-  //justify-content: space-between;
+  //display: flex;
+  //justify-content: center;
   @media screen and (max-width:1439px ){
     //width: 954px;
-    width: 100%;
+    //width: 100%;
   }
   @media screen and (max-width:1023px ){
     //width: 540px;
-    width: 100%;
+    //width: 100%;
   }
   @media screen and (max-width:599px ){
-    width: 100%;
+    //width: 100%;
     padding-left: 19px;
     padding-right: 19px;
   }

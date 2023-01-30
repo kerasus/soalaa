@@ -2,6 +2,16 @@
   <option-panel-tabs v-model:options="localOptions">
     <template #main-tab>
       <div class="option-panel-container">
+        <div class="row items-center q-my-md">
+          <q-btn size="md"
+                 class="q-py-lg"
+                 color="green-7"
+                 label="افزودن پنل"
+                 round
+                 dense
+                 icon="add"
+                 @click="addBanner" />
+        </div>
         <q-table dir="rtl"
                  title="جدول پنل ها"
                  :rows="rows"
@@ -74,11 +84,11 @@
             </q-card-section>
           </div>
           <div class="col-12 row">
-            <q-card-section class="col-6">
+            <q-card-section class="col-4">
               <q-input v-model="selectedSlide.title"
                        label="title" />
             </q-card-section>
-            <q-card-section class="col-6">
+            <q-card-section class="col-4">
               <q-input v-model="selectedSlide.button.url"
                        label="link" />
             </q-card-section>
@@ -86,13 +96,15 @@
               <q-input v-model="selectedSlide.button.text"
                        label="button text" />
             </q-card-section>
-            <q-card-section class="col-4 offset-1">
-              <q-input v-model="selectedSlide.button.bgColor"
-                       label="button background" />
+            <q-card-section class="col-6 text-center">
+              background color
+              <q-color v-model="selectedSlide.button.bgColor"
+                       class="button background" />
             </q-card-section>
-            <q-card-section class="col-3 offset-1">
-              <q-input v-model="selectedSlide.button.color"
-                       label="button color" />
+            <q-card-section class="col-6 text-center">
+              color
+              <q-color v-model="selectedSlide.button.color"
+                       class="button background" />
             </q-card-section>
           </div>
           <div class="col-12 row">
@@ -285,6 +297,7 @@ export default defineComponent({
       handler(newValue) {
         const index = this.localOptions.tabs.findIndex(tab => tab.id === this.selectedSlide.id)
         this.localOptions.tabs[index] = new TabPanel(newValue)
+        this.updateTable(index)
       },
       deep: true
     }
@@ -303,13 +316,45 @@ export default defineComponent({
         })
       }
     },
+    updateTable(index) {
+      this.rows[index].title = this.localOptions.tabs[index].title
+      this.rows[index].icon = this.localOptions.tabs[index].icon
+      this.rows[index].icon2 = this.localOptions.tabs[index].icon2
+      this.rows[index].photo = this.localOptions.tabs[index].photo
+    },
+    addBanner() {
+      const index = this.localOptions.tabs.length
+      this.localOptions.tabs.push({
+        id: this.localOptions.tabs.length + 1,
+        title: '',
+        editor: '',
+        value: '',
+        image: '',
+        icon: '',
+        icon2: '',
+        button: {
+          bgColor: '',
+          color: '#8075DC',
+          text: 'اطلاعات بیشتر',
+          url: ''
+        }
+      })
+      this.rows.push({
+        title: this.localOptions.tabs[index].title,
+        icon: this.localOptions.tabs[index].icon,
+        icon2: this.localOptions.tabs[index].icon2,
+        photo: this.localOptions.tabs[index].photo
+      })
+    },
+    removeBanner(title) {
+      const index = this.rows.findIndex(row => row.title === title)
+      this.localOptions.tabs.splice(index, 1)
+      this.rows.splice(index, 1)
+    },
     showFullBanner(title) {
       const index = this.localOptions.tabs.findIndex(tab => tab.title === title)
       this.expandBanner = true
       this.selectedSlide = new TabPanel(this.localOptions.tabs[index])
-    },
-    removeBanner() {
-
     }
   }
 })
