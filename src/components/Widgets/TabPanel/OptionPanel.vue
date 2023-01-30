@@ -285,7 +285,6 @@ export default defineComponent({
       handler(newValue) {
         const index = this.localOptions.tabs.findIndex(tab => tab.id === this.selectedSlide.id)
         this.localOptions.tabs[index] = new TabPanel(newValue)
-        console.log(this.localOptions)
       },
       deep: true
     }

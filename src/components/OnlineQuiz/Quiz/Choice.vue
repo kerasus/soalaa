@@ -108,6 +108,7 @@ export default {
         color: #777;
         /*padding-left: 30px;*/
         display: flex;
+        align-items: flex-end;
     }
     .answer-text.ltr {
         height: max-content;
@@ -116,6 +117,7 @@ export default {
         padding-left: 0;
         padding-right: 30px;
         display: flex;
+        align-items: baseline;
     }
     .answer-text .mesra {
       max-width: 100%;
