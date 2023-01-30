@@ -24,7 +24,6 @@ const mixinWidget = {
   },
   created() {
     this.mergeOptionsToDefaultOptions()
-    console.log(this.initialSections)
   },
   computed: {
   //   className() {
