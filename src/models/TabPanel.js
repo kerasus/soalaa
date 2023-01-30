@@ -7,7 +7,8 @@ class TabPanel extends Model {
       { key: 'title' },
       { key: 'value' },
       { key: 'image' },
-      { key: 'link' },
+      { key: 'editor' },
+      { key: 'button' },
       { key: 'icon' },
       { key: 'icon2' }
     ])
