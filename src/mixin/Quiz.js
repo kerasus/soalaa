@@ -442,7 +442,7 @@ const mixinQuiz = {
 
       return currentExamQuestionsArray
     },
-    startExam (examId, viewType, retake) {
+    startExam (examId, viewType, retake, personal) {
       if (!Assistant.getId(examId)) {
         return
       }
@@ -456,7 +456,7 @@ const mixinQuiz = {
           this.$store.commit('Exam/cleanCurrentQuestion')
           this.bookletsDialog = true
           this.$store.commit('loading/overlay', true)
-          examData.getExamDataAndParticipate(examId, retake)
+          examData.getExamDataAndParticipate(examId, retake, personal)
           examData.loadQuestionsFromFile()
         } else {
           userExamId = this.quiz.user_exam_id

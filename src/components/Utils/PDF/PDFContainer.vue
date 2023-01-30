@@ -1,17 +1,20 @@
 <template>
   <div class="col-md-5 right-side">
     <div v-if="pageChunks.length === 0"
-         :style="{ width: pageSize.w + 'px' }"
+         :style="{ width: pageSize.w + 'mm', paddingRight:parseInt(pdfConfig.rightMargin)+'mm', paddingLeft: parseInt(pdfConfig.leftMargin)+'mm' }"
          class="prepare-question-section"
     >
       <pdf-question-field v-for="question in questions"
                           :key="'question-item-'+question.id"
                           v-model:height="question.height"
+                          :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'mm'}"
                           :question="question"
                           :order="question.order"
                           :display-choices="mode === 'questionsNoAnswer'"
                           :display-statement="mode === 'questionsNoAnswer'"
                           :display-descriptive-answer="mode === 'onlyDescriptiveAnswers'"
+                          :questionAndChoices="pdfConfig.questionAndChoices"
+                          :betweenChoices="pdfConfig.betweenChoices"
                           @questionLoaded="onQuestionLoaded(question)"
       />
     </div>
@@ -24,7 +27,10 @@
                   :title="exam.title"
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
-                  :page="(pageIndex+1).toString()"
+                  :page="(pageIndex+parseInt(pdfConfig.paginateStart)).toString()"
+                  :paddingRight="parseInt(pdfConfig.rightMargin)+9"
+                  :paddingLeft="parseInt(pdfConfig.leftMargin)+9"
+                  :pdf-config="pdfConfig"
         >
           <template v-slot:body>
             <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
@@ -33,6 +39,9 @@
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
+                                  :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'mm'}"
+                                  :questionAndChoices="pdfConfig.questionAndChoices"
+                                  :betweenChoices="pdfConfig.betweenChoices"
                                   display-choices
                                   display-statement
                                   :display-descriptive-answer="false"
@@ -50,7 +59,10 @@
                   :title="exam.title"
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
-                  :page="(pageIndex+1).toString()"
+                  :page="(pageIndex+parseInt(pdfConfig.paginateStart)).toString()"
+                  :paddingRight="parseInt(pdfConfig.rightMargin)+9"
+                  :paddingLeft="parseInt(pdfConfig.leftMargin)+9"
+                  :pdf-config="pdfConfig"
         >
           <template v-slot:body>
             <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
@@ -59,14 +71,16 @@
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
+                                  :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'mm'}"
                                   :display-choices="false"
                                   :display-statement="false"
+                                  :questionAndChoices="pdfConfig.questionAndChoices"
+                                  :betweenChoices="pdfConfig.betweenChoices"
                                   display-descriptive-answer
               />
             </div>
           </template>
         </pdf-page>
-        <div class="page-break"></div>
       </div>
     </div>
   </div>
@@ -83,6 +97,23 @@ export default {
   components: { PdfQuestionField, PdfPage },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion],
   props: {
+    pdfConfig: {
+      type: Object,
+      default () {
+        return {
+          hasTitle: true,
+          hasMajor: true,
+          hasGrade: true,
+          hasPaginate: true,
+          paginateStart: 1,
+          spaceBetweenQuestion: 5,
+          rightMargin: 5,
+          leftMargin: 5,
+          questionAndChoices: 5,
+          betweenChoices: 5
+        }
+      }
+    },
     exam: {
       type: Object,
       default () {
@@ -110,6 +141,7 @@ export default {
   emits: ['loaded'],
   data () {
     return {
+      loading: false,
       pageChunks: [],
       pageSize: {
         w: 724,
@@ -129,9 +161,11 @@ export default {
     }
   },
   mounted() {
+    this.loading = true
     if (this.allQuestionLoaded) {
       this.calcQuestionsHeight()
     }
+    this.loading = false
   },
   methods: {
     calcQuestionsHeight () {
@@ -139,6 +173,7 @@ export default {
       this.questions.forEach(question => {
         question.loaded = false
       })
+      this.loading = false
     },
     createPageChunks (pageHeight) {
       let sumHeight = 0
@@ -149,7 +184,9 @@ export default {
           sumHeight += question.height
           pageQuestions.push(question)
         } else {
-          pages.push(pageQuestions)
+          if (pageQuestions.length > 0) {
+            pages.push(pageQuestions)
+          }
           sumHeight = 0
           pageQuestions = []
           sumHeight += question.height
@@ -173,9 +210,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .prepare-question-section {
   margin: auto;
+}
+.loading {
+  width: 100%;
+  z-index: 9999;
+  .pdf-skeleton {
+    border-radius: 15px;
+  }
 }
 </style>
 <style>

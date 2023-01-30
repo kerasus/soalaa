@@ -149,7 +149,8 @@ export default {
       this.getOptions()
         .then(() => {
           this.getDraftExam()
-            .then(() => {
+            .then((response) => {
+              // ToDo: must check
               if (!response.data?.data) {
                 return
               }

@@ -81,6 +81,34 @@
                 </q-item>
               </div>
             </div>
+
+            <div class="self-center"
+                 @click="togglePageBuilderEditable">
+              <q-item v-ripple
+                      clickable
+                      :active="false"
+                      active-class="active-item">
+                <q-item-section v-if="!pageBuilderEditable"
+                                class="tab-title">
+                  ویرایش صفحه
+                </q-item-section>
+                <div v-else>
+                  <q-btn square
+                         color="positive"
+                         icon="check"
+                         @click="editPage" />
+                  <q-btn square
+                         class="q-ml-md"
+                         color="negative"
+                         icon="cancel"
+                         @click="cancelEditPageBuilder" />
+                  <q-btn square
+                         class="q-ml-md"
+                         color="primary"
+                         icon="edit" />
+                </div>
+              </q-item>
+            </div>
           </q-list>
         </div>
         <!--        -----------------------------------------------------Actions Section--------------------------------------------   -->
@@ -360,6 +388,9 @@ export default {
     this.addAdminItem()
   },
   computed: {
+    pageBuilderEditable() {
+      return this.$store.getters['AppLayout/pageBuilderEditable']
+    },
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
     },
@@ -370,6 +401,10 @@ export default {
   methods: {
     toggleLeftDrawer () {
       this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
+    },
+    editPage() {
+      const currentSections = this.$store.getters['AppLayout/currentSections']
+      this.$store.dispatch('AppLayout/editPageWidget', currentSections)
     },
     updateLayout() {
       if (this.$route.name === 'HomePage') {
@@ -391,6 +426,15 @@ export default {
           to: 'Admin.Exam.Index'
         })
       }
+    },
+    togglePageBuilderEditable () {
+      const state = this.pageBuilderEditable
+      this.$store.commit('AppLayout/updatePageBuilderEditable', !state)
+      console.log(this.pageBuilderEditable)
+    },
+    cancelEditPageBuilder() {
+      const initialSections = this.$store.getters['AppLayout/initialSections']
+      this.$store.commit('AppLayout/updateCurrentSections', initialSections)
     },
     logOut () {
       return this.$store.dispatch('Auth/logOut')

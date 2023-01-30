@@ -8,38 +8,43 @@
       class="feature-box ">
       <div class="content">
         <div>
-          <div class="title">
-            {{featureData.head }}
+          <div class="title"
+               :style="options.style">
+            {{ options.data.head }}
           </div>
-          <div class="sub-title ellipsis">
-            {{featureData.title}}
+          <!--          <div class="sub-title ellipsis">-->
+          <!--            {{options.data.title}}-->
+          <!--          </div>-->
+          <div>
+            <span v-html="options.data.editor"></span>
           </div>
-          <div v-for="(item, index) in featureData.value"
-               :key="index"
-               class="soalaa-item">
-            <q-icon size="7px"
-                    class="badge"
-                    name="circle" />
-            <div class="ellipsis">{{item}}</div>
-          </div>
+          <!--          <div v-for="(item, index) in options.data.value"-->
+          <!--               :key="index"-->
+          <!--               class="soalaa-item">-->
+          <!--            <q-icon size="7px"-->
+          <!--                    class="badge"-->
+          <!--                    name="circle" />-->
+          <!--            <div class="ellipsis">{{item}}</div>-->
+          <!--          </div>-->
         </div>
-        <div v-if="featureData.button?.url"
+        <div v-if="options.data.button?.url"
              class="more-details text-right">
           <q-btn
             unelevated
-            color="primary"
-            :href="featureData.button?.url"
-            style="color: #8075DC"
+            :href="options.data.button?.url"
+            :style="{background: options.data.button.bgColor, color: options.data.button.textColor}"
             class="btn q-ma-none"
             padding="7px 15px 7px 15px"
             icon-right="west"
-            :label="featureData.button?.text" />
+            :label="options.data.button?.text" />
         </div>
       </div>
       <div class="img-box">
-        <q-img
-          class="img"
-          :src="featureData.image?.link" />
+        <a :href="options.data.image?.url">
+          <q-img
+            class="img"
+            :src="options.data.image?.link" />
+        </a>
       </div>
     </div>
   </div>
@@ -52,28 +57,40 @@ import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'FeatureBox',
   data: () => ({
+    editor: '',
+    titleColor: null,
     loading: false,
     featureData: []
   }),
   props: {
-    getData: {
-      type: Function,
-      default: () => {}
-    },
-    data: {
+    options: {
       type: Object,
       default: () => {}
     }
   },
+  watch: {
+    options: {
+      handler() {
+        this.titleColor = this.options.titleColor
+      },
+      deep: true
+    }
+  },
   created() {
     this.initPageData()
+    this.titleColor = this.options.titleColor
+  },
+  computed: {
+    pageBuilderEditable () {
+      return this.$store.getters['AppLayout/pageBuilderEditable']
+    }
   },
   methods: {
     async initPageData() {
       this.loading = true
       try {
-        const response = await this.getData(API_ADDRESS.homePage.base)
-        this.featureData = response.data.data[this.data.responseKey]
+        const response = await this.$axios(API_ADDRESS.homePage.base)
+        this.featureData = response.data.data[this.options.responseKey]
         this.loading = false
       } catch (e) {
         this.loading = false
@@ -88,7 +105,7 @@ export default {
   .feature-box{
     .content{
       .title{
-        color: #FFC107;
+        //color: #FFC107;
       }
     }
   }
@@ -156,7 +173,7 @@ export default {
       font-weight: 800;
       font-size: 40px;
       line-height: 62px;
-      color: #8075DC;
+      color: v-bind(titleColor);
       margin-bottom: 10px;
       @media screen and (max-width: 1439px) {
         font-size: 32px;

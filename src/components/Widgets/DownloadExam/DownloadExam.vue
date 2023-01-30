@@ -11,7 +11,7 @@
           </div>
           <div class="col-12">
             <div class="flex justify-between items-center">
-              <q-checkbox v-model="pdfConfig.examTitle">
+              <q-checkbox v-model="pdfConfig.hasTitle">
                 عنوان آزمون
               </q-checkbox>
               <div class="value">
@@ -21,7 +21,7 @@
           </div>
           <div class="col-12">
             <div class="flex justify-between items-center">
-              <q-checkbox v-model="pdfConfig.major">
+              <q-checkbox v-model="pdfConfig.hasMajor">
                 رشته تحصیلی
               </q-checkbox>
               <div class="value">
@@ -31,7 +31,7 @@
           </div>
           <div class="col-12">
             <div class="flex justify-between items-center">
-              <q-checkbox v-model="pdfConfig.grade">
+              <q-checkbox v-model="pdfConfig.hasGrade">
                 پایه تحصیلی
               </q-checkbox>
               <div class="value">
@@ -75,26 +75,24 @@
               </template>
             </q-input>
           </div>
-          <!-- <div class="u-p flex justify-between">
-            <q-input v-model="number"
-                     filled
-                     class="side-input"
-                     prefix=" cm | "
-            >
-              <template v-slot:before>
-                بـــــــالا
-              </template>
-            </q-input>
-            <q-input v-model="number"
-                     filled
-                     class="side-input"
-                     prefix=" cm | "
-            >
-              <template v-slot:before>
-                پاییـن
-              </template>
-            </q-input>
-          </div> -->
+          <div class="sub-sub-title">
+            فاصله بین صورت سوال و گزینه ها
+          </div>
+          <q-input v-model="pdfConfig.questionAndChoices"
+                   type="number"
+                   filled
+                   prefix=" mm | "
+          />
+
+          <div class="sub-sub-title">
+            فاصله بین گزینه ها
+          </div>
+          <q-input v-model="pdfConfig.betweenChoices"
+                   type="number"
+                   filled
+                   prefix=" mm | "
+          />
+
           <div class="sub-sub-title">
             فاصله بین سوالات
           </div>
@@ -123,11 +121,11 @@
             صفحه بندی سوالات
           </div>
           <div class="radio-btn">
-            <q-radio v-model="pdfConfig.paginateExists"
+            <q-radio v-model="pdfConfig.hasPaginate"
                      :val="true"
                      label="بله" />
 
-            <q-radio v-model="pdfConfig.paginateExists"
+            <q-radio v-model="pdfConfig.hasPaginate"
                      :val="false"
                      label="خیر" />
           </div>
@@ -169,8 +167,7 @@
                  label="پاسخنامه کلیدی" />
         </q-tabs>
         <q-tab-panels v-model="tab"
-                      animated
-        >
+                      animated>
           <q-tab-panel class="tab-panel-style"
                        name="questions">
             <div class="question-info flex">
@@ -205,11 +202,11 @@
                 <q-skeleton height="900px"
                             class="pdf-skeleton" />
               </div>
-              <p-d-f-container
-                v-else-if="doesHaveQuestion"
-                :exam="examInfo"
-                :questions="questions"
-                @loaded="onQuestionsLoaded"
+              <p-d-f-container v-else-if="doesHaveQuestion"
+                               :exam="examInfo"
+                               :questions="questions"
+                               :pdfConfig="pdfConfig"
+                               @loaded="onQuestionsLoaded"
               />
             <!--            <vue-pdf-embed-->
             <!--              v-else-->
@@ -255,12 +252,12 @@
                 <q-skeleton height="900px"
                             class="pdf-skeleton" />
               </div>
-              <p-d-f-container
-                v-else-if="doesHaveQuestion"
-                :exam="examInfo"
-                :questions="questions"
-                :mode="'onlyDescriptiveAnswers'"
-                @loaded="onQuestionsLoaded"
+              <p-d-f-container v-else-if="doesHaveQuestion"
+                               :exam="examInfo"
+                               :questions="questions"
+                               :pdfConfig="pdfConfig"
+                               :mode="'onlyDescriptiveAnswers'"
+                               @loaded="onQuestionsLoaded"
               />
             <!--            <vue-pdf-embed-->
             <!--              v-else-->
@@ -295,7 +292,7 @@
                          class="btn"
                          label="دانلود PDF"
                          @click="generatePDF('keyAnswerPdf')"
-                  ></q-btn>
+                  />
                 </div>
               </div>
             </div>
@@ -319,13 +316,12 @@
         </q-tab-panels>
       </q-card>
       <div class="row text-center justify-center pagination-box">
-        <q-pagination
-          v-model="page"
-          :max="pageCount"
-          icon-first="isax:arrow-right-4"
-          icon-next="isax:arrow-right"
-          icon-last="isax:arrow-left"
-          @update:model-value="onChangePage"
+        <q-pagination v-model="page"
+                      :max="pageCount"
+                      icon-first="isax:arrow-right-4"
+                      icon-next="isax:arrow-right"
+                      icon-last="isax:arrow-left"
+                      @update:model-value="onChangePage"
         />
       </div>
     </div>
@@ -364,14 +360,16 @@ export default {
     radioOne: false,
     radioTow: false,
     pdfConfig: {
-      examTitle: false,
-      major: false,
-      grade: false,
-      paginateExists: false,
+      hasTitle: true,
+      hasMajor: true,
+      hasGrade: true,
+      hasPaginate: true,
       paginateStart: 1,
-      spaceBetweenQuestion: 1,
-      rightMargin: 1,
-      leftMargin: 1
+      spaceBetweenQuestion: 5,
+      rightMargin: 5,
+      leftMargin: 5,
+      questionAndChoices: 5,
+      betweenChoices: 5
     },
     loading: false,
     doesHaveQuestion: false,
@@ -655,21 +653,21 @@ export default {
      padding: 30px 0 0 0;
       border-top: 1px solid #E4E8EF;
 
-      .pdf-container{
-        direction: rtl!important ;
-        :deep(.vue-pdf-embed){
-          direction: rtl!important;
-          canvas{
-            border-radius: 12px !important;
-          }
-        }
-        .pdf{
-          direction: rtl!important;
-          *{
-            direction: rtl!important;
-          }
-        }
-      }
+      // .pdf-container{
+      //   direction: ltr!important ;
+      //   :deep(.vue-pdf-embed){
+      //     direction: rtl!important;
+      //     canvas{
+      //       border-radius: 12px !important;
+      //     }
+      //   }
+      //   .pdf{
+      //     direction: rtl!important;
+      //     *{
+      //       direction: rtl!important;
+      //     }
+      //   }
+      // }
 
       .pagination-box{
           margin-top: 30px;

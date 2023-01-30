@@ -5,9 +5,9 @@
     <div class="question-box"
          :class="{ 'current-question': this.currentQuestion.id === question.id, ltr: isLtrQuestion}"
     >
-      <div
-        v-if="displayStatement"
-        class="question-head"
+      <div v-if="displayStatement"
+           class="question-head"
+           :style="{marginBottom: questionAndChoices + 'mm'}"
       >
         <p :id="'question' + question.id"
            class="question-body"
@@ -24,16 +24,15 @@
         v-if="displayChoices"
         class="choices-box row"
       >
-        <q-item
-          v-for="(choice, index) in question.choices"
-          :key="choice.id"
-          class="choices"
-          :class="choiceClass"
+        <q-item v-for="(choice, index) in question.choices"
+                :key="choice.id"
+                class="choices"
+                :class="choiceClass"
+                :style="{marginBottom: betweenChoices + 'mm'}"
         >
-          <q-item-section
-            ref="choices"
-            class="choice"
-            :class="{ltr: isRtl}"
+          <q-item-section ref="choices"
+                          class="choice"
+                          :class="{ltr: isRtl}"
           >
             <div class="choice-inside">
               <q-icon
@@ -42,28 +41,26 @@
                 size="20px"
                 name="check"
               />
-              <vue-katex
-                class="vue-katex"
-                :input="'<span class='+'number'+'>'+ (index + 1) +') </span>' + choice.title"
-                :ltr="isLtrQuestion"
-                base64
-                @loaded="onChoiceLoaded(choice)"
+              <vue-katex class="vue-katex"
+                         :input="'<span class='+'number'+'>'+ (index + 1) +') </span>' + choice.title"
+                         :ltr="isLtrQuestion"
+                         base64
+                         @loaded="onChoiceLoaded(choice)"
               />
             </div>
           </q-item-section>
         </q-item>
       </q-list>
-      <div
-        v-if="displayDescriptiveAnswer"
-        class="question-descriptiveAnswer"
+      <div v-if="displayDescriptiveAnswer"
+           class="question-descriptiveAnswer"
       >
-        <p
-          :id="'question' + question.id"
-          class="question-body"
-          :class="{ ltr: isRtl }"
+        <p :id="'question' + question.id"
+           class="question-body"
+           :class="{ ltr: isRtl }"
         >
           <vue-katex class="vue-katex"
                      :input="getQuestionCompleteAnswerInput(order, question.descriptive_answer)"
+                     base64
                      @loaded="onDescriptiveAnswerLoaded"
           />
         </p>
@@ -92,6 +89,14 @@ export default {
       default: true
     },
     height: {
+      type: Number,
+      default: 0
+    },
+    questionAndChoices: {
+      type: Number,
+      default: 0
+    },
+    betweenChoices: {
       type: Number,
       default: 0
     },
@@ -244,6 +249,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.loading {
+  width: 100%;
+  z-index: 9999;
+  .pdf-skeleton {
+    border-radius: 15px;
+  }
+}
 .question-field{
   width: 100% !important;
   .alert-sheet{
@@ -261,14 +273,12 @@ export default {
     }
   }
   .question-box {
-    padding: 10px 10px 10px 30px;
     &.current-question {
       background-color: #fffaee;
     }
     .question-head{
       padding: 0;
       .question-body {
-        margin-bottom: 20px;
         line-height: 40px;
       }
       .question-icons {
@@ -280,7 +290,6 @@ export default {
     .question-descriptiveAnswer{
       padding: 0;
       .question-body {
-        margin-bottom: 20px;
         line-height: 40px;
       }
       .question-icons {
@@ -293,6 +302,9 @@ export default {
       .choices {
         display: flex;
         flex-direction: row;
+        padding: 0 16px;
+        min-height: 24px;
+
         .choice{
           display: flex;
           flex-direction: row;

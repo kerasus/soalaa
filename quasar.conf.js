@@ -9,6 +9,7 @@
 /* eslint-env node */
 const ESLintPlugin = require('eslint-webpack-plugin')
 const { configure } = require('quasar/wrappers')
+const { generateWidgetList } = require('./src/widgetListGetter/index')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 // const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
@@ -32,6 +33,7 @@ module.exports = configure(function (ctx) {
       'middleware',
       'icon',
       'breadcrumbs',
+      'registerQPageBuilder',
       'routesLayoutConfigs'
     ],
 
@@ -141,6 +143,13 @@ module.exports = configure(function (ctx) {
         // cfg.plugins.push(new MiniCssExtractPlugin({
         //   ignoreOrder: true
         // }))
+      },
+
+      beforeDev({ quasarConf }) {
+        generateWidgetList('./src/components/Widgets')
+      },
+      beforeBuild({ quasarConf }) {
+        generateWidgetList('./src/components/Widgets')
       }
     },
 
@@ -166,6 +175,14 @@ module.exports = configure(function (ctx) {
             ['^' + process.env.AAA_API]: ''
           }
         },
+        // [process.env.AAA_API_PRODUCTION]: {
+        //   target: process.env.AAA_API_SERVER_PRODUCTION,
+        //   changeOrigin: true,
+        //   secure: false,
+        //   pathRewrite: {
+        //     ['^' + process.env.AAA_API_PRODUCTION]: ''
+        //   }
+        // },
         [process.env.TREE_API]: {
           target: process.env.TREE_API_SERVER,
           changeOrigin: true,

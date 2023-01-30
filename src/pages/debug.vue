@@ -1,17 +1,12 @@
 <template>
-  <page-builder
-    :sections="sections"
-    :options="options"
-    :containerFullHeight="calculateHeightStyle"
-  ></page-builder>
+  <q-page-builder v-model:sections="sections"
+                  v-model:options="pageConfig"
+                  :editable="pageBuilderEditable" />
 </template>
 
 <script>
-import pageBuilder from 'src/components/PageBuilder/PageBuilder'
-
 export default {
   name: 'debug',
-  components: { pageBuilder },
   data() {
     return {
       sections: [
@@ -53,10 +48,13 @@ export default {
           options: {}
         }
       ],
-      options: []
+      pageConfig: {}
     }
   },
   computed: {
+    pageBuilderEditable () {
+      return this.$store.getters['AppLayout/pageBuilderEditable']
+    },
     calculateHeightStyle() {
       return this.$store.getters['AppLayout/calculateContainerFullHeight']
     }

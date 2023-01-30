@@ -85,7 +85,7 @@ const routes = [
       layoutHeaderType: 'panel',
       layoutLeftDrawerVisible: true,
       layoutLeftSideBarType: 'panel',
-      layoutView: 'lHh Lpr lFf',
+      layoutView: 'lHh Lpr lff',
       layoutHeader: true,
       layoutHeaderReveal: false,
       layoutHeaderElevated: false,
@@ -108,30 +108,14 @@ const routes = [
         path: '',
         name: 'HomePage',
         layoutConfig: {
-          layoutHeader: false,
-          layoutHeaderVisible: false
-          // layoutHeaderType: 'panel',
-          // layoutLeftDrawerVisible: true,
-          // layoutLeftSideBarType: 'panel',
-          // layoutView: 'lHh Lpr lFf',
-          // layoutHeader: true,
-          // layoutHeaderReveal: false,
-          // layoutHeaderElevated: false,
-          // layoutHeaderBordered: false,
-          // layoutLeftDrawer: true,
-          // layoutLeftDrawerOverlay: false,
-          // layoutLeftDrawerElevated: false,
-          // layoutLeftDrawerBordered: false,
-          // layoutLeftDrawerWidth: 325,
-          // layoutLeftDrawerBehavior: 'default',
-          // layoutPageContainer: true,
-          // layoutRightDrawer: false,
-          // layoutFooter: false,
-          // layoutHeaderCustomClass: '',
-          // layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
-          // layoutPageContainerCustomClass: 'main-layout-container'
+          layoutHeader: true,
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutLeftDrawerVisible: false,
+          layoutFooter: true,
+          layoutFooterVisible: true
         },
-        component: () => import('pages/User/landing/landing')
+        component: () => import('src/pages/HomePage.vue')
       },
       {
         path: 'landing',
@@ -139,8 +123,13 @@ const routes = [
         component: () => import('layouts/LandingLayout'),
         children: [
           {
-            path: '',
+            path: '3a_exams',
             name: 'Landing.3aExams',
+            layoutConfig: {
+              layoutHeader: false,
+              layoutLeftDrawer: false,
+              layoutFooter: true
+            },
             component: () => import('pages/User/landing/landing')
           }
         ]
@@ -661,8 +650,36 @@ const routes = [
         }
       },
       {
+        path: '/onlineQuiz/alaaView/personal/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView.personal',
+        component: () => import('pages/User/exam/participate/AlaaView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
         path: '/onlineQuiz/konkoorView/:quizId',
         name: 'konkoorView',
+        component: () => import('pages/User/exam/participate/konkoorView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
+        path: '/onlineQuiz/konkoorView/personal/:quizId',
+        name: 'onlineQuiz.konkoorView.personal',
         component: () => import('pages/User/exam/participate/konkoorView'),
         layoutConfig: {
           layoutHeaderVisible: true,

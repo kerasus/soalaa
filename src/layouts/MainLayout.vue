@@ -72,6 +72,9 @@
         <Router :include="keepAliveComponents" />
       </div>
     </template>
+    <template #footer>
+      <main-footer />
+    </template>
   </quasar-template-builder>
 </template>
 
@@ -80,6 +83,7 @@
 import { defineAsyncComponent } from 'vue'
 import QuasarTemplateBuilder from 'quasar-template-builder/src/quasar-template-builder.vue'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import MainFooter from 'components/Layout/Footer/main'
 // import templateHeader from 'components/Headers/templateHeader'
 // import onlineQuizTemplateHeader from 'components/Headers/onlineQuizTemplateHeader'
 // import UserTemplateHeader from 'components/Headers/userTemplateHeader'
@@ -91,6 +95,7 @@ import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 
 export default {
   components: {
+    MainFooter,
     QuasarTemplateBuilder,
     UserSideBar: defineAsyncComponent(() => import('layouts/UserPanelLayouts/UserSideBar')),
     sideMenuMapOfQuestions: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu_MapOfQuestions')),

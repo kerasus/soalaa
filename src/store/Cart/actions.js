@@ -5,6 +5,7 @@ import { Notify } from 'quasar'
 import { Cart } from 'src/models/Cart'
 import { CartItem } from 'src/models/CartItem'
 import { OrderProduct } from 'src/models/OrderProduct'
+import { parse } from 'qs'
 
 export function addToCart (context, data) {
   const isUserLogin = !!this.getters['Auth/isUserLogin']
@@ -71,16 +72,19 @@ export function reviewCart (context, product) {
           seller: 2,
           cartItems: orders
         },
-        paramsSerializer: params => {
-          const q = new URLSearchParams()
-          q.set('seller', params.seller)
-          for (let item = 0; item < params.cartItems.length; item++) {
-            q.set(`cartItems[${item}][product_id]`, params.cartItems[item].product_id)
-            for (let product = 0; product < params.cartItems[item].products.length; product++) {
-              q.set(`cartItems[${item}][products][${product}]`, params.cartItems[item].products[product].id)
+        paramsSerializer: {
+          encode: parse,
+          serialize: params => {
+            const q = new URLSearchParams()
+            q.set('seller', params.seller)
+            for (let item = 0; item < params.cartItems.length; item++) {
+              q.set(`cartItems[${item}][product_id]`, params.cartItems[item].product_id)
+              for (let product = 0; product < params.cartItems[item].products.length; product++) {
+                q.set(`cartItems[${item}][products][${product}]`, params.cartItems[item].products[product].id)
+              }
             }
+            return q
           }
-          return q
         }
       })
       .then((response) => {
