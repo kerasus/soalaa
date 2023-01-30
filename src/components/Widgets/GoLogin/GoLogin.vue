@@ -45,13 +45,16 @@ export default {
 <style scoped lang="scss">
 
 .page-width{
-  width: 1362px;
+  //width: 1362px;
+  width: 100%;
   margin: auto;
   @media screen and (max-width:1439px ){
-    width: 954px;
+    //width: 954px;
+    width: 100%;
   }
   @media screen and (max-width:1023px ){
-    width: 540px;
+    //width: 540px;
+    width: 100%;
   }
   @media screen and (max-width:599px ){
     width: 100%;
