@@ -142,7 +142,6 @@ export default defineComponent({
   },
   methods: {
     color(cmd, name) {
-      console.log(this.proxy)
       // this.proxy.token.hide()
       this.proxy.targetRef.runCmd(cmd, name)
       this.proxy.targetRef.focus()

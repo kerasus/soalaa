@@ -4,7 +4,11 @@
       <div class="option-panel-container">
         <div
           class="row">
-          <div class="col-md-12">
+          <div class="col-md-5">
+            <q-input v-model="localOptions.text"
+                     label="text" />
+          </div>
+          <div class="col-md-5 offset-1">
             <q-select v-model="responsive"
                       :options="responsiveOpts"
                       label="responsive" />
@@ -69,9 +73,6 @@ export default defineComponent({
       },
       deep: true
     }
-  },
-  mounted() {
-    console.log(this.localOptions[this.responsive])
   }
 })
 </script>
