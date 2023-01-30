@@ -170,7 +170,6 @@ const API_ADDRESS = {
     },
     detachCategory: (examId, categoryId) => lumenServer + '/exam/detach/category/' + examId + '/' + categoryId,
     user: {
-      participate: (examId) => lumenServer + '/exam-user/' + examId,
       draft () { return lumenServer + '/exam/user/draft' },
       reportType: lumenServer + '/option/user?type=question_report_type',
       report(questionId) { return lumenServer + '/question/report/store/' + questionId },
