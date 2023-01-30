@@ -1,5 +1,6 @@
 <template>
-  <div class="page-width">
+  <div class="page-width"
+       :style="options.style">
     <q-skeleton v-if="loading"
                 class="full-width slider-loading"
                 height="520px" />
@@ -72,7 +73,6 @@
       </template>
     </q-carousel>
   </div>
-
 </template>
 
 <!--<script>-->
@@ -199,18 +199,18 @@ export default {
 
 <style scoped lang="scss">
 .page-width{
-  width: 100%;
+  //width: 100%;
   margin: 0 auto;
   @media screen and (max-width:1439px ){
     //width: 954px;
-    width: 100%;
+    //width: 100%;
   }
   @media screen and (max-width:1023px ){
     //width: 540px;
-    width: 100%;
+    //width: 100%;
   }
   @media screen and (max-width:599px ){
-    width: 100%;
+    //width: 100%;
     padding-left: 19px;
     padding-right: 19px;
   }
