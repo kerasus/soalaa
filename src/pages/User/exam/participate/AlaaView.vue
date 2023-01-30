@@ -192,7 +192,6 @@ export default {
     startExamProcess () {
       const retake = this.$route.name === 'onlineQuiz.alaaView.retake'
       const personal = this.$route.name === 'onlineQuiz.alaaView.personal'
-      debugger
       this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView', retake, personal)
         .then(() => {
           this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
