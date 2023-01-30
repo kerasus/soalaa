@@ -100,9 +100,25 @@
     </div>
     <div v-else-if="!subscribed"
          class="subscription-error">
+      <div v-if="comingSoon"
+           class="q-pa-md q-gutter-sm">
+        <q-banner inline-actions
+                  rounded
+                  style="width: 90vw"
+                  class="bg-orange text-white text-center q-mb-md">
+          این قسمت به زودی در دسترس حواهد یود
+
+          <template v-slot:action>
+            <q-btn flat
+                   icon="cancel"
+                   @click="comingSoon = false" />
+          </template>
+        </q-banner>
+      </div>
       <div class="subscription-error-title">شما دسترسی برای ایجاد آزمون ندارید</div>
       <q-btn color="primary"
              unelevated
+             disable
              label="تهیه اشتراک"
              @click="gotoSubscription" />
     </div>
@@ -209,6 +225,7 @@ export default {
   ],
   data() {
     return {
+      comingSoon: true,
       scrollInfo: {},
       subscribed: true,
       draftExamIsConfirmed: false,

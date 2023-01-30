@@ -1,11 +1,5 @@
 <template>
   <div class="page-width">
-    <!--    <div class="why-soalaa">-->
-    <!--      چرا سوالا؟-->
-    <!--    </div>-->
-    <!--    <div class="tab-title">-->
-    <!--      متفاوت‌ترین پلتفرم آزمون آنلاین و بانک سوال ایران-->
-    <!--    </div>-->
     <div class="tab-panel-container">
       <q-tabs
         v-model="activeTab"
@@ -80,9 +74,6 @@ export default {
   },
   created() {
     // this.initPageData()
-    this.$bus.on('changeTab', (newTab) => {
-      this.activeTab = newTab
-    })
   },
   methods: {
     tabIcon(index, icon, icon2) {
@@ -105,15 +96,18 @@ export default {
 
 <style scoped lang="scss">
 .page-width {
-  width: 1362px;
+  width: 100%;
   margin: auto;
   @media screen and (max-width: 1439px) {
-    width: 954px;
+    //width: 954px;
+    width: 100%;
   }
   @media screen and (max-width: 1023px) {
-    width: 540px;
+    //width: 540px;
+    width: 100%;
   }
   @media screen and (max-width: 599px) {
+    //width: 100%;
     width: 100%;
     padding-left: 19px;
     padding-right: 19px;
@@ -251,6 +245,7 @@ export default {
 
       .tab-panel-box {
         display: flex;
+        justify-content: space-between;
         @media screen and (max-width: 1439px) {
           flex-direction: column;
           align-items: center;
