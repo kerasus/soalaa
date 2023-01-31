@@ -4,52 +4,48 @@
               height="520px" />
   <div v-else
        :style="options.style"
-       class="page-width">
-    <div
-      class="feature-box">
-      <div class="content">
+       class="feature-box">
+    <div class="content">
+      <div>
+        <div class="title"
+             :style="options.style">
+          {{ options.data.head }}
+        </div>
+        <!--          <div class="sub-title ellipsis">-->
+        <!--            {{options.data.title}}-->
+        <!--          </div>-->
         <div>
-          <div class="title"
-               :style="options.style">
-            {{ options.data.head }}
-          </div>
-          <!--          <div class="sub-title ellipsis">-->
-          <!--            {{options.data.title}}-->
-          <!--          </div>-->
-          <div>
-            <span v-html="options.data.editor"></span>
-          </div>
-          <!--          <div v-for="(item, index) in options.data.value"-->
-          <!--               :key="index"-->
-          <!--               class="soalaa-item">-->
-          <!--            <q-icon size="7px"-->
-          <!--                    class="badge"-->
-          <!--                    name="circle" />-->
-          <!--            <div class="ellipsis">{{item}}</div>-->
-          <!--          </div>-->
+          <span v-html="options.data.editor"></span>
         </div>
-        <div v-if="options.data.button?.url"
-             class="more-details text-right">
-          <q-btn
-            unelevated
-            :href="options.data.button?.url"
-            :style="{background: options.data.button.bgColor, color: options.data.button.textColor}"
-            class="btn q-ma-none"
-            padding="7px 15px 7px 15px"
-            icon-right="west"
-            :label="options.data.button?.text" />
-        </div>
+        <!--          <div v-for="(item, index) in options.data.value"-->
+        <!--               :key="index"-->
+        <!--               class="soalaa-item">-->
+        <!--            <q-icon size="7px"-->
+        <!--                    class="badge"-->
+        <!--                    name="circle" />-->
+        <!--            <div class="ellipsis">{{item}}</div>-->
+        <!--          </div>-->
       </div>
-      <div class="img-box">
-        <a :href="options.data.image?.url">
-          <q-img
-            class="img"
-            :src="options.data.image?.link" />
-        </a>
+      <div v-if="options.data.button?.url"
+           class="more-details text-right">
+        <q-btn
+          unelevated
+          :href="options.data.button?.url"
+          :style="{background: options.data.button.bgColor, color: options.data.button.textColor}"
+          class="btn q-ma-none"
+          padding="7px 15px 7px 15px"
+          icon-right="west"
+          :label="options.data.button?.text" />
       </div>
     </div>
+    <div class="img-box">
+      <a :href="options.data.image?.url">
+        <q-img
+          class="img"
+          :src="options.data.image?.link" />
+      </a>
+    </div>
   </div>
-
 </template>
 
 <script>
@@ -102,36 +98,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.yellow-title{
-  .feature-box{
-    .content{
-      .title{
-        //color: #FFC107;
-      }
-    }
-  }
-}
-.page-width{
-  //width: 1362px;
-  //width: 100%;
-  margin: auto;
-  //display: flex;
-  //justify-content: center;
-  @media screen and (max-width:1439px ){
-    //width: 954px;
-    //width: 100%;
-  }
-  @media screen and (max-width:1023px ){
-    //width: 540px;
-    //width: 100%;
-  }
-  @media screen and (max-width:599px ){
-    //width: 100%;
-    padding-left: 19px;
-    padding-right: 19px;
-  }
-}
-.feature-box{
+.feature-box {
   padding: 40px 120px;
   background: #FFFFFF;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
@@ -140,9 +107,6 @@ export default {
   display: flex;
   justify-content: space-between;
   width: inherit;
-  //display: grid;
-  //grid-template-columns:587px 400px;
-  //column-gap: 135px;
   @media screen and (max-width: 1439px) {
     grid-template-columns:533px 280px;
     padding: 50px 40px;
