@@ -215,8 +215,8 @@ export default {
                             icon: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/1_on.png',
                             icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/1.png',
                             button: {
-                              bgColor: '',
-                              color: '#8075DC',
+                              bgColor: '#00000000',
+                              color: '#8075DCFF',
                               text: 'اطلاعات بیشتر',
                               url: '/landing/3a_exams'
                             }
@@ -232,8 +232,8 @@ export default {
                             icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/2.png',
                             button: {
                               text: 'اطلاعات بیشتر',
-                              bgColor: '',
-                              color: '#8075DC',
+                              bgColor: '#00000000',
+                              color: '#8075DCFF',
                               url: null
                             }
                           },
@@ -247,8 +247,8 @@ export default {
                             icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/3.png',
                             button: {
                               text: 'اطلاعات بیشتر',
-                              bgColor: '',
-                              color: '#8075DC',
+                              bgColor: '#00000000',
+                              color: '#8075DCFF',
                               url: null
                             }
                           },
@@ -262,8 +262,8 @@ export default {
                             icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/4.png',
                             button: {
                               text: 'اطلاعات بیشتر',
-                              bgColor: '',
-                              color: '#8075DC',
+                              bgColor: '#00000000',
+                              color: '#8075DCFF',
                               url: '/subscription'
                             }
                           },
@@ -277,7 +277,8 @@ export default {
                             icon2: 'https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/5.png',
                             button: {
                               text: 'اطلاعات بیشتر',
-                              color: '#8075DC',
+                              bgColor: '#00000000',
+                              color: '#8075DCFF',
                               url: null
                             }
                           }
@@ -289,7 +290,7 @@ export default {
                       name: 'FeatureBox',
                       options: {
                         responseKey: 'bank_soala',
-                        titleColor: '#8075DC',
+                        titleColor: '#8075DCFF',
                         data:
                           {
                             head: 'بانک سوالا',
@@ -320,7 +321,7 @@ export default {
                       options: {
                         responseKey: '3a_azmon',
                         title: 'آزمون‌های سه‌آ',
-                        titleColor: '#FFC107',
+                        titleColor: '#FFC107FF',
                         data:
                           {
                             head: 'آزمون‌های سه‌آ',
@@ -339,8 +340,8 @@ export default {
                             },
                             button: {
                               text: 'اطلاعات بیشتر',
-                              bgColor: '#8075DC',
-                              textColor: '#FFFFFF',
+                              bgColor: '#8075DCFF',
+                              textColor: '#FFFFFFFF',
                               url: '/landing/3a_exams'
                             }
                           }

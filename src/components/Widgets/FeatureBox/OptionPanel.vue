@@ -2,26 +2,29 @@
   <option-panel-tabs v-model:options="localOptions">
     <template #main-tab>
       <div class="option-panel-container">
-        <div class="row">
-          <div class="col-md-5">
-            <q-input v-model="localOptions.titleColor"
+        <div class="row q-col-gutter-md">
+          <div class="col-md-6">
+            <div class="row no-wrap q-mb-md">
+              <q-input v-model="localOptions.data.head"
+                       label="title" />
+            </div>
+            <div class="row no-wrap q-mb-md">
+              <q-input v-model="localOptions.data.button.text"
+                       label="button title" />
+            </div>
+            <div class="row no-wrap q-mb-md">
+              <q-input v-model="localOptions.data.button.link"
+                       label="button color" />
+            </div>
+            <div class="row no-wrap q-mb-md">
+              <q-input v-model="localOptions.data.button.url"
+                       label="button link" />
+            </div>
+          </div>
+          <div class="col-md-6 q-mt-sm text-center">
+            title color
+            <q-color v-model="localOptions.titleColor"
                      label="titleColor" />
-          </div>
-          <div class="col-md-5 offset-1">
-            <q-input v-model="localOptions.data.head"
-                     label="title" />
-          </div>
-          <div class="col-md-3">
-            <q-input v-model="localOptions.data.button.text"
-                     label="button title" />
-          </div>
-          <div class="col-md-3 offset-1">
-            <q-input v-model="localOptions.data.button.link"
-                     label="button color" />
-          </div>
-          <div class="col-md-3 offset-1">
-            <q-input v-model="localOptions.data.button.url"
-                     label="button link" />
           </div>
           <div class="col-md-12 q-pa-md q-gutter-sm">
             <q-editor v-model="localOptions.data.editor"
@@ -93,6 +96,7 @@
           </div>
           <div class="col-md-12">
             <q-input v-model="localOptions.data.image.link"
+                     dir="rtl"
                      label="image" />
             <lazy-img :src="localOptions.data.image.link" />
           </div>
