@@ -4,16 +4,30 @@
       <div class="option-panel-container">
         <div
           class="row">
-          <div class="col-md-5">
-            <q-input v-model="localOptions.text"
-                     label="text" />
+          <div class="col-md-12">
+            <q-editor v-model="localOptions.text"
+                      min-height="10rem"
+                      :toolbar="[
+                        [
+                          {
+                            label: $q.lang.editor.align,
+                            icon: $q.iconSet.editor.align,
+                            fixedLabel: true,
+                            list: 'only-icons',
+                          },
+                        ],
+                        ['bold', 'italic', 'strike', 'underline'],
+                        ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+                        ['viewsource']
+                      ]">
+            </q-editor>
           </div>
-          <div class="col-md-5 offset-1">
+          <div class="col-md-3">
             <q-select v-model="responsive"
                       :options="responsiveOpts"
                       label="responsive" />
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 offset-1">
             <q-select v-model="localOptions[responsive].fontStyle"
                       :options="fontStyle"
                       label="fontStyle" />
@@ -22,11 +36,11 @@
             <q-input v-model="localOptions.fontFamily"
                      label="font family" />
           </div>
-          <div class="col-md-3 offset-1">
+          <div class="col-md-3">
             <q-input v-model="localOptions[responsive].fontSize"
                      label="font size" />
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 offset-1">
             <q-input v-model="localOptions[responsive].fontWeight"
                      label="font weight" />
           </div>
@@ -72,6 +86,20 @@ export default defineComponent({
         this.$emit('update:options', newVal)
       },
       deep: true
+    }
+  },
+  mounted() {
+    const windowWidth = window.innerWidth
+    if (windowWidth > 1920) {
+      this.responsive = 'xl'
+    } else if (windowWidth > 1440 < 1920) {
+      this.responsive = 'lg'
+    } else if (windowWidth > 1024 < 1440) {
+      this.responsive = 'md'
+    } else if (windowWidth > 600 < 1024) {
+      this.responsive = 'sm'
+    } else if (windowWidth < 600) {
+      this.responsive = 'xs'
     }
   }
 })

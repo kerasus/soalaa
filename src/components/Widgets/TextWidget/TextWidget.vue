@@ -1,9 +1,9 @@
 <template>
-  <div class="text"
-       :style="options.style"
-       :class="options.customClass">
-    <span>
-      {{ options.text }}
+  <div
+    :style="options.style"
+    :class="options.customClass">
+    <span class="text"
+          v-html="options.text">
     </span>
   </div>
 </template>
@@ -40,38 +40,46 @@ export default {
       }
     }
   },
+  watch: {
+    options: {
+      handler() {
+        this.setTextStyle()
+      },
+      deep: true
+    }
+  },
   mounted() {
-    this.color = this.options.color
-    this.fontFamily = this.options.fontFamily
-    this.fontSize = this.options.xl.fontSize
-    this.fontWeight = this.options.xl.fontWeight
-    this.fontStyle = this.options.xl.fontStyle
+    this.setTextStyle()
+  },
+  methods: {
+    setTextStyle() {
+      this.color = this.options.color
+      this.fontFamily = this.options.fontFamily
+      this.fontSize = this.options.xl.fontSize
+      this.fontWeight = this.options.xl.fontWeight
+      this.fontStyle = this.options.xl.fontStyle
 
-    this.lgFontSize = this.options.lg.fontSize
-    this.lgFontWeight = this.options.lg.fontWeight
-    this.lgFontStyle = this.options.lg.fontStyle
+      this.lgFontSize = this.options.lg.fontSize
+      this.lgFontWeight = this.options.lg.fontWeight
+      this.lgFontStyle = this.options.lg.fontStyle
 
-    this.mdFontSize = this.options.md.fontSize
-    this.mdFontWeight = this.options.md.fontWeight
-    this.mdFontStyle = this.options.md.fontStyle
+      this.mdFontSize = this.options.md.fontSize
+      this.mdFontWeight = this.options.md.fontWeight
+      this.mdFontStyle = this.options.md.fontStyle
 
-    this.smFontSize = this.options.sm.fontSize
-    this.smFontWeight = this.options.sm.fontWeight
-    this.smFontStyle = this.options.sm.fontStyle
+      this.smFontSize = this.options.sm.fontSize
+      this.smFontWeight = this.options.sm.fontWeight
+      this.smFontStyle = this.options.sm.fontStyle
 
-    this.xsFontSize = this.options.xs.fontSize
-    this.xsFontWeight = this.options.xs.fontWeight
-    this.xsFontStyle = this.options.xs.fontStyle
+      this.xsFontSize = this.options.xs.fontSize
+      this.xsFontWeight = this.options.xs.fontWeight
+      this.xsFontStyle = this.options.xs.fontStyle
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
-/*:root{--xs-fontSize: v-bind(size)}*/
-/*:root{--xs-fontWeight: v-bind(weight)}*/
-/*:root{--xs-fontStyle: v-bind(responsive.xs.fontStyle)}*/
-/*:root{--color: v-bind(options.color)}*/
-/*:root{--fontFamily: v-bind(options.fontFamily)}*/
 
 .text {
   color: v-bind(color);
