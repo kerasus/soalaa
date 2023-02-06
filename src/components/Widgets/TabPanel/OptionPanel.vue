@@ -69,6 +69,7 @@
         </q-table>
       </div>
       <q-dialog v-model="expandBanner"
+                class="dialog"
                 persistent>
         <q-card v-ripple
                 class="column card no-wrap"
@@ -176,20 +177,20 @@
             </q-editor>
           </div>
           <div class="col-12 row">
-            <q-card-section class="col-7">
+            <q-card-section class="col-6">
               <q-input v-model="selectedSlide.icon"
                        label="icon" />
             </q-card-section>
-            <q-card-section class="col-5">
-              <lazy-img :src="selectedSlide.icon" />
-            </q-card-section>
-          </div>
-          <div class="col-12 row">
-            <q-card-section class="col-7">
+            <q-card-section class="col-6">
               <q-input v-model="selectedSlide.icon2"
                        label="icon2" />
             </q-card-section>
-            <q-card-section class="col-5">
+          </div>
+          <div class="col-12 row">
+            <q-card-section class="col-6">
+              <lazy-img :src="selectedSlide.icon" />
+            </q-card-section>
+            <q-card-section class="col-6">
               <lazy-img :src="selectedSlide.icon2" />
             </q-card-section>
           </div>
@@ -202,12 +203,6 @@
               <lazy-img :src="selectedSlide.image" />
             </q-card-section>
           </div>
-          <!--          <div class="row col-12">-->
-          <!--            <q-card-section class="col-12">-->
-          <!--              <banner-preview v-model:banner="selectedSlide"-->
-          <!--                              @update:src="updateSrc" />-->
-          <!--            </q-card-section>-->
-          <!--          </div>-->
         </q-card>
       </q-dialog>
     </template>
@@ -359,3 +354,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.dialog {
+  max-width: 900px !important;
+}
+</style>
