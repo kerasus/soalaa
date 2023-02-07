@@ -184,7 +184,7 @@ export default {
     }
   },
   created() {
-    this.initPageData()
+    // this.initPageData()
   },
   mounted() {
     this.closeSidBarAndAppbar()

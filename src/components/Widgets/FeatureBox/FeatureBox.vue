@@ -74,7 +74,7 @@ export default {
     }
   },
   created() {
-    this.initPageData()
+    // this.initPageData()
     this.titleColor = this.options.titleColor
   },
   computed: {
