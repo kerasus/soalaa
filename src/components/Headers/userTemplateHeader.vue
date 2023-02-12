@@ -82,17 +82,18 @@
               </div>
             </div>
 
-            <div class="self-center"
-                 @click="togglePageBuilderEditable">
+            <div v-if="user.hasPermission('examStore') && $route.name === 'HomePage'"
+                 class="self-center">
               <q-item v-ripple
                       clickable
                       :active="false"
                       active-class="active-item">
-                <q-item-section v-if="!pageBuilderEditable && this.user.hasPermission('examStore') && this.$route.name === 'HomePage'"
-                                class="tab-title">
+                <q-item-section v-if="!pageBuilderEditable"
+                                class="tab-title"
+                                @click="togglePageBuilderEditable">
                   ویرایش صفحه
                 </q-item-section>
-                <div v-else-if="this.user.hasPermission('examStore') && this.$route.name === 'HomePage'">
+                <div v-else>
                   <q-btn square
                          color="positive"
                          icon="check"

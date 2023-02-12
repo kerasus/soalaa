@@ -45,7 +45,9 @@
       "path": "components/Widgets/GoLogin",
       "name": "GoLogin",
       "self_type": "folder",
-      "type": "widget"
+      "type": "widget",
+      "optionPanel": "components/Widgets/GoLogin/OptionPanel.vue",
+      "optionPanelName": "GoLoginOptionPanel"
     },
     {
       "path": "components/Widgets/HomePage",
