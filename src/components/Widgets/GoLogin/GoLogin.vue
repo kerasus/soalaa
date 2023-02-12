@@ -2,7 +2,9 @@
   <div  v-if="!isUserLogin"
         class="page-width">
     <div class="sub-mit-box flex justify-between items-center">
-      <div class="info">با ورود و یا ثبت نام در سوالا میتوانید محتوای شخصی سازی شده و مربوط به خود را دنبال کنید</div>
+      <div class="info">
+        <span v-html="options.text" />
+      </div>
       <div class="action-box">
         <q-btn
           unelevated
@@ -26,6 +28,14 @@
 <script>
 export default {
   name: 'GoLogin',
+  props: {
+    options: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   computed: {
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
