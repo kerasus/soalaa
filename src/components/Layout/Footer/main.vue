@@ -267,10 +267,38 @@
           </div>
         </div>
       </div>
-      <div class="layer-3"></div>
+      <div class="layer-3 q-px-lg">
+        <div class="user-tab-section">
+          <q-list class="flex tabs-list justify-center no-wrap">
+            <div
+              v-for="(item , index) in footerItems"
+              :key="index"
+              class="tabs-list-container"
+            >
+              <div
+                class="self-center"
+              >
+                <q-item
+                  v-ripple
+                  clickable
+                  class="q-mt-sm"
+                  :active="isRouteSelected(item.to)"
+                  active-class="active-item"
+                  :to="{ name: item.to }"
+                >
+                  <q-item-section class="tab-title"
+                                  avatar>
+                    <q-icon :name="item.icon"
+                            color="primary"
+                            size="30px" />
+                  </q-item-section>
+                </q-item>
+              </div>
+            </div>
+          </q-list>
+        </div>
+      </div>
     </div>
-
-    <div class="layer-4"></div>
   </div>
 </template>
 
@@ -279,9 +307,44 @@ import { User } from 'src/models/User.js'
 
 export default {
   name: 'MainFooter',
+  data() {
+    return {
+      footerItems: [
+        {
+          title: 'profile',
+          icon: 'isax:user',
+          to: 'User.Profile',
+          active: false
+        },
+        {
+          title: 'card',
+          icon: 'isax:card',
+          to: 'cart',
+          active: false
+        },
+        {
+          title: 'bank-soala',
+          icon: 'isax:discover',
+          to: 'User.Create.Exam',
+          active: false
+        },
+        {
+          title: 'home',
+          icon: 'isax:home',
+          to: 'HomePage',
+          active: false
+        }
+      ]
+    }
+  },
   methods: {
     scrollToTop() {
       document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    },
+    isRouteSelected () {
+      return (itemName) => {
+        return (this.$route.name === itemName)
+      }
     }
   },
   computed: {
@@ -298,8 +361,10 @@ export default {
 <style scoped lang="scss">
 .homePage-footer-container {
   background: #f4f6f9;
-  @media screen and (max-width:599px){
-    display: none;
+  .footer-box-1, .footer-box-2{
+    @media screen and (max-width:600px){
+      display: none;
+    }
   }
   .content-layout,.content-layout-2 {
     max-width: 1362px;
@@ -635,13 +700,13 @@ export default {
     }
   }
   .layer-3{
-    min-height: 40px;
+    display: none;
+    box-shadow: 0px -6px 10px rgba(112, 108, 161, 0.07);
+    border-radius: 16px 16px 0;
     background: white;
-    @media screen and (max-width:1023px){
-      min-height: 30px;
-    }
-    @media screen and (max-width:599px){
-      min-height: 60px;
+    @media screen and (max-width:600px){
+      display: block;
+      height: 72px;
     }
   }
 }
@@ -649,7 +714,7 @@ export default {
   min-height: 72px;
   display: none;
   @media screen and (max-width:599px){
-    display: block;
+    display: flex;
   }
 
 }

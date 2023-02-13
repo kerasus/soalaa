@@ -52,6 +52,18 @@ export function addToCart (context, data) {
   })
 }
 
+// function getParams(params) {
+//   const q = new URLSearchParams()
+//   q.set('seller', params.seller)
+//   for (let item = 0; item < params.cartItems.length; item++) {
+//     q.set(`cartItems[${item}][product_id]`, params.cartItems[item].product_id)
+//     for (let product = 0; product < params.cartItems[item].products.length; product++) {
+//       q.set(`cartItems[${item}][products][${product}]`, params.cartItems[item].products[product].id)
+//     }
+//   }
+//   return q
+// }
+
 export function reviewCart (context, product) {
   const isUserLogin = this.getters['Auth/isUserLogin']
   const currentCart = this.getters['Cart/cart']
