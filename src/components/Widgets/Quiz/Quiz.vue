@@ -79,7 +79,8 @@
                               animated>
                   <q-tab-panel name="exam">
                     <quiz-list
-                      :pagination="paginationPage"
+                      :key="examPagination"
+                      :pagination="pagination.exam.current_page"
                       :pageCount="pageCount"
                       :quiz-type="'exam'"
                       :exams="allExamsList"
@@ -90,7 +91,8 @@
                   </q-tab-panel>
                   <q-tab-panel name="myExam">
                     <quiz-list
-                      :pagination="paginationPage"
+                      :key="myExamPagination"
+                      :pagination="pagination.myExam.current_page"
                       :pageCount="pageCount"
                       :quiz-type="'myExam'"
                       :exams="myExams"
@@ -152,14 +154,19 @@ export default defineComponent({
       pagination: {
         exam: {
           total: 0,
-          per_page: 0
+          per_page: 0,
+          current_page: 1
         },
         myExam: {
           total: 0,
-          per_page: 0
+          per_page: 0,
+          current_page: 1
         }
       },
       filterData: {},
+      date: moment(new Date(Time.now())).format('YYYY-MM-DD'),
+      examPagination: 1,
+      myExamPagination: 1,
       paginationPage: 1,
       allExamsList: new ExamList(),
       upcomingExams: new ExamList(),
@@ -190,11 +197,10 @@ export default defineComponent({
   methods: {
     getBaseExamList () {
       this.allExamsList.loading = true
-      const date = moment(new Date(Time.now())).format('YYYY-MM-DD')
       this.$axios.get(API_ADDRESS.exam.userExamList.base(), {
         params:
           {
-            start_at_till: date,
+            start_at_till: this.date,
             page: 1
           }
       })
@@ -202,6 +208,7 @@ export default defineComponent({
           this.allExamsList = new ExamList(response.data.data)
           this.pagination.exam = response.data.meta
           this.allExamsList.loading = false
+          this.filterData.to = this.date
         }).catch(() => {
           this.allExamsList.loading = false
         })
@@ -223,13 +230,14 @@ export default defineComponent({
               ...(title && { title }),
               ...(start && { start_at_from: start }),
               ...(end && { start_at_till: end }),
-              ...(page && { start_at_till: page })
+              ...(page && { page })
             }
         })
         .then((response) => {
           this.allExamsList = new ExamList(response.data.data)
           this.pagination.exam = response.data.meta
           this.allExamsList.loading = false
+          this.examPagination++
         }).catch(() => {
           this.allExamsList.loading = false
         })
@@ -243,13 +251,14 @@ export default defineComponent({
               ...(title && { title }),
               ...(start && { created_at_from: start }),
               ...(end && { created_at_till: end }),
-              ...(page && { start_at_till: page })
+              ...(page && { page })
             }
         })
         .then((response) => {
           this.myExams = new ExamList(response.data.data)
           this.pagination.myExam = response.data.meta
           this.myExams.loading = false
+          this.myExamPagination++
         }).catch(() => {
           this.allExamsList.loading = false
         })
