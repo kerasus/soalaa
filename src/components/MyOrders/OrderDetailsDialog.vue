@@ -4,8 +4,10 @@
     class="order-details-dialog"
   >
     <q-card class="order-details-card">
-      <q-card-section class="dialog-header">
-        <div>
+      <div class="dialog-header">
+        <div></div>
+        <div class="title">جزییات سفارش</div>
+        <div class="close">
           <q-btn
             round
             flat
@@ -29,42 +31,39 @@
                     stroke-linecap="round"
                     stroke-linejoin="round" />
             </svg>
-
           </q-btn>
         </div>
-        <div class="title">جزییات سفارش</div>
-        <div></div>
-      </q-card-section>
+      </div>
       <div>
         <q-card-section class="info">
           <div class="info-box part1">
             <div class="default-info paid">اطلاعات کلی</div>
-            <div>
+            <div class="info-item">
               شماره سفارش:
               <span class="default-info">{{ order.id }}</span>
             </div>
-            <div>
+            <div class="info-item">
               وضعیت پرداخت:
               <span class="default-info">{{ order.paymentstatus.name }}</span>
             </div>
-            <div>
+            <div class="info-item">
               تاریخ سفارش:
               <span class="default-info">{{ getCurrentOrderCompletedAt(order.completed_at) }}</span>
             </div>
           </div>
           <div class="info-box part2">
-            <div>
+            <div class="info-item">
               جمع مبلغ سفارش:
               <span class="default-info">{{ toman(order.price, null) }} تومان</span>
             </div>
-            <div>
+            <div class="info-item">
               میزان تخفیف:
-              <span class="info-discount">({{ order.getOrderDiscount() }}%)</span>
+              <span class="info-discount">{{ order.getOrderDiscount() ? '(' + order.getOrderDiscount() + '% )' : 0 }}</span>
               <!--            <span class="info-discount">({{ order.discount }}%)</span>-->
               <!--              <span class="default-info paid">پرداخت شده</span>-->
               <span class="default-info">{{ order.getOrderDiscount('toman') }}</span>
             </div>
-            <div>
+            <div class="info-item">
               مبلغ نهایی:
               <span class="default-info">{{ toman(order.paid_price, null) }} تومان</span>
             </div>
@@ -105,6 +104,11 @@ export default {
         return new Order()
       }
     }
+  },
+  watch: {
+    // order(val) {
+    //   console.log(val)
+    // }
   },
   emits: [
     'update:dialogValue'
@@ -178,9 +182,15 @@ export default {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       align-items: center;
-
+      padding: 30px 20px 15px 20px;
+      @media screen and (max-width:1439px ){
+        padding: 20px 20px 15px 20px;
+      }
       .title {
         justify-self: center;
+      }
+      .close{
+        justify-self: end;
       }
     }
 
@@ -189,6 +199,9 @@ export default {
       grid-template-columns: auto auto;
       align-items: center;
       padding: 16px 30px;
+      @media screen and (max-width: 1439px){
+        padding: 16px 20px
+      }
 
       .info-box {
         font-weight: 400;
@@ -208,7 +221,9 @@ export default {
       color: #DA5F5C;
       padding: 0 8px;
     }
-
+    .info-item{
+      margin-bottom: 16px;
+    }
     .default-info {
       color: #434765;
       padding: 0 8px;
@@ -226,6 +241,10 @@ export default {
       text-align: left;
       letter-spacing: -0.03em;
       color: #434765;
+      padding:0 30px 5px 30px;
+      @media screen and (max-width: 1439px){
+        padding:0  20px
+      }
     }
   }
   .q-dialog__inner--minimized > div {

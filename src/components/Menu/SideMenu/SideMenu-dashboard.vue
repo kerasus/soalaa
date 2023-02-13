@@ -183,6 +183,7 @@ export default {
           active: false,
           children: [
             { displayName: 'مرجع سوال', routeName: 'Admin.QuestionAuthors.Index', active: false },
+            { displayName: 'گزارش خطا سوال', routeName: 'Admin.QuestionReport.Index', active: false },
             // { displayName: 'معلفان سوال', routeName: 'Admin.QuestionAuthors.Index', active: false },
             { displayName: 'تاریخ تالیف', routeName: 'Admin.AuthorshipDates.Index', active: false },
             { displayName: 'اهداف', routeName: 'Admin.QuestionTarget.Index', active: false },
@@ -196,7 +197,7 @@ export default {
           routeName: null,
           active: false,
           children: [
-            { displayName: 'ساخت آزمون', routeName: 'Admin.Exam.Create.AttachQuestion', active: false },
+            // { displayName: 'ساخت آزمون', routeName: 'Admin.Exam.Create.AttachQuestion', active: false },
             { displayName: 'لیست آزمون ها', routeName: 'Admin.Exam.Index', active: false }
           ]
         },

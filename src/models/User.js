@@ -14,6 +14,7 @@ class User extends Model {
       { key: 'first_name' },
       { key: 'last_name' },
       { key: 'full_name' },
+      { key: 'national_code' },
       { key: 'mobile' },
       { key: 'city' },
       { key: 'province' },
@@ -63,8 +64,13 @@ class User extends Model {
 
     ])
 
+    if (data?.shahr) {
+      this.city = data.shahr.title
+    }
     if (!this.full_name) {
-      this.full_name = this.first_name + ' ' + this.last_name
+      const firstName = this.first_name ? this.first_name : ''
+      const lastName = this.last_name ? this.last_name : ''
+      this.full_name = firstName + ' ' + lastName
     }
 
     // TODO: this is for test

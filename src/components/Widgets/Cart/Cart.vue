@@ -96,15 +96,6 @@ export default {
               cart.items.list.push(order)
             })
           }
-
-          // if (product) {
-          //   const isExist = cart.items.list.find(
-          //     (item) => item.id === product.id
-          //   )
-          //   if (!isExist) {
-          //     cart.items.list.push(product)
-          //   }
-          // }
           this.cart = cart
           this.$store.dispatch('loading/overlayLoading', false)
         })

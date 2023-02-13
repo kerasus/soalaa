@@ -25,7 +25,11 @@ class Price extends Model {
   }
 
   discountInPercent () {
-    return Math.round(this.discount * 100 / this.base)
+    const num = Math.round(this.discount * 100 / this.base)
+    if (isNaN(num)) {
+      return 0
+    }
+    return num
   }
 }
 

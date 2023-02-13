@@ -2,8 +2,9 @@
   <component
     :is="comp"
     v-bind="allProps"
-  ></component>
+  />
 </template>
+
 <script>
 /* eslint-disable no-var */
 import { defineAsyncComponent } from 'vue'
@@ -25,7 +26,9 @@ export default {
   mounted () {},
   computed: {
     comp () {
-      return defineAsyncComponent(() => import(`components/Question/QuestionPage/Create/textMode/questionTypes/${this.component.componentName}/${this.component.componentName}.vue`))
+      // ToDo: must check this
+      const gg = `src/components/Question/QuestionPage/Create/textMode/questionTypes/${this.component.componentName}/${this.component.componentName}.vue`
+      return defineAsyncComponent(() => import(gg))
     }
   },
   methods: {}

@@ -144,7 +144,9 @@ export default {
       }
     },
     confirmSendingAllAnswers () {
-      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id, false)
+      const isPersonalExam = this.$route.name === 'onlineQuiz.alaaView.personal' || this.$route.name === 'onlineQuiz.konkoorView.personal'
+      const finishExam = isPersonalExam
+      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id, finishExam)
         .then(response => {
           this.$q.notify({
             type: 'positive',

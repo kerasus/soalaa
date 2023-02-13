@@ -51,6 +51,10 @@ export default {
   margin-bottom: 16px;
   &:deep(.q-item--clickable){
     justify-content: space-between;
+    padding: 22px 24px;
+    @media only screen and (max-width: 1439px) {
+      padding: 20px 16px;
+    }
   }
   &:deep(.q-focus-helper){
     background: none !important;
@@ -62,7 +66,7 @@ export default {
   .filter-option-container {
     width: 500px;
     display: flex;
-    padding: 20px 24px 20px 24px;
+    //padding: 20px 24px 20px 24px;
     justify-content: space-between;
 
     .filter-option-title {
@@ -73,6 +77,9 @@ export default {
       color: #23263B;
     }
 
+  }
+  .custom-card {
+    border-radius: 16px;
   }
 }
 </style>

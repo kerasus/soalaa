@@ -97,7 +97,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'زمان شروع آزمون', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: '', col: 'col-12', calendarIcon: 'isax:calendar-1', placeholder: 'زمان شروع آزمون' }
+            { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: '', col: 'col-12', calendarIcon: ' ', placeholder: 'زمان شروع آزمون' }
           ]
         },
         {
@@ -106,7 +106,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'زمان پایان آزمون', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: '', col: 'col-12', placeholder: 'زمان تاخیر' }
+            { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: '', calendarIcon: ' ', col: 'col-12', placeholder: 'زمان تاخیر' }
 
           ]
         },
