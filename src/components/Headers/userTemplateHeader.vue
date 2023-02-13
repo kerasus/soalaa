@@ -106,7 +106,8 @@
                   <q-btn square
                          class="q-ml-md"
                          color="primary"
-                         icon="edit" />
+                         icon="edit"
+                         @click="togglePageBuilderEditable" />
                 </div>
               </q-item>
             </div>
