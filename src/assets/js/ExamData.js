@@ -256,7 +256,7 @@ class ExamData {
     return this
   }
 
-  getExamDataAndParticipate (examId, retake) {
+  getExamDataAndParticipate (examId, retake, personal) {
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!examId && !that.exam) {
@@ -270,11 +270,12 @@ class ExamData {
       if (!examId) {
         examId = that.exam.id
       }
-      const data = { }
+      const data = { exam_id: examId }
       if (retake) {
         data.retake = true
       }
-      this.$axios.post(API_ADDRESS.exam.examUser, data)
+      const url = personal ? API_ADDRESS.exam.participate.personal(examId) : API_ADDRESS.exam.participate.sample(examId)
+      this.$axios.post(url, data)
         .then(response => {
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id

@@ -1,0 +1,146 @@
+{
+  "path": "/home/alaa/WebstormProjects/Question-making-panel/src/components/Widgets",
+  "name": "Widgets",
+  "self_type": "folder",
+  "children": [
+    {
+      "path": "components/Widgets/BottomNavigation",
+      "name": "BottomNavigation",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/Cart",
+      "name": "Cart",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/Dashboard",
+      "name": "Dashboard",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/DownloadExam",
+      "name": "DownloadExam",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/FeatureBox",
+      "name": "FeatureBox",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/FeatureBox/OptionPanel.vue",
+      "optionPanelName": "FeatureBoxOptionPanel"
+    },
+    {
+      "path": "components/Widgets/Footer",
+      "name": "Footer",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/GoLogin",
+      "name": "GoLogin",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/GoLogin/OptionPanel.vue",
+      "optionPanelName": "GoLoginOptionPanel"
+    },
+    {
+      "path": "components/Widgets/HomePage",
+      "name": "HomePage",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/Profile",
+      "name": "Profile",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/Quiz",
+      "name": "Quiz",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/Slider",
+      "name": "Slider",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/Slider/OptionPanel.vue",
+      "optionPanelName": "SliderOptionPanel"
+    },
+    {
+      "path": "/home/alaa/WebstormProjects/Question-making-panel/src/components/Widgets/Subscription",
+      "name": "Subscription",
+      "self_type": "folder",
+      "children": [
+        {
+          "path": "components/Widgets/Subscription/FAQ",
+          "name": "FAQ",
+          "self_type": "folder",
+          "type": "widget"
+        },
+        {
+          "path": "components/Widgets/Subscription/SubscriptionBanner",
+          "name": "SubscriptionBanner",
+          "self_type": "folder",
+          "type": "widget"
+        },
+        {
+          "path": "components/Widgets/Subscription/SubscriptionPackagesSection",
+          "name": "SubscriptionPackagesSection",
+          "self_type": "folder",
+          "type": "widget"
+        }
+      ],
+      "type": "folder"
+    },
+    {
+      "path": "components/Widgets/TabPanel",
+      "name": "TabPanel",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/TabPanel/OptionPanel.vue",
+      "optionPanelName": "TabPanelOptionPanel"
+    },
+    {
+      "path": "components/Widgets/TestComponent1Widget",
+      "name": "TestComponent1Widget",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/TestComponent2Widget",
+      "name": "TestComponent2Widget",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/TextWidget",
+      "name": "TextWidget",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/TextWidget/OptionPanel.vue",
+      "optionPanelName": "TextWidgetOptionPanel"
+    },
+    {
+      "path": "/home/alaa/WebstormProjects/Question-making-panel/src/components/Widgets/readme.md",
+      "name": "readme",
+      "self_type": "file",
+      "file_type": "md"
+    },
+    {
+      "path": "/home/alaa/WebstormProjects/Question-making-panel/src/components/Widgets/widget.json",
+      "name": "widget",
+      "self_type": "file",
+      "file_type": "json"
+    }
+  ],
+  "type": "folder"
+}

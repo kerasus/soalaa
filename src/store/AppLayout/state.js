@@ -2,6 +2,9 @@ module.exports = {
   linearLoading: false,
   drawer: false,
   loginDialog: false,
+  pageBuilderEditable: false,
+  initialSections: [],
+  currentSections: [],
   confirmDialog: {
     show: false,
     message: '',

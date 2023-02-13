@@ -218,7 +218,7 @@ export default {
       const isPersonalExam = this.$route.name === 'onlineQuiz.konkoorView.personal'
       const retake = false
 
-      this.startExam(this.$route.params.quizId, this.$route.name, isPersonalExam, retake)
+      this.startExam(this.$route.params.quizId, this.$route.name, retake, isPersonalExam)
         .then(() => {
           this.questions = this.getCurrentExamQuestionsInArray()
           const callbacks = {

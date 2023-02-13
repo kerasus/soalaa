@@ -1,11 +1,6 @@
 <template>
-  <div class="page-width">
-    <div class="why-soalaa">
-      چرا سوالا؟
-    </div>
-    <div class="tab-title">
-      متفاوت‌ترین پلتفرم آزمون آنلاین و بانک سوال ایران
-    </div>
+  <div class="page-width"
+       :style="options.style">
     <div class="tab-panel-container">
       <q-tabs
         v-model="activeTab"
@@ -18,34 +13,35 @@
         active-class="active-tab"
         class="tab-box"
       >
-        <q-tab v-for="(tab, index) in tabs"
+        <q-tab v-for="(tab, index) in options.tabs"
                :key="index"
                :name="index"
                :icon="tabIcon(index, tab.icon, tab.icon2)"
                class="tab-style"
-               :label="tab.key"
+               :label="tab.title"
         />
       </q-tabs>
       <q-tab-panels v-model="activeTab"
                     animated
                     class="tab-content">
-        <q-tab-panel v-for="(tabData, index) in tabs"
+        <q-tab-panel v-for="(tabData, index) in options.tabs"
                      :key="index"
                      class="q-pa-none tab-panel-box"
                      :name="index">
           <div class="content">
-            <div class="title"> {{tabData.key}}</div>
-            <div class="description">{{tabData.value}}</div>
-            <div v-if="tabData.link"
+            <div class="title"> {{ tabData.title }}</div>
+            <span class="description"
+                  v-html="tabData.editor"></span>
+            <div v-if="tabData.button.url"
                  class="more-detail text-right">
               <q-btn
                 flat
-                :href="tabData.link"
-                style="color: #8075DC"
+                :href="tabData.button.url"
+                :style="{background: tabData.button.bgColor, color: tabData.button.color}"
                 class="btn"
                 padding="9px 17px"
                 icon-right="west"
-                label="اطلاعات بیشتر" />
+                :label="tabData.button.text" />
             </div>
           </div>
           <div class="img-box">
@@ -70,13 +66,15 @@ export default {
     activeTab: 0
   }),
   props: {
-    getData: {
-      type: Function,
-      default: () => {}
+    options: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
   },
   created() {
-    this.initPageData()
+    // this.initPageData()
   },
   methods: {
     tabIcon(index, icon, icon2) {
@@ -86,7 +84,7 @@ export default {
     async initPageData() {
       this.loading = true
       try {
-        const response = await this.getData(API_ADDRESS.homePage.base)
+        const response = await this.$axios.get(API_ADDRESS.homePage.base)
         this.tabs = response.data.data.tabs
         this.loading = false
       } catch (e) {
@@ -98,21 +96,27 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.page-width{
-  width: 1362px;
+.page-width {
+  //width: 100%;
+  //display: flex;
+  //justify-content: center;
   margin: auto;
-  @media screen and (max-width:1439px ){
-    width: 954px;
+  @media screen and (max-width: 1439px) {
+    //width: 954px;
+    //width: 100%;
   }
-  @media screen and (max-width:1023px ){
-    width: 540px;
+  @media screen and (max-width: 1023px) {
+    //width: 540px;
+    //width: 100%;
   }
-  @media screen and (max-width:599px ){
-    width: 100%;
+  @media screen and (max-width: 599px) {
+    //width: 100%;
+    //width: 100%;
     padding-left: 19px;
     padding-right: 19px;
   }
-  .why-soalaa{
+
+  .why-soalaa {
     text-align: center;
     font-style: normal;
     font-weight: 400;
@@ -120,24 +124,25 @@ export default {
     line-height: 31px;
     letter-spacing: -0.03em;
     color: #6D708B;
-    padding:20px 0 16px 0;
-    @media screen and (max-width: 1439px){
+    padding: 20px 0 16px 0;
+    @media screen and (max-width: 1439px) {
 
     }
-    @media screen and (max-width: 1023px){
+    @media screen and (max-width: 1023px) {
       font-weight: 400;
       font-size: 16px;
       line-height: 25px;
-      padding:10px 0 16px 0;
+      padding: 10px 0 16px 0;
     }
-    @media screen and (max-width: 599px){
+    @media screen and (max-width: 599px) {
       font-weight: 400;
       font-size: 14px;
       line-height: 22px;
-      padding:4px 0 8px 0;
+      padding: 4px 0 8px 0;
     }
   }
-  .tab-title{
+
+  .tab-title {
     font-style: normal;
     font-weight: 700;
     font-size: 36px;
@@ -146,17 +151,17 @@ export default {
     letter-spacing: -0.03em;
     color: #434765;
     margin-bottom: 40px;
-    @media screen and (max-width: 1439px){
+    @media screen and (max-width: 1439px) {
       font-size: 36px;
       line-height: 56px;
       margin-bottom: 24px;
     }
-    @media screen and (max-width: 1023px){
+    @media screen and (max-width: 1023px) {
       font-size: 24px;
       line-height: 37px;
       margin-bottom: 16px;
     }
-    @media screen and (max-width: 599px){
+    @media screen and (max-width: 599px) {
       font-size: 20px;
       line-height: 31px;
       margin-bottom: 20px;
@@ -164,112 +169,125 @@ export default {
     }
   }
 
-  .tab-panel-container{
+  .tab-panel-container {
     margin-bottom: 80px;
     @media screen and (max-width: 1439px) {
       margin-bottom: 40px;
     }
-    .active-tab{
-      :deep(.q-tab__label){
+
+    .active-tab {
+      :deep(.q-tab__label) {
         color: #9690E4 !important;
       }
     }
-    .active-container{
+
+    .active-container {
       color: #9690E4;
     }
-    .tab-box{
-      :deep(.q-icon){
+
+    .tab-box {
+      :deep(.q-icon) {
         font-size: 20px;
         color: var(--Text-2);
       }
-      @media screen and (max-width: 1023px){
+
+      @media screen and (max-width: 1023px) {
         width: 265px;
         margin: auto auto 16px;
       }
-      .tab-style{
+
+      .tab-style {
         width: 202px;
         margin: 0 15px 24px 15px;
         height: 60px;
-        &:deep(.q-tab__label){
+
+        &:deep(.q-tab__label) {
           font-style: normal;
           font-weight: 700;
           font-size: 18px;
           line-height: 28px;
           letter-spacing: -0.03em;
           color: #8A8CA6;
-          @media screen and (max-width: 1439px){
+          @media screen and (max-width: 1439px) {
             font-size: 16px;
             line-height: 25px;
           }
-          @media screen and (max-width: 1023px){
+          @media screen and (max-width: 1023px) {
             font-size: 18px;
             line-height: 28px;
           }
         }
-        &:deep(.q-tab__content){
-          .q-icon{
+
+        &:deep(.q-tab__content) {
+          .q-icon {
             width: 28px;
             height: 28px;
           }
         }
-        @media screen and (max-width: 1023px){
+
+        @media screen and (max-width: 1023px) {
           margin: 0;
         }
       }
     }
 
-    .tab-content{
+    .tab-content {
       background: rgba(228, 232, 239, .6);
       border-radius: 20px;
       padding: 40px 80px;
-      @media screen and (max-width: 1439px){
+      @media screen and (max-width: 1439px) {
         flex-direction: column;
         padding: 36px;
       }
-      @media screen and (max-width: 1023px){
+      @media screen and (max-width: 1023px) {
         padding: 24px;
       }
-      @media screen and (max-width: 599px){
+      @media screen and (max-width: 599px) {
         padding: 20px;
       }
-      .tab-panel-box{
+
+      .tab-panel-box {
         display: flex;
-        @media screen and (max-width: 1439px){
+        justify-content: space-between;
+        @media screen and (max-width: 1439px) {
           flex-direction: column;
           align-items: center;
         }
-        .content{
+
+        .content {
           margin-right: 40px;
           display: grid;
           grid-template-columns: 1fr;
           grid-template-rows: min-content;
           padding-top: 20px;
-          @media screen and (max-width: 1439px){
+          @media screen and (max-width: 1439px) {
             margin-right: 0;
             margin-bottom: 20px;
             padding-top: 0px;
           }
-          .title{
+
+          .title {
             font-weight: 700;
             font-size: 24px;
             line-height: 37px;
             letter-spacing: -0.03em;
             color: #434765;
             margin-bottom: 24px;
-            @media screen and (max-width: 1439px){
+            @media screen and (max-width: 1439px) {
               margin-bottom: 16px;
             }
-            @media screen and (max-width: 1023px){
+            @media screen and (max-width: 1023px) {
               margin-bottom: 10px;
               font-size: 20px;
               line-height: 31px;
             }
-            @media screen and (max-width: 599px){
+            @media screen and (max-width: 599px) {
               font-size: 18px;
               line-height: 28px;
             }
           }
-          .description{
+
+          .description {
             font-style: normal;
             font-weight: 400;
             font-size: 18px;
@@ -279,27 +297,29 @@ export default {
             color: #434765;
             margin-bottom: 31px;
             width: 586px;
-            @media screen and (max-width: 1439px){
+            @media screen and (max-width: 1439px) {
               margin-bottom: 6px;
               font-size: 18px;
               line-height: 28px;
               width: 100%;
             }
-            @media screen and (max-width: 1023px){
+            @media screen and (max-width: 1023px) {
               margin-bottom: 10px;
               font-size: 16px;
               line-height: 25px;
             }
-            @media screen and (max-width: 599px){
+            @media screen and (max-width: 599px) {
               font-size: 14px;
               line-height: 22px;
               margin-bottom: 16px;
             }
           }
-          .more-detail{
+
+          .more-detail {
             align-self: flex-end;
-            .btn{
-              color: #8075DC;
+
+            .btn {
+              //color: #8075DC;
               font-style: normal;
               font-weight: 600;
               font-size: 18px;
@@ -308,12 +328,14 @@ export default {
               @media screen and (max-width: 1439px) {
                 font-size: 16px;
                 line-height: 25px;
-                padding: 0!important;
+                padding: 0 !important;
               }
-              &:deep(.q-btn__content){
+
+              &:deep(.q-btn__content) {
                 margin: 0;
               }
-              &:deep(.q-icon){
+
+              &:deep(.q-icon) {
                 font-size: 22px;
                 @media screen and (max-width: 1023px) {
                   font-size: 16px;
@@ -323,20 +345,22 @@ export default {
             }
           }
         }
-        .img-box{
-          width:576px;
+
+        .img-box {
+          width: 576px;
           border-radius: 20px;
-          @media screen and (max-width: 1439px){
+          @media screen and (max-width: 1439px) {
             width: 502px;
             border-radius: 16px;
           }
-          @media screen and (max-width: 1023px){
+          @media screen and (max-width: 1023px) {
             width: 492px;
           }
-          @media screen and (max-width: 599px){
+          @media screen and (max-width: 599px) {
             border-radius: 12px;
           }
-          .img{
+
+          .img {
             width: 100%;
             height: 100%;
             border-radius: inherit;

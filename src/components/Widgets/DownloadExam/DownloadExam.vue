@@ -202,12 +202,11 @@
                 <q-skeleton height="900px"
                             class="pdf-skeleton" />
               </div>
-              <p-d-f-container
-                v-else-if="doesHaveQuestion"
-                :exam="examInfo"
-                :questions="questions"
-                :pdfConfig="pdfConfig"
-                @loaded="onQuestionsLoaded"
+              <p-d-f-container v-else-if="doesHaveQuestion"
+                               :exam="examInfo"
+                               :questions="questions"
+                               :pdfConfig="pdfConfig"
+                               @loaded="onQuestionsLoaded"
               />
             <!--            <vue-pdf-embed-->
             <!--              v-else-->
@@ -253,13 +252,12 @@
                 <q-skeleton height="900px"
                             class="pdf-skeleton" />
               </div>
-              <p-d-f-container
-                v-else-if="doesHaveQuestion"
-                :exam="examInfo"
-                :questions="questions"
-                :pdfConfig="pdfConfig"
-                :mode="'onlyDescriptiveAnswers'"
-                @loaded="onQuestionsLoaded"
+              <p-d-f-container v-else-if="doesHaveQuestion"
+                               :exam="examInfo"
+                               :questions="questions"
+                               :pdfConfig="pdfConfig"
+                               :mode="'onlyDescriptiveAnswers'"
+                               @loaded="onQuestionsLoaded"
               />
             <!--            <vue-pdf-embed-->
             <!--              v-else-->
@@ -294,7 +292,7 @@
                          class="btn"
                          label="دانلود PDF"
                          @click="generatePDF('keyAnswerPdf')"
-                  ></q-btn>
+                  />
                 </div>
               </div>
             </div>
@@ -318,13 +316,12 @@
         </q-tab-panels>
       </q-card>
       <div class="row text-center justify-center pagination-box">
-        <q-pagination
-          v-model="page"
-          :max="pageCount"
-          icon-first="isax:arrow-right-4"
-          icon-next="isax:arrow-right"
-          icon-last="isax:arrow-left"
-          @update:model-value="onChangePage"
+        <q-pagination v-model="page"
+                      :max="pageCount"
+                      icon-first="isax:arrow-right-4"
+                      icon-next="isax:arrow-right"
+                      icon-last="isax:arrow-left"
+                      @update:model-value="onChangePage"
         />
       </div>
     </div>

@@ -2,7 +2,9 @@
   <div  v-if="!isUserLogin"
         class="page-width">
     <div class="sub-mit-box flex justify-between items-center">
-      <div class="info">با ورود و یا ثبت نام در سوالا میتوانید محتوای شخصی سازی شده و مربوط به خود را دنبال کنید</div>
+      <div class="info">
+        <span v-html="options.text" />
+      </div>
       <div class="action-box">
         <q-btn
           unelevated
@@ -26,6 +28,14 @@
 <script>
 export default {
   name: 'GoLogin',
+  props: {
+    options: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
+  },
   computed: {
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
@@ -45,13 +55,16 @@ export default {
 <style scoped lang="scss">
 
 .page-width{
-  width: 1362px;
+  //width: 1362px;
+  width: 100%;
   margin: auto;
   @media screen and (max-width:1439px ){
-    width: 954px;
+    //width: 954px;
+    width: 100%;
   }
   @media screen and (max-width:1023px ){
-    width: 540px;
+    //width: 540px;
+    width: 100%;
   }
   @media screen and (max-width:599px ){
     width: 100%;

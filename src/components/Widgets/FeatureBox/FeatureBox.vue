@@ -3,47 +3,49 @@
               class="full-width slider-loading"
               height="520px" />
   <div v-else
-       class="page-width">
-    <div
-      class="feature-box ">
-      <div class="content">
+       :style="options.style"
+       class="feature-box">
+    <div class="content">
+      <div>
+        <div class="title"
+             :style="options.style">
+          {{ options.data.head }}
+        </div>
+        <!--          <div class="sub-title ellipsis">-->
+        <!--            {{options.data.title}}-->
+        <!--          </div>-->
         <div>
-          <div class="title">
-            {{featureData.head }}
-          </div>
-          <div class="sub-title ellipsis">
-            {{featureData.title}}
-          </div>
-          <div v-for="(item, index) in featureData.value"
-               :key="index"
-               class="soalaa-item">
-            <q-icon size="7px"
-                    class="badge"
-                    name="circle" />
-            <div class="ellipsis">{{item}}</div>
-          </div>
+          <span v-html="options.data.editor"></span>
         </div>
-        <div v-if="featureData.button?.url"
-             class="more-details text-right">
-          <q-btn
-            unelevated
-            color="primary"
-            :href="featureData.button?.url"
-            style="color: #8075DC"
-            class="btn q-ma-none"
-            padding="7px 15px 7px 15px"
-            icon-right="west"
-            :label="featureData.button?.text" />
-        </div>
+        <!--          <div v-for="(item, index) in options.data.value"-->
+        <!--               :key="index"-->
+        <!--               class="soalaa-item">-->
+        <!--            <q-icon size="7px"-->
+        <!--                    class="badge"-->
+        <!--                    name="circle" />-->
+        <!--            <div class="ellipsis">{{item}}</div>-->
+        <!--          </div>-->
       </div>
-      <div class="img-box">
-        <q-img
-          class="img"
-          :src="featureData.image?.link" />
+      <div v-if="options.data.button?.url"
+           class="more-details text-right">
+        <q-btn
+          unelevated
+          :href="options.data.button?.url"
+          :style="{background: options.data.button.bgColor, color: options.data.button.textColor}"
+          class="btn q-ma-none"
+          padding="7px 15px 7px 15px"
+          icon-right="west"
+          :label="options.data.button?.text" />
       </div>
     </div>
+    <div class="img-box">
+      <a :href="options.data.image?.url">
+        <q-img
+          class="img"
+          :src="options.data.image?.link" />
+      </a>
+    </div>
   </div>
-
 </template>
 
 <script>
@@ -52,28 +54,40 @@ import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'FeatureBox',
   data: () => ({
+    editor: '',
+    titleColor: null,
     loading: false,
     featureData: []
   }),
   props: {
-    getData: {
-      type: Function,
-      default: () => {}
-    },
-    data: {
+    options: {
       type: Object,
       default: () => {}
     }
   },
+  watch: {
+    options: {
+      handler() {
+        this.titleColor = this.options.titleColor
+      },
+      deep: true
+    }
+  },
   created() {
-    this.initPageData()
+    // this.initPageData()
+    this.titleColor = this.options.titleColor
+  },
+  computed: {
+    pageBuilderEditable () {
+      return this.$store.getters['AppLayout/pageBuilderEditable']
+    }
   },
   methods: {
     async initPageData() {
       this.loading = true
       try {
-        const response = await this.getData(API_ADDRESS.homePage.base)
-        this.featureData = response.data.data[this.data.responseKey]
+        const response = await this.$axios(API_ADDRESS.homePage.base)
+        this.featureData = response.data.data[this.options.responseKey]
         this.loading = false
       } catch (e) {
         this.loading = false
@@ -84,39 +98,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.yellow-title{
-  .feature-box{
-    .content{
-      .title{
-        color: #FFC107;
-      }
-    }
-  }
-}
-.page-width{
-  width: 1362px;
-  margin: auto;
-  @media screen and (max-width:1439px ){
-    width: 954px;
-  }
-  @media screen and (max-width:1023px ){
-    width: 540px;
-  }
-  @media screen and (max-width:599px ){
-    width: 100%;
-    padding-left: 19px;
-    padding-right: 19px;
-  }
-}
-.feature-box{
+.feature-box {
   padding: 40px 120px;
   background: #FFFFFF;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
   border-radius: 24px;
   margin-bottom: 80px;
-  display: grid;
-  grid-template-columns:587px 400px;
-  column-gap: 135px;
+  display: flex;
+  justify-content: space-between;
+  width: inherit;
   @media screen and (max-width: 1439px) {
     grid-template-columns:533px 280px;
     padding: 50px 40px;
@@ -156,7 +146,7 @@ export default {
       font-weight: 800;
       font-size: 40px;
       line-height: 62px;
-      color: #8075DC;
+      color: v-bind(titleColor);
       margin-bottom: 10px;
       @media screen and (max-width: 1439px) {
         font-size: 32px;

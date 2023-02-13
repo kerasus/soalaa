@@ -5,10 +5,9 @@
     <div class="question-box"
          :class="{ 'current-question': this.currentQuestion.id === question.id, ltr: isLtrQuestion}"
     >
-      <div
-        v-if="displayStatement"
-        class="question-head"
-        :style="{marginBottom: questionAndChoices + 'mm'}"
+      <div v-if="displayStatement"
+           class="question-head"
+           :style="{marginBottom: questionAndChoices + 'mm'}"
       >
         <p :id="'question' + question.id"
            class="question-body"
@@ -25,17 +24,15 @@
         v-if="displayChoices"
         class="choices-box row"
       >
-        <q-item
-          v-for="(choice, index) in question.choices"
-          :key="choice.id"
-          class="choices"
-          :class="choiceClass"
-          :style="{marginBottom: betweenChoices + 'mm'}"
+        <q-item v-for="(choice, index) in question.choices"
+                :key="choice.id"
+                class="choices"
+                :class="choiceClass"
+                :style="{marginBottom: betweenChoices + 'mm'}"
         >
-          <q-item-section
-            ref="choices"
-            class="choice"
-            :class="{ltr: isRtl}"
+          <q-item-section ref="choices"
+                          class="choice"
+                          :class="{ltr: isRtl}"
           >
             <div class="choice-inside">
               <q-icon
@@ -44,28 +41,26 @@
                 size="20px"
                 name="check"
               />
-              <vue-katex
-                class="vue-katex"
-                :input="'<span class='+'number'+'>'+ (index + 1) +') </span>' + choice.title"
-                :ltr="isLtrQuestion"
-                base64
-                @loaded="onChoiceLoaded(choice)"
+              <vue-katex class="vue-katex"
+                         :input="'<span class='+'number'+'>'+ (index + 1) +') </span>' + choice.title"
+                         :ltr="isLtrQuestion"
+                         base64
+                         @loaded="onChoiceLoaded(choice)"
               />
             </div>
           </q-item-section>
         </q-item>
       </q-list>
-      <div
-        v-if="displayDescriptiveAnswer"
-        class="question-descriptiveAnswer"
+      <div v-if="displayDescriptiveAnswer"
+           class="question-descriptiveAnswer"
       >
-        <p
-          :id="'question' + question.id"
-          class="question-body"
-          :class="{ ltr: isRtl }"
+        <p :id="'question' + question.id"
+           class="question-body"
+           :class="{ ltr: isRtl }"
         >
           <vue-katex class="vue-katex"
                      :input="getQuestionCompleteAnswerInput(order, question.descriptive_answer)"
+                     base64
                      @loaded="onDescriptiveAnswerLoaded"
           />
         </p>
