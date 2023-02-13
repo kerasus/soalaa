@@ -255,8 +255,7 @@ export default defineComponent({
       default: 0
     },
     pagination: {
-      type: Number,
-      default: 1
+      type: Number
     }
   },
   emits: [
@@ -271,7 +270,6 @@ export default defineComponent({
     examActions: [],
     examPrimaryAction: null,
     examSecondryActions: [],
-    page: 1,
     searchInExams: '',
     preventStartExam: false,
     examItem: new Exam(),
@@ -284,9 +282,6 @@ export default defineComponent({
       { type: 'date', name: 'to', label: 'تا', responseKey: 'toDate', calendarIcon: ' ', col: 'col-12 col-sm-6 form-builder-date-to' }
     ]
   }),
-  created () {
-    // this.getExams()
-  },
   watch: {
     quizType () {
       this.clearInputs()
@@ -297,9 +292,11 @@ export default defineComponent({
       } else {
         this.$store.commit('loading/loading', false)
       }
-    },
-    pagination(newValue) {
-      this.page = newValue
+    }
+  },
+  computed: {
+    page() {
+      return this.pagination
     }
   },
   mounted() {
