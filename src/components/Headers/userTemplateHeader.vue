@@ -436,6 +436,7 @@ export default {
     cancelEditPageBuilder() {
       const initialSections = this.$store.getters['AppLayout/initialSections']
       this.$store.commit('AppLayout/updateCurrentSections', initialSections)
+      this.togglePageBuilderEditable()
     },
     logOut () {
       return this.$store.dispatch('Auth/logOut')
