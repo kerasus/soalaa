@@ -1,5 +1,5 @@
 {
-  "path": "/home/alaa/WebstormProjects/Question-making-panel/src/components/Widgets",
+  "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets",
   "name": "Widgets",
   "self_type": "folder",
   "children": [
@@ -76,7 +76,7 @@
       "optionPanelName": "SliderOptionPanel"
     },
     {
-      "path": "/home/alaa/WebstormProjects/Question-making-panel/src/components/Widgets/Subscription",
+      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/Subscription",
       "name": "Subscription",
       "self_type": "folder",
       "children": [
@@ -130,13 +130,13 @@
       "optionPanelName": "TextWidgetOptionPanel"
     },
     {
-      "path": "/home/alaa/WebstormProjects/Question-making-panel/src/components/Widgets/readme.md",
+      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/readme.md",
       "name": "readme",
       "self_type": "file",
       "file_type": "md"
     },
     {
-      "path": "/home/alaa/WebstormProjects/Question-making-panel/src/components/Widgets/widget.json",
+      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/widget.json",
       "name": "widget",
       "self_type": "file",
       "file_type": "json"
