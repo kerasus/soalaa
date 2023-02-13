@@ -109,13 +109,49 @@
           type="checkbox"
           :options="filterQuestions.levels.map(option => {
             return {
-              label: option.label,
-              value: option
+              label: option.value,
+              value: option.value
             }
           })"
           @update:model-value="onChangeLevels"
         />
         <div v-if="filterQuestions.levels.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
+
+      </question-filter-expansion>
+
+      <question-filter-expansion
+        header-title="وضعیت سوال"
+      >
+        <q-option-group
+          v-model="selectedStatuses"
+          type="checkbox"
+          :options="filterQuestions.statuses.map(option => {
+            return {
+              label: option.display_title,
+              value: option.display_title
+            }
+          })"
+          @update:model-value="onChangeStatuses"
+        />
+        <div v-if="filterQuestions.statuses.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
+
+      </question-filter-expansion>
+
+      <question-filter-expansion
+        header-title="نوع سوال"
+      >
+        <q-option-group
+          v-model="selectedTypes"
+          type="checkbox"
+          :options="filterQuestions.types.map(option => {
+            return {
+              label: option.value,
+              value: option.value
+            }
+          })"
+          @update:model-value="onChangeTypes"
+        />
+        <div v-if="filterQuestions.types.length === 0"> هیچ نوع سوالی ایجاد نشده است</div>
 
       </question-filter-expansion>
     </div>
@@ -178,13 +214,18 @@ export default {
       selectedYears: [],
       selectedMajors: [],
       selectedLevels: [],
+      selectedTypes: [],
       selectedTags: [],
+      selectedStatuses: [],
       filtersData: {
         tags: [],
         reference: [],
         majors: [],
         level: [],
-        years: []
+        years: [],
+        types: [],
+        statuses: []
+
       }
     }
   },
@@ -278,6 +319,12 @@ export default {
     },
     onChangeMajors (value) {
       this.changeFilterData('majors', value)
+    },
+    onChangeStatuses(value) {
+      this.changeFilterData('statuses', value)
+    },
+    onChangeTypes (value) {
+      this.changeFilterData('types', value)
     },
     tickedData (value) {
       this.$emit('tagsChanged', value)

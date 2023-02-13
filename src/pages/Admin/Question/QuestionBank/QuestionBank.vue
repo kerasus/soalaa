@@ -168,7 +168,8 @@ export default {
             id: '3',
             value: 'سخت'
           }
-        ]
+        ],
+        types: []
       },
       questionListKey: Date.now(),
       selectedQuestions: [],
@@ -340,7 +341,7 @@ export default {
         statement: (filterData.statement) ? filterData.statement[0] : '',
         sort_by: (this.searchSelector.value) ? 'created_at' : '',
         sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value,
-        statuses: (filterData.statuses) ? filterData.statuses.map(item => item.id) : [],
+        statuses: (filterData.statuses) ? filterData.statuses.map(item => item) : [],
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
@@ -382,6 +383,8 @@ export default {
               this.filterQuestions.year_type.push(option)
             } else if (option.type === 'major_type') {
               this.filterQuestions.major_type.push(option)
+            } else if (option.type === 'question_type') {
+              this.filterQuestions.types.push(option)
             }
           })
         })
