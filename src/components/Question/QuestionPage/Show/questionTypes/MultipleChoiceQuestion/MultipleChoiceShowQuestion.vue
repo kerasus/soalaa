@@ -123,7 +123,7 @@ export default {
     .question-box {
       align-items: last baseline;
       font-weight: normal;
-      font-size: 14px;
+      font-size: 20px;
       line-height: 24px;
       .question-img {
         text-align: left #{"/* rtl:ignore */"};
@@ -184,7 +184,7 @@ export default {
   .default-Qcard-box {
     align-items: last baseline;
     font-weight: normal;
-    font-size: 14px;
+    font-size: 20px;
     line-height: 24px;
     .default-Qcard-img {
       text-align: left #{"/* rtl:ignore */"};

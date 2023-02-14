@@ -1,14 +1,26 @@
 <template>
-  <div
-    class="html-katex"
-    style="overflow: hidden"
-    :dir="!isLtrString ? 'rtl' : 'ltr'"
-    v-html="computedKatex"
+  <div ref="HtmlKatex"
+       class="html-katex"
+       style="overflow: hidden"
+       :dir="!isLtrString ? 'rtl' : 'ltr'"
+       v-html="computedKatex"
   />
+<!--  <canvas v-show="false"-->
+<!--          ref="convertor" />-->
 </template>
 
 <script>
 import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
+import katex from 'katex'
+import 'katex/dist/katex.css'
+import addPersianTo from 'src/Utils/katex-persian-renderer/src/index.mjs'
+import 'src/Utils/katex-persian-renderer/katex-persian-fonts/index.css'
+import allMetrics from 'src/Utils/katex-persian-renderer/katex-persian-fonts/YekanBakhFontMetrics.json'
+
+addPersianTo(katex, {
+  fontName: 'YekanBakh',
+  fontMetrics: allMetrics
+})
 
 export default {
   name: 'VueKatex',
@@ -20,15 +32,20 @@ export default {
     ltr: {
       type: Boolean,
       default: null
+    },
+    base64: {
+      type: Boolean,
+      default: false
     }
   },
-  data () {
+  emits: ['loaded'],
+  data() {
     return {
       rtl: true
     }
   },
   computed: {
-    isLtrString () {
+    isLtrString() {
       if (this.ltr !== null) {
         return this.ltr
       }
@@ -47,12 +64,26 @@ export default {
         return ''
       }
       string = this.removeFirstAndLastBracket(string)
-      string = mixinConvertToTiptap.methods.renderKatexToHTML(string)
+      string = this.renderKatexToHTML(string)
       return string
     }
   },
+  mounted() {
+    setTimeout(() => {
+      document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
+        item.setAttribute('dir', 'ltr')
+      })
+      this.$emit('loaded')
+      if (this.base64) {
+        this.convertPhotosToBase64()
+      }
+    }, 1000)
+  },
+  created() {
+    // this.rtl = !this.isLtrString(this.input)
+  },
   methods: {
-    removeFirstAndLastBracket (input) {
+    removeFirstAndLastBracket(input) {
       const regexPatternForFormula = mixinConvertToTiptap.methods.getRegexPatternForFormula()
       const regex = /\\\[.*\\]/gms
       let string = input
@@ -72,17 +103,89 @@ export default {
         return '$' + finalMatch + '$'
       })
       return string
-    }
-  },
-  mounted () {
-    setTimeout(() => {
-      document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
-        item.setAttribute('dir', 'ltr')
+    },
+    renderKatexToHTML(input, katexConfig = {
+      throwOnError: false,
+      strict: 'warn',
+      safe: true,
+      trust: true
+    }) {
+      let string = input
+      string = mixinConvertToTiptap.methods.convertToTiptap(string)
+      const regex = mixinConvertToTiptap.methods.getRegexPatternForFormula()
+      string = string.replace(regex, (match) => {
+        let finalMatch
+        if (match.includes('$')) {
+          finalMatch = match.slice(1, -1)
+        } else {
+          finalMatch = match.slice(2, -2)
+        }
+        if (finalMatch) {
+          finalMatch = mixinConvertToTiptap.methods.replaceKatexSigns(finalMatch)
+        }
+        return katex.renderToString(finalMatch, katexConfig)
       })
-    }, 1000)
-  },
-  created () {
-    // this.rtl = !this.isLtrString(this.input)
+      return string
+    },
+    convertPhotosToBase64 () {
+      this.convertSvgToBase64()
+      this.convertImagesToBase64()
+    },
+    convertImagesToBase64 () {
+      if (!this.$refs.HtmlKatex) {
+        return
+      }
+      const images = this.$refs.HtmlKatex.getElementsByTagName('img')
+      images.forEach(image => {
+        this.toDataURL(image.src, function(dataUrl) {
+          image.src = dataUrl
+        })
+      })
+    },
+    convertSvgToBase64 () {
+      if (!this.$refs.HtmlKatex) {
+        return
+      }
+      const svgs = this.$refs.HtmlKatex.getElementsByTagName('svg')
+      svgs.forEach(svg => {
+        // Convert the SVG node to HTML.
+        const div = document.createElement('div')
+        div.appendChild(svg.cloneNode(true))
+
+        // Encode the SVG as base64
+        const b64 = 'data:image/svg+xml;base64,' + window.btoa(div.innerHTML)
+        const url = 'url("' + b64 + '")'
+        svg.style.backgroundImage = url
+        svg.style.backgroundSize = 'cover'
+        if (svg.parentElement.classList.contains('brace-left')) {
+          svg.style.backgroundPosition = 'left'
+        }
+        if (svg.parentElement.classList.contains('brace-center')) {
+          svg.style.backgroundPosition = 'bottom'
+        }
+        if (svg.parentElement.classList.contains('brace-right')) {
+          svg.style.backgroundPosition = 'right'
+        }
+      })
+    },
+    toDataURL(src, callback, outputFormat) {
+      const img = new Image()
+      img.crossOrigin = 'Anonymous'
+      img.onload = function() {
+        const canvas = document.createElement('CANVAS')
+        const ctx = canvas.getContext('2d')
+        canvas.height = this.naturalHeight
+        canvas.width = this.naturalWidth
+        ctx.drawImage(this, 0, 0)
+        const dataURL = canvas.toDataURL(outputFormat)
+        callback(dataURL)
+      }
+      img.src = src + '?test=123'
+      if (img.complete || img.complete === undefined) {
+        img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='
+        img.src = src
+      }
+    }
   }
 }
 </script>
@@ -95,96 +198,25 @@ export default {
 //rtl change bug fix
 [dir="rtl"] .html-katex {
   @include katex-rtl-fix;
-  font-size: 1.2rem;
-  line-height: 4rem;
+  //font-size: 1.2rem;
+  //line-height: 4rem;
+
   .katex {
-    font-size: 1.9rem;
+    //font-size: 1.9rem;
   }
 }
 
 .html-katex {
   width: 100%;
+
   & > p {
     direction: inherit;
   }
+
   .katex {
     /*rtl:ignore*/
     direction: ltr !important;
     /*rtl:ignore*/
-  }
-  table {
-    border-collapse: collapse;
-    table-layout: fixed;
-    width: 100%;
-    margin: 0;
-    overflow: hidden;
-    td,
-    th {
-      min-width: 1em;
-      border: 2px solid #ced4da;
-      padding: 3px 5px;
-      vertical-align: top;
-      box-sizing: border-box;
-      position: static;
-      > * {
-        margin-bottom: 0;
-      }
-    }
-    th {
-      font-weight: bold;
-      text-align: left;
-      background-color: #f1f3f5;
-    }
-    .selectedCell:after {
-      z-index: 2;
-      position: absolute;
-      content: "";
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      background: rgba(200, 200, 255, 0.4);
-      pointer-events: none;
-    }
-    .column-resize-handle {
-      position: absolute;
-      right: -2px;
-      top: 0;
-      bottom: -2px;
-      width: 4px;
-      background-color: #adf;
-      pointer-events: none;
-    }
-  }
-  .beit {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
-    @media only screen and (max-width: 500px) {
-      flex-direction: column;
-    }
-    .mesra {
-      position: relative;
-      width: 100%;
-      min-height: 1px;
-      padding-right: 15px;
-      padding-left: 15px;
-      -ms-flex-preferred-size: 0;
-      flex-basis: 0;
-      -webkit-box-flex: 1;
-      -ms-flex-positive: 1;
-      flex-grow: 1;
-      max-width: 100%;
-      white-space: nowrap;
-      @media only screen and (max-width: 500px) {
-        white-space: normal;
-        flex-basis: auto;
-      }
-    }
   }
 }
 

@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="exam-rule-box">
-      <q-img class="dots"
-             src="https://nodes.alaatv.com/upload/landing/3a/3a_2.png" />
-      <q-img class="logo"
-             src="https://nodes.alaatv.com/upload/landing/3a/3a_1.png" />
+      <!--      <q-img class="dots"-->
+      <!--             src="https://nodes.alaatv.com/upload/landing/3a/3a_2.png" />-->
+      <!--      <q-img class="logo"-->
+      <!--             src="https://nodes.alaatv.com/upload/landing/3a/3a_1.png" />-->
       <div class="title-s">چگونگی و شرایط برگزاری آزمون سه‌آ</div>
       <div v-for="(rule, index) in rules"
            :key="index"

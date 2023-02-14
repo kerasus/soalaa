@@ -6,6 +6,7 @@
 // the Sass/SCSS variables found in Quasar's source Sass/SCSS files.
 
 // Check documentation for full list of Quasar variables
+// https://quasar.dev/style/sass-scss-variables#variables-list
 
 // Your own variables (that are declared here) and Quasar's own
 // ones will be available out of the box in your .vue/.scss/.sass files
@@ -16,3 +17,5 @@
 
 //$primary   : #1976D2; default
 
+$space-base   : 16px !default;
+$flex-gutter-lg : ($space-base * 1.875) !default;

@@ -1,8 +1,14 @@
-.form-builder-input-col , .form-builder-select-col {
-  padding: 8px 12px 15px 12px;
-  @media screen and (max-width: 1919px) {
-    padding: 8px 10px 15px 10px;
+@import "mixin";
 
+.form-builder-input-col,
+.form-builder-select-col {
+  .outsideLabel {
+    @include global-outsideLabel;
+  }
+
+  //padding: 8px 12px 15px 12px;
+  @media screen and (max-width: 1919px) {
+    //padding: 8px 10px 15px 10px;
     //  &:first-child {
   //    padding-left: 0 !important;
   //  }
@@ -11,10 +17,10 @@
   //  }
   }
   @media screen and (max-width: 1023px) {
-    padding: 8px 8px 12px 8px;
+    //padding: 8px 8px 12px 8px;
   }
   @media screen and (max-width: 599px) {
-    padding: 8px 8px 10px 8px;
+    //padding: 8px 8px 10px 8px;
   }
   .q-input , .q-select {
     @include global-input;
@@ -24,13 +30,17 @@
 .form-builder-input-col  .q-field--filled {
   @include global-input;
 
+  .q-field__input{
+    padding: 8px 16px;
+  }
+
   .q-field__inner {
     background-color: var(--3a-Neutral2);
 
     .q-field__control {
       background-color: var(--3a-Neutral2);
-
     }
   }
 }
+
 

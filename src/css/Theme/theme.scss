@@ -1,10 +1,11 @@
 @import 'src/css/Theme/icons';
 @import 'src/css/Theme/colors';
+@import 'src/css/Theme/Typography/typography';
 @import 'src/css/Theme/sizes';
 @import 'src/css/Theme/Controls/controles';
 @import 'src/css/Theme/Typography/typography';
 @import 'src/css/Theme/Widgets/widgets';
-@import 'src/css/Theme/Form-Builder/entity';
+@import 'Form-Builder/FormBuilder';
 
   body.body--light {
     //background: #f1f1f1

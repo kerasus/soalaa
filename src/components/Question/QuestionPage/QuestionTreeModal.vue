@@ -1,9 +1,10 @@
 <template>
   <q-dialog
     v-model="modal"
+    :persistent="persistent"
   >
     <q-card class="tree-card">
-      <div class="fit row wrap">
+      <div class="fit row wrap tree-inner-container">
         <div class="choose-tree-box question-details col-6">
           <div class="details-container-2 default-details-container">
             <div class="detail-box"
@@ -22,6 +23,7 @@
             <div class="detail-box">
               <div class="detail-box-title">نام درس</div>
               <q-select
+                ref="lessonSelector"
                 v-model="lesson"
                 filled
                 dense
@@ -36,6 +38,7 @@
               <tree
                 ref="tree"
                 :key="treeKey"
+                :no-nodes-label="'لطفا یک درس را انتخاب کنید'"
                 tick-strategy="strict"
                 :get-node-by-id="getNodeById"
                 @ticked="updateNodes"
@@ -78,16 +81,23 @@
               </div>
             </div>
           </div>
-          <div class="close-btn-box text-right">
-            <q-btn
-              v-close-popup
-              class="close-btn"
-              label="بستن"
-              color="primary"
-            />
+          <div class="action-btn-box text-right">
+            <slot name="tree-dialog-action-box">
+              <q-btn
+                v-close-popup
+                class="close-btn"
+                label="بستن"
+                color="primary"
+                :disable="persistent"
+              />
+            </slot>
           </div>
         </div>
       </div>
+      <q-inner-loading
+        :showing="dialogLoading"
+        dark
+      />
     </q-card>
   </q-dialog>
 </template>
@@ -95,6 +105,7 @@
 
 import Tree from 'components/Tree/Tree'
 import mixinTree from 'src/mixin/Tree'
+import { TreeNode } from 'src/models/TreeNode'
 
 export default {
   name: 'QuestionTreeModal',
@@ -122,6 +133,24 @@ export default {
     },
     subjectsField: {
       type: Object
+    },
+    singleListChoiceMode: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    },
+    initialLesson: {
+      type: [Object, TreeNode],
+      default () {
+        return new TreeNode()
+      }
+    },
+    persistent: {
+      type: Boolean,
+      default () {
+        return false
+      }
     }
   },
   emits: [
@@ -132,6 +161,7 @@ export default {
   ],
   data () {
     return {
+      dialogLoading: false,
       lesson: '',
       group: '',
       selectedNodesIDs: [],
@@ -143,6 +173,11 @@ export default {
     }
   },
   created () {},
+  mounted () {
+    if (this.initialLesson.id) {
+      this.lesson = this.initialLesson
+    }
+  },
   updated () {},
   computed: {
     getAllSubjects () {
@@ -181,7 +216,6 @@ export default {
       }
     }
   },
-  mounted () {},
   methods: {
     updateNodes (values) {
       this.nodesUpdatedFromTree = values
@@ -224,10 +258,12 @@ export default {
     },
     showTreeModalNode (item) {
       this.treeKey += 1
+      this.dialogLoading = true
       this.showTree('tree', this.getNode(item.id))
         .then(() => {
           this.syncAllCheckedIds()
           this.selectWantedTree(this.lesson)
+          this.dialogLoading = false
         })
     },
     selectWantedTree (lesson) {
@@ -245,7 +281,7 @@ export default {
       this.currentTreeNode = this.chosenSubjects[lessonId].nodes
     },
     updateChosenSubjects () {
-      if (this.lesson.id) {
+      if (this.lesson.id && this.chosenSubjects[this.lesson.id]) {
         this.chosenSubjects[this.lesson.id].nodes = this.currentTreeNode
       }
     },
@@ -273,13 +309,24 @@ export default {
       if (newVal.length > 0) {
         this.updateChosenSubjects()
       }
+    },
+    lesson (newVal) {
+      if (newVal && this.singleListChoiceMode) {
+        this.deleteAllNodes()
+      }
+    },
+    initialLesson (newVal) {
+      if (newVal.id) {
+        this.lesson = newVal
+        this.lessonSelected(newVal)
+      }
     }
   }
 }
 </script>
 <style scoped lang="scss">
-.close-btn-box {
-  padding-top: 30px;
+.action-btn-box {
+  padding-top: 20px;
   .close-btn {
     color: #FFFFFF;
     font-weight: 500;
@@ -291,6 +338,11 @@ export default {
     height: 40px;
     margin: auto 0 auto auto;
   }
+  @media screen and (max-width: 880px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 .q-card {
   min-width: 830px;
@@ -298,6 +350,16 @@ export default {
   background: #FFFFFF;
   border-radius: 15px;
   padding: 30px;
+  width: 830px;
+  @media screen and (max-width: 880px) {
+    min-width: 350px;
+    width: 350px;
+    .tree-inner-container {
+      display: flex;
+      flex-direction: column;
+      height: auto !important;
+    }
+  }
 }
 .question-details {
   font-style: normal;
@@ -306,21 +368,25 @@ export default {
   line-height: 28px;
   text-align: right #{"/* rtl:ignore */"};
   color: #23263B;
+  @media screen and (max-width: 880px) {
+    width: 100%;
+  }
   .tree-chips-box {
     height: 412px;
     max-width: 367px;
     background: #F4F5F6;
     border-radius: 10px;
     padding: 16px;
+    overflow-x: scroll;
     .tree-chips {
       background: #FFFFFF;
       margin-right: 10px;
     }
   }
   .question-tree {
-    height: 382px;
+    height: 378px;
     overflow-x: scroll;
-    margin-top: 2px;
+    margin-top: 10px;
   }
   .default-details-container {
     .detail-box {
@@ -402,7 +468,7 @@ export default {
     }
   }
 }
-@media screen and (min-width: 1240px) {
+@media screen and (min-width: 881px) {
   .choose-tree-box {
     padding-right: 15px;
   }
@@ -456,10 +522,5 @@ export default {
       }
     }
   }
-}
-.q-menu {
-  // I'm in charge of this one and did this on purpose, if you need to change this please let me know.TU
-  background: #FFFFFF;
-  border-radius: 10px;
 }
 </style>
