@@ -55,9 +55,10 @@ export default {
   },
   methods: {
     loadData () {
-      this.getData(API_ADDRESS.subscription.landing).then(res => {
-        this.info = res.data.data.questions
-      })
+      this.$axios.get(API_ADDRESS.subscription.landing)
+        .then(res => {
+          this.info = res.data.data.questions
+        })
     }
   }
 }
