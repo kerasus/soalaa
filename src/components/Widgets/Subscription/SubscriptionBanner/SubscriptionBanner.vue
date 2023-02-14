@@ -29,9 +29,10 @@ export default {
   },
   methods: {
     loadData () {
-      this.getData(API_ADDRESS.subscription.landing).then(res => {
-        this.info = res.data.data['bank-soala']
-      })
+      this.$axios.get(API_ADDRESS.subscription.landing)
+        .then(res => {
+          this.info = res.data.data['bank-soala']
+        })
     }
   }
 }
