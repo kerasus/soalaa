@@ -38,6 +38,13 @@
       <question-filter-expansion
         header-title="درس و مبحث"
       >
+        <q-checkbox
+          v-model="searcSinglehNode"
+          class="q-ml-md"
+          right-label
+          label="جستجوی تک گره"
+          @update:model-value="onSearchSingleNode"
+        />
         <tree-component
           ref="tree"
           :key="treeKey"
@@ -209,6 +216,7 @@ export default {
   data () {
     return {
       treeKey: 0,
+      searcSinglehNode: false,
       check: false,
       selectedReference: [],
       selectedYears: [],
@@ -325,6 +333,9 @@ export default {
     },
     onChangeTypes (value) {
       this.changeFilterData('types', value)
+    },
+    onSearchSingleNode(value) {
+      console.log(value)
     },
     tickedData (value) {
       this.$emit('tagsChanged', value)

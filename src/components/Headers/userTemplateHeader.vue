@@ -407,6 +407,7 @@ export default {
     editPage() {
       const currentSections = this.$store.getters['AppLayout/currentSections']
       this.$store.dispatch('AppLayout/editPageWidget', currentSections)
+      this.togglePageBuilderEditable()
     },
     updateLayout() {
       if (this.$route.name === 'HomePage') {

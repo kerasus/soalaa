@@ -110,69 +110,21 @@ export default {
     //width: 100%;
   }
   @media screen and (max-width: 599px) {
-    //width: 100%;
+    //display: flex;
+    //flex-wrap: wrap;
     //width: 100%;
     padding-left: 19px;
     padding-right: 19px;
-  }
-
-  .why-soalaa {
-    text-align: center;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 31px;
-    letter-spacing: -0.03em;
-    color: #6D708B;
-    padding: 20px 0 16px 0;
-    @media screen and (max-width: 1439px) {
-
-    }
-    @media screen and (max-width: 1023px) {
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 25px;
-      padding: 10px 0 16px 0;
-    }
-    @media screen and (max-width: 599px) {
-      font-weight: 400;
-      font-size: 14px;
-      line-height: 22px;
-      padding: 4px 0 8px 0;
-    }
-  }
-
-  .tab-title {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 56px;
-    text-align: center;
-    letter-spacing: -0.03em;
-    color: #434765;
-    margin-bottom: 40px;
-    @media screen and (max-width: 1439px) {
-      font-size: 36px;
-      line-height: 56px;
-      margin-bottom: 24px;
-    }
-    @media screen and (max-width: 1023px) {
-      font-size: 24px;
-      line-height: 37px;
-      margin-bottom: 16px;
-    }
-    @media screen and (max-width: 599px) {
-      font-size: 20px;
-      line-height: 31px;
-      margin-bottom: 20px;
-      padding: 0 34px;
-    }
   }
 
   .tab-panel-container {
     margin-bottom: 80px;
     @media screen and (max-width: 1439px) {
       margin-bottom: 40px;
+    }
+
+    @media screen and (max-width: 599px) {
+      width: 100%
     }
 
     .active-tab {
