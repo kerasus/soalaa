@@ -5,7 +5,7 @@
   <div v-else
        :style="options.style"
        class="feature-box">
-    <div class="content">
+    <div class="content full-width">
       <div>
         <div class="title"
              :style="options.style">
@@ -119,10 +119,13 @@ export default {
     margin-bottom: 40px;
   }
   @media screen and (max-width: 599px){
-    grid-template-columns: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
+    //grid-template-columns: 100%;
     padding: 20px 16px;
     border-radius: 16px;
-    column-gap: 0;
+    //column-gap: 0;
   }
   .content{
     display: flex;
@@ -236,7 +239,7 @@ export default {
       justify-self: center;
     }
     @media screen and (max-width: 599px){
-      width: 200px;
+      //width: 200px;
     }
     .img{
       width: 100%;
