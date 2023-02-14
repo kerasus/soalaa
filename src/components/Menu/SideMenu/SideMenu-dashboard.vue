@@ -171,7 +171,7 @@ export default {
               active: false
             },
             // { displayName: 'ثبت سوال', routeName: 'a', active: false },
-            { displayName: 'کارخانه سوال', routeName: 'Admin.Question.Factory', active: false },
+            // { displayName: 'کارخانه سوال', routeName: 'Admin.Question.Factory', active: false },
             { displayName: 'بانک سوال', routeName: 'Admin.Question.Bank', active: false }
           ]
         },

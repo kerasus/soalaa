@@ -1,5 +1,6 @@
 <template>
   <div
+    class="text-widget-container"
     :style="options.style"
     :class="options.customClass">
     <span class="text"
@@ -80,6 +81,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.text-widget-container {
+  @media screen and(max-width: 599px) {
+    //display: flex;
+    //width: 100%;
+  }
+}
 
 .text {
   color: v-bind(color);

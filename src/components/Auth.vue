@@ -90,7 +90,7 @@ export default {
         return
       }
       const redirectTo = this.$store.getters['Auth/redirectTo']
-      const defaultRoute = { name: 'User.Exam.List' }
+      const defaultRoute = { name: 'HomePage' }
       if (!redirectTo) {
         this.$router.push(defaultRoute)
         return

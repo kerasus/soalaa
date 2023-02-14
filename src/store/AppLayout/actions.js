@@ -1,4 +1,5 @@
 import { axios } from 'src/boot/axios'
+import { Notify } from 'quasar'
 
 export function updateAppBarAndDrawer (context, newInfo) {
   this.commit('AppLayout/updateLayoutHeaderVisible', newInfo)
@@ -23,6 +24,10 @@ export function editPageWidget (context, data) {
       .then(r => {
         this.commit('AppLayout/updateCurrentSections', JSON.parse(r.data.data.value))
         this.commit('AppLayout/updateInitialSections', JSON.parse(r.data.data.value))
+        Notify.create({
+          message: 'تغییرات با موفقیت ذخیره شد',
+          type: 'positive'
+        })
       })
       .catch(e => {
         reject(e)
