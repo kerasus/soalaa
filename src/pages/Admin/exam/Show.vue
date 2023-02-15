@@ -45,7 +45,6 @@
       </template>
     </entity-show>
   </div>
-
 </template>
 
 <script>
@@ -65,6 +64,8 @@ export default {
       editRouteName: 'Admin.Exam.Edit',
       indexRouteName: 'Admin.Exam.Index',
       inputs: [
+        { type: 'file', name: 'photo111', responseKey: 'data.photo', label: 'پیش نمایش تصویر', col: 'col-md-4', placeholder: ' ', disable: true },
+        { type: 'input', name: 'photo', responseKey: 'data.photo', label: 'آدرس تصویر', col: 'col-md-12', placeholder: ' ', filled: true },
         { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6', placeholder: ' ', filled: true },
         {
           type: 'Select',
