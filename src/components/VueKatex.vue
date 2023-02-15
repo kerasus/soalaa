@@ -203,6 +203,9 @@ export default {
 
   .katex {
     //font-size: 1.9rem;
+    /*rtl:ignore*/
+    direction: ltr !important;
+    /*rtl:ignore*/
   }
 }
 
