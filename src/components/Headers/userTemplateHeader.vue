@@ -391,7 +391,7 @@ export default {
   },
   computed: {
     pageBuilderEditable() {
-      return this.$store.getters['AppLayout/pageBuilderEditable']
+      return this.$store.getters['PageBuilder/pageBuilderEditable']
     },
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
@@ -436,8 +436,8 @@ export default {
       this.$store.commit('PageBuilder/updatePageBuilderEditable', !state)
     },
     cancelEditPageBuilder() {
-      const initialSections = this.$store.getters['AppLayout/initialSections']
-      this.$store.commit('AppLayout/updateCurrentSections', initialSections)
+      const initialSections = this.$store.getters['PageBuilder/initialSections']
+      this.$store.commit('PageBuilder/updateCurrentSections', initialSections)
       this.togglePageBuilderEditable()
     },
     logOut () {

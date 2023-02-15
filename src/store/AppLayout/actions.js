@@ -41,7 +41,6 @@ export function getPageWidget (context, value) {
       .get('3a/api/v1/setting/show?key=' + value)
       .then(r => {
         const parsedData = JSON.parse(r.data.data.value)
-        console.log('parsedData', parsedData)
         context.commit('updateCurrentSections', parsedData)
         context.commit('updateInitialSections', parsedData)
       })
