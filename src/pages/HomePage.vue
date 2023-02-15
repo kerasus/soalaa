@@ -1,7 +1,18 @@
 <template>
-  <q-page-builder v-model:sections="currenSections"
-                  v-model:options="pageConfig"
-                  :editable="pageBuilderEditable" />
+  <transition v-if="!pageLoading"
+              appear
+              enter-active-class="animated fadeIn"
+              leave-active-class="animated fadeOut"
+  >
+    <q-page-builder v-model:sections="currenSections"
+                    v-model:options="pageConfig"
+                    :editable="pageBuilderEditable" />
+  </transition>
+  <q-inner-loading :showing="pageLoading"
+                   label="کمی صبر کنید ...."
+                   label-class="text-teal"
+                   label-style="font-size: 1.1em"
+  />
 </template>
 
 <script>
@@ -11,6 +22,7 @@ export default {
   name: 'HomePage',
   mixins: [mixinPageBuilder],
   data: () => ({
+    pageLoading: false,
     pageConfig: {},
     sections: [
       {
@@ -971,9 +983,16 @@ export default {
       }
     ]
   }),
-  created: function () {
+  created () {
+    this.pageLoading = true
     // this.$store.dispatch('PageBuilder/getPageWidget', this.$route.name)
     this.$store.dispatch('PageBuilder/getPageWidget', 'homePage')
+      .then(() => {
+        this.pageLoading = false
+      })
+      .catch(() => {
+        this.pageLoading = false
+      })
   }
 }
 </script>

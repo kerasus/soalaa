@@ -29,6 +29,7 @@ export function getPageWidget (context, value) {
         const parsedData = JSON.parse(r.data.data.value)
         context.commit('updateCurrentSections', parsedData)
         context.commit('updateInitialSections', parsedData)
+        resolve(r)
       })
       .catch(e => {
         reject(e)
