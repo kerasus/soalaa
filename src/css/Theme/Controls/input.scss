@@ -1,6 +1,6 @@
 @mixin global-input {
     .q-field__inner {
-      border-radius: 10px;
+      border-radius: 8px;
       .q-field__control {
         color: transparent;
         border-radius: 10px;
@@ -16,15 +16,14 @@
         .q-field__append , .q-field__prepend {
           height: 40px;
           min-height: 0;
-          padding: 8px 20px;
+          padding: 8px 16px;
           .q-icon {
             font-size: 20px;
           }
         }
         .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
           border-radius: 10px;
-          padding: 8px 24px;
-
+          padding: 8px 16px;
         }
         .q-field__control-container {
           padding-top: 0;
@@ -39,7 +38,9 @@
     }
 }
 
-
+.q-field{
+  border-radius: 8px;
+}
 .q-field--focused {
   border: none;
 }

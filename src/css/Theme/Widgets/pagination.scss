@@ -23,13 +23,21 @@
     &.q-btn--standard {
       background: #9690E4 !important;
       color: #FFFFFF !important;
-      box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+      //box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+      box-shadow: none;
       border-radius: 12px;
+    }
+    .q-btn--active::before{
+      box-shadow: none;
     }
     &:nth-child(2){
       background: #FFFFFF;
       border-radius: 12px;
     }
+  }
+// new design
+  .q-btn::before{
+    box-shadow: none;
   }
 
   .disabled {

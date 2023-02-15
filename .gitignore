@@ -2,6 +2,7 @@
 .thumbs.db
 .env
 node_modules
+/src/components/Widgets/widget.json
 
 # Quasar core related directories
 .quasar

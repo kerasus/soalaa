@@ -30,7 +30,6 @@ export default store(function (/* { ssrContext } */) {
     plugins: [
       // vuejsStorage({
       //   keys: [
-
       //     'userQuizListData',
       //     'Auth',
       //     'psychometricAnswer',

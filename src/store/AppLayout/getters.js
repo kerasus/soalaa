@@ -2,6 +2,18 @@ export function linearLoading (state) {
   return state.linearLoading
 }
 
+export function pageBuilderEditable (state) {
+  return state.pageBuilderEditable
+}
+
+export function initialSections (state) {
+  return state.initialSections
+}
+
+export function currentSections (state) {
+  return state.currentSections
+}
+
 // export function drawer (state) {
 //   return state.drawer
 // }

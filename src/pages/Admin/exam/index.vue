@@ -182,8 +182,8 @@ export default {
       },
       inputs: [
         { type: 'input', name: 'statement', col: 'col-md-4', placeholder: 'عنوان' },
-        { type: 'date', name: 'start_at_from', col: 'col-md-4', placeholder: 'تاریخ شروع از' },
-        { type: 'date', name: 'start_at_till', col: 'col-md-4', placeholder: 'تاریخ شروع تا' }
+        { type: 'date', name: 'start_at_from', calendarIcon: ' ', col: 'col-md-4', placeholder: 'تاریخ شروع از' },
+        { type: 'date', name: 'start_at_till', calendarIcon: ' ', col: 'col-md-4', placeholder: 'تاریخ شروع تا' }
       ]
     }
   },

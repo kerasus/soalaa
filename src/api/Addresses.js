@@ -1,5 +1,6 @@
 import process from 'process'
 const lumenServer = process.env.AAA_API
+// const lumenServerProduction = process.env.AAA_API_PRODUCTION
 const authServer = process.env.AUTH_API
 const timeServer = process.env.GET_TIME_SERVER
 const socketServer = process.env.SOCKET_SERVER
@@ -18,16 +19,19 @@ const API_ADDRESS = {
   },
   user: {
     base: authServer + '/user',
+    edit (userId) { return authServer + '/user/' + userId },
     mobile: {
       resend: authServer + '/mobile/resend',
       verify: authServer + '/mobile/verify'
     },
     formData: authServer + '/megaroute/getUserFormData',
     show_user: authServer + '/getUserFor3a',
-    getOrderList (id) {
-      return authServer + '/user/' + id + '/orders?seller=2'
-      // return authServer + '/user/' + id + '/orders?seller=1'
-    }
+    orders: {
+      status: lumenServer + '/payment/status',
+      userOrders: lumenServer + '/orders'
+    },
+    statistics: lumenServer + 'user/dashboard/statistics',
+    feature: (feature) => lumenServer + '/user/feature?feature=' + feature
   },
   set: {
     base: authServer + '/set'
@@ -36,7 +40,9 @@ const API_ADDRESS = {
     base: authServer + '/c'
   },
   option: {
-    base: lumenServer + '/option'
+    base: lumenServer + '/option',
+    userIndex: lumenServer + '/option/user',
+    user(type) { return lumenServer + '/option/user?type=' + type }
   },
   log: {
     base: lumenServer + '/activity-log',
@@ -56,6 +62,12 @@ const API_ADDRESS = {
       edit: lumenServer + '/option',
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=reference_type&with_pagination=true'
+    },
+    questionReport: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/option',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=question_report_type&with_pagination=true'
     },
     questionTarget: {
       show: lumenServer + '/option/',
@@ -82,6 +94,19 @@ const API_ADDRESS = {
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
     analysisVideo: lumenServer + '/exam-question/attach/sub-category',
+    userExamList: {
+      base () {
+        return lumenServer + '/examAndUser'
+      },
+      upcomingExams(start) {
+        return lumenServer + '/examAndUser' + '?start_at_from=' + start
+      },
+      myExams(designerType = 'personal') {
+        const route = '?designer_type=' + designerType
+        return lumenServer + '/examAndUser' + route
+      }
+
+    },
     getAnalysisVideo (examId) {
       return lumenServer + '/exam-question/videos/' + examId
     },
@@ -92,6 +117,14 @@ const API_ADDRESS = {
       return lumenServer + '/exam-question/booklet-file/' + examId
     },
     base (pageNumber) {
+      if (pageNumber) {
+        return lumenServer + '/exam?with_pagination=1&page=' + pageNumber
+      } else {
+        return lumenServer + '/exam'
+      }
+    },
+    // todo : temporary, MUST BE DELETED
+    baseProduction (pageNumber) {
       if (pageNumber) {
         return lumenServer + '/exam?with_pagination=1&page=' + pageNumber
       } else {
@@ -116,6 +149,10 @@ const API_ADDRESS = {
     },
     registerExam: lumenServer + '/user/registerExam',
     examUser: lumenServer + '/exam-user',
+    participate: {
+      sample: (examId) => lumenServer + '/exam-user/' + examId,
+      personal: (examId) => lumenServer + '/exam-user/personal/' + examId
+    },
     examQuestion (quizId, page = 1) {
       return lumenServer + '/exam-question/attach/show/' + quizId + '?page=' + page
     },
@@ -131,7 +168,31 @@ const API_ADDRESS = {
     examBookletUpload (examId) {
       return lumenServer + '/exam-question/booklet-file/' + examId
     },
-    detachCategory: (examId, categoryId) => lumenServer + '/exam/detach/category/' + examId + '/' + categoryId
+    detachCategory: (examId, categoryId) => lumenServer + '/exam/detach/category/' + examId + '/' + categoryId,
+    user: {
+      draft () { return lumenServer + '/exam/user/draft' },
+      reportType: lumenServer + '/option/user?type=question_report_type',
+      report(questionId) { return lumenServer + '/question/report/store/' + questionId },
+      attach: lumenServer + '/exam-question/user/attach/v3',
+      detach(questionId) { return lumenServer + '/exam-question/user/detach/' + questionId },
+      updateOrders(examId) {
+        return lumenServer + '/exam-question/user/replace-questions/' + examId
+      },
+      detachBulk(examId) {
+        return lumenServer + '/exam-question/user/detach/bulk/' + examId
+      },
+      draftExam: {
+        create: lumenServer + '/exam/user',
+        update: (examId) => lumenServer + '/exam/user/' + examId,
+        getAttachedQuestions: (examId) => lumenServer + '/exam-question/user/attach/show/' + examId,
+        bulkAttachQuestions: (examId) => lumenServer + '/exam-question/user/attach/bulk/' + examId,
+        bulkDetachQuestions: (examId) => lumenServer + '/exam-question/user/detach/bulk/' + examId,
+        replaceQuestions: (examId) => lumenServer + '/exam-question/user/replace-questions/' + examId
+      },
+      pdf: (examId) => lumenServer + `/exam/user/pdf/${examId}`,
+      examInfo: (examId) => lumenServer + '/exam/user/' + examId,
+      questionsWithAnswer: (examId) => lumenServer + `/exam-question/user/attach/show/${examId}`
+    }
   },
   question: {
     photo (type, id) {
@@ -142,19 +203,21 @@ const API_ADDRESS = {
       page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
     },
     index (filters, page) {
-      const newFilter = filters ? JSON.parse(JSON.stringify(filters)) : {}
-      function setQueryParams (paramKey) {
-        if (typeof newFilter[paramKey] === 'undefined') {
-          return
+      let newFilter = (filters) ? JSON.parse(JSON.stringify(filters)) : {}
+      function setQueryParams (paramKey, singleMode = false) {
+        if (!newFilter) {
+          newFilter = {}
         }
-        // newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
-        if (typeof newFilter[paramKey] === 'object') {
+        newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
+        if (!singleMode) {
           newFilter[paramKey] = newFilter[paramKey].join('&' + paramKey + '[]=')
           if (newFilter[paramKey]) {
             newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
           }
         } else {
-          newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
+          if (newFilter[paramKey]) {
+            newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
+          }
         }
       }
       setQueryParams('statuses')
@@ -163,6 +226,9 @@ const API_ADDRESS = {
       setQueryParams('reference')
       setQueryParams('tags')
       setQueryParams('level')
+      setQueryParams('statement', true)
+      setQueryParams('sort_by', true)
+      setQueryParams('sort_type', true)
       setQueryParams('tags_with_childrens')
 
       if (typeof page !== 'undefined') {
@@ -202,6 +268,7 @@ const API_ADDRESS = {
     update (questionId) {
       return lumenServer + '/question/' + questionId
     },
+    reportLog: lumenServer + '/question/report',
     show (questionId) {
       return lumenServer + '/question/' + questionId
     },
@@ -224,7 +291,10 @@ const API_ADDRESS = {
     uploadImage (questionId) {
       return lumenServer + '/question/upload/' + questionId
     },
-    printQuestions: lumenServer + '/question/export'
+    printQuestions: lumenServer + '/question/export',
+    report(questionId) {
+      return lumenServer + 'question/report/store/' + questionId
+    }
   },
   questionSubcategory: {
     base: lumenServer + '/sub-category',
@@ -289,6 +359,15 @@ const API_ADDRESS = {
     review: apiV2Server + '/checkout/review',
     getPaymentRedirectEncryptedLink: apiV2Server + '/getPaymentRedirectEncryptedLink?seller=2',
     orderWithTransaction (orderId) { return apiV2Server + '/orderWithTransaction/' + orderId }
+  },
+  subscription: {
+    landing: lumenServer + '/subscribe/landing',
+    list: lumenServer + '/subscribe/user',
+    last: lumenServer + '/subscribe/user/last',
+    register: (userId) => lumenServer + `/subscribe/user/${userId}`
+  },
+  homePage: {
+    base: lumenServer + '/homepage'
   },
   ticket: {
     create: {

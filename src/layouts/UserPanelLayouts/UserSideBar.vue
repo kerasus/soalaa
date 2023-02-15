@@ -1,6 +1,10 @@
 <template>
-  <div class="user-panel-side-bar">
-    <div class="bg-primary profile-box">
+  <div
+    v-if="$route.name !== 'HomePage'"
+    class="user-panel-side-bar"
+  >
+    <div v-if="isUserLogin"
+         class="bg-primary profile-box">
       <div class="profile-detail">
         <div class="profile-photo-box">
           <div class="profile-photo-img">
@@ -25,7 +29,10 @@
             </svg>
           </div>
         </div>
-        <div class="profile-detail-info">
+        <div
+          v-if="isUserLogin"
+          class="profile-detail-info"
+        >
           <div class="info-name">{{user.full_name}}</div>
           <div class="info-phoneNumber">{{user.mobile}}</div>
         </div>
@@ -49,13 +56,18 @@
       <!--        </div>-->
       <!--      </div>-->
     </div>
-    <div class="bg-primary side-menu-main-layout">
+    <div
+      class="bg-primary side-menu-main-layout"
+      :class="{ 'loggedIn' : isUserLogin }"
+    >
       <user-panel-base-menu />
     </div>
-    <!--     Todo : usage of :mode="'drawer'" for panel in mobile size , default is 'sideBar'-->
-    <!--    <div class="bg-white">-->
-    <!--      <user-panel-base-menu :mode="'drawer'" />-->
-    <!--    </div>-->
+  </div>
+  <div
+    v-else
+    class="user-panel-side-drawer-container"
+  >
+    <user-panel-side-drawer />
   </div>
 </template>
 
@@ -63,9 +75,10 @@
 
 import { User } from 'src/models/User'
 import UserPanelBaseMenu from 'layouts/UserPanelLayouts/UserPanelBaseMenu'
+import UserPanelSideDrawer from 'layouts/UserPanelLayouts/UserPanelSideDrawer'
 export default {
   name: 'UserSideBar',
-  components: { UserPanelBaseMenu },
+  components: { UserPanelSideDrawer, UserPanelBaseMenu },
   data () {
     return {
       clickedItem: null
@@ -83,10 +96,16 @@ export default {
       }
       return new User()
     },
+    isUserLogin() {
+      return this.$store.getters['Auth/isUserLogin']
+    },
     showMenuItem () {
       return (item) => {
         return (item.permission === 'all' || this.user.hasPermission(item.permission))
       }
+    },
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
     }
   }
 }
@@ -94,6 +113,9 @@ export default {
 
 <style lang="scss" scoped>
 .user-panel-side-bar {
+  @media screen and (max-width: 1023px) {
+    //display: none;
+  }
   .profile-box {
     font-style: normal;
     font-weight: 400;
@@ -102,15 +124,12 @@ export default {
     text-align: left;
     color: #FFFFFF;
 
-    width: 277px;
+    width: 100%;
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 16px;
-    @media screen and (max-width: 1919px) {
-      width: 273px;
-    }
+
     @media screen and (max-width: 1439px) {
-      width: 220px;
       font-weight: 400;
       font-size: 12px;
       line-height: 19px;
@@ -122,6 +141,7 @@ export default {
     }
     @media screen and (max-width: 1023px) {
       width: 100%;
+      border-radius: 0;
     }
     @media screen and (max-width: 599px) {}
     .profile-detail {
@@ -144,8 +164,11 @@ export default {
           height: 56px;
         }
         .profile-photo-img {
+          width: 100%;
+          height: 100%;
           .q-img {
             border-radius: 16px;
+            height: 100%;
           }
         }
         .profile-photo-badge {
@@ -194,16 +217,15 @@ export default {
     }
   }
   .side-menu-main-layout {
-    width: 277px;
+    width: 100%;
     min-height: 480px;
     border-radius: 20px;
     padding: 24px;
+    display: grid;
     @media screen and (max-width: 1919px) {
-      width: 273px;
       min-height: 480px;
     }
     @media screen and (max-width: 1439px) {
-      width: 220px;
       border-radius: 16px;
       padding-right: 16px;
       padding-left: 16px;
@@ -213,12 +235,23 @@ export default {
     }
     @media screen and (max-width: 1023px) {
       width: 100%;
-      height: calc(100vh - 100px);
+      border-radius: 0;
+      height:100vh;
+
+      &.loggedIn {
+        height: calc(100vh - 90px);
+
+      }
     }
     @media screen and (max-width: 599px) {
       //width: 100%;
     }
   }
 }
-
+.user-panel-side-drawer-container {
+  display: none;
+  @media screen and (max-width: 1023px) {
+    display: block;
+  }
+}
 </style>

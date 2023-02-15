@@ -223,13 +223,11 @@
 </template>
 
 <script>
-import Widgets from 'components/PageBuilder/Widgets'
 import { Cart } from 'src/models/Cart'
 import { Product } from 'src/models/Product'
 
 export default {
   name: 'cartView',
-  mixins: [Widgets],
   data() {
     return {
       dialogState: false,
@@ -304,7 +302,7 @@ export default {
       this.$store.dispatch('Cart/removeItemFromCart', order)
         .then(() => {
           this.$emit('cartReview')
-          this.$store.dispatch('loading/overlayLoading', false)
+          // this.$store.dispatch('loading/overlayLoading', false)
           this.changeDialogState(false)
         }).catch(() => {
           this.changeDialogState(false)

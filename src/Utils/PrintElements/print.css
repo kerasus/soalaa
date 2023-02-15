@@ -1,0 +1,43 @@
+@media print and (color) {
+    .pe-no-print {
+        display: none !important;
+    }
+
+    .pe-preserve-ancestor {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+   .download-exam .pdf-container {
+      margin-left: 0px;
+    }
+
+    #pdf-container{
+      direction: ltr;
+
+    }
+
+    .choice {
+      direction: rtl;
+      text-align: right;
+    }
+
+    body {
+      margin: 0;
+    }
+
+
+    @page {
+      margin: 0;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    * {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+}

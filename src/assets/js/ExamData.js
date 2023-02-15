@@ -62,16 +62,26 @@ class ExamData {
     this.userExamData = null
   }
 
-  run () {
-    let result = Promise.resolve()
-    // let reject = Promise.reject(new Error('fail'))
-    this.commands.forEach(function (promiseLike) {
-      result = result.then(promiseLike)
-      result = result.catch(promiseLike)
-    })
+  async run () {
+    let rejectData = null
+    for (const command of this.commands) {
+      try {
+        const promiseCommand = await command()
+        if (promiseCommand.type === 'reject') {
+          break
+        }
+      } catch (err) {
+        rejectData = err
+        break
+      }
+    }
+
     return new Promise((resolve, reject) => {
-      result.then(resolve)
-      result.catch(reject)
+      if (rejectData) {
+        reject(rejectData)
+      } else {
+        resolve()
+      }
     })
   }
 
@@ -80,7 +90,11 @@ class ExamData {
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!that.questionsFileUrl && !that.exam) {
         Assistant.handleAxiosError('questionsFileUrl in loadQuestionsFromFile() is not set')
-        reject('questionsFileUrl in loadQuestionsFromFile() is not set')
+        reject({
+          data: 'questionsFileUrl in loadQuestionsFromFile() is not set',
+          message: 'مشکلی در گرفتن آدرس فایل سوالات رخ داده است.',
+          type: 'reject'
+        })
       }
       if (!that.questionsFileUrl && questionsFileUrl) {
         that.questionsFileUrl = questionsFileUrl
@@ -105,10 +119,17 @@ class ExamData {
             questions = new ShuffleQuestions(questions).run()
           }
           that.exam.questions = new QuestionList(questions)
-          resolve(response.data)
+          resolve({
+            data: response,
+            type: 'resolve'
+          })
         })
         .catch(error => {
-          reject(error)
+          reject({
+            data: error,
+            message: 'مشکلی در دریافت فایل سوالات رخ داده است.',
+            type: 'reject'
+          })
         })
     })
     )
@@ -121,7 +142,11 @@ class ExamData {
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!userExamId && !that.exam) {
         Assistant.handleAxiosError('userExamId in getUserExamWithCorrectAnswers() is not set')
-        reject('userExamId in getUserExamWithCorrectAnswers() is not set')
+        reject({
+          data: 'userExamId in getUserExamWithCorrectAnswers() is not set',
+          message: 'مشکلی در تشخیص شناسه آزمون جهت گرفتن پاسخ های کاربر رخ داده است.',
+          type: 'reject'
+        })
       }
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
@@ -136,10 +161,17 @@ class ExamData {
           that.exam.title = response.data.data.exam.title
           that.exam.questions_file_url = response.data.data.exam.questions_file_url
           that.questionsFileUrl = response.data.data.exam.questions_file_url
-          resolve(response)
+          resolve({
+            data: response,
+            type: 'resolve'
+          })
         })
         .catch(error => {
-          reject(error)
+          reject({
+            data: error,
+            message: 'مشکلی در دریافت پاسخ های کاربر رخ داده است.',
+            type: 'reject'
+          })
         })
     })
     )
@@ -152,7 +184,11 @@ class ExamData {
       if (!userExamId && !that.exam) {
         Assistant.handleAxiosError('userExamId in getUserExamDataReport() is not set')
         // eslint-disable-next-line prefer-promise-reject-errors
-        reject('userExamId in getUserExamDataReport() is not set')
+        reject({
+          data: 'userExamId in getUserExamDataReport() is not set',
+          message: 'مشکلی در تشخیص شناسه کاربر جهت گرفتن کارنامه رخ داده است.',
+          type: 'reject'
+        })
       }
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
@@ -189,7 +225,11 @@ class ExamData {
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!userExamId && !that.exam) {
         Assistant.handleAxiosError('userExamId in getUserExamData() is not set')
-        reject('userExamId in getUserExamData() is not set')
+        reject({
+          data: 'userExamId in getUserExamData() is not set',
+          message: 'مشکلی در تشخیص شناسه آزمون جهت گرفتن پاسخ های کاربر رخ داده است.',
+          type: 'reject'
+        })
       }
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
@@ -198,10 +238,17 @@ class ExamData {
       this.$axios.get(API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
         .then(response => {
           that.userExamData = response.data
-          resolve(response)
+          resolve({
+            data: response,
+            type: 'resolve'
+          })
         })
         .catch(error => {
-          reject(error)
+          reject({
+            data: error,
+            message: 'مشکلی در دریافت پاسخ های کاربر رخ داده است.',
+            type: 'reject'
+          })
         })
       // }
     })
@@ -209,12 +256,16 @@ class ExamData {
     return this
   }
 
-  getExamDataAndParticipate (examId, retake) {
+  getExamDataAndParticipate (examId, retake, personal) {
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!examId && !that.exam) {
         Assistant.handleAxiosError('exam_id in getExamDataAndParticipate() is not set')
-        reject('exam_id in getExamDataAndParticipate() is not set')
+        reject({
+          data: 'exam_id in getExamDataAndParticipate() is not set',
+          message: 'مشکلی در تشخیص شناسه آزمون جهت گرفتن پاسخ های کاربر رخ داده است.',
+          type: 'reject'
+        })
       }
       if (!examId) {
         examId = that.exam.id
@@ -223,7 +274,8 @@ class ExamData {
       if (retake) {
         data.retake = true
       }
-      this.$axios.post(API_ADDRESS.exam.examUser, data)
+      const url = personal ? API_ADDRESS.exam.participate.personal(examId) : API_ADDRESS.exam.participate.sample(examId)
+      this.$axios.post(url, data)
         .then(response => {
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
@@ -237,10 +289,16 @@ class ExamData {
           that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
           that.exam.holding_config = response.data.data.holding_config
           that.userExamData = response.data
-          resolve(response)
+          resolve({
+            data: response,
+            type: 'resolve'
+          })
         })
         .catch(error => {
-          reject(error)
+          reject({
+            data: error,
+            type: 'reject'
+          })
         })
     })
     )
@@ -252,7 +310,10 @@ class ExamData {
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!examId && !that.exam) {
         Assistant.handleAxiosError('exam_id in getExamData() is not set')
-        reject('exam_id in getExamData() is not set')
+        reject({
+          data: 'exam_id in getExamData() is not set',
+          type: 'reject'
+        })
       }
       if (!examId) {
         examId = that.exam.id
@@ -271,10 +332,16 @@ class ExamData {
           that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
           that.exam.holding_config = response.data.data.holding_config
           that.userExamData = response.data
-          resolve(response)
+          resolve({
+            data: response,
+            type: 'resolve'
+          })
         })
         .catch(error => {
-          reject(error)
+          reject({
+            data: error,
+            type: 'reject'
+          })
         })
     })
     )
