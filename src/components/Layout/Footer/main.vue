@@ -275,9 +275,7 @@
               :key="index"
               class="tabs-list-container"
             >
-              <div
-                class="self-center"
-              >
+              <div class="self-center">
                 <q-item
                   v-ripple
                   clickable
@@ -341,10 +339,8 @@ export default {
     scrollToTop() {
       document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
     },
-    isRouteSelected () {
-      return (itemName) => {
-        return (this.$route.name === itemName)
-      }
+    isRouteSelected (itemName) {
+      return this.$route.name === itemName
     }
   },
   computed: {

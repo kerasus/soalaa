@@ -1,12 +1,12 @@
-import { axios } from 'src/boot/axios'
 import { Notify } from 'quasar'
+import { axios } from 'src/boot/axios'
 
 export function updateAppBarAndDrawer (context, newInfo) {
-  this.commit('AppLayout/updateLayoutHeaderVisible', newInfo)
-  this.commit('AppLayout/updateLayoutLeftDrawerVisible', newInfo)
+  context.commit('updateLayoutHeaderVisible', newInfo)
+  context.commit('updateLayoutLeftDrawerVisible', newInfo)
 }
 export function showConfirmDialog (context, newInfo) {
-  this.commit('AppLayout/showConfirmDialog', newInfo)
+  context.commit('showConfirmDialog', newInfo)
 }
 export function showLoginDialog (context, newInfo) {
   let redirectTo = newInfo?.redirectTo
@@ -14,16 +14,17 @@ export function showLoginDialog (context, newInfo) {
     redirectTo = null
   }
   this.dispatch('Auth/logOut', null, { root: true })
-  this.commit('Auth/updateRedirectTo', redirectTo, { root: true })
-  this.commit('AppLayout/updateLoginDialog', true)
+  context.commit('Auth/updateRedirectTo', redirectTo, { root: true })
+  context.commit('updateLoginDialog', true)
 }
 export function editPageWidget (context, data) {
   return new Promise((resolve, reject) => {
     axios
       .put('3a/api/v1/setting', { key: 'homePage', value: JSON.stringify(data) })
       .then(r => {
-        this.commit('AppLayout/updateCurrentSections', JSON.parse(r.data.data.value))
-        this.commit('AppLayout/updateInitialSections', JSON.parse(r.data.data.value))
+        const parsedData = JSON.parse(r.data.data.value)
+        context.commit('updateCurrentSections', parsedData)
+        context.commit('updateInitialSections', parsedData)
         Notify.create({
           message: 'تغییرات با موفقیت ذخیره شد',
           type: 'positive'
@@ -34,13 +35,15 @@ export function editPageWidget (context, data) {
       })
   })
 }
-export function getPageWidget (context) {
+export function getPageWidget (context, value) {
   return new Promise((resolve, reject) => {
     axios
-      .get('3a/api/v1/setting/show?key=homePage')
+      .get('3a/api/v1/setting/show?key=' + value)
       .then(r => {
-        this.commit('AppLayout/updateCurrentSections', JSON.parse(r.data.data.value))
-        this.commit('AppLayout/updateInitialSections', JSON.parse(r.data.data.value))
+        const parsedData = JSON.parse(r.data.data.value)
+        console.log('parsedData', parsedData)
+        context.commit('updateCurrentSections', parsedData)
+        context.commit('updateInitialSections', parsedData)
       })
       .catch(e => {
         reject(e)
@@ -49,13 +52,13 @@ export function getPageWidget (context) {
 }
 export function updateTemplateLayout (context, newInfo) {
   if (newInfo.layoutHeaderType !== undefined) {
-    this.commit('AppLayout/changeTemplateHeaderType', newInfo.layoutHeaderType)
+    context.commit('changeTemplateHeaderType', newInfo.layoutHeaderType)
   }
   if (newInfo.layoutLeftSideBarType !== undefined) {
-    this.commit('AppLayout/changeTemplateLeftSideBarType', newInfo.layoutLeftSideBarType)
+    context.commit('changeTemplateLeftSideBarType', newInfo.layoutLeftSideBarType)
   }
   if (newInfo.layoutRightSideBarType !== undefined) {
-    this.commit('AppLayout/changeTemplateRightSideBarType', newInfo.layoutRightSideBarType)
+    context.commit('changeTemplateRightSideBarType', newInfo.layoutRightSideBarType)
   }
   this.dispatch('AppLayout/updateStore', newInfo)
 }

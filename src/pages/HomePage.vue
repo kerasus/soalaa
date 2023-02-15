@@ -6,6 +6,7 @@
 
 <script>
 import { mixinPageBuilder } from 'src/mixin/Mixins.js'
+
 export default {
   name: 'HomePage',
   mixins: [mixinPageBuilder],
@@ -970,25 +971,9 @@ export default {
       }
     ]
   }),
-  created() {
-    // this.currenSections = this.sections
-    this.$store.dispatch('AppLayout/getPageWidget')
-    // this.$store.dispatch('AppLayout/editPageWidget', this.sections)
-    // this.$store.commit('AppLayout/updateInitialSections', this.sections)
-  },
-  methods: {
-    saveTempData() {
-      this.$axios.post('3a/api/v1/setting', {
-        key: 'homePage',
-        value: JSON.stringify(this.sections)
-      })
-        .then(r => {
-          // console.log(r)
-        })
-        .catch(e => {
-          // console.log(e)
-        })
-    }
+  created: function () {
+    // this.$store.dispatch('PageBuilder/getPageWidget', this.$route.name)
+    this.$store.dispatch('PageBuilder/getPageWidget', 'homePage')
   }
 }
 </script>
