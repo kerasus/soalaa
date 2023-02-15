@@ -191,9 +191,6 @@ export default {
     // }
   },
   methods: {
-    loggg (data) {
-      console.log(data)
-    },
     showExam (id) {
       this.$router.push({
         name: 'Admin.Exam.Show',
