@@ -10,106 +10,104 @@
     >
       <!--            :show-search-button="false"
 -->
-      <template #table-cell="{inputData, showConfirmRemoveDialog}">
-        <q-td :props="inputData.props">
-          <template v-if="inputData.props.col.name === 'actions'">
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="info"
-                   icon="isax:eye"
-                   :to="{name:'Admin.Exam.Show', params: {id: inputData.props.row.id}}"
+      <template #entity-index-table-cell="{props, col, showConfirmRemoveDialog}">
+        <template v-if="col.name === 'actions'">
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="info"
+                 icon="isax:eye"
+                 :to="{name:'Admin.Exam.Show', params: {id: props.row.id}}"
+          >
+            <q-tooltip anchor="top middle"
+                       self="bottom middle">
+              مشاهده
+            </q-tooltip>
+          </q-btn>
+          <!--            <q-btn round flat dense size="md" color="purple" icon="edit" :to="{name:'Admin.Exam.Edit', params: {id: props.row.id}}">-->
+          <!--              <q-tooltip anchor="top middle" self="bottom middle">-->
+          <!--                ویرایش-->
+          <!--              </q-tooltip>-->
+          <!--            </q-btn>-->
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="indigo"
+                 icon="auto_stories"
+                 :to="{name:'Admin.Exam.Categories', params: {exam_id: props.row.id , examTitle: props.row.title}}"
+          >
+            <q-tooltip anchor="top middle"
+                       self="bottom middle">
+              مشاهده دروس
+            </q-tooltip>
+          </q-btn>
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="blue"
+                 icon="assignment">
+            <q-menu
+              class="options-menu"
+              transition-show="jump-down"
+              transition-hide="jump-up"
+              :offset="[150,5]"
             >
-              <q-tooltip anchor="top middle"
-                         self="bottom middle">
-                مشاهده
-              </q-tooltip>
-            </q-btn>
-            <!--            <q-btn round flat dense size="md" color="purple" icon="edit" :to="{name:'Admin.Exam.Edit', params: {id: inputData.props.row.id}}">-->
-            <!--              <q-tooltip anchor="top middle" self="bottom middle">-->
-            <!--                ویرایش-->
-            <!--              </q-tooltip>-->
-            <!--            </q-btn>-->
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="indigo"
-                   icon="auto_stories"
-                   :to="{name:'Admin.Exam.Categories', params: {exam_id: inputData.props.row.id , examTitle: inputData.props.row.title}}"
-            >
-              <q-tooltip anchor="top middle"
-                         self="bottom middle">
-                مشاهده دروس
-              </q-tooltip>
-            </q-btn>
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="blue"
-                   icon="assignment">
-              <q-menu
-                class="options-menu"
-                transition-show="jump-down"
-                transition-hide="jump-up"
-                :offset="[150,5]"
-              >
-                <q-list style="min-width: 100px">
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
-                    :to="{name:'Admin.Exam.AllResults', params: {id: inputData.props.row.id}}"
-                  >
-                    <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>
-                  </q-item>
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
-                    :to="{name:'Admin.Exam.Lessons.List', params: {quizId: inputData.props.row.id, quizTitle: inputData.props.row.title}}"
-                  >
-                    <q-item-section>کارنامه سرگروه</q-item-section>
-                  </q-item>
-                </q-list>
-              </q-menu>
-              <q-tooltip anchor="top middle"
-                         self="bottom middle">
-                مشاهده نتایج
-              </q-tooltip>
-            </q-btn>
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="info"
-                   icon="info"
-                   :to="{name:'Admin.Exam.MoreActions', params: {id: inputData.props.row.id}}">
-              <q-tooltip anchor="top middle"
-                         self="bottom middle">
-                عملیات بیشتر
-              </q-tooltip>
-            </q-btn>
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="red"
-                   icon="delete"
-                   @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
-              <q-tooltip anchor="top middle"
-                         self="bottom middle">
-                حذف آزمون
-              </q-tooltip>
-            </q-btn>
+              <q-list style="min-width: 100px">
+                <q-item
+                  v-ripple:yellow
+                  clickable
+                  manual-focus
+                  :to="{name:'Admin.Exam.AllResults', params: {id: props.row.id}}"
+                >
+                  <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>
+                </q-item>
+                <q-item
+                  v-ripple:yellow
+                  clickable
+                  manual-focus
+                  :to="{name:'Admin.Exam.Lessons.List', params: {quizId: props.row.id, quizTitle: props.row.title}}"
+                >
+                  <q-item-section>کارنامه سرگروه</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+            <q-tooltip anchor="top middle"
+                       self="bottom middle">
+              مشاهده نتایج
+            </q-tooltip>
+          </q-btn>
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="info"
+                 icon="info"
+                 :to="{name:'Admin.Exam.MoreActions', params: {id: props.row.id}}">
+            <q-tooltip anchor="top middle"
+                       self="bottom middle">
+              عملیات بیشتر
+            </q-tooltip>
+          </q-btn>
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="red"
+                 icon="delete"
+                 @click="showConfirmRemoveDialog(props.row, 'id', getRemoveMessage(props.row))">
+            <q-tooltip anchor="top middle"
+                       self="bottom middle">
+              حذف آزمون
+            </q-tooltip>
+          </q-btn>
 
-          </template>
-          <template v-else>
-            {{ inputData.props.value }}
-          </template>
-        </q-td>
+        </template>
+        <template v-else>
+          {{ col.value }}
+        </template>
       </template>
     </entity-index>
   </div>
@@ -193,6 +191,9 @@ export default {
     // }
   },
   methods: {
+    loggg (data) {
+      console.log(data)
+    },
     showExam (id) {
       this.$router.push({
         name: 'Admin.Exam.Show',
