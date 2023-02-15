@@ -10,8 +10,8 @@ const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
   socket: socketServer,
   pages: {
-    base: lumenServer + 'setting',
-    show: (key) => lumenServer + 'setting/show?key=' + key
+    base: lumenServer + '/setting',
+    show: (key) => lumenServer + '/setting/show?key=' + key
   },
   server: {
     time: timeServer,
