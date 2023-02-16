@@ -394,21 +394,21 @@ export default {
       return this.$store.dispatch('Auth/logOut')
     },
     togglePageBuilderEditable () {
-      const state = this.$store.getters['AppLayout/pageBuilderEditable']
-      this.$store.commit('AppLayout/updatePageBuilderEditable', !state)
+      const state = this.$store.getters['PageBuilder/pageBuilderEditable']
+      this.$store.commit('PageBuilder/updatePageBuilderEditable', !state)
     },
     editPage(name) {
       if (name === 'edit' || name === 'default') {
         this.togglePageBuilderEditable()
       }
       if (name === 'accept') {
-        const currentSections = this.$store.getters['AppLayout/currentSections']
-        this.$store.dispatch('AppLayout/editPageWidget', currentSections)
+        const currentSections = this.$store.getters['PageBuilder/currentSections']
+        this.$store.dispatch('PageBuilder/editPageWidget', { key: 'homePage', sections: currentSections })
         this.togglePageBuilderEditable()
       }
       if (name === 'cancel') {
-        const initialSections = this.$store.getters['AppLayout/initialSections']
-        this.$store.commit('AppLayout/updateCurrentSections', initialSections)
+        const initialSections = this.$store.getters['PageBuilder/initialSections']
+        this.$store.commit('PageBuilder/updateCurrentSections', initialSections)
         this.togglePageBuilderEditable()
       }
     }
