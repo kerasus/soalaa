@@ -197,6 +197,9 @@ export default {
       @media screen and (max-width: 599px) {
         padding: 20px;
       }
+      &:deep(.q-panel) {
+        overflow: hidden;
+      }
 
       .tab-panel-box {
         display: flex;
@@ -310,6 +313,7 @@ export default {
           }
           @media screen and (max-width: 599px) {
             border-radius: 12px;
+            width: 272px
           }
 
           .img {
