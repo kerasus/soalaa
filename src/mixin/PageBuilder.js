@@ -1,17 +1,17 @@
 const mixinPageBuilder = {
   computed: {
     pageBuilderEditable () {
-      return this.$store.getters['AppLayout/pageBuilderEditable']
+      return this.$store.getters['PageBuilder/pageBuilderEditable']
     },
     initialSections() {
-      return this.$store.getters['AppLayout/initialSections']
+      return this.$store.getters['PageBuilder/initialSections']
     },
     currenSections: {
       get() {
-        return this.$store.getters['AppLayout/currentSections']
+        return this.$store.getters['PageBuilder/currentSections']
       },
       set(newInfo) {
-        return this.$store.commit('AppLayout/updateCurrentSections', newInfo)
+        return this.$store.commit('PageBuilder/updateCurrentSections', newInfo)
       }
     }
   }

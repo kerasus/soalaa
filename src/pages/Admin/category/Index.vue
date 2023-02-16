@@ -8,47 +8,45 @@
       :table-keys="tableKeys"
       :create-route-name="'Admin.Category.Create'"
     >
-      <template #table-cell="{inputData, showConfirmRemoveDialog}">
-        <q-td :props="inputData.props">
-          <template v-if="inputData.props.col.name === 'thumbnail'">
-            <q-avatar
-              round
-              font-size="30px"
-              text-color="white"
-              icon="mdi-card-text"
-              color="grey"
-            />
-          </template>
-          <template v-else-if="inputData.props.col.name === 'actions'">
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="info"
-                   icon="info"
-                   :to="{name:'Admin.Category.Show', params: {id: inputData.props.row.id}}">
-              <q-tooltip>
-                مشاهده
-              </q-tooltip>
-            </q-btn>
-            <q-btn v-if="false"
-                   round
-                   flat
-                   dense
-                   size="md"
-                   color="negative"
-                   icon="delete"
-                   class="q-ml-md"
-                   @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
-              <q-tooltip>
-                حذف
-              </q-tooltip>
-            </q-btn>
-          </template>
-          <template v-else>
-            {{ inputData.props.value }}
-          </template>
-        </q-td>
+      <template #entity-index-table-cell="{props, col, showConfirmRemoveDialog}">
+        <template v-if="col.name === 'thumbnail'">
+          <q-avatar
+            round
+            font-size="30px"
+            text-color="white"
+            icon="mdi-card-text"
+            color="grey"
+          />
+        </template>
+        <template v-else-if="col.name === 'actions'">
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="info"
+                 icon="info"
+                 :to="{name:'Admin.Category.Show', params: {id: props.row.id}}">
+            <q-tooltip>
+              مشاهده
+            </q-tooltip>
+          </q-btn>
+          <q-btn v-if="false"
+                 round
+                 flat
+                 dense
+                 size="md"
+                 color="negative"
+                 icon="delete"
+                 class="q-ml-md"
+                 @click="showConfirmRemoveDialog(props.row, 'id', getRemoveMessage(props.row))">
+            <q-tooltip>
+              حذف
+            </q-tooltip>
+          </q-btn>
+        </template>
+        <template v-else>
+          {{ col.value }}
+        </template>
       </template>
     </entity-index>
   </div>

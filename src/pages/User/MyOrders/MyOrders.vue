@@ -83,50 +83,48 @@
             </div>
           </q-expansion-item>
         </template>
-        <template #table-cell="{inputData}">
-          <q-td :props="inputData.props">
-            <template v-if="inputData.props.col.name === 'details'">
-              <q-btn round
-                     flat
-                     dense
-                     size="md"
-                     @click="showDetailsDialog(inputData.props.row)"
+        <template #entity-index-table-cell="{props, col}">
+          <template v-if="col.name === 'details'">
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   @click="showDetailsDialog(props.row)"
+            >
+              <!--              <q-tooltip anchor="top middle"-->
+              <!--                         self="bottom middle">-->
+              <!--                مشاهده-->
+              <!--              </q-tooltip>-->
+              <svg width="24"
+                   height="24"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   xmlns="http://www.w3.org/2000/svg"
               >
-                <!--              <q-tooltip anchor="top middle"-->
-                <!--                         self="bottom middle">-->
-                <!--                مشاهده-->
-                <!--              </q-tooltip>-->
-                <svg width="24"
-                     height="24"
-                     viewBox="0 0 24 24"
-                     fill="none"
-                     xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="12"
-                    cy="6"
-                    r="2"
-                    fill="#6D708B"
-                  />
-                  <circle
-                    cx="12"
-                    cy="12"
-                    r="2"
-                    fill="#6D708B"
-                  />
-                  <circle
-                    cx="12"
-                    cy="18"
-                    r="2"
-                    fill="#6D708B"
-                  />
-                </svg>
-              </q-btn>
-            </template>
-            <template v-else>
-              {{ inputData.props.value }}
-            </template>
-          </q-td>
+                <circle
+                  cx="12"
+                  cy="6"
+                  r="2"
+                  fill="#6D708B"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="2"
+                  fill="#6D708B"
+                />
+                <circle
+                  cx="12"
+                  cy="18"
+                  r="2"
+                  fill="#6D708B"
+                />
+              </svg>
+            </q-btn>
+          </template>
+          <template v-else>
+            {{ col.value }}
+          </template>
         </template>
         <template v-slot:table-item-cell="{inputData}">
           <q-card class="details-table-mobile">
