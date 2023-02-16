@@ -73,7 +73,39 @@
           v-if="showMenuItem(item)"
         >
           <q-expansion-item
-            v-if="item.children.length"
+            v-if="item.title === 'ویرایش صفحه' && this.$route.name === 'HomePage'"
+            :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
+            :label="item.title"
+            :icon="item.icon"
+            class="side-expansion-list"
+            dark
+          >
+            <div class="expansion-body">
+              <q-separator dark
+                           size="2px"
+                           vertical
+                           class="vertical-separator" />
+              <q-list class="list-expansion">
+                <q-item
+                  v-for="(subItem , i) in item.children"
+                  :key="i"
+                  class="list-child-item"
+                  exact-active-class="active-route"
+                >
+                  <q-item-section
+                    class="list-child-section"
+                    @click="editPage(subItem.name)"
+                  >
+                    {{ subItem.displayName }}
+                  </q-item-section>
+                  <span class="indicator" />
+                </q-item>
+              </q-list>
+            </div>
+          </q-expansion-item>
+
+          <q-expansion-item
+            v-if="item.children.length && item.title !== 'ویرایش صفحه'"
             :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
             :label="item.title"
             :icon="item.icon"
@@ -104,7 +136,7 @@
             </div>
           </q-expansion-item>
           <q-item
-            v-else
+            v-else-if="item.title !== 'ویرایش صفحه'"
             v-model="clickedItem"
             :to="(item.routeName) ? {name: item.routeName} : null"
             class="item-list"
@@ -147,6 +179,46 @@ export default {
     return {
       clickedItem: null,
       titlesList: [
+        {
+          title: 'صفحه اصلی',
+          icon: 'isax:home',
+          permission: 'all',
+          routeName: 'HomePage',
+          active: false,
+          children: []
+        },
+        {
+          title: 'پنل ادمین',
+          icon: 'isax:admin',
+          permission: 'examStore',
+          routeName: 'Admin.Exam.Index',
+          active: false,
+          children: []
+        },
+        {
+          title: 'ویرایش صفحه',
+          icon: 'isax:edit',
+          permission: 'examStore',
+          active: false,
+          children: [
+            {
+              name: 'edit',
+              displayName: 'حالت ویرایش'
+            },
+            {
+              name: 'default',
+              displayName: 'حالت عادی'
+            },
+            {
+              name: 'accept',
+              displayName: 'تایید ویرایش'
+            },
+            {
+              name: 'cancel',
+              displayName: 'بازگشت به حالت اول'
+            }
+          ]
+        },
         // {
         //   title: 'داشبورد',
         //   icon: 'isax:home',
@@ -318,6 +390,25 @@ export default {
   methods: {
     logOut () {
       return this.$store.dispatch('Auth/logOut')
+    },
+    togglePageBuilderEditable () {
+      const state = this.$store.getters['AppLayout/pageBuilderEditable']
+      this.$store.commit('AppLayout/updatePageBuilderEditable', !state)
+    },
+    editPage(name) {
+      if (name === 'edit' || name === 'default') {
+        this.togglePageBuilderEditable()
+      }
+      if (name === 'accept') {
+        const currentSections = this.$store.getters['AppLayout/currentSections']
+        this.$store.dispatch('AppLayout/editPageWidget', currentSections)
+        this.togglePageBuilderEditable()
+      }
+      if (name === 'cancel') {
+        const initialSections = this.$store.getters['AppLayout/initialSections']
+        this.$store.commit('AppLayout/updateCurrentSections', initialSections)
+        this.togglePageBuilderEditable()
+      }
     }
   },
   computed: {

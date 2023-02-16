@@ -199,6 +199,12 @@ export default {
 
 }
 
+.drawer-inside{
+  @media screen and(max-width: 599px) {
+    width: 250px
+  }
+}
+
 :deep(.user-main-layout-header) {
   background-color: #f1f1f1;
   display: flex;
@@ -291,6 +297,7 @@ export default {
 
 .main-layout-left-drawer {
   //background-color: #f1f1f1;
+  overflow: hidden;
   background-color: #F4F6F9;
 }
 </style>
