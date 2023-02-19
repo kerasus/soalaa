@@ -1,4 +1,4 @@
-module.exports = {
+const state = {
   linearLoading: false,
   drawer: false,
   loginDialog: false,
@@ -11,9 +11,11 @@ module.exports = {
     buttons: {
     }
   },
-  templateHeaderType: '',
-  templateLeftSideBarType: '',
-  templateRightSideBarType: '',
+
+  layoutHeaderType: '',
+  layoutLeftSideBarType: '',
+  layoutRightSideBarType: '',
+
   windowSize: {
     x: 0,
     y: 0
@@ -31,3 +33,5 @@ module.exports = {
     ]
   }
 }
+
+export default state

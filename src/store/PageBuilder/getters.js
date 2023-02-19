@@ -1,9 +1,14 @@
-export function pageBuilderEditable (state) {
-  return state.pageBuilderEditable
+const getters = {
+  pageBuilderEditable: (state) => {
+    return state.pageBuilderEditable
+  },
+  initialSections: (state) => {
+    return state.initialSections
+  },
+  currentSections: (state) => {
+    return state.currentSections
+  }
+
 }
-export function initialSections (state) {
-  return state.initialSections
-}
-export function currentSections (state) {
-  return state.currentSections
-}
+
+export default getters

@@ -1,10 +1,13 @@
-export function updatePageBuilderEditable (state, newInfo) {
-  state.pageBuilderEditable = newInfo
-}
-export function updateInitialSections (state, newInfo) {
-  state.initialSections = newInfo
+const mutations = {
+  updatePageBuilderEditable: (state, newInfo) => {
+    state.pageBuilderEditable = newInfo
+  },
+  updateInitialSections: (state, newInfo) => {
+    state.initialSections = newInfo
+  },
+  updateCurrentSections: (state, newInfo) => {
+    state.currentSections = newInfo
+  }
 }
 
-export function updateCurrentSections (state, newInfo) {
-  state.currentSections = newInfo
-}
+export default mutations

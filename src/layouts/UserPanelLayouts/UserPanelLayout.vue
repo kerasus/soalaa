@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     getTemplateLeftSideBarType() {
-      return this.$store.getters['AppLayout/templateLeftSideBarType']
+      return this.$store.getters['AppLayout/layoutLeftSideBarType']
     },
     getLayoutLeftDrawerVisibility () {
       return this.$store.getters['AppLayout/layoutLeftDrawerVisible']

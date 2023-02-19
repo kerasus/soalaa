@@ -96,12 +96,10 @@ const routes = [
       layoutLeftDrawerBordered: false,
       layoutLeftDrawerWidth: 325,
       layoutLeftDrawerBehavior: 'default',
-      layoutPageContainer: true,
       layoutRightDrawer: false,
       layoutFooter: false,
       layoutHeaderCustomClass: '',
-      layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
-      layoutPageContainerCustomClass: 'main-layout-container'
+      layoutLeftDrawerCustomClass: 'main-layout-left-drawer'
     },
     children: [
       {
@@ -111,6 +109,7 @@ const routes = [
           layoutHeader: true,
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
+          layoutLeftDrawer: true,
           layoutLeftDrawerVisible: false,
           layoutFooter: true,
           layoutFooterVisible: true

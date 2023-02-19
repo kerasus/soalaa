@@ -1,5 +1,9 @@
 import { Cart } from 'src/models/Cart'
 
-export function cart (state) {
-  return new Cart(state.cart)
+const getters = {
+  cart: (state) => {
+    return new Cart(state.cart)
+  }
 }
+
+export default getters
