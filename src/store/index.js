@@ -4,10 +4,10 @@ import createPersistedState from 'vuex-persistedstate'
 // import vuejsStorage from '@krasus/vuejs-storage'
 
 import Auth from 'src/store/Auth'
+import Cart from 'src/store/Cart'
+import Exam from 'src/store/Exam'
 import loading from 'src/store/loading'
 import AppLayout from 'src/store/AppLayout'
-import Exam from 'src/store/Exam'
-import Cart from 'src/store/Cart'
 import PageBuilder from 'src/store/PageBuilder'
 
 /*

@@ -140,10 +140,10 @@ export default {
       return this.$store.getters['AppLayout/linearLoading']
     },
     getTemplateHeaderType() {
-      return this.$store.getters['AppLayout/templateHeaderType']
+      return this.$store.getters['AppLayout/layoutHeaderType']
     },
     getTemplateLeftSideBarType() {
-      return this.$store.getters['AppLayout/templateLeftSideBarType']
+      return this.$store.getters['AppLayout/layoutLeftSideBarType']
     }
   },
   watch: {
@@ -153,9 +153,6 @@ export default {
   created () {
   },
   methods: {
-    updateLayout () {
-      this.$store.dispatch('AppLayout/updateStore', this.properties)
-    },
     confirmDialogAction (data) {
       if (this.confirmDialogData) this.confirmDialogData.callback(data)
       else {
@@ -166,13 +163,6 @@ export default {
     },
     setHeaderDimension (value) {
       this.$refs.contentInside.style.height = 'calc(100vh +' + value.height + 'px'
-    },
-    setLayoutCustomClass () {
-      if (this.templateHeaderType === 'dashboard') {
-        this.properties.layoutHeaderCustomClass = 'user-main-layout-header row'
-        return
-      }
-      this.properties.layoutHeaderCustomClass = 'main-layout-header row'
     },
     resize (val) {
       this.$store.commit('AppLayout/updateWindowSize', val)

@@ -1,5 +1,7 @@
 import { boot } from 'quasar/wrappers'
-import { getRouteWithParent, createBreadcrumbsFromRouteWithParent } from 'quasar-template-builder'
+// import { getRouteWithParent, createBreadcrumbsFromRouteWithParent } from 'quasar-template-builder'
+import helper from 'quasar-template-builder/src/helper.js'
+const { getRouteWithParent, createBreadcrumbsFromRouteWithParent } = helper
 
 export default boot(({ router, store }) => {
   router.beforeEach((to) => {
