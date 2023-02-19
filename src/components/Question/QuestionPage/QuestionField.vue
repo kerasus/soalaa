@@ -8,8 +8,11 @@
       class="default-detail-btn"
       @click="setModifiedValue(true)"
     />
+    <!--          :key="key"
+-->
     <vue-tiptap-katex
       ref="tiptap"
+      :key="key"
       :loading="loading"
       :options="{
         bubbleMenu: false,
@@ -60,7 +63,9 @@ export default {
       html: '',
       loading: false,
       btnLoading: false,
-      isValueChangeAllowed: false
+      isValueChangeAllowed: false,
+      key: 0,
+      modifiedContent: ''
     }
   },
   inject: {
@@ -104,7 +109,15 @@ export default {
     },
     setModifiedContent(input, superModifyMode) {
       this.value = this.getModifiedContent(input, superModifyMode)
+      this.modifiedContent = this.value
       this.$refs.tiptap.setContent(this.value)
+      this.key++
+      setTimeout(() => {
+        if (this.$refs.tiptap) {
+          console.log('this.modifiedContent', this.modifiedContent)
+          this.$refs.tiptap.setContent(this.modifiedContent)
+        }
+      }, 3000)
     },
     getContent() {
       return this.$refs.tiptap.getContent()
@@ -128,9 +141,11 @@ export default {
       modifiedValue = this.removeEmptyDataKatexElements(modifiedValue)
       modifiedValue = this.modifyCombination(modifiedValue)
       modifiedValue = this.removeFirstAndLastBracket(modifiedValue)
+      modifiedValue = this.fixRightArrowBug(modifiedValue)
       if (superModifyMode) {
         modifiedValue = this.modifyMultilineWithPublishConvertor(modifiedValue)
         modifiedValue = this.modifyMultilineWithFormatConvertor(modifiedValue)
+        modifiedValue = this.fixRightArrowBug(modifiedValue)
       }
       return modifiedValue
     },
@@ -216,6 +231,16 @@ export default {
         finalResult = finalResult.replace('end{align}', 'end{array}')
         return finalResult
       })
+    },
+    fixRightArrowBug(input) {
+      const regex = /(\\left\()([^)]*)(\\right\)arrow)/gms
+      return input.replaceAll(regex, (result) => {
+        let finalResult = result
+        finalResult = finalResult.replaceAll('\\right)arrow', '\\rightarrow')
+        // finalResult = finalResult.replace('\\left(', '\\left(')
+
+        return finalResult
+      })
     }
   }
 }
@@ -252,6 +277,7 @@ export default {
   line-height: 4rem;
   .katex {
     font-size: 1.9rem;
+    direction: ltr #{"/* rtl:ignore */"};
   }
 }
 
