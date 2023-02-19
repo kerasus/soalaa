@@ -1,6 +1,10 @@
-export function loading (state, value) {
-  state.loading = value
+const mutations = {
+  loading: (state, value) => {
+    state.loading = value
+  },
+  overlay: (state, value) => {
+    state.overlay = value
+  }
 }
-export function overlay (state, value) {
-  state.overlay = value
-}
+
+export default mutations

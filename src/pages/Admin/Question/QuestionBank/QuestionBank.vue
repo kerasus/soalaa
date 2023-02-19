@@ -6,12 +6,14 @@
         <QuestionBankHeader />
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
-        <question-filter
-          ref="filter"
-          :filterQuestions="filterQuestions"
-          @onFilter="onFilter"
-          @delete-filter="deleteFilterItem"
-        />
+        <sticky-both-sides :max-width="1024">
+          <question-filter
+            ref="filter"
+            :filterQuestions="filterQuestions"
+            @onFilter="onFilter"
+            @delete-filter="deleteFilterItem"
+          />
+        </sticky-both-sides>
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
@@ -23,6 +25,45 @@
             @deleteAllQuestions="deleteAllQuestions"
             @selectAllQuestions="selectAllQuestions"
           />
+        </div>
+        <div class="col-12 filter-card-container">
+          <q-card
+            class="filter-card"
+            flat
+          >
+            <q-card-section class="search-section">
+              <q-input
+                v-model="searchInput"
+                filled
+                class="bg-white search-input"
+                placeholder="جستجو در سوالات..."
+              >
+                <template v-slot:append>
+                  <q-btn
+                    flat
+                    rounded
+                    icon="isax:search-normal-1"
+                    class="search"
+                    @click="filterByStatement"
+                  />
+                </template>
+              </q-input>
+            </q-card-section>
+
+            <q-card-section class="filter-section">
+              <q-select
+                v-model="searchSelector"
+                filled
+                dropdown-icon="isax:arrow-down-1"
+                option-value="value"
+                option-label="title"
+                :options="searchInputOptions"
+                class="backGround-gray-input filter-input"
+                @update:model-value="sortByCreatedAt"
+              >
+              </q-select>
+            </q-card-section>
+          </q-card>
         </div>
         <div class="question-bank-content">
           <question-item v-if="questions.loading"
@@ -77,12 +118,35 @@ import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
 import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
+import StickyBothSides from 'components/Utils/StickyBothSides'
 
 export default {
   name: 'QuestionBank',
-  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
-  data () {
+  components: {
+    StickyBothSides,
+    QuestionBankHeader,
+    QuestionToolBar,
+    QuestionFilter,
+    QuestionItem,
+    pagination
+  },
+  data() {
     return {
+      searchInput: '',
+      searchSelector: {
+        title: 'جدید ترین',
+        value: 'ASC'
+      },
+      searchInputOptions: [
+        {
+          title: 'جدید ترین',
+          value: 'ASC'
+        },
+        {
+          title: 'قدیمی ترین',
+          value: 'DESC'
+        }
+      ],
       showSearchResultReport: true,
       filterData: null,
       checkBox: false,
@@ -104,7 +168,8 @@ export default {
             id: '3',
             value: 'سخت'
           }
-        ]
+        ],
+        types: []
       },
       questionListKey: Date.now(),
       selectedQuestions: [],
@@ -140,25 +205,25 @@ export default {
   },
   watch: {
     'selectedQuestions.length': {
-      handler (newValue, oldValue) {
+      handler(newValue, oldValue) {
         this.exam.questions.list = []
         this.exam.questions.list = this.selectedQuestions
         this.questionListKey = Date.now()
       }
     }
   },
-  created () {
+  created() {
     this.getQuestionData()
     this.getFilterOptions()
   },
   emits: ['onFilter'],
   methods: {
-    onFilter (filterData) {
+    onFilter(filterData) {
       this.$emit('onFilter', filterData)
       this.filterData = this.getFiltersForRequest(filterData)
       this.getQuestionData(1, this.filterData)
     },
-    RemoveChoice (title) {
+    RemoveChoice(title) {
       const target = this.selectedQuestions.filter(question => question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
       if (target.length) {
         target.forEach(question => {
@@ -169,10 +234,10 @@ export default {
         })
       }
     },
-    toggleQuestionSelected (question) {
+    toggleQuestionSelected(question) {
       question.selected = !question.selected
     },
-    questionHandle (question) {
+    questionHandle(question) {
       if (question.selected) {
         this.addQuestionToSelectedList(question)
         // this.addQuestionToExam(question)
@@ -181,26 +246,28 @@ export default {
         // this.deleteQuestionFromExam(question)
       }
     },
-    onClickedCheckQuestionBtn (question) {
+    onClickedCheckQuestionBtn(question) {
       this.toggleQuestionSelected(question)
       this.questionHandle(question)
     },
-    addQuestionToExam (question) {
+    addQuestionToExam(question) {
       this.$emit('addQuestionToExam', question)
       this.questionListKey = Date.now()
     },
-    deleteQuestionFromExam (question) {
+    deleteQuestionFromExam(question) {
       this.$emit('deleteQuestionFromExam', question)
       this.questionListKey = Date.now()
     },
-    addQuestionToSelectedList (question) {
+    addQuestionToSelectedList(question) {
       this.selectedQuestions.push(question)
       if (this.selectedQuestions.length === this.questions.list.length) {
         this.checkBox = true
-      } else this.checkBox = 'maybe'
+      } else {
+        this.checkBox = 'maybe'
+      }
       this.questionListKey = Date.now()
     },
-    deleteQuestionFromSelectedList (question) {
+    deleteQuestionFromSelectedList(question) {
       if (this.checkBox) {
         this.checkBox = false
       }
@@ -258,27 +325,37 @@ export default {
     callDeleteQuestion() {
 
     },
-    updatePage (page) {
+    updatePage(page) {
       this.getQuestionData(page, this.filterData)
     },
-    deleteFilterItem (filter) {
+    deleteFilterItem(filter) {
       // this.$refs.filter.setTicked('tree', filter.id, false)
     },
-    getFiltersForRequest (filterData) {
+    getFiltersForRequest(filterData) {
       return {
         tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
-        level: (filterData.level) ? filterData.level.map(item => item.id) : [],
+        level: (filterData.level) ? filterData.level.map(item => item.value) : [],
         years: (filterData.years) ? filterData.years.map(item => item.id) : [],
         majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
-        statuses: (filterData.statuses) ? filterData.statuses.map(item => item.id) : [],
         reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
+        statement: (filterData.statement) ? filterData.statement[0] : '',
+        sort_by: (this.searchSelector.value) ? 'created_at' : '',
+        sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value,
+        statuses: (filterData.statuses) ? filterData.statuses.map(item => item) : [],
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
 
-    getQuestionData (page, filters) {
+    getQuestionData(page, filters) {
       if (!page) {
         page = 1
+      }
+      if (!filters) {
+        filters = {
+          sort_by: 'created_at',
+          sort_type: this.searchSelector.value,
+          statement: ''
+        }
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
@@ -296,7 +373,7 @@ export default {
           this.questions.loading = false
         })
     },
-    getFilterOptions () {
+    getFilterOptions() {
       this.$axios.get(API_ADDRESS.option.base)
         .then((response) => {
           response.data.data.forEach(option => {
@@ -306,6 +383,8 @@ export default {
               this.filterQuestions.year_type.push(option)
             } else if (option.type === 'major_type') {
               this.filterQuestions.major_type.push(option)
+            } else if (option.type === 'question_type') {
+              this.filterQuestions.types.push(option)
             }
           })
         })
@@ -317,7 +396,13 @@ export default {
           this.filterQuestions.statuses = response.data.data
         })
     },
-    selectAllQuestions () {
+    filterByStatement() {
+      this.$refs.filter.changeFilterData('statement', [this.searchInput])
+    },
+    sortByCreatedAt() {
+      this.$refs.filter.changeFilterData('sort_type', [this.searchSelector.value])
+    },
+    selectAllQuestions() {
       this.checkBox = !this.checkBox
       if (this.selectedQuestions.length) {
         this.questions.list.forEach(question => {
@@ -337,7 +422,7 @@ export default {
         })
       }
     },
-    deleteAllQuestions () {
+    deleteAllQuestions() {
       if (this.checkBox) {
         this.checkBox = false
       }
@@ -352,6 +437,110 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.filter-card-container {
+  padding-bottom: 24px;
+  @media only screen and (max-width: 1439px) {
+    padding-bottom: 20px;
+  }
+  @media only screen and (max-width: 1023px) {
+    padding-bottom: 16px;
+  }
+
+  .filter-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: #f4f6f9;
+    @media only screen and (max-width: 599px) {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    &:deep(.q-card__section) {
+      padding: 0;
+
+      .q-field--filled .q-field__inner .q-field__control {
+        background: #FFFFFF;
+      }
+
+      .q-field--filled .q-field__inner .q-field__control .q-field__append, .q-field--filled .q-field__inner .q-field__control .q-field__prepend {
+        padding-right: 16px;
+        padding-left: 12px;
+      }
+
+      @media only screen and (max-width: 599px) {
+        width: 100%;
+      }
+    }
+
+    .search-section {
+      .search-input {
+        width: 300px;
+        background-color: white;
+
+        &:deep(.q-field__append) {
+          padding-right: 8px !important;
+
+          .q-icon {
+            color: #6D708B;
+            cursor: pointer;
+          }
+        }
+
+        &:deep(.q-field__control) {
+          background-color: white;
+        }
+
+        //&:deep(.q-field--filled .q-field__inner .q-field__control .q-field__append, .q-field--filled .q-field__inner .q-field__control .q-field__prepend ){
+        //
+        //}
+        @media only screen and (max-width: 1023px) {
+          width: 352px;
+        }
+        @media only screen and (max-width: 599px) {
+          width: 100%;
+        }
+
+        .search {
+          color: #6D708B;
+
+          :deep(.q-field__inner .q-field__control .q-field__append .q-icon) {
+            color: #6D708B;
+          }
+        }
+      }
+    }
+
+    .filter-section {
+      display: flex;
+      flex-direction: row;
+
+      :deep(.q-field--filled .q-field__inner .q-field__control .q-field__label) {
+        margin-top: -10px;
+      }
+
+      :deep(.q-field--filled .q-field__inner .q-field__control .q-field__native, .q-field--filled .q-field__inner .q-field__control .q-field__prefix, .q-field--filled .q-field__inner .q-field__control .q-field__suffix, .q-field--filled .q-field__inner .q-field__control .q-field__input) {
+        padding-left: 16px;
+        padding-right: 0;
+        min-height: 40px;
+      }
+
+      .filter-input {
+        width: 160px;
+        @media only screen and (max-width: 1023px) {
+          width: 164px;
+        }
+        @media only screen and (max-width: 599px) {
+          width: 100%;
+          padding-top: 16px;
+        }
+      }
+
+    }
+  }
+}
 
 .q-checkbox__bg {
   border: 1px solid #65677F;
@@ -375,11 +564,13 @@ export default {
 
   .question-bank-content {
     margin-bottom: 16px;
+
     :deep(.question-card) {
       margin-bottom: 16px;
     }
   }
 }
+
 @media only screen and (max-width: 1919px) {
   .main-container {
     padding-left: 0;
@@ -389,6 +580,7 @@ export default {
     padding-right: 20px;
   }
 }
+
 @media only screen and (max-width: 1439px) {
   .main-container {
     padding-left: 30px;
@@ -405,11 +597,13 @@ export default {
     padding-bottom: 20px;
   }
 }
+
 @media only screen and (max-width: 1023px) {
   .question-bank-filter {
     padding-right: 0px;
   }
 }
+
 @media only screen and (max-width: 599px) {
   .question-bank-toolbar {
     padding-bottom: 0;

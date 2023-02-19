@@ -53,8 +53,10 @@ export default {
   },
   methods: {
     changeView () {
+      const isPersonalExam = this.$route.name === 'onlineQuiz.alaaView.personal'
+      const routeName = isPersonalExam ? 'onlineQuiz.konkoorView.personal' : 'onlineQuiz.konkoorView'
       this.$router.push({
-        name: 'konkoorView',
+        name: routeName,
         params: {
           quizId: this.$route.params.quizId
         }

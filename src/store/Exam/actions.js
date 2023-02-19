@@ -1,3 +1,4 @@
-export function someAction (/* context */) {
-
+const actions = {
 }
+
+export default actions

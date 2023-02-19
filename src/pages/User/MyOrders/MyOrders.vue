@@ -1,64 +1,105 @@
 <template>
-  <div style="display: none"> {{windowSize}}</div>
-  <div
-    v-if="!hasUserOrdered"
-  >
-    <div class="empty-order-list">
-      <q-img
-        class="image"
-        :src="'https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_orders.png'"
-      />
-      <div class="list-text">
-        لیست سفارش‌های شما خالی است!
-      </div>
-      <div class="back-to-shop">
-        <q-btn
-          class="back-to-shop-btn"
-          flat
-          :color="'primary'"
-          label="رفتن به فروشگاه"
-          :to="{name:'Landing.3aExams'}"
+  <div v-if="loading"
+       class="flex justify-center q-mt-xl">
+    <q-spinner-ball
+      color="primary"
+      size="2em"
+    />
+  </div>
+  <template v-if="!loading">
+    <div style="display: none"> {{windowSize}}</div>
+    <div v-if="!hasUserOrdered">
+      <div class="empty-order-list">
+        <q-img class="image"
+               :src="'https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_orders.png'"
         />
+        <div class="list-text">
+          لیست سفارش‌های شما خالی است!
+        </div>
+        <div class="back-to-shop">
+          <q-btn class="back-to-shop-btn"
+                 flat
+                 :color="'primary'"
+                 label="رفتن به فروشگاه"
+                 :to="{name:'Landing.3aExams'}"
+          />
+        </div>
       </div>
     </div>
-  </div>
-  <div
-    v-else
-    class="my-orders-list"
-  >
-    <div class="title">سفارش های من</div>
-    <entity-index
-      class="orders-list-entity-index"
-      title="سفارش های من"
-      :api="getEntityApi"
-      :table="table"
-      :table-keys="tableKeys"
-      :default-layout="false"
-      :table-grid-size="$q.screen.lt.sm"
-      :create-route-name="'Admin.Exam.Create'"
+    <div
+      v-else
+      class="my-orders-list"
     >
-      <template #table-cell="{inputData}">
-        <q-td :props="inputData.props">
-          {{setHasUserOrderedValue(inputData.props.row)}}
-
-          <template v-if="inputData.props.col.name === 'details'">
-            <q-btn
-              round
-              flat
-              dense
-              size="md"
-              @click="showDetailsDialog(inputData.props.row)"
+      <div class="title">
+        سفارش های من</div>
+      <entity-index
+        ref="orderList"
+        v-model:value="inputs"
+        class="orders-list-entity-index"
+        title="سفارش های من"
+        :api="getEntityApi"
+        :table="table"
+        :table-keys="tableKeys"
+        :default-layout="false"
+        :table-grid-size="$q.screen.lt.md"
+        :create-route-name="'Admin.Exam.Create'"
+        @onPageChanged="onPageChange"
+      >
+        <template v-slot:before-index-table="">
+          <div class="row items-center search-box">
+            <div class="col-lg-4 col-xl-4 col-sm-6 col-xs-9 text-left">
+              <q-input v-model="searchInput"
+                       filled
+                       placeholder="جستجو..."
+                       class="search-input bg-white">
+                <template v-slot:append>
+                  <q-icon name="isax:search-normal-1"
+                          class="search-icon"
+                          @click="filterFormBuilderData" />
+                </template>
+              </q-input>
+            </div>
+            <div class="col-lg-8 col-xl-8 col-sm-6 col-xs-3 text-right">
+              <q-btn unelevated
+                     class="filter-toggle"
+                     :class="filterExpanded? 'gray-bg': 'bg-white'"
+                     icon="isax:filter"
+                     @click="filterExpanded = !filterExpanded" />
+            </div>
+          </div>
+          <q-expansion-item v-model="filterExpanded"
+                            icon="perm_identity"
+                            class="expand-filter"
+                            label="Account settings"
+                            caption="John Doe"
+          >
+            <div class="row filter-items">
+              <div class="col-12">
+                <form-builder ref="filterSlot"
+                              :value="filterInputs"
+                              @onClick="onClickFilterFormBuilder"
+                />
+              </div>
+            </div>
+          </q-expansion-item>
+        </template>
+        <template #entity-index-table-cell="{props, col}">
+          <template v-if="col.name === 'details'">
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   @click="showDetailsDialog(props.row)"
             >
               <!--              <q-tooltip anchor="top middle"-->
               <!--                         self="bottom middle">-->
               <!--                مشاهده-->
               <!--              </q-tooltip>-->
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+              <svg width="24"
+                   height="24"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   xmlns="http://www.w3.org/2000/svg"
               >
                 <circle
                   cx="12"
@@ -79,98 +120,111 @@
                   fill="#6D708B"
                 />
               </svg>
-
             </q-btn>
-
           </template>
           <template v-else>
-            {{ inputData.props.value }}
+            {{ col.value }}
           </template>
-        </q-td>
-      </template>
-      <template v-slot:table-item-cell="{inputData}">
-        <q-card class="details-table-mobile">
-          <div class="details-info">
-            <div class="first-col">
-              <div class="order first-col-item">
-                شماره سفارش:
-                <span class="order-id">{{inputData.props.row.id}}</span>
+        </template>
+        <template v-slot:table-item-cell="{inputData}">
+          <q-card class="details-table-mobile">
+            <div class="details-info">
+              <div class="item">
+                <div class="order first-col-item">
+                  شماره سفارش:
+                  <span class="order-id">{{inputData.props.row.id}}</span>
+                </div>
+                <div
+                  class="details-btn toggle"
+                  @click="toggleDetailsCard(inputData.props.row)"
+                >
+                  جزئیات
+                  <q-icon color="primary"
+                          :name="detailsCardToggle[inputData.props.row.id] ? 'isax:arrow-up-2' : 'isax:arrow-down-1' " />
+                </div>
+                <div
+                  class="details-btn dialog"
+                  @click="showDetailsDialog(inputData.props.row)"
+                >
+                  مشاهده جزییات
+                </div>
               </div>
-              <div class="first-col-item">وضعیت پرداخت:</div>
-              <div class="first-col-item">مبلغ:</div>
-              <div class="first-col-item">تاریخ سفارش:</div>
+              <div class="item">
+                <div class="first-col-item">وضعیت پرداخت:</div>
+                <div
+                  :class="{ 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
+                            'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
+                            'payment-installment' : inputData.props.row.paymentstatus.id === 4 }"
+                >
+                  <!--                پرداخت نشده-->
+                  {{inputData.props.row.paymentstatus.name}}
+                </div>
+              </div>
+              <div class="item">
+                <div class="first-col-item">مبلغ:</div>
+                <div class="value">
+                  {{inputData.props.row.price ? toman(inputData.props.row.price) : 0 }}
+                </div>
+              </div>
+              <div class="item">
+                <div class="first-col-item">تاریخ سفارش:</div>
+                <div class="value">
+                  {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}
+                  <!--                {{ getCurrentOrderCompletedAt('1401/09/25') }}-->
+                </div>
+              </div>
+              <!--              <div class="first-col">-->
+              <!--                <div class="order first-col-item">-->
+              <!--                  شماره سفارش:-->
+              <!--                  <span class="order-id">{{inputData.props.row.id}}</span>-->
+              <!--                </div>-->
+              <!--                <div class="first-col-item">وضعیت پرداخت:</div>-->
+              <!--                <div class="first-col-item">مبلغ:</div>-->
+              <!--                <div class="first-col-item">تاریخ سفارش:</div>-->
+              <!--              </div>-->
+              <!--              <div class="second-col">-->
+              <!--                <q-btn round-->
+              <!--                       flat-->
+              <!--                       dense-->
+              <!--                       size="md"-->
+              <!--                       class="details-btn"-->
+              <!--                       @click="toggleDetailsCard(inputData.props.row)"-->
+              <!--                >-->
+              <!--                  جزئیات-->
+              <!--                  <q-icon color="primary"-->
+              <!--                          :name="detailsCardToggle[inputData.props.row.id] ? 'isax:arrow-up-2' : 'isax:arrow-down-1' " />-->
+              <!--                </q-btn>-->
+              <!--                <div class="min-h"-->
+              <!--                     :class="{ 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,-->
+              <!--                               'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,-->
+              <!--                               'payment-installment' : inputData.props.row.paymentstatus.id === 4 }"-->
+              <!--                >-->
+              <!--                  &lt;!&ndash;                پرداخت نشده&ndash;&gt;-->
+              <!--                  {{inputData.props.row.paymentstatus.name}}-->
+              <!--                </div>-->
+              <!--                <div class="min-h">-->
+              <!--                  {{inputData.props.row.price ? toman(inputData.props.row.price) : 0 }}-->
+              <!--                </div>-->
+              <!--                <div class="min-h">-->
+              <!--                  {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}-->
+              <!--                  &lt;!&ndash;                {{ getCurrentOrderCompletedAt('1401/09/25') }}&ndash;&gt;-->
+              <!--                </div>-->
+              <!--              </div>-->
             </div>
-            <div class="second-col">
-              <q-btn
-                round
-                flat
-                dense
-                size="md"
-                class="details-btn"
-                @click="toggleDetailsCard(inputData.props.row)"
-              >
-                جزییات
-                <!--              <q-tooltip anchor="top middle"-->
-                <!--                         self="bottom middle">-->
-                <!--                مشاهده-->
-                <!--              </q-tooltip>-->
-                <!--                dksjfhksd-->
-                <!--                <div v-if="!detailsCardToggle">-->
-                <!--                  جزییات-->
-                <!--                  <svg width="16"-->
-                <!--                       height="16"-->
-                <!--                       viewBox="0 0 16 16"-->
-                <!--                       fill="none"-->
-                <!--                       xmlns="http://www.w3.org/2000/svg">-->
-                <!--                    <path d="M8.00001 11.2C7.53335 11.2 7.06668 11.02 6.71335 10.6667L2.36668 6.31999C2.17335 6.12666 2.17335 5.80666 2.36668 5.61332C2.56001 5.41999 2.88001 5.41999 3.07335 5.61332L7.42001 9.95999C7.74001 10.28 8.26001 10.28 8.58001 9.95999L12.9267 5.61332C13.12 5.41999 13.44 5.41999 13.6333 5.61332C13.8267 5.80666 13.8267 6.12666 13.6333 6.31999L9.28668 10.6667C8.93335 11.02 8.46668 11.2 8.00001 11.2Z"-->
-                <!--                          fill="#8075DC" />-->
-                <!--                  </svg>-->
-                <!--                </div>-->
-                <!--                <div v-if="detailsCardToggle">-->
-                <!--                  جزییات-->
-                <!--                  <svg width="16"-->
-                <!--                       height="16"-->
-                <!--                       viewBox="0 0 16 16"-->
-                <!--                       fill="none"-->
-                <!--                       xmlns="http://www.w3.org/2000/svg">-->
-                <!--                    <path d="M8.00001 11.2C7.53335 11.2 7.06668 11.02 6.71335 10.6667L2.36668 6.31999C2.17335 6.12666 2.17335 5.80666 2.36668 5.61332C2.56001 5.41999 2.88001 5.41999 3.07335 5.61332L7.42001 9.95999C7.74001 10.28 8.26001 10.28 8.58001 9.95999L12.9267 5.61332C13.12 5.41999 13.44 5.41999 13.6333 5.61332C13.8267 5.80666 13.8267 6.12666 13.6333 6.31999L9.28668 10.6667C8.93335 11.02 8.46668 11.2 8.00001 11.2Z"-->
-                <!--                          fill="#8075DC" />-->
-                <!--                  </svg>-->
-                <!--                </div>-->
-              </q-btn>
-              <div
-                :class="
-                  { 'payment-not-okay' : inputData.props.row.paymentstatus.id === 1 ,
-                    'payment-okay' : inputData.props.row.paymentstatus.id === 3 ,
-                    'payment-installment' : inputData.props.row.paymentstatus.id
-                  }"
-              >
-                <!--                پرداخت نشده-->
-                {{inputData.props.row.paymentstatus.name}}
-              </div>
-              <div>
-                {{ toman(inputData.props.row.price) }}
-              </div>
-              <div>
-                {{ getCurrentOrderCompletedAt(inputData.props.row.completed_at) }}
-                <!--                {{ getCurrentOrderCompletedAt('1401/09/25') }}-->
-              </div>
-            </div>
-          </div>
-          <order-details-card
-            v-if="windowSize.x < 600"
-            v-model:toggleValue="detailsCardToggle[inputData.props.row.id]"
-            :order="currentOrder"
-          />
-        </q-card>
-      </template>
-    </entity-index>
-    <order-details-dialog
-      v-if="windowSize.x >= 600"
-      v-model:dialogValue="detailsDialog"
-      :order="currentOrder"
+            <order-details-card v-if="windowSize.x < 600"
+                                v-model:toggleValue="detailsCardToggle[inputData.props.row.id]"
+                                :order="currentOrder"
+            />
+          </q-card>
+        </template>
+      </entity-index>
+    </div>
+    <order-details-dialog v-if="windowSize.x >= 600"
+                          v-model:dialogValue="detailsDialog"
+                          :order="currentOrder"
     />
-  </div>
+  </template>
+
 </template>
 
 <script>
@@ -181,16 +235,34 @@ import moment from 'moment-jalaali'
 import { Order } from 'src/models/Order'
 import OrderDetailsDialog from 'components/MyOrders/OrderDetailsDialog'
 import OrderDetailsCard from 'components/MyOrders/OrderDetailsCard'
+import { FormBuilder } from 'quasar-form-builder'
+import ActionBtn from 'pages/User/MyOrders/actionBtn'
 export default {
   name: 'MyOrders',
   components: {
     OrderDetailsCard,
+    FormBuilder,
     OrderDetailsDialog,
     EntityIndex
   },
   data() {
     return {
-      expanded: false,
+      loading: true,
+      isFirstReq: true,
+      filterExpanded: false,
+      inputs: [
+        { type: 'hidden', name: 'paymentStatuses', class: '', responseKey: 'paymentStatuses', col: 'col-12 col-lg-12 col-sm-6' },
+        { type: 'hidden', name: 'since', responseKey: 'since', col: 'col-12 col-lg-12 col-sm-6' },
+        { type: 'hidden', name: 'till', responseKey: 'till', col: 'col-12 col-lg-12 col-sm-6' },
+        { type: 'hidden', name: 'search', responseKey: 'search', col: 'col-12 col-lg-12 col-sm-6' }
+      ],
+      filterInputs: [
+        { type: 'select', name: 'paymentStatuses', dropdownIcon: 'isax:arrow-down-1', optionValue: 'id', optionLabel: 'name', responseKey: 'paymentStatuses', multiple: true, label: 'وضعیت پرداخت', placeholder: ' ', col: 'filter-option col-sm-6 col-lg-4 col-xs-12' },
+        { type: 'date', name: 'since', responseKey: 'since', label: 'تاریخ سفارش', placeholder: ' از', calendarIcon: ' ', col: 'col-lg-3 col-sm-6 col-xs-12' },
+        { type: 'date', name: 'till', label: ' ', placeholder: 'تا', calendarIcon: ' ', responseKey: 'till', col: 'col-lg-3 col-sm-6 col-xs-12' },
+        { type: ActionBtn, name: 'ActionBtn', col: 'col-lg-2 col-sm-6 col-xs-12' }
+      ],
+      searchInput: '',
       table: {
         columns: [
           {
@@ -240,596 +312,6 @@ export default {
         perPage: 'meta.per_page',
         pageKey: 'page'
       },
-      // currentOrder: new Order(),
-      // currentOrder: new Order({
-      //   id: 1722713,
-      //   discount: 0,
-      //   customer_description: null,
-      //   price: 24360,
-      //   paid_price: 24360,
-      //   refund_price: 0,
-      //   debt: 0,
-      //   orderstatus: {
-      //     id: 2,
-      //     name: 'ثبت نهایی'
-      //   },
-      //   paymentstatus: {
-      //     id: 3,
-      //     name: 'پرداخت شده'
-      //   },
-      //   orderproducts: [
-      //     {
-      //       id: 2303303,
-      //       quantity: 1,
-      //       type: 1,
-      //       product: {
-      //         id: 361,
-      //         redirect_url: null,
-      //         type: 1,
-      //         category: 'جزوه',
-      //         title: 'جزوات حسابان یازدهم با تدریس محمد صادق ثابتی',
-      //         is_free: 0,
-      //         url: {
-      //           web: 'http://office.alaa.tv:8080/product/361',
-      //           api: 'http://office.alaa.tv:8080/api/v2/product/361'
-      //         },
-      //         photo: 'https://nodes.alaatv.com/upload/images/product/pr9_20191010073218.jpg',
-      //         attributes: {
-      //           info: {
-      //             teacher: [
-      //               'محمد صادق ثابتی'
-      //             ],
-      //             shipping_method: [
-      //               'دانلودی'
-      //             ],
-      //             major: [
-      //               'ریاضی'
-      //             ],
-      //             services: [
-      //               'جزوه'
-      //             ],
-      //             download_date: [
-      //               'از لحظه خرید'
-      //             ],
-      //             educational_system: [
-      //               'نظام جدید'
-      //             ],
-      //             duration: [
-      //               'تاکنون 50 صفحه'
-      //             ],
-      //             production_year: [
-      //               '98-99'
-      //             ]
-      //           },
-      //           extra: null
-      //         },
-      //         redirect_code: null
-      //       },
-      //       grand: {
-      //         id: 349,
-      //         redirect_url: null,
-      //         type: 3,
-      //         category: null,
-      //         title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
-      //         is_free: 0,
-      //         url: {
-      //           web: 'http://office.alaa.tv:8080/product/349',
-      //           api: 'http://office.alaa.tv:8080/api/v2/product/349'
-      //         },
-      //         photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
-      //         attributes: {
-      //           info: {
-      //             teacher: [
-      //               'گروه آموزشی'
-      //             ],
-      //             shipping_method: [
-      //               'دانلودی'
-      //             ],
-      //             major: [
-      //               'ریاضی',
-      //               'تجربی',
-      //               'انسانی'
-      //             ],
-      //             services: [
-      //               'جزوه'
-      //             ],
-      //             download_date: [
-      //               'از لحظه خرید'
-      //             ],
-      //             educational_system: [
-      //               'نظام جدید'
-      //             ],
-      //             duration: [
-      //               'تاکنون 1110 صفحه'
-      //             ],
-      //             production_year: [
-      //               '98-99'
-      //             ]
-      //           },
-      //           extra: null
-      //         },
-      //         redirect_code: null
-      //       },
-      //       price: {
-      //         discountDetail: {
-      //           productDiscount: 0,
-      //           bonDiscount: 0,
-      //           productDiscountAmount: 0
-      //         },
-      //         extraCost: 0,
-      //         base: 4872,
-      //         discount: 0,
-      //         final: 4872
-      //       },
-      //       photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
-      //       extra_attributes: null
-      //     },
-      //     {
-      //       id: 2303304,
-      //       quantity: 1,
-      //       type: 1,
-      //       product: {
-      //         id: 363,
-      //         redirect_url: null,
-      //         type: 1,
-      //         category: 'جزوه',
-      //         title: 'جزوات نکته و تست حسابان کنکور با تدریس محمد صادق ثابتی',
-      //         is_free: 0,
-      //         url: {
-      //           web: 'http://office.alaa.tv:8080/product/363',
-      //           api: 'http://office.alaa.tv:8080/api/v2/product/363'
-      //         },
-      //         photo: 'https://nodes.alaatv.com/upload/images/product/pr16_20191010073252.jpg',
-      //         attributes: {
-      //           info: {
-      //             teacher: [
-      //               'محمد صادق ثابتی'
-      //             ],
-      //             shipping_method: [
-      //               'دانلودی'
-      //             ],
-      //             major: [
-      //               'ریاضی'
-      //             ],
-      //             services: [
-      //               'جزوه'
-      //             ],
-      //             download_date: [
-      //               'از لحظه خرید'
-      //             ],
-      //             educational_system: [
-      //               'نظام جدید'
-      //             ],
-      //             duration: [
-      //               'تاکنون 126 صفحه'
-      //             ],
-      //             production_year: [
-      //               '98-99'
-      //             ]
-      //           },
-      //           extra: null
-      //         },
-      //         redirect_code: null
-      //       },
-      //       grand: {
-      //         id: 349,
-      //         redirect_url: null,
-      //         type: 3,
-      //         category: null,
-      //         title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
-      //         is_free: 0,
-      //         url: {
-      //           web: 'http://office.alaa.tv:8080/product/349',
-      //           api: 'http://office.alaa.tv:8080/api/v2/product/349'
-      //         },
-      //         photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
-      //         attributes: {
-      //           info: {
-      //             teacher: [
-      //               'گروه آموزشی'
-      //             ],
-      //             shipping_method: [
-      //               'دانلودی'
-      //             ],
-      //             major: [
-      //               'ریاضی',
-      //               'تجربی',
-      //               'انسانی'
-      //             ],
-      //             services: [
-      //               'جزوه'
-      //             ],
-      //             download_date: [
-      //               'از لحظه خرید'
-      //             ],
-      //             educational_system: [
-      //               'نظام جدید'
-      //             ],
-      //             duration: [
-      //               'تاکنون 1110 صفحه'
-      //             ],
-      //             production_year: [
-      //               '98-99'
-      //             ]
-      //           },
-      //           extra: null
-      //         },
-      //         redirect_code: null
-      //       },
-      //       price: {
-      //         discountDetail: {
-      //           productDiscount: 0,
-      //           bonDiscount: 0,
-      //           productDiscountAmount: 0
-      //         },
-      //         extraCost: 0,
-      //         base: 4872,
-      //         discount: 0,
-      //         final: 4872
-      //       },
-      //       photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
-      //       extra_attributes: null
-      //     },
-      //     {
-      //       id: 2303305,
-      //       quantity: 1,
-      //       type: 1,
-      //       product: {
-      //         id: 365,
-      //         redirect_url: null,
-      //         type: 1,
-      //         category: 'جزوه',
-      //         title: 'جزوات هندسه کامل کنکور با تدریس محمد صادق ثابتی',
-      //         is_free: 0,
-      //         url: {
-      //           web: 'http://office.alaa.tv:8080/product/365',
-      //           api: 'http://office.alaa.tv:8080/api/v2/product/365'
-      //         },
-      //         photo: 'https://nodes.alaatv.com/upload/images/product/pr10_20191010073340.jpg',
-      //         attributes: {
-      //           info: {
-      //             teacher: [
-      //               'محمد صادق ثابتی'
-      //             ],
-      //             shipping_method: [
-      //               'دانلودی'
-      //             ],
-      //             major: [
-      //               'ریاضی'
-      //             ],
-      //             services: [
-      //               'جزوه'
-      //             ],
-      //             download_date: [
-      //               'از لحظه خرید'
-      //             ],
-      //             educational_system: [
-      //               'نظام جدید'
-      //             ],
-      //             duration: [
-      //               'تاکنون 45 صفحه'
-      //             ],
-      //             production_year: [
-      //               '98-99'
-      //             ]
-      //           },
-      //           extra: null
-      //         },
-      //         redirect_code: null
-      //       },
-      //       grand: {
-      //         id: 349,
-      //         redirect_url: null,
-      //         type: 3,
-      //         category: null,
-      //         title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
-      //         is_free: 0,
-      //         url: {
-      //           web: 'http://office.alaa.tv:8080/product/349',
-      //           api: 'http://office.alaa.tv:8080/api/v2/product/349'
-      //         },
-      //         photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
-      //         attributes: {
-      //           info: {
-      //             teacher: [
-      //               'گروه آموزشی'
-      //             ],
-      //             shipping_method: [
-      //               'دانلودی'
-      //             ],
-      //             major: [
-      //               'ریاضی',
-      //               'تجربی',
-      //               'انسانی'
-      //             ],
-      //             services: [
-      //               'جزوه'
-      //             ],
-      //             download_date: [
-      //               'از لحظه خرید'
-      //             ],
-      //             educational_system: [
-      //               'نظام جدید'
-      //             ],
-      //             duration: [
-      //               'تاکنون 1110 صفحه'
-      //             ],
-      //             production_year: [
-      //               '98-99'
-      //             ]
-      //           },
-      //           extra: null
-      //         },
-      //         redirect_code: null
-      //       },
-      //       price: {
-      //         discountDetail: {
-      //           productDiscount: 0,
-      //           bonDiscount: 0,
-      //           productDiscountAmount: 0
-      //         },
-      //         extraCost: 0,
-      //         base: 4872,
-      //         discount: 0,
-      //         final: 4872
-      //       },
-      //       photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
-      //       extra_attributes: null
-      //     },
-      //     {
-      //       id: 2303306,
-      //       quantity: 1,
-      //       type: 1,
-      //       product: {
-      //         id: 367,
-      //         redirect_url: null,
-      //         type: 1,
-      //         category: 'جزوه',
-      //         title: 'جزوات گسسته با تدریس محمد صادق ثابتی',
-      //         is_free: 0,
-      //         url: {
-      //           web: 'http://office.alaa.tv:8080/product/367',
-      //           api: 'http://office.alaa.tv:8080/api/v2/product/367'
-      //         },
-      //         photo: 'https://nodes.alaatv.com/upload/images/product/pr11_20191010073417.jpg',
-      //         attributes: {
-      //           info: {
-      //             teacher: [
-      //               'محمد صادق ثابتی'
-      //             ],
-      //             shipping_method: [
-      //               'دانلودی'
-      //             ],
-      //             major: [
-      //               'ریاضی'
-      //             ],
-      //             services: [
-      //               'جزوه'
-      //             ],
-      //             download_date: [
-      //               'از لحظه خرید'
-      //             ],
-      //             educational_system: [
-      //               'نظام جدید'
-      //             ],
-      //             duration: [
-      //               'تاکنون 29 صفحه'
-      //             ],
-      //             production_year: [
-      //               '98-99'
-      //             ]
-      //           },
-      //           extra: null
-      //         },
-      //         redirect_code: null
-      //       },
-      //       grand: {
-      //         id: 349,
-      //         redirect_url: null,
-      //         type: 3,
-      //         category: null,
-      //         title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
-      //         is_free: 0,
-      //         url: {
-      //           web: 'http://office.alaa.tv:8080/product/349',
-      //           api: 'http://office.alaa.tv:8080/api/v2/product/349'
-      //         },
-      //         photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
-      //         attributes: {
-      //           info: {
-      //             teacher: [
-      //               'گروه آموزشی'
-      //             ],
-      //             shipping_method: [
-      //               'دانلودی'
-      //             ],
-      //             major: [
-      //               'ریاضی',
-      //               'تجربی',
-      //               'انسانی'
-      //             ],
-      //             services: [
-      //               'جزوه'
-      //             ],
-      //             download_date: [
-      //               'از لحظه خرید'
-      //             ],
-      //             educational_system: [
-      //               'نظام جدید'
-      //             ],
-      //             duration: [
-      //               'تاکنون 1110 صفحه'
-      //             ],
-      //             production_year: [
-      //               '98-99'
-      //             ]
-      //           },
-      //           extra: null
-      //         },
-      //         redirect_code: null
-      //       },
-      //       price: {
-      //         discountDetail: {
-      //           productDiscount: 0,
-      //           bonDiscount: 0,
-      //           productDiscountAmount: 0
-      //         },
-      //         extraCost: 0,
-      //         base: 4872,
-      //         discount: 0,
-      //         final: 4872
-      //       },
-      //       photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
-      //       extra_attributes: null
-      //     },
-      //     {
-      //       id: 2303307,
-      //       quantity: 1,
-      //       type: 1,
-      //       product: {
-      //         id: 369,
-      //         redirect_url: null,
-      //         type: 1,
-      //         category: 'جزوه',
-      //         title: 'جزوات زبان دهم با تدریس علی اکبر عزتی',
-      //         is_free: 0,
-      //         url: {
-      //           web: 'http://office.alaa.tv:8080/product/369',
-      //           api: 'http://office.alaa.tv:8080/api/v2/product/369'
-      //         },
-      //         photo: 'https://nodes.alaatv.com/upload/images/product/pr12_20191010073500.jpg',
-      //         attributes: {
-      //           info: {
-      //             teacher: [
-      //               'عزتی'
-      //             ],
-      //             shipping_method: [
-      //               'دانلودی'
-      //             ],
-      //             major: [
-      //               'ریاضی',
-      //               'تجربی',
-      //               'انسانی'
-      //             ],
-      //             services: [
-      //               'جزوه'
-      //             ],
-      //             download_date: [
-      //               'از لحظه خرید'
-      //             ],
-      //             educational_system: [
-      //               'نظام جدید'
-      //             ],
-      //             duration: [
-      //               '57 صفحه'
-      //             ],
-      //             production_year: [
-      //               '98-99'
-      //             ]
-      //           },
-      //           extra: null
-      //         },
-      //         redirect_code: null
-      //       },
-      //       grand: {
-      //         id: 349,
-      //         redirect_url: null,
-      //         type: 3,
-      //         category: null,
-      //         title: 'جزوه سوالات مرتبط با دوره های درسی سال 99-98',
-      //         is_free: 0,
-      //         url: {
-      //           web: 'http://office.alaa.tv:8080/product/349',
-      //           api: 'http://office.alaa.tv:8080/api/v2/product/349'
-      //         },
-      //         photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
-      //         attributes: {
-      //           info: {
-      //             teacher: [
-      //               'گروه آموزشی'
-      //             ],
-      //             shipping_method: [
-      //               'دانلودی'
-      //             ],
-      //             major: [
-      //               'ریاضی',
-      //               'تجربی',
-      //               'انسانی'
-      //             ],
-      //             services: [
-      //               'جزوه'
-      //             ],
-      //             download_date: [
-      //               'از لحظه خرید'
-      //             ],
-      //             educational_system: [
-      //               'نظام جدید'
-      //             ],
-      //             duration: [
-      //               'تاکنون 1110 صفحه'
-      //             ],
-      //             production_year: [
-      //               '98-99'
-      //             ]
-      //           },
-      //           extra: null
-      //         },
-      //         redirect_code: null
-      //       },
-      //       price: {
-      //         discountDetail: {
-      //           productDiscount: 0,
-      //           bonDiscount: 0,
-      //           productDiscountAmount: 0
-      //         },
-      //         extraCost: 0,
-      //         base: 4872,
-      //         discount: 0,
-      //         final: 4872
-      //       },
-      //       photo: 'https://nodes.alaatv.com/upload/images/product/j98_99_20200915075432.jpg',
-      //       extra_attributes: null
-      //     }
-      //   ],
-      //   coupon_info: null,
-      //   successful_transactions: [
-      //     {
-      //       wallet_id: 218041,
-      //       order_id: 1722713,
-      //       cost: 24360,
-      //       transactionID: null,
-      //       trace_number: null,
-      //       refrence_number: null,
-      //       paycheck_number: null,
-      //       paymentmethod: {
-      //         name: 'wallet',
-      //         display_name: 'کیف پول',
-      //         id: 5
-      //       },
-      //       transactiongateway: null,
-      //       transactionstatus: {
-      //         name: 'موفق',
-      //         id: 3
-      //       },
-      //       created_at: '2022-09-03 13:33:55',
-      //       completed_at: '2022-09-03 18:03:55',
-      //       deadline_at: null
-      //     }
-      //   ],
-      //   pending_transactions: null,
-      //   unpaid_transaction: null,
-      //   posting_info: null,
-      //   user: {
-      //     id: 219548,
-      //     first_name: 'علی',
-      //     last_name: 'اسماعیلی',
-      //     mobile: '09358745928',
-      //     national_code: '0014258269',
-      //     profile_completion: 77
-      //   },
-      //   created_at: '2022-05-15 13:26:58',
-      //   completed_at: '2022-09-03 18:03:55'
-      // }),
       currentOrder: new Order(),
       detailsDialog: false,
       detailsCardToggle: {},
@@ -838,6 +320,21 @@ export default {
     }
   },
   created() {
+    this.getPaymentStatus()
+  },
+  watch: {
+    till(value) {
+      this.updateInputsValue('till', value)
+    },
+    since(value) {
+      this.updateInputsValue('since', value)
+    },
+    paymentStatus (value) {
+      this.updateInputsValue('paymentStatuses', value)
+    },
+    searchInput(value) {
+      this.updateInputsValue('search', value)
+    }
   },
   computed: {
     user() {
@@ -846,9 +343,17 @@ export default {
       }
       return new User()
     },
+    paymentStatus() {
+      return this.getInput('filterInputs', 'paymentStatuses').value
+    },
+    since() {
+      return this.getInput('filterInputs', 'since').value
+    },
+    till() {
+      return this.getInput('filterInputs', 'till').value
+    },
     getEntityApi() {
-      return API_ADDRESS.user.getOrderList(this.user.id)
-      // return API_ADDRESS.exam.base(1)
+      return API_ADDRESS.user.orders.userOrders
     },
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']
@@ -860,282 +365,68 @@ export default {
     }
   },
   methods: {
+    onPageChange(response) {
+      if (!this.isFirstReq) {
+        return
+      }
+      this.hasUserOrdered = response.data.data.length > 0
+      this.isFirstReq = false
+    },
+    onClickFilterFormBuilder (data) {
+      data.event === 'reload' ? this.reloadFilterData() : this.filterFormBuilderData()
+    },
+
+    reloadFilterData() {
+      if (this.$refs.filterSlot) {
+        this.$refs.filterSlot.clearFormBuilderInputValues()
+      }
+      this.searchInput = ''
+      // need to $nextTick
+      this.$nextTick(() => {
+        if (this.$refs.orderList) {
+          this.$refs.orderList.reload()
+        }
+      })
+    },
+
+    filterFormBuilderData() {
+      if (!this.$refs.orderList) {
+        return
+      }
+      this.$refs.orderList.search()
+    },
+    updateInputsValue(name, newValue) {
+      const input = this.getInput('inputs', name)
+      input.value = newValue
+    },
+    getInput(src, name) {
+      return this[src].find(item => item.name === name)
+    },
+    async getPaymentStatus() {
+      const response = await this.$axios.get(API_ADDRESS.user.orders.status)
+      this.loading = false
+      this.getInput('filterInputs', 'paymentStatuses').options = response.data.data
+    },
+    filterTable() {
+      // if (!this.$refs.filterSlot) {
+      //   return
+      // }
+      // const inputsData = this.$refs.filterSlot.getValues()
+    },
+    resetData() {
+      if (!this.$refs.orderList) {
+        return
+      }
+
+      this.$refs.orderList.clearData()
+    },
     showDetailsDialog(rowData) {
       this.currentOrder = new Order(rowData)
-      // this.currentOrder = new Order({
-      //   id: 416466,
-      //   discount: 0,
-      //   customer_description: null,
-      //   price: 7000,
-      //   paid_price: 7000,
-      //   refund_price: 0,
-      //   debt: 0,
-      //   orderstatus: {
-      //     id: 2,
-      //     name: 'ثبت نهایی'
-      //   },
-      //   paymentstatus: {
-      //     id: 3,
-      //     name: 'پرداخت شده'
-      //   },
-      //   orderproducts: [
-      //     {
-      //       id: 353571,
-      //       quantity: 1,
-      //       type: 1,
-      //       product: {
-      //         id: 294,
-      //         redirect_url: null,
-      //         type: 1,
-      //         category: 'VIP',
-      //         title: 'ال...ماس عربی دوازدهم کنکور',
-      //         is_free: 0,
-      //         url: {
-      //           web: 'http://office.alaa.tv:8080/product/294',
-      //           api: 'http://office.alaa.tv:8080/api/v2/product/294'
-      //         },
-      //         photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
-      //         attributes: {
-      //           info: {
-      //             teacher: [
-      //               'واحد تخته نگار آلاء'
-      //             ],
-      //             shipping_method: [
-      //               'دانلودی'
-      //             ],
-      //             major: [
-      //               'ریاضی',
-      //               'تجربی',
-      //               'انسانی'
-      //             ],
-      //             services: [
-      //               'فیلم',
-      //               'جزوه'
-      //             ],
-      //             download_date: [
-      //               'از لحظه خرید'
-      //             ],
-      //             educational_system: [
-      //               'نظام جدید'
-      //             ],
-      //             duration: [
-      //               '2 ساعت'
-      //             ],
-      //             production_year: [
-      //               '97-98'
-      //             ]
-      //           },
-      //           extra: null
-      //         },
-      //         redirect_code: null
-      //       },
-      //       grand: null,
-      //       price: {
-      //         discountDetail: {
-      //           productDiscount: 0,
-      //           bonDiscount: 0,
-      //           productDiscountAmount: 0
-      //         },
-      //         extraCost: 0,
-      //         base: 14000,
-      //         discount: 0,
-      //         final: 14000
-      //       },
-      //       photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
-      //       extra_attributes: null
-      //     }
-      //   ],
-      //   coupon_info: {
-      //     name: 'طلایی',
-      //     code: 'talaee',
-      //     discount: 50,
-      //     coupontype: {
-      //       name: 'overall',
-      //       display_name: 'کلی'
-      //     },
-      //     discounttype: {
-      //       name: 'percentage',
-      //       display_name: 'درصد'
-      //     }
-      //   },
-      //   successful_transactions: [
-      //     {
-      //       wallet_id: 218041,
-      //       order_id: 416466,
-      //       cost: 7000,
-      //       transactionID: null,
-      //       trace_number: null,
-      //       refrence_number: null,
-      //       paycheck_number: null,
-      //       paymentmethod: {
-      //         name: 'wallet',
-      //         display_name: 'کیف پول',
-      //         id: 5
-      //       },
-      //       transactiongateway: null,
-      //       transactionstatus: {
-      //         name: 'موفق',
-      //         id: 3
-      //       },
-      //       created_at: '2019-06-24 14:27:38',
-      //       completed_at: '2019-06-24 18:57:38',
-      //       deadline_at: null
-      //     }
-      //   ],
-      //   pending_transactions: null,
-      //   unpaid_transaction: null,
-      //   posting_info: null,
-      //   user: {
-      //     id: 219548,
-      //     first_name: 'علی',
-      //     last_name: 'اسماعیلی',
-      //     mobile: '09358745928',
-      //     national_code: '0014258269',
-      //     profile_completion: 77
-      //   },
-      //   created_at: '2019-06-23 11:01:02',
-      //   completed_at: '2019-06-24 14:27:38'
-      // })
       this.detailsDialog = true
     },
     toggleDetailsCard(rowData) {
       if (!this.detailsCardToggle[rowData.id]) {
         this.currentOrder = new Order(rowData)
-
-        // this.currentOrder = new Order({
-        //   id: 416466,
-        //   discount: 0,
-        //   customer_description: null,
-        //   price: 7000,
-        //   paid_price: 7000,
-        //   refund_price: 0,
-        //   debt: 0,
-        //   orderstatus: {
-        //     id: 2,
-        //     name: 'ثبت نهایی'
-        //   },
-        //   paymentstatus: {
-        //     id: 3,
-        //     name: 'پرداخت شده'
-        //   },
-        //   orderproducts: [
-        //     {
-        //       id: 353571,
-        //       quantity: 1,
-        //       type: 1,
-        //       product: {
-        //         id: 294,
-        //         redirect_url: null,
-        //         type: 1,
-        //         category: 'VIP',
-        //         title: 'ال...ماس عربی دوازدهم کنکور',
-        //         is_free: 0,
-        //         url: {
-        //           web: 'http://office.alaa.tv:8080/product/294',
-        //           api: 'http://office.alaa.tv:8080/api/v2/product/294'
-        //         },
-        //         photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
-        //         attributes: {
-        //           info: {
-        //             teacher: [
-        //               'واحد تخته نگار آلاء'
-        //             ],
-        //             shipping_method: [
-        //               'دانلودی'
-        //             ],
-        //             major: [
-        //               'ریاضی',
-        //               'تجربی',
-        //               'انسانی'
-        //             ],
-        //             services: [
-        //               'فیلم',
-        //               'جزوه'
-        //             ],
-        //             download_date: [
-        //               'از لحظه خرید'
-        //             ],
-        //             educational_system: [
-        //               'نظام جدید'
-        //             ],
-        //             duration: [
-        //               '2 ساعت'
-        //             ],
-        //             production_year: [
-        //               '97-98'
-        //             ]
-        //           },
-        //           extra: null
-        //         },
-        //         redirect_code: null
-        //       },
-        //       grand: null,
-        //       price: {
-        //         discountDetail: {
-        //           productDiscount: 0,
-        //           bonDiscount: 0,
-        //           productDiscountAmount: 0
-        //         },
-        //         extraCost: 0,
-        //         base: 14000,
-        //         discount: 0,
-        //         final: 14000
-        //       },
-        //       photo: 'https://nodes.alaatv.com/upload/images/product/A58_20190513140213.jpg',
-        //       extra_attributes: null
-        //     }
-        //   ],
-        //   coupon_info: {
-        //     name: 'طلایی',
-        //     code: 'talaee',
-        //     discount: 50,
-        //     coupontype: {
-        //       name: 'overall',
-        //       display_name: 'کلی'
-        //     },
-        //     discounttype: {
-        //       name: 'percentage',
-        //       display_name: 'درصد'
-        //     }
-        //   },
-        //   successful_transactions: [
-        //     {
-        //       wallet_id: 218041,
-        //       order_id: 416466,
-        //       cost: 7000,
-        //       transactionID: null,
-        //       trace_number: null,
-        //       refrence_number: null,
-        //       paycheck_number: null,
-        //       paymentmethod: {
-        //         name: 'wallet',
-        //         display_name: 'کیف پول',
-        //         id: 5
-        //       },
-        //       transactiongateway: null,
-        //       transactionstatus: {
-        //         name: 'موفق',
-        //         id: 3
-        //       },
-        //       created_at: '2019-06-24 14:27:38',
-        //       completed_at: '2019-06-24 18:57:38',
-        //       deadline_at: null
-        //     }
-        //   ],
-        //   pending_transactions: null,
-        //   unpaid_transaction: null,
-        //   posting_info: null,
-        //   user: {
-        //     id: 219548,
-        //     first_name: 'علی',
-        //     last_name: 'اسماعیلی',
-        //     mobile: '09358745928',
-        //     national_code: '0014258269',
-        //     profile_completion: 77
-        //   },
-        //   created_at: '2019-06-23 11:01:02',
-        //   completed_at: '2019-06-24 14:27:38'
-        // })
       }
       this.detailsCardToggle[rowData.id] = !this.detailsCardToggle[rowData.id]
     },
@@ -1146,7 +437,7 @@ export default {
       if (rowData.id) {
         this.hasUserOrdered = true
       }
-      this.firstRowPassed = true
+      this.firstRowPassed = false
     },
     getRemoveMessage(row) {
       const title = row.title
@@ -1166,6 +457,133 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.filter-toggle{
+  color:#6D708B;
+}
+.gray-bg{
+  background: #E4E8EF;
+}
+.search-box{
+  margin-bottom: 20px;
+  @media  screen and (max-width: 599px){
+      margin-bottom: 20px;
+  }
+}
+.expand-filter{
+  &:deep(.q-item-type){
+    display: none;
+  }
+  .filter-option{
+
+  }
+  .filter-items{
+    font-weight: 400!important;
+    font-size: 16px;
+    line-height: 25px;
+    letter-spacing: -0.03em;
+    color: #434765;
+    margin-bottom: 30px;
+    position: relative;
+    @media screen and (max-width: 1439px){
+      margin-bottom: 24px;
+    }
+
+    @media screen and (max-width: 599px){
+      margin-bottom: 20px;
+    }
+
+    &:deep(.filter-option){
+      .outsideLabel{
+        padding-bottom: 8px;
+      }
+      @media screen and (max-width: 1439px) {
+        order: 3;
+      }
+      @media screen and (max-width: 599px) {
+        padding-left: 16px;
+        padding-right: 0;
+      }
+    }
+    &:deep(.till){
+      padding-top: 40px;
+      @media screen and (max-width: 599px) {
+        padding: 1px;
+      }
+    }
+    &:deep(.since){
+      .outsideLabel{
+        padding-bottom: 8px;
+      }
+      &:deep(.q-icon){
+        &::before{
+          content: '';
+        }
+      }
+      @media screen and (max-width: 599px) {
+        padding: 1px 1px 8px;
+      }
+      @media screen and (max-width: 1439px) {
+
+      }
+    }
+    &:deep(.formBuilder-actionBtn-ActionBtn){
+      @media screen and (max-width: 1439px){
+        text-align: right;
+        order:3
+      }
+    }
+    .action-btn{
+      @media screen and (max-width: 1439px) {
+        position: absolute;
+        bottom: 0;
+        margin-top:10px;
+      }
+      @media screen and (max-width: 599px){
+        position: relative;
+      }
+    }
+    .select-input{
+
+    }
+    .filter-inputs{
+      @media screen and (max-width: 1439px) {
+        order: 1;
+      }
+    }
+    .filter-btn{
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 22px;
+      letter-spacing: -0.03em;
+      color: #FFFFFF;
+    }
+    .reload-icon{
+      color: #6D708B;
+      margin-right: 16px;
+    }
+  }
+}
+.search-input{
+  background-color: white;
+  //border-radius: 8px;
+  //border: none;
+  &:deep(.q-field__append){
+    .q-icon{
+      color: #6D708B;
+      cursor: pointer;
+    }
+  }
+  .search-icon{
+
+  }
+  &:deep(.q-field__control){
+    //q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input
+    background-color: white;
+  }
+  &:deep(.q-field__append){
+
+  }
+}
 .my-orders-list {
   .title {
     font-style: normal;
@@ -1174,7 +592,25 @@ export default {
     line-height: 28px;
     text-align: left;
     color: #434765;
-    padding-bottom: 24px;
+    padding-bottom: 40px;
+  }
+  :deep(.q-table__bottom){
+    display: none;
+  }
+  .quasar-crud-index-table{
+    :deep(.q-table){
+
+      tr{
+        border: none;
+      }
+      th{
+        border: none;
+      }
+      td{
+        border: none;
+      }
+    }
+
   }
 
   .payment-okay {
@@ -1196,6 +632,9 @@ export default {
       background: #FFFFFF;
       box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       border-radius: 16px;
+      @media screen and (max-width: 599px) {
+        //padding-bottom: 20px;
+      }
 
       .q-table__middle {
         //.q-table {
@@ -1211,6 +650,19 @@ export default {
             font-size: 16px;
             line-height: 25px;
             color: #6D708B;
+            padding: 23px 40px;
+            @media screen and (max-width: 1439px){
+              padding: 20px 30px;
+            }
+          }
+
+          tbody{
+            tr{
+              &:nth-child(2n + 1) {
+                background: #F6F9FF;
+                border-radius: 16px;
+              }
+            }
           }
 
           tr {
@@ -1218,9 +670,15 @@ export default {
             font-size: 14px;
             line-height: 22px;
             color: #434765;
-
-            &:nth-child(2n) {
-              background: #F6F9FF;
+            td{
+              padding: 10px 40px;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 22px;
+              letter-spacing: -0.03em;
+              @media screen and (max-width: 1439px){
+                padding: 2px 30px;
+              }
             }
 
             :not(:last-child) > td {
@@ -1266,43 +724,68 @@ export default {
   .details-table-mobile {
       box-shadow: none;
       border-radius: 0;
-    border-bottom: 1px solid #E4E8EF;
+      border-bottom: 1px solid #E4E8EF;
+    &:last-child{
+      border-radius: 16px;
+      border-bottom: none;
+    }
+    &:first-child{
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
 
     .details-info {
       padding: 15px 20px;
       font-weight: 400;
       font-size: 14px;
       line-height: 22px;
-      text-align: left;
       letter-spacing: -0.03em;
-      display: flex;
-      justify-content: space-between;
-      .first-col {
-        color: #6D708B;
-        div {
-          padding-top: 5px;
-          padding-bottom: 5px;
+      @media screen and (max-width: 599px){
+        padding: 15px 18px;
+      }
+      .item{
+        color: var(--Text-2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 25px;
+        @media screen and (max-width: 599px){
+          margin-bottom: 10px;
+          font-size: 14px;
+          line-height: 22px;
+        }
+        .value{
+          color: var(--Text-1);
         }
         .order {
           .order-id {
             padding-left: 8px;
+            color: var(--Text-1);
           }
-        }
-      }
-      .second-col {
-        text-align: right;
-        div {
-          padding-top: 5px;
-          padding-bottom: 5px;
         }
         .details-btn {
           color:#8075DC ;
+          cursor: pointer;
+          :deep(.q-icon ){
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 6px;
+          }
+          &.dialog{
+            @media screen and (max-width: 599px) {
+              display: none;
+            }
+          }
+          &.toggle{
+            display: none;
+            @media screen and (max-width: 599px) {
+              display: block;
+            }
+          }
         }
-        //:deep(.q-btn) {
-        //  .q-btn__content {
-        //    margin: 0;
-        //  }
-        //}
       }
     }
   }
@@ -1359,5 +842,10 @@ export default {
       color: #8075DC;
     }
   }
+}
+</style>
+<style>
+.q-table thead, .q-table tr, .q-table th, .q-table td {
+  border-color: transparent;
 }
 </style>

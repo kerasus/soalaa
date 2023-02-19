@@ -1,3 +1,20 @@
+$text-1 : #434765;
+$text-2: #6D708B;
+$text-3: #8A8CA6;
+$text-4: #AAAEC2;
+$Secondary-dark: #FFB74D;
+$Secondary-main: #FFB74D;
+$Secondary-light-1: #FFB74D;
+$primary-dark: #8075DC;
+$primary-main: #9690E4;
+$primary-light-1: #F4F3FF;
+$background: #F4F6F9;
+$Neutral-1: #E4E8EF;
+$Neutral-2: #F2F5F9;
+$Neutral-3: #F6F9FF;
+$Neutral-4: #FFFFFF;
+$other-yellow: #FFCA28;
+
 :root {
   --3a-Primary: #9690E4;
   --3a-Secondary: #FFB74D;
@@ -25,9 +42,6 @@
   --primary-1: #ffc107;
   --primary-2: #fbcf4b;
   --primary-3: #ffc107;
-  --text-1: #000;
-  --text-2: #666;
-  --text-3: #fff;
   --accent-1: #2196F3;
   --accent-2: #2196F3;
   --accent-3: #2196F3;
@@ -37,6 +51,24 @@
   --error-1: #f44336;
   --error-2: #f44336;
   --error-3: #f44336;
+
+// soalaa
+  --Text-1: #{$text-1};
+  --Text-2: #{$text-2};
+  --Text-3: #{$text-3};
+  --Text-4: #{$text-4};
+  --Secondary-dark: #{$Secondary-dark};
+  --Secondary-main: #{$Secondary-main};
+  --Secondary-light-1: #{$Secondary-light-1};
+  --Primary-dark: #{$primary-dark};
+  --Primary-main: #{$primary-main};
+  --Primary-light-1: #{$primary-light-1};
+  --Background: #{$background};
+  --Neutral-1: #{$Neutral-1};
+  --Neutral-2: #{$Neutral-2};
+  --Neutral-3: #{$Neutral-3};
+  --Neutral-4: #{$Neutral-4};
+  --other-yellow: #{$other-yellow}
 }
  // ------ quasar variables
 $primary   : #9690E4; // for 3A
@@ -44,8 +76,7 @@ $accent    : #65677F;
 $dark      : #23263B;
 $positive  : #4caf50;
 $negative  : #E86562;
-$info      : #31CCEC;
-$warning   : #F2C037;
+$info      : #8ED6FF;
+$warning   : #FFCA28;
 $success : #4caf50;
 $secondary: #FFB74D;
-

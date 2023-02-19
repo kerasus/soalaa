@@ -23,6 +23,7 @@ class Question extends Model {
         default: API_ADDRESS.question.base
       },
       { key: 'id' },
+      { key: 'code' },
       { key: '_id' },
       { key: 'title' },
       { key: 'code' },

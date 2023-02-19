@@ -17,61 +17,59 @@
         :table-keys="tableKeys"
         :create-route-name="'Admin.subCategory.Create'"
       >
-        <template #table-cell="{inputData, showConfirmRemoveDialog}">
-          <q-td :props="inputData.props">
-            <template v-if="inputData.props.col.name === 'icon'">
-              <q-avatar
-                size="40px"
-                round
-                text-color="white"
-                :color="iconPicker(inputData.props.row.title).color"
-                :icon="iconPicker(inputData.props.row.title).icon"
-              />
-            </template>
-            <template v-if="inputData.props.col.name === 'actions'">
-              <q-btn round
-                     flat
-                     dense
-                     size="md"
-                     color="info"
-                     icon="info"
-                     :to="{name:'Admin.subCategory.Show', params: {id: inputData.props.row.id}}">
-                <q-tooltip>
-                  مشاهده
-                </q-tooltip>
-              </q-btn>
-              <q-btn round
-                     flat
-                     dense
-                     size="md"
-                     color="purple"
-                     icon="edit"
-                     :to="{name:'Admin.subCategory.Edit', params: {id: inputData.props.row.id}}">
-                <q-tooltip>
-                  ویرایش
-                </q-tooltip>
-              </q-btn>
-              <q-btn
-                round
-                flat
-                dense
-                size="md"
-                color="negative"
-                icon="delete"
-                class="q-ml-md"
-                @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
-                <q-tooltip>
-                  حذف درس
-                </q-tooltip>
-              </q-btn>
-            </template>
-            <!--          <template v-if="inputData.props.col.name === 'category_id'">-->
-            <!--            {{}}-->
-            <!--          </template>-->
-            <template v-else>
-              {{ inputData.props.value }}
-            </template>
-          </q-td>
+        <template #entity-index-table-cell="{props, col, showConfirmRemoveDialog}">
+          <template v-if="col.name === 'icon'">
+            <q-avatar
+              size="40px"
+              round
+              text-color="white"
+              :color="iconPicker(props.row.title).color"
+              :icon="iconPicker(props.row.title).icon"
+            />
+          </template>
+          <template v-if="col.name === 'actions'">
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   color="info"
+                   icon="info"
+                   :to="{name:'Admin.subCategory.Show', params: {id: props.row.id}}">
+              <q-tooltip>
+                مشاهده
+              </q-tooltip>
+            </q-btn>
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   color="purple"
+                   icon="edit"
+                   :to="{name:'Admin.subCategory.Edit', params: {id: props.row.id}}">
+              <q-tooltip>
+                ویرایش
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              round
+              flat
+              dense
+              size="md"
+              color="negative"
+              icon="delete"
+              class="q-ml-md"
+              @click="showConfirmRemoveDialog(props.row, 'id', getRemoveMessage(props.row))">
+              <q-tooltip>
+                حذف درس
+              </q-tooltip>
+            </q-btn>
+          </template>
+          <!--          <template v-if="col.name === 'category_id'">-->
+          <!--            {{}}-->
+          <!--          </template>-->
+          <template v-else>
+            {{ col.value }}
+          </template>
         </template>
       </entity-index>
     </template>

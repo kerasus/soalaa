@@ -1,47 +1,86 @@
-.form-builder-date-time-col {
-  padding: 8px 12px 15px 12px;
+@import "mixin";
 
+.form-builder-date-time-col {
+  //padding: 8px 12px 15px 12px;
+  .outsideLabel {
+    @include global-outsideLabel;
+  }
   .form-calender {
     border-radius: 10px 0 0 10px;
-
     @include global-input;
-
+    &.q-field--standard.q-field--readonly {
+      .q-field__inner {
+        .q-field__control {
+          &:before {
+            border-bottom: none;
+          }
+        }
+      }
+    }
     .q-field__inner {
       .q-field__control {
         border-radius: 25px 0 0 25px;
-
+        background: transparent;
+        &:before {
+          border-bottom: none;
+        }
         .q-field__prepend {
           padding: 10px;
           background: var(--3a-Primary);
           border-radius: 12px;
           color: #FFF;
-
+          .q-icon.material-icons {
+            font-family: "iconsax" !important;
+            speak: never;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            * {
+              display: none;
+            }
+            &:before {
+              content: "";
+              width: 100%;
+              height: 100%;
+              display: flex !important;
+              align-items: center;
+              justify-content: center;
+            }
+          }
         }
-
         .q-field__append {
           &.q-anchor--skip {
             display: none
           }
         }
-
+        .q-field__control-container {
+          padding-left: 8px;
+          .q-field__native {
+            &.q-placeholder {
+              background: white;
+              border-radius: 8px;
+              direction: ltr;
+              text-align: left;
+            }
+          }
+        }
         .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
           border-radius: 10px;
           padding-right: 10px;
           padding-left: 10px;
-
         }
-
         .q-field__label {
           margin: -15px 8px;
         }
       }
     }
   }
-
   .time-input-dateTime {
     border-radius: 0 10px 10px 0;
     @include global-input;
-
     .q-field__inner {
       .q-field__control {
         border-radius: 0 10px 10px 0;
@@ -51,7 +90,6 @@
         }
         .q-field__append {
           padding-right: 10px;
-
           &.q-anchor--skip {
             display: none
           }

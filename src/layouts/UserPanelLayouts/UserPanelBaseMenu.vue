@@ -70,14 +70,29 @@
         </div>
       </div>
     </q-list>
-    <div class="log-out"
-         @click="logOut">
+    <div
+      v-if="isUserLogin"
+      class="log-out"
+      @click="logOut"
+    >
       <span>
         <q-avatar icon="isax:logout"
                   size="30"
                   dir="rtl" />
       </span>
       <span class="logout-text">خروج </span>
+    </div>
+    <div
+      v-else
+      class="log-out"
+      @click="goToLogin"
+    >
+      <span>
+        <q-avatar icon="isax:logout"
+                  size="30"
+                  dir="rtl" />
+      </span>
+      <span class="logout-text">ورود </span>
     </div>
   </div>
 </template>
@@ -99,14 +114,14 @@ export default {
     return {
       clickedItem: null,
       titlesList: [
-        // {
-        //   title: 'داشبورد',
-        //   icon: 'isax:home',
-        //   routeName: 'dashboard',
-        //   permission: 'all',
-        //   active: false,
-        //   children: []
-        // },
+        {
+          title: 'داشبورد',
+          icon: 'isax:home',
+          routeName: 'User.Dashboard',
+          permission: 'all',
+          active: false,
+          children: []
+        },
         {
           title: 'آزمون ها',
           icon: 'isax:task-square',
@@ -115,6 +130,14 @@ export default {
           active: false,
           children: []
         },
+        // {
+        //   title: 'ساخت آزمون',
+        //   icon: 'isax:task-square',
+        //   routeName: 'User.Create.Exam',
+        //   permission: 'all',
+        //   active: false,
+        //   children: []
+        // },
         {
           title: 'سفارش‌ های من',
           icon: 'isax:clipboard-text',
@@ -124,8 +147,16 @@ export default {
           children: []
         },
         {
-          title: 'تیکت',
-          icon: 'isax:clipboard-text',
+          title: 'اطلاعات کاربری',
+          icon: 'isax:user',
+          routeName: 'User.Profile',
+          permission: 'all',
+          active: false,
+          children: []
+        },
+        {
+          title: 'تیکت پشتیبانی',
+          icon: 'isax:message-question',
           routeName: 'User.Ticket.Index',
           permission: 'all',
           active: false,
@@ -145,9 +176,15 @@ export default {
   methods: {
     logOut () {
       return this.$store.dispatch('Auth/logOut')
+    },
+    goToLogin() {
+      this.$router.push({ name: 'login' })
     }
   },
   computed: {
+    isUserLogin() {
+      return this.$store.getters['Auth/isUserLogin']
+    },
     user () {
       if (this.$store.getters['Auth/user']) {
         return this.$store.getters['Auth/user']
@@ -171,8 +208,11 @@ export default {
 
 <style scoped lang="scss">
 .user-panel-base-menu {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  height: 100%;
+  grid-template-rows:1fr;
+  grid-template-columns: 1fr;
+  justify-content: space-between;
   color: #6D708B;
   @media screen and (max-width: 1919px) {}
   @media screen and (max-width: 1439px) {
@@ -368,6 +408,8 @@ export default {
 
   &.list-side-mode {
     color: white;
+    justify-content: space-between;
+    height: 100%;
     .q-list {
       a {
         color: white;

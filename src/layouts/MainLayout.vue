@@ -72,6 +72,9 @@
         <Router :include="keepAliveComponents" />
       </div>
     </template>
+    <template #footer>
+      <main-footer />
+    </template>
   </quasar-template-builder>
 </template>
 
@@ -80,6 +83,7 @@
 import { defineAsyncComponent } from 'vue'
 import QuasarTemplateBuilder from 'quasar-template-builder/src/quasar-template-builder.vue'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import MainFooter from 'components/Layout/Footer/main'
 // import templateHeader from 'components/Headers/templateHeader'
 // import onlineQuizTemplateHeader from 'components/Headers/onlineQuizTemplateHeader'
 // import UserTemplateHeader from 'components/Headers/userTemplateHeader'
@@ -91,6 +95,7 @@ import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 
 export default {
   components: {
+    MainFooter,
     QuasarTemplateBuilder,
     UserSideBar: defineAsyncComponent(() => import('layouts/UserPanelLayouts/UserSideBar')),
     sideMenuMapOfQuestions: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu_MapOfQuestions')),
@@ -135,10 +140,10 @@ export default {
       return this.$store.getters['AppLayout/linearLoading']
     },
     getTemplateHeaderType() {
-      return this.$store.getters['AppLayout/templateHeaderType']
+      return this.$store.getters['AppLayout/layoutHeaderType']
     },
     getTemplateLeftSideBarType() {
-      return this.$store.getters['AppLayout/templateLeftSideBarType']
+      return this.$store.getters['AppLayout/layoutLeftSideBarType']
     }
   },
   watch: {
@@ -148,9 +153,6 @@ export default {
   created () {
   },
   methods: {
-    updateLayout () {
-      this.$store.dispatch('AppLayout/updateStore', this.properties)
-    },
     confirmDialogAction (data) {
       if (this.confirmDialogData) this.confirmDialogData.callback(data)
       else {
@@ -161,13 +163,6 @@ export default {
     },
     setHeaderDimension (value) {
       this.$refs.contentInside.style.height = 'calc(100vh +' + value.height + 'px'
-    },
-    setLayoutCustomClass () {
-      if (this.templateHeaderType === 'dashboard') {
-        this.properties.layoutHeaderCustomClass = 'user-main-layout-header row'
-        return
-      }
-      this.properties.layoutHeaderCustomClass = 'main-layout-header row'
     },
     resize (val) {
       this.$store.commit('AppLayout/updateWindowSize', val)
@@ -192,6 +187,12 @@ export default {
     width: 100%;
   }
 
+}
+
+.drawer-inside{
+  @media screen and(max-width: 599px) {
+    width: 250px
+  }
 }
 
 :deep(.user-main-layout-header) {
@@ -286,6 +287,7 @@ export default {
 
 .main-layout-left-drawer {
   //background-color: #f1f1f1;
+  overflow: hidden;
   background-color: #F4F6F9;
 }
 </style>

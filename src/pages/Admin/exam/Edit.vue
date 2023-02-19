@@ -1,118 +1,116 @@
 <template>
-  <div>
-    <entity-edit :key="entityEdit"
-                 v-model:value="inputs"
-                 title="ویرایش اطلاعات آزمون"
-                 :api="api"
-                 :entity-id-key="entityIdKey"
-                 :entity-param-key="entityParamKey"
-                 :show-route-name="showRouteName"
-                 :before-load-input-data="beforeLoadInputData"
-    >
-      <template #after-form-builder>
-        <q-card class="category-card">
-          <q-card-section>
-            <h6 class="category-header q-ma-md">لیست دفترچه ها</h6>
-          </q-card-section>
-          <q-separator />
-          <q-card-section class="flex">
-            <div class="row bg-grey-3 add-category-box">
+  <entity-edit :key="entityEdit"
+               v-model:value="inputs"
+               title="ویرایش اطلاعات آزمون"
+               :api="api"
+               :entity-id-key="entityIdKey"
+               :entity-param-key="entityParamKey"
+               :show-route-name="showRouteName"
+               :before-load-input-data="beforeLoadInputData"
+  >
+    <template #after-form-builder>
+      <q-card class="category-card">
+        <q-card-section>
+          <h6 class="category-header q-ma-md">لیست دفترچه ها</h6>
+        </q-card-section>
+        <q-separator />
+        <q-card-section class="flex">
+          <div class="row bg-grey-3 add-category-box">
+            <q-select
+              v-model="category.title"
+              class="q-pa-md col-md-4"
+              :value="category"
+              label="دفترچه"
+              :options="categoryOptions"
+              option-value="categoryOptions"
+              option-label="title"
+              emit-value
+              map-options
+              :disable="totalCategory"
+            />
+            <q-input
+              v-model="category.order"
+              class="q-pa-md col-md-3"
+              label="ترتیب"
+              :disable="totalCategory"
+            />
+            <q-input
+              v-model="category.time"
+              class="q-pa-md col-md-3"
+              label="زمان"
+              :disable="totalCategory"
+            />
+            <div class="q-pa-md col-md-2 flex">
+              <q-btn
+                class="q-ma-md"
+                icon="add"
+                color="green"
+                flat
+                dense
+                fab-mini
+                :disable="totalCategory"
+                @click="addCategory"
+              />
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-section>
+          <div
+            v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length === 0"
+            class="category-list">
+            <p class="bg-red-2 alert">در حال حاضر دفترچه ای به آزمون اضافه نشده است !</p>
+          </div>
+          <div
+            v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length > 0"
+            class="row"
+          >
+            <div
+              v-for="(category , index) in inputs[examCategoriesIndex].value"
+              :key="index"
+              class="row col-md-12 category-list-row"
+            >
               <q-select
                 v-model="category.title"
                 class="q-pa-md col-md-4"
-                :value="category"
+                :value="category.id"
                 label="دفترچه"
                 :options="categoryOptions"
-                option-value="categoryOptions"
+                option-value="id"
                 option-label="title"
                 emit-value
                 map-options
-                :disable="totalCategory"
               />
               <q-input
                 v-model="category.order"
                 class="q-pa-md col-md-3"
                 label="ترتیب"
-                :disable="totalCategory"
               />
               <q-input
                 v-model="category.time"
                 class="q-pa-md col-md-3"
                 label="زمان"
-                :disable="totalCategory"
               />
               <div class="q-pa-md col-md-2 flex">
                 <q-btn
                   class="q-ma-md"
-                  icon="add"
-                  color="green"
+                  icon="close"
+                  color="red"
                   flat
                   dense
                   fab-mini
-                  :disable="totalCategory"
-                  @click="addCategory"
+                  @click="deleteCategory(category.id)"
                 />
               </div>
             </div>
-          </q-card-section>
-          <q-card-section>
-            <div
-              v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length === 0"
-              class="category-list">
-              <p class="bg-red-2 alert">در حال حاضر دفترچه ای به آزمون اضافه نشده است !</p>
-            </div>
-            <div
-              v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length > 0"
-              class="row"
-            >
-              <div
-                v-for="(category , index) in inputs[examCategoriesIndex].value"
-                :key="index"
-                class="row col-md-12 category-list-row"
-              >
-                <q-select
-                  v-model="category.title"
-                  class="q-pa-md col-md-4"
-                  :value="category.id"
-                  label="دفترچه"
-                  :options="categoryOptions"
-                  option-value="id"
-                  option-label="title"
-                  emit-value
-                  map-options
-                />
-                <q-input
-                  v-model="category.order"
-                  class="q-pa-md col-md-3"
-                  label="ترتیب"
-                />
-                <q-input
-                  v-model="category.time"
-                  class="q-pa-md col-md-3"
-                  label="زمان"
-                />
-                <div class="q-pa-md col-md-2 flex">
-                  <q-btn
-                    class="q-ma-md"
-                    icon="close"
-                    color="red"
-                    flat
-                    dense
-                    fab-mini
-                    @click="deleteCategory(category.id)"
-                  />
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-        <q-inner-loading :showing="detachCategoryLoading">
-          <q-spinner-gears size="50px"
-                           color="primary" />
-        </q-inner-loading>
-      </template>
-    </entity-edit>
-  </div>
+          </div>
+        </q-card-section>
+      </q-card>
+      <q-inner-loading :showing="detachCategoryLoading">
+        <q-spinner-gears size="50px"
+                         color="primary" />
+      </q-inner-loading>
+    </template>
+  </entity-edit>
 </template>
 
 <script>
@@ -132,34 +130,50 @@ export default {
   },
   data () {
     return {
-      detachCategoryLoading: false,
       entityEdit: Date.now(),
+      detachCategoryLoading: false,
       api: API_ADDRESS.exam.base(),
       entityIdKey: 'data.id',
       entityParamKey: 'data.id',
       showRouteName: 'Admin.Exam.Show',
       options: null,
       inputs: [
-        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6', placeholder: ' ', filled: true },
+        {
+          type: 'formBuilder',
+          col: 'col-md-4',
+          value: [
+            { type: 'file', name: 'photo111', responseKey: 'data.photo', label: 'پیش نمایش تصویر', col: 'col-md-6', placeholder: ' ', disable: true }
+          ]
+        },
+        {
+          type: 'formBuilder',
+          col: 'col-md-8',
+          value: [
+            { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-12', placeholder: ' ', filled: true },
+            { type: 'input', name: 'photo', responseKey: 'data.photo', label: 'آدرس تصویر', col: 'col-md-12', placeholder: ' ', filled: true },
+            { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: 'زمان شروع', calendarIcon: ' ', col: 'col-md-6', placeholder: 'زمان شروع' },
+            { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: 'زمان پایان', calendarIcon: ' ', col: 'col-md-6', placeholder: 'زمان پایان' }
+          ]
+        },
         {
           type: 'Select',
           name: 'type_id',
-          responseKey: 'data.type.id',
+          responseKey: 'data.type.value',
           label: ' انتخاب نوع آزمون',
-          col: 'col-md-6',
+          col: 'col-md-3',
           options: [],
           optionValue: 'id',
-          optionLabel: 'value'
+          optionLabel: 'value',
+          placeholder: ' ',
+          filled: true
         },
-        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', col: 'col-md-4', label: 'زمان شروع' },
-        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', col: 'col-md-4', label: 'زمان پایان' },
-        { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'enable', responseKey: 'data.enable', label: 'فعال', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'is_free', responseKey: 'data.is_free', label: 'رایگان', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'is_register_open', responseKey: 'data.is_register_open', label: 'ثبت نام باز است.', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'is_open', responseKey: 'data.is_open', label: 'شرکت در آزمون باز است.', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'confirm', responseKey: 'data.confirm', label: 'تولید خودکار کارنامه', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'generate_questions_automatically', responseKey: 'data.generate_questions_automatically', label: 'تولید خودکار سوال', col: 'col-md-4' },
+        { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'Checkbox', name: 'enable', responseKey: 'data.enable', label: 'فعال', col: 'col-md-3' },
+        { type: 'Checkbox', name: 'is_free', responseKey: 'data.is_free', label: 'رایگان', col: 'col-md-3' },
+        { type: 'Checkbox', name: 'is_register_open', responseKey: 'data.is_register_open', label: 'ثبت نام باز است.', col: 'col-md-3' },
+        { type: 'Checkbox', name: 'is_open', responseKey: 'data.is_open', label: 'شرکت در آزمون باز است.', col: 'col-md-3' },
+        { type: 'Checkbox', name: 'confirm', responseKey: 'data.confirm', label: 'تولید خودکار کارنامه', col: 'col-md-3' },
+        { type: 'Checkbox', name: 'generate_questions_automatically', responseKey: 'data.generate_questions_automatically', label: 'تولید خودکار سوال', col: 'col-md-3' },
         { type: 'hidden', name: 'categories', responseKey: 'data.categories', value: [] }
       ],
       category: { title: '', id: '', order: 0, time: 0 },

@@ -275,7 +275,7 @@ export default {
       return verticalGroupAmount * 182 + 20
     },
     changeAppBarAndDrawer (state) {
-      this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
+      // this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
     },
     async loadQuizDataAndSubCategories (reload = false, pageNumber = 1, callback) {
       this.pageLoading = true
