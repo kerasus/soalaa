@@ -8,8 +8,6 @@
       class="default-detail-btn"
       @click="setModifiedValue(true)"
     />
-    <!--          :key="key"
--->
     <vue-tiptap-katex
       ref="tiptap"
       :loading="loading"
