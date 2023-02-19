@@ -334,8 +334,8 @@ export default {
     onChangeTypes (value) {
       this.changeFilterData('types', value)
     },
-    onSearchSingleNode(value) {
-      console.log(value)
+    onSearchSingleNode(/* value */) {
+      // console.log(value)
     },
     tickedData (value) {
       this.$emit('tagsChanged', value)

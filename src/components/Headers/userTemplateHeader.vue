@@ -391,7 +391,7 @@ export default {
   },
   computed: {
     pageBuilderEditable() {
-      return this.$store.getters['AppLayout/pageBuilderEditable']
+      return this.$store.getters['PageBuilder/pageBuilderEditable']
     },
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
@@ -405,8 +405,9 @@ export default {
       this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
     },
     editPage() {
-      const currentSections = this.$store.getters['AppLayout/currentSections']
-      this.$store.dispatch('AppLayout/editPageWidget', currentSections)
+      const currentSections = this.$store.getters['PageBuilder/currentSections']
+      // this.$store.dispatch('PageBuilder/editPageWidget', { key: this.$route.name, sections: currentSections })
+      this.$store.dispatch('PageBuilder/editPageWidget', { key: 'homePage', sections: currentSections })
       this.togglePageBuilderEditable()
     },
     updateLayout() {
@@ -432,11 +433,11 @@ export default {
     },
     togglePageBuilderEditable () {
       const state = this.pageBuilderEditable
-      this.$store.commit('AppLayout/updatePageBuilderEditable', !state)
+      this.$store.commit('PageBuilder/updatePageBuilderEditable', !state)
     },
     cancelEditPageBuilder() {
-      const initialSections = this.$store.getters['AppLayout/initialSections']
-      this.$store.commit('AppLayout/updateCurrentSections', initialSections)
+      const initialSections = this.$store.getters['PageBuilder/initialSections']
+      this.$store.commit('PageBuilder/updateCurrentSections', initialSections)
       this.togglePageBuilderEditable()
     },
     logOut () {

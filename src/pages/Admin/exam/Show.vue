@@ -45,7 +45,6 @@
       </template>
     </entity-show>
   </div>
-
 </template>
 
 <script>
@@ -65,26 +64,42 @@ export default {
       editRouteName: 'Admin.Exam.Edit',
       indexRouteName: 'Admin.Exam.Index',
       inputs: [
-        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6', placeholder: ' ', filled: true },
+        {
+          type: 'formBuilder',
+          col: 'col-md-4',
+          value: [
+            { type: 'file', name: 'photo111', responseKey: 'data.photo', label: 'پیش نمایش تصویر', col: 'col-md-6', placeholder: ' ', disable: true }
+          ]
+        },
+        {
+          type: 'formBuilder',
+          col: 'col-md-8',
+          value: [
+            { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-12', placeholder: ' ', filled: true },
+            { type: 'input', name: 'photo', responseKey: 'data.photo', label: 'آدرس تصویر', col: 'col-md-12', placeholder: ' ', filled: true },
+            { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: 'زمان شروع', calendarIcon: ' ', col: 'col-md-6', placeholder: 'زمان شروع' },
+            { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: 'زمان پایان', calendarIcon: ' ', col: 'col-md-6', placeholder: 'زمان پایان' }
+          ]
+        },
         {
           type: 'Select',
           name: 'type_id',
           responseKey: 'data.type.value',
           label: ' انتخاب نوع آزمون',
-          col: 'col-md-6',
+          col: 'col-md-3',
           options: [],
           optionValue: 'id',
-          optionLabel: 'value'
+          optionLabel: 'value',
+          placeholder: ' ',
+          filled: true
         },
-        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: '', calendarIcon: ' ', col: 'col-md-4', placeholder: 'زمان شروع' },
-        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: '', calendarIcon: ' ', col: 'col-md-4', placeholder: 'زمان پایان' },
-        { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'enable', responseKey: 'data.enable', label: 'فعال', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'is_free', responseKey: 'data.is_free', label: 'رایگان', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'is_register_open', responseKey: 'data.is_register_open', label: 'ثبت نام باز است.', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'is_open', responseKey: 'data.is_open', label: 'شرکت در آزمون باز است.', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'confirm', responseKey: 'data.confirm', label: 'تولید خودکار کارنامه', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'generate_questions_automatically', responseKey: 'data.generate_questions_automatically', label: 'تولید خودکار سوال', col: 'col-md-4' },
+        { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'Checkbox', name: 'enable', responseKey: 'data.enable', label: 'فعال', col: 'col-md-3' },
+        { type: 'Checkbox', name: 'is_free', responseKey: 'data.is_free', label: 'رایگان', col: 'col-md-3' },
+        { type: 'Checkbox', name: 'is_register_open', responseKey: 'data.is_register_open', label: 'ثبت نام باز است.', col: 'col-md-3' },
+        { type: 'Checkbox', name: 'is_open', responseKey: 'data.is_open', label: 'شرکت در آزمون باز است.', col: 'col-md-3' },
+        { type: 'Checkbox', name: 'confirm', responseKey: 'data.confirm', label: 'تولید خودکار کارنامه', col: 'col-md-3' },
+        { type: 'Checkbox', name: 'generate_questions_automatically', responseKey: 'data.generate_questions_automatically', label: 'تولید خودکار سوال', col: 'col-md-3' },
         { type: 'hidden', name: 'categories', responseKey: 'data.categories', value: [] }
       ]
     }

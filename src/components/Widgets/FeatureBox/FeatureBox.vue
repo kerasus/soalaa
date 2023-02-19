@@ -121,7 +121,6 @@ export default {
   @media screen and (max-width: 599px){
     display: flex;
     flex-wrap: wrap;
-    width: 100vw;
     //grid-template-columns: 100%;
     padding: 20px 16px;
     border-radius: 16px;

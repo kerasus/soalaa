@@ -5,8 +5,8 @@ import mutations from './mutations.js'
 
 export default {
   namespaced: true,
-  getters,
-  mutations,
+  state,
   actions,
-  state
+  getters,
+  mutations
 }
