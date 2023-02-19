@@ -12,7 +12,6 @@
 -->
     <vue-tiptap-katex
       ref="tiptap"
-      :key="key"
       :loading="loading"
       :options="{
         bubbleMenu: false,
@@ -64,7 +63,6 @@ export default {
       loading: false,
       btnLoading: false,
       isValueChangeAllowed: false,
-      key: 0,
       modifiedContent: ''
     }
   },
@@ -99,25 +97,18 @@ export default {
         this.value = value
       }
     },
-    setModifiedValue(superModifyMode = false) {
+    setModifiedValue(criticalModifyingMode = false) {
       if (!this.$refs.tiptap) {
         return
       }
       this.btnLoading = true
-      this.setModifiedContent(this.value, superModifyMode)
+      this.setModifiedContent(this.value, criticalModifyingMode)
       this.btnLoading = false
     },
-    setModifiedContent(input, superModifyMode) {
-      this.value = this.getModifiedContent(input, superModifyMode)
+    setModifiedContent(input, criticalModifyingMode) {
+      this.value = this.getModifiedContent(input, criticalModifyingMode)
       this.modifiedContent = this.value
       this.$refs.tiptap.setContent(this.value)
-      this.key++
-      setTimeout(() => {
-        if (this.$refs.tiptap) {
-          console.log('this.modifiedContent', this.modifiedContent)
-          this.$refs.tiptap.setContent(this.modifiedContent)
-        }
-      }, 3000)
     },
     getContent() {
       return this.$refs.tiptap.getContent()
@@ -131,7 +122,7 @@ export default {
       this.value = html
       this.loading = false
     },
-    getModifiedContent(input, superModifyMode) {
+    getModifiedContent(input, criticalModifyingMode) {
       let modifiedValue = input
       modifiedValue = this.removeImageWithLocalSrc(input)
       modifiedValue = this.fixWidehatProblemFromLatex(modifiedValue)
@@ -142,9 +133,10 @@ export default {
       modifiedValue = this.modifyCombination(modifiedValue)
       modifiedValue = this.removeFirstAndLastBracket(modifiedValue)
       modifiedValue = this.fixRightArrowBug(modifiedValue)
-      if (superModifyMode) {
+      if (criticalModifyingMode) {
         modifiedValue = this.modifyMultilineWithPublishConvertor(modifiedValue)
         modifiedValue = this.modifyMultilineWithFormatConvertor(modifiedValue)
+        modifiedValue = this.correctParenthesis(modifiedValue)
         modifiedValue = this.fixRightArrowBug(modifiedValue)
       }
       return modifiedValue
@@ -232,13 +224,24 @@ export default {
         return finalResult
       })
     },
+    correctParenthesis (input) {
+      const regex = /(\\left\()(.*?)(\\right)./gms
+      return input.replaceAll(regex, (result) => {
+        const lastCharOfResult = result.substring(result.length - 1)
+        let finalResult = result
+        if (lastCharOfResult === '?') {
+          finalResult = result.substring(0, result.length - 1) + ')'
+        } else if (lastCharOfResult !== ')') {
+          finalResult = result.substring(0, result.length - 1) + ')' + lastCharOfResult
+        }
+        return finalResult
+      })
+    },
     fixRightArrowBug(input) {
       const regex = /(\\left\()([^)]*)(\\right\)arrow)/gms
       return input.replaceAll(regex, (result) => {
         let finalResult = result
         finalResult = finalResult.replaceAll('\\right)arrow', '\\rightarrow')
-        // finalResult = finalResult.replace('\\left(', '\\left(')
-
         return finalResult
       })
     }
