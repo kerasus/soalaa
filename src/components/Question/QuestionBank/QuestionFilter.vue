@@ -39,7 +39,7 @@
         header-title="درس و مبحث"
       >
         <q-checkbox
-          v-model="searcSinglehNode"
+          v-model="searchSingleNode"
           class="q-ml-md"
           right-label
           label="جستجوی تک گره"
@@ -216,7 +216,7 @@ export default {
   data () {
     return {
       treeKey: 0,
-      searcSinglehNode: false,
+      searchSingleNode: false,
       check: false,
       selectedReference: [],
       selectedYears: [],
@@ -232,8 +232,8 @@ export default {
         level: [],
         years: [],
         types: [],
-        statuses: []
-
+        statuses: [],
+        tags_with_childrens: 0
       }
     }
   },
@@ -270,10 +270,12 @@ export default {
       const titles = []
       filtersDataKey.forEach(key => {
         const filterGroup = this.filtersData[key]
-        filterGroup.forEach(filterItem => {
-          const title = filterItem.title || filterItem.label || filterItem.value
-          titles.push(title)
-        })
+        if (typeof filterGroup !== 'number') {
+          filterGroup.forEach(filterItem => {
+            const title = filterItem.title || filterItem.label || filterItem.value
+            titles.push(title)
+          })
+        }
       })
 
       return titles
@@ -334,8 +336,9 @@ export default {
     onChangeTypes (value) {
       this.changeFilterData('types', value)
     },
-    onSearchSingleNode(/* value */) {
-      // console.log(value)
+    onSearchSingleNode(value) {
+      const sendData = value ? 1 : 0
+      this.changeFilterData('tags_with_childrens', sendData)
     },
     tickedData (value) {
       this.$emit('tagsChanged', value)
