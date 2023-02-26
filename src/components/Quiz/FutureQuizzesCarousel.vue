@@ -75,7 +75,7 @@
               مانده
             </div>
             <div
-              v-if="true"
+              v-if="false"
               class="test-link">
               <router-link
                 :to="getExamRoute(slide)"
