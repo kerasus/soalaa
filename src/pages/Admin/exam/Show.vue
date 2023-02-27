@@ -68,15 +68,14 @@ export default {
           type: 'formBuilder',
           col: 'col-md-4',
           value: [
-            { type: 'file', name: 'photo111', responseKey: 'data.photo', label: 'پیش نمایش تصویر', col: 'col-md-6', placeholder: ' ', disable: true }
+            { type: 'file', name: 'photo111', responseKey: 'data.photo', label: 'پیش نمایش تصویر', col: 'col-md-6', placeholder: ' ' }
           ]
         },
         {
           type: 'formBuilder',
           col: 'col-md-8',
           value: [
-            { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-12', placeholder: ' ', filled: true },
-            { type: 'input', name: 'photo', responseKey: 'data.photo', label: 'آدرس تصویر', col: 'col-md-12', placeholder: ' ', filled: true },
+            { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-12', placeholder: ' ', filled: true, readonly: true },
             { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: 'زمان شروع', calendarIcon: ' ', col: 'col-md-6', placeholder: 'زمان شروع' },
             { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: 'زمان پایان', calendarIcon: ' ', col: 'col-md-6', placeholder: 'زمان پایان' }
           ]

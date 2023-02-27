@@ -15,7 +15,7 @@
                 rounded
                 style="width: 90vw"
                 class="bg-orange text-white text-center q-mb-md">
-        این قسمت به زودی در دسترس حواهد یود
+        این قسمت به زودی در دسترس خواهد یود
       </q-banner>
     </div>
     <div class="row packages-row">

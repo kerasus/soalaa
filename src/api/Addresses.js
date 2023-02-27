@@ -219,9 +219,9 @@ const API_ADDRESS = {
             newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
           }
         } else {
-          if (newFilter[paramKey]) {
-            newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
-          }
+          // if (newFilter[paramKey]) {
+          newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
+          // }
         }
       }
       setQueryParams('statuses')
@@ -230,10 +230,10 @@ const API_ADDRESS = {
       setQueryParams('reference')
       setQueryParams('tags')
       setQueryParams('level')
-      setQueryParams('statement', true)
+      // setQueryParams('statement', true)
       setQueryParams('sort_by', true)
       setQueryParams('sort_type', true)
-      setQueryParams('tags_with_childrens')
+      setQueryParams('tags_with_childrens', true)
 
       if (typeof page !== 'undefined') {
         page = '&page=' + page
