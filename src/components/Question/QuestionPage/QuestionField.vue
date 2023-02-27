@@ -282,6 +282,12 @@ export default {
   }
 }
 
+.type-section {
+  .katex {
+    direction: ltr #{"/* rtl:ignore */"};
+  }
+}
+
 .type-section.katex * {
 }
 #mathfield .ML__cmr,
