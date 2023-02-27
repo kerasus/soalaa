@@ -24,6 +24,9 @@ const API_ADDRESS = {
   user: {
     base: authServer + '/user',
     edit (userId) { return authServer + '/user/' + userId },
+    updatePhoto(userId) {
+      return authServer + '/user/update/' + userId
+    },
     mobile: {
       resend: authServer + '/mobile/resend',
       verify: authServer + '/mobile/verify'

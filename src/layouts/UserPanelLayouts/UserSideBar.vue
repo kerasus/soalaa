@@ -8,26 +8,57 @@
       <div class="profile-detail">
         <div class="profile-photo-box">
           <div class="profile-photo-img">
-            <q-img :src="user.photo"></q-img>
+            <q-img :src="previewImg"></q-img>
+            <q-file ref="file"
+                    v-model="file"
+                    :model-value="file"
+                    label="Label"
+                    class="hidden"
+                    @update:model-value="updateFile()" />
+            <q-btn v-if="!controls"
+                   icon="isax:edit"
+                   size="xs"
+                   color="white"
+                   text-color="accent"
+                   round
+                   class="photo-edit"
+                   @click="updatePhoto" />
+            <div v-if="controls"
+                 class="controls flex no-wrap">
+              <q-btn icon="isax:tick-circle"
+                     size="xs"
+                     color="green"
+                     text-color="white"
+                     class="controls-btn q-mr-xs"
+                     @click="confirmUpdate" />
+              <q-btn icon="isax:close-circle"
+                     size="xs"
+                     color="red"
+                     text-color="white"
+                     class="controls-btn"
+                     @click="discardUpdate" />
+            </div>
           </div>
-          <div class="profile-photo-badge">
-            <svg width="24"
-                 height="24"
-                 viewBox="0 0 24 24"
-                 fill="none"
-                 xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12"
-                      cy="12"
-                      r="12"
-                      fill="white" />
-              <path d="M7.69332 17.0133C7.28666 17.0133 6.90666 16.8733 6.63332 16.6133C6.28666 16.2867 6.11999 15.7933 6.17999 15.26L6.42666 13.1C6.47332 12.6933 6.71999 12.1533 7.00666 11.86L12.48 6.06666C13.8467 4.61999 15.2733 4.57999 16.72 5.94666C18.1667 7.31333 18.2067 8.73999 16.84 10.1867L11.3667 15.98C11.0867 16.28 10.5667 16.56 10.16 16.6267L8.01332 16.9933C7.89999 17 7.79999 17.0133 7.69332 17.0133ZM14.62 5.93999C14.1067 5.93999 13.66 6.25999 13.2067 6.73999L7.73332 12.54C7.59999 12.68 7.44666 13.0133 7.41999 13.2067L7.17332 15.3667C7.14666 15.5867 7.19999 15.7667 7.31999 15.88C7.43999 15.9933 7.61999 16.0333 7.83999 16L9.98666 15.6333C10.18 15.6 10.5 15.4267 10.6333 15.2867L16.1067 9.49333C16.9333 8.61333 17.2333 7.79999 16.0267 6.66666C15.4933 6.15333 15.0333 5.93999 14.62 5.93999Z"
-                    fill="#6D708B" />
-              <path d="M15.56 11.3C15.5466 11.3 15.5266 11.3 15.5133 11.3C13.4333 11.0933 11.76 9.51335 11.44 7.44668C11.4 7.17334 11.5866 6.92001 11.86 6.87334C12.1333 6.83334 12.3866 7.02001 12.4333 7.29334C12.6866 8.90668 13.9933 10.1467 15.62 10.3067C15.8933 10.3333 16.0933 10.58 16.0666 10.8533C16.0333 11.1067 15.8133 11.3 15.56 11.3Z"
-                    fill="#6D708B" />
-              <path d="M18 19.1667H6C5.72667 19.1667 5.5 18.94 5.5 18.6667C5.5 18.3933 5.72667 18.1667 6 18.1667H18C18.2733 18.1667 18.5 18.3933 18.5 18.6667C18.5 18.94 18.2733 19.1667 18 19.1667Z"
-                    fill="#6D708B" />
-            </svg>
-          </div>
+          <!--          <div class="profile-photo-badge">-->
+          <!--            <svg width="24"-->
+          <!--                 height="24"-->
+          <!--                 viewBox="0 0 24 24"-->
+          <!--                 fill="none"-->
+          <!--                 xmlns="http://www.w3.org/2000/svg"-->
+          <!--                 style="cursor: pointer"-->
+          <!--                 @click="updatePhoto">-->
+          <!--              <circle cx="12"-->
+          <!--                      cy="12"-->
+          <!--                      r="12"-->
+          <!--                      fill="white" />-->
+          <!--              <path d="M7.69332 17.0133C7.28666 17.0133 6.90666 16.8733 6.63332 16.6133C6.28666 16.2867 6.11999 15.7933 6.17999 15.26L6.42666 13.1C6.47332 12.6933 6.71999 12.1533 7.00666 11.86L12.48 6.06666C13.8467 4.61999 15.2733 4.57999 16.72 5.94666C18.1667 7.31333 18.2067 8.73999 16.84 10.1867L11.3667 15.98C11.0867 16.28 10.5667 16.56 10.16 16.6267L8.01332 16.9933C7.89999 17 7.79999 17.0133 7.69332 17.0133ZM14.62 5.93999C14.1067 5.93999 13.66 6.25999 13.2067 6.73999L7.73332 12.54C7.59999 12.68 7.44666 13.0133 7.41999 13.2067L7.17332 15.3667C7.14666 15.5867 7.19999 15.7667 7.31999 15.88C7.43999 15.9933 7.61999 16.0333 7.83999 16L9.98666 15.6333C10.18 15.6 10.5 15.4267 10.6333 15.2867L16.1067 9.49333C16.9333 8.61333 17.2333 7.79999 16.0267 6.66666C15.4933 6.15333 15.0333 5.93999 14.62 5.93999Z"-->
+          <!--                    fill="#6D708B" />-->
+          <!--              <path d="M15.56 11.3C15.5466 11.3 15.5266 11.3 15.5133 11.3C13.4333 11.0933 11.76 9.51335 11.44 7.44668C11.4 7.17334 11.5866 6.92001 11.86 6.87334C12.1333 6.83334 12.3866 7.02001 12.4333 7.29334C12.6866 8.90668 13.9933 10.1467 15.62 10.3067C15.8933 10.3333 16.0933 10.58 16.0666 10.8533C16.0333 11.1067 15.8133 11.3 15.56 11.3Z"-->
+          <!--                    fill="#6D708B" />-->
+          <!--              <path d="M18 19.1667H6C5.72667 19.1667 5.5 18.94 5.5 18.6667C5.5 18.3933 5.72667 18.1667 6 18.1667H18C18.2733 18.1667 18.5 18.3933 18.5 18.6667C18.5 18.94 18.2733 19.1667 18 19.1667Z"-->
+          <!--                    fill="#6D708B" />-->
+          <!--            </svg>-->
+          <!--          </div>-->
         </div>
         <div
           v-if="isUserLogin"
@@ -76,17 +107,43 @@
 import { User } from 'src/models/User'
 import UserPanelBaseMenu from 'layouts/UserPanelLayouts/UserPanelBaseMenu'
 import UserPanelSideDrawer from 'layouts/UserPanelLayouts/UserPanelSideDrawer'
+import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'UserSideBar',
   components: { UserPanelSideDrawer, UserPanelBaseMenu },
   data () {
     return {
-      clickedItem: null
+      clickedItem: null,
+      previewImg: null,
+      file: null,
+      controls: false
     }
+  },
+  mounted() {
+    this.previewImg = this.user.photo
   },
   methods: {
     logOut () {
       return this.$store.dispatch('Auth/logOut')
+    },
+    updatePhoto() {
+      this.$refs.file.pickFiles()
+    },
+    updateFile() {
+      this.controls = true
+      this.previewImg = URL.createObjectURL(this.file)
+    },
+    discardUpdate() {
+      this.controls = false
+      this.file = null
+      this.previewImg = this.user.photo
+    },
+    confirmUpdate() {
+      const fd = new FormData()
+      fd.append('photo', this.file)
+      this.$axios.put(API_ADDRESS.user.updatePhoto(this.user.id), fd).then((d) => {
+        this.controls = false
+      })
     }
   },
   computed: {
@@ -112,6 +169,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.photo-edit {
+  font-size: 7px;
+  position: absolute;
+  border-radius: 50%;
+  top: 50px;
+  left: -10px;
+}
+.controls-btn {
+  font-size: 9px !important;
+  border-radius: 50%;
+  left: -15px;
+}
 .user-panel-side-bar {
   @media screen and (max-width: 1023px) {
     //display: none;
