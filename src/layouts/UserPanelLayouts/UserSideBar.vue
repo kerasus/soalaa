@@ -21,6 +21,7 @@
                    color="white"
                    text-color="accent"
                    round
+                   disable
                    class="photo-edit"
                    @click="updatePhoto" />
             <div v-if="controls"
