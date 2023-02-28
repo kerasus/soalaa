@@ -70,7 +70,7 @@
             class="test-box-footer"
             :class="true ? 'active' : ''"
           >
-            <div v-if="!goToExam"
+            <div v-if="!isExamStarted"
                  class="test-time">
               {{ getExamRemainingTime(slide.start_at) }}
               مانده
@@ -80,7 +80,7 @@
               آزمون شروع شده
             </div>
             <div
-              v-if="goToExam"
+              v-if="isExamStarted"
               class="test-link">
               <router-link
                 :to="getExamRoute(slide)"
@@ -127,10 +127,11 @@ export default defineComponent({
       // return '2023-02-27 12:00:00'
     },
     getExamRemainingTime (dateTime) {
-      const remainingTime = Time.getRemainTime(dateTime)
+      const remainingTime = Time.getRemainTime('2023-02-28 20:35:00')
+      console.log(remainingTime)
       const msRemainingTime = Time.getRemainTime(dateTime, false)
       if (msRemainingTime < 0) {
-        this.goToExam = true
+        this.isExamStarted = true
       } else {
         return this.getTitledTime(remainingTime)
       }
@@ -156,7 +157,7 @@ export default defineComponent({
     }
   },
   setup() {
-    const goToExam = ref(false)
+    const isExamStarted = ref(false)
     const carousel = ref()
     const nextSlide = () => {
       carousel.value.next()
@@ -169,7 +170,7 @@ export default defineComponent({
       carousel,
       nextSlide,
       prevSlide,
-      goToExam
+      isExamStarted
     }
   }
 })
