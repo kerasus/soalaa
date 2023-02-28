@@ -21,7 +21,6 @@
                    color="white"
                    text-color="accent"
                    round
-                   disable
                    class="photo-edit"
                    @click="updatePhoto" />
             <div v-if="controls"
@@ -142,7 +141,7 @@ export default {
     confirmUpdate() {
       const fd = new FormData()
       fd.append('photo', this.file)
-      this.$axios.put(API_ADDRESS.user.updatePhoto(this.user.id), fd).then((d) => {
+      this.$axios.put(API_ADDRESS.user.updatePhoto(), fd).then((d) => {
         this.controls = false
       })
     }

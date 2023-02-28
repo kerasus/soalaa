@@ -24,8 +24,8 @@ const API_ADDRESS = {
   user: {
     base: authServer + '/user',
     edit (userId) { return authServer + '/user/' + userId },
-    updatePhoto(userId) {
-      return authServer + '/user/update/' + userId
+    updatePhoto() {
+      return lumenServer + '/user/avatar'
     },
     mobile: {
       resend: authServer + '/mobile/resend',
