@@ -127,8 +127,7 @@ export default defineComponent({
       // return '2023-02-27 12:00:00'
     },
     getExamRemainingTime (dateTime) {
-      const remainingTime = Time.getRemainTime('2023-02-28 20:35:00')
-      console.log(remainingTime)
+      const remainingTime = Time.getRemainTime(dateTime)
       const msRemainingTime = Time.getRemainTime(dateTime, false)
       if (msRemainingTime < 0) {
         this.isExamStarted = true
