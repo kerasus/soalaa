@@ -219,7 +219,7 @@ export default {
   emits: ['onFilter'],
   methods: {
     onFilter(filterData) {
-      this.$emit('onFilter', filterData)
+      // this.$emit('onFilter', filterData)
       this.filterData = this.getFiltersForRequest(filterData)
       this.getQuestionData(1, this.filterData)
     },
@@ -342,6 +342,7 @@ export default {
         sort_by: (this.searchSelector.value) ? 'created_at' : '',
         sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value,
         statuses: (filterData.statuses) ? filterData.statuses.map(item => item) : [],
+        // tags_with_childrens: (filterData.tags_with_childrens) ? filterData.tags_with_childrens : false
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
@@ -354,7 +355,8 @@ export default {
         filters = {
           sort_by: 'created_at',
           sort_type: this.searchSelector.value,
-          statement: ''
+          // statement: '',
+          tags_with_childrens: 0
         }
       }
       this.loadingQuestion.loading = true
