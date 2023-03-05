@@ -158,7 +158,7 @@ export default {
         {
           type: 'Select',
           name: 'type_id',
-          responseKey: 'data.type.value',
+          responseKey: 'data.type.id',
           label: ' انتخاب نوع آزمون',
           col: 'col-md-3',
           options: [],
