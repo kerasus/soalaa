@@ -8,8 +8,8 @@
       :table-keys="tableKeys"
       :create-route-name="'Admin.Category.Create'"
     >
-      <template #entity-index-table-cell="{props, col, showConfirmRemoveDialog}">
-        <template v-if="col.name === 'thumbnail'">
+      <template #entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
+        <template v-if="inputData.col.name === 'thumbnail'">
           <q-avatar
             round
             font-size="30px"
@@ -18,14 +18,14 @@
             color="grey"
           />
         </template>
-        <template v-else-if="col.name === 'actions'">
+        <template v-else-if="inputData.col.name === 'actions'">
           <q-btn round
                  flat
                  dense
                  size="md"
                  color="info"
                  icon="info"
-                 :to="{name:'Admin.Category.Show', params: {id: props.row.id}}">
+                 :to="{name:'Admin.Category.Show', params: {id: inputData.props.row.id}}">
             <q-tooltip>
               مشاهده
             </q-tooltip>
@@ -38,14 +38,14 @@
                  color="negative"
                  icon="delete"
                  class="q-ml-md"
-                 @click="showConfirmRemoveDialog(props.row, 'id', getRemoveMessage(props.row))">
+                 @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
             <q-tooltip>
               حذف
             </q-tooltip>
           </q-btn>
         </template>
         <template v-else>
-          {{ col.value }}
+          {{ inputData.col.value }}
         </template>
       </template>
     </entity-index>
