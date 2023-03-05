@@ -200,9 +200,18 @@ export default {
           name: 'exam',
           label: 'آزمون ها',
           selectionMode: 'multiple',
-          buttonColor: 'primary',
-          buttonTextColor: 'white',
-          buttonBadgeColor: 'amber-7',
+          popUpButtonConfig: {
+            color: 'primary',
+            textColor: 'white',
+            badgeColor: 'amber-7',
+            label: 'انتخاب از لیست آزمون ها'
+          },
+          tableRowExpandable: true,
+          dialogConfirmButtonConfig: {
+            unelevated: true,
+            color: 'positive',
+            label: 'ثبت آزمون'
+          },
           indexConfig: {
             apiAddress: API_ADDRESS.exam.base(),
             tableTitle: 'لیست آزمون ها',
@@ -241,8 +250,8 @@ export default {
             },
             inputs: [
               { type: 'input', name: 'statement', placeholder: 'عنوان', col: 'col-md-3' },
-              { type: 'date', name: 'start_at_from', col: 'col-md-4', placeholder: 'تاریخ شروع از' },
-              { type: 'date', name: 'start_at_till', col: 'col-md-4', placeholder: 'تاریخ شروع تا' }
+              { type: 'date', name: 'start_at_from', calendarIcon: ' ', col: 'col-md-4', placeholder: 'تاریخ شروع از' },
+              { type: 'date', name: 'start_at_till', calendarIcon: ' ', col: 'col-md-4', placeholder: 'تاریخ شروع تا' }
             ],
             itemIdentifyKey: 'id'
           },

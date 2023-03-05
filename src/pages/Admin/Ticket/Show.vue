@@ -274,10 +274,12 @@ export default {
           type: 'entity',
           name: 'management',
           selectionMode: 'single',
-          label: 'انتخاب کاربر',
-          buttonColor: 'blue',
-          buttonTextColor: 'white',
-          buttonBadgeColor: 'primary',
+          popUpButtonConfig: {
+            color: 'blue',
+            textColor: 'white',
+            badgeColor: 'primary',
+            label: 'انتخاب کاربر'
+          },
           indexConfig: {
             apiAddress: 'https://reqres.in/api/users',
             tableTitle: 'لیست کاربران',
@@ -340,10 +342,12 @@ export default {
           type: 'entity',
           name: 'management',
           selectionMode: 'multiple',
-          label: 'انتخاب اپراتورها',
-          buttonColor: 'blue',
-          buttonTextColor: 'white',
-          buttonBadgeColor: 'primary',
+          popUpButtonConfig: {
+            color: 'blue',
+            textColor: 'white',
+            badgeColor: 'primary',
+            label: 'انتخاب اپراتورها'
+          },
           indexConfig: {
             apiAddress: 'https://reqres.in/api/users',
             tableTitle: 'لیست کاربران',
