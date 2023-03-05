@@ -24,6 +24,9 @@ const API_ADDRESS = {
   user: {
     base: authServer + '/user',
     edit (userId) { return authServer + '/user/' + userId },
+    updatePhoto() {
+      return lumenServer + '/user/avatar'
+    },
     mobile: {
       resend: authServer + '/mobile/resend',
       verify: authServer + '/mobile/verify'
@@ -34,7 +37,7 @@ const API_ADDRESS = {
       status: lumenServer + '/payment/status',
       userOrders: lumenServer + '/orders'
     },
-    statistics: lumenServer + 'user/dashboard/statistics',
+    statistics: lumenServer + '/user/dashboard/statistics',
     feature: (feature) => lumenServer + '/user/feature?feature=' + feature
   },
   set: {
