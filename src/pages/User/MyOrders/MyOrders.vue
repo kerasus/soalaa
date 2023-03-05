@@ -365,9 +365,6 @@ export default {
     }
   },
   methods: {
-    logg (data) {
-      console.log('data', data)
-    },
     onPageChange(response) {
       if (!this.isFirstReq) {
         return
