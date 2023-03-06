@@ -11,7 +11,11 @@
       <!--            :show-search-button="false"
 -->
       <template #entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
-        <template v-if="inputData.col.name === 'actions'">
+        <template v-if="inputData.col.name === 'photo'">
+          <q-img :src="inputData.props.row.photo"
+                 width="50px" />
+        </template>
+        <template v-else-if="inputData.col.name === 'actions'">
           <q-btn round
                  flat
                  dense
@@ -125,6 +129,13 @@ export default {
       expanded: true,
       table: {
         columns: [
+          {
+            name: 'photo',
+            required: true,
+            label: 'تصویر',
+            align: 'left',
+            field: row => row.photo
+          },
           {
             name: 'title',
             required: true,
