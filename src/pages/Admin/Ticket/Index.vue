@@ -353,9 +353,6 @@ export default {
     }
   },
   methods: {
-    logg (data) {
-      console.log(data)
-    },
     rateImg (id) {
       if (id) {
         return 'https://nodes.alaatv.com/upload/ticket-rate-' + id + '-on.png'
