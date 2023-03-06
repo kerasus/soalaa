@@ -1,10 +1,27 @@
 @import "mixin";
+@import "src/css/Theme/Controls/input.scss";
 
 .form-builder-date-time-col {
-  //padding: 8px 12px 15px 12px;
   .outsideLabel {
     @include global-outsideLabel;
   }
+
+  .q-field--filled {
+    @include global-input;
+
+    .q-field__input{
+      padding: 8px 16px;
+    }
+
+    .q-field__inner {
+      background-color: var(--3a-Neutral2);
+
+      .q-field__control {
+        background-color: var(--3a-Neutral2);
+      }
+    }
+  }
+
   .form-calender {
     border-radius: 10px 0 0 10px;
     @include global-input;
@@ -81,6 +98,15 @@
   .time-input-dateTime {
     border-radius: 0 10px 10px 0;
     @include global-input;
+    &.q-field--standard.q-field--readonly {
+      .q-field__inner {
+        .q-field__control {
+          &:before {
+            border-bottom: none;
+          }
+        }
+      }
+    }
     .q-field__inner {
       .q-field__control {
         border-radius: 0 10px 10px 0;

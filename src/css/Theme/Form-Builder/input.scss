@@ -1,8 +1,25 @@
 @import "mixin";
+@import "src/css/Theme/Controls/input.scss";
 
 .form-builder-input-col {
   .outsideLabel {
     @include global-outsideLabel;
+  }
+
+  .q-field--filled {
+    @include global-input;
+
+    .q-field__input{
+      padding: 8px 16px;
+    }
+
+    .q-field__inner {
+      background-color: var(--3a-Neutral2);
+
+      .q-field__control {
+        background-color: var(--3a-Neutral2);
+      }
+    }
   }
 
   //padding: 8px 12px 15px 12px;
@@ -25,21 +42,3 @@
     @include global-input;
   }
 }
-
-.form-builder-input-col  .q-field--filled {
-  @include global-input;
-
-  .q-field__input{
-    padding: 8px 16px;
-  }
-
-  .q-field__inner {
-    background-color: var(--3a-Neutral2);
-
-    .q-field__control {
-      background-color: var(--3a-Neutral2);
-    }
-  }
-}
-
-
