@@ -1,6 +1,5 @@
 import process from 'process'
 const lumenServer = process.env.AAA_API
-// const lumenServerProduction = process.env.AAA_API_PRODUCTION
 const authServer = process.env.AUTH_API
 const timeServer = process.env.GET_TIME_SERVER
 const socketServer = process.env.SOCKET_SERVER
