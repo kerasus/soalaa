@@ -1,7 +1,6 @@
 @import "mixin";
 
-.form-builder-input-col,
-.form-builder-select-col {
+.form-builder-input-col {
   .outsideLabel {
     @include global-outsideLabel;
   }
