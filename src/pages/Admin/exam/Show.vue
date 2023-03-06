@@ -68,7 +68,7 @@ export default {
           type: 'formBuilder',
           col: 'col-md-4',
           value: [
-            { type: 'file', name: 'photo111', responseKey: 'data.photo', label: 'پیش نمایش تصویر', col: 'col-md-6', placeholder: ' ' }
+            { type: 'file', name: 'photo', responseKey: 'data.photo', label: 'پیش نمایش تصویر', col: 'col-md-6', placeholder: ' ' }
           ]
         },
         {

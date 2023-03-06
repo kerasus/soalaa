@@ -144,7 +144,7 @@ export default {
           value: [
             {
               type: 'file',
-              name: 'photo111',
+              name: 'photo',
               responseKey: 'data.photo',
               label: 'پیش نمایش تصویر',
               col: 'col-md-6',
