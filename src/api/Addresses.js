@@ -175,6 +175,7 @@ const API_ADDRESS = {
       return lumenServer + '/exam-question/booklet-file/' + examId
     },
     detachCategory: (examId, categoryId) => lumenServer + '/exam/detach/category/' + examId + '/' + categoryId,
+    attachCategories: (examId) => lumenServer + '/exam/attach/category/' + examId,
     user: {
       draft () { return lumenServer + '/exam/user/draft' },
       reportType: lumenServer + '/option/user?type=question_report_type',
