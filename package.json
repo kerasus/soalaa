@@ -45,7 +45,7 @@
     "videojs-brand": "^0.0.4",
     "videojs-hotkeys": "^0.2.28",
     "vue": "^3.2.45",
-    "vue-advanced-cropper": "^2.8.3",
+    "vue-advanced-cropper": "^2.8.8",
     "vue-audio-visual": "^2.5.0",
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.1.6",
