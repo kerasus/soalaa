@@ -10,15 +10,19 @@
     >
       <!--            :show-search-button="false"
 -->
-      <template #entity-index-table-cell="{props, col, showConfirmRemoveDialog}">
-        <template v-if="col.name === 'actions'">
+      <template #entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
+        <template v-if="inputData.col.name === 'photo'">
+          <q-img :src="inputData.props.row.photo"
+                 width="50px" />
+        </template>
+        <template v-else-if="inputData.col.name === 'actions'">
           <q-btn round
                  flat
                  dense
                  size="md"
                  color="info"
                  icon="isax:eye"
-                 :to="{name:'Admin.Exam.Show', params: {id: props.row.id}}"
+                 :to="{name:'Admin.Exam.Show', params: {id: inputData.props.row.id}}"
           >
             <q-tooltip anchor="top middle"
                        self="bottom middle">
@@ -36,7 +40,7 @@
                  size="md"
                  color="indigo"
                  icon="auto_stories"
-                 :to="{name:'Admin.Exam.Categories', params: {exam_id: props.row.id , examTitle: props.row.title}}"
+                 :to="{name:'Admin.Exam.Categories', params: {exam_id: inputData.props.row.id , examTitle: inputData.props.row.title}}"
           >
             <q-tooltip anchor="top middle"
                        self="bottom middle">
@@ -60,7 +64,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{name:'Admin.Exam.AllResults', params: {id: props.row.id}}"
+                  :to="{name:'Admin.Exam.AllResults', params: {id: inputData.props.row.id}}"
                 >
                   <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>
                 </q-item>
@@ -68,7 +72,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{name:'Admin.Exam.Lessons.List', params: {quizId: props.row.id, quizTitle: props.row.title}}"
+                  :to="{name:'Admin.Exam.Lessons.List', params: {quizId: inputData.props.row.id, quizTitle: inputData.props.row.title}}"
                 >
                   <q-item-section>کارنامه سرگروه</q-item-section>
                 </q-item>
@@ -85,7 +89,7 @@
                  size="md"
                  color="info"
                  icon="info"
-                 :to="{name:'Admin.Exam.MoreActions', params: {id: props.row.id}}">
+                 :to="{name:'Admin.Exam.MoreActions', params: {id: inputData.props.row.id}}">
             <q-tooltip anchor="top middle"
                        self="bottom middle">
               عملیات بیشتر
@@ -97,7 +101,7 @@
                  size="md"
                  color="red"
                  icon="delete"
-                 @click="showConfirmRemoveDialog(props.row, 'id', getRemoveMessage(props.row))">
+                 @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
             <q-tooltip anchor="top middle"
                        self="bottom middle">
               حذف آزمون
@@ -106,7 +110,7 @@
 
         </template>
         <template v-else>
-          {{ col.value }}
+          {{ inputData.col.value }}
         </template>
       </template>
     </entity-index>
@@ -125,6 +129,13 @@ export default {
       expanded: true,
       table: {
         columns: [
+          {
+            name: 'photo',
+            required: true,
+            label: 'تصویر',
+            align: 'left',
+            field: row => row.photo
+          },
           {
             name: 'title',
             required: true,

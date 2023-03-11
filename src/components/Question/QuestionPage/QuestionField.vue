@@ -281,6 +281,12 @@ export default {
     direction: ltr #{"/* rtl:ignore */"};
   }
 }
+// todo : direction must be checked
+//.type-section {
+//  .katex {
+//    direction: ltr #{"/* rtl:ignore */"};
+//  }
+//}
 
 .type-section.katex * {
 }

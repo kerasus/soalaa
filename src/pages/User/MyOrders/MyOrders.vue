@@ -83,13 +83,13 @@
             </div>
           </q-expansion-item>
         </template>
-        <template #entity-index-table-cell="{props, col}">
-          <template v-if="col.name === 'details'">
+        <template #entity-index-table-cell="{inputData}">
+          <template v-if="inputData.col.name === 'details'">
             <q-btn round
                    flat
                    dense
                    size="md"
-                   @click="showDetailsDialog(props.row)"
+                   @click="showDetailsDialog(inputData.props.row)"
             >
               <!--              <q-tooltip anchor="top middle"-->
               <!--                         self="bottom middle">-->
@@ -123,10 +123,10 @@
             </q-btn>
           </template>
           <template v-else>
-            {{ col.value }}
+            {{ inputData.col.value }}
           </template>
         </template>
-        <template v-slot:table-item-cell="{inputData}">
+        <template v-slot:entity-index-table-item-cell="{inputData}">
           <q-card class="details-table-mobile">
             <div class="details-info">
               <div class="item">
