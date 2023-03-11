@@ -233,7 +233,7 @@ export default {
         years: [],
         types: [],
         statuses: [],
-        tags_with_childrens: 0
+        tags_with_childrens: 1
       }
     }
   },
@@ -337,7 +337,7 @@ export default {
       this.changeFilterData('types', value)
     },
     onSearchSingleNode(value) {
-      const sendData = value ? 1 : 0
+      const sendData = value ? 0 : 1
       this.changeFilterData('tags_with_childrens', sendData)
     },
     tickedData (value) {
