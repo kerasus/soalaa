@@ -113,7 +113,7 @@
                  size="md"
                  color="black"
                  icon="isax:book-1"
-                 :to="getParticipateExamPageRoute(inputData.props.row.id)"
+                 :to="{name: 'onlineQuiz.alaaView', params: { quizId: inputData.props.row.id, questNumber: 1 }}"
           >
             <q-tooltip anchor="top middle"
                        self="bottom middle">
@@ -213,15 +213,7 @@ export default {
     //   this.api = API_ADDRESS.exam.base(this.tableKeys.currentPage)
     // }
   },
-  computed: {
-    getParticipateExamPageRoute () {
-      return (examId) => {
-        return {
-          name: 'onlineQuiz.alaaView', params: { quizId: examId, questNumber: 1 }
-        }
-      }
-    }
-  },
+  computed: {},
   methods: {
     showExam (id) {
       this.$router.push({
