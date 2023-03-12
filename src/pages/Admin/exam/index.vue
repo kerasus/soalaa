@@ -107,7 +107,19 @@
               حذف آزمون
             </q-tooltip>
           </q-btn>
-
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="black"
+                 icon="isax:book-1"
+                 :to="getParticipateExamPageRoute(inputData.props.row.id)"
+          >
+            <q-tooltip anchor="top middle"
+                       self="bottom middle">
+              شرکت در آزمون
+            </q-tooltip>
+          </q-btn>
         </template>
         <template v-else>
           {{ inputData.col.value }}
@@ -201,7 +213,23 @@ export default {
     //   this.api = API_ADDRESS.exam.base(this.tableKeys.currentPage)
     // }
   },
+  computed: {
+    getParticipateExamPageRoute () {
+      return (examId) => {
+        return {
+          name: 'onlineQuiz.alaaView', params: { quizId: examId, questNumber: 1 }
+        }
+      }
+    }
+  },
   methods: {
+    goToParticipateExamPage (exam, retake, personal) {
+      let routeName = this.getParticipateExamPageRoute(retake, personal)
+      if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
+        routeName = 'onlineQuiz.mbtiBartle'
+      }
+      this.$router.push({ name: routeName, params: { quizId: exam.id, questNumber: 1 } })
+    },
     showExam (id) {
       this.$router.push({
         name: 'Admin.Exam.Show',
