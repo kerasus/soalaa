@@ -223,13 +223,6 @@ export default {
     }
   },
   methods: {
-    goToParticipateExamPage (exam, retake, personal) {
-      let routeName = this.getParticipateExamPageRoute(retake, personal)
-      if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
-        routeName = 'onlineQuiz.mbtiBartle'
-      }
-      this.$router.push({ name: routeName, params: { quizId: exam.id, questNumber: 1 } })
-    },
     showExam (id) {
       this.$router.push({
         name: 'Admin.Exam.Show',
