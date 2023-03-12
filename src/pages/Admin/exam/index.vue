@@ -107,7 +107,19 @@
               حذف آزمون
             </q-tooltip>
           </q-btn>
-
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="black"
+                 icon="isax:book-1"
+                 :to="{name: 'onlineQuiz.alaaView', params: { quizId: inputData.props.row.id, questNumber: 1 }}"
+          >
+            <q-tooltip anchor="top middle"
+                       self="bottom middle">
+              شرکت در آزمون
+            </q-tooltip>
+          </q-btn>
         </template>
         <template v-else>
           {{ inputData.col.value }}
@@ -201,6 +213,7 @@ export default {
     //   this.api = API_ADDRESS.exam.base(this.tableKeys.currentPage)
     // }
   },
+  computed: {},
   methods: {
     showExam (id) {
       this.$router.push({
