@@ -46,7 +46,7 @@
                 :transition-duration="defaultOptions.transition.transitionDuration"
                 :height="defaultOptions.styles.height ? defaultOptions.styles.height : 'auto'"
                 :class="defaultOptions.styles.classes"
-                class="slider-widget">
+                class="slider-widget bg-transparent">
       <q-carousel-slide v-for="(slide, index) in options.list"
                         :key="index"
                         :name="index">
@@ -75,39 +75,6 @@
   </div>
 </template>
 
-<!--<script>-->
-<!--import API_ADDRESS from 'src/api/Addresses'-->
-<!--export default {-->
-<!--  name: 'Slider',-->
-<!--  data: () => ({-->
-<!--    loading: false,-->
-<!--    slideList: [],-->
-<!--    slide: 1,-->
-<!--    autoplay: false-->
-<!--  }),-->
-<!--  props: {-->
-<!--    getData: {-->
-<!--      type: Function,-->
-<!--      default: () => {}-->
-<!--    }-->
-<!--  },-->
-<!--  created() {-->
-<!--    this.initPageData()-->
-<!--  },-->
-<!--  methods: {-->
-<!--    async initPageData() {-->
-<!--      this.loading = true-->
-<!--      try {-->
-<!--        const response = await this.getData(API_ADDRESS.homePage.base)-->
-<!--        this.slideList = response.data.data.slider-->
-<!--        this.loading = false-->
-<!--      } catch (e) {-->
-<!--        this.loading = false-->
-<!--      }-->
-<!--    }-->
-<!--  }-->
-<!--}-->
-<!--</script>-->
 <script>
 import { ref } from 'vue'
 import { BannerList } from 'src/models/Banner.js'

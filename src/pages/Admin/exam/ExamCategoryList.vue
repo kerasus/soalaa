@@ -1,7 +1,15 @@
 <template>
   <div class="exam-category-list">
     <div class="tableSize">
-      <div>{{ examTitle }}</div>
+      <div>
+        <template v-if="!categoryList.loading">
+          {{ examTitle }}
+        </template>
+        <template v-else>
+          <q-skeleton type="text"
+                      width="150px" />
+        </template>
+      </div>
       <q-btn
         round
         dark-percentage
@@ -16,10 +24,7 @@
         </q-tooltip>
       </q-btn>
     </div>
-    <q-markup-table
-      v-if="!categoryList.loading"
-      class="tableSize"
-    >
+    <q-markup-table class="tableSize">
       <template v-slot:default>
         <thead>
           <tr>
@@ -32,31 +37,56 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="category in categoryList.list"
-            :key="category.id"
-          >
-            <td>{{ category.title }}</td>
-            <td class="actionsColumn">
-              <div class="row q-pt-sm justify-center">
-                <div class="col-auto">
-                  <q-btn
-                    round
-                    dark-percentage
-                    color="primary"
-                    icon="isax:arrow-left-2"
-                    @click="goToSubCategoryList(category.id)"
-                  >
-                    <q-tooltip anchor="top middle"
-                               self="bottom middle"
-                               :offset="[10, 10]">
-                      <span class="smallFontSize">رفتن به صفحه {{ category.title }}</span>
-                    </q-tooltip>
-                  </q-btn>
-                </div>
+          <template v-if="!categoryList.loading">
+            <template v-if="categoryList.list.length > 0">
+              <tr v-for="category in categoryList.list"
+                  :key="category.id"
+              >
+                <td>{{ category.title }}</td>
+                <td class="actionsColumn">
+                  <div class="row q-pt-sm justify-center">
+                    <div class="col-auto">
+                      <q-btn
+                        round
+                        dark-percentage
+                        color="primary"
+                        icon="isax:arrow-left-2"
+                        @click="goToSubCategoryList(category.id)"
+                      >
+                        <q-tooltip anchor="top middle"
+                                   self="bottom middle"
+                                   :offset="[10, 10]">
+                          <span class="smallFontSize">رفتن به صفحه {{ category.title }}</span>
+                        </q-tooltip>
+                      </q-btn>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </template>
+            <template v-else>
+              <div class="row justify-center q-pa-md">
+                دفترچه ای برای این آزمون وجود ندارد
               </div>
-            </td>
-          </tr>
+            </template>
+          </template>
+          <template v-else>
+            <tr
+              v-for="counter in [1, 2, 3, 4, 5]"
+              :key="counter"
+            >
+              <td>
+                <q-skeleton type="text" />
+              </td>
+              <td class="actionsColumn">
+                <div class="row q-pt-sm justify-center">
+                  <div class="col-auto">
+                    <q-skeleton type="QBtn" />
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </template>
     </q-markup-table>

@@ -2,7 +2,15 @@
   <div class="row">
     <div class="col-12">
       <div class="tableSize">
-        <span>{{ examTitle }}</span>
+        <div>
+          <template v-if="!subcategoryList.loading">
+            {{ examTitle }}
+          </template>
+          <template v-else>
+            <q-skeleton type="text"
+                        width="150px" />
+          </template>
+        </div>
         <q-btn
           class="q-mx-sm float-right"
           round
@@ -19,10 +27,7 @@
         </q-btn>
       </div>
     </div>
-    <div
-      v-if="!subcategoryList.loading"
-      class="col-12"
-    >
+    <div class="col-12">
       <q-markup-table class="tableSize">
         <template v-slot:default>
           <thead>
@@ -36,92 +41,115 @@
             </tr>
           </thead>
           <tbody>
-            <template
-              v-if="subcategoryList.length"
-            >
-              <tr
-                v-for="subcategory in subcategoryList"
-                :key="subcategory.id"
+            <template v-if="!subcategoryList.loading">
+              <template v-if="subcategoryList.length">
+                <tr
+                  v-for="subcategory in subcategoryList"
+                  :key="subcategory.id"
+                >
+                  <td>{{ subcategory.title }}</td>
+                  <td class="actionsColumn">
+                    <div>
+                      <q-input
+                        v-model="subcategory.order"
+                        type="number"
+                        :loading="subcategory.loading"
+                        :disabled="subcategory.loading"
+                        label="ترتیب درس"
+                        hide-details="auto"
+                        class="mb-2"
+                      >
+                        <q-btn
+                          class="q-mx-sm float-right"
+                          size="1px"
+                          fab-mini
+                          dark-percentage
+                          color="primary"
+                          flat
+                          @click="updateOrder(subcategory)"
+                        >
+                          <q-icon
+                            name="mdi-pencil"
+                            size="sm"
+                          />
+                        </q-btn>
+                      </q-input>
+                    </div>
+                    <div class="row q-pt-sm">
+                      <div class="col-6">
+                        <q-btn
+                          :style="{ 'width':'90%' , 'height':'90%' }"
+                          class="q-mx-sm"
+                          size="12px"
+                          dark-percentage
+                          color="green"
+                          @click="redirectToSubCategoryQuestions(subcategory.id)">
+                          <q-icon
+                            name="mdi-notebook-outline"
+                            size="sm"
+                          />
+                          <q-tooltip anchor="top middle"
+                                     self="bottom middle"
+                                     :offset="[10, 10]">
+                            <span class="smallFontSize">مشاهده سوالات دروس</span>
+                          </q-tooltip>
+                        </q-btn>
+                      </div>
+                      <div class="col-6">
+                        <q-btn class="q-mx-sm"
+                               size="12px"
+                               :style="{ 'width':'90%' , 'height':'90%' }"
+                               dark-percentage
+                               color="blue"
+                               :to="{ name: 'Admin.Exam.video.set',
+                                      params: {
+                                        subcategory_id: subcategory.id,
+                                        examId: examId
+                                      }}"
+                        >
+                          <q-icon
+                            name="mdi-video"
+                            size="sm"
+                          />
+                          <q-tooltip anchor="top middle"
+                                     self="bottom middle"
+                                     :offset="[10, 10]">
+                            <span class="smallFontSize">ثبت ویدئو تحلیل</span>
+                          </q-tooltip>
+                        </q-btn>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </template>
+              <template v-else>
+                <div class="row justify-center q-pa-md">
+                  درسی برای این دفترچه وجود ندارد
+                </div>
+              </template>
+            </template>
+            <template v-else>
+              <tr v-for="counter in [1, 2, 3, 4, 5]"
+                  :key="counter"
               >
-                <td>{{ subcategory.title }}</td>
+                <td>
+                  <q-skeleton type="text" />
+                </td>
                 <td class="actionsColumn">
                   <div>
-                    <q-input
-                      v-model="subcategory.order"
-                      type="number"
-                      :loading="subcategory.loading"
-                      :disabled="subcategory.loading"
-                      label="ترتیب درس"
-                      hide-details="auto"
-                      class="mb-2"
-                    >
-                      <q-btn
-                        class="q-mx-sm float-right"
-                        size="1px"
-                        fab-mini
-                        dark-percentage
-                        color="primary"
-                        flat
-                        @click="updateOrder(subcategory)"
-                      >
-                        <q-icon
-                          name="mdi-pencil"
-                          size="sm"
-                        />
-                      </q-btn>
-                    </q-input>
+                    <q-skeleton type="QInput"
+                                height="25px" />
                   </div>
                   <div class="row q-pt-sm">
                     <div class="col-6">
-                      <q-btn
-                        :style="{ 'width':'90%' , 'height':'90%' }"
-                        class="q-mx-sm"
-                        size="12px"
-                        dark-percentage
-                        color="green"
-                        @click="redirectToSubCategoryQuestions(subcategory.id)">
-                        <q-icon
-                          name="mdi-notebook-outline"
-                          size="sm"
-                        />
-                        <q-tooltip anchor="top middle"
-                                   self="bottom middle"
-                                   :offset="[10, 10]">
-                          <span class="smallFontSize">مشاهده سوالات دروس</span>
-                        </q-tooltip>
-                      </q-btn>
+                      <q-skeleton type="QBtn" />
                     </div>
                     <div class="col-6">
-                      <q-btn class="q-mx-sm"
-                             size="12px"
-                             :style="{ 'width':'90%' , 'height':'90%' }"
-                             dark-percentage
-                             color="blue"
-                             :to="{ name: 'Admin.Exam.video.set',
-                                    params: {
-                                      subcategory_id: subcategory.id,
-                                      examId: examId
-                                    }}"
-                      >
-                        <q-icon
-                          name="mdi-video"
-                          size="sm"
-                        />
-                        <q-tooltip anchor="top middle"
-                                   self="bottom middle"
-                                   :offset="[10, 10]">
-                          <span class="smallFontSize">ثبت ویدئو تحلیل</span>
-                        </q-tooltip>
-                      </q-btn>
+                      <q-skeleton type="QBtn" />
                     </div>
                   </div>
                 </td>
               </tr>
-            </template>
-            <template v-else>
-              <div class="row justify-center q-pa-md">
-                درسی برای این دفترچه وجود ندارد
-              </div>
             </template>
           </tbody>
         </template>

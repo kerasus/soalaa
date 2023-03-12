@@ -72,8 +72,6 @@ const Time = (function () {
   }
 
   function getRemainTime (endTime, formattedTime) {
-    // const end = moment(endTime)
-    // const present = moment(now())
     const remainDiff = diff(endTime, now())
     if (typeof formattedTime === 'undefined' || formattedTime === true) {
       return msToTime(remainDiff)
@@ -82,10 +80,8 @@ const Time = (function () {
   }
 
   function msToTime (s) {
-    // Pad to 2 or 3 digits, default is 2
-    const pad = (n, z = 2) => ('00' + n).slice(-z)
-    // + '.' + pad(s%1000, 3)
-    return pad(s / 3.6e6 | 0, 3) + ':' + pad((s % 3.6e6) / 6e4 | 0) + ':' + pad((s % 6e4) / 1000 | 0)
+    const pad = (n) => n.toString().padStart(2, '0')
+    return pad(s / 3.6e6 | 0) + ':' + pad((s % 3.6e6) / 6e4 | 0) + ':' + pad((s % 6e4) / 1000 | 0)
   }
 
   function addTime (amount, type, formattedTime, base) {
