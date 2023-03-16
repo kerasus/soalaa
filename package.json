@@ -18,7 +18,7 @@
     "@nodeguy/server-date": "^4.0.3",
     "@quasar/extras": "^1.15.8",
     "@silvermine/videojs-quality-selector": "^1.2.5",
-    "axios": "^1.2.2",
+    "axios": "^1.3.4",
     "core-js": "^3.26.1",
     "cropperjs": "^1.5.13",
     "crud": "^0.0.28",
