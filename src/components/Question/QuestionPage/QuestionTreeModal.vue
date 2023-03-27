@@ -256,13 +256,16 @@ export default {
       this.$emit('lessonSelected', lesson)
       this.showTreeModalNode(lesson)
     },
-    showTreeModalNode (item) {
+    async showTreeModalNode (item) {
       this.treeKey += 1
       this.dialogLoading = true
       this.showTree('tree', this.getNode(item.id))
         .then(() => {
           this.syncAllCheckedIds()
           this.selectWantedTree(this.lesson)
+          this.dialogLoading = false
+        })
+        .catch(() => {
           this.dialogLoading = false
         })
     },
