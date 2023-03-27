@@ -9,7 +9,7 @@ const mixinTree = {
             const node = response.data.data
             const treeComponent = this.$refs[refKey]
             if (!treeComponent) {
-              return
+              resolve(response)
             }
             treeComponent.createRoot({
               title: node.title,
