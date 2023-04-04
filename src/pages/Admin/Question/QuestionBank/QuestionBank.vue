@@ -356,7 +356,7 @@ export default {
           sort_by: 'created_at',
           sort_type: this.searchSelector.value,
           // statement: '',
-          tags_with_childrens: 0
+          tags_with_childrens: 1
         }
       }
       this.loadingQuestion.loading = true

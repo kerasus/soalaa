@@ -265,6 +265,9 @@ export default {
           this.selectWantedTree(this.lesson)
           this.dialogLoading = false
         })
+        .catch(() => {
+          this.dialogLoading = false
+        })
     },
     selectWantedTree (lesson) {
       if (this.chosenSubjects[lesson.id] && this.chosenSubjects[lesson.id].nodes) {
