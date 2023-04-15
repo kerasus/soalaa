@@ -107,7 +107,20 @@
               حذف آزمون
             </q-tooltip>
           </q-btn>
-
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="black"
+                 icon="isax:book-1"
+                 :loading="attendExamBtnLoading"
+                 @click="attendExam(inputData.props.row.id)"
+          >
+            <q-tooltip anchor="top middle"
+                       self="bottom middle">
+              شرکت در آزمون
+            </q-tooltip>
+          </q-btn>
         </template>
         <template v-else>
           {{ inputData.col.value }}
@@ -127,6 +140,7 @@ export default {
   data () {
     return {
       expanded: true,
+      attendExamBtnLoading: false,
       table: {
         columns: [
           {
@@ -201,7 +215,30 @@ export default {
     //   this.api = API_ADDRESS.exam.base(this.tableKeys.currentPage)
     // }
   },
+  computed: {},
   methods: {
+    registerExam (examId) {
+      return this.$axios.post(API_ADDRESS.exam.registerExam, { exam_id: examId })
+    },
+    attendExam (examId) {
+      this.attendExamBtnLoading = true
+      this.registerExam(examId)
+        .then((response) => {
+          this.$q.notify({
+            type: 'positive',
+            message: 'ثبت نام در آزمون با موفقیت انجام شد',
+            position: 'top'
+          })
+          this.attendExamBtnLoading = false
+          this.$router.push({
+            name: 'onlineQuiz.alaaView',
+            params: { quizId: examId, questNumber: 1 }
+          })
+        })
+        .catch(() => {
+          this.attendExamBtnLoading = false
+        })
+    },
     showExam (id) {
       this.$router.push({
         name: 'Admin.Exam.Show',
