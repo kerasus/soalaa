@@ -10,7 +10,7 @@ import { OrderProduct } from 'src/models/OrderProduct'
 const actions = {
 
   addToCart: (context, data) => {
-    const isUserLogin = !!this.getters['Auth/isUserLogin']
+    const isUserLogin = !!context.getters['Auth/isUserLogin']
     return new Promise((resolve, reject) => {
       if (isUserLogin) {
         axios
@@ -67,8 +67,8 @@ const actions = {
   // }
 
   reviewCart: (context, product) => {
-    const isUserLogin = this.getters['Auth/isUserLogin']
-    const currentCart = this.getters['Cart/cart']
+    const isUserLogin = !!context.getters['Auth/isUserLogin']
+    const currentCart = context.getters.cart
     const orders = []
     if (currentCart.items.list !== undefined && currentCart.items.list.length > 0) {
       currentCart.items.list.forEach(item => {
@@ -127,7 +127,7 @@ const actions = {
   },
 
   removeItemFromCart: (context, productId) => {
-    const isUserLogin = this.getters['Auth/isUserLogin']
+    const isUserLogin = context.getters['Auth/isUserLogin']
 
     return new Promise((resolve, reject) => {
       if (isUserLogin) {
@@ -148,7 +148,7 @@ const actions = {
             return reject(error)
           })
       } else {
-        const cart = this.getters['Cart/cart']
+        const cart = context.getters.cart
         cart.removeItem(productId)
         context.commit('updateCart', cart)
         return resolve()
@@ -157,7 +157,7 @@ const actions = {
   },
 
   deleteList: (context) => {
-    const isUserLogin = !!this.getters['Auth/isUserLogin']
+    const isUserLogin = !!context.getters['Auth/isUserLogin']
     const cart = context.getters.cart
 
     return new Promise((resolve, reject) => {

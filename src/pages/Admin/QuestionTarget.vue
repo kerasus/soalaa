@@ -8,39 +8,37 @@
   >
     <!--    {inputData, showConfirmRemoveDialog}-->
     <template v-slot:entity-crud-table-cell="{inputData,showConfirmRemoveDialog}">
-      <q-td :props="inputData.props">
-        <template v-if="inputData.props.col.name === 'actions'">
-          <q-btn round
-                 flat
-                 dense
-                 size="md"
-                 color="info"
-                 icon="info"
-                 :to="{name:'Admin.QuestionTarget.Show', params: {id: inputData.props.row.id}}">
-            <q-tooltip>
-              مشاهده
-            </q-tooltip>
-          </q-btn>
-          <q-btn round
-                 flat
-                 dense
-                 size="md"
-                 color="negative"
-                 icon="delete"
-                 class="q-ml-md"
-                 @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
-            <q-tooltip>
-              حذف
-            </q-tooltip>
-          </q-btn>
-        </template>
-        <template v-else-if="inputData.props.col.name === 'description'">
-          <div v-html="inputData.props.value" />
-        </template>
-        <template v-else>
-          {{ inputData.props.value }}
-        </template>
-      </q-td>
+      <template v-if="inputData.col.name === 'actions'">
+        <q-btn round
+               flat
+               dense
+               size="md"
+               color="info"
+               icon="info"
+               :to="{name:'Admin.QuestionTarget.Show', params: {id: inputData.props.row.id}}">
+          <q-tooltip>
+            مشاهده
+          </q-tooltip>
+        </q-btn>
+        <q-btn round
+               flat
+               dense
+               size="md"
+               color="negative"
+               icon="delete"
+               class="q-ml-md"
+               @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
+          <q-tooltip>
+            حذف
+          </q-tooltip>
+        </q-btn>
+      </template>
+      <template v-else-if="inputData.col.name === 'description'">
+        <div v-html="inputData.col.value" />
+      </template>
+      <template v-else>
+        {{ inputData.col.value }}
+      </template>
     </template>
   </entity-crud>
 </template>

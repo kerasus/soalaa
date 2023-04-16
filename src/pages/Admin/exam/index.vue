@@ -10,15 +10,19 @@
     >
       <!--            :show-search-button="false"
 -->
-      <template #entity-index-table-cell="{props, col, showConfirmRemoveDialog}">
-        <template v-if="col.name === 'actions'">
+      <template #entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
+        <template v-if="inputData.col.name === 'photo'">
+          <q-img :src="inputData.props.row.photo"
+                 width="50px" />
+        </template>
+        <template v-else-if="inputData.col.name === 'actions'">
           <q-btn round
                  flat
                  dense
                  size="md"
                  color="info"
                  icon="isax:eye"
-                 :to="{name:'Admin.Exam.Show', params: {id: props.row.id}}"
+                 :to="{name:'Admin.Exam.Show', params: {id: inputData.props.row.id}}"
           >
             <q-tooltip anchor="top middle"
                        self="bottom middle">
@@ -36,7 +40,7 @@
                  size="md"
                  color="indigo"
                  icon="auto_stories"
-                 :to="{name:'Admin.Exam.Categories', params: {exam_id: props.row.id , examTitle: props.row.title}}"
+                 :to="{name:'Admin.Exam.Categories', params: {exam_id: inputData.props.row.id , examTitle: inputData.props.row.title}}"
           >
             <q-tooltip anchor="top middle"
                        self="bottom middle">
@@ -60,7 +64,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{name:'Admin.Exam.AllResults', params: {id: props.row.id}}"
+                  :to="{name:'Admin.Exam.AllResults', params: {id: inputData.props.row.id}}"
                 >
                   <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>
                 </q-item>
@@ -68,7 +72,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{name:'Admin.Exam.Lessons.List', params: {quizId: props.row.id, quizTitle: props.row.title}}"
+                  :to="{name:'Admin.Exam.Lessons.List', params: {quizId: inputData.props.row.id, quizTitle: inputData.props.row.title}}"
                 >
                   <q-item-section>کارنامه سرگروه</q-item-section>
                 </q-item>
@@ -85,7 +89,7 @@
                  size="md"
                  color="info"
                  icon="info"
-                 :to="{name:'Admin.Exam.MoreActions', params: {id: props.row.id}}">
+                 :to="{name:'Admin.Exam.MoreActions', params: {id: inputData.props.row.id}}">
             <q-tooltip anchor="top middle"
                        self="bottom middle">
               عملیات بیشتر
@@ -97,16 +101,29 @@
                  size="md"
                  color="red"
                  icon="delete"
-                 @click="showConfirmRemoveDialog(props.row, 'id', getRemoveMessage(props.row))">
+                 @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
             <q-tooltip anchor="top middle"
                        self="bottom middle">
               حذف آزمون
             </q-tooltip>
           </q-btn>
-
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="black"
+                 icon="isax:book-1"
+                 :loading="attendExamBtnLoading"
+                 @click="attendExam(inputData.props.row.id)"
+          >
+            <q-tooltip anchor="top middle"
+                       self="bottom middle">
+              شرکت در آزمون
+            </q-tooltip>
+          </q-btn>
         </template>
         <template v-else>
-          {{ col.value }}
+          {{ inputData.col.value }}
         </template>
       </template>
     </entity-index>
@@ -123,8 +140,16 @@ export default {
   data () {
     return {
       expanded: true,
+      attendExamBtnLoading: false,
       table: {
         columns: [
+          {
+            name: 'photo',
+            required: true,
+            label: 'تصویر',
+            align: 'left',
+            field: row => row.photo
+          },
           {
             name: 'title',
             required: true,
@@ -190,7 +215,30 @@ export default {
     //   this.api = API_ADDRESS.exam.base(this.tableKeys.currentPage)
     // }
   },
+  computed: {},
   methods: {
+    registerExam (examId) {
+      return this.$axios.post(API_ADDRESS.exam.registerExam, { exam_id: examId })
+    },
+    attendExam (examId) {
+      this.attendExamBtnLoading = true
+      this.registerExam(examId)
+        .then((response) => {
+          this.$q.notify({
+            type: 'positive',
+            message: 'ثبت نام در آزمون با موفقیت انجام شد',
+            position: 'top'
+          })
+          this.attendExamBtnLoading = false
+          this.$router.push({
+            name: 'onlineQuiz.alaaView',
+            params: { quizId: examId, questNumber: 1 }
+          })
+        })
+        .catch(() => {
+          this.attendExamBtnLoading = false
+        })
+    },
     showExam (id) {
       this.$router.push({
         name: 'Admin.Exam.Show',

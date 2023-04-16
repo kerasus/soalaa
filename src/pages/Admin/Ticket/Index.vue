@@ -8,47 +8,45 @@
       :table-keys="tableKeys"
       :create-route-name="'Admin.Ticket.Create'"
     >
-      <template v-slot:table-cell="{inputData, showConfirmRemoveDialog}">
-        <q-td :props="inputData.props">
-          <template v-if="inputData.props.col.name === 'status'">
-            <q-chip :color="checkStatusColor(inputData.props.row.status.id)"
-                    :style="{color: '#FFF', height: '26px'}">
-              {{ inputData.props.row.status.title }}
-            </q-chip>
-          </template>
-          <template v-if="inputData.props.col.name === 'score'">
-            <q-img :src="rateImg(inputData.props.row.rate)"
-                   class="rate-img" />
-          </template>
-          <template v-if="inputData.props.col.name === 'actions'">
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="info"
-                   icon="info"
-                   :to="{name:'Admin.Ticket.Show', params: {id: inputData.props.row.id}}">
-              <q-tooltip>
-                مشاهده
-              </q-tooltip>
-            </q-btn>
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="negative"
-                   icon="delete"
-                   class="q-ml-md"
-                   @click="showConfirmRemoveDialog(inputData.props.row, 'id', 'آیا از حذف تیکت اطمینان دارید ؟')">
-              <q-tooltip>
-                حذف
-              </q-tooltip>
-            </q-btn>
-          </template>
-          <template v-else>
-            {{ inputData.props.value }}
-          </template>
-        </q-td>
+      <template v-slot:entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
+        <template v-if="inputData.col.name === 'status'">
+          <q-chip :color="checkStatusColor(inputData.props.row.status.id)"
+                  :style="{color: '#FFF', height: '26px'}">
+            {{ inputData.props.row.status.title }}
+          </q-chip>
+        </template>
+        <template v-if="inputData.col.name === 'score'">
+          <q-img :src="rateImg(inputData.props.row.rate)"
+                 class="rate-img" />
+        </template>
+        <template v-if="inputData.col.name === 'actions'">
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="info"
+                 icon="info"
+                 :to="{name:'Admin.Ticket.Show', params: {id: inputData.props.row.id}}">
+            <q-tooltip>
+              مشاهده
+            </q-tooltip>
+          </q-btn>
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="negative"
+                 icon="delete"
+                 class="q-ml-md"
+                 @click="showConfirmRemoveDialog(inputData.props.row, 'id', 'آیا از حذف تیکت اطمینان دارید ؟')">
+            <q-tooltip>
+              حذف
+            </q-tooltip>
+          </q-btn>
+        </template>
+        <template v-else>
+          {{ inputData.col.value }}
+        </template>
       </template>
     </entity-index>
   </div>
@@ -177,10 +175,17 @@ export default {
           type: 'entity',
           name: 'management',
           selectionMode: 'single',
-          label: 'مسؤل',
-          buttonColor: 'primary',
-          buttonTextColor: 'white',
-          buttonBadgeColor: 'secondary',
+          popUpButtonConfig: {
+            color: 'primary',
+            textColor: 'white',
+            badgeColor: 'secondary',
+            label: 'مسئول'
+          },
+          dialogConfirmButtonConfig: {
+            unelevated: true,
+            color: 'positive',
+            label: 'ثبت مسؤل'
+          },
           indexConfig: {
             apiAddress: 'https://reqres.in/api/users',
             tableTitle: 'لیست مسؤلین',
@@ -243,10 +248,17 @@ export default {
           type: 'entity',
           name: 'product',
           selectionMode: 'multiple',
-          label: 'انتخاب محصول',
-          buttonColor: 'primary',
-          buttonTextColor: 'white',
-          buttonBadgeColor: 'secondary',
+          popUpButtonConfig: {
+            color: 'primary',
+            textColor: 'white',
+            badgeColor: 'secondary',
+            label: 'انتخاب محصول'
+          },
+          dialogConfirmButtonConfig: {
+            unelevated: true,
+            color: 'positive',
+            label: 'ثبت محصول'
+          },
           indexConfig: {
             apiAddress: API_ADDRESS.product.index.base,
             tableTitle: 'لیست محصولات',

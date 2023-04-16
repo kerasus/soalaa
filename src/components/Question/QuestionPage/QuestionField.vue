@@ -60,7 +60,8 @@ export default {
       html: '',
       loading: false,
       btnLoading: false,
-      isValueChangeAllowed: false
+      isValueChangeAllowed: false,
+      modifiedContent: ''
     }
   },
   inject: {
@@ -94,16 +95,17 @@ export default {
         this.value = value
       }
     },
-    setModifiedValue(superModifyMode = false) {
+    setModifiedValue(criticalModifyingMode = false) {
       if (!this.$refs.tiptap) {
         return
       }
       this.btnLoading = true
-      this.setModifiedContent(this.value, superModifyMode)
+      this.setModifiedContent(this.value, criticalModifyingMode)
       this.btnLoading = false
     },
-    setModifiedContent(input, superModifyMode) {
-      this.value = this.getModifiedContent(input, superModifyMode)
+    setModifiedContent(input, criticalModifyingMode) {
+      this.value = this.getModifiedContent(input, criticalModifyingMode)
+      this.modifiedContent = this.value
       this.$refs.tiptap.setContent(this.value)
     },
     getContent() {
@@ -118,7 +120,7 @@ export default {
       this.value = html
       this.loading = false
     },
-    getModifiedContent(input, superModifyMode) {
+    getModifiedContent(input, criticalModifyingMode) {
       let modifiedValue = input
       modifiedValue = this.removeImageWithLocalSrc(input)
       modifiedValue = this.fixWidehatProblemFromLatex(modifiedValue)
@@ -128,9 +130,12 @@ export default {
       modifiedValue = this.removeEmptyDataKatexElements(modifiedValue)
       modifiedValue = this.modifyCombination(modifiedValue)
       modifiedValue = this.removeFirstAndLastBracket(modifiedValue)
-      if (superModifyMode) {
+      modifiedValue = this.fixRightArrowBug(modifiedValue)
+      if (criticalModifyingMode) {
         modifiedValue = this.modifyMultilineWithPublishConvertor(modifiedValue)
         modifiedValue = this.modifyMultilineWithFormatConvertor(modifiedValue)
+        modifiedValue = this.correctParenthesis(modifiedValue)
+        modifiedValue = this.fixRightArrowBug(modifiedValue)
       }
       return modifiedValue
     },
@@ -216,6 +221,27 @@ export default {
         finalResult = finalResult.replace('end{align}', 'end{array}')
         return finalResult
       })
+    },
+    correctParenthesis (input) {
+      const regex = /(\\left\()(.*?)(\\right)./gms
+      return input.replaceAll(regex, (result) => {
+        const lastCharOfResult = result.substring(result.length - 1)
+        let finalResult = result
+        if (lastCharOfResult === '?') {
+          finalResult = result.substring(0, result.length - 1) + ')'
+        } else if (lastCharOfResult !== ')') {
+          finalResult = result.substring(0, result.length - 1) + ')' + lastCharOfResult
+        }
+        return finalResult
+      })
+    },
+    fixRightArrowBug(input) {
+      const regex = /(\\left\()([^)]*)(\\right\)arrow)/gms
+      return input.replaceAll(regex, (result) => {
+        let finalResult = result
+        finalResult = finalResult.replaceAll('\\right)arrow', '\\rightarrow')
+        return finalResult
+      })
     }
   }
 }
@@ -252,8 +278,15 @@ export default {
   line-height: 4rem;
   .katex {
     font-size: 1.9rem;
+    direction: ltr #{"/* rtl:ignore */"};
   }
 }
+// todo : direction must be checked
+//.type-section {
+//  .katex {
+//    direction: ltr #{"/* rtl:ignore */"};
+//  }
+//}
 
 .type-section.katex * {
 }

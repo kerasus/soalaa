@@ -1,7 +1,7 @@
-import { Question, QuestionList } from 'src/models/Question'
-import { Exam } from 'src/models/Exam'
-import Time from 'src/plugins/time'
-import Assistant from 'src/plugins/assistant'
+import Time from 'src/plugins/time.js'
+import { Exam } from 'src/models/Exam.js'
+import Assistant from 'src/plugins/assistant.js'
+import { Question, QuestionList } from 'src/models/Question.js'
 
 function removeFromFailedList (state, payload, key) {
   const questionId = payload
@@ -14,10 +14,10 @@ function removeFromFailedList (state, payload, key) {
 }
 
 const mutations = {
-  setPsychometricAnswer: (state, newInfo) => {
+  setPsychometricAnswer (state, newInfo) {
     state.psychometricAnswer = newInfo
   },
-  resetState: (state) => {
+  resetState (state) {
     this.commit('Auth/updateUser', null)
     this.commit('Auth/updateAccessToken', null)
 
@@ -25,10 +25,10 @@ const mutations = {
     state.currentQuestion = null
     state.userQuizListData = {}
   },
-  updateUserQuizListDataExam: (state, newInfo) => {
+  updateUserQuizListDataExam (state, newInfo) {
     state.userQuizListData = newInfo
   },
-  mergeDbAnswersIntoLocalstorage: (state, payload) => {
+  mergeDbAnswersIntoLocalstorage (state, payload) {
     const serverAnswers = payload.dbAnswers
     const force = !!payload.force
     const userExamId = Assistant.getId(payload.user_exam_id)
@@ -101,7 +101,7 @@ const mutations = {
       state.userQuizListData[userExamId][questionId].change_status_at = serverItem.selected_at
     }, force)
   },
-  createEmptyQuestionIfNotExistInLocal: (state, payload) => {
+  createEmptyQuestionIfNotExistInLocal (state, payload) {
     // const examId = payload.exam_id
     const userExamId = Assistant.getId(payload.user_exam_id)
     const questionId = payload.question_id
@@ -112,10 +112,10 @@ const mutations = {
       state.userQuizListData[userExamId][questionId] = {}
     }
   },
-  resetStatusFailedList: (state) => {
+  resetStatusFailedList (state) {
     state.failedListStatusData = []
   },
-  removeFromStatusFailedList: (state, payload) => {
+  removeFromStatusFailedList (state, payload) {
     removeFromFailedList(state, payload, 'failedListStatusData')
   // const questionId = payload
   // const target = state.failedListStatusData.findIndex(item => item.question_id === questionId)
@@ -124,13 +124,13 @@ const mutations = {
   // }
   // state.failedListStatusData.splice(target, 1)
   },
-  pushToStatusFailedList: (state, payload) => {
+  pushToStatusFailedList (state, payload) {
     state.failedListStatusData.push(payload)
   },
-  resetBookmarkFailedList: (state) => {
+  resetBookmarkFailedList (state) {
     state.failedListBookmarkData = []
   },
-  removeFromBookmarkFailedList: (state, payload) => {
+  removeFromBookmarkFailedList (state, payload) {
     removeFromFailedList(state, payload, 'failedListBookmarkData')
   // const questionId = payload
   // const target = state.failedListBookmarkData.findIndex(item => item.question_id === questionId)
@@ -139,13 +139,13 @@ const mutations = {
   // }
   // state.failedListBookmarkData.splice(target, 1)
   },
-  pushToBookmarkFailedList: (state, payload) => {
+  pushToBookmarkFailedList (state, payload) {
     state.failedListBookmarkData.push(payload)
   },
-  resetUnBookmarkFailedList: (state) => {
+  resetUnBookmarkFailedList (state) {
     state.failedListUnBookmarkData = []
   },
-  removeFromUnBookmarkFailedList: (state, payload) => {
+  removeFromUnBookmarkFailedList (state, payload) {
     removeFromFailedList(state, payload, 'failedListUnBookmarkData')
   // const questionId = payload
   // const target = state.failedListUnBookmarkData.findIndex(item => item.question_id === questionId)
@@ -154,16 +154,16 @@ const mutations = {
   // }
   // state.failedListUnBookmarkData.splice(target, 1)
   },
-  pushToUnBookmarkFailedList: (state, payload) => {
+  pushToUnBookmarkFailedList (state, payload) {
     state.failedListUnBookmarkData.push(payload)
   },
-  resetAnswerFailedList: (state) => {
+  resetAnswerFailedList (state) {
     state.failedListAnswerData = {
       exam_user_id: null,
       questions: []
     }
   },
-  removeFromAnswerFailedList: (state, payload) => {
+  removeFromAnswerFailedList (state, payload) {
     removeFromFailedList(state, payload, 'failedListAnswerData')
   // const questionId = payload
   // const target = state.failedListAnswerData.questions.findIndex(item => item.question_id === questionId)
@@ -172,11 +172,11 @@ const mutations = {
   // }
   // state.failedListAnswerData.questions.splice(target, 1)
   },
-  pushToAnswerFailedList: (state, payload) => {
+  pushToAnswerFailedList (state, payload) {
     state.failedListAnswerData.exam_user_id = payload.exam_user_id
     state.failedListAnswerData.questions = state.failedListAnswerData.questions.concat(payload.questions)
   },
-  changeQuestionBookmark: (state, payload) => {
+  changeQuestionBookmark (state, payload) {
     const userExamId = payload.user_exam_id
     const questionId = payload.question_id
     if (!userExamId || !questionId) {
@@ -190,7 +190,7 @@ const mutations = {
     state.userQuizListData[userExamId][questionId].change_bookmarked_at = changeBookmarkedAt
     state.userQuizListData[userExamId][questionId].bookmarked = payload.bookmarked
   },
-  changeQuestionSelectChoice: (state, payload) => {
+  changeQuestionSelectChoice (state, payload) {
     const userExamId = payload.user_exam_id
     const questionId = payload.question_id
     if (!userExamId || !questionId) {
@@ -204,7 +204,7 @@ const mutations = {
     state.userQuizListData[userExamId][questionId].answered_at = answeredAt
     state.userQuizListData[userExamId][questionId].answered_choice_id = payload.answered_choice_id
   },
-  changeQuestionStatus: (state, payload) => {
+  changeQuestionStatus (state, payload) {
     const userExamId = payload.user_exam_id
     const questionId = payload.question_id
     if (!userExamId || !questionId) {
@@ -218,7 +218,7 @@ const mutations = {
     state.userQuizListData[userExamId][questionId].change_status_at = changeStatusAt
     state.userQuizListData[userExamId][questionId].status = payload.status
   },
-  // setUserQuizListData: (state, payload) => {
+  // setUserQuizListData (state, payload) {
   //   const examId = Assistant.getId(payload.exam_id)
   //   const questionId = Assistant.getId(payload.question_id)
   //   if (!examId || !questionId) {
@@ -233,38 +233,38 @@ const mutations = {
   //     status: payload.status
   //   }
   // }
-  setQuiz: (state, newInfo) => {
+  setQuiz (state, newInfo) {
     state.quiz = newInfo
   },
-  updateQuiz: (state, newInfo) => {
+  updateQuiz (state, newInfo) {
     if (!newInfo) {
       return
     }
     newInfo.questions = new QuestionList()
     state.quiz = newInfo
   },
-  setExamAcceptAtIsPassed: (state) => {
+  setExamAcceptAtIsPassed (state) {
     state.quiz.accept_at_is_passed = true
   },
-  setActiveStateOfExamCategories: (state, newInfo) => {
+  setActiveStateOfExamCategories (state, newInfo) {
     if (!state.quiz) {
       return
     }
     Time.setStateOfExamCategories(state.quiz.categories.list, !!newInfo)
   },
-  setActiveStateOfQuestionsBasedOnActiveCategory: (state) => {
+  setActiveStateOfQuestionsBasedOnActiveCategory (state) {
     if (!state.quiz) {
       return
     }
     Time.setStateOfQuestionsBasedOnActiveCategory(state.quiz)
   },
-  setCurrentQuestion: (state, newInfo) => {
+  setCurrentQuestion (state, newInfo) {
     state.currentQuestion = new Question(newInfo)
   },
-  clearExamData: (state, userExamId) => {
+  clearExamData (state, userExamId) {
     delete state.userQuizListData[userExamId]
   },
-  checkIfQuestionExistInUserQuizListData: (state, questionId) => {
+  checkIfQuestionExistInUserQuizListData (state, questionId) {
     if (!state.userQuizListData[state.quiz.user_exam_id]) {
       state.userQuizListData[state.quiz.user_exam_id] = {}
     }
@@ -272,7 +272,7 @@ const mutations = {
       state.userQuizListData[state.quiz.user_exam_id][questionId] = {}
     }
   },
-  enterQuestion: (state, questionId) => {
+  enterQuestion (state, questionId) {
   // this.commit('Exam/checkIfQuestionExistInUserQuizListData', questionId)
 
     this.commit('Exam/checkIfQuestionExistInUserQuizListData', questionId)
@@ -283,7 +283,7 @@ const mutations = {
     checkInTimes.push({ start: Time.now(), end: null })
     state.userQuizListData[state.quiz.user_exam_id][questionId].check_in_times = checkInTimes
   },
-  leaveQuestion: (state, questionId) => {
+  leaveQuestion (state, questionId) {
     this.commit('Exam/checkIfQuestionExistInUserQuizListData', questionId)
     const checkInTimes = state.userQuizListData[state.quiz.user_exam_id][questionId].check_in_times
     if (!checkInTimes || checkInTimes.length === 0) {
@@ -294,10 +294,10 @@ const mutations = {
       return item.end
     })
   },
-  cleanCurrentQuestion: (state) => {
+  cleanCurrentQuestion (state) {
     state.currentQuestion = new Question()
   },
-  updateCurrentQuestion: (state, newInfo) => {
+  updateCurrentQuestion (state, newInfo) {
     const oldQuestionId = (!state.currentQuestion) ? false : Assistant.getId(state.currentQuestion.id)
     const newQuestionId = Assistant.getId(newInfo.newQuestionId)
     if (!state.quiz || newQuestionId === oldQuestionId || !Assistant.getId(state.quiz.user_exam_id)) {
@@ -338,20 +338,20 @@ const mutations = {
 
     state.currentQuestion = new Question(currentQuestion)
   },
-  reloadQuizModel: (state) => {
+  reloadQuizModel (state) {
     if (!state.quiz || !state.quiz.questions || typeof state.quiz.questions.getNextQuestion !== 'function') {
       state.quiz = new Exam(state.quiz)
     }
   },
-  reloadCurrentQuestionModel: (state) => {
+  reloadCurrentQuestionModel (state) {
     if (!state.currentQuestion || typeof state.currentQuestion.isAnswered !== 'function') {
       state.currentQuestion = new Question(state.currentQuestion)
     }
   },
-  updateCurrentExamFrozenQuestions: (state, newInfo) => {
+  updateCurrentExamFrozenQuestions (state, newInfo) {
     state.currentExamFrozenQuestions = newInfo
   }
-// export function changeQuestionRefreshQuestionObject: (state, payload) => {
+// export function changeQuestionRefreshQuestionObject (state, payload) {
 //   const examId = payload.exam_id
 //   const questionId = payload.question_id
 //   if (!state.userQuizListData[examId]) {

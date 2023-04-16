@@ -1,6 +1,5 @@
 import process from 'process'
 const lumenServer = process.env.AAA_API
-// const lumenServerProduction = process.env.AAA_API_PRODUCTION
 const authServer = process.env.AUTH_API
 const timeServer = process.env.GET_TIME_SERVER
 const socketServer = process.env.SOCKET_SERVER
@@ -24,6 +23,9 @@ const API_ADDRESS = {
   user: {
     base: authServer + '/user',
     edit (userId) { return authServer + '/user/' + userId },
+    updatePhoto() {
+      return lumenServer + '/user/avatar'
+    },
     mobile: {
       resend: authServer + '/mobile/resend',
       verify: authServer + '/mobile/verify'
@@ -34,7 +36,7 @@ const API_ADDRESS = {
       status: lumenServer + '/payment/status',
       userOrders: lumenServer + '/orders'
     },
-    statistics: lumenServer + 'user/dashboard/statistics',
+    statistics: lumenServer + '/user/dashboard/statistics',
     feature: (feature) => lumenServer + '/user/feature?feature=' + feature
   },
   set: {
@@ -173,6 +175,7 @@ const API_ADDRESS = {
       return lumenServer + '/exam-question/booklet-file/' + examId
     },
     detachCategory: (examId, categoryId) => lumenServer + '/exam/detach/category/' + examId + '/' + categoryId,
+    attachCategories: (examId) => lumenServer + '/exam/attach/category/' + examId,
     user: {
       draft () { return lumenServer + '/exam/user/draft' },
       reportType: lumenServer + '/option/user?type=question_report_type',
@@ -219,9 +222,9 @@ const API_ADDRESS = {
             newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
           }
         } else {
-          if (newFilter[paramKey]) {
-            newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
-          }
+          // if (newFilter[paramKey]) {
+          newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
+          // }
         }
       }
       setQueryParams('statuses')
@@ -230,10 +233,10 @@ const API_ADDRESS = {
       setQueryParams('reference')
       setQueryParams('tags')
       setQueryParams('level')
-      setQueryParams('statement', true)
+      // setQueryParams('statement', true)
       setQueryParams('sort_by', true)
       setQueryParams('sort_type', true)
-      setQueryParams('tags_with_childrens')
+      setQueryParams('tags_with_childrens', true)
 
       if (typeof page !== 'undefined') {
         page = '&page=' + page

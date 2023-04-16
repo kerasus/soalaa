@@ -5,7 +5,7 @@
     </div>
     <div class="title">سبد خرید شما خالی است!</div>
     <router-link
-      :to="{name: 'HomePage'}"
+      :to="{name: 'Landing.3aExams'}"
       class="back"
     >
       بازگشت به فروشگاه
