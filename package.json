@@ -39,7 +39,7 @@
     "quasar-crud": "^0.3.19",
     "quasar-form-builder": "^0.1.90",
     "quasar-template-builder": "^1.0.21",
-    "quasar-ui-q-page-builder": "^0.0.15",
+    "quasar-ui-q-page-builder": "^0.1.13",
     "socket.io-client": "^4.5.4",
     "video.js": "^7.21.1",
     "videojs-brand": "^0.0.4",
