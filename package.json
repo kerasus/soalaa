@@ -26,7 +26,7 @@
     "eslint-plugin-n": "^15.6.0",
     "filepond": "^4.30.4",
     "filepond-plugin-image-preview": "^4.6.11",
-    "firebase": "^9.15.0",
+    "firebase": "^9.19.0",
     "highcharts": "^10.3.2",
     "highcharts-vue": "^1.4.0",
     "html2pdf.js": "^0.10.1",
