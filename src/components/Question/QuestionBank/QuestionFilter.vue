@@ -127,6 +127,7 @@
       </question-filter-expansion>
 
       <question-filter-expansion
+        v-if="filterQuestions.statuses"
         header-title="وضعیت سوال"
       >
         <q-option-group
@@ -145,6 +146,7 @@
       </question-filter-expansion>
 
       <question-filter-expansion
+        v-if="filterQuestions.types"
         header-title="نوع سوال"
       >
         <q-option-group
@@ -159,6 +161,25 @@
           @update:model-value="onChangeTypes"
         />
         <div v-if="filterQuestions.types.length === 0"> هیچ نوع سوالی ایجاد نشده است</div>
+
+      </question-filter-expansion>
+
+      <question-filter-expansion
+        v-if="filterQuestions.report_type"
+        header-title="نوع خطا"
+      >
+        <q-option-group
+          v-model="selectedTypes"
+          type="checkbox"
+          :options="filterQuestions.report_type.map(option => {
+            return {
+              label: option.value,
+              value: option.value
+            }
+          })"
+          @update:model-value="onChangeTypes"
+        />
+        <div v-if="filterQuestions.report_type.length === 0"> هیچ نوع سوالی ایجاد نشده است</div>
 
       </question-filter-expansion>
     </div>
@@ -232,6 +253,7 @@ export default {
         level: [],
         years: [],
         types: [],
+        report_type: [],
         statuses: [],
         tags_with_childrens: 1
       }
@@ -335,6 +357,9 @@ export default {
     },
     onChangeTypes (value) {
       this.changeFilterData('types', value)
+    },
+    onChangeReportTypes (value) {
+      this.changeFilterData('report', value)
     },
     onSearchSingleNode(value) {
       const sendData = value ? 0 : 1
