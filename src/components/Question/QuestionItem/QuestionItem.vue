@@ -232,12 +232,7 @@
             <div class="answer-video flex items-center justify-center"
                  :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
             >
-              <div class="soon flex items-center justify-center">
-                به زودی
-              </div>
-
-              <!--              ToDo : uncomment this when backend give you a valid key-->
-              <!--              <video-player />-->
+              <content-video-player :content="content" />
             </div>
 
             <div class="answer-video-title">
@@ -419,16 +414,17 @@
 <script>
 import VueKatex from 'src/components/VueKatex'
 import question from 'components/Question/QuestionItem/Question'
-// import VideoPlayer from 'src/components/VideoPlayer'
+import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import { Question } from 'src/models/Question'
 import API_ADDRESS from 'src/api/Addresses'
+import { Content } from 'src/models/Content'
 
 export default {
   name: 'QuestionItem',
   components: {
     VueKatex,
-    question
-    // VideoPlayer
+    question,
+    ContentVideoPlayer
   },
   props: {
     questionsLength: {
@@ -557,7 +553,8 @@ export default {
         problemType: '',
         options: [],
         description: ''
-      }
+      },
+      content: new Content()
     }
   },
   created () {
@@ -609,6 +606,7 @@ export default {
       this.applyPageStrategy()
       this.applyListConfig()
       this.getQuestionReportOptions()
+      this.getQuestionContent(24301)
     },
     getQuestionReportOptions() {
       this.reportProblemDialog.options = this.reportOptions
@@ -707,6 +705,13 @@ export default {
           message: 'مشکلی به وجود آمده.'
         })
       }
+    },
+    getQuestionContent(contentId) {
+      this.$axios.get(API_ADDRESS.content.get(contentId))
+        .then(res => {
+          this.content = new Content(res.data.data)
+        })
+        .catch(() => {})
     }
   }
 }
@@ -1085,6 +1090,8 @@ export default {
           background: #f6f9ff;
           border-radius: 16px;
           margin-bottom: 10px;
+          padding: 0 15px;
+
           .soon{
             width: 86px;
             height: 32px;
