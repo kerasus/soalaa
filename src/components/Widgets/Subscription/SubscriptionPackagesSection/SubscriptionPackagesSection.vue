@@ -42,7 +42,7 @@
                   class="package-item-feature-item">{{ability}}</li>
             </ul>
             <q-btn class="package-item-action-btn"
-                   disable
+
                    label="شروع کنید"
                    unelevated
                    @click="subscribe(item.id)"
