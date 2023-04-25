@@ -43,7 +43,8 @@ const API_ADDRESS = {
     base: authServer + '/set'
   },
   content: {
-    base: authServer + '/c'
+    base: authServer + '/c',
+    get: (id) => authServer + `c/${id}`
   },
   option: {
     base: lumenServer + '/option',

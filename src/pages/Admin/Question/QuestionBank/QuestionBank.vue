@@ -6,7 +6,8 @@
         <QuestionBankHeader />
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
-        <sticky-both-sides :max-width="1024">
+        <sticky-both-sides :max-width="1024"
+                           :top-gap="130">
           <question-filter
             ref="filter"
             :filterQuestions="filterQuestions"

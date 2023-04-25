@@ -160,13 +160,15 @@
           :key="index"
           class="question-tag"
         >
-          <div
-            class="tag-box no-wrap flex items-center"
-          >
-            <div class="tag-title ellipsis">{{ item.title }}</div>
-            <div class="tag-circle" />
+          <div v-for="(ancestor,ancestorIndex) in item.ancestors"
+               :key="ancestorIndex"
+               class="ancestors flex flex-center">
+            <div v-if="ancestorIndex !== 0"
+                 class="tag-title ellipsis">{{ ancestor.title }}</div>
+            <div v-if="ancestorIndex !== 0"
+                 class="tag-circle" />
           </div>
-
+          <div class="tag-title ellipsis">{{ item.title }}</div>
         </div>
       </div>
     </q-card-section>
@@ -232,12 +234,7 @@
             <div class="answer-video flex items-center justify-center"
                  :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
             >
-              <div class="soon flex items-center justify-center">
-                به زودی
-              </div>
-
-              <!--              ToDo : uncomment this when backend give you a valid key-->
-              <!--              <video-player />-->
+              <content-video-player :content="content" />
             </div>
 
             <div class="answer-video-title">
@@ -419,16 +416,17 @@
 <script>
 import VueKatex from 'src/components/VueKatex'
 import question from 'components/Question/QuestionItem/Question'
-// import VideoPlayer from 'src/components/VideoPlayer'
+import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import { Question } from 'src/models/Question'
 import API_ADDRESS from 'src/api/Addresses'
+import { Content } from 'src/models/Content'
 
 export default {
   name: 'QuestionItem',
   components: {
     VueKatex,
-    question
-    // VideoPlayer
+    question,
+    ContentVideoPlayer
   },
   props: {
     questionsLength: {
@@ -557,7 +555,8 @@ export default {
         problemType: '',
         options: [],
         description: ''
-      }
+      },
+      content: new Content()
     }
   },
   created () {
@@ -609,6 +608,7 @@ export default {
       this.applyPageStrategy()
       this.applyListConfig()
       this.getQuestionReportOptions()
+      this.getQuestionContent(24301)
     },
     getQuestionReportOptions() {
       this.reportProblemDialog.options = this.reportOptions
@@ -707,6 +707,13 @@ export default {
           message: 'مشکلی به وجود آمده.'
         })
       }
+    },
+    getQuestionContent(contentId) {
+      this.$axios.get(API_ADDRESS.content.get(contentId))
+        .then(res => {
+          this.content = new Content(res.data.data)
+        })
+        .catch(() => {})
     }
   }
 }
@@ -870,7 +877,7 @@ export default {
 
     .question-tags {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       margin-top: 16px;
 
       @media only screen and (max-width: 1439px) {
@@ -892,17 +899,6 @@ export default {
         line-height: 19px;
         color: #434765;
 
-        .tag-circle {
-          border-radius: 50%;
-          margin: 0 6px;
-          width: 6px;
-          height: 6px;
-          background: #6D708B;
-          opacity: 0.3;
-          @media screen and (max-width: 599px){
-            order: 1;
-          }
-        }
         .tag-title{
           @media screen and (max-width: 599px){
             order: 2;
@@ -912,12 +908,15 @@ export default {
           }
         }
 
-        &:last-child {
-          .tag-circle {
-            display: none;
-            @media screen and (max-width: 599px) {
-              display: block;
-            }
+        .tag-circle {
+          border-radius: 50%;
+          margin: 0 6px;
+          width: 6px;
+          height: 6px;
+          background: #6D708B;
+          opacity: 0.3;
+          @media screen and (max-width: 599px){
+            order: 1;
           }
         }
       }
@@ -1085,6 +1084,8 @@ export default {
           background: #f6f9ff;
           border-radius: 16px;
           margin-bottom: 10px;
+          padding: 0 15px;
+
           .soon{
             width: 86px;
             height: 32px;

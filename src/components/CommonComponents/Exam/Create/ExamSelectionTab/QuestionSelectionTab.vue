@@ -245,7 +245,8 @@ export default {
             value: 3,
             label: 'سخت'
           }
-        ]
+        ],
+        tags_with_childrens: 1
       },
       selectedQuestions: [],
       questionId: [],
@@ -478,7 +479,9 @@ export default {
         reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
         statement: (filterData.statement) ? filterData.statement[0] : '',
         sort_by: (this.searchSelector.value) ? 'created_at' : '',
-        sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value
+        sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value,
+        ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
+
       }
     },
     getQuestionData(page, filters) {
