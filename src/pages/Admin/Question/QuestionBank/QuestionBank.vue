@@ -366,7 +366,7 @@ export default {
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
-      this.$axios.get(API_ADDRESS.question.index(filters, page))
+      this.$axios.get(API_ADDRESS.question.index(filters, page, true))
         .then((response) => {
           this.questions = new QuestionList(response.data.data)
           this.paginationMeta = response.data.meta

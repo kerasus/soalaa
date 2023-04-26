@@ -481,7 +481,6 @@ export default {
         sort_by: (this.searchSelector.value) ? 'created_at' : '',
         sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value,
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
-
       }
     },
     getQuestionData(page, filters) {

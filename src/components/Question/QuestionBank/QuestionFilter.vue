@@ -185,6 +185,7 @@
       </question-filter-expansion>
 
       <question-filter-expansion
+        v-if="filterQuestions.report_statuses"
         header-title="وضعیت خطا"
       >
         <q-option-group

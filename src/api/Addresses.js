@@ -209,14 +209,14 @@ const API_ADDRESS = {
     bank: {
       page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
     },
-    index (filters, page) {
+    index (filters, page, isAdmin = false) {
       let newFilter = (filters) ? JSON.parse(JSON.stringify(filters)) : {}
       function setQueryParams (paramKey, singleMode = false) {
         if (!newFilter) {
           newFilter = {}
         }
-        newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
         if (!singleMode) {
+          newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
           newFilter[paramKey] = newFilter[paramKey].join('&' + paramKey + '[]=')
           if (newFilter[paramKey]) {
             newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
@@ -254,7 +254,11 @@ const API_ADDRESS = {
       if (queryParam.length > 0) {
         queryParam = queryParam.substr(1)
       }
-      return lumenServer + '/question?' + queryParam
+      if (isAdmin) {
+        return lumenServer + '/question?' + queryParam
+      } else {
+        return lumenServer + '/question/bank/search?' + queryParam
+      }
     },
     status: {
       base: lumenServer + '/question/statuses',
