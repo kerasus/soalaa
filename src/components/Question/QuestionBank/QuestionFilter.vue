@@ -407,6 +407,7 @@ export default {
     },
     onChangeErrorStatus(value) {
       // ToDO: use radioButton instead of optionGroup and set an option with value for none state
+      // visit link: https://quasar.dev/vue-components/option-group#standard
       if (value.length > 1) {
         this.selectedErrorStatus.splice(0, 1)
       }
