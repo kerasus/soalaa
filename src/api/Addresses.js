@@ -43,6 +43,7 @@ const API_ADDRESS = {
     base: authServer + '/set'
   },
   content: {
+    admin: authServer + '/admin/contents',
     base: authServer + '/c',
     get: (id) => authServer + `c/${id}`
   },

@@ -18,7 +18,8 @@
          ref="overPlayer"
          class="over-player-wrapper"
          :style="{width: overPlayerWidth}">
-      <q-btn icon-right="isax:menu-1"
+      <q-btn v-if="!hasTimepointSlider"
+             icon-right="isax:menu-1"
              size="sm"
              color="primary"
              class="toggleSideBarBtn"
@@ -84,9 +85,15 @@ export default {
     },
     currentTimed: {
       type: Number
+    },
+    hasTimepointSlider: {
+      type: Boolean,
+      default () {
+        return false
+      }
     }
   },
-  emits: ['seeked'],
+  emits: ['seeked', 'timeUpdate'],
   data() {
     return {
       drawer: false,
@@ -186,6 +193,14 @@ export default {
         this.moveSideBarElementIntoVideoPlayerElements()
       })
     }
+
+    this.$refs.videoPlayer.addEventListener('timeupdate', (event) => {
+      if (this.$refs.videoPlayer) {
+        this.$emit('timeUpdate', this.$refs.videoPlayer.currentTime)
+      } else {
+        this.$emit('timeUpdate', 0)
+      }
+    })
   },
   beforeUnmount() {
     if (this.player) {

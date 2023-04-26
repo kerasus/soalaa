@@ -142,6 +142,12 @@ class Question extends Model {
         default: 1
       },
       {
+        key: 'content_id'
+      },
+      {
+        key: 'time_point_id'
+      },
+      {
         key: 'confirmed',
         default: false
       },

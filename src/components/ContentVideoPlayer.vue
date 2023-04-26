@@ -9,7 +9,9 @@
                   :poster="content.photo"
                   :over-player="hasTimepoint"
                   :over-player-width="'250px'"
-                  :use-over-player="hasTimepoint">
+                  :use-over-player="hasTimepoint"
+                  :hasTimepointSlider="hasTimepointSlider"
+                  @time-update="updateCurrentTime($event)">
       <template v-if="hasTimepointSlider"
                 #overPlayer>
         <div class="timepoint-list">
@@ -55,6 +57,7 @@
 import Bookmark from 'components/Bookmark.vue'
 import { Content } from 'src/models/Content.js'
 import VideoPlayer from 'src/components/VideoPlayer.vue'
+import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 
 export default {
   name: 'ContentVideoPlayer',
@@ -73,6 +76,12 @@ export default {
       default () {
         return ''
       }
+    },
+    timePoint: {
+      type: ContentTimePoint
+    },
+    nextTimePoint: {
+      type: ContentTimePoint
     },
     keepCalculating: {
       type: Boolean,
@@ -100,7 +109,8 @@ export default {
   data() {
     return {
       playerKey: Date.now(),
-      currentContent: new Content()
+      currentContent: new Content(),
+      currentTime: 0
     }
   },
   computed: {
@@ -112,6 +122,21 @@ export default {
     content(newValue) {
       this.playerKey = Date.now()
       this.currentContent = newValue
+    },
+    currentTime(time) {
+      if (time >= this.nextTimePoint.time) {
+        this.goToTimpoint(this.timePoint)
+      }
+    },
+    timePoint() {
+      if (this.timePoint.time) {
+        this.goToTimpoint(this.timePoint)
+      }
+    }
+  },
+  mounted() {
+    if (this.timePoint.time) {
+      this.goToTimpoint(this.timePoint)
     }
   },
   beforeUnmount() {
@@ -120,6 +145,9 @@ export default {
     }
   },
   methods: {
+    updateCurrentTime(time) {
+      this.currentTime = time
+    },
     goToTimpoint (timepoint) {
       if (!this.$refs.videoPlayer) {
         return
