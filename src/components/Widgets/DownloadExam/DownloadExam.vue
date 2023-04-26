@@ -426,6 +426,13 @@ export default {
     },
     generatePDF (ref) {
       html2pdf()
+        .set({
+          image: { type: 'png', quality: 1 },
+          html2canvas: {
+            dpi: 500,
+            scale: 3
+          }
+        })
         .from(this.$refs[ref])
         .save()
     }
