@@ -1,49 +1,42 @@
 <template>
-  <q-dialog
-    v-model="modal"
-    :persistent="persistent"
-  >
+  <q-dialog v-model="modal"
+            :persistent="persistent">
     <q-card class="tree-card">
       <div class="fit row wrap tree-inner-container">
         <div class="choose-tree-box question-details col-6">
           <div class="details-container-2 default-details-container">
-            <div class="detail-box"
-                 style="padding-right:0;">
-                 <!--              <div class="detail-box-title" style="padding-bottom: 9px;" >گروه درس</div>-->
-                 <!--              <q-select-->
-                 <!--                filled-->
-                 <!--                dense-->
-                 <!--                dropdown-icon="isax:arrow-down-1"-->
-                 <!--                v-model="group"-->
-                 <!--                option-label="title"-->
-                 <!--                :options="groupsList"-->
-                 <!--                @update:model-value="groupSelected"-->
-                 <!--              />-->
-            </div>
-            <div class="detail-box">
-              <div class="detail-box-title">نام درس</div>
-              <q-select
-                ref="lessonSelector"
-                v-model="lesson"
-                filled
-                dense
-                dropdown-icon="isax:arrow-down-1"
-                option-label="title"
-                :options="lessonsList"
-                :disable="!doesHaveLessons"
-                @update:model-value="lessonSelected"
-              />
+            <div class="detail-box-container row">
+              <div class="col-12 col-md-6 detail-box q-pr-sm">
+                <div class="detail-box-title">پایه تحصیلی</div>
+                <q-select v-model="grade"
+                          filled
+                          dense
+                          dropdown-icon="isax:arrow-down-1"
+                          option-label="title"
+                          :options="highestLayerNodeList"
+                          @update:model-value="highestLayerNodeSelected" />
+              </div>
+              <div class="col-12 col-md-6 detail-box q-pl-sm">
+                <div class="detail-box-title"> نام درس</div>
+                <q-select ref="lessonSelector"
+                          v-model="lowestLayerNode"
+                          filled
+                          dense
+                          dropdown-icon="isax:arrow-down-1"
+                          option-label="title"
+                          :options="lowestLayerNodeList"
+                          :disable="!doesHaveLessons"
+                          @update:model-value="lowestLayerNodeSelected" />
+              </div>
             </div>
             <div class="question-tree">
-              <tree
-                ref="tree"
-                :key="treeKey"
-                :no-nodes-label="'لطفا یک درس را انتخاب کنید'"
-                tick-strategy="strict"
-                :get-node-by-id="getNodeById"
-                @ticked="updateNodes"
-                @lazy-loaded="syncAllCheckedIds"
-              />
+              <tree ref="tree"
+                    :key="treeKey"
+                    :no-nodes-label="'لطفا یک پایه و درس را انتخاب کنید'"
+                    tick-strategy="strict"
+                    :get-node-by-id="getNodeById"
+                    @ticked="updateNodes"
+                    @lazy-loaded="syncAllCheckedIds" />
             </div>
           </div>
         </div>
@@ -53,28 +46,20 @@
                  style="padding-right:0;">
               <div class="box-btn-title flex justify-between">
                 <div class="detail-box-title">انتخاب ها</div>
-                <q-btn
-                  class="delete-all-btn"
-                  flat
-                  label="حذف همه"
-                  color="primary"
-                  @click="deleteAllNodes"
-                />
+                <q-btn class="delete-all-btn"
+                       flat
+                       label="حذف همه"
+                       color="primary"
+                       @click="deleteAllNodes" />
               </div>
-              <div
-                class="tree-chips-box"
-              >
-                <div
-                  v-if="getAllSubjects[0]"
-                >
-                  <q-chip
-                    v-for="item in getAllSubjects"
-                    :key="item"
-                    class="tree-chips"
-                    icon-remove="mdi-close"
-                    removable
-                    @remove="removeNode(item)"
-                  >
+              <div class="tree-chips-box">
+                <div v-if="getAllSubjects[0]">
+                  <q-chip v-for="item in getAllSubjects"
+                          :key="item"
+                          class="tree-chips"
+                          icon-remove="mdi-close"
+                          removable
+                          @remove="removeNode(item)">
                     {{ item.title }}
                   </q-chip>
                 </div>
@@ -83,32 +68,29 @@
           </div>
           <div class="action-btn-box text-right">
             <slot name="tree-dialog-action-box">
-              <q-btn
-                v-close-popup
-                class="close-btn"
-                label="بستن"
-                color="primary"
-                :disable="persistent"
-              />
+              <q-btn v-close-popup
+                     class="close-btn"
+                     label="بستن"
+                     color="primary"
+                     :disable="persistent" />
             </slot>
           </div>
         </div>
       </div>
-      <q-inner-loading
-        :showing="dialogLoading"
-        dark
-      />
+      <q-inner-loading :showing="dialogLoading"
+                       dark />
     </q-card>
   </q-dialog>
 </template>
 <script>
 
-import Tree from 'components/Tree/Tree'
-import mixinTree from 'src/mixin/Tree'
-import { TreeNode } from 'src/models/TreeNode'
+import Tree from 'components/Tree/Tree.vue'
+import mixinTree from 'src/mixin/Tree.js'
+import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
+import API_ADDRESS from 'src/api/Addresses'
 
 export default {
-  name: 'QuestionTreeModal',
+  name: 'TreeModal',
   components: {
     Tree
   },
@@ -116,31 +98,34 @@ export default {
     mixinTree
   ],
   props: {
-    lessonsList: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
-    groupsList: {
-      type: Array,
-      default () {
-        return []
-      }
-    },
     dialogValue: {
       type: Boolean
     },
-    subjectsField: {
-      type: Object
+    selectedNodesList: {
+      type: [Array, TreeNodeList],
+      default () {
+        return new TreeNodeList()
+      }
     },
-    singleListChoiceMode: {
+    singleHighestLayerOnly: {
       type: Boolean,
       default () {
         return false
       }
     },
-    initialLesson: {
+    exchangeLowestLayerOnly: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    },
+    initialLowestLayerNode: {
+      type: [Object, TreeNode],
+      default () {
+        return new TreeNode()
+      }
+    },
+    highestLayerNode: {
       type: [Object, TreeNode],
       default () {
         return new TreeNode()
@@ -154,31 +139,27 @@ export default {
     }
   },
   emits: [
-    'groupSelected',
-    'lessonSelected',
+    'highestLayerNodeSelected',
+    'lowestLayerNodeSelected',
     'update:dialogValue',
     'update:subjectsField'
   ],
   data () {
     return {
       dialogLoading: false,
-      lesson: '',
-      group: '',
+      // lesson resembles our lowest layer
+      lowestLayerNode: '',
+      // grade resembles our highest scope
+      grade: '',
       selectedNodesIDs: [],
-      loading: false,
+      lowestLayerNodeList: [],
       currentTreeNode: [],
       lastTreeNodes: [],
       treeKey: 0,
-      areNodesSynced: false
+      areNodesSynced: false,
+      highestLayerNodeList: []
     }
   },
-  created () {},
-  mounted () {
-    if (this.initialLesson.id) {
-      this.lesson = this.initialLesson
-    }
-  },
-  updated () {},
   computed: {
     getAllSubjects () {
       const fieldText = []
@@ -196,7 +177,7 @@ export default {
       return fieldText
     },
     doesHaveLessons () {
-      return !!(this.lessonsList && this.lessonsList.length > 0)
+      return !!(this.lowestLayerNodeList && this.lowestLayerNodeList.length > 0)
     },
     modal: {
       get () {
@@ -206,7 +187,7 @@ export default {
         this.$emit('update:dialogValue', value)
       }
     },
-    // main storage
+    // global scope (main storage)
     chosenSubjects: {
       get () {
         return this.subjectsField
@@ -216,8 +197,65 @@ export default {
       }
     }
   },
+  watch: {
+    modal (newVal) {
+      this.updateChosenSubjects()
+      if (!newVal) {
+        this.lowestLayerNode = ''
+      }
+    },
+    currentTreeNode (newVal) {
+      if (newVal.length > 0) {
+        this.updateChosenSubjects()
+      }
+    },
+    lowestLayerNode (newVal) {
+      if (newVal && this.onlyOneGradeMode) {
+        this.deleteAllNodes()
+      }
+    },
+    initialLowestLayerNode (newVal) {
+      if (newVal.id) {
+        this.lowestLayerNode = newVal
+        this.lowestLayerNodeSelected(newVal)
+      }
+    }
+  },
+  created () {},
+  mounted () {
+    this.initInitialLesson()
+    this.setGradesList()
+  },
+  updated () {},
   methods: {
+    initInitialLesson() {
+      if (this.initialLowestLayerNode.id) {
+        this.lowestLayerNode = this.initialLowestLayerNode
+        this.lowestLayerNodeSelected(this.lowestLayerNode)
+      }
+    },
+    setGradesList () {
+      this.dialogLoading = true
+      this.$axios.get(API_ADDRESS.tree.getGradesList)
+        .then((response) => {
+          this.highestLayerNodeList = response.data.data.children
+          this.dialogLoading = false
+        }).catch(() => {
+          this.dialogLoading = false
+        })
+    },
+    setLessonList (lessonId) {
+      this.dialogLoading = true
+      this.$axios.get(API_ADDRESS.tree.getLessonList(lessonId))
+        .then((response) => {
+          this.lowestLayerNodeList = response.data.data.children
+          this.dialogLoading = false
+        }).catch(() => {
+          this.dialogLoading = false
+        })
+    },
     updateNodes (values) {
+      console.log('updateNodes', values)
       this.nodesUpdatedFromTree = values
       // if nodes are synced with response don't update currentTreeNode
       if (!this.areNodesSynced) {
@@ -225,7 +263,8 @@ export default {
       }
       this.selectedNodesIDs = values.map(item => item.id)
     },
-    removeNode (node) {
+    removeNode (item) {
+      const node = item.id ? item : { id: item }
       if (this.nodesUpdatedFromTree.find(item => item.id === node.id)) {
         this.setTickedMode('tree', node.id, false)
       }
@@ -248,13 +287,14 @@ export default {
         })
       }
     },
-    groupSelected (item) {
-      this.$emit('groupSelected', item)
-      this.lesson = ''
+    highestLayerNodeSelected (item) {
+      this.lowestLayerNode = ''
+      this.setLessonList(item.id)
+      this.$emit('highestLayerNodeSelected', item)
     },
-    lessonSelected (lesson) {
-      this.$emit('lessonSelected', lesson)
+    lowestLayerNodeSelected (lesson) {
       this.showTreeModalNode(lesson)
+      this.$emit('lowestLayerNodeSelected', lesson)
     },
     showTreeModalNode (item) {
       this.treeKey += 1
@@ -262,7 +302,7 @@ export default {
       this.showTree('tree', this.getNode(item.id))
         .then(() => {
           this.syncAllCheckedIds()
-          this.selectWantedTree(this.lesson)
+          this.selectWantedTree(this.lowestLayerNode)
           this.dialogLoading = false
         })
         .catch(() => {
@@ -284,45 +324,39 @@ export default {
       this.currentTreeNode = this.chosenSubjects[lessonId].nodes
     },
     updateChosenSubjects () {
-      if (this.lesson.id && this.chosenSubjects[this.lesson.id]) {
-        this.chosenSubjects[this.lesson.id].nodes = this.currentTreeNode
+      if (this.lowestLayerNode.id && this.chosenSubjects[this.lowestLayerNode.id]) {
+        this.chosenSubjects[this.lowestLayerNode.id].nodes = this.currentTreeNode
       }
     },
     syncAllCheckedIds (syncedWithResponse) {
       if (syncedWithResponse) {
         this.areNodesSynced = true
       }
-      if (this.lesson && this.chosenSubjects[this.lesson.id]) {
-        const selectedNodesIds = this.chosenSubjects[this.lesson.id].nodes.map(item => item.id)
+      if (this.lowestLayerNode && this.chosenSubjects[this.lowestLayerNode.id]) {
+        const selectedNodesIds = this.chosenSubjects[this.lowestLayerNode.id].nodes.map(item => item.id)
         if (selectedNodesIds.length > 0) {
           this.$refs.tree.setNodesTicked(selectedNodesIds, true)
         }
         this.areNodesSynced = false
       }
-    }
-  },
-  watch: {
-    modal (newVal) {
-      this.updateChosenSubjects()
-      if (!newVal) {
-        this.lesson = ''
-      }
     },
-    currentTreeNode (newVal) {
-      if (newVal.length > 0) {
-        this.updateChosenSubjects()
-      }
+    getUniqueListBy (arr, key) {
+      return [...new Map(arr.map(item => [item[key], item])).values()]
     },
-    lesson (newVal) {
-      if (newVal && this.singleListChoiceMode) {
-        this.deleteAllNodes()
-      }
-    },
-    initialLesson (newVal) {
-      if (newVal.id) {
-        this.lesson = newVal
-        this.lessonSelected(newVal)
-      }
+    getTheLastSelectedNode () {
+      const foundedNodes = []
+      let cleaned = []
+      this.allSubjectsFlat.forEach((selectedNode) => {
+        selectedNode.ancestors.forEach((parentNode) => {
+          if (this.allSubjectsFlat.find(item => item.id === parentNode.id)) {
+            foundedNodes.push(parentNode)
+          }
+        })
+      })
+      cleaned = this.getUniqueListBy(foundedNodes, 'id')
+      this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
+        return !(cleaned.find(item => item.id === selectedNode.id))
+      })
     }
   }
 }
@@ -351,7 +385,7 @@ export default {
   min-width: 830px;
   height: 580px;
   background: #FFFFFF;
-  border-radius: 15px;
+  border-radius: 10px;
   padding: 30px;
   width: 830px;
   @media screen and (max-width: 880px) {
@@ -393,7 +427,7 @@ export default {
   }
   .default-details-container {
     .detail-box {
-      margin-top: 10px;
+      //margin-top: 10px;
       .detail-box-title, .delete-all-btn {
         margin-bottom: 5px;
       }
@@ -405,10 +439,10 @@ export default {
       padding-left: 12px #{"/* rtl:ignore */"};
     }
     .detail-box-first {
-      padding-right: 0px #{"/* rtl:ignore */"};
+      padding-right: 0 #{"/* rtl:ignore */"};
     }
     .detail-box-last {
-      padding-left: 0px #{"/* rtl:ignore */"};
+      padding-left: 0 #{"/* rtl:ignore */"};
     }
   }
   .default-detail-btn {
@@ -443,15 +477,15 @@ export default {
       }
     }
     .detail-box-first {
-      padding-right: 0px #{"/* rtl:ignore */"};
+      padding-right: 0 #{"/* rtl:ignore */"};
     }
     .detail-box-last {
-      padding-right: 0px #{"/* rtl:ignore */"};
+      padding-right: 0 #{"/* rtl:ignore */"};
       width: 200px;
       //margin-right: 132px #{"/* rtl:ignore */"};
     }
     .detail-box-last-of-row {
-      padding-left: 0px #{"/* rtl:ignore */"};
+      padding-left: 0 #{"/* rtl:ignore */"};
       margin-top: 43px;
       text-align: end;
       display: flex;
@@ -479,18 +513,12 @@ export default {
     padding-left: 15px;
   }
 }
-</style>
-<style lang="scss">
-.q-dialog {
-  .q-dialog__inner--minimized > div {
-    max-width: none;
-  }
-}
+
 .tree-card {
   .question-details {
     .default-details-container {
       .detail-box {
-        .q-field {
+        :deep(.q-field) {
           background: #FFFFFF;
           border-radius: 10px;
           line-height: 24px;
@@ -503,24 +531,41 @@ export default {
             margin-top: 9px;
             padding-right: 0 !important;
             padding-left: 0 !important;
+            .q-field__control {
+              border-radius: 10px;
+              min-height: 40px;
+              color: #65677F;
+              background-color: #f4f5f6;
+              &::before {
+                display: none;
+              }
+              &::after {
+                display: none;
+              }
+            }
           }
         }
-        .q-field--auto-height .q-field__native {
-          min-height: 40px;
-          color: #65677F;
-          background-color: #f4f5f6;
-
-        }
-        .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
-          min-height: 40px;
-          color: #65677F;
-          background-color: #f4f5f6;
-        }
-        .q-field__control::before, .q-field__control::after {
-          display: none;
-        }
-        .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
-          color: #65677F;
+        :deep(.q-field--auto-height){
+          .q-field__native {
+            min-height: 40px;
+            color: #65677F;
+            //background-color: #f4f5f6;
+            &.q-field__prefix &.q-field__suffix &.q-field__input {
+              color: #65677F;
+            }
+          }
+          .q-field__control {
+            border-radius: 10px;
+            min-height: 40px;
+            color: #65677F;
+            background-color: #f4f5f6;
+            ::before {
+              display: none;
+            }
+            ::after {
+              display: none;
+            }
+          }
         }
       }
     }

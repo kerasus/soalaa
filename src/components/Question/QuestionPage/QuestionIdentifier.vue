@@ -68,18 +68,18 @@
           :disable="!editable"
         />
       </div>
-      <div class="detail-box detail-box-first col-3">
-        <div class="detail-box-title">پایه تحصیلی</div>
-        <q-select
-          v-model="grade"
-          borderless
-          option-value="id"
-          option-label="title"
-          :options="gradesList"
-          :disable="!editable"
-          @update:model-value="gradeSelected"
-        />
-      </div>
+      <!--      <div class="detail-box detail-box-first col-3">-->
+      <!--        <div class="detail-box-title">پایه تحصیلی</div>-->
+      <!--        <q-select-->
+      <!--          v-model="grade"-->
+      <!--          borderless-->
+      <!--          option-value="id"-->
+      <!--          option-label="title"-->
+      <!--          :options="gradesList"-->
+      <!--          :disable="!editable"-->
+      <!--          @update:model-value="gradeSelected"-->
+      <!--        />-->
+      <!--      </div>-->
       <div class="detail-box col-3">
         <div class="detail-box-title">رشته تحصیلی</div>
         <q-select
@@ -94,7 +94,7 @@
           :disable="!editable"
         />
       </div>
-      <div class="detail-box col-3">
+      <div class="detail-box col-6">
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
           <div class="input-box">
@@ -103,11 +103,11 @@
                      disable />
           </div>
           <div class="icon-box">
+            <!--                          :disable="!isTreeModalAvailable"-->
             <q-btn
               unelevated
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
-              :disable="!isTreeModalAvailable"
               @click="dialogValue = true"
             />
           </div>
@@ -123,14 +123,13 @@
     <!--    >-->
     <!--      ثبت مباحث انتخاب شده-->
     <!--    </q-btn>-->
-    <question-tree-modal
+    <tree-modal
       ref="questionTreeModal"
       v-model:dialogValue="dialogValue"
-      v-model:subjectsField="allSubjects"
-      :lessons-list="lessonsList"
-      :groups-list="groupsList"
-      @groupSelected="groupSelected"
-      @lessonSelected="lessonSelected"
+      v-model:selectedNodesList="allSubjectsFlat"
+      exchange-lowest-layer-only
+      @highestLayerNodeSelected="groupSelected"
+      @lowestLayerNodeSelected="lessonSelected"
     />
   </div>
 </template>
@@ -142,12 +141,12 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
-import QuestionTreeModal from 'components/Question/QuestionPage/QuestionTreeModal'
+import TreeModal from 'components/Question/QuestionPage/TreeModal'
 
 export default {
   name: 'QuestionIdentifier',
   components: {
-    QuestionTreeModal,
+    TreeModal,
     AttachExam
   },
   props: {
@@ -312,7 +311,7 @@ export default {
       const firstTag = this.question.tags.list[0]
       const lesson = firstTag.ancestors[firstTag.ancestors.length - 1]
       // this.$refs.questionTreeModal.lesson = new TreeNode(lesson)
-      this.$refs.questionTreeModal.lessonSelected(lesson)
+      this.$refs.questionTreeModal.lowestLayerNodeSelected(lesson)
     },
     fillAllSubjectsFromResponse () {
       this.question.tags.list.forEach((tag, index) => {

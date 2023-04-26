@@ -127,11 +127,11 @@
   <question-tree-modal
     ref="questionTreeModal"
     v-model:dialogValue="treeModalValue"
-    v-model:subjectsField="allSubjects"
+    v-model:selected-nodes-list="allSubjects"
+    single-highest-layer-only
     :lessons-list="treeModalLessonsList"
     :persistent="!doesExamHaveLesson"
-    single-list-choice-mode
-    :initial-lesson="initialLesson"
+    :initial-lowest-layer-node="initialLesson"
     @lessonSelected="onLessonChanged"
   >
     <template v-slot:tree-dialog-action-box>
@@ -159,7 +159,7 @@ import { Question, QuestionList } from 'src/models/Question'
 import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionsGeneralInfo from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo'
-import QuestionTreeModal from 'components/Question/QuestionPage/QuestionTreeModal'
+import QuestionTreeModal from 'components/Question/QuestionPage/TreeModal'
 import mixinTree from 'src/mixin/Tree'
 import { TreeNode } from 'src/models/TreeNode'
 import StickyBothSides from 'components/Utils/StickyBothSides'
