@@ -39,7 +39,7 @@
         header-title="درس و مبحث"
       >
         <q-checkbox
-          v-if="$route.name !== 'User.Create.Exam'"
+          v-if="availableSearchSingleNode"
           v-model="searchSingleNode"
           class="q-ml-md"
           right-label
@@ -187,6 +187,7 @@
       <question-filter-expansion
         v-if="filterQuestions.report_statuses"
         header-title="وضعیت خطا"
+        :loading="loadings.reportStatusLoading"
       >
         <q-option-group
           v-model="selectedErrorStatus"
@@ -199,7 +200,7 @@
           })"
           @update:model-value="onChangeErrorStatus"
         />
-        <div v-if="filterQuestions.report_type.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
+        <div v-if="filterQuestions.report_statuses.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
 
       </question-filter-expansion>
 
@@ -217,6 +218,16 @@ export default {
   components: { QuestionFilterExpansion, TreeComponent },
   mixins: [mixinTree],
   props: {
+    loadings: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    availableSearchSingleNode: {
+      type: Boolean,
+      default: true
+    },
     filterQuestions: {
       type: Object,
       default: () => {
@@ -387,6 +398,7 @@ export default {
       this.changeFilterData('question_report_type', value)
     },
     onChangeErrorStatus(value) {
+      // ToDO: use radioButton instead of optionGroup and set an option with value for none state
       if (value.length > 1) {
         this.selectedErrorStatus.splice(0, 1)
       }

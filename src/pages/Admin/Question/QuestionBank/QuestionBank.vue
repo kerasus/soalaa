@@ -10,6 +10,7 @@
                            :top-gap="130">
           <question-filter
             ref="filter"
+            :loadings="loadings"
             :filterQuestions="filterQuestions"
             @onFilter="onFilter"
             @delete-filter="deleteFilterItem"
@@ -133,6 +134,9 @@ export default {
   },
   data() {
     return {
+      loadings: {
+        reportStatusLoading: false
+      },
       searchInput: '',
       searchSelector: {
         title: 'جدید ترین',
@@ -336,16 +340,16 @@ export default {
     },
     getFiltersForRequest(filterData) {
       return {
-        tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
-        level: (filterData.level) ? filterData.level.map(item => item.value) : [],
-        years: (filterData.years) ? filterData.years.map(item => item.id) : [],
-        majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
-        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
+        tags: filterData.tags.map(item => item.id),
+        level: filterData.level.map(item => item.value),
+        years: filterData.years.map(item => item.id),
+        majors: filterData.majors.map(item => item.id),
+        reference: filterData.reference.map(item => item.id),
         statement: (filterData.statement) ? filterData.statement[0] : '',
         sort_by: (this.searchSelector.value) ? 'created_at' : '',
         sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value,
-        statuses: (filterData.statuses) ? filterData.statuses.map(item => item.id) : [],
-        question_report_type: (filterData.question_report_type) ? filterData.question_report_type.map(item => item.id) : [],
+        statuses: filterData.statuses.map(item => item.id),
+        question_report_type: filterData.question_report_type.map(item => item.id),
         report_status: (filterData.report_status) ? filterData.report_status : '',
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
@@ -407,11 +411,15 @@ export default {
         })
     },
     getQuestionReportStatuses() {
+      this.loadings.reportStatusLoading = true
       this.$axios.get(API_ADDRESS.question.reportStatuses)
         .then(response => {
+          this.loadings.reportStatusLoading = false
           this.filterQuestions.report_statuses = response.data.data
         })
-        .catch()
+        .catch(() => {
+          this.loadings.reportStatusLoading = false
+        })
     },
     filterByStatement() {
       this.$refs.filter.changeFilterData('statement', [this.searchInput])
