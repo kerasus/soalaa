@@ -170,7 +170,9 @@ export default {
             value: 'سخت'
           }
         ],
-        types: []
+        types: [],
+        report_type: [],
+        report_statuses: []
       },
       questionListKey: Date.now(),
       selectedQuestions: [],
@@ -342,8 +344,9 @@ export default {
         statement: (filterData.statement) ? filterData.statement[0] : '',
         sort_by: (this.searchSelector.value) ? 'created_at' : '',
         sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value,
-        statuses: (filterData.statuses) ? filterData.statuses.map(item => item) : [],
-        // tags_with_childrens: (filterData.tags_with_childrens) ? filterData.tags_with_childrens : false
+        statuses: (filterData.statuses) ? filterData.statuses.map(item => item.id) : [],
+        question_report_type: (filterData.question_report_type) ? filterData.question_report_type.map(item => item.id) : [],
+        report_status: (filterData.report_status) ? filterData.report_status : '',
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
@@ -357,7 +360,8 @@ export default {
           sort_by: 'created_at',
           sort_type: this.searchSelector.value,
           // statement: '',
-          tags_with_childrens: 1
+          tags_with_childrens: 1,
+          report_status: ''
         }
       }
       this.loadingQuestion.loading = true
@@ -388,16 +392,26 @@ export default {
               this.filterQuestions.major_type.push(option)
             } else if (option.type === 'question_type') {
               this.filterQuestions.types.push(option)
+            } else if (option.type === 'question_report_type') {
+              this.filterQuestions.report_type.push(option)
             }
           })
         })
       this.getQuestionStatuses()
+      this.getQuestionReportStatuses()
     },
     getQuestionStatuses () {
       this.$axios.get(API_ADDRESS.question.status.base)
         .then(response => {
           this.filterQuestions.statuses = response.data.data
         })
+    },
+    getQuestionReportStatuses() {
+      this.$axios.get(API_ADDRESS.question.reportStatuses)
+        .then(response => {
+          this.filterQuestions.report_statuses = response.data.data
+        })
+        .catch()
     },
     filterByStatement() {
       this.$refs.filter.changeFilterData('statement', [this.searchInput])

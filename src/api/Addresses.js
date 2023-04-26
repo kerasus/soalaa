@@ -222,9 +222,9 @@ const API_ADDRESS = {
             newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
           }
         } else {
-          // if (newFilter[paramKey]) {
-          newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
-          // }
+          if (newFilter[paramKey]) {
+            newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
+          }
         }
       }
       setQueryParams('statuses')
@@ -233,8 +233,10 @@ const API_ADDRESS = {
       setQueryParams('reference')
       setQueryParams('tags')
       setQueryParams('level')
+      setQueryParams('question_report_type')
       // setQueryParams('statement', true)
       setQueryParams('sort_by', true)
+      setQueryParams('report_status', true)
       setQueryParams('sort_type', true)
       setQueryParams('tags_with_childrens', true)
 
@@ -260,6 +262,7 @@ const API_ADDRESS = {
         return lumenServer + '/question/' + questionId + '/status'
       }
     },
+    reportStatuses: lumenServer + '/question/report/statuses',
     log: {
       base (questionId, pagination) {
         if (!pagination) {
