@@ -714,18 +714,19 @@ export default {
       }
     },
     getQuestionContent() {
-      // this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
-      this.$axios.get(API_ADDRESS.content.get(40249))
+      this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
         .then(res => {
           this.content = new Content(res.data.data)
-          // this.questionTimePoint = this.content.timepoints.list.find(x => x.id === this.question.time_point_id)
-          this.questionTimePoint = this.content.timepoints.list.find(x => x.id === 131133)
-          const timePointList = this.content.timepoints.list
-          timePointList.sort((a, b) => (a.time > b.time ? 1 : -1))
-          const timePointIndex = timePointList.findIndex(x => x.id === 131133) + 1
-          this.nextTimePoint = timePointList[timePointIndex]
+          this.getTimePoints()
         })
         .catch(() => {})
+    },
+    getTimePoints() {
+      this.questionTimePoint = this.content.timepoints.list.find(x => x.id === this.question.time_point_id)
+      const timePointList = this.content.timepoints.list
+      timePointList.sort((a, b) => (a.time > b.time ? 1 : -1))
+      const timePointIndex = timePointList.findIndex(x => x.id === 131133) + 1
+      this.nextTimePoint = timePointList[timePointIndex]
     }
   }
 }
