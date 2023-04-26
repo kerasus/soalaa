@@ -234,7 +234,8 @@
             <div class="answer-video flex items-center justify-center"
                  :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
             >
-              <content-video-player :content="content" />
+              <content-video-player :content="content"
+                                    :timePoint="questionTimePoint" />
             </div>
 
             <div class="answer-video-title">
@@ -417,9 +418,10 @@
 import VueKatex from 'src/components/VueKatex'
 import question from 'components/Question/QuestionItem/Question'
 import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
-import { Question } from 'src/models/Question'
-import API_ADDRESS from 'src/api/Addresses'
-import { Content } from 'src/models/Content'
+import { Question } from 'src/models/Question.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Content } from 'src/models/Content.js'
+import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 
 export default {
   name: 'QuestionItem',
@@ -556,7 +558,8 @@ export default {
         options: [],
         description: ''
       },
-      content: new Content()
+      content: new Content(),
+      questionTimePoint: new ContentTimePoint()
     }
   },
   created () {
@@ -608,7 +611,7 @@ export default {
       this.applyPageStrategy()
       this.applyListConfig()
       this.getQuestionReportOptions()
-      this.getQuestionContent(24301)
+      this.getQuestionContent()
     },
     getQuestionReportOptions() {
       this.reportProblemDialog.options = this.reportOptions
@@ -708,10 +711,11 @@ export default {
         })
       }
     },
-    getQuestionContent(contentId) {
-      this.$axios.get(API_ADDRESS.content.get(contentId))
+    getQuestionContent() {
+      this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
         .then(res => {
           this.content = new Content(res.data.data)
+          this.questionTimePoint = this.content.timepoints.list.find(x => x.id === this.question.time_point_id)
         })
         .catch(() => {})
     }

@@ -18,7 +18,8 @@
          ref="overPlayer"
          class="over-player-wrapper"
          :style="{width: overPlayerWidth}">
-      <q-btn icon-right="isax:menu-1"
+      <q-btn v-if="!hasTimepointSlider"
+             icon-right="isax:menu-1"
              size="sm"
              color="primary"
              class="toggleSideBarBtn"
@@ -84,6 +85,12 @@ export default {
     },
     currentTimed: {
       type: Number
+    },
+    hasTimepointSlider: {
+      type: Boolean,
+      default () {
+        return false
+      }
     }
   },
   emits: ['seeked'],

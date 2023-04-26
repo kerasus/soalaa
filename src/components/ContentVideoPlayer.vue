@@ -9,7 +9,8 @@
                   :poster="content.photo"
                   :over-player="hasTimepoint"
                   :over-player-width="'250px'"
-                  :use-over-player="hasTimepoint">
+                  :use-over-player="hasTimepoint"
+                  :hasTimepointSlider="hasTimepointSlider">
       <template v-if="hasTimepointSlider"
                 #overPlayer>
         <div class="timepoint-list">
@@ -55,6 +56,7 @@
 import Bookmark from 'components/Bookmark.vue'
 import { Content } from 'src/models/Content.js'
 import VideoPlayer from 'src/components/VideoPlayer.vue'
+import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 
 export default {
   name: 'ContentVideoPlayer',
@@ -73,6 +75,10 @@ export default {
       default () {
         return ''
       }
+    },
+    timePoint: {
+      type: Object,
+      default: new ContentTimePoint()
     },
     keepCalculating: {
       type: Boolean,
@@ -112,6 +118,11 @@ export default {
     content(newValue) {
       this.playerKey = Date.now()
       this.currentContent = newValue
+    }
+  },
+  mounted() {
+    if (this.timePoint.time) {
+      this.goToTimpoint(this.timePoint)
     }
   },
   beforeUnmount() {
