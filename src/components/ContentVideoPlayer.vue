@@ -10,7 +10,8 @@
                   :over-player="hasTimepoint"
                   :over-player-width="'250px'"
                   :use-over-player="hasTimepoint"
-                  :hasTimepointSlider="hasTimepointSlider">
+                  :hasTimepointSlider="hasTimepointSlider"
+                  @time-update="updateCurrentTime($event)">
       <template v-if="hasTimepointSlider"
                 #overPlayer>
         <div class="timepoint-list">
@@ -77,8 +78,10 @@ export default {
       }
     },
     timePoint: {
-      type: Object,
-      default: new ContentTimePoint()
+      type: ContentTimePoint
+    },
+    nextTimePoint: {
+      type: ContentTimePoint
     },
     keepCalculating: {
       type: Boolean,
@@ -106,7 +109,8 @@ export default {
   data() {
     return {
       playerKey: Date.now(),
-      currentContent: new Content()
+      currentContent: new Content(),
+      currentTime: 0
     }
   },
   computed: {
@@ -118,6 +122,16 @@ export default {
     content(newValue) {
       this.playerKey = Date.now()
       this.currentContent = newValue
+    },
+    currentTime(time) {
+      if (time >= this.nextTimePoint.time) {
+        this.goToTimpoint(this.timePoint)
+      }
+    },
+    timePoint() {
+      if (this.timePoint.time) {
+        this.goToTimpoint(this.timePoint)
+      }
     }
   },
   mounted() {
@@ -131,6 +145,9 @@ export default {
     }
   },
   methods: {
+    updateCurrentTime(time) {
+      this.currentTime = time
+    },
     goToTimpoint (timepoint) {
       if (!this.$refs.videoPlayer) {
         return

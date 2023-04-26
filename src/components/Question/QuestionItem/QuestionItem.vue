@@ -235,7 +235,8 @@
                  :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
             >
               <content-video-player :content="content"
-                                    :timePoint="questionTimePoint" />
+                                    :timePoint="questionTimePoint"
+                                    :nextTimePoint="nextTimePoint" />
             </div>
 
             <div class="answer-video-title">
@@ -559,7 +560,8 @@ export default {
         description: ''
       },
       content: new Content(),
-      questionTimePoint: new ContentTimePoint()
+      questionTimePoint: new ContentTimePoint(),
+      nextTimePoint: new ContentTimePoint()
     }
   },
   created () {
@@ -712,10 +714,16 @@ export default {
       }
     },
     getQuestionContent() {
-      this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
+      // this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
+      this.$axios.get(API_ADDRESS.content.get(40249))
         .then(res => {
           this.content = new Content(res.data.data)
-          this.questionTimePoint = this.content.timepoints.list.find(x => x.id === this.question.time_point_id)
+          // this.questionTimePoint = this.content.timepoints.list.find(x => x.id === this.question.time_point_id)
+          this.questionTimePoint = this.content.timepoints.list.find(x => x.id === 131133)
+          const timePointList = this.content.timepoints.list
+          timePointList.sort((a, b) => (a.time > b.time ? 1 : -1))
+          const timePointIndex = timePointList.findIndex(x => x.id === 131133) + 1
+          this.nextTimePoint = timePointList[timePointIndex]
         })
         .catch(() => {})
     }

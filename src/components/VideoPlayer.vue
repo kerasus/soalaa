@@ -93,7 +93,7 @@ export default {
       }
     }
   },
-  emits: ['seeked'],
+  emits: ['seeked', 'timeUpdate'],
   data() {
     return {
       drawer: false,
@@ -193,6 +193,14 @@ export default {
         this.moveSideBarElementIntoVideoPlayerElements()
       })
     }
+
+    this.$refs.videoPlayer.addEventListener('timeupdate', (event) => {
+      if (this.$refs.videoPlayer) {
+        this.$emit('timeUpdate', this.$refs.videoPlayer.currentTime)
+      } else {
+        this.$emit('timeUpdate', 0)
+      }
+    })
   },
   beforeUnmount() {
     if (this.player) {
