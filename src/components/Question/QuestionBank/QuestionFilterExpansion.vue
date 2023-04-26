@@ -17,7 +17,7 @@
       </q-card-section>
       <q-inner-loading
         :showing="loading"
-        label="Please wait..."
+        label="کمی صبر کنید..."
         label-class="text-teal"
         label-style="font-size: 1.1em"
       />

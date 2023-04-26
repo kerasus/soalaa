@@ -187,7 +187,7 @@
       <question-filter-expansion
         v-if="filterQuestions.report_statuses"
         header-title="وضعیت خطا"
-        :loading="loadings.reportStatusLoading"
+        :loading="localLoadings.reportStatusLoading"
       >
         <q-option-group
           v-model="selectedErrorStatus"
@@ -221,7 +221,9 @@ export default {
     loadings: {
       type: Object,
       default() {
-        return {}
+        return {
+          reportStatusLoading: false
+        }
       }
     },
     availableSearchSingleNode: {
@@ -268,6 +270,9 @@ export default {
   ],
   data () {
     return {
+      defaultLoadings: {
+        reportStatusLoading: false
+      },
       treeKey: 0,
       searchSingleNode: false,
       check: false,
@@ -323,6 +328,9 @@ export default {
     }
   },
   computed: {
+    localLoadings() {
+      return Object.assign(this.defaultLoadings, this.loadings)
+    },
     selectedFiltersTitle () {
       const filtersDataKey = Object.keys(this.filtersData)
       const titles = []
