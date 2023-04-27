@@ -6,27 +6,18 @@
         <div class="choose-tree-box question-details col-6">
           <div class="details-container-2 default-details-container">
             <div class="detail-box-container row">
-              <div class="col-12 col-md-6 detail-box q-pr-sm">
-                <div class="detail-box-title">پایه تحصیلی</div>
-                <q-select v-model="grade"
+              <div v-for="(layer, index) in layersList"
+                   :key="index"
+                   class="col-12 col-md-6 detail-box">
+                <div class="detail-box-title">{{layer.label}}</div>
+                <q-select v-model="layer.selectedValue"
                           filled
                           dense
                           dropdown-icon="isax:arrow-down-1"
                           option-label="title"
-                          :options="highestLayerNodeList"
-                          @update:model-value="highestLayerNodeSelected" />
-              </div>
-              <div class="col-12 col-md-6 detail-box q-pl-sm">
-                <div class="detail-box-title"> نام درس</div>
-                <q-select ref="lessonSelector"
-                          v-model="lowestLayerNode"
-                          filled
-                          dense
-                          dropdown-icon="isax:arrow-down-1"
-                          option-label="title"
-                          :options="lowestLayerNodeList"
-                          :disable="!doesHaveLessons"
-                          @update:model-value="lowestLayerNodeSelected" />
+                          :options="layer.nodeList"
+                          :disable="!doesHigherLayerHaveValue || layer.disable"
+                          @update:model-value="layerNodeSelected(layer, index)" />
               </div>
             </div>
             <div class="question-tree">
@@ -53,16 +44,16 @@
                        @click="deleteAllNodes" />
               </div>
               <div class="tree-chips-box">
-                <div v-if="getAllSubjects[0]">
-                  <q-chip v-for="item in getAllSubjects"
-                          :key="item"
-                          class="tree-chips"
-                          icon-remove="mdi-close"
-                          removable
-                          @remove="removeNode(item)">
-                    {{ item.title }}
-                  </q-chip>
-                </div>
+                <!--                <div v-if="getAllSubjects[0]">-->
+                <!--                  <q-chip v-for="item in getAllSubjects"-->
+                <!--                          :key="item"-->
+                <!--                          class="tree-chips"-->
+                <!--                          icon-remove="mdi-close"-->
+                <!--                          removable-->
+                <!--                          @remove="removeNode(item)">-->
+                <!--                    {{ item.title }}-->
+                <!--                  </q-chip>-->
+                <!--                </div>-->
               </div>
             </div>
           </div>
@@ -86,8 +77,7 @@
 
 import Tree from 'components/Tree/Tree.vue'
 import mixinTree from 'src/mixin/Tree.js'
-import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
-import API_ADDRESS from 'src/api/Addresses'
+import { TreeNodeList } from 'src/models/TreeNode.js'
 
 export default {
   name: 'TreeModal',
@@ -119,16 +109,11 @@ export default {
         return false
       }
     },
-    initialLowestLayerNode: {
-      type: [Object, TreeNode],
+    layersConfig: {
+      type: Array,
+      required: true,
       default () {
-        return new TreeNode()
-      }
-    },
-    highestLayerNode: {
-      type: [Object, TreeNode],
-      default () {
-        return new TreeNode()
+        return []
       }
     },
     persistent: {
@@ -139,18 +124,15 @@ export default {
     }
   },
   emits: [
-    'highestLayerNodeSelected',
-    'lowestLayerNodeSelected',
     'update:dialogValue',
-    'update:subjectsField'
+    'update:subjectsField',
+    'update:layersConfig'
   ],
   data () {
     return {
       dialogLoading: false,
-      // lesson resembles our lowest layer
       lowestLayerNode: '',
-      // grade resembles our highest scope
-      grade: '',
+      highestLayerNode: '',
       selectedNodesIDs: [],
       lowestLayerNodeList: [],
       currentTreeNode: [],
@@ -176,8 +158,14 @@ export default {
       }
       return fieldText
     },
-    doesHaveLessons () {
-      return !!(this.lowestLayerNodeList && this.lowestLayerNodeList.length > 0)
+    doesHigherLayerHaveValue () {
+      return (layerIndex) => {
+        if (layerIndex <= 0) {
+          return true
+        }
+        return !!(this.layersList[layerIndex - 1].nodeList &&
+          this.layersList[layerIndex - 1].selectedValue?.id)
+      }
     },
     modal: {
       get () {
@@ -185,6 +173,14 @@ export default {
       },
       set (value) {
         this.$emit('update:dialogValue', value)
+      }
+    },
+    layersList: {
+      get () {
+        return this.layersConfig
+      },
+      set (value) {
+        this.$emit('update:layersConfig', value)
       }
     },
     // global scope (main storage)
@@ -214,41 +210,46 @@ export default {
         this.deleteAllNodes()
       }
     },
-    initialLowestLayerNode (newVal) {
-      if (newVal.id) {
-        this.lowestLayerNode = newVal
-        this.lowestLayerNodeSelected(newVal)
-      }
+    layersList: {
+      handler(newVal) {
+        this.$emit('update:layersConfig', newVal)
+      },
+      deep: true
     }
   },
-  created () {},
+  created () {
+    this.createNodesStorage()
+  },
   mounted () {
-    this.initInitialLesson()
-    this.setGradesList()
+    this.initLayers()
   },
   updated () {},
   methods: {
-    initInitialLesson() {
-      if (this.initialLowestLayerNode.id) {
-        this.lowestLayerNode = this.initialLowestLayerNode
-        this.lowestLayerNodeSelected(this.lowestLayerNode)
-      }
+    initLayers() {
+      this.defineLayersEmits(this.layersConfig.map((item) => item.name))
+      this.initInitialLayer()
     },
-    setGradesList () {
-      this.dialogLoading = true
-      this.$axios.get(API_ADDRESS.tree.getGradesList)
-        .then((response) => {
-          this.highestLayerNodeList = response.data.data.children
-          this.dialogLoading = false
-        }).catch(() => {
-          this.dialogLoading = false
+    defineLayersEmits (layerEmitNamesList) {
+      layerEmitNamesList.forEach(layerName => {
+        Object.assign(this._.emitsOptions, {
+          [layerName + 'nodeSelected']: null
         })
+      })
     },
-    setLessonList (lessonId) {
+    createNodesStorage () {
+
+    },
+    initInitialLayer() {
+      if (this.layersConfig.length === 0) {
+        return
+      }
+      this.setLayerList(this.layersConfig[0].routeNameToGetNode)
+    },
+    setLayerList (layerRoute, layerIndex = 0) {
       this.dialogLoading = true
-      this.$axios.get(API_ADDRESS.tree.getLessonList(lessonId))
+      this.$axios.get(layerRoute)
         .then((response) => {
-          this.lowestLayerNodeList = response.data.data.children
+          this.layersList[layerIndex].nodeList = response.data.data.children
           this.dialogLoading = false
         }).catch(() => {
           this.dialogLoading = false
@@ -287,22 +288,27 @@ export default {
         })
       }
     },
-    highestLayerNodeSelected (item) {
-      this.lowestLayerNode = ''
-      this.setLessonList(item.id)
-      this.$emit('highestLayerNodeSelected', item)
+    layerNodeSelected (layer, layerIndex) {
+      this.$emit(layer.name + 'nodeSelected', layer.selectedValue)
+      if (!this.layersList[layerIndex + 1]) {
+        this.showTreeModalNode(layer.selectedValue.id)
+        return
+      }
+      this.layersList[layerIndex + 1].selectedValue = ''
+      this.setLayerList(this.getLayerRoute(this.layersConfig[layerIndex + 1], layer.selectedValue.id), layerIndex + 1)
     },
-    lowestLayerNodeSelected (lesson) {
-      this.showTreeModalNode(lesson)
-      this.$emit('lowestLayerNodeSelected', lesson)
+    getLayerRoute(layer, layerId) {
+      return typeof layer.routeNameToGetNode === 'function'
+        ? layer.routeNameToGetNode(layerId)
+        : layer.routeNameToGetNode
     },
-    showTreeModalNode (item) {
+    showTreeModalNode (layerId) {
       this.treeKey += 1
       this.dialogLoading = true
-      this.showTree('tree', this.getNode(item.id))
+      this.showTree('tree', this.getNode(layerId))
         .then(() => {
-          this.syncAllCheckedIds()
-          this.selectWantedTree(this.lowestLayerNode)
+          // this.syncAllCheckedIds()
+          // this.selectWantedTree(this.lowestLayerNode)
           this.dialogLoading = false
         })
         .catch(() => {
@@ -518,6 +524,8 @@ export default {
   .question-details {
     .default-details-container {
       .detail-box {
+        padding-left: 2px;
+        padding-right: 2px;
         :deep(.q-field) {
           background: #FFFFFF;
           border-radius: 10px;

@@ -124,15 +124,14 @@
     </div>
 
   </div>
-  <question-tree-modal
+  <tree-modal
     ref="questionTreeModal"
     v-model:dialogValue="treeModalValue"
-    v-model:selected-nodes-list="allSubjects"
-    single-highest-layer-only
-    :lessons-list="treeModalLessonsList"
+    v-model:selected-nodes-list="allSubjectsFlat"
+    exchange-lowest-layer-only
     :persistent="!doesExamHaveLesson"
-    :initial-lowest-layer-node="initialLesson"
-    @lessonSelected="onLessonChanged"
+    :layers-config="treeLayersConfig"
+    @layer2NodeSelected="onLessonChanged"
   >
     <template v-slot:tree-dialog-action-box>
       <q-btn
@@ -148,7 +147,7 @@
         label="تایید"
       />
     </template>
-  </question-tree-modal>
+  </tree-modal>
 </template>
 
 <script>
@@ -159,14 +158,14 @@ import { Question, QuestionList } from 'src/models/Question'
 import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionsGeneralInfo from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo'
-import QuestionTreeModal from 'components/Question/QuestionPage/TreeModal'
+import TreeModal from 'components/Question/QuestionPage/TreeModal'
 import mixinTree from 'src/mixin/Tree'
 import { TreeNode } from 'src/models/TreeNode'
 import StickyBothSides from 'components/Utils/StickyBothSides'
 
 export default {
   name: 'QuestionSelectionTab',
-  components: { StickyBothSides, QuestionTreeModal, QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
+  components: { StickyBothSides, TreeModal, QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
   mixins: [
     mixinTree
   ],
@@ -215,12 +214,29 @@ export default {
         }
       ],
       selectedTags: [],
-      initialLesson: new TreeNode(),
       treeModalValue: false,
       allSubjects: {},
       treeModalLessonsList: [],
       rootNodeIdInFilter: '',
       groupsList: [],
+      treeLayersConfig: [
+        {
+          name: 'layer1',
+          selectedValue: new TreeNode(),
+          nodeList: [],
+          routeNameToGetNode: API_ADDRESS.tree.getGradesList,
+          disable: true,
+          label: 'پایه تحصیلی'
+        },
+        {
+          name: 'layer2',
+          selectedValue: new TreeNode(),
+          nodeList: [],
+          routeNameToGetNode: (layerId) => API_ADDRESS.tree.getNodeById(layerId),
+          disable: false,
+          label: 'نام درس'
+        }
+      ],
       allSubjectsFlat: [],
       lastSelectedNodes: [],
       examGradeSetValue: '',
@@ -390,7 +406,7 @@ export default {
       if (!foundedLesson.id) {
         return
       }
-      this.initialLesson = foundedLesson
+      this.treeLayersConfig[1].selectedValue = foundedLesson
     },
     toggleTreeModal() {
       this.treeModalValue = !this.treeModalValue
