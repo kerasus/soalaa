@@ -103,11 +103,11 @@
                      disable />
           </div>
           <div class="icon-box">
-            <!--                          :disable="!isTreeModalAvailable"-->
             <q-btn
               unelevated
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
+              :disable="!isTreeModalAvailable"
               @click="dialogValue = true"
             />
           </div>
@@ -127,9 +127,11 @@
       ref="questionTreeModal"
       v-model:dialogValue="dialogValue"
       v-model:selectedNodesList="allSubjectsFlat"
+      :number-of-layers="2"
+      :initial-node-list="gradesList"
       exchange-lowest-layer-only
-      @highestLayerNodeSelected="groupSelected"
-      @lowestLayerNodeSelected="lessonSelected"
+      @layer1NodeSelected="groupSelected"
+      @layer2NodeSelected="lessonSelected"
     />
   </div>
 </template>
@@ -142,6 +144,7 @@ import { QuestCategoryList } from 'src/models/QuestCategory'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import TreeModal from 'components/Question/QuestionPage/TreeModal'
+import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'QuestionIdentifier',
@@ -211,12 +214,6 @@ export default {
       default () {
         return []
       }
-    },
-    gradesList: {
-      type: Array,
-      default () {
-        return []
-      }
     }
   },
   emits: [
@@ -264,7 +261,8 @@ export default {
       identifierData: [],
       draftBtnLoading: false,
       saveBtnLoading: false,
-      lessonsTitles: []
+      lessonsTitles: [],
+      gradesList: []
     }
   },
   computed: {
@@ -275,7 +273,7 @@ export default {
       return !!(this.lessonsList && this.lessonsList.length > 0)
     },
     isTreeModalAvailable () {
-      return this.doesHaveLessons && this.editable
+      return this.gradesList.length > 0
     }
   },
   watch: {
@@ -289,6 +287,12 @@ export default {
       },
       deep: true
     }
+  },
+  mounted() {
+    this.$axios.get(API_ADDRESS.tree.getGradesList)
+      .then((response) => {
+        this.gradesList = response.data.data.children
+      })
   },
   methods: {
     loadQuestionDataFromResponse () {
@@ -308,10 +312,9 @@ export default {
       this.gradeSelected(this.grade)
     },
     fillLessonFromResponse () {
-      const firstTag = this.question.tags.list[0]
-      const lesson = firstTag.ancestors[firstTag.ancestors.length - 1]
-      // this.$refs.questionTreeModal.lesson = new TreeNode(lesson)
-      this.$refs.questionTreeModal.lowestLayerNodeSelected(lesson)
+      // const firstTag = this.question.tags.list[0]
+      // const lesson = firstTag.ancestors[firstTag.ancestors.length - 1]
+      // this.$refs.questionTreeModal.lowestLayerNodeSelected(lesson)
     },
     fillAllSubjectsFromResponse () {
       this.question.tags.list.forEach((tag, index) => {

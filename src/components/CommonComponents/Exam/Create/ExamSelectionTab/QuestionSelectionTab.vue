@@ -129,7 +129,6 @@
     v-model:dialogValue="treeModalValue"
     v-model:selected-nodes-list="allSubjects"
     single-highest-layer-only
-    :lessons-list="treeModalLessonsList"
     :persistent="!doesExamHaveLesson"
     :initial-lowest-layer-node="initialLesson"
     @lessonSelected="onLessonChanged"
