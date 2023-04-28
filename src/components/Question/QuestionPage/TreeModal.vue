@@ -41,19 +41,19 @@
                        flat
                        label="حذف همه"
                        color="primary"
-                       @click="deleteAllNodes" />
+                       @click="removeAllNodes" />
               </div>
               <div class="tree-chips-box">
-                <!--                <div v-if="getAllSubjects[0]">-->
-                <!--                  <q-chip v-for="item in getAllSubjects"-->
-                <!--                          :key="item"-->
-                <!--                          class="tree-chips"-->
-                <!--                          icon-remove="mdi-close"-->
-                <!--                          removable-->
-                <!--                          @remove="removeNode(item)">-->
-                <!--                    {{ item.title }}-->
-                <!--                  </q-chip>-->
-                <!--                </div>-->
+                <div v-if="getGlobalStorageSelectedNodes.length > 0">
+                  <q-chip v-for="item in getGlobalStorageSelectedNodes"
+                          :key="item"
+                          class="tree-chips"
+                          icon-remove="mdi-close"
+                          removable
+                          @remove="removeNode(item)">
+                    {{ item.title }}
+                  </q-chip>
+                </div>
               </div>
             </div>
           </div>
@@ -126,7 +126,8 @@ export default {
   emits: [
     'update:dialogValue',
     'update:subjectsField',
-    'update:layersConfig'
+    'update:layersConfig',
+    'update:selectedNodesList'
   ],
   data () {
     return {
@@ -139,24 +140,22 @@ export default {
       lastTreeNodes: [],
       treeKey: 0,
       areNodesSynced: false,
-      highestLayerNodeList: []
+      highestLayerNodeList: [],
+      globalStorage: {}
     }
   },
   computed: {
-    getAllSubjects () {
-      const fieldText = []
-      if (Object.keys(this.chosenSubjects).length === 0) {
-        return fieldText
+    getGlobalStorageSelectedNodes () {
+      const nodes = []
+      Object.entries(this.globalStorage).forEach(([parentKey]) => {
+        Object.entries(this.globalStorage[parentKey]).forEach(([childKey, childValue]) => {
+          nodes.push(...childValue.nodes)
+        })
+      })
+      if (nodes.length === 0) {
+        return this.selectedNodesList
       }
-
-      for (const key in this.chosenSubjects) {
-        if (this.chosenSubjects[key].nodes && this.chosenSubjects[key].nodes.length > 0) {
-          this.chosenSubjects[key].nodes.forEach(val => {
-            fieldText.push(val)
-          })
-        }
-      }
-      return fieldText
+      return nodes
     },
     doesHigherLayerHaveValue () {
       return (layerIndex) => {
@@ -183,31 +182,49 @@ export default {
         this.$emit('update:layersConfig', value)
       }
     },
-    // global scope (main storage)
-    chosenSubjects: {
+    selectedNodesArray: {
       get () {
-        return this.subjectsField
+        return this.selectedNodesList
       },
       set (value) {
-        this.$emit('update:subjectsField', value)
+        this.$emit('update:selectedNodesList', value)
       }
+    },
+    currentLocalStorage: {
+      get () {
+        return this.globalStorage[this.secondLowestLayer
+          ?.selectedValue?.id][this.lowestLayer
+          ?.selectedValue?.id]
+      },
+      set (value) {
+        if (!this.secondLowestLayer.selectedValue.id ||
+          !this.lowestLayer.selectedValue.id) {
+          return
+        }
+        this.globalStorage[this.secondLowestLayer
+          ?.selectedValue?.id][this.lowestLayer
+          ?.selectedValue?.id].nodes = value
+      }
+    },
+    getSelectedNodesIds() {
+      return this.selectedNodesArray.map(item => item.id)
+    },
+    lowestLayer() {
+      return this.layersList[this.layersList.length - 1]
+    },
+    secondLowestLayer() {
+      return this.layersList[this.layersList.length - 2]
     }
   },
   watch: {
     modal (newVal) {
-      this.updateChosenSubjects()
       if (!newVal) {
-        this.lowestLayerNode = ''
-      }
-    },
-    currentTreeNode (newVal) {
-      if (newVal.length > 0) {
-        this.updateChosenSubjects()
+        this.onModalClosed()
       }
     },
     lowestLayerNode (newVal) {
-      if (newVal && this.onlyOneGradeMode) {
-        this.deleteAllNodes()
+      if (newVal && this.singleHighestLayerOnly) {
+        this.removeAllNodes()
       }
     },
     layersList: {
@@ -217,9 +234,7 @@ export default {
       deep: true
     }
   },
-  created () {
-    this.createNodesStorage()
-  },
+  created () {},
   mounted () {
     this.initLayers()
   },
@@ -236,8 +251,40 @@ export default {
         })
       })
     },
-    createNodesStorage () {
-
+    onModalClosed () {
+      this.finalizeOutputData()
+      this.layersList[this.layersList.length - 1].selectedValue = ''
+    },
+    finalizeOutputData () {
+      this.selectedNodesArray = this.getTheLastSelectedNode()
+    },
+    initGlobalStorage () {
+      const lowestLayer = this.lowestLayer
+      const secondLowestLayer = this.secondLowestLayer
+      secondLowestLayer.nodeList.forEach(upperNode => {
+        Object.assign(this.globalStorage, {
+          [upperNode.id]: {}
+        })
+      })
+      if (this.globalStorage[secondLowestLayer.selectedValue.id]) {
+        lowestLayer.nodeList.forEach(innerNode => {
+          Object.assign(this.globalStorage[secondLowestLayer.selectedValue.id], {
+            [innerNode.id]: {
+              nodes: []
+            }
+          })
+        })
+      }
+      this.fillGlobalStorage(lowestLayer)
+    },
+    fillGlobalStorage() {
+      Object.entries(this.globalStorage).forEach(([parentKey]) => {
+        Object.entries(this.globalStorage[parentKey]).forEach(([childKey]) => {
+          const nodesInThisLayer = this.selectedNodesArray
+            .filter(node => !!node.ancestors.find(parent => parent.id === childKey))
+          this.globalStorage[parentKey][childKey].nodes = nodesInThisLayer
+        })
+      })
     },
     initInitialLayer() {
       if (this.layersConfig.length === 0) {
@@ -256,46 +303,43 @@ export default {
         })
     },
     updateNodes (values) {
-      console.log('updateNodes', values)
-      this.nodesUpdatedFromTree = values
-      // if nodes are synced with response don't update currentTreeNode
-      if (!this.areNodesSynced) {
-        this.currentTreeNode = values
-      }
-      this.selectedNodesIDs = values.map(item => item.id)
+      this.currentLocalStorage = values
+      this.selectedNodesArray.push(...values
+        .filter(node => this.selectedNodesArray
+          .findIndex(item => item.id === node.id) === -1))
+    },
+    updateGlobalStorage() {
+      this.fillGlobalStorage(this.lowestLayer)
     },
     removeNode (item) {
       const node = item.id ? item : { id: item }
-      if (this.nodesUpdatedFromTree.find(item => item.id === node.id)) {
+      if (this.currentLocalStorage?.nodes.find(item => item.id === node.id)) {
         this.setTickedMode('tree', node.id, false)
       }
-      this.removeNodeFromChosenSubjects(node)
-      this.updateChosenSubjects()
+      const nodeIndex = this.selectedNodesArray.findIndex(item => item.id === node.id)
+      if (nodeIndex > -1) {
+        this.selectedNodesArray.splice(nodeIndex, 1)
+      }
+      this.updateGlobalStorage()
     },
     removeAllNodes () {
-      this.setTickedMode('tree', this.selectedNodesIDs, false)
-      this.chosenSubjects = {}
-    },
-    deleteAllNodes () {
-      this.removeAllNodes()
-    },
-    removeNodeFromChosenSubjects (node) {
-      for (const key in this.chosenSubjects) {
-        this.chosenSubjects[key].nodes.forEach((value, index) => {
-          if (value.id === node.id) {
-            this.chosenSubjects[key].nodes.splice(index, 1)
-          }
-        })
+      this.setTickedMode('tree', this.getSelectedNodesIds, false)
+      this.selectedNodesArray.splice(0, this.selectedNodesArray.length)
+      if (this.lowestLayer.selectedValue.id &&
+        this.secondLowestLayer.selectedValue.id) {
+        this.updateGlobalStorage()
       }
     },
     layerNodeSelected (layer, layerIndex) {
       this.$emit(layer.name + 'nodeSelected', layer.selectedValue)
       if (!this.layersList[layerIndex + 1]) {
         this.showTreeModalNode(layer.selectedValue.id)
+        this.initGlobalStorage()
         return
       }
       this.layersList[layerIndex + 1].selectedValue = ''
       this.setLayerList(this.getLayerRoute(this.layersConfig[layerIndex + 1], layer.selectedValue.id), layerIndex + 1)
+      this.treeKey++
     },
     getLayerRoute(layer, layerId) {
       return typeof layer.routeNameToGetNode === 'function'
@@ -307,43 +351,17 @@ export default {
       this.dialogLoading = true
       this.showTree('tree', this.getNode(layerId))
         .then(() => {
-          // this.syncAllCheckedIds()
-          // this.selectWantedTree(this.lowestLayerNode)
+          this.syncAllCheckedIds()
           this.dialogLoading = false
         })
         .catch(() => {
           this.dialogLoading = false
         })
     },
-    selectWantedTree (lesson) {
-      if (this.chosenSubjects[lesson.id] && this.chosenSubjects[lesson.id].nodes) {
-        this.switchToSelectedTree(lesson.id)
-        return
-      }
-      this.createNewDataTree(lesson.id)
-    },
-    createNewDataTree (lessonId) {
-      this.chosenSubjects[lessonId] = {}
-      this.chosenSubjects[lessonId].nodes = []
-    },
-    switchToSelectedTree (lessonId) {
-      this.currentTreeNode = this.chosenSubjects[lessonId].nodes
-    },
-    updateChosenSubjects () {
-      if (this.lowestLayerNode.id && this.chosenSubjects[this.lowestLayerNode.id]) {
-        this.chosenSubjects[this.lowestLayerNode.id].nodes = this.currentTreeNode
-      }
-    },
-    syncAllCheckedIds (syncedWithResponse) {
-      if (syncedWithResponse) {
-        this.areNodesSynced = true
-      }
-      if (this.lowestLayerNode && this.chosenSubjects[this.lowestLayerNode.id]) {
-        const selectedNodesIds = this.chosenSubjects[this.lowestLayerNode.id].nodes.map(item => item.id)
-        if (selectedNodesIds.length > 0) {
-          this.$refs.tree.setNodesTicked(selectedNodesIds, true)
-        }
-        this.areNodesSynced = false
+    syncAllCheckedIds () {
+      const selectedNodesIds = this.currentLocalStorage.nodes.map(item => item.id)
+      if (selectedNodesIds.length > 0) {
+        this.$refs.tree.setNodesTicked(selectedNodesIds, true)
       }
     },
     getUniqueListBy (arr, key) {
@@ -352,15 +370,15 @@ export default {
     getTheLastSelectedNode () {
       const foundedNodes = []
       let cleaned = []
-      this.allSubjectsFlat.forEach((selectedNode) => {
+      this.selectedNodesList.forEach((selectedNode) => {
         selectedNode.ancestors.forEach((parentNode) => {
-          if (this.allSubjectsFlat.find(item => item.id === parentNode.id)) {
+          if (this.selectedNodesList.find(item => item.id === parentNode.id)) {
             foundedNodes.push(parentNode)
           }
         })
       })
       cleaned = this.getUniqueListBy(foundedNodes, 'id')
-      this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
+      return this.selectedNodesList.filter((selectedNode) => {
         return !(cleaned.find(item => item.id === selectedNode.id))
       })
     }

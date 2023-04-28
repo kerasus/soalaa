@@ -98,7 +98,7 @@
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
           <div class="input-box">
-            <q-input v-model="lessonsTitles"
+            <q-input v-model="getLessonTitles"
                      dense
                      disable />
           </div>
@@ -126,7 +126,7 @@
     <tree-modal
       ref="questionTreeModal"
       v-model:dialogValue="dialogValue"
-      v-model:selectedNodesList="allSubjectsFlat"
+      v-model:selectedNodesList="selectedNodes"
       :layers-config="treeLayersConfig"
       exchange-lowest-layer-only
       @layer1NodeSelected="groupSelected"
@@ -272,13 +272,10 @@ export default {
         }
       ],
       subjectsFieldText: [],
-      allSubjects: {},
-      allSubjectsFlat: [],
-      lastSelectedNodes: [],
+      selectedNodes: [],
       identifierData: [],
       draftBtnLoading: false,
       saveBtnLoading: false,
-      lessonsTitles: [],
       gradesList: []
     }
   },
@@ -291,6 +288,9 @@ export default {
     },
     isTreeModalAvailable () {
       return this.gradesList.length > 0
+    },
+    getLessonTitles() {
+      return this.selectedNodes.map(node => node.title)
     }
   },
   watch: {
@@ -319,30 +319,13 @@ export default {
       this.majors = this.question.majors
       this.questionLevel = this.question.level.toString()
       if (this.question.tags.list[0]) {
-        this.fillGradeFromResponse()
-        this.fillLessonFromResponse()
-        this.fillAllSubjectsFromResponse()
+        this.selectedNodes = this.question.tags.list
       }
     },
     fillGradeFromResponse () {
       this.grade = new TreeNode(this.question.tags.list[0].ancestors[1])
+      this.treeLayersConfig[0].selectedValue = this.grade
       this.gradeSelected(this.grade)
-    },
-    fillLessonFromResponse () {
-      // const firstTag = this.question.tags.list[0]
-      // const lesson = firstTag.ancestors[firstTag.ancestors.length - 1]
-      // this.$refs.questionTreeModal.lowestLayerNodeSelected(lesson)
-    },
-    fillAllSubjectsFromResponse () {
-      this.question.tags.list.forEach((tag, index) => {
-        const lastAncestors = tag.ancestors[tag.ancestors.length - 1]
-        if (!this.allSubjects[lastAncestors.id]) {
-          this.allSubjects[lastAncestors.id] = {
-            nodes: []
-          }
-        }
-        Object.assign(this.allSubjects[lastAncestors.id].nodes, { [index]: { ...tag } })
-      })
     },
     emitAttachExam (item) {
       this.$emit('attach', item)
@@ -379,10 +362,9 @@ export default {
       this.lessonsTitles = fieldText
     },
     getLastNodesLessonsTitles () {
-      return this.lastSelectedNodes.map(item => item.title)
+      return this.selectedNodes.map(item => item.title)
     },
     getIdentifierData (setTags) {
-      this.updateLessonsTitles()
       this.identifierData.push(...this.getLastNodesLessonsTitles())
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
 
@@ -391,7 +373,7 @@ export default {
       this.question.reference = (this.questionAuthor) ? this.questionAuthor.map(item => item.id) : []
       this.question.targets = (this.questionTargets) ? this.questionTargets.map(item => item.id) : []
       this.question.level = this.questionLevel
-      this.question.tags = new TreeNodeList(this.lastSelectedNodes)
+      this.question.tags = new TreeNodeList(this.selectedNodes)
 
       if (setTags) {
         this.setTags(this.identifierData)
