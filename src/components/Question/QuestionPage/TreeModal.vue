@@ -192,17 +192,14 @@ export default {
     },
     currentLocalStorage: {
       get () {
-        console.log('currentLocalStorage', this.currentLocalStorage)
-        console.log('secondLowestLayer', this.secondLowestLayer.selectedValue.id)
-        console.log('lowestLayer', this.lowestLayer.selectedValue.id)
         return this.globalStorage[this.secondLowestLayer
-          ?.selectedValue?.id][this.lowestLayer
-          ?.selectedValue?.id]
+          .selectedValue.id][this.lowestLayer
+          .selectedValue.id]
       },
       set (value) {
         this.globalStorage[this.secondLowestLayer
-          ?.selectedValue?.id][this.lowestLayer
-          ?.selectedValue?.id].nodes = value
+          .selectedValue.id][this.lowestLayer
+          .selectedValue.id].nodes = value
       }
     },
     getSelectedNodesIds() {
@@ -241,14 +238,25 @@ export default {
         // })
       },
       deep: true
+    },
+    selectedNodesList: {
+      handler(newVal) {
+        this.fillGlobalStorage(newVal)
+      },
+      deep: true
     }
+    // currentLocalStorage: {
+    //   handler(newVal) {
+    //     // console.log('currentLocalStorage', newVal)
+    //   },
+    //   deep: true
+    // }
   },
   created () {},
   async mounted () {
     await this.initLayers()
     this.initGlobalStorage()
     this.initLocalStorage()
-    this.fillGlobalStorage(this.selectedNodesArray)
   },
   updated () {},
   methods: {
@@ -279,6 +287,7 @@ export default {
       })
     },
     initLocalStorage() {
+      console.log('initLocalStorage', this.globalStorage)
       if (this.globalStorage[this.secondLowestLayer.selectedValue.id]) {
         this.lowestLayer.nodeList.forEach(innerNode => {
           if (this.globalStorage[this.secondLowestLayer.selectedValue.id][innerNode.id]?.nodes?.length > 0) {
@@ -291,27 +300,29 @@ export default {
           })
         })
       }
-      console.log('globalStorage', this.globalStorage)
+      console.log('currentLocalStorage', this.currentLocalStorage)
+    },
+    setGlobalStorageValue(arrayOfLayers, node) {
+      if (!this.globalStorage[arrayOfLayers[0]][arrayOfLayers[1]]?.nodes[node.id]) {
+        this.globalStorage[arrayOfLayers[0]][arrayOfLayers[1]]?.nodes.push(node)
+        return
+      }
+      Object.assign(this.globalStorage[arrayOfLayers[0]], {
+        [arrayOfLayers[1]]: {
+          nodes: [node]
+        }
+      })
     },
     fillGlobalStorage(nodesToFillInStorage = []) {
-      Object.entries(this.globalStorage).forEach(([parentKey]) => {
-        // const nodesWithThisParent = nodesToFillInStorage
-        //   .filter(node => !!node.ancestors.find(parent => parent.id === (parentKey)))
-        //   .forEach(node => {
-        //     const parentIndex = node.ancestors.findIndex(parent => parent.id === (parentKey))
-        //     this.globalStorage[node.ancestors[parentIndex]][node.ancestors[parentIndex + 1]] = {
-        //       nodes :
-        //     }
-        //   })
-        // nodesWithGlobalStorageParent.forEach(item => {
-        //   // item
-        //   console.log('item', item)
-        // })
-        // Object.entries(this.globalStorage[parentKey]).forEach(([childKey]) => {
-        //   const nodesInThisLayer = nodesToFillInStorage
-        //     .filter(node => !!node.ancestors.find(parent => parent.id === (childKey)))
-        //   this.globalStorage[parentKey][childKey].nodes = nodesInThisLayer
-        // })
+      nodesToFillInStorage.forEach((node) => {
+        const parentStartIndex = node.ancestors.findIndex(parent => this.globalStorage[parent.id])
+        if (parentStartIndex === -1) {
+          return
+        }
+        const parentsInGlobalStorage = node.ancestors
+          .slice(parentStartIndex, node.ancestors.length)
+          .map(item => item.id)
+        this.setGlobalStorageValue(parentsInGlobalStorage, node)
       })
       console.log('fillGlobalStorage', this.globalStorage)
     },
@@ -336,23 +347,37 @@ export default {
       })
     },
     updateNodes (values) {
-      this.currentLocalStorage = values
       this.selectedNodesArray.push(...values
         .filter(node => this.selectedNodesArray
           .findIndex(item => item.id === node.id) === -1))
+      const removedNodes = this.getRemovedNodes(values)
+      removedNodes.forEach(node => this.removeNodeFromArray(node))
+    },
+    getRemovedNodes(newNodes) {
+      const deletedNodes = []
+      this.currentLocalStorage.nodes.forEach(node => {
+        const existingNode = newNodes.find(item => item.id === node.id)
+        if (!existingNode) {
+          deletedNodes.push(node)
+        }
+      })
+      return deletedNodes
     },
     updateGlobalStorage() {
-      this.fillGlobalStorage(this.selectedNodesArray)
+      // this.fillGlobalStorage(this.selectedNodesArray)
+    },
+    removeNodeFromArray(node) {
+      const nodeIndex = this.selectedNodesArray.findIndex(item => item.id === node.id)
+      if (nodeIndex > -1) {
+        this.selectedNodesArray.splice(nodeIndex, 1)
+      }
     },
     removeNode (item) {
       const node = item.id ? item : { id: item }
       if (this.currentLocalStorage?.nodes.find(item => item.id === node.id)) {
         this.setTickedMode('tree', node.id, false)
       }
-      const nodeIndex = this.selectedNodesArray.findIndex(item => item.id === node.id)
-      if (nodeIndex > -1) {
-        this.selectedNodesArray.splice(nodeIndex, 1)
-      }
+      this.removeNodeFromArray(item)
       this.updateGlobalStorage()
     },
     removeAllNodes () {
