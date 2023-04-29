@@ -129,8 +129,8 @@
       v-model:selectedNodesList="selectedNodes"
       :layers-config="treeLayersConfig"
       exchange-lowest-layer-only
-      @layer1NodeSelected="groupSelected"
-      @layer2NodeSelected="lessonSelected"
+      @layer1nodeSelected="groupSelected"
+      @layer2nodeSelected="lessonSelected"
     />
   </div>
 </template>
