@@ -347,7 +347,8 @@ const API_ADDRESS = {
     getGradesList: lumenServer + '/forrest/tree?type=test',
     getLessonList(lessonId) {
       return lumenServer + '/forrest/tree/' + lessonId
-    }
+    },
+    getSubjectTagsTree: lumenServer + '/forrest/tree?type=subject_tags'
   },
   tags: {
     setTags (questionId) {
