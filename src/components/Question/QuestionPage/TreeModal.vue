@@ -141,7 +141,9 @@ export default {
       treeKey: 0,
       areNodesSynced: false,
       highestLayerNodeList: [],
-      globalStorage: {}
+      globalStorage: {},
+      hasTreeJustBeenLoaded: false,
+      treeLazyLoadedCount: 0
     }
   },
   computed: {
@@ -229,34 +231,18 @@ export default {
       },
       deep: true
     },
-    globalStorage: {
-      handler(newVal) {
-        // Object.entries(newVal).forEach(([parentKey]) => {
-        //   Object.entries(newVal[parentKey]).forEach(([childKey, childValue]) => {
-        //     this.selectedNodesArray.push(...childValue.nodes)
-        //   })
-        // })
-      },
-      deep: true
-    },
     selectedNodesList: {
       handler(newVal) {
+        this.emptyGlobalStorage()
         this.fillGlobalStorage(newVal)
       },
       deep: true
     }
-    // currentLocalStorage: {
-    //   handler(newVal) {
-    //     // console.log('currentLocalStorage', newVal)
-    //   },
-    //   deep: true
-    // }
   },
   created () {},
   async mounted () {
     await this.initLayers()
     this.initGlobalStorage()
-    this.initLocalStorage()
   },
   updated () {},
   methods: {
@@ -268,6 +254,13 @@ export default {
       layerEmitNamesList.forEach(layerName => {
         Object.assign(this._.emitsOptions, {
           [layerName + 'nodeSelected']: null
+        })
+      })
+    },
+    emptyGlobalStorage() {
+      Object.entries(this.globalStorage).forEach(([parentKey]) => {
+        Object.entries(this.globalStorage[parentKey]).forEach(([childKey]) => {
+          this.globalStorage[parentKey][childKey].nodes = []
         })
       })
     },
@@ -286,32 +279,35 @@ export default {
         })
       })
     },
-    initLocalStorage() {
-      console.log('initLocalStorage', this.globalStorage)
-      if (this.globalStorage[this.secondLowestLayer.selectedValue.id]) {
-        this.lowestLayer.nodeList.forEach(innerNode => {
-          if (this.globalStorage[this.secondLowestLayer.selectedValue.id][innerNode.id]?.nodes?.length > 0) {
-            return
-          }
-          Object.assign(this.globalStorage[this.secondLowestLayer.selectedValue.id], {
-            [innerNode.id]: {
-              nodes: []
-            }
-          })
-        })
-      }
-      console.log('currentLocalStorage', this.currentLocalStorage)
-    },
-    setGlobalStorageValue(arrayOfLayers, node) {
-      if (!this.globalStorage[arrayOfLayers[0]][arrayOfLayers[1]]?.nodes[node.id]) {
-        this.globalStorage[arrayOfLayers[0]][arrayOfLayers[1]]?.nodes.push(node)
+    initLocalStorage(layer) {
+      if (!this.globalStorage[this.secondLowestLayer.selectedValue.id]) {
         return
       }
-      Object.assign(this.globalStorage[arrayOfLayers[0]], {
-        [arrayOfLayers[1]]: {
-          nodes: [node]
+      if (this.globalStorage[this.secondLowestLayer.selectedValue.id][layer.id]?.nodes?.length > 0) {
+        return
+      }
+      Object.assign(this.globalStorage[this.secondLowestLayer.selectedValue.id], {
+        [layer.id]: {
+          nodes: []
         }
       })
+    },
+    setGlobalStorageValue(arrayOfLayers, node) {
+      if (!this.globalStorage[arrayOfLayers[0]]) {
+        return
+      }
+      if (!this.globalStorage[arrayOfLayers[0]][arrayOfLayers[1]]) {
+        Object.assign(this.globalStorage[arrayOfLayers[0]], {
+          [arrayOfLayers[1]]: {
+            nodes: [node]
+          }
+        })
+        return
+      }
+      if (!this.globalStorage[arrayOfLayers[0]][arrayOfLayers[1]]?.nodes
+        .find(item => item.id === node.id)) {
+        this.globalStorage[arrayOfLayers[0]][arrayOfLayers[1]]?.nodes.push(node)
+      }
     },
     fillGlobalStorage(nodesToFillInStorage = []) {
       nodesToFillInStorage.forEach((node) => {
@@ -324,7 +320,6 @@ export default {
           .map(item => item.id)
         this.setGlobalStorageValue(parentsInGlobalStorage, node)
       })
-      console.log('fillGlobalStorage', this.globalStorage)
     },
     async initInitialLayer() {
       if (this.layersConfig.length === 0) {
@@ -351,7 +346,7 @@ export default {
         .filter(node => this.selectedNodesArray
           .findIndex(item => item.id === node.id) === -1))
       const removedNodes = this.getRemovedNodes(values)
-      removedNodes.forEach(node => this.removeNodeFromArray(node))
+      removedNodes.forEach(node => this.removeNodeFromArray(node, true))
     },
     getRemovedNodes(newNodes) {
       const deletedNodes = []
@@ -363,10 +358,10 @@ export default {
       })
       return deletedNodes
     },
-    updateGlobalStorage() {
-      // this.fillGlobalStorage(this.selectedNodesArray)
-    },
-    removeNodeFromArray(node) {
+    removeNodeFromArray(node, checkForTree = false) {
+      if (checkForTree && !(this.treeLazyLoadedCount > 2)) {
+        return
+      }
       const nodeIndex = this.selectedNodesArray.findIndex(item => item.id === node.id)
       if (nodeIndex > -1) {
         this.selectedNodesArray.splice(nodeIndex, 1)
@@ -378,28 +373,19 @@ export default {
         this.setTickedMode('tree', node.id, false)
       }
       this.removeNodeFromArray(item)
-      this.updateGlobalStorage()
     },
     removeAllNodes () {
       this.setTickedMode('tree', this.getSelectedNodesIds, false)
       this.selectedNodesArray.splice(0, this.selectedNodesArray.length)
-      if (this.lowestLayer.selectedValue.id &&
-        this.secondLowestLayer.selectedValue.id) {
-        this.updateGlobalStorage()
-      }
-    },
-    getLayerIndex (layer) {
-      return this.layersList.findIndex(item => item.name === layer.name)
     },
     layerNodeSelected (layer, layerIndex) {
       this.$emit(layer.name + 'nodeSelected', layer.selectedValue)
       if (!this.layersList[layerIndex + 1]) {
-        this.initLocalStorage()
+        this.initLocalStorage(layer.selectedValue)
         this.showTreeModalNode(layer.selectedValue.id)
         return
       }
       this.treeKey += 1
-      this.updateGlobalStorage()
       this.layersList[layerIndex + 1].selectedValue = ''
       this.setLayerList(this.getLayerRoute(this.layersConfig[layerIndex + 1], layer.selectedValue.id), layerIndex + 1)
     },
@@ -409,6 +395,8 @@ export default {
         : layer.routeNameToGetNode
     },
     showTreeModalNode (layerId) {
+      this.hasTreeJustBeenLoaded = true
+      this.treeLazyLoadedCount = 0
       this.dialogLoading = true
       this.showTree('tree', this.getNode(layerId))
         .then(() => {
@@ -420,6 +408,7 @@ export default {
         })
     },
     syncAllCheckedIds () {
+      this.treeLazyLoadedCount++
       const selectedNodesIds = this.currentLocalStorage?.nodes?.map(item => item.id) || []
       if (selectedNodesIds.length > 0) {
         this.$refs.tree.setNodesTicked(selectedNodesIds, true)
