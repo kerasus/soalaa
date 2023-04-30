@@ -568,7 +568,7 @@ export default {
           .list-section {
             display: flex;
             flex-direction: row;
-            justify-content: right;
+            justify-content: left;
 
             .q-avatar {
               height: 22px;
