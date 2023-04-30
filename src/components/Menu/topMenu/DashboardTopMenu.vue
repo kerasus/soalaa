@@ -54,7 +54,10 @@ export default {
   mixins: [mixinAuth],
   methods: {
     logout () {
-      return this.$store.dispatch('Auth/logOut')
+      this.$store.dispatch('Auth/logOut')
+        .then(() => {
+          this.$router.push({ name: 'login' })
+        })
     }
   }
 }
