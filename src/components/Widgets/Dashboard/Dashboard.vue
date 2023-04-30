@@ -288,7 +288,10 @@ export default {
       this.$router.push({ name })
     },
     logOut () {
-      return this.$store.dispatch('Auth/logOut')
+      this.$store.dispatch('Auth/logOut')
+        .then(() => {
+          this.$router.push({ name: 'login' })
+        })
     }
   }
 }

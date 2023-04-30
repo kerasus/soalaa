@@ -391,7 +391,10 @@ export default {
   },
   methods: {
     logOut () {
-      return this.$store.dispatch('Auth/logOut')
+      this.$store.dispatch('Auth/logOut')
+        .then(() => {
+          this.$router.push({ name: 'login' })
+        })
     },
     togglePageBuilderEditable () {
       const state = this.$store.getters['PageBuilder/pageBuilderEditable']
@@ -568,7 +571,7 @@ export default {
           .list-section {
             display: flex;
             flex-direction: row;
-            justify-content: right;
+            justify-content: left;
 
             .q-avatar {
               height: 22px;

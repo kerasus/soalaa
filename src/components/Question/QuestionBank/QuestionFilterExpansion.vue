@@ -15,6 +15,12 @@
           <slot />
         </q-expansion-item>
       </q-card-section>
+      <q-inner-loading
+        :showing="loading"
+        label="کمی صبر کنید..."
+        label-class="text-teal"
+        label-style="font-size: 1.1em"
+      />
     </q-card>
   </div>
 </template>
@@ -30,6 +36,10 @@ export default {
     }
   },
   props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
     headerTitle: {
       type: String,
       default: ''

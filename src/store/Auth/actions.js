@@ -22,7 +22,6 @@ const actions = {
     context.commit('updateAccessToken', null)
     context.commit('updateUser', null)
     context.commit('updateRedirectTo', null)
-    this.$router.push({ name: 'login' })
   }
 }
 

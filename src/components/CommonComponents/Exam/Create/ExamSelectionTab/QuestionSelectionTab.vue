@@ -25,6 +25,7 @@
         <question-filter
           ref="filter"
           :show-major-list="false"
+          :availableSearchSingleNode="false"
           :filterQuestions="filterQuestions"
           :root-node-id-to-load="rootNodeIdInFilter"
           :node-ids-to-tick="selectedNodesIds"
@@ -408,7 +409,7 @@ export default {
       this.$emit('nextTab')
     },
     onFilter(filterData) {
-      this.$emit('onFilter', filterData)
+      // this.$emit('onFilter', filterData)
       this.filterData = this.getFiltersForRequest(filterData)
       this.getQuestionData(1, this.filterData)
     },
@@ -472,16 +473,15 @@ export default {
     },
     getFiltersForRequest(filterData) {
       return {
-        tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
-        level: (filterData.level) ? filterData.level.map(item => item.value) : [],
-        years: (filterData.years) ? filterData.years.map(item => item.id) : [],
-        majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
-        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : [],
+        tags: filterData.tags.map(item => item.id),
+        level: filterData.level.map(item => item.value),
+        years: filterData.years.map(item => item.id),
+        majors: filterData.majors.map(item => item.id),
+        reference: filterData.reference.map(item => item.id),
         statement: (filterData.statement) ? filterData.statement[0] : '',
         sort_by: (this.searchSelector.value) ? 'created_at' : '',
         sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value,
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
-
       }
     },
     getQuestionData(page, filters) {
