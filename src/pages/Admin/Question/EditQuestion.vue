@@ -176,7 +176,7 @@ export default {
         perPage: 'meta.per_page',
         pageKey: 'page'
       },
-      logIndexApi: API_ADDRESS.question.reportLog,
+      logIndexApi: null,
       questionType: new QuestionType(),
       componentTabs: new TypeList(),
       question: new Question(),
@@ -191,6 +191,7 @@ export default {
     }
   },
   created () {
+    this.logIndexApi = API_ADDRESS.question.reportLog(this.$route.params.question_id)
     this.enableLoading()
     this.getQuestionTypeForTypeId(this.question)
     this.loadExamList()

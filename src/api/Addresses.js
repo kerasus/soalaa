@@ -284,7 +284,7 @@ const API_ADDRESS = {
     update (questionId) {
       return lumenServer + '/question/' + questionId
     },
-    reportLog: lumenServer + '/question/report',
+    reportLog: (questionId) => lumenServer + '/question/report/' + questionId,
     show (questionId) {
       return lumenServer + '/question/' + questionId
     },
