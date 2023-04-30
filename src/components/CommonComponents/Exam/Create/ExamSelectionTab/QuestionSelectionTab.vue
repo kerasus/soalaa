@@ -127,7 +127,7 @@
   <tree-modal
     ref="questionTreeModal"
     v-model:dialogValue="treeModalValue"
-    v-model:selectedNodes="allSubjectsFlat"
+    v-model:selected-nodes="selectedNodes"
     exchange-last-layer-only
     :persistent="!doesExamHaveLesson"
     :layers-config="treeLayersConfig"
@@ -237,7 +237,6 @@ export default {
           label: 'نام درس'
         }
       ],
-      allSubjectsFlat: [],
       lastSelectedNodes: [],
       examGradeSetValue: '',
       selectedNodesIds: [],
@@ -264,6 +263,7 @@ export default {
         ],
         tags_with_childrens: 1
       },
+      selectedNodes: [],
       selectedQuestions: [],
       questionId: [],
       loadingQuestion: new Question(),
@@ -291,13 +291,6 @@ export default {
         }
         this.hideLoading()
       }
-    },
-    allSubjects: {
-      handler() {
-        this.updateLessonsTitles()
-        this.getTheLastSelectedNode()
-      },
-      deep: true
     },
     treeModalValue(newVal) {
       if (!newVal) {
@@ -577,40 +570,6 @@ export default {
     getLessonsList(item) {
       return this.getNode(item.id)
     },
-    updateLessonsTitles() {
-      const fieldText = []
-      const flatSelectedNodes = []
-      if (Object.keys(this.allSubjects).length !== 0) {
-        for (const key in this.allSubjects) {
-          if (this.allSubjects[key].nodes && this.allSubjects[key].nodes.length > 0) {
-            this.allSubjects[key].nodes.forEach(val => {
-              fieldText.push(val.title)
-              flatSelectedNodes.push(val)
-            })
-          }
-        }
-      }
-      this.allSubjectsFlat = flatSelectedNodes
-      this.lessonsTitles = fieldText
-    },
-    getTheLastSelectedNode() {
-      const foundedNodes = []
-      let cleaned = []
-      this.allSubjectsFlat.forEach((selectedNode) => {
-        selectedNode.ancestors.forEach((parentNode) => {
-          if (this.allSubjectsFlat.find(item => item.id === parentNode.id)) {
-            foundedNodes.push(parentNode)
-          }
-        })
-      })
-      cleaned = this.getUniqueListBy(foundedNodes, 'id')
-      this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
-        return !(cleaned.find(item => item.id === selectedNode.id))
-      })
-    },
-    getUniqueListBy(arr, key) {
-      return [...new Map(arr.map(item => [item[key], item])).values()]
-    },
     AreAllQuestionsSelected() {
       const questionListIds = this.questions.list.map(question => question.id)
       return this.doesFirstArrayIncludeTheSecondOne(this.getSelectedQuestionIds, questionListIds)
@@ -633,15 +592,7 @@ export default {
       this.selectedQuestions = this.providedExam.questions.list.filter(question => questionListIds.includes(question.id))
     },
     fillAllSubjectsFromResponse() {
-      this.providedExam.temp.tags.forEach((tag, index) => {
-        const lastAncestors = tag.ancestors[tag.ancestors.length - 1]
-        if (!this.allSubjects[lastAncestors.id]) {
-          this.allSubjects[lastAncestors.id] = {
-            nodes: []
-          }
-        }
-        Object.assign(this.allSubjects[lastAncestors.id].nodes, { [index]: { ...tag } })
-      })
+      this.selectedNodes = this.providedExam.temp.tags
     },
     setSelectedTags(allTags) {
       this.selectedTags = allTags

@@ -129,8 +129,8 @@
       v-model:selected-nodes="selectedNodes"
       :layers-config="treeLayersConfig"
       exchange-last-layer-only
-      @layer1nodeSelected="groupSelected"
-      @layer2nodeSelected="lessonSelected"
+      @gradenodeSelected="groupSelected"
+      @lessonnodeSelected="lessonSelected"
     />
   </div>
 </template>
@@ -241,7 +241,7 @@ export default {
       majors: null,
       treeLayersConfig: [
         {
-          name: 'layer1',
+          name: 'grade',
           selectedValue: new TreeNode(),
           nodeList: [],
           routeNameToGetNode: API_ADDRESS.tree.getGradesList,
@@ -249,7 +249,7 @@ export default {
           label: 'پایه تحصیلی'
         },
         {
-          name: 'layer2',
+          name: 'lesson',
           selectedValue: new TreeNode(),
           nodeList: [],
           routeNameToGetNode: (layerId) => API_ADDRESS.tree.getNodeById(layerId),
