@@ -126,7 +126,7 @@
     <tree-modal
       ref="questionTreeModal"
       v-model:dialogValue="dialogValue"
-      v-model:selectedNodes="selectedNodes"
+      v-model:selected-nodes="selectedNodes"
       :layers-config="treeLayersConfig"
       exchange-last-layer-only
       @layer1nodeSelected="groupSelected"
@@ -289,29 +289,25 @@ export default {
     isTreeModalAvailable () {
       return this.gradesList.length > 0
     },
-    getLessonTitles() {
+    lessonTitles() {
       return this.selectedNodes.map(node => node.title)
     }
   },
   watch: {
     'question.id': function () {
       this.loadQuestionDataFromResponse()
-    },
-    allSubjects: {
-      handler () {
-        this.updateLessonsTitles()
-        this.getTheLastSelectedNode()
-      },
-      deep: true
     }
   },
   mounted() {
-    this.$axios.get(API_ADDRESS.tree.getGradesList)
-      .then((response) => {
-        this.gradesList = response.data.data.children
-      })
+    this.setGradeList()
   },
   methods: {
+    setGradeList () {
+      this.$axios.get(API_ADDRESS.tree.getGradesList)
+        .then((response) => {
+          this.gradesList = response.data.data.children
+        })
+    },
     loadQuestionDataFromResponse () {
       this.authorshipDate = this.question.years
       this.questionAuthor = this.question.reference
@@ -321,11 +317,6 @@ export default {
       if (this.question.tags.list[0]) {
         this.selectedNodes = this.question.tags.list
       }
-    },
-    fillGradeFromResponse () {
-      this.grade = new TreeNode(this.question.tags.list[0].ancestors[1])
-      this.treeLayersConfig[0].selectedValue = this.grade
-      this.gradeSelected(this.grade)
     },
     emitAttachExam (item) {
       this.$emit('attach', item)
@@ -345,27 +336,8 @@ export default {
     setTags (allTags) {
       this.$emit('tags-collected', allTags)
     },
-    updateLessonsTitles () {
-      const fieldText = []
-      const flatSelectedNodes = []
-      if (Object.keys(this.allSubjects).length !== 0) {
-        for (const key in this.allSubjects) {
-          if (this.allSubjects[key].nodes && this.allSubjects[key].nodes.length > 0) {
-            this.allSubjects[key].nodes.forEach(val => {
-              fieldText.push(val.title)
-              flatSelectedNodes.push(val)
-            })
-          }
-        }
-      }
-      this.allSubjectsFlat = flatSelectedNodes
-      this.lessonsTitles = fieldText
-    },
-    getLastNodesLessonsTitles () {
-      return this.selectedNodes.map(item => item.title)
-    },
     getIdentifierData (setTags) {
-      this.identifierData.push(...this.getLastNodesLessonsTitles())
+      this.identifierData.push(...this.lessonTitles)
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
 
       this.question.majors = (this.majors) ? this.majors.map(item => item.id) : []
@@ -394,24 +366,6 @@ export default {
         finalArray.push(tag.title)
       }
       return finalArray
-    },
-    getUniqueListBy (arr, key) {
-      return [...new Map(arr.map(item => [item[key], item])).values()]
-    },
-    getTheLastSelectedNode () {
-      const foundedNodes = []
-      let cleaned = []
-      this.allSubjectsFlat.forEach((selectedNode) => {
-        selectedNode.ancestors.forEach((parentNode) => {
-          if (this.allSubjectsFlat.find(item => item.id === parentNode.id)) {
-            foundedNodes.push(parentNode)
-          }
-        })
-      })
-      cleaned = this.getUniqueListBy(foundedNodes, 'id')
-      this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
-        return !(cleaned.find(item => item.id === selectedNode.id))
-      })
     }
   }
 }
