@@ -314,7 +314,7 @@ export default {
       this.questionTargets = this.question.targets
       this.majors = this.question.majors
       this.questionLevel = this.question.level.toString()
-      if (this.question.tags.list[0]) {
+      if (this.question.tags.list.length > 0) {
         this.selectedNodes = this.question.tags.list
       }
     },
