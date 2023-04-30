@@ -343,6 +343,10 @@ const API_ADDRESS = {
     },
     editNode (id) {
       return lumenServer + '/forrest/tree/' + id
+    },
+    getGradesList: lumenServer + '/forrest/tree?type=test',
+    getLessonList(lessonId) {
+      return lumenServer + '/forrest/tree/' + lessonId
     }
   },
   tags: {
