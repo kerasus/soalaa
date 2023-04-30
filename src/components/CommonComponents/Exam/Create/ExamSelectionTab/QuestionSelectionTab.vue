@@ -127,8 +127,8 @@
   <tree-modal
     ref="questionTreeModal"
     v-model:dialogValue="treeModalValue"
-    v-model:selected-nodes-list="allSubjectsFlat"
-    exchange-lowest-layer-only
+    v-model:selectedNodes="allSubjectsFlat"
+    exchange-last-layer-only
     :persistent="!doesExamHaveLesson"
     :layers-config="treeLayersConfig"
     @layer2NodeSelected="onLessonChanged"

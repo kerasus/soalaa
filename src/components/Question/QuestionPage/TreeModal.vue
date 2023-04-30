@@ -91,7 +91,7 @@ export default {
     dialogValue: {
       type: Boolean
     },
-    selectedNodesList: {
+    selectedNodes: {
       type: [Array, TreeNodeList],
       default () {
         return new TreeNodeList()
@@ -103,7 +103,7 @@ export default {
         return false
       }
     },
-    exchangeLowestLayerOnly: {
+    exchangeLastLayerOnly: {
       type: Boolean,
       default () {
         return false
@@ -127,7 +127,7 @@ export default {
     'update:dialogValue',
     'update:subjectsField',
     'update:layersConfig',
-    'update:selectedNodesList'
+    'update:selectedNodes'
   ],
   data () {
     return {
@@ -147,7 +147,7 @@ export default {
         })
       })
       if (nodes.length === 0) {
-        return this.selectedNodesList
+        return this.selectedNodes
       }
       return nodes
     },
@@ -178,10 +178,10 @@ export default {
     },
     selectedNodesArray: {
       get () {
-        return this.selectedNodesList
+        return this.selectedNodes
       },
       set (value) {
-        this.$emit('update:selectedNodesList', value)
+        this.$emit('update:selectedNodes', value)
       }
     },
     currentLocalStorage: {
@@ -225,7 +225,7 @@ export default {
       },
       deep: true
     },
-    selectedNodesList: {
+    selectedNodes: {
       handler(newVal) {
         this.emptyGlobalStorage()
         this.fillGlobalStorage(newVal)
@@ -263,6 +263,9 @@ export default {
       this.layersList[this.layersList.length - 1].selectedValue = ''
     },
     finalizeOutputData () {
+      if (!this.exchangeLastLayerOnly) {
+        return
+      }
       this.selectedNodesArray = this.getTheLastSelectedNode(this.selectedNodesArray)
     },
     initGlobalStorage () {
