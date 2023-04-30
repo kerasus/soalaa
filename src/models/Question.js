@@ -105,6 +105,10 @@ class Question extends Model {
         relatedModel: TreeNodeList
       },
       {
+        key: 'subject_tags',
+        relatedModel: TreeNodeList
+      },
+      {
         key: 'choices',
         relatedModel: ChoiceList
       },

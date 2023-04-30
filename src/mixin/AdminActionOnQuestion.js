@@ -144,6 +144,7 @@ const AdminActionOnQuestion = {
         // reference: [this.question.reference],
         // years: this.question.years,
         tags: this.question.tags.list.map(tag => tag.id),
+        subject_tags: this.question.subject_tags.list.map(tag => tag.id),
         major: this.question.major
       }
       this.$axios.put(API_ADDRESS.question.update(question.id), question)
@@ -195,6 +196,9 @@ const AdminActionOnQuestion = {
       })
       question.tags.list.forEach((item, key) => {
         formData.append('tags[' + key + ']', item.id)
+      })
+      question.subject_tags.list.forEach((item, key) => {
+        formData.append('subject_tags[' + key + ']', item.id)
       })
       question.majors.forEach((item, key) => {
         formData.append('majors[' + key + ']', item)
