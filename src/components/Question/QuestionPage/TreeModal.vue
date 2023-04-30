@@ -132,17 +132,9 @@ export default {
   data () {
     return {
       dialogLoading: false,
-      lowestLayerNode: '',
-      highestLayerNode: '',
       selectedNodesIDs: [],
-      lowestLayerNodeList: [],
-      currentTreeNode: [],
-      lastTreeNodes: [],
       treeKey: 0,
-      areNodesSynced: false,
-      highestLayerNodeList: [],
       globalStorage: {},
-      hasTreeJustBeenLoaded: false,
       treeLazyLoadedCount: 0
     }
   },
@@ -220,9 +212,11 @@ export default {
         this.onModalClosed()
       }
     },
-    lowestLayerNode (newVal) {
-      if (newVal && this.singleHighestLayerOnly) {
-        this.removeAllNodes()
+    'lowestLayer.selectedValue.id': {
+      handler(newValue) {
+        if (newValue && this.singleHighestLayerOnly) {
+          this.removeAllNodes()
+        }
       }
     },
     layersList: {
@@ -395,7 +389,6 @@ export default {
         : layer.routeNameToGetNode
     },
     showTreeModalNode (layerId) {
-      this.hasTreeJustBeenLoaded = true
       this.treeLazyLoadedCount = 0
       this.dialogLoading = true
       this.showTree('tree', this.getNode(layerId))
