@@ -98,7 +98,7 @@
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
           <div class="input-box">
-            <q-input v-model="getLessonTitles"
+            <q-input v-model="lessonTitles"
                      dense
                      disable />
           </div>
