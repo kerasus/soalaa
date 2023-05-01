@@ -49,7 +49,7 @@ export default {
         total: 'meta.total',
         currentPage: 'meta.current_page',
         perPage: 'meta.per_page',
-        pageKey: 'page'
+        pageKey: 'contentPage'
       },
       table: {
         columns: [
@@ -72,7 +72,7 @@ export default {
       },
       inputs: [
         { type: 'input', name: 'id', value: null, label: 'آیدی مورد نظر را وارد کنید', col: 'col-md-4' },
-        { type: 'input', name: 'title', value: null, label: 'عنوان مورد نظد را وارد کنید', col: 'col-md-4' }
+        { type: 'input', name: 'name', value: null, label: 'عنوان مورد نظد را وارد کنید', col: 'col-md-4' }
       ]
     }
   },
