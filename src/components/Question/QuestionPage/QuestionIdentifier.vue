@@ -68,18 +68,18 @@
           :disable="!editable"
         />
       </div>
-      <div class="detail-box detail-box-first col-3">
-        <div class="detail-box-title">پایه تحصیلی</div>
-        <q-select
-          v-model="grade"
-          borderless
-          option-value="id"
-          option-label="title"
-          :options="gradesList"
-          :disable="!editable"
-          @update:model-value="gradeSelected"
-        />
-      </div>
+      <!--      <div class="detail-box detail-box-first col-3">-->
+      <!--        <div class="detail-box-title">پایه تحصیلی</div>-->
+      <!--        <q-select-->
+      <!--          v-model="grade"-->
+      <!--          borderless-->
+      <!--          option-value="id"-->
+      <!--          option-label="title"-->
+      <!--          :options="gradesList"-->
+      <!--          :disable="!editable"-->
+      <!--          @update:model-value="gradeSelected"-->
+      <!--        />-->
+      <!--      </div>-->
       <div class="detail-box col-3">
         <div class="detail-box-title">رشته تحصیلی</div>
         <q-select
@@ -98,7 +98,7 @@
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
           <div class="input-box">
-            <q-input v-model="lessonsTitles"
+            <q-input v-model="lessonTitles"
                      dense
                      disable />
           </div>
@@ -113,6 +113,24 @@
           </div>
         </div>
       </div>
+      <div class="detail-box col-3">
+        <div class="detail-box-title">تگ موضوعی</div>
+        <div class="input-container flex">
+          <div class="input-box">
+            <q-input v-model="tagsTitles"
+                     dense
+                     disable />
+          </div>
+          <div class="icon-box">
+            <q-btn
+              unelevated
+              icon="isax:tree"
+              class="open-modal-btn default-detail-btn"
+              @click="subjectTagsTreeModal = true"
+            />
+          </div>
+        </div>
+      </div>
     </div>
     <!--    <q-btn-->
     <!--      unelevated-->
@@ -123,14 +141,20 @@
     <!--    >-->
     <!--      ثبت مباحث انتخاب شده-->
     <!--    </q-btn>-->
-    <question-tree-modal
+    <tree-modal
       ref="questionTreeModal"
       v-model:dialogValue="dialogValue"
-      v-model:subjectsField="allSubjects"
-      :lessons-list="lessonsList"
-      :groups-list="groupsList"
-      @groupSelected="groupSelected"
-      @lessonSelected="lessonSelected"
+      v-model:selected-nodes="selectedNodes"
+      :layers-config="treeLayersConfig"
+      exchange-last-layer-only
+      @gradenodeSelected="groupSelected"
+      @lessonnodeSelected="lessonSelected"
+    />
+    <tree-modal
+      v-model:dialogValue="subjectTagsTreeModal"
+      v-model:selected-nodes="selectedTreeTags"
+      :layers-config="treeTagsConfig"
+      exchange-last-layer-only
     />
   </div>
 </template>
@@ -142,12 +166,13 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
-import QuestionTreeModal from 'components/Question/QuestionPage/QuestionTreeModal'
+import TreeModal from 'components/Question/QuestionPage/TreeModal'
+import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'QuestionIdentifier',
   components: {
-    QuestionTreeModal,
+    TreeModal,
     AttachExam
   },
   props: {
@@ -212,12 +237,6 @@ export default {
       default () {
         return []
       }
-    },
-    gradesList: {
-      type: Array,
-      default () {
-        return []
-      }
     }
   },
   emits: [
@@ -237,6 +256,7 @@ export default {
   data () {
     return {
       dialogValue: false,
+      subjectTagsTreeModal: false,
       questionAuthor: null,
       questionTargets: null,
       authorshipDate: null,
@@ -244,6 +264,42 @@ export default {
       grade: '',
       model: null,
       majors: null,
+      treeLayersConfig: [
+        {
+          name: 'grade',
+          selectedValue: new TreeNode(),
+          nodeList: [],
+          routeNameToGetNode: API_ADDRESS.tree.getGradesList,
+          disable: false,
+          label: 'پایه تحصیلی'
+        },
+        {
+          name: 'lesson',
+          selectedValue: new TreeNode(),
+          nodeList: [],
+          routeNameToGetNode: (layerId) => API_ADDRESS.tree.getNodeById(layerId),
+          disable: false,
+          label: 'نام درس'
+        }
+      ],
+      treeTagsConfig: [
+        {
+          name: 'layer1',
+          selectedValue: new TreeNode(),
+          nodeList: [],
+          routeNameToGetNode: API_ADDRESS.tree.getSubjectTagsTree,
+          disable: false,
+          label: 'پایه تحصیلی'
+        },
+        {
+          name: 'layer2',
+          selectedValue: new TreeNode(),
+          nodeList: [],
+          routeNameToGetNode: (layerId) => API_ADDRESS.tree.getNodeById(layerId),
+          disable: false,
+          label: 'نام درس'
+        }
+      ],
       levels: [
         {
           id: '1',
@@ -259,13 +315,12 @@ export default {
         }
       ],
       subjectsFieldText: [],
-      allSubjects: {},
-      allSubjectsFlat: [],
-      lastSelectedNodes: [],
+      selectedNodes: [],
+      selectedTreeTags: [],
       identifierData: [],
       draftBtnLoading: false,
       saveBtnLoading: false,
-      lessonsTitles: []
+      gradesList: []
     }
   },
   computed: {
@@ -276,54 +331,42 @@ export default {
       return !!(this.lessonsList && this.lessonsList.length > 0)
     },
     isTreeModalAvailable () {
-      return this.doesHaveLessons && this.editable
+      return this.gradesList.length > 0
+    },
+    lessonTitles() {
+      return this.selectedNodes.map(node => node.title)
+    },
+    tagsTitles() {
+      return this.selectedTreeTags.map(node => node.title)
     }
   },
   watch: {
     'question.id': function () {
       this.loadQuestionDataFromResponse()
-    },
-    allSubjects: {
-      handler () {
-        this.updateLessonsTitles()
-        this.getTheLastSelectedNode()
-      },
-      deep: true
     }
   },
+  mounted() {
+    this.setGradeList()
+  },
   methods: {
+    setGradeList () {
+      this.$axios.get(API_ADDRESS.tree.getGradesList)
+        .then((response) => {
+          this.gradesList = response.data.data.children
+        })
+    },
     loadQuestionDataFromResponse () {
       this.authorshipDate = this.question.years
       this.questionAuthor = this.question.reference
       this.questionTargets = this.question.targets
       this.majors = this.question.majors
       this.questionLevel = this.question.level.toString()
-      if (this.question.tags.list[0]) {
-        this.fillGradeFromResponse()
-        this.fillLessonFromResponse()
-        this.fillAllSubjectsFromResponse()
+      if (this.question.tags.list.length > 0) {
+        this.selectedNodes = this.question.tags.list
       }
-    },
-    fillGradeFromResponse () {
-      this.grade = new TreeNode(this.question.tags.list[0].ancestors[1])
-      this.gradeSelected(this.grade)
-    },
-    fillLessonFromResponse () {
-      const firstTag = this.question.tags.list[0]
-      const lesson = firstTag.ancestors[firstTag.ancestors.length - 1]
-      // this.$refs.questionTreeModal.lesson = new TreeNode(lesson)
-      this.$refs.questionTreeModal.lessonSelected(lesson)
-    },
-    fillAllSubjectsFromResponse () {
-      this.question.tags.list.forEach((tag, index) => {
-        const lastAncestors = tag.ancestors[tag.ancestors.length - 1]
-        if (!this.allSubjects[lastAncestors.id]) {
-          this.allSubjects[lastAncestors.id] = {
-            nodes: []
-          }
-        }
-        Object.assign(this.allSubjects[lastAncestors.id].nodes, { [index]: { ...tag } })
-      })
+      if (this.question.subject_tags.list.length > 0) {
+        this.selectedTreeTags = this.question.subject_tags.list
+      }
     },
     emitAttachExam (item) {
       this.$emit('attach', item)
@@ -343,28 +386,8 @@ export default {
     setTags (allTags) {
       this.$emit('tags-collected', allTags)
     },
-    updateLessonsTitles () {
-      const fieldText = []
-      const flatSelectedNodes = []
-      if (Object.keys(this.allSubjects).length !== 0) {
-        for (const key in this.allSubjects) {
-          if (this.allSubjects[key].nodes && this.allSubjects[key].nodes.length > 0) {
-            this.allSubjects[key].nodes.forEach(val => {
-              fieldText.push(val.title)
-              flatSelectedNodes.push(val)
-            })
-          }
-        }
-      }
-      this.allSubjectsFlat = flatSelectedNodes
-      this.lessonsTitles = fieldText
-    },
-    getLastNodesLessonsTitles () {
-      return this.lastSelectedNodes.map(item => item.title)
-    },
     getIdentifierData (setTags) {
-      this.updateLessonsTitles()
-      this.identifierData.push(...this.getLastNodesLessonsTitles())
+      this.identifierData.push(...this.lessonTitles)
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
 
       this.question.majors = (this.majors) ? this.majors.map(item => item.id) : []
@@ -372,7 +395,8 @@ export default {
       this.question.reference = (this.questionAuthor) ? this.questionAuthor.map(item => item.id) : []
       this.question.targets = (this.questionTargets) ? this.questionTargets.map(item => item.id) : []
       this.question.level = this.questionLevel
-      this.question.tags = new TreeNodeList(this.lastSelectedNodes)
+      this.question.tags = new TreeNodeList(this.selectedNodes)
+      this.question.subject_tags = new TreeNodeList(this.selectedTreeTags)
 
       if (setTags) {
         this.setTags(this.identifierData)
@@ -393,24 +417,6 @@ export default {
         finalArray.push(tag.title)
       }
       return finalArray
-    },
-    getUniqueListBy (arr, key) {
-      return [...new Map(arr.map(item => [item[key], item])).values()]
-    },
-    getTheLastSelectedNode () {
-      const foundedNodes = []
-      let cleaned = []
-      this.allSubjectsFlat.forEach((selectedNode) => {
-        selectedNode.ancestors.forEach((parentNode) => {
-          if (this.allSubjectsFlat.find(item => item.id === parentNode.id)) {
-            foundedNodes.push(parentNode)
-          }
-        })
-      })
-      cleaned = this.getUniqueListBy(foundedNodes, 'id')
-      this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
-        return !(cleaned.find(item => item.id === selectedNode.id))
-      })
     }
   }
 }

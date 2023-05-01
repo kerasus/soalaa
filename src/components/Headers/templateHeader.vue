@@ -147,7 +147,10 @@ export default {
       'updateLayoutLeftDrawerVisible'
     ]),
     logOut () {
-      return this.$store.dispatch('Auth/logOut')
+      this.$store.dispatch('Auth/logOut')
+        .then(() => {
+          this.$router.push({ name: 'login' })
+        })
     },
     toggleLeftDrawer () {
       this.updateLayoutLeftDrawerVisible(true)

@@ -145,6 +145,7 @@ export default {
           reference: this.question.reference,
           years: this.question.years,
           tags: this.question.tags.list.map(item => item.id),
+          subject_tags: this.question.subject_tags.list.map(item => item.id),
           major: this.question.major,
           sub_category_id: 1,
           recommended_time: 0,
