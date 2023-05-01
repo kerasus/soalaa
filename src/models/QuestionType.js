@@ -39,6 +39,9 @@ class QuestionType extends Model {
     } else if (this.value === 'descriptive') {
       this.tabName = 'تشریحی'
       this.componentName = 'DescriptiveQ'
+    } else if (this.value === 'group_question') {
+      this.tabName = 'سوالات گروهی'
+      this.componentName = 'GroupQuestion'
     }
   }
 }
