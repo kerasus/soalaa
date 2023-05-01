@@ -43,9 +43,10 @@ const API_ADDRESS = {
     base: authServer + '/set'
   },
   content: {
-    admin: authServer + '/admin/contents',
+    admin: authServer + '/admin/c',
+    adminGet: (id) => authServer + `/admin/c/${id}`,
     base: authServer + '/c',
-    get: (id) => authServer + `c/${id}`
+    get: (id) => authServer + `/c/${id}`
   },
   option: {
     base: lumenServer + '/option',
@@ -347,7 +348,8 @@ const API_ADDRESS = {
     getGradesList: lumenServer + '/forrest/tree?type=test',
     getLessonList(lessonId) {
       return lumenServer + '/forrest/tree/' + lessonId
-    }
+    },
+    getSubjectTagsTree: lumenServer + '/forrest/tree?type=subject_tags'
   },
   tags: {
     setTags (questionId) {

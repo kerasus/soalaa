@@ -94,7 +94,7 @@
           :disable="!editable"
         />
       </div>
-      <div class="detail-box col-6">
+      <div class="detail-box col-3">
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
           <div class="input-box">
@@ -109,6 +109,24 @@
               class="open-modal-btn default-detail-btn"
               :disable="!isTreeModalAvailable"
               @click="dialogValue = true"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="detail-box col-3">
+        <div class="detail-box-title">تگ موضوعی</div>
+        <div class="input-container flex">
+          <div class="input-box">
+            <q-input v-model="tagsTitles"
+                     dense
+                     disable />
+          </div>
+          <div class="icon-box">
+            <q-btn
+              unelevated
+              icon="isax:tree"
+              class="open-modal-btn default-detail-btn"
+              @click="subjectTagsTreeModal = true"
             />
           </div>
         </div>
@@ -131,6 +149,12 @@
       exchange-last-layer-only
       @gradenodeSelected="groupSelected"
       @lessonnodeSelected="lessonSelected"
+    />
+    <tree-modal
+      v-model:dialogValue="subjectTagsTreeModal"
+      v-model:selected-nodes="selectedTreeTags"
+      :layers-config="treeTagsConfig"
+      exchange-last-layer-only
     />
   </div>
 </template>
@@ -232,6 +256,7 @@ export default {
   data () {
     return {
       dialogValue: false,
+      subjectTagsTreeModal: false,
       questionAuthor: null,
       questionTargets: null,
       authorshipDate: null,
@@ -257,6 +282,24 @@ export default {
           label: 'نام درس'
         }
       ],
+      treeTagsConfig: [
+        {
+          name: 'layer1',
+          selectedValue: new TreeNode(),
+          nodeList: [],
+          routeNameToGetNode: API_ADDRESS.tree.getSubjectTagsTree,
+          disable: false,
+          label: 'پایه تحصیلی'
+        },
+        {
+          name: 'layer2',
+          selectedValue: new TreeNode(),
+          nodeList: [],
+          routeNameToGetNode: (layerId) => API_ADDRESS.tree.getNodeById(layerId),
+          disable: false,
+          label: 'نام درس'
+        }
+      ],
       levels: [
         {
           id: '1',
@@ -273,6 +316,7 @@ export default {
       ],
       subjectsFieldText: [],
       selectedNodes: [],
+      selectedTreeTags: [],
       identifierData: [],
       draftBtnLoading: false,
       saveBtnLoading: false,
@@ -291,6 +335,9 @@ export default {
     },
     lessonTitles() {
       return this.selectedNodes.map(node => node.title)
+    },
+    tagsTitles() {
+      return this.selectedTreeTags.map(node => node.title)
     }
   },
   watch: {
@@ -316,6 +363,9 @@ export default {
       this.questionLevel = this.question.level.toString()
       if (this.question.tags.list.length > 0) {
         this.selectedNodes = this.question.tags.list
+      }
+      if (this.question.subject_tags.list.length > 0) {
+        this.selectedTreeTags = this.question.subject_tags.list
       }
     },
     emitAttachExam (item) {
@@ -346,6 +396,7 @@ export default {
       this.question.targets = (this.questionTargets) ? this.questionTargets.map(item => item.id) : []
       this.question.level = this.questionLevel
       this.question.tags = new TreeNodeList(this.selectedNodes)
+      this.question.subject_tags = new TreeNodeList(this.selectedTreeTags)
 
       if (setTags) {
         this.setTags(this.identifierData)

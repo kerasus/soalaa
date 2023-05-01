@@ -231,7 +231,15 @@
 
           <div class="description-answer-video"
           >
-            <div class="answer-video flex items-center justify-center"
+            <div v-if="contentLoading"
+                 class="answer-video flex items-center justify-center">
+              <q-spinner-ball
+                color="primary"
+                size="2em"
+              />
+            </div>
+            <div v-else
+                 class="answer-video flex items-center justify-center"
                  :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
             >
               <content-video-player :content="content"
@@ -332,7 +340,7 @@
           class="see-answer-button no-padding"
           :label="listConfig.questionAnswerExpanded ? '' : ''"
           :icon-right="listConfig.questionAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-          @click="listConfig.questionAnswerExpanded = !listConfig.questionAnswerExpanded"
+          @click="toggleContent"
         >
           <span v-if="listConfig.questionAnswerExpanded">
             پاسخ تشریحی
@@ -499,6 +507,7 @@ export default {
   ],
   data () {
     return {
+      contentLoading: false,
       questionChoiceList: [],
       confirmQuestion: false,
       questionLevel: 2,
@@ -613,7 +622,6 @@ export default {
       this.applyPageStrategy()
       this.applyListConfig()
       this.getQuestionReportOptions()
-      this.getQuestionContent()
     },
     getQuestionReportOptions() {
       this.reportProblemDialog.options = this.reportOptions
@@ -713,13 +721,26 @@ export default {
         })
       }
     },
+    toggleContent() {
+      this.listConfig.questionAnswerExpanded = !this.listConfig.questionAnswerExpanded
+      if (this.listConfig.questionAnswerExpanded) {
+        this.getQuestionContent()
+      }
+    },
     getQuestionContent() {
+      if (!this.question.content_id) {
+        return
+      }
+      this.contentLoading = true
       this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
         .then(res => {
           this.content = new Content(res.data.data)
           this.getTimePoints()
+          this.contentLoading = false
         })
-        .catch(() => {})
+        .catch(() => {
+          this.contentLoading = false
+        })
     },
     getTimePoints() {
       this.questionTimePoint = this.content.timepoints.list.find(x => x.id === this.question.time_point_id)
