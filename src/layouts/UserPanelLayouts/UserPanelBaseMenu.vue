@@ -175,7 +175,10 @@ export default {
   },
   methods: {
     logOut () {
-      return this.$store.dispatch('Auth/logOut')
+      this.$store.dispatch('Auth/logOut')
+        .then(() => {
+          this.$router.push({ name: 'login' })
+        })
     },
     goToLogin() {
       this.$router.push({ name: 'login' })

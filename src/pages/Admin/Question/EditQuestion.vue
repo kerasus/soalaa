@@ -63,6 +63,7 @@
           @tags-collected="setTags"
         />
       </div>
+      <question-video-answer @update-value="updateQuestion($event)" />
       <btn-box
         class="col-12"
         editeQuestion
@@ -118,6 +119,7 @@ import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentif
 import mixinTree from 'src/mixin/Tree'
 import { EntityIndex } from 'quasar-crud'
 import moment from 'moment-jalaali'
+import QuestionVideoAnswer from 'components/Question/QuestionPage/QuestionVideoAnswer.vue'
 
 export default {
   name: 'EditQuestion',
@@ -132,7 +134,8 @@ export default {
     EntityIndex,
     StatusChange,
     AttachExam,
-    LogListComponent
+    LogListComponent,
+    QuestionVideoAnswer
   },
   mixins: [
     AdminActionOnQuestion,
@@ -173,7 +176,7 @@ export default {
         perPage: 'meta.per_page',
         pageKey: 'page'
       },
-      logIndexApi: API_ADDRESS.question.reportLog,
+      logIndexApi: null,
       questionType: new QuestionType(),
       componentTabs: new TypeList(),
       question: new Question(),
@@ -188,6 +191,7 @@ export default {
     }
   },
   created () {
+    this.logIndexApi = API_ADDRESS.question.reportLog(this.$route.params.question_id)
     this.enableLoading()
     this.getQuestionTypeForTypeId(this.question)
     this.loadExamList()
@@ -304,6 +308,10 @@ export default {
       this.$store.commit('AppLayout/showConfirmDialog', {
         show: false
       })
+    },
+    updateQuestion(data) {
+      this.question.content_id = data.content_id
+      this.question.time_point_id = data.time_point_id
     }
   },
   computed: {

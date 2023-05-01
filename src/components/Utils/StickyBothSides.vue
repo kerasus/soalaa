@@ -64,6 +64,9 @@ export default {
   },
   watch: {
     scrollInfo(newValue) {
+      if (newValue.position.top === 0) {
+        this.stickyElement.style.position = 'static'
+      }
       if (!this.disableSticky) {
         this.updateScroll(newValue)
       } else {

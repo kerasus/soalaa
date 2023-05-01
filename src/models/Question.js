@@ -105,6 +105,10 @@ class Question extends Model {
         relatedModel: TreeNodeList
       },
       {
+        key: 'subject_tags',
+        relatedModel: TreeNodeList
+      },
+      {
         key: 'choices',
         relatedModel: ChoiceList
       },
@@ -140,6 +144,12 @@ class Question extends Model {
       {
         key: 'creator',
         default: 1
+      },
+      {
+        key: 'content_id'
+      },
+      {
+        key: 'time_point_id'
       },
       {
         key: 'confirmed',

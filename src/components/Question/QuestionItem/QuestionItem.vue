@@ -160,13 +160,15 @@
           :key="index"
           class="question-tag"
         >
-          <div
-            class="tag-box no-wrap flex items-center"
-          >
-            <div class="tag-title ellipsis">{{ item.title }}</div>
-            <div class="tag-circle" />
+          <div v-for="(ancestor,ancestorIndex) in item.ancestors"
+               :key="ancestorIndex"
+               class="ancestors flex flex-center">
+            <div v-if="ancestorIndex !== 0"
+                 class="tag-title ellipsis">{{ ancestor.title }}</div>
+            <div v-if="ancestorIndex !== 0"
+                 class="tag-circle" />
           </div>
-
+          <div class="tag-title ellipsis">{{ item.title }}</div>
         </div>
       </div>
     </q-card-section>
@@ -229,15 +231,20 @@
 
           <div class="description-answer-video"
           >
-            <div class="answer-video flex items-center justify-center"
+            <div v-if="contentLoading"
+                 class="answer-video flex items-center justify-center">
+              <q-spinner-ball
+                color="primary"
+                size="2em"
+              />
+            </div>
+            <div v-else
+                 class="answer-video flex items-center justify-center"
                  :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
             >
-              <div class="soon flex items-center justify-center">
-                به زودی
-              </div>
-
-              <!--              ToDo : uncomment this when backend give you a valid key-->
-              <!--              <video-player />-->
+              <content-video-player :content="content"
+                                    :timePoint="questionTimePoint"
+                                    :nextTimePoint="nextTimePoint" />
             </div>
 
             <div class="answer-video-title">
@@ -333,7 +340,7 @@
           class="see-answer-button no-padding"
           :label="listConfig.questionAnswerExpanded ? '' : ''"
           :icon-right="listConfig.questionAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-          @click="listConfig.questionAnswerExpanded = !listConfig.questionAnswerExpanded"
+          @click="toggleContent"
         >
           <span v-if="listConfig.questionAnswerExpanded">
             پاسخ تشریحی
@@ -419,16 +426,18 @@
 <script>
 import VueKatex from 'src/components/VueKatex'
 import question from 'components/Question/QuestionItem/Question'
-// import VideoPlayer from 'src/components/VideoPlayer'
-import { Question } from 'src/models/Question'
-import API_ADDRESS from 'src/api/Addresses'
+import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
+import { Question } from 'src/models/Question.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Content } from 'src/models/Content.js'
+import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 
 export default {
   name: 'QuestionItem',
   components: {
     VueKatex,
-    question
-    // VideoPlayer
+    question,
+    ContentVideoPlayer
   },
   props: {
     questionsLength: {
@@ -498,6 +507,7 @@ export default {
   ],
   data () {
     return {
+      contentLoading: false,
       questionChoiceList: [],
       confirmQuestion: false,
       questionLevel: 2,
@@ -557,7 +567,10 @@ export default {
         problemType: '',
         options: [],
         description: ''
-      }
+      },
+      content: new Content(),
+      questionTimePoint: new ContentTimePoint(),
+      nextTimePoint: new ContentTimePoint()
     }
   },
   created () {
@@ -707,6 +720,34 @@ export default {
           message: 'مشکلی به وجود آمده.'
         })
       }
+    },
+    toggleContent() {
+      this.listConfig.questionAnswerExpanded = !this.listConfig.questionAnswerExpanded
+      if (this.listConfig.questionAnswerExpanded) {
+        this.getQuestionContent()
+      }
+    },
+    getQuestionContent() {
+      if (!this.question.content_id) {
+        return
+      }
+      this.contentLoading = true
+      this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
+        .then(res => {
+          this.content = new Content(res.data.data)
+          this.getTimePoints()
+          this.contentLoading = false
+        })
+        .catch(() => {
+          this.contentLoading = false
+        })
+    },
+    getTimePoints() {
+      this.questionTimePoint = this.content.timepoints.list.find(x => x.id === this.question.time_point_id)
+      const timePointList = this.content.timepoints.list
+      timePointList.sort((a, b) => (a.time > b.time ? 1 : -1))
+      const timePointIndex = timePointList.findIndex(x => x.id === 131133) + 1
+      this.nextTimePoint = timePointList[timePointIndex]
     }
   }
 }
@@ -870,7 +911,7 @@ export default {
 
     .question-tags {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       margin-top: 16px;
 
       @media only screen and (max-width: 1439px) {
@@ -892,17 +933,6 @@ export default {
         line-height: 19px;
         color: #434765;
 
-        .tag-circle {
-          border-radius: 50%;
-          margin: 0 6px;
-          width: 6px;
-          height: 6px;
-          background: #6D708B;
-          opacity: 0.3;
-          @media screen and (max-width: 599px){
-            order: 1;
-          }
-        }
         .tag-title{
           @media screen and (max-width: 599px){
             order: 2;
@@ -912,12 +942,15 @@ export default {
           }
         }
 
-        &:last-child {
-          .tag-circle {
-            display: none;
-            @media screen and (max-width: 599px) {
-              display: block;
-            }
+        .tag-circle {
+          border-radius: 50%;
+          margin: 0 6px;
+          width: 6px;
+          height: 6px;
+          background: #6D708B;
+          opacity: 0.3;
+          @media screen and (max-width: 599px){
+            order: 1;
           }
         }
       }
@@ -1085,6 +1118,8 @@ export default {
           background: #f6f9ff;
           border-radius: 16px;
           margin-bottom: 10px;
+          padding: 0 15px;
+
           .soon{
             width: 86px;
             height: 32px;

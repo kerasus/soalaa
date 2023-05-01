@@ -43,7 +43,10 @@ const API_ADDRESS = {
     base: authServer + '/set'
   },
   content: {
-    base: authServer + '/c'
+    admin: authServer + '/admin/c',
+    adminGet: (id) => authServer + `/admin/c/${id}`,
+    base: authServer + '/c',
+    get: (id) => authServer + `/c/${id}`
   },
   option: {
     base: lumenServer + '/option',
@@ -209,22 +212,22 @@ const API_ADDRESS = {
     bank: {
       page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
     },
-    index (filters, page) {
+    index (filters, page, isAdmin = false) {
       let newFilter = (filters) ? JSON.parse(JSON.stringify(filters)) : {}
       function setQueryParams (paramKey, singleMode = false) {
         if (!newFilter) {
           newFilter = {}
         }
-        newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
         if (!singleMode) {
+          newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
           newFilter[paramKey] = newFilter[paramKey].join('&' + paramKey + '[]=')
           if (newFilter[paramKey]) {
             newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
           }
         } else {
-          // if (newFilter[paramKey]) {
-          newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
-          // }
+          if (newFilter[paramKey]) {
+            newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
+          }
         }
       }
       setQueryParams('statuses')
@@ -233,8 +236,10 @@ const API_ADDRESS = {
       setQueryParams('reference')
       setQueryParams('tags')
       setQueryParams('level')
+      setQueryParams('question_report_type')
       // setQueryParams('statement', true)
       setQueryParams('sort_by', true)
+      setQueryParams('report_status', true)
       setQueryParams('sort_type', true)
       setQueryParams('tags_with_childrens', true)
 
@@ -252,7 +257,11 @@ const API_ADDRESS = {
       if (queryParam.length > 0) {
         queryParam = queryParam.substr(1)
       }
-      return lumenServer + '/question?' + queryParam
+      if (isAdmin) {
+        return lumenServer + '/question?' + queryParam
+      } else {
+        return lumenServer + '/question/bank/search?' + queryParam
+      }
     },
     status: {
       base: lumenServer + '/question/statuses',
@@ -260,6 +269,7 @@ const API_ADDRESS = {
         return lumenServer + '/question/' + questionId + '/status'
       }
     },
+    reportStatuses: lumenServer + '/question/report/statuses',
     log: {
       base (questionId, pagination) {
         if (!pagination) {
@@ -275,7 +285,7 @@ const API_ADDRESS = {
     update (questionId) {
       return lumenServer + '/question/' + questionId
     },
-    reportLog: lumenServer + '/question/report',
+    reportLog: (questionId) => lumenServer + '/question/report/' + questionId,
     show (questionId) {
       return lumenServer + '/question/' + questionId
     },
@@ -334,7 +344,12 @@ const API_ADDRESS = {
     },
     editNode (id) {
       return lumenServer + '/forrest/tree/' + id
-    }
+    },
+    getGradesList: lumenServer + '/forrest/tree?type=test',
+    getLessonList(lessonId) {
+      return lumenServer + '/forrest/tree/' + lessonId
+    },
+    getSubjectTagsTree: lumenServer + '/forrest/tree?type=subject_tags'
   },
   tags: {
     setTags (questionId) {

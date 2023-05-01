@@ -39,6 +39,7 @@
         header-title="درس و مبحث"
       >
         <q-checkbox
+          v-if="availableSearchSingleNode"
           v-model="searchSingleNode"
           class="q-ml-md"
           right-label
@@ -117,7 +118,7 @@
           :options="filterQuestions.levels.map(option => {
             return {
               label: option.value,
-              value: option.value
+              value: option
             }
           })"
           @update:model-value="onChangeLevels"
@@ -127,6 +128,7 @@
       </question-filter-expansion>
 
       <question-filter-expansion
+        v-if="filterQuestions.statuses"
         header-title="وضعیت سوال"
       >
         <q-option-group
@@ -135,7 +137,7 @@
           :options="filterQuestions.statuses.map(option => {
             return {
               label: option.display_title,
-              value: option.display_title
+              value: option
             }
           })"
           @update:model-value="onChangeStatuses"
@@ -145,6 +147,7 @@
       </question-filter-expansion>
 
       <question-filter-expansion
+        v-if="filterQuestions.types"
         header-title="نوع سوال"
       >
         <q-option-group
@@ -153,7 +156,7 @@
           :options="filterQuestions.types.map(option => {
             return {
               label: option.value,
-              value: option.value
+              value: option
             }
           })"
           @update:model-value="onChangeTypes"
@@ -161,6 +164,46 @@
         <div v-if="filterQuestions.types.length === 0"> هیچ نوع سوالی ایجاد نشده است</div>
 
       </question-filter-expansion>
+
+      <question-filter-expansion
+        v-if="filterQuestions.report_type"
+        header-title="نوع خطا"
+      >
+        <q-option-group
+          v-model="selectedReportType"
+          type="checkbox"
+          :options="filterQuestions.report_type.map(option => {
+            return {
+              label: option.value,
+              value: option
+            }
+          })"
+          @update:model-value="onChangeReportTypes"
+        />
+        <div v-if="filterQuestions.report_type.length === 0"> هیچ نوع خطایی ایجاد نشده است</div>
+
+      </question-filter-expansion>
+
+      <question-filter-expansion
+        v-if="filterQuestions.report_statuses"
+        header-title="وضعیت خطا"
+        :loading="localLoadings.reportStatusLoading"
+      >
+        <q-option-group
+          v-model="selectedErrorStatus"
+          type="checkbox"
+          :options="filterQuestions.report_statuses.map(option => {
+            return {
+              label: option.description,
+              value: option.title
+            }
+          })"
+          @update:model-value="onChangeErrorStatus"
+        />
+        <div v-if="filterQuestions.report_statuses.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
+
+      </question-filter-expansion>
+
     </div>
   </div>
 </template>
@@ -175,6 +218,18 @@ export default {
   components: { QuestionFilterExpansion, TreeComponent },
   mixins: [mixinTree],
   props: {
+    loadings: {
+      type: Object,
+      default() {
+        return {
+          reportStatusLoading: false
+        }
+      }
+    },
+    availableSearchSingleNode: {
+      type: Boolean,
+      default: true
+    },
     filterQuestions: {
       type: Object,
       default: () => {
@@ -215,6 +270,9 @@ export default {
   ],
   data () {
     return {
+      defaultLoadings: {
+        reportStatusLoading: false
+      },
       treeKey: 0,
       searchSingleNode: false,
       check: false,
@@ -223,6 +281,8 @@ export default {
       selectedMajors: [],
       selectedLevels: [],
       selectedTypes: [],
+      selectedReportType: [],
+      selectedErrorStatus: [],
       selectedTags: [],
       selectedStatuses: [],
       filtersData: {
@@ -232,7 +292,10 @@ export default {
         level: [],
         years: [],
         types: [],
+        report_type: [],
         statuses: [],
+        question_report_type: [],
+        report_status: '',
         tags_with_childrens: 1
       }
     }
@@ -265,12 +328,15 @@ export default {
     }
   },
   computed: {
+    localLoadings() {
+      return Object.assign(this.defaultLoadings, this.loadings)
+    },
     selectedFiltersTitle () {
       const filtersDataKey = Object.keys(this.filtersData)
       const titles = []
       filtersDataKey.forEach(key => {
         const filterGroup = this.filtersData[key]
-        if (typeof filterGroup !== 'number') {
+        if (Array.isArray(filterGroup)) {
           filterGroup.forEach(filterItem => {
             const title = filterItem.title || filterItem.label || filterItem.value
             titles.push(title)
@@ -336,6 +402,18 @@ export default {
     onChangeTypes (value) {
       this.changeFilterData('types', value)
     },
+    onChangeReportTypes (value) {
+      this.changeFilterData('question_report_type', value)
+    },
+    onChangeErrorStatus(value) {
+      // ToDO: use radioButton instead of optionGroup and set an option with value for none state
+      // visit link: https://quasar.dev/vue-components/option-group#standard
+      if (value.length > 1) {
+        this.selectedErrorStatus.splice(0, 1)
+      }
+      const sendData = value.length > 0 ? value[0] : ''
+      this.changeFilterData('report_status', sendData)
+    },
     onSearchSingleNode(value) {
       const sendData = value ? 0 : 1
       this.changeFilterData('tags_with_childrens', sendData)
@@ -362,6 +440,9 @@ export default {
       this.filtersData.level.splice(0, this.filtersData.level.length)
       this.filtersData.years.splice(0, this.filtersData.years.length)
       this.filtersData.majors.splice(0, this.filtersData.majors.length)
+      this.filtersData.question_report_type.splice(0, this.filtersData.question_report_type.length)
+      this.filtersData.types.splice(0, this.filtersData.types.length)
+      this.filtersData.statuses.splice(0, this.filtersData.statuses.length)
       this.showTreeModalNode(this.rootNodeIdToLoad)
       // this.QuestionFilters.splice(0, this.QuestionFilters.length)
       this.onUpdateFilterData()
