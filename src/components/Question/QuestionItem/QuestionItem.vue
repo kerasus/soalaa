@@ -722,8 +722,10 @@ export default {
       }
     },
     toggleContent() {
-      this.getQuestionContent()
       this.listConfig.questionAnswerExpanded = !this.listConfig.questionAnswerExpanded
+      if (this.listConfig.questionAnswerExpanded) {
+        this.getQuestionContent()
+      }
     },
     getQuestionContent() {
       if (!this.question.content_id) {
