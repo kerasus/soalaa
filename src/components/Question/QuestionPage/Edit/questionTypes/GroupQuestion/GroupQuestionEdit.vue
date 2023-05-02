@@ -83,7 +83,7 @@ import { ExamList } from 'src/models/Exam'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 export default {
-  name: 'MultipleChoiceEditQuestion',
+  name: 'GroupQuestionEdit',
   components: {
     QuestionField
   },

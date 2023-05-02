@@ -72,7 +72,7 @@
 import VueKatex from 'src/components/VueKatex'
 import { Question } from 'src/models/Question'
 export default {
-  name: 'MultipleChoiceShowQuestion',
+  name: 'GroupQuestionShow',
   components: {
     VueKatex
   },

@@ -102,6 +102,7 @@ export default {
     DescriptiveShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/DescriptiveQuestion/DescriptiveShowQuestion')),
     MultipleChoiceShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MultipleChoiceQuestion/MultipleChoiceShowQuestion')),
     MBTIShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MBTIQuestion/MBTIShowQuestion')),
+    GroupQuestionShow: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/GroupQuestion/GroupQuestionShow')),
     BtnBox,
     StatusChange,
     AttachExam,
@@ -156,6 +157,7 @@ export default {
     },
     chosenComponent () {
       const cName = this.question.type.componentName
+      console.log('cName', cName)
       if (cName === 'MultipleChoiceQ') {
         return 'multiple-choice-show-question'
       }

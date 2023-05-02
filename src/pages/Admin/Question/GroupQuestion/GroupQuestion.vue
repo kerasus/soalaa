@@ -11,57 +11,43 @@
         />
       </div>
     </q-card-section>
+    <q-card-section
+      class="row main-card-section multiple-answer"
+    >
+      <div
+        v-for="(item, index) in selectedQuestionIDs"
+        :key="index"
+        class="col-lg-6 col-12"
+      >
+        <div class="card-section-header">
+          <q-btn
+            class="icon-type"
+            icon="isax:close-square5"
+            color="negative"
+            flat
+            @click="removeSelectedQuestionIDs(item)"
+          />
+          <div>سوال {{index+ 1}} با شناسه {{item}}</div>
+        </div>
+      </div>
+    </q-card-section>
     <q-card-section class="row main-card-section">
       <div class="col-12">
-        <entity-index
-          v-model:value="tableInputs"
-          v-model:table-selected-values="selectedQuestions"
-          title="لیست سوالات"
-          :api="questionIndexApi"
-          :table="questionTable"
-          table-selection-mode="multiple"
-          :table-keys="questionTableKeys"
-          :item-indicator-key="'code'"
-        >
-          <template v-slot:entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
-            <template v-if="inputData.col.name === 'tags'">
-              <q-chip
-                v-for="item in inputData.props.row.tags"
-                :key="item"
-              >
-                {{ item.title }}
-              </q-chip>
-            </template>
-            <template v-if="inputData.col.name === 'actions'">
-              <q-btn round
-                     flat
-                     dense
-                     size="md"
-                     color="info"
-                     icon="info"
-                     :to="{name:'Admin.Ticket.Show', params: {id: inputData.props.row.id}}">
-                <q-tooltip>
-                  مشاهده
-                </q-tooltip>
-              </q-btn>
-              <q-btn round
-                     flat
-                     dense
-                     size="md"
-                     color="negative"
-                     icon="delete"
-                     class="q-ml-md"
-                     @click="showConfirmRemoveDialog(inputData.props.row, 'id', 'آیا از حذف تیکت اطمینان دارید ؟')">
-                <q-tooltip>
-                  حذف
-                </q-tooltip>
-              </q-btn>
-            </template>
-            <template v-else>
-              {{ inputData.col.value }}
-            </template>
-          </template>
-        </entity-index>
+        <div class="card-section-header">
+          <q-input
+            v-model="currentQuestionIdToAdd"
+            filled
+            placeholder="شناسه سوال"
+          />
+          <q-btn
+            class="icon-type"
+            icon="isax:add-square5"
+            color="positive"
+            flat
+            @click="addQuestionId"
+          />
+          <span>اضافه کردن سوال جدید</span>
+        </div>
       </div>
     </q-card-section>
     <q-card-section class="main-card-section long-answer">
@@ -117,7 +103,6 @@ import { computed } from 'vue'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
 import mixinTree from 'src/mixin/Tree'
-import { EntityIndex } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 
 // import moment from 'moment-jalaali'
@@ -126,8 +111,7 @@ export default {
   components: {
     QuestionIdentifier,
     QuestionField,
-    BtnBox,
-    EntityIndex
+    BtnBox
   },
   mixins: [
     AdminActionOnQuestion,
@@ -141,6 +125,7 @@ export default {
   },
   data () {
     return {
+      currentQuestionIdToAdd: '',
       domKey: Date.now(),
       choice: '',
       defaultRefName: 'tiptap',
@@ -153,7 +138,7 @@ export default {
       allProps: {
         loading: false
       },
-      selectedQuestions: [],
+      selectedQuestionIDs: [],
       questionIndexApi: API_ADDRESS.question.index({}, undefined, true),
       tableInputs: [
         { type: 'hidden', name: 'question_id', col: 'col-md-12', value: null }
@@ -207,6 +192,14 @@ export default {
     this.loadMajorList()
   },
   methods: {
+    removeSelectedQuestionIDs (questionId) {
+      const index = this.selectedQuestionIDs.findIndex(item => item === questionId)
+      this.selectedQuestionIDs.splice(index, 1)
+    },
+    addQuestionId () {
+      this.selectedQuestionIDs.push(this.currentQuestionIdToAdd)
+      this.currentQuestionIdToAdd = ''
+    },
     saveQuestion () {
       this.getContent()
       const exams = []
@@ -229,10 +222,9 @@ export default {
         reference: this.question.reference,
         years: this.question.years,
         tags: this.question.tags.list.map(item => item.id),
-        // subject_tags: this.question.subject_tags.list.map(item => item.id),
-        subject_tags: ['644ffb2e39cc8bdaec08def2'],
+        subject_tags: this.question.subject_tags.list.map(item => item.id),
         majors: this.question.majors,
-        group: this.selectedQuestions.map(item => item.id),
+        group: this.selectedQuestionIDs,
         sub_category_id: 1,
         recommended_time: 0,
         type_id: this.question.type_id
