@@ -1,99 +1,107 @@
 <template>
-  <div class="editQ-text-container">
-    <q-linear-progress
-      v-if="loadingState"
-      size="md"
-      indeterminate
-      rounded
-      color="primary"
-    />
-    <navbar
-      :mode="'edit'"
-      @panelClicked="openCloseImgPanel"
-    />
-    <div class="relative-position">
-      <div
-        :class="{ 'row reverse': (isPanelOpened && !imgFloatMode) }"
-      >
-        <div
-          v-if="isPanelOpened"
-          class="image-panel"
-          :class="{ 'col-5 image-panel-side-mode': !imgFloatMode , 'image-panel-float-mode' : imgFloatMode }"
+  <q-card class="create-question-main-card custom-card">
+    <q-card-section class="main-card-section question">
+      <div class="card-section-header">
+        <span>صورت سوال</span>
+      </div>
+      <div class="question-box">
+        <QuestionField
+          ref="tiptapQuestionStatement"
+          :key="'statement' + domKey"
+        />
+      </div>
+    </q-card-section>
+    <q-card-section class="row main-card-section">
+      <div class="col-12">
+        <entity-index
+          v-model:value="tableInputs"
+          v-model:table-selected-values="selectedQuestions"
+          title="لیست سوالات"
+          :api="questionIndexApi"
+          :table="questionTable"
+          table-selection-mode="multiple"
+          :table-keys="questionTableKeys"
+          :item-indicator-key="'code'"
         >
-          <image-panel
-            :editable="true"
-            :mode="'edit'"
-            @closePanelBtnClicked="openCloseImgPanel"
-            @deleteImage="deleteImage"
-            @uploadStatement="updateStatementPhoto(question)"
-            @uploadAnswer="updateAnswerPhoto(question)"
-            @imgPanelModeChanged="changeImagePAnelMode"
-          />
-        </div>
-        <component
-          :is="getComponent"
-          v-if="question.type"
-          v-bind="allProps"
-          ref="currentEditComponent"
-          :key="editComponentKey"
-          :class="{ 'col-7': !imgFloatMode}"
+          <template v-slot:entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
+            <template v-if="inputData.col.name === 'tags'">
+              <q-chip
+                v-for="item in inputData.props.row.tags"
+                :key="item"
+              >
+                {{ item.title }}
+              </q-chip>
+            </template>
+            <template v-if="inputData.col.name === 'actions'">
+              <q-btn round
+                     flat
+                     dense
+                     size="md"
+                     color="info"
+                     icon="info"
+                     :to="{name:'Admin.Ticket.Show', params: {id: inputData.props.row.id}}">
+                <q-tooltip>
+                  مشاهده
+                </q-tooltip>
+              </q-btn>
+              <q-btn round
+                     flat
+                     dense
+                     size="md"
+                     color="negative"
+                     icon="delete"
+                     class="q-ml-md"
+                     @click="showConfirmRemoveDialog(inputData.props.row, 'id', 'آیا از حذف تیکت اطمینان دارید ؟')">
+                <q-tooltip>
+                  حذف
+                </q-tooltip>
+              </q-btn>
+            </template>
+            <template v-else>
+              {{ inputData.col.value }}
+            </template>
+          </template>
+        </entity-index>
+      </div>
+    </q-card-section>
+    <q-card-section class="main-card-section long-answer">
+      <div class="card-section-header">پاسخ تشریحی</div>
+      <div class="answer-box">
+        <QuestionField
+          ref="tiptapDescriptiveAnswer"
+          :key="'descriptive_answer' + domKey"
         />
       </div>
-    </div>
-    <div class="relative-position">
-      <div class="attach-btn row">
-        <question-identifier
-          ref="questionIdentifier"
-          class="col-12"
-          editable
-          :exams="examList"
-          :lessons="subCategoriesList"
-          :categories="categoryList"
-          :gradesList="gradesList"
-          :groups-list="lessonGroupList"
-          :lessons-list="lessonsList"
-          :major-list="majorList"
-          :authorship-dates-list="authorshipDatesList"
-          :question-authors-list="questionAuthorsList"
-          :question-target-list="questionTargetList"
-          @gradeSelected="getLessonsList"
-          @groupSelected="getLessonsList"
-          @attach="attachExam"
-          @detach="detachExam"
-          @tags-collected="setTags"
-        />
-      </div>
-      <question-video-answer @update-value="updateQuestion($event)" />
-      <btn-box
+    </q-card-section>
+  </q-card>
+  <div class="relative-position">
+    <div class="attach-btn row">
+      <question-identifier
+        ref="questionIdentifier"
+        editable
         class="col-12"
-        editeQuestion
-        @saveQuestion="saveQuestion"
-        @deletefromDb="deleteQuestion"
-      />
-      <status-change
-        :statuses="questionStatuses"
-        @update="changeStatus"
-      />
-    </div>
-    <div v-if="question.logs && question.logs.list && question.logs.list.length > 0">
-      <log-list-component
-        :logs="question.logs"
-        :mode="'edit'"
-        @addComment="addComment"
-        @restoreQuestion="restoreQuestion"
-      />
-    </div>
-    <div class="q-mt-md">
-      <entity-index
-        v-model:value="logIndexInputs"
-        title="لیست خطا های گزارش شده"
-        :api="logIndexApi"
-        :table="logIndexTable"
-        :table-keys="logIndexTableKeys"
-        :create-route-name="false"
-        :show-search-button="false"
+        :exams="examList"
+        :lessons="subCategoriesList"
+        :categories="categoryList"
+        :gradesList="gradesList"
+        :groups-list="lessonGroupList"
+        :lessons-list="lessonsList"
+        :major-list="majorList"
+        :authorship-dates-list="authorshipDatesList"
+        :question-authors-list="questionAuthorsList"
+        :question-target-list="questionTargetList"
+        buffer
+        @gradeSelected="getLessonsList"
+        @groupSelected="getLessonsList"
+        @attach="attachExam"
+        @detach="detachExam"
+        @tags-collected="setTagsOnCreate"
       />
     </div>
+    <btn-box
+      class="col-12"
+      @saveQuestion="saveQuestion"
+    />
   </div>
 </template>
 
@@ -112,7 +120,6 @@ import StatusChange from 'components/Question/QuestionPage/StatusChange'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
-import API_ADDRESS from 'src/api/Addresses'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
@@ -120,7 +127,8 @@ import mixinTree from 'src/mixin/Tree'
 import { EntityIndex } from 'quasar-crud'
 import moment from 'moment-jalaali'
 import QuestionVideoAnswer from 'components/Question/QuestionPage/QuestionVideoAnswer.vue'
-
+import { EntityIndex } from 'quasar-crud'
+import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'EditQuestion',
   components: {
@@ -241,6 +249,9 @@ export default {
       }
       if (cName === 'MBTIQ') {
         return 'm-b-t-i-edit-question'
+      }
+      if (cName === 'GroupQuestion') {
+        return 'group-question-edit'
       }
     },
     setQuestionContents () {

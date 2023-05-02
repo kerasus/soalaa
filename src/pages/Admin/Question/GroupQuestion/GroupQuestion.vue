@@ -1,6 +1,5 @@
 <template>
   <q-card class="create-question-main-card custom-card">
-    سوالات گروهی
     <q-card-section class="main-card-section question">
       <div class="card-section-header">
         <span>صورت سوال</span>
@@ -12,52 +11,57 @@
         />
       </div>
     </q-card-section>
-    <q-card-section
-      v-if="question.choices.list[0]"
-      class="row main-card-section multiple-answer"
-    >
-      <div
-        v-for="(item, index) in question.choices.list"
-        :key="item.order"
-        class="col-lg-6 col-12"
-      >
-        <div class="card-section-header">
-          <q-btn
-            class="icon-type"
-            icon="isax:close-square5"
-            color="negative"
-            flat
-            @click="removeChoice(item.order)"
-          />
-          <q-radio
-            v-model="choice"
-            dense
-            :val="'choice' + index"
-            :label="'گزینه ' + (index + 1)"
-            color="primary"
-            @click="choiceClicked(item.order)"
-          />
-        </div>
-        <div class="multiple-answer-box">
-          <QuestionField
-            :ref="'tiptapChoice' + index"
-            :key="'choices' + index + domKey"
-          />
-        </div>
-      </div>
-    </q-card-section>
     <q-card-section class="row main-card-section">
       <div class="col-12">
-        <div class="card-section-header">
-          <q-btn
-            class="icon-type"
-            icon="isax:add-square5"
-            color="positive"
-            flat
-            @click="addChoice"
-          />
-          <span>گزینه جدید</span>
-        </div>
+        <entity-index
+          v-model:value="tableInputs"
+          v-model:table-selected-values="selectedQuestions"
+          title="لیست سوالات"
+          :api="questionIndexApi"
+          :table="questionTable"
+          table-selection-mode="multiple"
+          :table-keys="questionTableKeys"
+          :item-indicator-key="'code'"
+        >
+          <template v-slot:entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
+            <template v-if="inputData.col.name === 'tags'">
+              <q-chip
+                v-for="item in inputData.props.row.tags"
+                :key="item"
+              >
+                {{ item.title }}
+              </q-chip>
+            </template>
+            <template v-if="inputData.col.name === 'actions'">
+              <q-btn round
+                     flat
+                     dense
+                     size="md"
+                     color="info"
+                     icon="info"
+                     :to="{name:'Admin.Ticket.Show', params: {id: inputData.props.row.id}}">
+                <q-tooltip>
+                  مشاهده
+                </q-tooltip>
+              </q-btn>
+              <q-btn round
+                     flat
+                     dense
+                     size="md"
+                     color="negative"
+                     icon="delete"
+                     class="q-ml-md"
+                     @click="showConfirmRemoveDialog(inputData.props.row, 'id', 'آیا از حذف تیکت اطمینان دارید ؟')">
+                <q-tooltip>
+                  حذف
+                </q-tooltip>
+              </q-btn>
+            </template>
+            <template v-else>
+              {{ inputData.col.value }}
+            </template>
+          </template>
+        </entity-index>
       </div>
     </q-card-section>
     <q-card-section class="main-card-section long-answer">
@@ -113,12 +117,17 @@ import { computed } from 'vue'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
 import mixinTree from 'src/mixin/Tree'
+import { EntityIndex } from 'quasar-crud'
+import API_ADDRESS from 'src/api/Addresses'
+
+// import moment from 'moment-jalaali'
 export default {
   name: 'MultipleChoiceQ',
   components: {
     QuestionIdentifier,
     QuestionField,
-    BtnBox
+    BtnBox,
+    EntityIndex
   },
   mixins: [
     AdminActionOnQuestion,
@@ -143,6 +152,40 @@ export default {
       categoryList: new QuestCategoryList(),
       allProps: {
         loading: false
+      },
+      selectedQuestions: [],
+      questionIndexApi: API_ADDRESS.question.index({}, undefined, true),
+      tableInputs: [
+        { type: 'hidden', name: 'question_id', col: 'col-md-12', value: null }
+      ],
+      questionTable: {
+        columns: [
+          {
+            name: 'id',
+            label: 'شناسه سوال',
+            align: 'center',
+            field: row => row.id
+          },
+          {
+            name: 'code',
+            label: 'شماره سوال',
+            align: 'left',
+            field: row => row.code
+          },
+          {
+            name: 'tags',
+            label: 'شماره سوال',
+            align: 'left'
+            // field: row => row.tags.map(item => item.title)
+          }
+        ]
+      },
+      questionTableKeys: {
+        data: 'data',
+        total: 'meta.total',
+        currentPage: 'meta.current_page',
+        perPage: 'meta.per_page',
+        pageKey: 'page'
       }
     }
   },
@@ -156,7 +199,6 @@ export default {
     setTimeout(() => {
       that.domKey = 'Date.now()'
     }, 100)
-    this.setDefaultChoices()
     this.getPageReady()
     this.getGradesList()
     this.loadQuestionAuthors()
@@ -164,19 +206,9 @@ export default {
     this.loadAuthorshipDates()
     this.loadMajorList()
   },
-  mounted () {
-    this.$nextTick(() => {
-      // this.setAllQuestionLoadings()
-      // this.disableAllQuestionLoadings()
-    })
-  },
-  updated () {},
   methods: {
     saveQuestion () {
-      if (!this.getContent()) {
-        return
-      }
-
+      this.getContent()
       const exams = []
       this.question.exams.list.forEach(item => {
         exams.push({
@@ -190,7 +222,6 @@ export default {
       this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
       const question = {
         author: this.question.author,
-        choices: this.question.choices.list,
         exams,
         descriptive_answer: this.question.descriptive_answer,
         statement: this.question.statement,
@@ -198,121 +229,22 @@ export default {
         reference: this.question.reference,
         years: this.question.years,
         tags: this.question.tags.list.map(item => item.id),
-        subject_tags: this.question.subject_tags.list.map(item => item.id),
+        // subject_tags: this.question.subject_tags.list.map(item => item.id),
+        subject_tags: ['644ffb2e39cc8bdaec08def2'],
         majors: this.question.majors,
+        group: this.selectedQuestions.map(item => item.id),
         sub_category_id: 1,
         recommended_time: 0,
         type_id: this.question.type_id
       }
       this.createQuestion(question)
     },
-    setDefaultChoices () {
-      this.question.choices.list = []
-      this.question.choices.addEmptyChoices(4)
-    },
-    removeChoice (order) {
-      if (this.question.choices.list.length < 3) {
-        this.$q.notify({
-          message: 'شما نمیتوانید کمتر از 2 گزینه داشته باشید!',
-          color: 'negative',
-          icon: 'report_problem'
-        })
-        return
-      }
-      const index = this.question.choices.list.findIndex(item => item.order === order)
-      this.question.choices.list.splice(index, 1)
-      this.question.choices.reorder()
-    },
-    addChoice () {
-      this.question.choices.addOneEmptyChoice()
-    },
     getContent () {
-      const that = this
-      let status = false
-      if (this.validateContent()) {
-        this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
-        this.question.choices.list.forEach(function (item, index) {
-          item.title = that.getContentOfChoice(index)
-          // toDo : the line bellow is none related and temporary
-          item.id = index
-        })
-        this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
-        // console.log('this.question', this.question)
-        status = true
-      }
-      return status
-    },
-    getContentOfChoice (index) {
-      return this.$refs[this.defaultRefName + 'Choice' + index][0].getContent()
+      this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
+      this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
     },
     getContentOfQuestionParts (name) {
       return this.$refs[this.defaultRefName + name].getContent()
-    },
-    validateContentOfChoice () {
-      const that = this
-      let status = true
-      this.question.choices.list.forEach(function (item, index) {
-        if (!that.getContentOfChoice(index)) {
-          status = false
-        }
-      })
-      return status
-    },
-    validateAnswerOfChoice () {
-      let status = false
-      this.question.choices.list.forEach(function (item, index) {
-        if (item.answer) {
-          status = true
-        }
-      })
-      return status
-    },
-    validateContent () {
-      let status = true
-      const that = this
-      // eslint-disable-next-line
-      let errors = []
-      if (!this.getContentOfQuestionParts('QuestionStatement')) {
-        errors.push(this.getErrorMessage('صورت سوال'))
-        status = false
-      }
-      if (!this.validateContentOfChoice()) {
-        const ChoiceMassage = 'لطفا پاسخ تمامی سوالات را درج کنید'
-        errors.push(ChoiceMassage)
-        status = false
-      }
-      // if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
-      //   errors.push(this.getErrorMessage('پاسخ تشریحی'))
-      //   status = false
-      // }
-      if (!this.choice) {
-        const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
-        errors.push(ChoiceMassage)
-        status = false
-      }
-      if (!this.validateAnswerOfChoice()) {
-        const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
-        errors.push(ChoiceMassage)
-        status = false
-      }
-      if (!status) {
-        errors.forEach(function (item) {
-          that.$q.notify({
-            message: item,
-            color: 'negative',
-            icon: 'report_problem'
-          })
-        })
-      }
-      return status
-    },
-    getErrorMessage (dynamicWord) {
-      return 'لطفا فیلد ' + dynamicWord + ' را پر کنید'
-    },
-    choiceClicked (order) {
-      this.question.choices.list.forEach(item => {
-        item.answer = item.order === order
-      })
     }
   }
 }
