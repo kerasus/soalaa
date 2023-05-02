@@ -165,6 +165,9 @@ export default {
       if (cName === 'MBTIQ') {
         return 'm-b-t-i-show-question'
       }
+      if (cName === 'GroupQuestion') {
+        return 'group-question-show'
+      }
     },
     setQuestionContents () {
       this.allProps.setContentToQuestion = true
