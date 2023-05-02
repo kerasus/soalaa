@@ -1,85 +1,99 @@
 <template>
-  <q-card class="edit-question-main-card custom-card">
-    <q-card-section class="main-card-section question">
-      <div class="card-section-header">
-        <span>صورت سوال</span>
-      </div>
-      <div class="question-box">
-        <QuestionField
-          ref="tiptapQuestionStatement"
-          :key="'statement' + domKey"
-          :editorValue="question.statement"
-        />
-      </div>
-    </q-card-section>
-    <q-card-section
-      class="row main-card-section multiple-answer"
-    >
-      <div
-        v-for="(item, index) in question.group"
-        :key="index"
-        class="col-lg-6 col-12"
+  <div>
+    <q-card class="edit-question-main-card custom-card">
+      <q-card-section class="main-card-section question">
+        <div class="card-section-header">
+          <span>صورت سوال</span>
+        </div>
+        <div class="question-box">
+          <QuestionField
+            ref="tiptapQuestionStatement"
+            :key="'statement' + domKey"
+            :editorValue="question.statement"
+          />
+        </div>
+      </q-card-section>
+      <q-card-section
+        class="row main-card-section multiple-answer"
       >
-        <div class="card-section-header">
-          <q-btn
-            v-if="isQuestionGroupInEditMode"
-            class="icon-type"
-            icon="isax:close-square5"
-            color="negative"
-            flat
-            @click="removeSelectedQuestionIDs(item)"
-          />
-          <div>سوال {{index+ 1}} با شناسه {{item.id}}</div>
+        <div
+          v-for="(item, index) in question.group"
+          :key="index"
+          class="col-lg-6 col-12"
+        >
+          <div class="card-section-header">
+            <q-btn
+              v-if="isQuestionGroupInEditMode"
+              class="icon-type"
+              icon="isax:close-square5"
+              color="negative"
+              flat
+              @click="removeSelectedQuestionIDs(item)"
+            />
+            <div>سوال {{index+ 1}} با شناسه {{item.id}}</div>
+          </div>
         </div>
-      </div>
-    </q-card-section>
-    <q-card-section class="row main-card-section">
-      <div class="col-12">
-        <div class="card-section-header">
-          <q-input
-            v-if="isQuestionGroupInEditMode"
-            v-model="currentQuestionIdToAdd"
-            filled
-            placeholder="شناسه سوال"
-          />
-          <q-btn
-            v-if="isQuestionGroupInEditMode"
-            class="icon-type q-mr-lg"
-            icon="isax:add-square5"
-            color="positive"
-            flat
-            @click="addQuestionId"
-          />
-          <q-btn
-            unelevated
-            class="icon-type q-mr-lg"
-            color="positive"
-            :loading="groupAttachLoading"
-            label="ثبت نهایی شناسه سوالات"
-            @click="attachQuestionGroup"
-          />
-          <q-btn
-            v-if="!isQuestionGroupInEditMode"
-            unelevated
-            class="icon-type"
-            color="primary"
-            label="ویرایش سوالات گروهی"
-            @click="isQuestionGroupInEditMode = true"
+      </q-card-section>
+      <q-card-section class="row main-card-section">
+        <div class="col-12">
+          <div class="card-section-header">
+            <q-input
+              v-if="isQuestionGroupInEditMode"
+              v-model="currentQuestionIdToAdd"
+              filled
+              placeholder="شناسه سوال"
+            />
+            <q-btn
+              v-if="isQuestionGroupInEditMode"
+              class="icon-type q-mr-lg"
+              icon="isax:add-square5"
+              color="positive"
+              flat
+              @click="addQuestionId"
+            />
+            <q-btn
+              unelevated
+              class="icon-type q-mr-lg"
+              color="positive"
+              :loading="groupAttachLoading"
+              label="ثبت نهایی شناسه سوالات"
+              @click="attachQuestionGroup"
+            />
+            <q-btn
+              v-if="!isQuestionGroupInEditMode"
+              unelevated
+              class="icon-type"
+              color="primary"
+              label="ویرایش سوالات گروهی"
+              @click="isQuestionGroupInEditMode = true"
+            />
+          </div>
+        </div>
+      </q-card-section>
+      <q-card-section class="main-card-section long-answer">
+        <div class="card-section-header">پاسخ تشریحی</div>
+        <div class="answer-box">
+          <QuestionField
+            ref="tiptapDescriptiveAnswer"
+            :key="'descriptive_answer' + domKey"
+            :editor-value="question.descriptive_answer"
           />
         </div>
-      </div>
-    </q-card-section>
-    <q-card-section class="main-card-section long-answer">
-      <div class="card-section-header">پاسخ تشریحی</div>
-      <div class="answer-box">
-        <QuestionField
-          ref="tiptapDescriptiveAnswer"
-          :key="'descriptive_answer' + domKey"
-          :editor-value="question.descriptive_answer"
-        />
-      </div>
-    </q-card-section>
-  </q-card>
+      </q-card-section>
+    </q-card>
+    <div
+      class="q-pt-lg"
+    >
+      <div  class="q-pb-md"> سوالات گروهی این سوال </div>
+      <question-item
+        v-for="(question, index) in question.group"
+        :key="index"
+        :question="question"
+        pageStrategy="question-bank"
+        :listOptions="questionsItemOptions"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -91,9 +105,11 @@ import { ExamList } from 'src/models/Exam'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import API_ADDRESS from 'src/api/Addresses'
+import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 export default {
   name: 'GroupQuestionEdit',
   components: {
+    QuestionItem,
     QuestionField
   },
   mixins: [
@@ -108,6 +124,14 @@ export default {
   data () {
     return {
       domKey: Date.now(),
+      questionsItemOptions: {
+        copy: true,
+        detachQuestion: true,
+        deleteQuestionFromDb: false,
+        deleteQuestionFromExam: false,
+        editQuestion: true,
+        switch: true
+      },
       choice: '',
       defaultRefName: 'tiptap',
       dynamicMassage: '',
@@ -134,7 +158,6 @@ export default {
     setTimeout(() => {
       that.domKey = 'Date.now()'
     }, 100)
-    this.setChoice()
   },
   updated () {},
   methods: {
@@ -144,7 +167,9 @@ export default {
         group_question_id: this.question.id,
         questions: this.question.group.map(item => item.id)
       })
-        .then(() => {
+        .then((response) => {
+          const question = new Question(response.data.data)
+          this.question.group = question.group
           this.$q.notify({
             message: 'ثبت با موفقیت انجام شد',
             color: 'green',
@@ -162,18 +187,11 @@ export default {
       this.question.group.splice(index, 1)
     },
     addQuestionId () {
-      this.question.group.push(this.currentQuestionIdToAdd)
+      this.question.group.push(new Question({ id: this.currentQuestionIdToAdd }))
       this.currentQuestionIdToAdd = ''
     },
-    setChoice () {
-      const choiceIndex = this.question.choices.list.findIndex((item) => item.answer === true)
-      this.choice = 'choice' + choiceIndex
-    },
     saveQuestion () {
-      if (!this.getContent()) {
-        return
-      }
-
+      this.setContent()
       const question = {
         ...this.question,
         choices: this.question.choices.list,
@@ -182,106 +200,12 @@ export default {
       }
       this.updateQuestion(question)
     },
-    removeChoice (order) {
-      if (this.question.choices.list.length < 3) {
-        this.$q.notify({
-          message: 'شما نمیتوانید کمتر از 2 گزینه داشته باشید!',
-          color: 'negative',
-          icon: 'report_problem'
-        })
-        return
-      }
-      const index = this.question.choices.list.findIndex(item => item.order === order)
-      this.question.choices.list.splice(index, 1)
-      this.question.choices.reorder()
-    },
-    addChoice () {
-      this.question.choices.addOneEmptyChoice()
-    },
-    getContent () {
-      const that = this
-      let status = false
-      // if (this.validateContent()) {
+    setContent () {
       this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
-      this.question.choices.list.forEach(function (item, index) {
-        item.title = that.getContentOfChoice(index)
-      })
       this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
-      status = true
-      // }
-      return status
-    },
-    getContentOfChoice (index) {
-      return this.$refs[this.defaultRefName + 'Choice' + index][0].getContent()
     },
     getContentOfQuestionParts (name) {
       return this.$refs[this.defaultRefName + name].getContent()
-    },
-    validateContentOfChoice () {
-      const that = this
-      let status = true
-      this.question.choices.list.forEach(function (item, index) {
-        if (!that.getContentOfChoice(index)) {
-          status = false
-        }
-      })
-      return status
-    },
-    validateAnswerOfChoice () {
-      let status = false
-      this.question.choices.list.forEach(function (item, index) {
-        if (item.answer) {
-          status = true
-        }
-      })
-      return status
-    },
-    validateContent () {
-      let status = true
-      const that = this
-      // eslint-disable-next-line
-      let errors = []
-      if (!this.getContentOfQuestionParts('QuestionStatement')) {
-        errors.push(this.getErrorMessage('صورت سوال'))
-        status = false
-      }
-      if (!this.validateContentOfChoice()) {
-        const ChoiceMassage = 'لطفا پاسخ تمامی سوالات را درج کنید'
-        errors.push(ChoiceMassage)
-        status = false
-      }
-      if (!this.choice) {
-        const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
-        errors.push(ChoiceMassage)
-        status = false
-      }
-      if (!this.validateAnswerOfChoice()) {
-        const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
-        errors.push(ChoiceMassage)
-        status = false
-      }
-      // if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
-      //   errors.push(this.getErrorMessage('پاسخ تشریحی'))
-      //   status = false
-      // }
-      if (!status) {
-        errors.forEach(function (item) {
-          that.$q.notify({
-            message: item,
-            color: 'negative',
-            icon: 'report_problem'
-          })
-        })
-      }
-      return status
-    },
-    getErrorMessage (dynamicWord) {
-      return 'لطفا فیلد ' + dynamicWord + ' را پر کنید'
-    },
-    choiceClicked (order) {
-      this.question.choices.list.forEach(item => {
-        item.answer = item.order === order
-      })
     }
   }
 }

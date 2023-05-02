@@ -180,10 +180,7 @@ class Question extends Model {
 
     if (this.group.length > 0) {
       this.group = this.group.map(question => {
-        return {
-          id: question._id || question.id,
-          ...question
-        }
+        return new Question(question)
       })
     }
 

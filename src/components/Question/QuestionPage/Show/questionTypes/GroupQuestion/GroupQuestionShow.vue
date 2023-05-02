@@ -1,65 +1,76 @@
 <template>
-  <div class="multiple-choice-Q">
-    <q-card class="question-card default-questions-card">
-      <q-card-section class="question default-Qcard-title">
-        <div>صورت سوال</div>
-      </q-card-section>
-      <q-separator inset />
-      <q-card-section>
-        <div
-          v-if="question.statement"
-          class="row justify-between question-box default-Qcard-box"
-        >
-          <vue-katex
-            :input="question.statement"
-          />
-        </div>
-      </q-card-section>
-    </q-card>
-    <q-card-section
-      class="row main-card-section multiple-answer"
-    >
-      <div
-        v-for="(item, index) in question.group"
-        :key="index"
-        class="col-lg-6 col-12"
+  <div>
+    <div class="multiple-choice-Q">
+      <q-card class="question-card default-questions-card">
+        <q-card-section class="question default-Qcard-title">
+          <div>صورت سوال</div>
+        </q-card-section>
+        <q-separator inset />
+        <q-card-section>
+          <div
+            v-if="question.statement"
+            class="row justify-between question-box default-Qcard-box"
+          >
+            <vue-katex
+              :input="question.statement"
+            />
+          </div>
+        </q-card-section>
+      </q-card>
+      <q-card
+        v-if="question.descriptive_answer"
+        class="default-questions-card"
       >
-        <div class="card-section-header">
-          <div>سوال {{index+ 1}} با شناسه {{item.id}}</div>
-        </div>
-      </div>
-    </q-card-section>
-    <q-card
-      v-if="question.descriptive_answer"
-      class="default-questions-card"
+        <q-card-section class="default-Qcard-title">
+          <div>پاسخ تشریحی</div>
+        </q-card-section>
+        <q-separator inset />
+        <q-card-section>
+          <div class="row justify-between default-Qcard-box">
+            <vue-katex
+              :input="question.descriptive_answer"
+            />
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
+    <div
+      class="q-pt-lg"
     >
-      <q-card-section class="default-Qcard-title">
-        <div>پاسخ تشریحی</div>
-      </q-card-section>
-      <q-separator inset />
-      <q-card-section>
-        <div class="row justify-between default-Qcard-box">
-          <vue-katex
-            :input="question.descriptive_answer"
-          />
-        </div>
-      </q-card-section>
-    </q-card>
+      <div  class="q-pb-md"> سوالات گروهی این سوال </div>
+      <question-item
+        v-for="(question, index) in question.group"
+        :key="index"
+        :question="question"
+        pageStrategy="question-bank"
+        :listOptions="questionsItemOptions"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import VueKatex from 'src/components/VueKatex'
 import { Question } from 'src/models/Question'
+import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 export default {
   name: 'GroupQuestionShow',
   components: {
+    QuestionItem,
     VueKatex
   },
   props: {},
   data () {
     return {
-      choice: ''
+      choice: '',
+      questionsItemOptions: {
+        copy: true,
+        detachQuestion: true,
+        deleteQuestionFromDb: false,
+        deleteQuestionFromExam: false,
+        editQuestion: true,
+        switch: true
+      }
     }
   },
   inject: {
