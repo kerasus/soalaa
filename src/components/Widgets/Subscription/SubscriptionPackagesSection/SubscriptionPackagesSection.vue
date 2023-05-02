@@ -13,31 +13,46 @@
     <div class="row packages-row">
       <div class="col-12 packages-col">
         <div class="packages-wrapper">
-          <div v-for="(item, index) in packageList"
-               :key="index"
-               class="package-item">
-            <div class="package-item-header">
-              <div class="package-item-header-title">
-                {{item.title}}
+          <template v-if="!getSubscribeLoading">
+            <div v-for="(item, index) in packageList"
+                 :key="index"
+                 class="package-item">
+              <div class="package-item-header">
+                <div class="package-item-header-title">
+                  {{item.title}}
+                </div>
+                <div class="package-item-header-duration">
+                  {{item.length}} روزه
+                </div>
               </div>
-              <div class="package-item-header-duration">
-                {{item.length}} روزه
+              <div class="package-item-price">
+                <div class="package-item-price-numeric">{{item.price}}</div>
+                تومان
+              </div>
+              <ul class="package-item-feature-list">
+                <li v-for="ability in item.abilities"
+                    :key="ability"
+                    class="package-item-feature-item">{{ability}}</li>
+              </ul>
+              <q-btn class="package-item-action-btn"
+                     label="شروع کنید"
+                     unelevated
+                     :loading="subscribeLoading"
+                     @click="subscribe(item.id)"
+              />
+            </div>
+          </template>
+          <div v-else
+               class="flex justify-center items-center q-ma-lg q-pa-lg">
+            <div class="text-center">
+              <q-spinner-grid
+                color="primary"
+                size="2em"
+              />
+              <div class="q-mt-lg">
+                کمی صبر کنید ...
               </div>
             </div>
-            <div class="package-item-price">
-              <div class="package-item-price-numeric">{{item.price}}</div>
-              تومان
-            </div>
-            <ul class="package-item-feature-list">
-              <li v-for="ability in item.abilities"
-                  :key="ability"
-                  class="package-item-feature-item">{{ability}}</li>
-            </ul>
-            <q-btn class="package-item-action-btn"
-                   label="شروع کنید"
-                   unelevated
-                   @click="subscribe(item.id)"
-            />
           </div>
         </div>
       </div>
@@ -52,7 +67,9 @@ export default defineComponent({
   name: 'SubscriptionPackageSection',
   data() {
     return ({
-      packageList: {}
+      packageList: [],
+      getSubscribeLoading: false,
+      subscribeLoading: false
     })
   },
   created() {
@@ -65,17 +82,31 @@ export default defineComponent({
   },
   methods: {
     getData() {
+      this.loading = true
       this.$axios.get(API_ADDRESS.subscription.list).then((res) => {
         this.packageList = res.data.data
       })
+        .then(() => {
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
     },
     subscribe(id) {
       if (this.isUserLogin) {
+        this.subscribeLoading = true
         this.$axios.post(API_ADDRESS.subscription.register(id)).then((res) => {
           if (res.status === 200) {
             this.$router.push({ name: 'User.Dashboard' })
           }
         })
+          .then(() => {
+            this.subscribeLoading = false
+          })
+          .catch(() => {
+            this.subscribeLoading = false
+          })
       } else {
         this.$router.push({ name: 'login' })
       }

@@ -56,6 +56,7 @@ export default {
     timePointId: {
       type: Number,
       default: null
+
     }
   },
   emits: ['updateValue'],

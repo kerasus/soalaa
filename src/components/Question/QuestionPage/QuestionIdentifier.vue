@@ -44,15 +44,17 @@
           :disable="!editable"
         />
       </div>
-      <attach-exam
-        class="col-3"
-        :exams="exams"
-        :lessons="lessons"
-        :categories="categories"
-        :buffer="buffer"
-        @attach="emitAttachExam"
-        @detach="emitDetachExam"
-      />
+      <div class="detail-box col-3">
+        <attach-exam
+          class="col-3"
+          :exams="exams"
+          :lessons="lessons"
+          :categories="categories"
+          :buffer="buffer"
+          @attach="emitAttachExam"
+          @detach="emitDetachExam"
+        />
+      </div>
       <div class="detail-box col-3"
            style="padding-right:0;">
         <div class="detail-box-title">هدف سوال</div>
@@ -442,9 +444,11 @@ export default {
   .default-details-container {
     .detail-box {
       margin-top: 10px;
-
       .detail-box-title {
         margin-bottom: 5px;
+      }
+      .exam-details {
+        margin-top: -10px;
       }
     }
   }
@@ -481,7 +485,7 @@ export default {
 
       .input-container {
         .input-box {
-          width: 72%;
+          width: calc( 100% - 52px );
         }
 
         .icon-box {
