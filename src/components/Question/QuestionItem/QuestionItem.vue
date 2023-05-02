@@ -746,7 +746,7 @@ export default {
       this.questionTimePoint = this.content.timepoints.list.find(x => x.id === this.question.time_point_id)
       const timePointList = this.content.timepoints.list
       timePointList.sort((a, b) => (a.time > b.time ? 1 : -1))
-      const timePointIndex = timePointList.findIndex(x => x.id === 131133) + 1
+      const timePointIndex = timePointList.findIndex(x => x.id === this.question.time_point_id) + 1
       this.nextTimePoint = timePointList[timePointIndex]
     }
   }
