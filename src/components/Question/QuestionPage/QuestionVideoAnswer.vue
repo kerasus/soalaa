@@ -8,10 +8,19 @@
         label="انتخاب محتوا"
         color="primary"
         class="dialog-btn"
+        :loading="loading"
         unelevated
         @click="toggleVideoAnswerDialog()"
-      />
+      >
+        <q-badge v-if="contentId !== null"
+                 color="warning"
+                 floating
+                 transparent>
+          1
+        </q-badge>
+      </q-btn>
       <content-selection-dialog :dialog="dialog"
+                                :content="content"
                                 @toggle-dialog="toggleVideoAnswerDialog"
                                 @update-value="updateContent($event)" />
     </div>
@@ -21,7 +30,7 @@
       </div>
       <q-select v-model="timePoint"
                 :options="timePointOptions"
-                :disable="timePointOptions.length === 0"
+                :disable="timePointOptions.length === 0 || loading"
                 placeholder="انتخاب کنید"
                 dense
                 rounded
@@ -39,6 +48,10 @@ export default {
   name: 'QuestionVideoAnswer',
   components: { ContentSelectionDialog },
   props: {
+    contentId: {
+      type: Number,
+      default: null
+    }
   },
   emits: ['updateValue'],
   data () {
@@ -47,7 +60,13 @@ export default {
       content: new Content(),
       timePoint: null,
       timePointOptions: [],
+      loading: false,
       dialog: false
+    }
+  },
+  watch: {
+    contentId(newContentId) {
+      this.getContent(newContentId)
     }
   },
   methods: {
@@ -56,12 +75,7 @@ export default {
     },
     updateContent(contentList) {
       this.content = new Content(contentList[0])
-      this.$axios.get(API_ADDRESS.content.get(this.content.id))
-        .then(res => {
-          this.content = new Content(res.data.data)
-          this.timePointOptions = this.content.timepoints.list
-        })
-        .catch(() => {})
+      this.getContent(this.content.id)
       this.onUpdateValue()
     },
     onUpdateValue() {
@@ -69,6 +83,18 @@ export default {
         content_id: this.content.id,
         time_point_id: this.timePoint
       })
+    },
+    getContent(contentId) {
+      this.loading = true
+      this.$axios.get(API_ADDRESS.content.get(contentId))
+        .then(res => {
+          this.content = new Content(res.data.data)
+          this.timePointOptions = this.content.timepoints.list
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
     }
   }
 }
