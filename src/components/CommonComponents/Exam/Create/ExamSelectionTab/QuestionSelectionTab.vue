@@ -125,7 +125,7 @@
     </div>
 
   </div>
-  <div v-if="doesExamHaveLesson && isTreeLayerConfigReady">
+  <div v-if="isTreeLayerConfigReady">
     <tree-modal
       ref="questionTreeModal"
       :key="treeKey"
@@ -388,9 +388,11 @@ export default {
         this.fillAllTagsFromResponse()
       }
       await this.setupTreeLayer()
-      this.$refs.questionTreeModal.layerNodeSelected(this.treeLayersConfig[0], 0)
-      this.treeKey++
-      this.toggleTreeModal()
+      this.$nextTick(() => {
+        this.$refs.questionTreeModal.layerNodeSelected(this.treeLayersConfig[0], 0)
+        this.treeKey++
+        this.toggleTreeModal()
+      })
     },
     setupTreeLayer() {
       return new Promise((resolve, reject) => {
