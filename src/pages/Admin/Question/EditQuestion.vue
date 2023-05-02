@@ -77,23 +77,41 @@
       />
     </div>
     <div v-if="question.logs && question.logs.list && question.logs.list.length > 0">
-      <log-list-component
-        :logs="question.logs"
-        :mode="'edit'"
-        @addComment="addComment"
-        @restoreQuestion="restoreQuestion"
+      <log-list-component :logs="question.logs"
+                          :loading="loadingState"
+                          :mode="'edit'"
+                          @addComment="addComment"
+                          @restoreQuestion="restoreQuestion"
       />
     </div>
     <div class="q-mt-md">
-      <entity-index
-        v-model:value="logIndexInputs"
-        title="لیست خطا های گزارش شده"
-        :api="logIndexApi"
-        :table="logIndexTable"
-        :table-keys="logIndexTableKeys"
-        :create-route-name="false"
-        :show-search-button="false"
-      />
+      <entity-index ref="reportIndex"
+                    v-model:value="logIndexInputs"
+                    title="لیست خطا های گزارش شده"
+                    :api="logIndexApi"
+                    :table="logIndexTable"
+                    :table-keys="logIndexTableKeys"
+                    :create-route-name="false"
+                    :show-search-button="false"
+      >
+        <template #entity-index-table-cell="{inputData}">
+          <template v-if="inputData.col.name === 'status'">
+            <template v-if="!questionReportStatusesLoading">
+              <q-select v-model="inputData.col.value.title"
+                        borderless
+                        option-value="title"
+                        option-label="description"
+                        :map-options="true"
+                        :options="questionReportStatuses"
+                        @update:model-value="onChangeReportStatus($event, inputData.props.row)"
+              />
+            </template>
+            <div v-else>
+              ...
+            </div>
+          </template>
+        </template>
+      </entity-index>
     </div>
   </div>
 </template>
@@ -148,25 +166,33 @@ export default {
       logIndexInputs: [
         { type: 'hidden', name: 'question_id', col: 'col-md-12', value: null }
       ],
+      questionReportStatuses: [],
+      questionReportStatusesLoading: true,
       logIndexTable: {
         columns: [
           {
             name: 'type',
             label: 'نوع خطا',
             align: 'left',
-            field: row => row.report.type
+            field: row => row.type.value
           },
           {
             name: 'body',
             label: 'متن خطا',
             align: 'left',
-            field: row => row.report.body
+            field: row => row.body
           },
           {
             name: 'created_at',
             label: 'تاریخ ایجاد',
             align: 'left',
-            field: row => moment(row.report.created_at, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
+            field: row => moment(row.created_at, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
+          },
+          {
+            name: 'status',
+            label: 'وضعیت',
+            align: 'left',
+            field: row => row.status
           }
         ]
       },
@@ -193,6 +219,7 @@ export default {
   },
   created () {
     this.logIndexApi = API_ADDRESS.question.reportLog(this.$route.params.question_id)
+    this.getQuestionReportStatuses()
     this.enableLoading()
     this.getQuestionTypeForTypeId(this.question)
     this.loadExamList()
@@ -213,6 +240,35 @@ export default {
   },
   mounted () {},
   methods: {
+    updateQuestionReportStatus (reportId, newStatus) {
+      this.questionReportStatusesLoading = true
+      this.$axios.put(this.logIndexApi, {
+        id: reportId,
+        status: newStatus
+      })
+        .then(() => {
+          this.questionReportStatusesLoading = false
+          this.$refs.reportIndex.reload()
+        })
+        .catch(() => {
+          this.questionReportStatusesLoading = false
+          this.$refs.reportIndex.reload()
+        })
+    },
+    onChangeReportStatus (event, reportItem) {
+      this.updateQuestionReportStatus(reportItem.id, event.title)
+    },
+    getQuestionReportStatuses() {
+      this.questionReportStatusesLoading = true
+      this.$axios.get(API_ADDRESS.question.reportStatuses)
+        .then(response => {
+          this.questionReportStatusesLoading = false
+          this.questionReportStatuses = response.data.data
+        })
+        .catch(() => {
+          this.questionReportStatusesLoading = false
+        })
+    },
     setlogIndexInputsValues () {
       const questionIdIndex = this.logIndexInputs.findIndex(item => item.name === 'question_id')
       if (questionIdIndex !== -1) {
