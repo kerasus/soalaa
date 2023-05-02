@@ -196,7 +196,8 @@ export default {
         ...this.question,
         choices: this.question.choices.list,
         // type_id: this.question.type_id
-        tags: this.question.tags.list.map(tag => tag.id)
+        tags: this.question.tags.list.map(tag => tag.id),
+        subject_tags: this.question.subject_tags.list.map(item => item.id)
       }
       this.updateQuestion(question)
     },
@@ -239,59 +240,6 @@ export default {
     }
   }
 }
-//.multiple-choice-Q {
-//  padding-top: 35px;
-//  font-style: normal;
-//  font-weight: 500;
-//  font-size: 16px;
-//  line-height: 28px;
-//  color: #23263B;
-//  text-align: right #{"/* rtl:ignore */"};
-//  .removeAllChoice-btn {
-//    color: #FFFFFF;
-//    background: #9690E4;
-//    border-radius: 10px;
-//  }
-//  .multiple-choice-A {
-//    padding-top: 12px;
-//    padding-bottom: 12px;
-//  }
-//  .question-card {
-//    .question {
-//      font-size: 14px;
-//      line-height: 24px;
-//      padding: 15px 20px;
-//    }
-//    .question-box {
-//      align-items: last baseline;
-//      font-weight: normal;
-//      font-size: 14px;
-//      line-height: 24px;
-//      .question-img {
-//        text-align: left #{"/* rtl:ignore */"};
-//        .q-img {
-//          border-radius: 0px 0px 1px 20px #{"/* rtl:ignore */"};
-//          padding: 0;
-//        }
-//      }
-//    }
-//  }
-//}
-//.multiple-choice-Answer {
-//  .answer-box {
-//    padding-top: 12px;
-//    padding-bottom: 12px;
-//    :nth-child(2n){
-//      padding-right: 0px #{"/* rtl:ignore */"};
-//    }
-//    :nth-child(2n+1){
-//      padding-left: 0px #{"/* rtl:ignore */"};
-//    }
-//    .q-separator--horizontal-inset {
-//      margin-right: 16px #{"/* rtl:ignore */"} !important ;
-//    }
-//  }
-//}
 </style>
 <style lang="scss">
 [dir="rtl"] .filepond--root {
@@ -303,47 +251,4 @@ export default {
   margin-left: 2.5em #{"/* rtl:ignore */"} !important;
   margin-right: 0.5em #{"/* rtl:ignore */"} !important;
 }
-//// USED IN MANY OTHER COMPONENTS
-//.default-questions-card {
-//  background: #FFFFFF;
-//  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
-//  border-radius: 30px;
-//  .q-card__section {
-//    padding: 15px 20px !important;
-//  }
-//  .default-Qcard-title {
-//    font-size: 14px;
-//    line-height: 24px;
-//  }
-//  .default-Qcard-box {
-//    align-items: last baseline;
-//    font-weight: normal;
-//    font-size: 14px;
-//    line-height: 24px;
-//    .default-Qcard-img {
-//      text-align: left #{"/* rtl:ignore */"};
-//      .q-img {
-//        border-radius: 0px 0px 1px 20px #{"/* rtl:ignore */"};
-//        padding: 0 !important;
-//        .q-img__image {
-//          padding: 0 !important;
-//        }
-//      }
-//    }
-//  }
-//}
-//.multiple-choice-Answer {
-//  .answer-box {
-//    .q-radio__inner {
-//      margin-left: 7px #{"/* rtl:ignore */"} !important;
-//    }
-//  }
-//  .default-Qcard-title{
-//    justify-content: space-between;
-//    display: flex;
-//    .q-btn {
-//      padding: 4px 16px !important;
-//    }
-//  }
-//}
 </style>
