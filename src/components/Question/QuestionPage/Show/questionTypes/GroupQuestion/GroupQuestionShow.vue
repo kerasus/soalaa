@@ -16,39 +16,19 @@
         </div>
       </q-card-section>
     </q-card>
-    <div class="multiple-choice-A">
+    <q-card-section
+      class="row main-card-section multiple-answer"
+    >
       <div
-        v-if="question.choices.list.length"
-        class="row multiple-choice-Answer"
+        v-for="(item, index) in question.group"
+        :key="index"
+        class="col-lg-6 col-12"
       >
-        <div
-          v-for="(item, index) in question.choices.list"
-          :key="item.order"
-          class="col-6 answer-box"
-        >
-          <q-card class="col-6 default-questions-card">
-            <q-card-section class="default-Qcard-title">
-              <q-radio
-                v-model="choice"
-                dense
-                disable
-                :val="'choice' + index"
-                :label="'گزینه ' + (index + 1)"
-                color="primary"
-              />
-            </q-card-section>
-            <q-separator inset />
-            <q-card-section>
-              <div class="row justify-between default-Qcard-box">
-                <vue-katex
-                  :input="item.title"
-                />
-              </div>
-            </q-card-section>
-          </q-card>
+        <div class="card-section-header">
+          <div>سوال {{index+ 1}} با شناسه {{item.id}}</div>
         </div>
       </div>
-    </div>
+    </q-card-section>
     <q-card
       v-if="question.descriptive_answer"
       class="default-questions-card"
@@ -91,7 +71,6 @@ export default {
   created () {
     this.setChoice()
   },
-  mounted () {},
   updated () {},
   methods: {
     setChoice () {

@@ -11,45 +11,6 @@
         />
       </div>
     </q-card-section>
-    <q-card-section
-      class="row main-card-section multiple-answer"
-    >
-      <div
-        v-for="(item, index) in selectedQuestionIDs"
-        :key="index"
-        class="col-lg-6 col-12"
-      >
-        <div class="card-section-header">
-          <q-btn
-            class="icon-type"
-            icon="isax:close-square5"
-            color="negative"
-            flat
-            @click="removeSelectedQuestionIDs(item)"
-          />
-          <div>سوال {{index+ 1}} با شناسه {{item}}</div>
-        </div>
-      </div>
-    </q-card-section>
-    <q-card-section class="row main-card-section">
-      <div class="col-12">
-        <div class="card-section-header">
-          <q-input
-            v-model="currentQuestionIdToAdd"
-            filled
-            placeholder="شناسه سوال"
-          />
-          <q-btn
-            class="icon-type"
-            icon="isax:add-square5"
-            color="positive"
-            flat
-            @click="addQuestionId"
-          />
-          <span>اضافه کردن سوال جدید</span>
-        </div>
-      </div>
-    </q-card-section>
     <q-card-section class="main-card-section long-answer">
       <div class="card-section-header">پاسخ تشریحی</div>
       <div class="answer-box">
@@ -138,7 +99,6 @@ export default {
       allProps: {
         loading: false
       },
-      selectedQuestionIDs: [],
       questionIndexApi: API_ADDRESS.question.index({}, undefined, true),
       tableInputs: [
         { type: 'hidden', name: 'question_id', col: 'col-md-12', value: null }
@@ -192,14 +152,6 @@ export default {
     this.loadMajorList()
   },
   methods: {
-    removeSelectedQuestionIDs (questionId) {
-      const index = this.selectedQuestionIDs.findIndex(item => item === questionId)
-      this.selectedQuestionIDs.splice(index, 1)
-    },
-    addQuestionId () {
-      this.selectedQuestionIDs.push(this.currentQuestionIdToAdd)
-      this.currentQuestionIdToAdd = ''
-    },
     saveQuestion () {
       this.getContent()
       const exams = []
@@ -224,7 +176,7 @@ export default {
         tags: this.question.tags.list.map(item => item.id),
         subject_tags: this.question.subject_tags.list.map(item => item.id),
         majors: this.question.majors,
-        group: this.selectedQuestionIDs,
+        group: [],
         sub_category_id: 1,
         recommended_time: 0,
         type_id: this.question.type_id

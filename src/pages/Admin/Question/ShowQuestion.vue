@@ -157,7 +157,6 @@ export default {
     },
     chosenComponent () {
       const cName = this.question.type.componentName
-      console.log('cName', cName)
       if (cName === 'MultipleChoiceQ') {
         return 'multiple-choice-show-question'
       }

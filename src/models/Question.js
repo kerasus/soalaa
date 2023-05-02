@@ -41,6 +41,10 @@ class Question extends Model {
       { key: 'major' }, // ToDo: must remove
       { key: 'majors' },
       {
+        key: 'group',
+        default: []
+      },
+      {
         key: 'years',
         default: []
       },
@@ -172,6 +176,15 @@ class Question extends Model {
 
     if (this._id) {
       this.id = this._id
+    }
+
+    if (this.group.length > 0) {
+      this.group = this.group.map(question => {
+        return {
+          id: question._id || question.id,
+          ...question
+        }
+      })
     }
 
     const that = this

@@ -13,51 +13,59 @@
       </div>
     </q-card-section>
     <q-card-section
-      v-if="question.choices.list.length > 0"
       class="row main-card-section multiple-answer"
     >
       <div
-        v-for="(item, index) in question.choices.list"
-        :key="item.order"
+        v-for="(item, index) in question.group"
+        :key="index"
         class="col-lg-6 col-12"
       >
         <div class="card-section-header">
           <q-btn
+            v-if="isQuestionGroupInEditMode"
             class="icon-type"
             icon="isax:close-square5"
             color="negative"
             flat
-            @click="removeChoice(item.order)"
+            @click="removeSelectedQuestionIDs(item)"
           />
-          <q-radio
-            v-model="choice"
-            dense
-            :val="'choice' + index"
-            :label="'گزینه ' + (index + 1)"
-            color="primary"
-            @click="choiceClicked(item.order)"
-          />
-        </div>
-        <div class="multiple-answer-box">
-          <QuestionField
-            :ref="'tiptapChoice' + index"
-            :key="'choices' + index + domKey"
-            :editor-value="item.title"
-          />
+          <div>سوال {{index+ 1}} با شناسه {{item.id}}</div>
         </div>
       </div>
     </q-card-section>
     <q-card-section class="row main-card-section">
       <div class="col-12">
         <div class="card-section-header">
+          <q-input
+            v-if="isQuestionGroupInEditMode"
+            v-model="currentQuestionIdToAdd"
+            filled
+            placeholder="شناسه سوال"
+          />
           <q-btn
-            class="icon-type"
+            v-if="isQuestionGroupInEditMode"
+            class="icon-type q-mr-lg"
             icon="isax:add-square5"
             color="positive"
             flat
-            @click="addChoice"
+            @click="addQuestionId"
           />
-          <span>گزینه جدید</span>
+          <q-btn
+            unelevated
+            class="icon-type q-mr-lg"
+            color="positive"
+            :loading="groupAttachLoading"
+            label="ثبت نهایی شناسه سوالات"
+            @click="attachQuestionGroup"
+          />
+          <q-btn
+            v-if="!isQuestionGroupInEditMode"
+            unelevated
+            class="icon-type"
+            color="primary"
+            label="ویرایش سوالات گروهی"
+            @click="isQuestionGroupInEditMode = true"
+          />
         </div>
       </div>
     </q-card-section>
@@ -82,6 +90,7 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { ExamList } from 'src/models/Exam'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'GroupQuestionEdit',
   components: {
@@ -105,10 +114,13 @@ export default {
       subCategoriesList: new QuestSubcategoryList(),
       examList: new ExamList(),
       questionStatuses: new QuestionStatusList(),
+      currentQuestionIdToAdd: '',
       categoryList: new QuestCategoryList(),
       allProps: {
         loading: false
-      }
+      },
+      groupAttachLoading: false,
+      isQuestionGroupInEditMode: true
     }
   },
   inject: {
@@ -124,9 +136,35 @@ export default {
     }, 100)
     this.setChoice()
   },
-  mounted () {},
   updated () {},
   methods: {
+    attachQuestionGroup () {
+      this.groupAttachLoading = true
+      this.$axios.post(API_ADDRESS.question.groupAttach, {
+        group_question_id: this.question.id,
+        questions: this.question.group.map(item => item.id)
+      })
+        .then(() => {
+          this.$q.notify({
+            message: 'ثبت با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
+          })
+          this.groupAttachLoading = false
+          this.isQuestionGroupInEditMode = false
+        })
+        .catch(() => {
+          this.groupAttachLoading = false
+        })
+    },
+    removeSelectedQuestionIDs (questionId) {
+      const index = this.question.group.findIndex(item => item === questionId)
+      this.question.group.splice(index, 1)
+    },
+    addQuestionId () {
+      this.question.group.push(this.currentQuestionIdToAdd)
+      this.currentQuestionIdToAdd = ''
+    },
     setChoice () {
       const choiceIndex = this.question.choices.list.findIndex((item) => item.answer === true)
       this.choice = 'choice' + choiceIndex
