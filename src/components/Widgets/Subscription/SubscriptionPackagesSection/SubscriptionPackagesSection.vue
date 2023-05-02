@@ -13,7 +13,7 @@
     <div class="row packages-row">
       <div class="col-12 packages-col">
         <div class="packages-wrapper">
-          <template v-if="!loading">
+          <template v-if="!getSubscribeLoading">
             <div v-for="(item, index) in packageList"
                  :key="index"
                  class="package-item">
@@ -37,6 +37,7 @@
               <q-btn class="package-item-action-btn"
                      label="شروع کنید"
                      unelevated
+                     :loading="subscribeLoading"
                      @click="subscribe(item.id)"
               />
             </div>
@@ -67,7 +68,8 @@ export default defineComponent({
   data() {
     return ({
       packageList: [],
-      loading: false
+      getSubscribeLoading: false,
+      subscribeLoading: false
     })
   },
   created() {
@@ -93,11 +95,18 @@ export default defineComponent({
     },
     subscribe(id) {
       if (this.isUserLogin) {
+        this.subscribeLoading = true
         this.$axios.post(API_ADDRESS.subscription.register(id)).then((res) => {
           if (res.status === 200) {
             this.$router.push({ name: 'User.Dashboard' })
           }
         })
+          .then(() => {
+            this.subscribeLoading = false
+          })
+          .catch(() => {
+            this.subscribeLoading = false
+          })
       } else {
         this.$router.push({ name: 'login' })
       }
