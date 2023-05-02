@@ -64,7 +64,8 @@
         />
       </div>
       <question-video-answer :contentId="question.content_id"
-                             @update-value="updateQuestion($event)" />
+                             :timePointId="question.time_point_id"
+                             @update-value="updateQuestionContent($event)" />
       <btn-box
         class="col-12"
         editeQuestion
@@ -310,7 +311,8 @@ export default {
         show: false
       })
     },
-    updateQuestion(data) {
+    updateQuestionContent(data) {
+      console.log(data)
       this.question.content_id = data.content_id
       this.question.time_point_id = data.time_point_id
     }
