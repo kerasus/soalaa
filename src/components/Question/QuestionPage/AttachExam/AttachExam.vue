@@ -144,12 +144,12 @@
 </template>
 
 <script>
+import API_ADDRESS from 'src/api/Addresses'
 import { Question } from 'src/models/Question'
 import { ExamList, Exam } from 'src/models/Exam'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { QuestCategoryList } from 'src/models/QuestCategory'
 import { EntityCrudFormBuilder } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
+import { QuestCategoryList } from 'src/models/QuestCategory'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 
 export default {
   name: 'AttachExam',
@@ -531,7 +531,7 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-left: 16px #{"/* rtl:ignore */"};
+          //margin-left: 16px #{"/* rtl:ignore */"};
 
           .question-details-subject-img {
             height: 24px;
@@ -612,7 +612,7 @@ export default {
           margin-top: 5px;
           .input-box {
             //width: initial;
-            width: 78%;
+            width: calc( 100% - 52px );
           }
           .icon-box {
             width: 40px;
@@ -622,7 +622,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 16px ;
+            margin-left: 12px ;
             color: #65677F ;
             .default-detail-btn {
               width: 40px;
