@@ -35,7 +35,8 @@
                 dense
                 rounded
                 option-label="title"
-                option-value="id" />
+                option-value="id"
+                @update:model-value="onUpdateValue" />
     </div>
   </div>
 </template>
@@ -51,6 +52,11 @@ export default {
     contentId: {
       type: Number,
       default: null
+    },
+    timePointId: {
+      type: Number,
+      default: null
+
     }
   },
   emits: ['updateValue'],
@@ -81,7 +87,7 @@ export default {
     onUpdateValue() {
       this.$emit('updateValue', {
         content_id: this.content.id,
-        time_point_id: this.timePoint
+        time_point_id: this.timePoint.id
       })
     },
     getContent(contentId) {
@@ -90,6 +96,7 @@ export default {
         .then(res => {
           this.content = new Content(res.data.data)
           this.timePointOptions = this.content.timepoints.list
+          this.timePoint = this.content.timepoints.list.find(x => x.id === this.timePointId)
           this.loading = false
         })
         .catch(() => {

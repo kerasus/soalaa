@@ -126,6 +126,7 @@ export default {
     currentTime(time) {
       if (time >= this.nextTimePoint.time) {
         this.goToTimpoint(this.timePoint)
+        this.$refs.videoPlayer?.player.pause()
       }
     },
     timePoint() {
