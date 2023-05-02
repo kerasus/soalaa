@@ -60,7 +60,8 @@
           @tags-collected="setTagsOnCreate"
         />
       </div>
-      <question-video-answer @update-value="updateQuestion($event)" />
+      <question-video-answer :contentId="question.content_id"
+                             @update-value="updateQuestion($event)" />
       <btn-box
         class="col-12"
         @saveQuestion="createQuestionImage(question)"
