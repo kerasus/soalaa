@@ -1,69 +1,77 @@
 <template>
-  <div
-    class="log-list"
-  >
-    <q-toolbar class="justify-between">
-      <q-tabs
-        v-model="tab"
-        dense
-        class="taps-group text-grey"
-        active-color="dark"
-        indicator-color="secondary"
-        align="left"
-        narrow-indicator
-      >
-        <q-tab
-          name="history"
-          label="سابقه"
-        />
-        <q-tab name="comments"
-               label="نظرات کاربران" />
-      </q-tabs>
-      <q-btn class="icon-type report-btn"
-             size="12px"
-             icon-right="isax:danger4"
-             label="گزارش خطا"
-             flat />
-    </q-toolbar>
-    <q-separator class="separator-tabs" />
-    <q-tab-panels v-model="tab"
-                  animated>
-      <q-tab-panel name="history">
-        <q-card class="log-list-tap-panel custom-card">
-          <q-scroll-area
-            class="scroll-bar"
-            tabindex="0"
-            :style="windowSize.x > 991 ? {height: '440px'}: {height: '497px'} "
-            visible
-          >
-            <div class="log-list-card">
-              <log-item
-                v-for="(item, index) in logs.list"
-                :key="index"
-                :log="item"
-                :mode="mode"
-                @restoreQuestion="restoreQuestion"
-              />
-            </div>
-          </q-scroll-area>
-        </q-card>
-      </q-tab-panel>
-      <q-tab-panel class="flex"
-                   name="comments">
-        <q-card
-          class="log-list-tap-panel full-width flex bg-transparent"
-          flat
+  <div class="log-list">
+    <template v-if="loading">
+      ...
+    </template>
+    <template v-else>
+      <q-toolbar class="justify-between">
+        <q-tabs
+          v-model="tab"
+          dense
+          class="taps-group text-grey"
+          active-color="dark"
+          indicator-color="secondary"
+          align="left"
+          narrow-indicator
         >
-          <div class="coming-soon">حالا حالاها خبری از این بخش نیست :)</div>
-        </q-card>
-      </q-tab-panel>
-    </q-tab-panels>
+          <q-tab
+            name="history"
+            label="سابقه"
+          />
+          <q-tab name="comments"
+                 label="نظرات کاربران" />
+        </q-tabs>
+        <q-btn class="icon-type report-btn"
+               size="12px"
+               icon-right="isax:danger4"
+               label="گزارش خطا"
+               flat />
+      </q-toolbar>
+      <q-separator class="separator-tabs" />
+      <q-tab-panels v-model="tab"
+                    animated>
+        <q-tab-panel name="history">
+          <q-card class="log-list-tap-panel custom-card">
+            <template v-if="!logs.loading">
+              <q-scroll-area
+                class="scroll-bar"
+                tabindex="0"
+                :style="windowSize.x > 991 ? {height: '440px'}: {height: '497px'}"
+                visible
+              >
+                <div class="log-list-card">
+                  <log-item
+                    v-for="(item, index) in logs.list"
+                    :key="index"
+                    :log="item"
+                    :mode="mode"
+                    @restoreQuestion="restoreQuestion"
+                  />
+                </div>
+              </q-scroll-area>
+            </template>
+            <div>
+              ...
+            </div>
+          </q-card>
+        </q-tab-panel>
+        <q-tab-panel class="flex"
+                     name="comments">
+          <q-card
+            class="log-list-tap-panel full-width flex bg-transparent"
+            flat
+          >
+            <div class="coming-soon">حالا حالاها خبری از این بخش نیست :)</div>
+          </q-card>
+        </q-tab-panel>
+      </q-tab-panels>
+    </template>
   </div>
 </template>
 
 <script>
-import LogItem from 'src/components/QuestionBank/EditQuestion/Log/LogItem/LogItem'
-import { LogList } from 'src/models/Log'
+import { LogList } from 'src/models/Log.js'
+import LogItem from 'src/components/QuestionBank/EditQuestion/Log/LogItem/LogItem.vue'
 
 export default {
   name: 'LogList',
@@ -76,6 +84,10 @@ export default {
       default () {
         return new LogList()
       }
+    },
+    loading: {
+      type: Boolean,
+      default: false
     },
     mode: {
       type: String,
@@ -109,7 +121,7 @@ export default {
 <style lang="scss" scoped>
 .log-list {
   margin-top: 70px;
-  margin-bottom: 485px;
+  margin-bottom: 50px;
 
   .scroll-bar {
     &:deep(.q-scrollarea__thumb){
