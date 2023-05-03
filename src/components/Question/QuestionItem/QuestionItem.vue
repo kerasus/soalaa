@@ -865,7 +865,7 @@ export default {
     .question-source {
       display: flex;
       align-items: center;
-      justify-content: left;
+      justify-content: right;
       min-height: 36px;
 
       @media only screen and (max-width: 599px) {
