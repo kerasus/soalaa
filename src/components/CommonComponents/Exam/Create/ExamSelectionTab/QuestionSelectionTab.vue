@@ -289,7 +289,7 @@ export default {
         total: 0
       },
       reportTypeList: [],
-      treeModalNodeId: ''
+      treeModalNodeId: null
     }
   },
   watch: {
