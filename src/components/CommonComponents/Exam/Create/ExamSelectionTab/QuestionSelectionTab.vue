@@ -131,6 +131,7 @@
       :key="treeKey"
       v-model:dialogValue="treeModalValue"
       v-model:selected-nodes="selectedNodes"
+      :initial-tree-node="treeModalNodeId"
       :no-nodes-label="'لطفا یک درس انتخاب کنید'"
       exchange-last-layer-only
       :persistent="!doesExamHaveLesson"
@@ -246,7 +247,6 @@ export default {
           className: 'col-12'
         }
       ],
-      lastSelectedNodes: [],
       examGradeSetValue: '',
       selectedNodesIds: [],
       lessonsTitles: [],
@@ -288,7 +288,8 @@ export default {
         to: 0,
         total: 0
       },
-      reportTypeList: []
+      reportTypeList: [],
+      treeModalNodeId: ''
     }
   },
   watch: {
@@ -348,7 +349,7 @@ export default {
       return !!this.providedExam.temp.lesson
     },
     isTreeLayerConfigReady() {
-      return this.providedExam.temp.grade
+      return this.providedExam.temp.grade && this.treeModalNodeId
     },
     getSelectedQuestionIds() {
       return this.providedExam.questions.list.map(question => question.id)
@@ -378,9 +379,10 @@ export default {
       this.providedExam.questions.list[questionIndex].selected = value
     },
     updateTreeFilter() {
+      this.$refs.questionTreeModal.finalizeOutputData()
       const foundedLesson = this.treeModalLessonsList.find(item => item.id === this.providedExam.temp.lesson)
-      const tagsToFilter = this.lastSelectedNodes.length > 0 ? this.lastSelectedNodes : [foundedLesson]
-      this.selectedNodesIds = this.lastSelectedNodes.map(node => node.id)
+      const tagsToFilter = this.selectedNodes.length > 0 ? this.selectedNodes : [foundedLesson]
+      this.selectedNodesIds = this.selectedNodes.map(node => node.id)
       this.$refs.filter.changeFilterData('tags', tagsToFilter)
     },
     async setupTreeModal() {
@@ -403,6 +405,7 @@ export default {
         }))
           .then(response => {
             this.hideLoading()
+            this.treeModalNodeId = response.data.data.id
             this.treeModalLessonsList = response.data.data.children
             if (this.treeModalLessonsList.length === 0) {
               this.$q.notify({
