@@ -368,7 +368,6 @@ export default {
       })
     },
     updateQuestionContent(data) {
-      console.log(data)
       this.question.content_id = data.content_id
       this.question.time_point_id = data.time_point_id
     }
