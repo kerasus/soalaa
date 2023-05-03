@@ -308,7 +308,7 @@ export default {
       draftBtnLoading: false,
       saveBtnLoading: false,
       gradesList: [],
-      rootNodeId: ''
+      rootNodeId: null
     }
   },
   computed: {
