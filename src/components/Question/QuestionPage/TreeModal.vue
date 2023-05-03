@@ -111,7 +111,7 @@ export default {
       type: Boolean
     },
     initialTreeNode: {
-      type: [Object, String, TreeNode],
+      type: [String, TreeNode],
       default () {
         return new TreeNode({})
       }
