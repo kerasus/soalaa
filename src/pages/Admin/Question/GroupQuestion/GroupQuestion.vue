@@ -64,9 +64,7 @@ import { computed } from 'vue'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
 import mixinTree from 'src/mixin/Tree'
-import API_ADDRESS from 'src/api/Addresses'
 
-// import moment from 'moment-jalaali'
 export default {
   name: 'MultipleChoiceQ',
   components: {
@@ -98,39 +96,6 @@ export default {
       categoryList: new QuestCategoryList(),
       allProps: {
         loading: false
-      },
-      questionIndexApi: API_ADDRESS.question.index({}, undefined, true),
-      tableInputs: [
-        { type: 'hidden', name: 'question_id', col: 'col-md-12', value: null }
-      ],
-      questionTable: {
-        columns: [
-          {
-            name: 'id',
-            label: 'شناسه سوال',
-            align: 'center',
-            field: row => row.id
-          },
-          {
-            name: 'code',
-            label: 'شماره سوال',
-            align: 'left',
-            field: row => row.code
-          },
-          {
-            name: 'tags',
-            label: 'شماره سوال',
-            align: 'left'
-            // field: row => row.tags.map(item => item.title)
-          }
-        ]
-      },
-      questionTableKeys: {
-        data: 'data',
-        total: 'meta.total',
-        currentPage: 'meta.current_page',
-        perPage: 'meta.per_page',
-        pageKey: 'page'
       }
     }
   },
