@@ -6,7 +6,23 @@
         <div class="choose-tree-box question-details col-6">
           <div class="details-container-2 default-details-container">
             <div class="detail-box-container row">
-              <div v-for="(layer, index) in layersList"
+              <div v-for="(layer, index) in treeLayersList"
+                   v-show="typeof layer.showLayer === 'undefined' || layer.showLayer"
+                   :key="index"
+                   class="detail-box"
+                   :class="getDefaultLayerClassName(layer)"
+              >
+                <div class="detail-box-title">{{layer.label}}</div>
+                <q-select v-model="layer.selectedValue"
+                          filled
+                          dense
+                          dropdown-icon="isax:arrow-down-1"
+                          option-label="title"
+                          :options="layer.nodeList"
+                          :disable="!doesHigherLayerHaveValue || layer.disable"
+                          @update:model-value="layerNodeSelected(layer, index)" />
+              </div>
+              <div v-for="(layer, index) in getRegularDropdownList"
                    v-show="typeof layer.showLayer === 'undefined' || layer.showLayer"
                    :key="index"
                    class="detail-box"
@@ -47,8 +63,8 @@
                        @click="removeAllNodes" />
               </div>
               <div class="tree-chips-box">
-                <div v-if="getGlobalStorageSelectedNodes.length > 0">
-                  <q-chip v-for="item in getGlobalStorageSelectedNodes"
+                <div v-if="globalStorage.length > 0">
+                  <q-chip v-for="item in globalStorage"
                           :key="item"
                           class="tree-chips"
                           icon-remove="mdi-close"
@@ -80,7 +96,7 @@
 
 import Tree from 'components/Tree/Tree.vue'
 import mixinTree from 'src/mixin/Tree.js'
-import { TreeNodeList } from 'src/models/TreeNode.js'
+import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
 
 export default {
   name: 'TreeModal',
@@ -93,6 +109,12 @@ export default {
   props: {
     dialogValue: {
       type: Boolean
+    },
+    initialTreeNode: {
+      type: [Object, String, TreeNode],
+      default () {
+        return new TreeNode({})
+      }
     },
     selectedNodes: {
       type: [Array, TreeNodeList],
@@ -114,7 +136,6 @@ export default {
     },
     layersConfig: {
       type: Array,
-      required: true,
       default () {
         return []
       }
@@ -136,30 +157,20 @@ export default {
     'update:dialogValue',
     'update:subjectsField',
     'update:layersConfig',
-    'update:selectedNodes'
+    'update:selectedNodes',
+    'layerSelected'
   ],
   data () {
     return {
       dialogLoading: false,
       selectedNodesIDs: [],
       treeKey: 0,
-      globalStorage: {},
+      globalStorage: [],
+      initialNode: new TreeNode(),
       treeLazyLoadedCount: 0
     }
   },
   computed: {
-    getGlobalStorageSelectedNodes () {
-      const nodes = []
-      Object.entries(this.globalStorage).forEach(([parentKey]) => {
-        Object.entries(this.globalStorage[parentKey]).forEach(([childKey, childValue]) => {
-          nodes.push(...childValue.nodes)
-        })
-      })
-      if (nodes.length === 0) {
-        return this.selectedNodes
-      }
-      return nodes
-    },
     doesHigherLayerHaveValue () {
       return (layerIndex) => {
         if (layerIndex <= 0) {
@@ -193,33 +204,29 @@ export default {
         this.$emit('update:selectedNodes', value)
       }
     },
-    currentLocalStorage: {
-      get () {
-        return this.globalStorage[this.secondLowestLayer
-          .selectedValue.id][this.lowestLayer
-          .selectedValue.id]
-      },
-      set (value) {
-        this.globalStorage[this.secondLowestLayer
-          .selectedValue.id][this.lowestLayer
-          .selectedValue.id].nodes = value
-      }
+    currentLocalStorage() {
+      return this.globalStorage.filter(node => node.isInCurrentTree)
+    },
+    treeLayersList() {
+      return this.layersList.filter(layer => typeof layer.showTree === 'undefined' || layer?.showTree)
+    },
+    getRegularDropdownList() {
+      return this.layersList.filter(layer => typeof layer.showTree !== 'undefined' && !layer?.showTree)
     },
     getSelectedNodesIds() {
-      return this.selectedNodesArray.map(item => item.id)
+      return this.globalStorage.map(item => item.id)
     },
     lowestLayer() {
       return this.layersList[this.layersList.length - 1]
-    },
-    secondLowestLayer() {
-      return this.layersList[this.layersList.length - 2]
     }
   },
   watch: {
     modal (newVal) {
       if (!newVal) {
         this.onModalClosed()
+        return
       }
+      this.onModalOpened()
     },
     'lowestLayer.selectedValue.id': {
       handler(newValue) {
@@ -233,30 +240,68 @@ export default {
         this.$emit('update:layersConfig', newVal)
       },
       deep: true
-    },
-    selectedNodes: {
-      handler(newVal) {
-        this.emptyGlobalStorage()
-        this.fillGlobalStorage(newVal)
-      },
-      deep: true
     }
   },
   created () {},
   async mounted () {
     await this.initLayers()
-    this.initGlobalStorage()
+    await this.setupGlobalStorage()
   },
   updated () {},
   methods: {
+    async setupInitialNode() {
+      const typeOfNode = typeof this.initialTreeNode
+      let node = this.initialTreeNode
+      if (typeOfNode === 'string') {
+        node = new TreeNode({
+          id: this.initialTreeNode
+        })
+      } else if (typeOfNode !== 'object' || !node.id) {
+        console.error('TreeModal Error : ' +
+          'initialNode must include either an id or an object with id')
+        return
+      }
+      const response = await this.getNode(node.id)
+      this.initialNode = response.data.data
+    },
+    async setupGlobalStorage () {
+      await this.setupInitialNode()
+      this.updateGlobalStorage()
+    },
+    updateGlobalStorage (nodeList = []) {
+      this.globalStorage = nodeList.map(node => {
+        return {
+          ...node,
+          isInCurrentTree: node.isInCurrentTree || false
+        }
+      })
+    },
+    addNodeToGlobalStorage (node, isInCurrentTree = false) {
+      this.globalStorage.push({
+        ...node,
+        isInCurrentTree
+      })
+    },
+    initTree() {
+      if (this.modalHasLayer()) {
+        return
+      }
+      this.showTreeModalNode(this.initialNode.id)
+    },
+    modalHasLayer () {
+      return this.layersConfig.length > 0
+    },
     async initLayers() {
+      if (!this.modalHasLayer()) {
+        return
+      }
       this.defineLayersEmits(this.layersConfig.map((item) => item.name))
       await this.initInitialLayer()
     },
     defineLayersEmits (layerEmitNamesList) {
       layerEmitNamesList.forEach(layerName => {
         Object.assign(this._.emitsOptions, {
-          [layerName + 'nodeSelected']: null
+          [layerName + 'Selected']: null
         })
       })
     },
@@ -266,77 +311,28 @@ export default {
       }
       return 'col-12 col-md-6'
     },
-    emptyGlobalStorage() {
-      Object.entries(this.globalStorage).forEach(([parentKey]) => {
-        Object.entries(this.globalStorage[parentKey]).forEach(([childKey]) => {
-          this.globalStorage[parentKey][childKey].nodes = []
-        })
-      })
+    onModalOpened() {
+      this.initTree()
+      this.updateGlobalStorage(this.selectedNodesArray)
     },
     onModalClosed () {
       this.finalizeOutputData()
-      this.layersList[this.layersList.length - 1].selectedValue = ''
+      if (this.modalHasLayer()) {
+        const lastTreeLayer = this.treeLayersList[this.treeLayersList.length - 1]
+        this.layersList[this.layersList
+          .findIndex(item => item.name === lastTreeLayer.name)]
+          .selectedValue = ''
+      }
     },
     finalizeOutputData () {
+      const finalCollectedNodes = this.globalStorage.map(node => new TreeNode(node))
       if (!this.exchangeLastLayerOnly) {
+        this.selectedNodesArray = finalCollectedNodes
         return
       }
-      this.selectedNodesArray = this.getTheLastSelectedNode(this.selectedNodesArray)
-    },
-    initGlobalStorage () {
-      const secondLowestLayer = this.secondLowestLayer
-      secondLowestLayer.nodeList.forEach(upperNode => {
-        Object.assign(this.globalStorage, {
-          [upperNode.id]: {}
-        })
-      })
-    },
-    initLocalStorage(layer) {
-      if (!this.globalStorage[this.secondLowestLayer.selectedValue.id]) {
-        return
-      }
-      if (this.globalStorage[this.secondLowestLayer.selectedValue.id][layer.id]?.nodes?.length > 0) {
-        return
-      }
-      Object.assign(this.globalStorage[this.secondLowestLayer.selectedValue.id], {
-        [layer.id]: {
-          nodes: []
-        }
-      })
-    },
-    setGlobalStorageValue(arrayOfLayers, node) {
-      if (!this.globalStorage[arrayOfLayers[0]]) {
-        return
-      }
-      if (!this.globalStorage[arrayOfLayers[0]][arrayOfLayers[1]]) {
-        Object.assign(this.globalStorage[arrayOfLayers[0]], {
-          [arrayOfLayers[1]]: {
-            nodes: [node]
-          }
-        })
-        return
-      }
-      if (!this.globalStorage[arrayOfLayers[0]][arrayOfLayers[1]]?.nodes
-        .find(item => item.id === node.id)) {
-        this.globalStorage[arrayOfLayers[0]][arrayOfLayers[1]]?.nodes.push(node)
-      }
-    },
-    fillGlobalStorage(nodesToFillInStorage = []) {
-      nodesToFillInStorage.forEach((node) => {
-        const parentStartIndex = node.ancestors.findIndex(parent => this.globalStorage[parent.id])
-        if (parentStartIndex === -1) {
-          return
-        }
-        const parentsInGlobalStorage = node.ancestors
-          .slice(parentStartIndex, node.ancestors.length)
-          .map(item => item.id)
-        this.setGlobalStorageValue(parentsInGlobalStorage, node)
-      })
+      this.selectedNodesArray = this.getTheLastSelectedNode(finalCollectedNodes)
     },
     async initInitialLayer() {
-      if (this.layersConfig.length === 0) {
-        return
-      }
       await this.setLayerList(this.layersConfig[0].routeNameToGetNode)
     },
     setLayerList (layerRoute, layerIndex = 0) {
@@ -354,15 +350,16 @@ export default {
       })
     },
     updateNodes (values) {
-      this.selectedNodesArray.push(...values
-        .filter(node => this.selectedNodesArray
-          .findIndex(item => item.id === node.id) === -1))
+      const newValues = values
+        .filter(node => this.globalStorage
+          .findIndex(item => item.id === node.id) === -1)
+      newValues.forEach(node => this.addNodeToGlobalStorage(node, true))
       const removedNodes = this.getRemovedNodes(values)
-      removedNodes.forEach(node => this.removeNodeFromArray(node, true))
+      removedNodes.forEach(node => this.removeNodeFromGlobalStorage(node))
     },
     getRemovedNodes(newNodes) {
       const deletedNodes = []
-      this.currentLocalStorage.nodes.forEach(node => {
+      this.currentLocalStorage.forEach(node => {
         const existingNode = newNodes.find(item => item.id === node.id)
         if (!existingNode) {
           deletedNodes.push(node)
@@ -370,47 +367,62 @@ export default {
       })
       return deletedNodes
     },
-    removeNodeFromArray(node, checkForTree = false) {
-      if (checkForTree && !(this.treeLazyLoadedCount > 2)) {
-        return
-      }
-      const nodeIndex = this.selectedNodesArray.findIndex(item => item.id === node.id)
+    removeNodeFromGlobalStorage(node) {
+      const nodeIndex = this.globalStorage.findIndex(item => item.id === node.id)
       if (nodeIndex > -1) {
-        this.selectedNodesArray.splice(nodeIndex, 1)
+        this.globalStorage.splice(nodeIndex, 1)
       }
     },
     removeNode (item) {
       const node = item.id ? item : { id: item }
-      if (this.currentLocalStorage?.nodes.find(item => item.id === node.id)) {
+      if (this.currentLocalStorage?.find(item => item.id === node.id)) {
         this.setTickedMode('tree', node.id, false)
       }
-      this.removeNodeFromArray(item)
+      this.removeNodeFromGlobalStorage(item)
     },
     removeAllNodes () {
       this.setTickedMode('tree', this.getSelectedNodesIds, false)
-      this.selectedNodesArray.splice(0, this.selectedNodesArray.length)
+      this.globalStorage.splice(0, this.globalStorage.length)
+    },
+    resetAllCurrentTreeFlags() {
+      this.globalStorage.forEach(node => {
+        node.isInCurrentTree = false
+      })
     },
     layerNodeSelected (layer, layerIndex) {
-      this.$emit(layer.name + 'nodeSelected', layer.selectedValue)
-      if (!this.layersList[layerIndex + 1]) {
-        this.initLocalStorage(layer.selectedValue)
+      this.$emit(layer.name + 'Selected', layer.selectedValue)
+      this.$emit('layerSelected', {
+        layerIndex,
+        layer
+      })
+      const isLayerInTreeMode = this.layersList[layerIndex + 1]?.showTree
+      if (!this.layersList[layerIndex + 1] && !isLayerInTreeMode) {
+        this.resetAllCurrentTreeFlags()
         this.showTreeModalNode(layer.selectedValue.id)
         return
       }
       this.treeKey += 1
-      this.layersList[layerIndex + 1].selectedValue = ''
-      this.setLayerList(this.getLayerRoute(this.layersConfig[layerIndex + 1], layer.selectedValue.id), layerIndex + 1)
+      if (!isLayerInTreeMode) {
+        this.layersList[layerIndex + 1].selectedValue = ''
+        this.setLayerList(this.getLayerRoute(this.layersConfig[layerIndex + 1], layer.selectedValue.id), layerIndex + 1)
+      }
     },
     getLayerRoute(layer, layerId) {
       return typeof layer.routeNameToGetNode === 'function'
         ? layer.routeNameToGetNode(layerId)
         : layer.routeNameToGetNode
     },
-    showTreeModalNode (layerId) {
+    showTreeModalNode (id) {
       this.treeLazyLoadedCount = 0
       this.dialogLoading = true
-      this.showTree('tree', this.getNode(layerId))
-        .then(() => {
+      this.treeKey += 1
+      this.showTree('tree', this.getNode(id))
+        .then((response) => {
+          const allNodes = response.data.data.children
+          allNodes.push(new TreeNode({
+            id
+          }))
+          this.updateCurrentTreeFlags(allNodes)
           this.syncAllCheckedIds()
           this.dialogLoading = false
         })
@@ -418,9 +430,16 @@ export default {
           this.dialogLoading = false
         })
     },
-    syncAllCheckedIds () {
-      this.treeLazyLoadedCount++
-      const selectedNodesIds = this.currentLocalStorage?.nodes?.map(item => item.id) || []
+    updateCurrentTreeFlags (nodeList = []) {
+      this.globalStorage.forEach(node => {
+        if (nodeList.find(item => item.id === node.id)) {
+          node.isInCurrentTree = true
+        }
+      })
+    },
+    syncAllCheckedIds (values = []) {
+      this.updateCurrentTreeFlags(values)
+      const selectedNodesIds = this.globalStorage?.map(item => item.id) || []
       if (selectedNodesIds.length > 0) {
         this.$refs.tree.setNodesTicked(selectedNodesIds, true)
       }
