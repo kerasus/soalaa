@@ -9,7 +9,7 @@
           <div class="col">نوع سوال</div>
           <div>
             <q-tabs
-              v-if="componentTabs.list[0] && !qTabLoading"
+              v-if="componentTabs?.list[0] && !qTabLoading"
               v-model="questionTab"
               no-caps
               dense
@@ -74,6 +74,7 @@
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { Question } from 'src/models/Question'
 import { TypeList } from 'src/models/QuestionType'
+import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'Navbar',
@@ -89,29 +90,7 @@ export default {
     return {
       question: new Question(),
       questionTab: '',
-      componentTabs: new TypeList([
-        {
-          id: '6225f4828044517f52500c04',
-          type: 'question_type',
-          value: 'konkur',
-          updated_at: '2022-03-07 15:33:14',
-          created_at: '2022-03-07 15:33:14'
-        },
-        {
-          id: '6225f4828044517f52500c05',
-          type: 'question_type',
-          value: 'psychometric',
-          updated_at: '2022-03-07 15:33:14',
-          created_at: '2022-03-07 15:33:14'
-        },
-        {
-          id: '6225f4828044517f52500c06',
-          type: 'question_type',
-          value: 'descriptive',
-          updated_at: '2022-03-07 15:33:14',
-          created_at: '2022-03-07 15:33:14'
-        }
-      ]),
+      componentTabs: new TypeList(),
       qTabLoading: false
     }
   },
@@ -122,9 +101,7 @@ export default {
     this.qTabLoading = true
   },
   mounted () {
-    this.$nextTick(() => {
-      this.qTabLoading = false
-    })
+    this.init()
   },
   computed: {
     doesHaveImage () {
@@ -133,8 +110,18 @@ export default {
     }
   },
   methods: {
+    async init() {
+      const tabs = await this.getQuestionType()
+      this.componentTabs = new TypeList(tabs.data.data)
+      this.$nextTick(() => {
+        this.qTabLoading = false
+      })
+    },
     panelClicked () {
       this.$emit('panelClicked')
+    },
+    getQuestionType() {
+      return this.$axios.get(API_ADDRESS.option.base + '?type=question_type')
     },
     getCurrentRoute (componentName) {
       const currentQuestionMode = this.getCurrentQuestionMode()
@@ -145,6 +132,8 @@ export default {
           return { name: 'Admin.Question.Create.' + currentQuestionMode + '.Descriptive' }
         } else if (componentName === 'MBTIQ') {
           return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MBTI' }
+        } else if (componentName === 'GroupQuestion') {
+          return { name: 'Admin.Question.Create.' + currentQuestionMode + '.GroupQuestion' }
         }
       } else {
         if (componentName === 'MultipleChoiceQ') {
@@ -166,6 +155,13 @@ export default {
             name: 'Admin.Question.Create.' + currentQuestionMode,
             params: {
               questionType: 'mbti'
+            }
+          }
+        } else if (componentName === 'GroupQuestion') {
+          return {
+            name: 'Admin.Question.Create.' + currentQuestionMode,
+            params: {
+              questionType: 'groupQuestion'
             }
           }
         }
