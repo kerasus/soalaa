@@ -102,6 +102,7 @@ export default {
     DescriptiveShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/DescriptiveQuestion/DescriptiveShowQuestion')),
     MultipleChoiceShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MultipleChoiceQuestion/MultipleChoiceShowQuestion')),
     MBTIShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MBTIQuestion/MBTIShowQuestion')),
+    GroupQuestionShow: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/GroupQuestion/GroupQuestionShow')),
     BtnBox,
     StatusChange,
     AttachExam,
@@ -164,6 +165,9 @@ export default {
       }
       if (cName === 'MBTIQ') {
         return 'm-b-t-i-show-question'
+      }
+      if (cName === 'GroupQuestion') {
+        return 'group-question-show'
       }
     },
     setQuestionContents () {

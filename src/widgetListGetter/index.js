@@ -54,8 +54,82 @@ const generateWidgetList = (_dirname) => {
   fs.writeFile(`${absolutePath}/widget.json`, data, (err) => {
     if (err) throw err
     console.info('Data written to file')
+    generateWidgetListJs(dirHierarchy, absolutePath)
   })
   return data
+}
+
+const generateWidgetListJs = (jsonData, absolutePath) => {
+  const widgets = []
+  function extractWidgets (json) {
+    json.children.forEach(element => {
+      if (element.type === 'widget') {
+        widgets.push(element)
+      } else {
+        // eslint-disable-next-line no-prototype-builtins
+        if (element.hasOwnProperty('children')) {
+          extractWidgets(element)
+        }
+      }
+    })
+  }
+
+  extractWidgets(jsonData)
+
+  let widgetsComponentString = ''
+  widgets.forEach((widget, index) => {
+    const widgetName = widget.name
+    const widgetPath = widget.path
+    // console.log('index', index)
+    // console.log('widgets.length', widgets.length)
+    const lastComponent = ((widgets.length - 1) === index)
+    // console.log('lastComponent', lastComponent)
+    widgetsComponentString += '  ' + widgetName + ': defineAsyncComponent(() => import(\'src/' + widgetPath + '/' + widgetName + '.vue\'))'
+    if (!lastComponent) {
+      widgetsComponentString += ',\n'
+    } else {
+      widgetsComponentString += '\n'
+    }
+    // console.log('widgetsComponentString', widgetsComponentString)
+  })
+
+  let widgetsOptionPanelString = ''
+  const widgetsOptionPanel = widgets.filter(widget => widget.optionPanel)
+  widgetsOptionPanel.forEach((widget, index) => {
+    const widgetName = widget.name
+    const widgetPath = widget.path
+    const hasOptionPanel = !!widget.optionPanel
+    if (hasOptionPanel) {
+      const widgetOptionPanelName = widgetName + 'OptionPanel'
+      const widgetOptionPanelPath = widgetPath + '/' + 'OptionPanel'
+      const lastComponent = (widgetsOptionPanel.length - 1 === index)
+      widgetsOptionPanelString += '  ' + widgetOptionPanelName + ': defineAsyncComponent(() => import(\'src/' + widgetOptionPanelPath + '.vue\'))'
+      if (!lastComponent) {
+        widgetsOptionPanelString += ',\n'
+      } else {
+        widgetsOptionPanelString += '\n'
+      }
+    }
+  })
+
+  createComponentJsFile(widgetsComponentString, absolutePath, 'PageBuilderComponents')
+  createComponentJsFile(widgetsOptionPanelString, absolutePath, 'PageBuilderOptionPanels')
+}
+
+function createComponentJsFile (componentsString, absolutePath, fileName) {
+  let jsString = '' +
+    'import { defineAsyncComponent } from \'vue\'\n' +
+    '\n' +
+    'export default {\n'
+
+  jsString += componentsString
+
+  jsString += '}\n'
+
+  fs.writeFile(`${absolutePath}/${fileName}.js`, jsString, (err) => {
+    if (err) throw err
+    console.info('Data written to file (' + fileName + ')')
+  })
 }
 
 module.exports.generateWidgetList = generateWidgetList
