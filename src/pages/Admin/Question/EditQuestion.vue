@@ -132,24 +132,26 @@ import StatusChange from 'components/Question/QuestionPage/StatusChange'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
-import API_ADDRESS from 'src/api/Addresses'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
 import mixinTree from 'src/mixin/Tree'
-import { EntityIndex } from 'quasar-crud'
 import moment from 'moment-jalaali'
 import QuestionVideoAnswer from 'components/Question/QuestionPage/QuestionVideoAnswer.vue'
-
+import { EntityIndex } from 'quasar-crud'
+import API_ADDRESS from 'src/api/Addresses'
+import QuestionField from 'components/Question/QuestionPage/QuestionField'
 export default {
   name: 'EditQuestion',
   components: {
+    QuestionField,
     QuestionIdentifier,
     ImagePanel,
     Navbar,
     DescriptiveEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/DescriptiveQuestion/DescriptiveEditQuestion')),
     MultipleChoiceEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/MultipleChoiceQuestion/MultipleChoiceEditQuestion')),
     MBTIEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/MBTIQuestion/MBTIEditQuestion')),
+    GroupQuestionEdit: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/GroupQuestion/GroupQuestionEdit')),
     BtnBox,
     EntityIndex,
     StatusChange,
@@ -299,6 +301,9 @@ export default {
       }
       if (cName === 'MBTIQ') {
         return 'm-b-t-i-edit-question'
+      }
+      if (cName === 'GroupQuestion') {
+        return 'group-question-edit'
       }
     },
     setQuestionContents () {

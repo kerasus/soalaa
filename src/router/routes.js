@@ -499,6 +499,12 @@ const routes = [
                         name: 'Admin.Question.Create.Text.MultipleChoice',
                         breadcrumbs: { title: 'تستی', loading: false },
                         component: () => import('pages/Admin/Question/MultipleChoiceQuestion/MultipleChoiceQuestion.vue')
+                      },
+                      {
+                        path: 'groupQuestion',
+                        name: 'Admin.Question.Create.Text.GroupQuestion',
+                        breadcrumbs: { title: 'سوالات گروهی', loading: false },
+                        component: () => import('pages/Admin/Question/GroupQuestion/GroupQuestion.vue')
                       }
                     ]
                   },

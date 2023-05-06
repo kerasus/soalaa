@@ -263,6 +263,7 @@ const API_ADDRESS = {
         return lumenServer + '/question/bank/search?' + queryParam
       }
     },
+    groupAttach: lumenServer + '/question/group/attach',
     status: {
       base: lumenServer + '/question/statuses',
       changeStatus (questionId) {
