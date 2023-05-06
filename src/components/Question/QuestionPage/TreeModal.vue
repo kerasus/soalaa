@@ -293,9 +293,10 @@ export default {
     },
     onModalClosed () {
       this.finalizeOutputData()
-      if (this.modalHasLayer()) {
-        this.layersList[this.layersList.length - 1].selectedValue = ''
+      if (!this.modalHasLayer()) {
+        return
       }
+      this.layersList[this.layersList.length - 1].selectedValue = ''
     },
     finalizeOutputData () {
       const finalCollectedNodes = this.globalStorage.map(node => new TreeNode(node))
