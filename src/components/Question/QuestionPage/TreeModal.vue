@@ -52,7 +52,7 @@
                           class="tree-chips"
                           icon-remove="mdi-close"
                           removable
-                          @remove="removeNode(item)">
+                          @remove="onChipRemoved(item)">
                     {{ item.title }}
                   </q-chip>
                 </div>
@@ -346,6 +346,9 @@ export default {
       if (nodeIndex > -1) {
         this.globalStorage.splice(nodeIndex, 1)
       }
+    },
+    onChipRemoved (chipItem) {
+      this.removeNode(chipItem)
     },
     removeNode (item) {
       const node = item.id ? item : { id: item }
