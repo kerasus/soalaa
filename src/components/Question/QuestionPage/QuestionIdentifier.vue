@@ -148,7 +148,7 @@
         ref="questionTreeModal"
         v-model:dialogValue="dialogValue"
         v-model:selected-nodes="selectedNodes"
-        :initial-tree-node="rootNodeId"
+        :initial-node="rootNodeId"
         :layers-config="treeLayersConfig"
         exchange-last-layer-only
         @gradeSelected="groupSelected"
