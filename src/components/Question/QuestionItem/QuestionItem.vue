@@ -204,6 +204,15 @@
       </div>
     </q-card-section>
 
+    <div v-if="question.group">
+      <question-item
+        v-for="childQuestion in question.group"
+        :key="childQuestion.id"
+        :question="childQuestion"
+        pageStrategy="question-bank"
+      />
+    </div>
+
     <q-card-section class="answer-section">
       <q-expansion-item
         v-model="listConfig.questionAnswerExpanded"
