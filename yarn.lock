@@ -8900,7 +8900,7 @@
     "@vue/compiler-sfc" "2.7.14"
     "csstype" "^3.1.0"
 
-"vue@^3.0.0", "vue@^3.2.0", "vue@^3.2.29", "vue@^3.2.47", "vue@>=1.0.0", "vue@>=3 < 4", "vue@3.2.47":
+"vue@^3.0.*", "vue@^3.0.0", "vue@^3.2.0", "vue@^3.2.29", "vue@^3.2.47", "vue@>=1.0.0", "vue@>=3 < 4", "vue@3.2.47":
   "integrity" "sha512-60188y/9Dc9WVrAZeUVSDxRQOZ+z+y5nO2ts9jWXSTkMvayiWxCWOWtBQoYjLeccfXkiiPZWAHcV+WTPhkqJHQ=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-3.2.47.tgz"
   "version" "3.2.47"
@@ -8920,6 +8920,11 @@
   "integrity" "sha512-7ein6vCC9LN6fsO3o9mYgmoldU9c/O2oyw9U5cqAJP21Mj2yQ8OGNPzEZfen6QltgLMfAOXv4iPIdE0EXFezGA=="
   "resolved" "https://registry.npmjs.org/vue3-drag-resize/-/vue3-drag-resize-2.0.5.tgz"
   "version" "2.0.5"
+
+"vue3-otp-input@^0.4.1":
+  "integrity" "sha512-wVl9i3DcWlO0C7fBI9V+RIP3crm/1tY72fuhvb3YM2JfbLoYofB96aPl5AgFhA0Cse5bQEMYtIvOeiqW3rfbAw=="
+  "resolved" "https://registry.npmjs.org/vue3-otp-input/-/vue3-otp-input-0.4.1.tgz"
+  "version" "0.4.1"
 
 "vue3-tiptap-katex@^1.0.51":
   "integrity" "sha512-zR+aWfsMtrVaZ3Ohde93qBv3vy4Fw3G3UEYZLDzspw5/Nr37wOWL4AX3HZxHGjK9NdBV3nlOXDFRySE+qnVDjA=="

@@ -362,6 +362,14 @@ const API_ADDRESS = {
         all: authServer + '/product/soalaa/all'
       }
     },
+    bulk: (productIds) => {
+      const idParams = []
+      productIds.forEach((productId, productIndex) => {
+        idParams.push('ids' + '[' + productIndex + ']=' + productId)
+      })
+      const queryParams = idParams.join('&')
+      return authServer + '/product?' + queryParams
+    },
 
     edit: {
       base: apiV2Server + '/admin/product'
@@ -370,7 +378,7 @@ const API_ADDRESS = {
       base: apiV2Server + '/admin/product'
     },
     show: {
-      base: apiV2Server + '/product'
+      base: authServer + '/product'
     }
   },
   cart: {

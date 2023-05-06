@@ -2,45 +2,29 @@
   <option-panel-tabs v-model:options="localOptions">
     <template #main-tab>
       <div class="option-panel-container">
-        <div
-          class="row">
+        <div class="row q-mt-sm">
           <div class="col-md-12">
-            <q-editor v-model="localOptions.text"
-                      min-height="10rem"
-                      :toolbar="[
-                        [
-                          {
-                            label: $q.lang.editor.align,
-                            icon: $q.iconSet.editor.align,
-                            fixedLabel: true,
-                            list: 'only-icons',
-                          },
-                        ],
-                        ['bold', 'italic', 'strike', 'underline'],
-                        ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
-                        ['viewsource']
-                      ]">
-            </q-editor>
+            <editor v-model:value="localOptions.text" />
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 q-ma-sm">
             <q-select v-model="responsive"
                       :options="responsiveOpts"
                       label="responsive" />
           </div>
-          <div class="col-md-3 offset-1">
+          <div class="col-md-3 offset-1 q-ma-sm">
             <q-select v-model="localOptions[responsive].fontStyle"
                       :options="fontStyle"
                       label="fontStyle" />
           </div>
-          <div class="col-md-3 offset-1">
+          <div class="col-md-3 offset-1 q-ma-sm">
             <q-input v-model="localOptions.fontFamily"
                      label="font family" />
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 q-ma-sm">
             <q-input v-model="localOptions[responsive].fontSize"
                      label="font size" />
           </div>
-          <div class="col-md-3 offset-1">
+          <div class="col-md-3 offset-1 q-ma-sm">
             <q-input v-model="localOptions[responsive].fontWeight"
                      label="font weight" />
           </div>
@@ -51,12 +35,13 @@
 </template>
 <script>
 import { defineComponent } from 'vue'
-import mixinOptionPanel from 'quasar-ui-q-page-builder/src/mixin/OptionPanel.js'
+import { mixinOptionPanel } from 'quasar-ui-q-page-builder'
 import OptionPanelTabs from 'quasar-ui-q-page-builder/src/components/OptionPanelComponents/OptionPanelTabs.vue'
+import Editor from 'components/Utils/Editor.vue'
 
 export default defineComponent({
   name: 'OptionPanel',
-  components: { OptionPanelTabs },
+  components: { Editor, OptionPanelTabs },
   mixins: [mixinOptionPanel],
   props: {
     options: {
@@ -69,6 +54,8 @@ export default defineComponent({
   data() {
     return {
       fontStyle: ['inherit', 'normal', 'italic'],
+      foreColor: '#000000',
+      token: null,
       responsiveOpts: ['xs', 'sm', 'md', 'lg', 'xl'],
       responsive: 'xs',
       defaultOptions: {
@@ -100,6 +87,15 @@ export default defineComponent({
       this.responsive = 'sm'
     } else if (windowWidth < 600) {
       this.responsive = 'xs'
+    }
+  },
+  methods: {
+    color(cmd, name) {
+      const edit = this.$refs.editor
+      this.$refs.token.hide()
+      edit.caret.restore()
+      edit.runCmd(cmd, name)
+      edit.focus()
     }
   }
 })

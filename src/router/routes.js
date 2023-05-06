@@ -118,9 +118,28 @@ const routes = [
       },
       {
         path: 'landing',
-        name: 'landing',
+        name: 'Landing',
         component: () => import('layouts/LandingLayout'),
         children: [
+          // {
+          //   path: ':landing_name',
+          //   meta: {
+          //     hasDynamicSettingWithParams: true
+          //   },
+          //   name: 'Public.Landing',
+          //   component: () => import('src/pages/Public/Landings/Landing.vue')
+          // },
+          {
+            path: '3a_comprehensive_exams',
+            name: 'Landing.3aComprehensiveExams',
+            layoutConfig: {
+              layoutHeader: true,
+              layoutHeaderType: 'default',
+              layoutLeftDrawer: false,
+              layoutFooter: true
+            },
+            component: () => import('src/pages/Public/Landings/3aComprehensiveExams.vue')
+          },
           {
             path: '3a_exams',
             name: 'Landing.3aExams',
