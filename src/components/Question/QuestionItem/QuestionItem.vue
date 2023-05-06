@@ -208,7 +208,7 @@
       <question-item
         v-for="childQuestion in question.group"
         :key="childQuestion.id"
-        :question="childQuestionObject(childQuestion)"
+        :question="childQuestion"
         pageStrategy="question-bank"
       />
     </div>
@@ -604,9 +604,6 @@ export default {
     }
   },
   methods: {
-    childQuestionObject(childQuestion) {
-      return new Question(childQuestion)
-    },
     onResize () {
       this.$refs.questionComponent.setChoiceCol()
     },
