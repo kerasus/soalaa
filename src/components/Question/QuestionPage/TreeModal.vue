@@ -93,7 +93,7 @@ export default {
     dialogValue: {
       type: Boolean
     },
-    initialTreeNode: {
+    initialNode: {
       type: [String, TreeNode],
       default () {
         return new TreeNode({})
@@ -149,7 +149,7 @@ export default {
       selectedNodesIDs: [],
       treeKey: 0,
       globalStorage: [],
-      initialNode: new TreeNode(),
+      localInitialNode: new TreeNode(),
       treeLazyLoadedCount: 0
     }
   },
@@ -190,9 +190,6 @@ export default {
     currentLocalStorage() {
       return this.globalStorage.filter(node => node.isInCurrentTree)
     },
-    treeLayersList() {
-      return this.layersList.filter(layer => typeof layer.showTree === 'undefined' || layer?.showTree)
-    },
     getSelectedNodesIds() {
       return this.globalStorage.map(item => item.id)
     },
@@ -224,17 +221,16 @@ export default {
   },
   created () {},
   async mounted () {
-    await this.initLayers()
-    await this.setupGlobalStorage()
+    await this.initTreeEssentials()
   },
   updated () {},
   methods: {
     async setupInitialNode() {
-      const typeOfNode = typeof this.initialTreeNode
-      let node = this.initialTreeNode
+      const typeOfNode = typeof this.initialNode
+      let node = this.initialNode
       if (typeOfNode === 'string') {
         node = new TreeNode({
-          id: this.initialTreeNode
+          id: this.initialNode
         })
       } else if (typeOfNode !== 'object' || !node.id) {
         console.error('TreeModal Error : ' +
@@ -242,9 +238,10 @@ export default {
         return
       }
       const response = await this.getNode(node.id)
-      this.initialNode = response.data.data
+      this.localInitialNode = response.data.data
     },
-    async setupGlobalStorage () {
+    async initTreeEssentials () {
+      await this.initLayers()
       await this.setupInitialNode()
       this.updateGlobalStorage()
     },
@@ -266,7 +263,7 @@ export default {
       if (this.modalHasLayer()) {
         return
       }
-      this.showTreeModalNode(this.initialNode.id)
+      this.showTreeModalNode(this.localInitialNode.id)
     },
     modalHasLayer () {
       return this.layersConfig.length > 0
@@ -275,7 +272,6 @@ export default {
       if (!this.modalHasLayer()) {
         return
       }
-      this.defineLayersEmits(this.layersConfig.map((item) => item.name))
       await this.initInitialLayer()
     },
     defineLayersEmits (layerEmitNamesList) {
