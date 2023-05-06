@@ -80,6 +80,7 @@
 import Tree from 'components/Tree/Tree.vue'
 import mixinTree from 'src/mixin/Tree.js'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
+import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'TreeModal',
@@ -236,7 +237,7 @@ export default {
           'initialNode must include either an id or an object with id')
         return
       }
-      const response = await this.getNode(node.id)
+      const response = await this.getTreeNode(node.id)
       this.localInitialNode = response.data.data
     },
     async initTreeEssentials () {
@@ -301,14 +302,35 @@ export default {
     async initInitialLayer() {
       await this.setLayerList(this.layersConfig[0].routeNameToGetNode)
     },
-    setLayerList (layerRoute, layerIndex = 0) {
-      this.dialogLoading = true
+    loadLayerList (layerRoute) {
       return new Promise((resolve, reject) => {
-        this.$axios.get(layerRoute)
+        this.getTreeNode(layerRoute, false)
           .then((response) => {
-            this.layersList[layerIndex].nodeList = response.data.data.children
+            resolve(response.data.data)
+          }).catch(() => {
+            reject()
+          })
+      })
+    },
+    async setLayerList (layerRoute, layerIndex = 0) {
+      const treeNode = await this.loadLayerList(layerRoute)
+      this.layersList[layerIndex].nodeList = treeNode.children
+    },
+    getRouteForNode (value, isValueNode) {
+      if (isValueNode && typeof value) {
+        const nodeId = typeof value === 'string' ? value : value.id
+        return API_ADDRESS.tree.getNodeById(nodeId)
+      }
+      return value
+    },
+    getTreeNode(value, isValueNode = true) {
+      const route = this.getRouteForNode(value, isValueNode)
+      return new Promise((resolve, reject) => {
+        this.dialogLoading = true
+        this.$axios.get(route)
+          .then((response) => {
+            resolve(response)
             this.dialogLoading = false
-            resolve()
           }).catch(() => {
             reject()
             this.dialogLoading = false
@@ -358,20 +380,23 @@ export default {
         node.isInCurrentTree = false
       })
     },
-    layerNodeSelected (layer, layerIndex) {
-      this.$emit('layerSelected', {
-        layerIndex,
-        layer
-      })
-      const nextLayer = this.layersList[layerIndex + 1]
+    setNextLayer (layer, nextLayerIndex) {
+      const nextLayer = this.layersList[nextLayerIndex]
       if (!nextLayer) {
         this.resetAllCurrentTreeFlags()
         this.showTreeModalNode(layer.selectedValue.id)
         return
       }
       this.treeKey += 1
-      this.layersList[layerIndex + 1].selectedValue = ''
-      this.setLayerList(this.getLayerRoute(nextLayer, layer.selectedValue.id), layerIndex + 1)
+      this.layersList[nextLayerIndex].selectedValue = ''
+      this.setLayerList(this.getLayerRoute(nextLayer, layer.selectedValue.id), nextLayerIndex)
+    },
+    layerNodeSelected (layer, layerIndex) {
+      this.$emit('layerSelected', {
+        layerIndex,
+        layer
+      })
+      this.setNextLayer(layer, layerIndex + 1)
     },
     getLayerRoute(layer, layerId) {
       return typeof layer.routeNameToGetNode === 'function'
@@ -381,7 +406,7 @@ export default {
     showTreeModalNode (id) {
       this.dialogLoading = true
       this.treeKey += 1
-      this.showTree('tree', this.getNode(id))
+      this.showTree('tree', this.getTreeNode(id))
         .then((response) => {
           const allNodes = response.data.data.children
           allNodes.push(new TreeNode({
