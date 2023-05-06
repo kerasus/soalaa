@@ -10,6 +10,14 @@
         </div>
       </div>
     </div>
+    <div class="q-pa-md row justify-center q-mt-lg">
+      <q-banner inline-actions
+                rounded
+                style="width: 90vw"
+                class="bg-orange text-white text-center q-mb-md">
+        این قسمت به زودی در دسترس خواهد یود
+      </q-banner>
+    </div>
     <div class="row packages-row">
       <div class="col-12 packages-col">
         <div class="packages-wrapper">
@@ -38,6 +46,7 @@
                      label="شروع کنید"
                      unelevated
                      :loading="subscribeLoading"
+                     disable
                      @click="subscribe(item.id)"
               />
             </div>
