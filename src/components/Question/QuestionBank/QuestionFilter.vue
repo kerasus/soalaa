@@ -191,7 +191,7 @@
       >
         <q-option-group
           v-model="selectedErrorStatus"
-          :options="ReportStatusesOptions()"
+          :options="reportStatusesOptions()"
           @update:model-value="onChangeErrorStatus"
         />
         <div v-if="filterQuestions.report_statuses.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
@@ -347,7 +347,7 @@ export default {
     }
   },
   methods: {
-    ReportStatusesOptions() {
+    reportStatusesOptions() {
       const options = this.filterQuestions.report_statuses.map(option => {
         return {
           label: option.description,
