@@ -204,6 +204,15 @@
       </div>
     </q-card-section>
 
+    <div v-if="question.group">
+      <question-item
+        v-for="childQuestion in question.group"
+        :key="childQuestion.id"
+        :question="childQuestion"
+        pageStrategy="question-bank"
+      />
+    </div>
+
     <q-card-section class="answer-section">
       <q-expansion-item
         v-model="listConfig.questionAnswerExpanded"
@@ -746,7 +755,7 @@ export default {
       this.questionTimePoint = this.content.timepoints.list.find(x => x.id === this.question.time_point_id)
       const timePointList = this.content.timepoints.list
       timePointList.sort((a, b) => (a.time > b.time ? 1 : -1))
-      const timePointIndex = timePointList.findIndex(x => x.id === 131133) + 1
+      const timePointIndex = timePointList.findIndex(x => x.id === this.question.time_point_id) + 1
       this.nextTimePoint = timePointList[timePointIndex]
     }
   }
@@ -865,7 +874,7 @@ export default {
     .question-source {
       display: flex;
       align-items: center;
-      justify-content: left;
+      justify-content: right;
       min-height: 36px;
 
       @media only screen and (max-width: 599px) {

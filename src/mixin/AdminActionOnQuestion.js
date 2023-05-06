@@ -344,6 +344,8 @@ const AdminActionOnQuestion = {
         currentValue = 'descriptive'
       } else if (currentType === 'multipleChoice') {
         currentValue = 'konkur'
+      } else if (currentType === 'groupQuestion') {
+        currentValue = 'group_question'
       }
       question.type = allTypes.list.find(item => (item.value === currentValue))
       question.type_id = question.type.id

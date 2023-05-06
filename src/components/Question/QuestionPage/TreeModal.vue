@@ -7,8 +7,11 @@
           <div class="details-container-2 default-details-container">
             <div class="detail-box-container row">
               <div v-for="(layer, index) in layersList"
+                   v-show="typeof layer.showLayer === 'undefined' || layer.showLayer"
                    :key="index"
-                   class="col-12 col-md-6 detail-box">
+                   class="detail-box"
+                   :class="getDefaultLayerClassName(layer)"
+              >
                 <div class="detail-box-title">{{layer.label}}</div>
                 <q-select v-model="layer.selectedValue"
                           filled
@@ -23,7 +26,7 @@
             <div class="question-tree">
               <tree ref="tree"
                     :key="treeKey"
-                    :no-nodes-label="'لطفا یک پایه و درس را انتخاب کنید'"
+                    :no-nodes-label="noNodesLabel"
                     tick-strategy="strict"
                     :get-node-by-id="getNodeById"
                     @ticked="updateNodes"
@@ -114,6 +117,12 @@ export default {
       required: true,
       default () {
         return []
+      }
+    },
+    noNodesLabel: {
+      type: String,
+      default () {
+        return 'لطفا یک پایه و درس را انتخاب کنید'
       }
     },
     persistent: {
@@ -250,6 +259,12 @@ export default {
           [layerName + 'nodeSelected']: null
         })
       })
+    },
+    getDefaultLayerClassName (layer) {
+      if (layer.className?.includes('col')) {
+        return layer.className
+      }
+      return 'col-12 col-md-6'
     },
     emptyGlobalStorage() {
       Object.entries(this.globalStorage).forEach(([parentKey]) => {

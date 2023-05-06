@@ -63,7 +63,9 @@
           @tags-collected="setTags"
         />
       </div>
-      <question-video-answer @update-value="updateQuestion($event)" />
+      <question-video-answer :contentId="question.content_id"
+                             :timePointId="question.time_point_id"
+                             @update-value="updateQuestionContent($event)" />
       <btn-box
         class="col-12"
         editeQuestion
@@ -76,23 +78,41 @@
       />
     </div>
     <div v-if="question.logs && question.logs.list && question.logs.list.length > 0">
-      <log-list-component
-        :logs="question.logs"
-        :mode="'edit'"
-        @addComment="addComment"
-        @restoreQuestion="restoreQuestion"
+      <log-list-component :logs="question.logs"
+                          :loading="loadingState"
+                          :mode="'edit'"
+                          @addComment="addComment"
+                          @restoreQuestion="restoreQuestion"
       />
     </div>
     <div class="q-mt-md">
-      <entity-index
-        v-model:value="logIndexInputs"
-        title="لیست خطا های گزارش شده"
-        :api="logIndexApi"
-        :table="logIndexTable"
-        :table-keys="logIndexTableKeys"
-        :create-route-name="false"
-        :show-search-button="false"
-      />
+      <entity-index ref="reportIndex"
+                    v-model:value="logIndexInputs"
+                    title="لیست خطا های گزارش شده"
+                    :api="logIndexApi"
+                    :table="logIndexTable"
+                    :table-keys="logIndexTableKeys"
+                    :create-route-name="false"
+                    :show-search-button="false"
+      >
+        <template #entity-index-table-cell="{inputData}">
+          <template v-if="inputData.col.name === 'status'">
+            <template v-if="!questionReportStatusesLoading">
+              <q-select v-model="inputData.col.value.title"
+                        borderless
+                        option-value="title"
+                        option-label="description"
+                        :map-options="true"
+                        :options="questionReportStatuses"
+                        @update:model-value="onChangeReportStatus($event, inputData.props.row)"
+              />
+            </template>
+            <div v-else>
+              ...
+            </div>
+          </template>
+        </template>
+      </entity-index>
     </div>
   </div>
 </template>
@@ -112,24 +132,26 @@ import StatusChange from 'components/Question/QuestionPage/StatusChange'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
-import API_ADDRESS from 'src/api/Addresses'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
 import mixinTree from 'src/mixin/Tree'
-import { EntityIndex } from 'quasar-crud'
 import moment from 'moment-jalaali'
 import QuestionVideoAnswer from 'components/Question/QuestionPage/QuestionVideoAnswer.vue'
-
+import { EntityIndex } from 'quasar-crud'
+import API_ADDRESS from 'src/api/Addresses'
+import QuestionField from 'components/Question/QuestionPage/QuestionField'
 export default {
   name: 'EditQuestion',
   components: {
+    QuestionField,
     QuestionIdentifier,
     ImagePanel,
     Navbar,
     DescriptiveEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/DescriptiveQuestion/DescriptiveEditQuestion')),
     MultipleChoiceEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/MultipleChoiceQuestion/MultipleChoiceEditQuestion')),
     MBTIEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/MBTIQuestion/MBTIEditQuestion')),
+    GroupQuestionEdit: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/GroupQuestion/GroupQuestionEdit')),
     BtnBox,
     EntityIndex,
     StatusChange,
@@ -147,25 +169,33 @@ export default {
       logIndexInputs: [
         { type: 'hidden', name: 'question_id', col: 'col-md-12', value: null }
       ],
+      questionReportStatuses: [],
+      questionReportStatusesLoading: true,
       logIndexTable: {
         columns: [
           {
             name: 'type',
             label: 'نوع خطا',
             align: 'left',
-            field: row => row.report.type
+            field: row => row.type.value
           },
           {
             name: 'body',
             label: 'متن خطا',
             align: 'left',
-            field: row => row.report.body
+            field: row => row.body
           },
           {
             name: 'created_at',
             label: 'تاریخ ایجاد',
             align: 'left',
-            field: row => moment(row.report.created_at, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
+            field: row => moment(row.created_at, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
+          },
+          {
+            name: 'status',
+            label: 'وضعیت',
+            align: 'left',
+            field: row => row.status
           }
         ]
       },
@@ -192,6 +222,7 @@ export default {
   },
   created () {
     this.logIndexApi = API_ADDRESS.question.reportLog(this.$route.params.question_id)
+    this.getQuestionReportStatuses()
     this.enableLoading()
     this.getQuestionTypeForTypeId(this.question)
     this.loadExamList()
@@ -212,6 +243,35 @@ export default {
   },
   mounted () {},
   methods: {
+    updateQuestionReportStatus (reportId, newStatus) {
+      this.questionReportStatusesLoading = true
+      this.$axios.put(this.logIndexApi, {
+        id: reportId,
+        status: newStatus
+      })
+        .then(() => {
+          this.questionReportStatusesLoading = false
+          this.$refs.reportIndex.reload()
+        })
+        .catch(() => {
+          this.questionReportStatusesLoading = false
+          this.$refs.reportIndex.reload()
+        })
+    },
+    onChangeReportStatus (event, reportItem) {
+      this.updateQuestionReportStatus(reportItem.id, event.title)
+    },
+    getQuestionReportStatuses() {
+      this.questionReportStatusesLoading = true
+      this.$axios.get(API_ADDRESS.question.reportStatuses)
+        .then(response => {
+          this.questionReportStatusesLoading = false
+          this.questionReportStatuses = response.data.data
+        })
+        .catch(() => {
+          this.questionReportStatusesLoading = false
+        })
+    },
     setlogIndexInputsValues () {
       const questionIdIndex = this.logIndexInputs.findIndex(item => item.name === 'question_id')
       if (questionIdIndex !== -1) {
@@ -241,6 +301,9 @@ export default {
       }
       if (cName === 'MBTIQ') {
         return 'm-b-t-i-edit-question'
+      }
+      if (cName === 'GroupQuestion') {
+        return 'group-question-edit'
       }
     },
     setQuestionContents () {
@@ -309,7 +372,8 @@ export default {
         show: false
       })
     },
-    updateQuestion(data) {
+    updateQuestionContent(data) {
+      console.log(data)
       this.question.content_id = data.content_id
       this.question.time_point_id = data.time_point_id
     }

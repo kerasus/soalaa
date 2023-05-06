@@ -13,7 +13,18 @@
           :table-selection-mode="'single'"
           :item-indicator-key="'id'"
           :default-layout="true"
-        />
+        >
+          <template #entity-index-table-cell="{inputData}">
+            <template v-if="inputData.col.name === 'photo'">
+              <q-img
+                :src="inputData.col.value"
+                class="content-photo"
+                spinner-color="primary"
+                spinner-size="82px"
+              />
+            </template>
+          </template>
+        </entity-index>
       </q-card-section>
       <q-card-actions align="right">
         <q-btn v-close-popup
@@ -29,6 +40,7 @@
 <script>
 import { EntityIndex } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
+import { Content } from 'src/models/Content'
 
 export default {
   name: 'ContentSelectionDialog',
@@ -37,6 +49,9 @@ export default {
     dialog: {
       type: Boolean,
       default: false
+    },
+    content: {
+      type: Content
     }
   },
   emits: ['updateValue', 'toggleDialog'],
@@ -54,6 +69,13 @@ export default {
       table: {
         columns: [
           {
+            name: 'photo',
+            required: true,
+            label: 'تصویر',
+            align: 'left',
+            field: row => row.photo
+          },
+          {
             name: 'id',
             required: true,
             label: '#',
@@ -66,6 +88,34 @@ export default {
             label: 'عنوان',
             align: 'left',
             field: row => row.name
+          },
+          {
+            name: 'status',
+            required: true,
+            label: 'وضعیت',
+            align: 'left',
+            field: row => row.status ? row.status : 'ندارد'
+          },
+          {
+            name: 'enable',
+            required: true,
+            label: 'فعال',
+            align: 'left',
+            field: row => row.enable ? 'فعال' : 'غیر فعال'
+          },
+          {
+            name: 'display',
+            required: true,
+            label: 'قابلیت دیدن',
+            align: 'left',
+            field: row => row.display ? 'قابل دیدن' : 'غیر قابل دیدن'
+          },
+          {
+            name: 'is_free',
+            required: true,
+            label: 'نوع',
+            align: 'left',
+            field: row => row.is_free ? 'رایگان' : 'پولی'
           }
         ],
         data: []
@@ -80,6 +130,9 @@ export default {
     selected(value) {
       this.$emit('updateValue', value)
       this.$emit('toggleDialog')
+    },
+    content(newContent) {
+      this.selected[0] = newContent
     }
   }
 }
@@ -87,6 +140,10 @@ export default {
 
 <style lang="scss" scoped>
 .content-selection-card {
-  width: 800px;
+  max-width: 100%;
+
+  .content-photo {
+    width: 200px;
+  }
 }
 </style>
