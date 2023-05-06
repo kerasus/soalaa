@@ -149,8 +149,7 @@ export default {
       selectedNodesIDs: [],
       treeKey: 0,
       globalStorage: [],
-      localInitialNode: new TreeNode(),
-      treeLazyLoadedCount: 0
+      localInitialNode: new TreeNode()
     }
   },
   computed: {
@@ -274,13 +273,6 @@ export default {
       }
       await this.initInitialLayer()
     },
-    defineLayersEmits (layerEmitNamesList) {
-      layerEmitNamesList.forEach(layerName => {
-        Object.assign(this._.emitsOptions, {
-          [layerName + 'Selected']: null
-        })
-      })
-    },
     getDefaultLayerClassName (layer) {
       if (layer.className?.includes('col')) {
         return layer.className
@@ -367,22 +359,19 @@ export default {
       })
     },
     layerNodeSelected (layer, layerIndex) {
-      this.$emit(layer.name + 'Selected', layer.selectedValue)
       this.$emit('layerSelected', {
         layerIndex,
         layer
       })
-      const isLayerInTreeMode = this.layersList[layerIndex + 1]?.showTree
-      if (!this.layersList[layerIndex + 1] && !isLayerInTreeMode) {
+      const nextLayer = this.layersList[layerIndex + 1]
+      if (!nextLayer) {
         this.resetAllCurrentTreeFlags()
         this.showTreeModalNode(layer.selectedValue.id)
         return
       }
       this.treeKey += 1
-      if (!isLayerInTreeMode) {
-        this.layersList[layerIndex + 1].selectedValue = ''
-        this.setLayerList(this.getLayerRoute(this.layersConfig[layerIndex + 1], layer.selectedValue.id), layerIndex + 1)
-      }
+      this.layersList[layerIndex + 1].selectedValue = ''
+      this.setLayerList(this.getLayerRoute(nextLayer, layer.selectedValue.id), layerIndex + 1)
     },
     getLayerRoute(layer, layerId) {
       return typeof layer.routeNameToGetNode === 'function'
@@ -390,7 +379,6 @@ export default {
         : layer.routeNameToGetNode
     },
     showTreeModalNode (id) {
-      this.treeLazyLoadedCount = 0
       this.dialogLoading = true
       this.treeKey += 1
       this.showTree('tree', this.getNode(id))
