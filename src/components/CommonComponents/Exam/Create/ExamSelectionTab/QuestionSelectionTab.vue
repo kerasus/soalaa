@@ -131,7 +131,7 @@
       :key="treeKey"
       v-model:dialogValue="treeModalValue"
       v-model:selected-nodes="selectedNodes"
-      :initial-tree-node="treeModalNodeId"
+      :initial-node="treeModalNodeId"
       :no-nodes-label="'لطفا یک درس انتخاب کنید'"
       exchange-last-layer-only
       :persistent="!doesExamHaveLesson"
