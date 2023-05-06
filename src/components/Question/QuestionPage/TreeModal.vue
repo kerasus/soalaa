@@ -190,8 +190,8 @@ export default {
     localStorage() {
       return this.globalStorage.filter(node => node.isInCurrentTree)
     },
-    getSelectedNodesIds() {
-      return this.globalStorage.map(item => item.id)
+    selectedNodesIds() {
+      return this.globalStorage?.map(item => item.id)
     },
     lowestLayer() {
       return this.layersList[this.layersList.length - 1]
@@ -358,7 +358,7 @@ export default {
       this.removeNodeFromGlobalStorage(item)
     },
     removeAllNodes () {
-      this.setTickedMode('tree', this.getSelectedNodesIds, false)
+      this.setTickedMode('tree', this.selectedNodesIds, false)
       this.globalStorage.splice(0, this.globalStorage.length)
     },
     resetAllCurrentTreeFlags() {
@@ -416,7 +416,7 @@ export default {
     },
     syncAllCheckedIds (values = []) {
       this.updateCurrentTreeFlags(values)
-      const selectedNodesIds = this.globalStorage?.map(item => item.id) || []
+      const selectedNodesIds = this.selectedNodesIds || []
       if (selectedNodesIds.length > 0) {
         this.$refs.tree.setNodesTicked(selectedNodesIds, true)
       }
