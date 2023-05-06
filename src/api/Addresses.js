@@ -22,6 +22,9 @@ const API_ADDRESS = {
   },
   user: {
     base: authServer + '/user',
+    resendGuest: authServer + '/mobile/resendGuest',
+    verifyMoshavereh: authServer + '/mobile/verifyMoshavereh',
+    newsletter: authServer + '/newsletter',
     edit (userId) { return authServer + '/user/' + userId },
     updatePhoto() {
       return lumenServer + '/user/avatar'
@@ -337,6 +340,13 @@ const API_ADDRESS = {
   },
   tree: {
     base: lumenServer + '/forrest/tree',
+    getMultiType (types) {
+      let treeAddress = authServer + '/forrest/tree?'
+      types.forEach(element => {
+        treeAddress = treeAddress + `multi-type[]=${element}&`
+      })
+      return treeAddress
+    },
     getNodeById (nodeId) {
       return lumenServer + '/forrest/tree/' + nodeId
     },

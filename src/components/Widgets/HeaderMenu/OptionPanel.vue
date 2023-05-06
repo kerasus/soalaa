@@ -127,6 +127,8 @@ export default defineComponent({
     return {
       actionObjectTypeOptions: ['link', 'event', 'scroll'],
       defaultOptions: {
+        style: {},
+        className: '',
         menuLink: [],
         logoImage: null,
         logoSlogan: null,

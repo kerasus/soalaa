@@ -47,12 +47,15 @@
 </template>
 
 <script>
+import Timer from './Timer.vue'
 import VOtpInput from 'vue3-otp-input'
+import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'VerificationStep',
   components: {
-    VOtpInput
+    VOtpInput,
+    Timer
   },
   props: {
     userInfo: {
@@ -65,18 +68,24 @@ export default {
     return {
       loading: false,
       otpInput: null,
-      bindModal: null,
+      bindModal: '',
       otpValue: null,
       canReset: true,
       date: Date.now() + 120000
     }
   },
+  mounted() {
+    if (this.userInfo.code) {
+      this.bindModal = this.userInfo.code
+    }
+  },
   methods: {
     verifyCode() {
-      const verifyData = {
-        code: this.otpValue
-      }
-      this.$apiGateway.user.verifyMoshavereh(verifyData)
+      this.$axios.post(API_ADDRESS.user.verifyMoshavereh, {
+        mobile: this.userInfo.mobile, // String
+        code: this.bindModal // String
+      })
+      // this.$apiGateway.user.verifyMoshavereh(verifyData)
         .then(() => {
           this.$emit('gotoNextStep')
           this.setLoading(false)
@@ -118,8 +127,10 @@ export default {
     },
     resendRequest(userInfo) {
       this.setLoading(true)
-      this.$apiGateway.user.resendGuest(userInfo)
-        .then(message => {
+      this.$axios.get(API_ADDRESS.user.resendGuest + '?mobile=' + userInfo.mobile)
+      // this.$apiGateway.user.resendGuest(userInfo)
+        .then(response => {
+          const message = response.data.message
           this.showMessage(message, 'success')
           this.$emit('updateUser', {
             mobile: this.userInfo.mobile,

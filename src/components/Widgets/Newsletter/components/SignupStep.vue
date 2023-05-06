@@ -8,7 +8,6 @@
       <q-input v-model="mobile"
                class="landing-text-input dialog-input"
                placeholder="09 - - - - - - - - -"
-               :rules="rules"
                outlined
                color="primary"
                dir="ltr" />
@@ -25,6 +24,8 @@
 </template>
 
 <script>
+
+import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'SignupStep',
@@ -56,12 +57,15 @@ export default {
     },
     sendCodeRequest(userInfo) {
       this.setLoading(true)
-      this.$apiGateway.user.resendGuest(userInfo)
-        .then(user => {
-          this.showMessage(user, 'success')
+      this.$axios.get(API_ADDRESS.user.resendGuest + '?mobile=' + userInfo.mobile)
+      // this.$apiGateway.user.resendGuest(userInfo)
+        .then(response => {
+          const message = response.data.message
+          const code = response.data.data.code
+          this.showMessage(message, 'success')
           this.$emit('updateUser', {
             mobile: this.mobile,
-            code: user.code ? user.code : null
+            code: code || null
           })
           this.$emit('gotoNextStep')
           this.setLoading(false)

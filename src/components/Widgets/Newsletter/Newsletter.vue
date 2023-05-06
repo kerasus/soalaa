@@ -21,7 +21,7 @@
             <signup-step @goto-next-step="gotoNextStep"
                          @update-user="updateUser($event)" />
           </q-step>
-          <q-step v-if="verification"
+          <q-step v-if="localOptions.verification"
                   :name="'verification'"
                   title="verification">
             <verification-step :userInfo="userForm"

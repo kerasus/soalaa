@@ -82,7 +82,7 @@
               </div>
             </div>
 
-            <div v-if="true || user.hasPermission('examStore') && $route.name === 'HomePage'"
+            <div v-if="user.hasPermission('examStore') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams')"
                  class="self-center">
               <q-item v-ripple
                       clickable
@@ -111,7 +111,7 @@
                 </div>
               </q-item>
             </div>
-            <div v-if="true || user.hasPermission('examStore') && $route.name === 'HomePage'"
+            <div v-if="user.hasPermission('examStore') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams')"
                  class="self-center">
               <q-item
                 v-ripple

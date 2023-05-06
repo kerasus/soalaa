@@ -133,10 +133,10 @@ const routes = [
             path: '3a_comprehensive_exams',
             name: 'Landing.3aComprehensiveExams',
             layoutConfig: {
-              layoutHeader: true,
+              layoutHeader: false,
               layoutHeaderType: 'default',
               layoutLeftDrawer: false,
-              layoutFooter: true
+              layoutFooter: false
             },
             component: () => import('src/pages/Public/Landings/3aComprehensiveExams.vue')
           },
