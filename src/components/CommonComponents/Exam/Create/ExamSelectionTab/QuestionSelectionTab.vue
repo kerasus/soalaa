@@ -233,9 +233,8 @@ export default {
           nodeList: [],
           routeNameToGetNode: API_ADDRESS.tree.getGradesList,
           disable: true,
-          showLayer: false,
           label: 'پایه تحصیلی',
-          className: 'col-12'
+          className: 'col-12 hidden'
         },
         {
           name: 'lesson',

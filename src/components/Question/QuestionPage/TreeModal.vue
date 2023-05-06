@@ -6,24 +6,7 @@
         <div class="choose-tree-box question-details col-6">
           <div class="details-container-2 default-details-container">
             <div class="detail-box-container row">
-              <div v-for="(layer, index) in treeLayersList"
-                   v-show="typeof layer.showLayer === 'undefined' || layer.showLayer"
-                   :key="index"
-                   class="detail-box"
-                   :class="getDefaultLayerClassName(layer)"
-              >
-                <div class="detail-box-title">{{layer.label}}</div>
-                <q-select v-model="layer.selectedValue"
-                          filled
-                          dense
-                          dropdown-icon="isax:arrow-down-1"
-                          option-label="title"
-                          :options="layer.nodeList"
-                          :disable="!doesHigherLayerHaveValue || layer.disable"
-                          @update:model-value="layerNodeSelected(layer, index)" />
-              </div>
-              <div v-for="(layer, index) in getRegularDropdownList"
-                   v-show="typeof layer.showLayer === 'undefined' || layer.showLayer"
+              <div v-for="(layer, index) in layersList"
                    :key="index"
                    class="detail-box"
                    :class="getDefaultLayerClassName(layer)"
@@ -210,9 +193,6 @@ export default {
     treeLayersList() {
       return this.layersList.filter(layer => typeof layer.showTree === 'undefined' || layer?.showTree)
     },
-    getRegularDropdownList() {
-      return this.layersList.filter(layer => typeof layer.showTree !== 'undefined' && !layer?.showTree)
-    },
     getSelectedNodesIds() {
       return this.globalStorage.map(item => item.id)
     },
@@ -318,10 +298,7 @@ export default {
     onModalClosed () {
       this.finalizeOutputData()
       if (this.modalHasLayer()) {
-        const lastTreeLayer = this.treeLayersList[this.treeLayersList.length - 1]
-        this.layersList[this.layersList
-          .findIndex(item => item.name === lastTreeLayer.name)]
-          .selectedValue = ''
+        this.layersList[this.layersList.length - 1].selectedValue = ''
       }
     },
     finalizeOutputData () {
