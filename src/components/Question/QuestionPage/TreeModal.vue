@@ -187,7 +187,7 @@ export default {
         this.$emit('update:selectedNodes', value)
       }
     },
-    currentLocalStorage() {
+    localStorage() {
       return this.globalStorage.filter(node => node.isInCurrentTree)
     },
     getSelectedNodesIds() {
@@ -332,7 +332,7 @@ export default {
     },
     getRemovedNodes(newNodes) {
       const deletedNodes = []
-      this.currentLocalStorage.forEach(node => {
+      this.localStorage.forEach(node => {
         const existingNode = newNodes.find(item => item.id === node.id)
         if (!existingNode) {
           deletedNodes.push(node)
@@ -348,7 +348,7 @@ export default {
     },
     removeNode (item) {
       const node = item.id ? item : { id: item }
-      if (this.currentLocalStorage?.find(item => item.id === node.id)) {
+      if (this.localStorage?.find(item => item.id === node.id)) {
         this.setTickedMode('tree', node.id, false)
       }
       this.removeNodeFromGlobalStorage(item)
