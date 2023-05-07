@@ -1434,7 +1434,11 @@ export default {
   methods: {
     async addToCart() {
       // console.log('addToCart :', this.selectedProductId)
-      const data = [this.selectedProductId]
+      // const data = [this.selectedProductId]
+      const data = {
+        product_id: this.selectedProductId.product.id,
+        products: this.selectedProductId.products
+      }
       try {
         await this.$store.dispatch('Cart/addToCart', data)
         // uninstall and install router :)

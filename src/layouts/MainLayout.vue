@@ -70,6 +70,7 @@
           <auth />
         </q-dialog>
         <Router :include="keepAliveComponents" />
+        <floating-action-button v-if="user.hasPermission('examStore') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams' || $route.name === 'Public.Product.Show')" />
       </div>
     </template>
     <template #footer>
@@ -81,9 +82,12 @@
 <script>
 
 import { defineAsyncComponent } from 'vue'
-import QuasarTemplateBuilder from 'quasar-template-builder/src/quasar-template-builder.vue'
-import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 import MainFooter from 'components/Layout/Footer/main'
+import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import QuasarTemplateBuilder from 'quasar-template-builder/src/quasar-template-builder.vue'
+import FloatingActionButton from 'components/Template/FloatingActionButton/FloatingActionButton.vue'
+import { User } from 'src/models/User'
+
 // import templateHeader from 'components/Headers/templateHeader'
 // import onlineQuizTemplateHeader from 'components/Headers/onlineQuizTemplateHeader'
 // import UserTemplateHeader from 'components/Headers/userTemplateHeader'
@@ -96,6 +100,7 @@ import MainFooter from 'components/Layout/Footer/main'
 export default {
   components: {
     MainFooter,
+    FloatingActionButton,
     QuasarTemplateBuilder,
     UserSideBar: defineAsyncComponent(() => import('layouts/UserPanelLayouts/UserSideBar')),
     sideMenuMapOfQuestions: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu_MapOfQuestions')),
@@ -121,6 +126,12 @@ export default {
     }
   },
   computed: {
+    user () {
+      if (this.$store.getters['Auth/user']) {
+        return this.$store.getters['Auth/user']
+      }
+      return new User()
+    },
     loginDialog: {
       get () {
         return this.$store.getters['AppLayout/loginDialog']
