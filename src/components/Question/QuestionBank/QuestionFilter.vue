@@ -191,13 +191,7 @@
       >
         <q-option-group
           v-model="selectedErrorStatus"
-          type="checkbox"
-          :options="filterQuestions.report_statuses.map(option => {
-            return {
-              label: option.description,
-              value: option.title
-            }
-          })"
+          :options="reportStatusesOptions()"
           @update:model-value="onChangeErrorStatus"
         />
         <div v-if="filterQuestions.report_statuses.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
@@ -353,6 +347,20 @@ export default {
     }
   },
   methods: {
+    reportStatusesOptions() {
+      const options = this.filterQuestions.report_statuses.map(option => {
+        return {
+          label: option.description,
+          value: option.title
+        }
+      })
+      const noneOption = {
+        label: 'هیچکدام',
+        value: ''
+      }
+      options.push(noneOption)
+      return options
+    },
     setNodesTicked (nodeIds) {
       this.$refs.tree.setNodesTicked(nodeIds, true)
     },
@@ -406,13 +414,7 @@ export default {
       this.changeFilterData('question_report_type', value)
     },
     onChangeErrorStatus(value) {
-      // ToDO: use radioButton instead of optionGroup and set an option with value for none state
-      // visit link: https://quasar.dev/vue-components/option-group#standard
-      if (value.length > 1) {
-        this.selectedErrorStatus.splice(0, 1)
-      }
-      const sendData = value.length > 0 ? value[0] : ''
-      this.changeFilterData('report_status', sendData)
+      this.changeFilterData('report_status', value)
     },
     onSearchSingleNode(value) {
       const sendData = value ? 0 : 1

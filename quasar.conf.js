@@ -31,6 +31,7 @@ module.exports = configure(function (ctx) {
       'axios',
       'appConfig',
       'middleware',
+      'bus',
       'icon',
       'breadcrumbs',
       'registerQPageBuilder',

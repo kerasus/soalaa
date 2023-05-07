@@ -82,7 +82,7 @@
               </div>
             </div>
 
-            <div v-if="user.hasPermission('examStore') && $route.name === 'HomePage'"
+            <div v-if="user.hasPermission('examStore') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams')"
                  class="self-center">
               <q-item v-ripple
                       clickable
@@ -109,6 +109,18 @@
                          icon="edit"
                          @click="togglePageBuilderEditable" />
                 </div>
+              </q-item>
+            </div>
+            <div v-if="user.hasPermission('examStore') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams')"
+                 class="self-center">
+              <q-item
+                v-ripple
+                clickable
+                @click="copyPageBuilderConfigs"
+              >
+                <q-item-section class="tab-title">
+                  کپی
+                </q-item-section>
               </q-item>
             </div>
           </q-list>
@@ -291,12 +303,14 @@
 </template>
 
 <script>
+import { copyToClipboard } from 'quasar'
+import { mixinPageBuilder } from 'src/mixin/Mixins.js'
 import UserLayoutHeader from 'src/mixin/UserLayoutHeader'
 // import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'UserTemplateHeader',
-  mixins: [UserLayoutHeader],
+  mixins: [UserLayoutHeader, mixinPageBuilder],
   data () {
     return {
       selected: '',
@@ -401,6 +415,21 @@ export default {
     }
   },
   methods: {
+    copyPageBuilderConfigs () {
+      copyToClipboard(JSON.stringify(this.currenSections))
+        .then(() => {
+          this.$q.notify({
+            message: 'کانفیگ کپی شد',
+            type: 'positive'
+          })
+        })
+        .catch(() => {
+          this.$q.notify({
+            type: 'negative',
+            message: 'مشکلی در کپی کردن کانفیگ رخ داده اس.'
+          })
+        })
+    },
     toggleLeftDrawer () {
       this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
     },

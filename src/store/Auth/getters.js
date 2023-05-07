@@ -4,6 +4,9 @@ const getters = {
   user: (state) => {
     return new User(state.user)
   },
+  canEditPage () {
+
+  },
   accessToken: (state) => {
     return state.accessToken
   },
