@@ -233,7 +233,7 @@ const API_ADDRESS = {
             newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
           }
         } else {
-          if (newFilter[paramKey]) {
+          if (typeof newFilter[paramKey] === 'number' || newFilter[paramKey]) {
             newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
           }
         }

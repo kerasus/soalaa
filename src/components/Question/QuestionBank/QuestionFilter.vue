@@ -21,14 +21,14 @@
         <div>
           <q-card-actions class="filter-container q-pa-none">
             <q-chip
-              v-for="(item, index) in selectedFiltersTitle"
+              v-for="(filter, index) in selectedFiltersObject"
               :key="index"
-              v-model="selectedFiltersTitle[index]"
+              v-model="selectedFiltersObject[index]"
               class="filter-items"
               removable
-              @remove="deleteFilterObject(item)"
+              @remove="deleteFilterObject(filter)"
             >
-              {{item}}
+              {{ getFilterTitle(filter) }}
             </q-chip>
           </q-card-actions>
         </div>
@@ -325,20 +325,23 @@ export default {
     localLoadings() {
       return Object.assign(this.defaultLoadings, this.loadings)
     },
-    selectedFiltersTitle () {
+    selectedFiltersObject () {
       const filtersDataKey = Object.keys(this.filtersData)
-      const titles = []
+      const filters = []
       filtersDataKey.forEach(key => {
         const filterGroup = this.filtersData[key]
         if (Array.isArray(filterGroup)) {
           filterGroup.forEach(filterItem => {
-            const title = filterItem.title || filterItem.label || filterItem.value
-            titles.push(title)
+            filters.push(filterItem)
           })
+        } else if (typeof filterGroup === 'string' && filterGroup) {
+          filters.push(filterGroup)
+        } else if (typeof filterGroup === 'number' && !filterGroup) {
+          filters.push(filterGroup)
         }
       })
 
-      return titles
+      return filters
     }
   },
   created () {
@@ -347,6 +350,15 @@ export default {
     }
   },
   methods: {
+    getFilterTitle(filter) {
+      if (typeof filter === 'number') {
+        if (!filter) {
+          return 'جستجوی تک گره'
+        }
+      } else {
+        return filter.display_title || filter.title || filter.value || filter
+      }
+    },
     reportStatusesOptions() {
       const options = this.filterQuestions.report_statuses.map(option => {
         return {
@@ -421,7 +433,7 @@ export default {
       this.changeFilterData('tags_with_childrens', sendData)
     },
     tickedData (value) {
-      this.$emit('tagsChanged', value)
+      // this.$emit('tagsChanged', value)
       this.changeFilterData('tags', value)
       // this.filtersData.tags = value
       // value.forEach(val => {
@@ -433,8 +445,43 @@ export default {
       // })
       // this.onUpdateFilterData()
     },
-    deleteFilterObject (item) {
-      this.$emit('deleteFilter', item)
+    removeFilterFromFiltersData(filterKey, filterId) {
+      const index = this.filtersData[filterKey].findIndex(filter => filter.id === filterId)
+      this.filtersData[filterKey].splice(index, 1)
+      this.onUpdateFilterData()
+    },
+    deleteFilterObject (filter) {
+      if (filter.type === 'test' || filter.type === 'treeNode') {
+        this.$refs.tree.untickedNode(filter.id)
+      }
+      if (filter.type === 'reference_type') {
+        this.removeFilterFromFiltersData('reference', filter.id)
+      }
+      if (filter.type === 'year-type') {
+        this.removeFilterFromFiltersData('selectedYears', filter.id)
+      }
+      if (filter.type === 'major-type') {
+        this.removeFilterFromFiltersData('majors', filter.id)
+      }
+      if (filter.type === 'level-type') {
+        this.removeFilterFromFiltersData('level', filter.id)
+      }
+      if (filter.type === 'question_type') {
+        this.removeFilterFromFiltersData('types', filter.id)
+      }
+      if (filter.type === 'question_report_type') {
+        this.removeFilterFromFiltersData('question_report_type', filter.id)
+      }
+      if (filter.type === 'statuses') {
+        this.removeFilterFromFiltersData('statuses', filter.id)
+      }
+      if (filter.type === 'report_status') {
+        this.removeFilterFromFiltersData('report_status', filter.id)
+      }
+      if (typeof filter === 'number') {
+        this.searchSingleNode = false
+        this.changeFilterData('tags_with_childrens', false)
+      }
     },
     deleteAllFilters () {
       this.filtersData.tags.splice(0, this.filtersData.tags.length)

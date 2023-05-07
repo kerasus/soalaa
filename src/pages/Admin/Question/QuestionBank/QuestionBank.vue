@@ -163,15 +163,18 @@ export default {
         levels: [
           {
             id: '1',
-            value: 'آسان'
+            value: 'آسان',
+            type: 'level-type'
           },
           {
             id: '2',
-            value: 'متوسط'
+            value: 'متوسط',
+            type: 'level-type'
           },
           {
             id: '3',
-            value: 'سخت'
+            value: 'سخت',
+            type: 'level-type'
           }
         ],
         types: [],
@@ -408,6 +411,9 @@ export default {
       this.$axios.get(API_ADDRESS.question.status.base)
         .then(response => {
           this.filterQuestions.statuses = response.data.data
+          this.filterQuestions.statuses.forEach(filter => {
+            filter.type = 'statuses'
+          })
         })
     },
     getQuestionReportStatuses() {
@@ -416,6 +422,9 @@ export default {
         .then(response => {
           this.loadings.reportStatusLoading = false
           this.filterQuestions.report_statuses = response.data.data
+          this.filterQuestions.report_statuses.forEach(filter => {
+            filter.type = 'report_status'
+          })
         })
         .catch(() => {
           this.loadings.reportStatusLoading = false
