@@ -175,7 +175,6 @@
         v-if="(listConfig.questionYear && question.years.length > 0) || question.loading"
         class="question-year ellipsis col-sm-6 col-xs-6 justify-end"
       >
-        <!--        {{logger(question.years.list)}}-->
         <q-skeleton
           v-if="question.loading"
           class="info-title q-mx-sm"
@@ -625,9 +624,6 @@ export default {
     }
   },
   methods: {
-    logger (data) {
-      console.log('data', data)
-    },
     onResize () {
       this.$refs.questionComponent?.setChoiceCol()
     },
