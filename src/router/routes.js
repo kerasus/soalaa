@@ -745,6 +745,34 @@ const routes = [
         }
       },
       {
+        path: '/onlineQuiz/konkoorView/:quizId',
+        name: 'onlineQuiz.konkoorView',
+        component: () => import('pages/User/exam/participate/konkoorView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
+        path: '/onlineQuiz/konkoorView/retake/:quizId',
+        name: 'onlineQuiz.konkoorView.retake',
+        component: () => import('pages/User/exam/participate/konkoorView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
         path: '/onlineQuiz/konkoorView/personal/:quizId',
         name: 'onlineQuiz.konkoorView.personal',
         component: () => import('pages/User/exam/participate/konkoorView'),
