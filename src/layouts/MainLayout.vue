@@ -70,7 +70,7 @@
           <auth />
         </q-dialog>
         <Router :include="keepAliveComponents" />
-        <floating-action-button v-if="user.hasPermission('examStore') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams')" />
+        <floating-action-button v-if="user.hasPermission('examStore') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams' || $route.name === 'Public.Product.Show')" />
       </div>
     </template>
     <template #footer>

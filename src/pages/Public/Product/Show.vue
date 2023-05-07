@@ -1,14 +1,15 @@
 <template>
   <q-page-builder v-model:sections="currenSections"
                   v-model:options="pageConfig"
-                  :editable="pageBuilderEditable" />
+                  :editable="pageBuilderEditable"
+                  :loading="pageBuilderLoading" />
 </template>
 
 <script>
 import { mixinPageBuilder } from 'src/mixin/Mixins.js'
 
 export default {
-  name: 'Landing',
+  name: 'Show',
   mixins: [mixinPageBuilder],
   data: () => ({
     pageConfig: {},
@@ -28,10 +29,6 @@ export default {
       .catch(() => {
         this.pageLoading = false
       })
-
-    // this.currenSections = this.sections
-    // this.$store.dispatch('PageBuilder/editPageWidget', { key, sections: this.currenSections })
-    // this.$store.dispatch('PageBuilder/createPageWidget', { key, sections: this.currenSections })
   }
 }
 </script>

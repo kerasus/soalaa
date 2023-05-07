@@ -42,6 +42,10 @@ const API_ADDRESS = {
     statistics: lumenServer + '/user/dashboard/statistics',
     feature: (feature) => lumenServer + '/user/feature?feature=' + feature
   },
+  block: {
+    home: authServer + '/home',
+    shop: authServer + '/shop'
+  },
   set: {
     base: authServer + '/set'
   },
@@ -49,6 +53,7 @@ const API_ADDRESS = {
     admin: authServer + '/admin/c',
     adminGet: (id) => authServer + `/admin/c/${id}`,
     base: authServer + '/c',
+    relatedProducts: (id) => authServer + '/c/' + id + '/products',
     get: (id) => authServer + `/c/${id}`
   },
   option: {
@@ -373,6 +378,10 @@ const API_ADDRESS = {
         all: authServer + '/product/soalaa/all'
       }
     },
+    gifts: (id) => authServer + '/gift-products/' + id,
+    sampleContent: (id) => authServer + '/product/' + id + '/sample',
+    favored: (id) => authServer + '/product/' + id + '/favored',
+    unfavored: (id) => authServer + '/product/' + id + '/unfavored',
     bulk: (productIds) => {
       const idParams = []
       productIds.forEach((productId, productIndex) => {

@@ -47,6 +47,12 @@
                       label-position="right"
                       color="positive"
                       icon="isax:clipboard-tick"
+                      label="ساخت"
+                      @click="createPageBuilderConfig" />
+        <q-fab-action external-label
+                      label-position="right"
+                      color="positive"
+                      icon="isax:clipboard-tick"
                       label="تایید"
                       @click="acceptPageBuilderConfig" />
         <q-fab-action external-label
@@ -302,6 +308,21 @@ export default {
     },
     acceptPageBuilderConfig () {
       this.updateSetting()
+    },
+    createPageBuilderConfig () {
+      const params = JSON.stringify(this.$route.params)
+      const routeName = this.$route.name
+      const key = 'route_name:' + routeName + (this.hasDynamicSettingWithParams ? ('-params:' + params) : '')
+      this.pageLoading = true
+      this.$store.dispatch('PageBuilder/createPageWidget', { key, sections: this.currenSections })
+        .then(() => {
+          this.pageLoading = false
+          this.$store.commit('PageBuilder/updatePageBuilderEditable', false)
+        })
+        .catch(() => {
+          this.pageLoading = false
+          this.$store.commit('PageBuilder/updatePageBuilderEditable', false)
+        })
     },
     showPageBuilderConfig () {
 

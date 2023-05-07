@@ -147,12 +147,12 @@ export default {
   }),
   computed: {
     getRoutingObject() {
-      // if (this.defaultOptions.routeToProduct) {
-      //   return {
-      //     name: 'Public.Product.Show',
-      //     params: { id: this.product.id || -1 }
-      //   }
-      // }
+      if (this.defaultOptions.routeToProduct) {
+        return {
+          name: 'Public.Product.Show',
+          params: { id: this.product.id || -1 }
+        }
+      }
       return {}
     },
     product: {

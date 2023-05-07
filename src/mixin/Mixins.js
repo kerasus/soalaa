@@ -9,6 +9,7 @@ import mixinDateOptions from '../mixin/DateOptions'
 import mixinPageBuilder from 'src/mixin/PageBuilder.js'
 import AdminActionOnQuestion from '../mixin/AdminActionOnQuestion'
 import mixinUserActionOnQuestion from '../mixin/UserActionOnQuestion'
+import mixinPrefetchServerData from 'src/mixin/PrefetchServerData.js'
 import PageBuilderOptionPanel from 'src/mixin/PageBuilderOptionPanel.js'
 
 export {
@@ -23,5 +24,6 @@ export {
   mixinPageBuilder,
   AdminActionOnQuestion,
   PageBuilderOptionPanel,
+  mixinPrefetchServerData,
   mixinUserActionOnQuestion
 }

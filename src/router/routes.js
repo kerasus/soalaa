@@ -153,6 +153,49 @@ const routes = [
         ]
       },
       {
+        path: 'product',
+        name: 'Public.Product',
+        layoutConfig: {
+          layoutView: 'lHh Lpr fff',
+          layoutHeader: true,
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutHeaderReveal: false,
+          layoutHeaderElevated: false,
+          layoutHeaderBordered: false,
+          layoutLeftDrawer: true,
+          layoutLeftSideBarType: 'main',
+          layoutLeftDrawerVisible: false,
+          layoutLeftDrawerOverlay: false,
+          layoutLeftDrawerElevated: false,
+          layoutLeftDrawerBordered: false,
+          layoutLeftDrawerWidth: 325,
+          layoutLeftDrawerBehavior: 'default',
+          layoutRightDrawer: false,
+          layoutFooter: true,
+          // showHamburgerBtn: true,
+          layoutFooterVisible: true,
+          layoutHeaderCustomClass: '',
+          layoutBreadcrumbsElements: [],
+          layoutBreadcrumbs: {
+            separator: 'home'
+          },
+          layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
+          layoutPageContainerCustomClass: 'main-layout-container'
+        },
+        component: () => import('layouts/bareLayout.vue'),
+        children: [
+          {
+            name: 'Public.Product.Show',
+            path: ':id',
+            meta: {
+              hasDynamicSetting: true
+            },
+            component: () => import('pages/Public/Product/Show.vue')
+          }
+        ]
+      },
+      {
         path: 'dashboard',
         name: 'dashboard',
         component: () => import('pages/User/exam/List'),
