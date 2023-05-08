@@ -144,7 +144,7 @@
       </div>
       <div
         v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-        class="question-tags ellipsis col-sm-12 col-xs-6"
+        class="question-tags ellipsis col-sm-6 col-xs-6"
       >
         <div v-for="i in 3"
              :key="i">
@@ -169,6 +169,25 @@
                  class="tag-circle" />
           </div>
           <div class="tag-title ellipsis">{{ item.title }}</div>
+        </div>
+      </div>
+      <div
+        v-if="(listConfig.questionYear && question.years.length > 0) || question.loading"
+        class="question-year ellipsis col-sm-6 col-xs-6 justify-end"
+      >
+        <q-skeleton
+          v-if="question.loading"
+          class="info-title q-mx-sm"
+          type="text"
+          width="80px"
+        />
+        <div
+          v-for="(year, index) in question.years"
+          :key="index"
+          class="question-tag"
+        >
+          سال انتشار:
+          {{year.value}}
         </div>
       </div>
     </q-card-section>
@@ -530,6 +549,7 @@ export default {
         selectQuestion: false,
         reportProblem: true,
         questionRate: true,
+        questionYear: false,
         questionComment: true,
         descriptiveAnswer: true,
         questionAnswerExpanded: false,
@@ -605,7 +625,7 @@ export default {
   },
   methods: {
     onResize () {
-      this.$refs.questionComponent.setChoiceCol()
+      this.$refs.questionComponent?.setChoiceCol()
     },
     changeOrder (mode, question) {
       this.$emit('changeOrder', {
@@ -655,6 +675,7 @@ export default {
         reportProblem: true,
         questionRate: true,
         questionComment: true,
+        questionYear: false,
         descriptiveAnswer: true,
         questionAnswerExpanded: false,
         menu: {
@@ -673,6 +694,7 @@ export default {
       if (this.pageStrategy === 'question-bank') {
         finalConf.deleteQuestionFromExam = true
         finalConf.deleteQuestionFromDb = true
+        finalConf.questionYear = true
         // return finalConf
       }
       if (this.pageStrategy === 'lesson-detail') {
@@ -687,6 +709,7 @@ export default {
       if (this.finalApprovalMode) {
         finalConf = {
           ...this.listOptions,
+          questionYear: true,
           reportProblem: true,
           editQuestion: false,
           menu: {
@@ -961,6 +984,53 @@ export default {
           @media screen and (max-width: 599px){
             order: 1;
           }
+        }
+      }
+    }
+
+    .question-year {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      margin-top: 16px;
+
+      @media only screen and (max-width: 1439px) {
+        margin-top: 20px;
+      }
+
+      @media screen and (max-width: 599px) {
+        margin-top: 0;
+      }
+    }
+
+    .question-tag {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 19px;
+      color: #434765;
+
+      .tag-title{
+        @media screen and (max-width: 599px){
+          order: 2;
+        }
+        div{
+          max-width: 99px;
+        }
+      }
+
+      .tag-circle {
+        border-radius: 50%;
+        margin: 0 6px;
+        width: 6px;
+        height: 6px;
+        background: #6D708B;
+        opacity: 0.3;
+        @media screen and (max-width: 599px){
+          order: 1;
         }
       }
     }
