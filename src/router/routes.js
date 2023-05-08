@@ -118,9 +118,28 @@ const routes = [
       },
       {
         path: 'landing',
-        name: 'landing',
+        name: 'Landing',
         component: () => import('layouts/LandingLayout'),
         children: [
+          // {
+          //   path: ':landing_name',
+          //   meta: {
+          //     hasDynamicSettingWithParams: true
+          //   },
+          //   name: 'Public.Landing',
+          //   component: () => import('src/pages/Public/Landings/Landing.vue')
+          // },
+          {
+            path: '3a_comprehensive_exams',
+            name: 'Landing.3aComprehensiveExams',
+            layoutConfig: {
+              layoutHeader: false,
+              layoutHeaderType: 'default',
+              layoutLeftDrawer: false,
+              layoutFooter: false
+            },
+            component: () => import('src/pages/Public/Landings/3aComprehensiveExams.vue')
+          },
           {
             path: '3a_exams',
             name: 'Landing.3aExams',
@@ -130,6 +149,49 @@ const routes = [
               layoutFooter: true
             },
             component: () => import('pages/User/landing/landing')
+          }
+        ]
+      },
+      {
+        path: 'product',
+        name: 'Public.Product',
+        layoutConfig: {
+          layoutView: 'lHh Lpr fff',
+          layoutHeader: true,
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'default',
+          layoutHeaderReveal: false,
+          layoutHeaderElevated: false,
+          layoutHeaderBordered: false,
+          layoutLeftDrawer: true,
+          layoutLeftSideBarType: 'main',
+          layoutLeftDrawerVisible: false,
+          layoutLeftDrawerOverlay: false,
+          layoutLeftDrawerElevated: false,
+          layoutLeftDrawerBordered: false,
+          layoutLeftDrawerWidth: 325,
+          layoutLeftDrawerBehavior: 'default',
+          layoutRightDrawer: false,
+          layoutFooter: true,
+          // showHamburgerBtn: true,
+          layoutFooterVisible: true,
+          layoutHeaderCustomClass: '',
+          layoutBreadcrumbsElements: [],
+          layoutBreadcrumbs: {
+            separator: 'home'
+          },
+          layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
+          layoutPageContainerCustomClass: 'main-layout-container'
+        },
+        component: () => import('layouts/bareLayout.vue'),
+        children: [
+          {
+            name: 'Public.Product.Show',
+            path: ':id',
+            meta: {
+              hasDynamicSetting: true
+            },
+            component: () => import('pages/Public/Product/Show.vue')
           }
         ]
       },
@@ -480,6 +542,12 @@ const routes = [
                         name: 'Admin.Question.Create.Text.MultipleChoice',
                         breadcrumbs: { title: 'تستی', loading: false },
                         component: () => import('pages/Admin/Question/MultipleChoiceQuestion/MultipleChoiceQuestion.vue')
+                      },
+                      {
+                        path: 'groupQuestion',
+                        name: 'Admin.Question.Create.Text.GroupQuestion',
+                        breadcrumbs: { title: 'سوالات گروهی', loading: false },
+                        component: () => import('pages/Admin/Question/GroupQuestion/GroupQuestion.vue')
                       }
                     ]
                   },
@@ -665,6 +733,34 @@ const routes = [
       {
         path: '/onlineQuiz/konkoorView/:quizId',
         name: 'konkoorView',
+        component: () => import('pages/User/exam/participate/konkoorView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
+        path: '/onlineQuiz/konkoorView/:quizId',
+        name: 'onlineQuiz.konkoorView',
+        component: () => import('pages/User/exam/participate/konkoorView'),
+        layoutConfig: {
+          layoutHeaderVisible: true,
+          layoutHeaderType: 'quiz',
+          layoutLeftDrawerVisible: true,
+          layoutLeftSideBarType: 'quiz'
+        },
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
+        path: '/onlineQuiz/konkoorView/retake/:quizId',
+        name: 'onlineQuiz.konkoorView.retake',
         component: () => import('pages/User/exam/participate/konkoorView'),
         layoutConfig: {
           layoutHeaderVisible: true,

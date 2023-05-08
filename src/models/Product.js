@@ -4,7 +4,7 @@ import { EecProduct } from '../models/EecProduct'
 import { SetList } from '../models/Set'
 
 class Product extends Model {
-  constructor (data) {
+  constructor(data) {
     super(data, [
       { key: 'id' },
       { key: 'redirect_url' },
@@ -22,8 +22,16 @@ class Product extends Model {
       { key: 'is_free' },
       { key: 'photo' },
       { key: 'attributes' },
-      { key: 'description' },
+      {
+        key: 'description',
+        default: {
+          long: null,
+          short: null,
+          slogan: null
+        }
+      },
       { key: 'longDescription' },
+      { key: 'last_content_user_watched' },
       { key: 'specialDescription' },
       {
         key: 'sets',
@@ -35,6 +43,14 @@ class Product extends Model {
       },
       {
         key: 'isFavored',
+        default: false
+      },
+      {
+        key: 'is_favored_2',
+        default: false
+      },
+      {
+        key: 'is_favored',
         default: false
       },
       { key: 'catalog' },
@@ -52,11 +68,17 @@ class Product extends Model {
         default: []
       }
     ])
+    if (this.is_favored_2) {
+      this.is_favored = this.is_favored_2
+    }
+    if (this.isFavored) {
+      this.is_favored = this.isFavored
+    }
   }
 }
 
 class ProductList extends Collection {
-  model () {
+  model() {
     return Product
   }
 }
