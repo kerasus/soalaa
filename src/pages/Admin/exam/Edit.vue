@@ -118,7 +118,8 @@ export default {
       return this.inputs.findIndex(item => item.name === 'categories')
     },
     totalCategory () {
-      return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 3
+      return false
+      // return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 3
     }
   },
   data () {
