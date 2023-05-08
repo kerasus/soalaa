@@ -78,7 +78,7 @@ const API_ADDRESS = {
       show: lumenServer + '/option/',
       edit: lumenServer + '/option',
       create: lumenServer + '/option',
-      index: lumenServer + '/option?type=reference_type&with_pagination=true'
+      index: lumenServer + '/option'
     },
     questionReport: {
       show: lumenServer + '/option/',
