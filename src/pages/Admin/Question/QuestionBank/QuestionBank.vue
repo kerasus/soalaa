@@ -416,9 +416,7 @@ export default {
       this.$axios.get(API_ADDRESS.question.status.base)
         .then(response => {
           this.filterQuestions.statuses = response.data.data
-          this.filterQuestions.statuses.forEach(filter => {
-            filter.type = 'statuses'
-          })
+          this.addTypeToFilter('statuses')
         })
     },
     getQuestionReportStatuses() {
