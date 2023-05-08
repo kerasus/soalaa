@@ -1400,7 +1400,7 @@ export default {
   },
   computed: {
     singlePriceOnPackMode() {
-      const price = (this.currentBundle.packFinalPrices) / (this.currentBundle.exams.length)
+      const price = Math.round((this.currentBundle.packFinalPrices) / (this.currentBundle.exams.length))
       return price.toLocaleString()
     },
     finalPriceInSingleMode() {
