@@ -132,6 +132,7 @@
       v-model:dialogValue="treeModalValue"
       v-model:selected-nodes="selectedNodes"
       :initial-node="treeModalNodeId"
+      :tree-type="'test'"
       :no-nodes-label="'لطفا یک درس انتخاب کنید'"
       exchange-last-layer-only
       :persistent="!doesExamHaveLesson"
@@ -231,7 +232,6 @@ export default {
           name: 'lesson',
           selectedValue: new TreeNode(),
           nodeList: [],
-          routeNameToGetNode: '',
           disable: false,
           label: 'نام درس',
           className: 'col-12'

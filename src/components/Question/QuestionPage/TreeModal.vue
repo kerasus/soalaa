@@ -100,6 +100,10 @@ export default {
         return new TreeNode({})
       }
     },
+    treeType: {
+      type: [String],
+      default: ''
+    },
     selectedNodes: {
       type: [Array, TreeNodeList],
       default () {
@@ -150,7 +154,8 @@ export default {
       selectedNodesIDs: [],
       treeKey: 0,
       globalStorage: [],
-      localInitialNode: new TreeNode()
+      localInitialNode: new TreeNode(),
+      routeNameToGetNode: (layerId) => API_ADDRESS.tree.getNodeById(layerId)
     }
   },
   computed: {
@@ -303,7 +308,7 @@ export default {
       if (this.layersConfig[0].nodeList.length > 0) {
         return
       }
-      await this.setLayerList(this.layersConfig[0].routeNameToGetNode)
+      await this.setLayerList(API_ADDRESS.tree.getNodeByType(this.treeType))
     },
     loadLayerList (layerRoute) {
       return new Promise((resolve, reject) => {
@@ -392,7 +397,7 @@ export default {
       }
       this.treeKey += 1
       this.layersList[nextLayerIndex].selectedValue = ''
-      this.setLayerList(this.getLayerRoute(nextLayer, layer.selectedValue.id), nextLayerIndex)
+      this.setLayerList(this.getLayerRoute(layer.selectedValue.id), nextLayerIndex)
     },
     layerNodeSelected (layer, layerIndex) {
       this.$emit('layerSelected', {
@@ -401,10 +406,8 @@ export default {
       })
       this.setNextLayer(layer, layerIndex + 1)
     },
-    getLayerRoute(layer, layerId) {
-      return typeof layer.routeNameToGetNode === 'function'
-        ? layer.routeNameToGetNode(layerId)
-        : layer.routeNameToGetNode
+    getLayerRoute(layerId) {
+      return this.routeNameToGetNode(layerId)
     },
     showTreeModalNode (id) {
       this.dialogLoading = true

@@ -143,12 +143,12 @@
     <!--    >-->
     <!--      ثبت مباحث انتخاب شده-->
     <!--    </q-btn>-->
-    <div v-if="rootNodeId">
+    <div>
       <tree-modal
         ref="questionTreeModal"
         v-model:dialogValue="dialogValue"
         v-model:selected-nodes="selectedNodes"
-        :initial-node="rootNodeId"
+        :tree-type="'test'"
         :layers-config="treeLayersConfig"
         exchange-last-layer-only
         @gradeSelected="groupSelected"
@@ -157,7 +157,7 @@
       <tree-modal
         v-model:dialogValue="subjectTagsTreeModal"
         v-model:selected-nodes="selectedTreeTags"
-        :initial-tree-node="rootNodeId"
+        :tree-type="'subject-tree'"
         exchange-last-layer-only
       />
     </div>
@@ -307,8 +307,7 @@ export default {
       identifierData: [],
       draftBtnLoading: false,
       saveBtnLoading: false,
-      gradesList: [],
-      rootNodeId: null
+      gradesList: []
     }
   },
   computed: {
@@ -340,7 +339,6 @@ export default {
     setGradeList () {
       this.$axios.get(API_ADDRESS.tree.getGradesList)
         .then((response) => {
-          this.rootNodeId = response.data.data.id
           this.gradesList = response.data.data.children
         })
     },
