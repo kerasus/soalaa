@@ -8,7 +8,7 @@
         <div class="question-box">
           <QuestionField
             ref="tiptapQuestionStatement"
-            :key="'statement' + domKey"
+            :key="questionFieldKey"
             :editorValue="question.statement"
           />
         </div>
@@ -75,7 +75,7 @@
         <div class="answer-box">
           <QuestionField
             ref="tiptapDescriptiveAnswer"
-            :key="'descriptive_answer' + domKey"
+            :key="descriptiveAnswer"
             :editor-value="question.descriptive_answer"
           />
         </div>
@@ -156,7 +156,7 @@ export default {
   created () {
     const that = this
     setTimeout(() => {
-      that.domKey = 'Date.now()'
+      that.domKey++
     }, 100)
   },
   updated () {},
