@@ -117,7 +117,7 @@
           type="checkbox"
           :options="filterQuestions.levels.map(option => {
             return {
-              label: option.value,
+              label: option.trans,
               value: option
             }
           })"
@@ -356,7 +356,7 @@ export default {
           return 'جستجوی تک گره'
         }
       } else {
-        return filter.display_title || filter.description || filter.title || filter.value || filter
+        return filter.display_title || filter.description || filter.title || filter.value || filter.trans || filter
       }
     },
     reportStatusesOptions() {
@@ -438,8 +438,8 @@ export default {
       })
       this.changeFilterData('tags', value)
     },
-    removeFilterFromFiltersData(filterKey, filterId) {
-      const index = this.filtersData[filterKey].findIndex(filter => filter.id === filterId)
+    removeFilterFromFiltersData(filterKey, filterId, Key) {
+      const index = this.filtersData[filterKey].findIndex(filter => filter[Key] === filterId)
       this.filtersData[filterKey].splice(index, 1)
       this.onUpdateFilterData()
     },
@@ -476,7 +476,10 @@ export default {
       ]
       types.forEach(type => {
         if (type.filterType === filter.type) {
-          this.removeFilterFromFiltersData(type.key, filter.id)
+          this.removeFilterFromFiltersData(type.key, filter.id, 'id')
+        }
+        if (type.filterType === 'level_type') {
+          this.removeFilterFromFiltersData('level', filter.key, 'key')
         }
       })
       if (filter.type === 'report_status') {

@@ -328,7 +328,7 @@ export default {
     getFiltersForRequest(filterData) {
       return {
         tags: filterData.tags.map(item => item.id),
-        level: filterData.level.map(item => item.value),
+        level: filterData.level.map(item => item.key),
         years: filterData.years.map(item => item.id),
         majors: filterData.majors.map(item => item.id),
         reference: filterData.reference.map(item => item.id),
