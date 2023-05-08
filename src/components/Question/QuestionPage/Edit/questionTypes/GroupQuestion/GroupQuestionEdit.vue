@@ -75,7 +75,6 @@
         <div class="answer-box">
           <QuestionField
             ref="tiptapDescriptiveAnswer"
-            :key="descriptiveAnswer"
             :key="'descriptive_answer' + domKey"
             :editor-value="question.descriptive_answer"
           />
