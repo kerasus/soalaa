@@ -321,6 +321,7 @@ const API_ADDRESS = {
       }
     },
     reportStatuses: lumenServer + '/question/report/statuses',
+    levels: lumenServer + '/question/levels',
     log: {
       base (questionId, pagination) {
         if (!pagination) {

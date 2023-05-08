@@ -160,23 +160,7 @@ export default {
         reference_type: [],
         year_type: [],
         statuses: [],
-        levels: [
-          {
-            id: '1',
-            value: 'آسان',
-            type: 'level_type'
-          },
-          {
-            id: '2',
-            value: 'متوسط',
-            type: 'level_type'
-          },
-          {
-            id: '3',
-            value: 'سخت',
-            type: 'level_type'
-          }
-        ],
+        levels: [],
         types: [],
         report_type: [],
         report_status: []
@@ -406,11 +390,20 @@ export default {
         })
       this.getQuestionStatuses()
       this.getQuestionReportStatuses()
+      this.getLevelsFilterData()
     },
     addTypeToFilter(filter) {
       this.filterQuestions[filter].forEach(item => {
         item.type = filter
       })
+    },
+    getLevelsFilterData() {
+      this.$axios.get(API_ADDRESS.question.levels)
+        .then(response => {
+          this.filterQuestions.levels = response.data.data
+          this.addTypeToFilter('level_type')
+        })
+        .catch()
     },
     getQuestionStatuses () {
       this.$axios.get(API_ADDRESS.question.status.base)
