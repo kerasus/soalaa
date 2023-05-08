@@ -1,6 +1,6 @@
+import { Product } from './Product.js'
 import { Model, Collection } from 'js-abstract-model'
-import { Product } from './Product'
-import { OrderProduct, OrderProductList } from 'src/models/OrderProduct'
+import { OrderProduct, OrderProductList } from './OrderProduct.js'
 
 class CartItem extends Model {
   constructor (data) {
@@ -21,10 +21,22 @@ class CartItem extends Model {
   }
 
   hasProduct (productId) {
-    const isGrand = this.grand.id === productId
-    const findInOrderProduct = !!this.order_product.hasProduct(productId)
+    const isGrand = this.isGrand(productId)
+    const findInOrderProduct = !!this.isInOrderProducts(productId)
 
     return isGrand || findInOrderProduct
+  }
+
+  isGrand (productId) {
+    return this.grand.id === productId
+  }
+
+  isInOrderProducts (productId) {
+    return !!this.order_product.hasProduct(productId)
+  }
+
+  removeFromOrderProducts (productId) {
+    this.order_product.removeProduct(productId)
   }
 
   addOrderProducts (products) {
@@ -47,6 +59,22 @@ class CartItemList extends Collection {
 
   hasProduct (productId) {
     return !!this.list.find(cartItem => cartItem.hasProduct(productId))
+  }
+
+  removeProduct (productId) {
+    this.list.forEach((cartItem, cartItemIndex) => {
+      const isGrand = cartItem.isGrand(productId)
+      const isInOrderProduct = !!cartItem.isInOrderProducts(productId)
+      if (isGrand) {
+        this.list.splice(cartItemIndex, 1)
+      } else if (isInOrderProduct) {
+        cartItem.removeFromOrderProducts(productId)
+      }
+    })
+  }
+
+  removeOrderProduct (orderProductId) {
+    this.list.forEach(cartItem => cartItem.order_product.removeOrderProduct(orderProductId))
   }
 }
 

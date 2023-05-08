@@ -8,7 +8,7 @@
         <div class="question-box">
           <QuestionField
             ref="tiptapQuestionStatement"
-            :key="questionFieldKey"
+            :key="'statement' + domKey"
             :editorValue="question.statement"
           />
         </div>
@@ -76,6 +76,7 @@
           <QuestionField
             ref="tiptapDescriptiveAnswer"
             :key="descriptiveAnswer"
+            :key="'descriptive_answer' + domKey"
             :editor-value="question.descriptive_answer"
           />
         </div>

@@ -22,6 +22,9 @@ const API_ADDRESS = {
   },
   user: {
     base: authServer + '/user',
+    resendGuest: authServer + '/mobile/resendGuest',
+    verifyMoshavereh: authServer + '/mobile/verifyMoshavereh',
+    newsletter: authServer + '/newsletter',
     edit (userId) { return authServer + '/user/' + userId },
     updatePhoto() {
       return lumenServer + '/user/avatar'
@@ -39,6 +42,10 @@ const API_ADDRESS = {
     statistics: lumenServer + '/user/dashboard/statistics',
     feature: (feature) => lumenServer + '/user/feature?feature=' + feature
   },
+  block: {
+    home: authServer + '/home',
+    shop: authServer + '/shop'
+  },
   set: {
     base: authServer + '/set'
   },
@@ -46,6 +53,7 @@ const API_ADDRESS = {
     admin: authServer + '/admin/c',
     adminGet: (id) => authServer + `/admin/c/${id}`,
     base: authServer + '/c',
+    relatedProducts: (id) => authServer + '/c/' + id + '/products',
     get: (id) => authServer + `/c/${id}`
   },
   option: {
@@ -70,7 +78,7 @@ const API_ADDRESS = {
       show: lumenServer + '/option/',
       edit: lumenServer + '/option',
       create: lumenServer + '/option',
-      index: lumenServer + '/option?type=reference_type&with_pagination=true'
+      index: lumenServer + '/option'
     },
     questionReport: {
       show: lumenServer + '/option/',
@@ -337,6 +345,13 @@ const API_ADDRESS = {
   },
   tree: {
     base: lumenServer + '/forrest/tree',
+    getMultiType (types) {
+      let treeAddress = authServer + '/forrest/tree?'
+      types.forEach(element => {
+        treeAddress = treeAddress + `multi-type[]=${element}&`
+      })
+      return treeAddress
+    },
     getNodeById (nodeId) {
       return lumenServer + '/forrest/tree/' + nodeId
     },
@@ -363,6 +378,18 @@ const API_ADDRESS = {
         all: authServer + '/product/soalaa/all'
       }
     },
+    gifts: (id) => authServer + '/gift-products/' + id,
+    sampleContent: (id) => authServer + '/product/' + id + '/sample',
+    favored: (id) => authServer + '/product/' + id + '/favored',
+    unfavored: (id) => authServer + '/product/' + id + '/unfavored',
+    bulk: (productIds) => {
+      const idParams = []
+      productIds.forEach((productId, productIndex) => {
+        idParams.push('ids' + '[' + productIndex + ']=' + productId)
+      })
+      const queryParams = idParams.join('&')
+      return authServer + '/product?' + queryParams
+    },
 
     edit: {
       base: apiV2Server + '/admin/product'
@@ -371,7 +398,7 @@ const API_ADDRESS = {
       base: apiV2Server + '/admin/product'
     },
     show: {
-      base: apiV2Server + '/product'
+      base: authServer + '/product'
     }
   },
   cart: {
