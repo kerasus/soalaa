@@ -228,19 +228,10 @@ export default {
       groupsList: [],
       treeLayersConfig: [
         {
-          name: 'grade',
-          selectedValue: new TreeNode(),
-          nodeList: [],
-          routeNameToGetNode: API_ADDRESS.tree.getGradesList,
-          disable: true,
-          label: 'پایه تحصیلی',
-          className: 'col-12 hidden'
-        },
-        {
           name: 'lesson',
           selectedValue: new TreeNode(),
           nodeList: [],
-          routeNameToGetNode: (layerId) => API_ADDRESS.tree.getNodeById(layerId),
+          routeNameToGetNode: '',
           disable: false,
           label: 'نام درس',
           className: 'col-12'
@@ -390,7 +381,6 @@ export default {
       }
       await this.setupTreeLayer()
       this.$nextTick(() => {
-        this.$refs.questionTreeModal.layerNodeSelected(this.treeLayersConfig[0], 0)
         this.treeKey++
         this.toggleTreeModal()
       })
@@ -398,7 +388,6 @@ export default {
     setupTreeLayer() {
       return new Promise((resolve, reject) => {
         this.showLoading()
-        this.setInitialGrade(this.providedExam.temp.grade)
         this.getLessonsList(new TreeNode({
           id: this.providedExam.temp.grade
         }))
@@ -412,6 +401,7 @@ export default {
                 type: 'negative'
               })
             }
+            this.setInitialTreeLayer(this.treeModalLessonsList)
             if (this.providedExam.temp.lesson) {
               this.setInitialLesson(this.providedExam.temp.lesson)
             }
@@ -423,19 +413,15 @@ export default {
           })
       })
     },
-    setInitialGrade(grade) {
-      const layerIndex = this.treeLayersConfig.findIndex(item => item.name === 'grade')
-      if (layerIndex === -1) {
-        return
-      }
-      this.treeLayersConfig[layerIndex].selectedValue = new TreeNode({ id: grade })
+    setInitialTreeLayer (nodeList) {
+      this.treeLayersConfig[0].nodeList = nodeList
     },
     setInitialLesson(lesson) {
       const foundedLesson = this.treeModalLessonsList.find(item => item.id === lesson)
       if (!foundedLesson?.id) {
         return
       }
-      this.treeLayersConfig[1].selectedValue = foundedLesson
+      this.treeLayersConfig[0].selectedValue = foundedLesson
     },
     toggleTreeModal() {
       this.treeModalValue = !this.treeModalValue

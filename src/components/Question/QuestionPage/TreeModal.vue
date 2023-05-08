@@ -300,6 +300,9 @@ export default {
       this.selectedNodesArray = this.getTheLastSelectedNode(finalCollectedNodes)
     },
     async initInitialLayer() {
+      if (this.layersConfig[0].nodeList.length > 0) {
+        return
+      }
       await this.setLayerList(this.layersConfig[0].routeNameToGetNode)
     },
     loadLayerList (layerRoute) {
