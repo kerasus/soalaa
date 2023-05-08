@@ -164,22 +164,22 @@ export default {
           {
             id: '1',
             value: 'آسان',
-            type: 'level-type'
+            type: 'level_type'
           },
           {
             id: '2',
             value: 'متوسط',
-            type: 'level-type'
+            type: 'level_type'
           },
           {
             id: '3',
             value: 'سخت',
-            type: 'level-type'
+            type: 'level_type'
           }
         ],
         types: [],
         report_type: [],
-        report_statuses: []
+        report_status: []
       },
       questionListKey: Date.now(),
       selectedQuestions: [],
@@ -353,7 +353,7 @@ export default {
         sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value,
         statuses: filterData.statuses.map(item => item.id),
         question_report_type: filterData.question_report_type.map(item => item.id),
-        report_status: (filterData.report_status) ? filterData.report_status : '',
+        report_status: (filterData.report_status.title) ? filterData.report_status.title : '',
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
@@ -407,6 +407,11 @@ export default {
       this.getQuestionStatuses()
       this.getQuestionReportStatuses()
     },
+    addTypeToFilter(filter) {
+      this.filterQuestions[filter].forEach(item => {
+        item.type = filter
+      })
+    },
     getQuestionStatuses () {
       this.$axios.get(API_ADDRESS.question.status.base)
         .then(response => {
@@ -421,10 +426,8 @@ export default {
       this.$axios.get(API_ADDRESS.question.reportStatuses)
         .then(response => {
           this.loadings.reportStatusLoading = false
-          this.filterQuestions.report_statuses = response.data.data
-          this.filterQuestions.report_statuses.forEach(filter => {
-            filter.type = 'report_status'
-          })
+          this.filterQuestions.report_status = response.data.data
+          this.addTypeToFilter('report_status')
         })
         .catch(() => {
           this.loadings.reportStatusLoading = false

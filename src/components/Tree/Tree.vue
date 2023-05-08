@@ -232,12 +232,6 @@ export default {
       this.nodes = [treeNodeData]
     },
 
-    untickedNode(nodeId) {
-      const index = this.ticked.findIndex(node => node === nodeId)
-      this.ticked.splice(index, 1)
-      this.$emit('ticked', this.ticked)
-    },
-
     tickedNode (target) {
       this.completeTickedNode = []
       target.forEach(id => {

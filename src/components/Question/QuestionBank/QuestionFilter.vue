@@ -185,7 +185,7 @@
       </question-filter-expansion>
 
       <question-filter-expansion
-        v-if="filterQuestions.report_statuses"
+        v-if="filterQuestions.report_status"
         header-title="وضعیت خطا"
         :loading="localLoadings.reportStatusLoading"
       >
@@ -194,7 +194,7 @@
           :options="reportStatusesOptions()"
           @update:model-value="onChangeErrorStatus"
         />
-        <div v-if="filterQuestions.report_statuses.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
+        <div v-if="filterQuestions.report_status.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
 
       </question-filter-expansion>
 
@@ -276,7 +276,7 @@ export default {
       selectedLevels: [],
       selectedTypes: [],
       selectedReportType: [],
-      selectedErrorStatus: [],
+      selectedErrorStatus: {},
       selectedTags: [],
       selectedStatuses: [],
       filtersData: {
@@ -334,7 +334,7 @@ export default {
           filterGroup.forEach(filterItem => {
             filters.push(filterItem)
           })
-        } else if (typeof filterGroup === 'string' && filterGroup) {
+        } else if (typeof filterGroup === 'object') {
           filters.push(filterGroup)
         } else if (typeof filterGroup === 'number' && !filterGroup) {
           filters.push(filterGroup)
@@ -356,14 +356,14 @@ export default {
           return 'جستجوی تک گره'
         }
       } else {
-        return filter.display_title || filter.title || filter.value || filter
+        return filter.display_title || filter.description || filter.title || filter.value || filter
       }
     },
     reportStatusesOptions() {
-      const options = this.filterQuestions.report_statuses.map(option => {
+      const options = this.filterQuestions.report_status.map(option => {
         return {
           label: option.description,
-          value: option.title
+          value: option
         }
       })
       const noneOption = {
@@ -433,17 +433,10 @@ export default {
       this.changeFilterData('tags_with_childrens', sendData)
     },
     tickedData (value) {
-      // this.$emit('tagsChanged', value)
+      value.forEach(node => {
+        node.type = 'treeNode'
+      })
       this.changeFilterData('tags', value)
-      // this.filtersData.tags = value
-      // value.forEach(val => {
-      //   if (typeof val === 'string') {
-      //     this.filtersData.tags.push(val)
-      //   } else {
-      //     this.filtersData.tags.push(val)
-      //   }
-      // })
-      // this.onUpdateFilterData()
     },
     removeFilterFromFiltersData(filterKey, filterId) {
       const index = this.filtersData[filterKey].findIndex(filter => filter.id === filterId)
@@ -451,36 +444,51 @@ export default {
       this.onUpdateFilterData()
     },
     deleteFilterObject (filter) {
-      if (filter.type === 'test' || filter.type === 'treeNode') {
-        this.$refs.tree.untickedNode(filter.id)
-      }
-      if (filter.type === 'reference_type') {
-        this.removeFilterFromFiltersData('reference', filter.id)
-      }
-      if (filter.type === 'year-type') {
-        this.removeFilterFromFiltersData('selectedYears', filter.id)
-      }
-      if (filter.type === 'major-type') {
-        this.removeFilterFromFiltersData('majors', filter.id)
-      }
-      if (filter.type === 'level-type') {
-        this.removeFilterFromFiltersData('level', filter.id)
-      }
-      if (filter.type === 'question_type') {
-        this.removeFilterFromFiltersData('types', filter.id)
-      }
-      if (filter.type === 'question_report_type') {
-        this.removeFilterFromFiltersData('question_report_type', filter.id)
-      }
-      if (filter.type === 'statuses') {
-        this.removeFilterFromFiltersData('statuses', filter.id)
-      }
+      const types = [
+        {
+          filterType: 'reference_type',
+          key: 'reference'
+        },
+        {
+          filterType: 'year_type',
+          key: 'years'
+        },
+        {
+          filterType: 'major_type',
+          key: 'majors'
+        },
+        {
+          filterType: 'level_type',
+          key: 'level'
+        },
+        {
+          filterType: 'question_type',
+          key: 'types'
+        },
+        {
+          filterType: 'question_report_type',
+          key: 'question_report_type'
+        },
+        {
+          filterType: 'statuses',
+          key: 'statuses'
+        }
+      ]
+      types.forEach(type => {
+        if (type.filterType === filter.type) {
+          this.removeFilterFromFiltersData(type.key, filter.id)
+        }
+      })
       if (filter.type === 'report_status') {
-        this.removeFilterFromFiltersData('report_status', filter.id)
+        this.selectedErrorStatus = ''
+        this.onChangeErrorStatus(this.selectedErrorStatus)
+      }
+      if (filter.type === 'treeNode') {
+        this.setTickedMode('tree', filter.id, false)
       }
       if (typeof filter === 'number') {
         this.searchSingleNode = false
-        this.changeFilterData('tags_with_childrens', false)
+        this.changeFilterData('tags_with_childrens', 0)
       }
     },
     deleteAllFilters () {

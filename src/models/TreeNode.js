@@ -14,10 +14,7 @@ class TreeNode extends Model {
         key: 'parentOfSelectedNode',
         default: []
       },
-      {
-        key: 'type',
-        default: 'treeNode'
-      },
+      { key: 'type' },
       { key: 'updated_at' },
       { key: 'created_at' },
       { key: 'number_of_children' },
