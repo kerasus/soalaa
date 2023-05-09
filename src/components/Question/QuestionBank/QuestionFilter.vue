@@ -21,14 +21,14 @@
         <div>
           <q-card-actions class="filter-container q-pa-none">
             <q-chip
-              v-for="(item, index) in selectedFiltersTitle"
+              v-for="(filter, index) in selectedFiltersObject"
               :key="index"
-              v-model="selectedFiltersTitle[index]"
+              v-model="selectedFiltersObject[index]"
               class="filter-items"
               removable
-              @remove="deleteFilterObject(item)"
+              @remove="deleteFilterObject(filter)"
             >
-              {{item}}
+              {{ getFilterTitle(filter) }}
             </q-chip>
           </q-card-actions>
         </div>
@@ -117,7 +117,7 @@
           type="checkbox"
           :options="filterQuestions.levels.map(option => {
             return {
-              label: option.value,
+              label: option.trans,
               value: option
             }
           })"
@@ -185,7 +185,7 @@
       </question-filter-expansion>
 
       <question-filter-expansion
-        v-if="filterQuestions.report_statuses"
+        v-if="filterQuestions.report_status"
         header-title="وضعیت خطا"
         :loading="localLoadings.reportStatusLoading"
       >
@@ -194,7 +194,7 @@
           :options="reportStatusesOptions()"
           @update:model-value="onChangeErrorStatus"
         />
-        <div v-if="filterQuestions.report_statuses.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
+        <div v-if="filterQuestions.report_status.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
 
       </question-filter-expansion>
 
@@ -276,7 +276,7 @@ export default {
       selectedLevels: [],
       selectedTypes: [],
       selectedReportType: [],
-      selectedErrorStatus: [],
+      selectedErrorStatus: {},
       selectedTags: [],
       selectedStatuses: [],
       filtersData: {
@@ -325,20 +325,23 @@ export default {
     localLoadings() {
       return Object.assign(this.defaultLoadings, this.loadings)
     },
-    selectedFiltersTitle () {
+    selectedFiltersObject () {
       const filtersDataKey = Object.keys(this.filtersData)
-      const titles = []
+      const filters = []
       filtersDataKey.forEach(key => {
         const filterGroup = this.filtersData[key]
         if (Array.isArray(filterGroup)) {
           filterGroup.forEach(filterItem => {
-            const title = filterItem.title || filterItem.label || filterItem.value
-            titles.push(title)
+            filters.push(filterItem)
           })
+        } else if (typeof filterGroup === 'object') {
+          filters.push(filterGroup)
+        } else if (typeof filterGroup === 'number' && !filterGroup) {
+          filters.push(filterGroup)
         }
       })
 
-      return titles
+      return filters
     }
   },
   created () {
@@ -347,11 +350,20 @@ export default {
     }
   },
   methods: {
+    getFilterTitle(filter) {
+      if (typeof filter === 'number') {
+        if (!filter) {
+          return 'جستجوی تک گره'
+        }
+      } else {
+        return filter.display_title || filter.description || filter.title || filter.value || filter.trans || filter
+      }
+    },
     reportStatusesOptions() {
-      const options = this.filterQuestions.report_statuses.map(option => {
+      const options = this.filterQuestions.report_status.map(option => {
         return {
           label: option.description,
-          value: option.title
+          value: option
         }
       })
       const noneOption = {
@@ -421,20 +433,66 @@ export default {
       this.changeFilterData('tags_with_childrens', sendData)
     },
     tickedData (value) {
-      this.$emit('tagsChanged', value)
+      value.forEach(node => {
+        node.type = 'treeNode'
+      })
       this.changeFilterData('tags', value)
-      // this.filtersData.tags = value
-      // value.forEach(val => {
-      //   if (typeof val === 'string') {
-      //     this.filtersData.tags.push(val)
-      //   } else {
-      //     this.filtersData.tags.push(val)
-      //   }
-      // })
-      // this.onUpdateFilterData()
     },
-    deleteFilterObject (item) {
-      this.$emit('deleteFilter', item)
+    removeFilterFromFiltersData(filterKey, filterId, Key) {
+      const index = this.filtersData[filterKey].findIndex(filter => filter[Key] === filterId)
+      this.filtersData[filterKey].splice(index, 1)
+      this.onUpdateFilterData()
+    },
+    deleteFilterObject (filter) {
+      const types = [
+        {
+          filterType: 'reference_type',
+          key: 'reference'
+        },
+        {
+          filterType: 'year_type',
+          key: 'years'
+        },
+        {
+          filterType: 'major_type',
+          key: 'majors'
+        },
+        {
+          filterType: 'level_type',
+          key: 'level'
+        },
+        {
+          filterType: 'question_type',
+          key: 'types'
+        },
+        {
+          filterType: 'question_report_type',
+          key: 'question_report_type'
+        },
+        {
+          filterType: 'statuses',
+          key: 'statuses'
+        }
+      ]
+      types.forEach(type => {
+        if (type.filterType === filter.type) {
+          this.removeFilterFromFiltersData(type.key, filter.id, 'id')
+        }
+        if (type.filterType === 'level_type') {
+          this.removeFilterFromFiltersData('level', filter.key, 'key')
+        }
+      })
+      if (filter.type === 'report_status') {
+        this.selectedErrorStatus = ''
+        this.onChangeErrorStatus(this.selectedErrorStatus)
+      }
+      if (filter.type === 'treeNode') {
+        this.setTickedMode('tree', filter.id, false)
+      }
+      if (typeof filter === 'number') {
+        this.searchSingleNode = false
+        this.changeFilterData('tags_with_childrens', 0)
+      }
     },
     deleteAllFilters () {
       this.filtersData.tags.splice(0, this.filtersData.tags.length)

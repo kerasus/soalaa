@@ -288,6 +288,7 @@
                          class="btn cancel"
                          label="انصراف"></q-btn>
                   <q-btn unelevated
+                         :disable="downloadLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
@@ -348,6 +349,7 @@ export default {
   data: () => ({
     tab: 'questions',
     questionPagesCount: 0,
+    downloadLoading: false,
     pageCount: 0,
     page: 1,
     pdfSrc: '',
@@ -425,6 +427,7 @@ export default {
       this.pdfSrc = 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase1moshavere.pdf'
     },
     generatePDF (ref) {
+      this.downloadLoading = true
       html2pdf()
         .set({
           image: { type: 'png', quality: 1 },
@@ -435,6 +438,9 @@ export default {
         })
         .from(this.$refs[ref])
         .save()
+        .then(() => {
+          this.downloadLoading = false
+        })
     }
   }
 }
