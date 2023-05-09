@@ -1,5 +1,7 @@
 <template>
+  <div v-if="loading">لطفا کمی صبر کنید...</div>
   <tree
+    v-else
     ref="tree"
     tick-strategy="strict"
     :editable="true"
@@ -34,11 +36,6 @@ export default {
         console.error(err)
         this.loading = false
       })
-  },
-  watch: {
-    loading (newValue) {
-      this.$store.dispatch('loading/overlayLoading', newValue)
-    }
   },
   methods: {
     onTicked (value) {
