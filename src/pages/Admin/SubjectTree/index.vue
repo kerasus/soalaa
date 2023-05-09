@@ -6,9 +6,8 @@
     :get-node-by-id="getNodeById"
     :add-new-node="createNode"
     :edit-node="editNode"
-    @ticked="test"
+    @ticked="onTicked"
   />
-<!--  <q-btn v-for="(t, k) in testArr" :key="k" :label="t" @click="test2"/>-->
 </template>
 
 <script>
@@ -19,14 +18,8 @@ export default {
   name: 'SubjectTree',
   data: () => {
     return {
-      nodes: [],
       loading: false,
-      newName: '',
-      newOrder: 1,
-      selectedNode: {},
-      editDialog: false,
-      newNode: {}
-      // testArr: []
+      nodeIds: []
     }
   },
   mixins: [mixinTree],
@@ -34,7 +27,7 @@ export default {
   created () {
     this.loading = true
     this.showTree('tree', this.getRootNode('subject_tags'))
-      .then((res) => {
+      .then(() => {
         this.loading = false
       })
       .catch(err => {
@@ -48,10 +41,10 @@ export default {
     }
   },
   methods: {
-    test (value) {
-      this.testArr = []
+    onTicked (value) {
+      this.nodeIds = []
       value.forEach(val => {
-        this.testArr.push(val.id)
+        this.nodeIds.push(val.id)
       })
     }
   }
