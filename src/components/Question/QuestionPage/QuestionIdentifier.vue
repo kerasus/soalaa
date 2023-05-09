@@ -143,21 +143,24 @@
     <!--    >-->
     <!--      ثبت مباحث انتخاب شده-->
     <!--    </q-btn>-->
-    <tree-modal
-      ref="questionTreeModal"
-      v-model:dialogValue="dialogValue"
-      v-model:selected-nodes="selectedNodes"
-      :layers-config="treeLayersConfig"
-      exchange-last-layer-only
-      @gradenodeSelected="groupSelected"
-      @lessonnodeSelected="lessonSelected"
-    />
-    <tree-modal
-      v-model:dialogValue="subjectTagsTreeModal"
-      v-model:selected-nodes="selectedTreeTags"
-      :layers-config="treeTagsConfig"
-      exchange-last-layer-only
-    />
+    <div>
+      <tree-modal
+        ref="questionTreeModal"
+        v-model:dialogValue="dialogValue"
+        v-model:selected-nodes="selectedNodes"
+        :tree-type="'test'"
+        :layers-config="treeLayersConfig"
+        exchange-last-layer-only
+        @gradeSelected="groupSelected"
+        @lessonSelected="lessonSelected"
+      />
+      <tree-modal
+        v-model:dialogValue="subjectTagsTreeModal"
+        v-model:selected-nodes="selectedTreeTags"
+        :tree-type="'subject-tree'"
+        exchange-last-layer-only
+      />
+    </div>
   </div>
 </template>
 
@@ -277,24 +280,6 @@ export default {
         },
         {
           name: 'lesson',
-          selectedValue: new TreeNode(),
-          nodeList: [],
-          routeNameToGetNode: (layerId) => API_ADDRESS.tree.getNodeById(layerId),
-          disable: false,
-          label: 'نام درس'
-        }
-      ],
-      treeTagsConfig: [
-        {
-          name: 'layer1',
-          selectedValue: new TreeNode(),
-          nodeList: [],
-          routeNameToGetNode: API_ADDRESS.tree.getSubjectTagsTree,
-          disable: false,
-          label: 'پایه تحصیلی'
-        },
-        {
-          name: 'layer2',
           selectedValue: new TreeNode(),
           nodeList: [],
           routeNameToGetNode: (layerId) => API_ADDRESS.tree.getNodeById(layerId),
