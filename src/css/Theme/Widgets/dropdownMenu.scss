@@ -1,0 +1,20 @@
+.q-menu {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 8px;
+
+  .q-virtual-scroll__content {
+    background: #F2F5F9;
+    margin-top: 8px;
+    border: 1px solid #F2F5F9;
+    border-radius: 8px;
+  }
+  .q-item {
+    background: #fff;
+
+    &:first-child {
+      border-radius: 8px 8px 0 0;
+      margin-top: 2px;
+    }
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets",
+  "name": "Widgets",
+  "self_type": "folder",
+  "children": [
+    {
+      "path": "components/Widgets/ActionButton",
+      "name": "ActionButton",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/ActionButton/OptionPanel.vue",
+      "optionPanelName": "ActionButtonOptionPanel"
+    },
+    {
+      "path": "components/Widgets/Block",
+      "name": "Block",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/Block/OptionPanel.vue",
+      "optionPanelName": "BlockOptionPanel"
+    },
+    {
+      "path": "components/Widgets/BottomNavigation",
+      "name": "BottomNavigation",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/Cart",
+      "name": "Cart",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/ComparisonTable",
+      "name": "ComparisonTable",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/ComparisonTable/OptionPanel.vue",
+      "optionPanelName": "ComparisonTableOptionPanel"
+    },
+    {
+      "path": "components/Widgets/ContentItem",
+      "name": "ContentItem",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/ContentItem/OptionPanel.vue",
+      "optionPanelName": "ContentItemOptionPanel"
+    },
+    {
+      "path": "components/Widgets/Dashboard",
+      "name": "Dashboard",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/DownloadExam",
+      "name": "DownloadExam",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/ExpansionPanel",
+      "name": "ExpansionPanel",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/ExpansionPanel/OptionPanel.vue",
+      "optionPanelName": "ExpansionPanelOptionPanel"
+    },
+    {
+      "path": "components/Widgets/FeatureBox",
+      "name": "FeatureBox",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/FeatureBox/OptionPanel.vue",
+      "optionPanelName": "FeatureBoxOptionPanel"
+    },
+    {
+      "path": "components/Widgets/Footer",
+      "name": "Footer",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/GoLogin",
+      "name": "GoLogin",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/GoLogin/OptionPanel.vue",
+      "optionPanelName": "GoLoginOptionPanel"
+    },
+    {
+      "path": "components/Widgets/HeaderMenu",
+      "name": "HeaderMenu",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/HeaderMenu/OptionPanel.vue",
+      "optionPanelName": "HeaderMenuOptionPanel"
+    },
+    {
+      "path": "components/Widgets/HomePage",
+      "name": "HomePage",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/ImageWidget",
+      "name": "ImageWidget",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/ImageWidget/OptionPanel.vue",
+      "optionPanelName": "ImageWidgetOptionPanel"
+    },
+    {
+      "path": "components/Widgets/Newsletter",
+      "name": "Newsletter",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/PageBuilderComponents.js",
+      "name": "PageBuilderComponents",
+      "self_type": "file",
+      "file_type": "js"
+    },
+    {
+      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/PageBuilderOptionPanels.js",
+      "name": "PageBuilderOptionPanels",
+      "self_type": "file",
+      "file_type": "js"
+    },
+    {
+      "path": "components/Widgets/PersonSlider",
+      "name": "PersonSlider",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/PersonSlider/OptionPanel.vue",
+      "optionPanelName": "PersonSliderOptionPanel"
+    },
+    {
+      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/Product",
+      "name": "Product",
+      "self_type": "folder",
+      "children": [
+        {
+          "path": "components/Widgets/Product/ProductContents",
+          "name": "ProductContents",
+          "self_type": "folder",
+          "type": "widget",
+          "optionPanel": "components/Widgets/Product/ProductContents/OptionPanel.vue",
+          "optionPanelName": "ProductContentsOptionPanel"
+        },
+        {
+          "path": "components/Widgets/Product/ProductDemos",
+          "name": "ProductDemos",
+          "self_type": "folder",
+          "type": "widget",
+          "optionPanel": "components/Widgets/Product/ProductDemos/OptionPanel.vue",
+          "optionPanelName": "ProductDemosOptionPanel"
+        },
+        {
+          "path": "components/Widgets/Product/ProductGifts",
+          "name": "ProductGifts",
+          "self_type": "folder",
+          "type": "widget",
+          "optionPanel": "components/Widgets/Product/ProductGifts/OptionPanel.vue",
+          "optionPanelName": "ProductGiftsOptionPanel"
+        },
+        {
+          "path": "components/Widgets/Product/ProductInfoShow",
+          "name": "ProductInfoShow",
+          "self_type": "folder",
+          "type": "widget",
+          "optionPanel": "components/Widgets/Product/ProductInfoShow/OptionPanel.vue",
+          "optionPanelName": "ProductInfoShowOptionPanel"
+        },
+        {
+          "path": "components/Widgets/Product/ProductIntroduction",
+          "name": "ProductIntroduction",
+          "self_type": "folder",
+          "type": "widget",
+          "optionPanel": "components/Widgets/Product/ProductIntroduction/OptionPanel.vue",
+          "optionPanelName": "ProductIntroductionOptionPanel"
+        },
+        {
+          "path": "components/Widgets/Product/ProductItem",
+          "name": "ProductItem",
+          "self_type": "folder",
+          "type": "widget",
+          "optionPanel": "components/Widgets/Product/ProductItem/OptionPanel.vue",
+          "optionPanelName": "ProductItemOptionPanel"
+        },
+        {
+          "path": "components/Widgets/Product/ProductPrice",
+          "name": "ProductPrice",
+          "self_type": "folder",
+          "type": "widget",
+          "optionPanel": "components/Widgets/Product/ProductPrice/OptionPanel.vue",
+          "optionPanelName": "ProductPriceOptionPanel"
+        },
+        {
+          "path": "components/Widgets/Product/ProductReview",
+          "name": "ProductReview",
+          "self_type": "folder",
+          "type": "widget",
+          "optionPanel": "components/Widgets/Product/ProductReview/OptionPanel.vue",
+          "optionPanelName": "ProductReviewOptionPanel"
+        },
+        {
+          "path": "components/Widgets/Product/ProductsTabPanel",
+          "name": "ProductsTabPanel",
+          "self_type": "folder",
+          "type": "widget",
+          "optionPanel": "components/Widgets/Product/ProductsTabPanel/OptionPanel.vue",
+          "optionPanelName": "ProductsTabPanelOptionPanel"
+        }
+      ],
+      "type": "folder"
+    },
+    {
+      "path": "components/Widgets/Profile",
+      "name": "Profile",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/Quiz",
+      "name": "Quiz",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/SetItem",
+      "name": "SetItem",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/Slider",
+      "name": "Slider",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/Slider/OptionPanel.vue",
+      "optionPanelName": "SliderOptionPanel"
+    },
+    {
+      "path": "components/Widgets/StickyMenu",
+      "name": "StickyMenu",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/Subscription",
+      "name": "Subscription",
+      "self_type": "folder",
+      "children": [
+        {
+          "path": "components/Widgets/Subscription/FAQ",
+          "name": "FAQ",
+          "self_type": "folder",
+          "type": "widget"
+        },
+        {
+          "path": "components/Widgets/Subscription/SubscriptionBanner",
+          "name": "SubscriptionBanner",
+          "self_type": "folder",
+          "type": "widget"
+        },
+        {
+          "path": "components/Widgets/Subscription/SubscriptionPackagesSection",
+          "name": "SubscriptionPackagesSection",
+          "self_type": "folder",
+          "type": "widget"
+        }
+      ],
+      "type": "folder"
+    },
+    {
+      "path": "components/Widgets/TabPanel",
+      "name": "TabPanel",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/TabPanel/OptionPanel.vue",
+      "optionPanelName": "TabPanelOptionPanel"
+    },
+    {
+      "path": "components/Widgets/TestComponent1Widget",
+      "name": "TestComponent1Widget",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/TestComponent2Widget",
+      "name": "TestComponent2Widget",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/TextWidget",
+      "name": "TextWidget",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/TextWidget/OptionPanel.vue",
+      "optionPanelName": "TextWidgetOptionPanel"
+    },
+    {
+      "path": "components/Widgets/VideoPlayerWidget",
+      "name": "VideoPlayerWidget",
+      "self_type": "folder",
+      "type": "widget",
+      "optionPanel": "components/Widgets/VideoPlayerWidget/OptionPanel.vue",
+      "optionPanelName": "VideoPlayerWidgetOptionPanel"
+    },
+    {
+      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/readme.md",
+      "name": "readme",
+      "self_type": "file",
+      "file_type": "md"
+    },
+    {
+      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/widget.json",
+      "name": "widget",
+      "self_type": "file",
+      "file_type": "json"
+    }
+  ],
+  "type": "folder"
+}

@@ -1,0 +1,8 @@
+@import "mixin";
+
+.form-builder-Select-col {
+  @include global-select;
+  .outsideLabel {
+    @include global-outsideLabel;
+  }
+}
