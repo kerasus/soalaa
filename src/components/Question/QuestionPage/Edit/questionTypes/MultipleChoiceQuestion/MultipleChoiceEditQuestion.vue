@@ -5,58 +5,44 @@
         <span>صورت سوال</span>
       </div>
       <div class="question-box">
-        <QuestionField
-          ref="tiptapQuestionStatement"
-          :key="'statement' + domKey"
-          :editorValue="question.statement"
-        />
+        <question-field ref="tiptapQuestionStatement"
+                        :key="'statement' + domKey"
+                        :editorValue="question.statement" />
       </div>
     </q-card-section>
-    <q-card-section
-      v-if="question.choices.list.length > 0"
-      class="row main-card-section multiple-answer"
-    >
-      <div
-        v-for="(item, index) in question.choices.list"
-        :key="item.order"
-        class="col-lg-6 col-12"
-      >
+    <q-card-section v-if="question.choices.list.length > 0"
+                    class="row main-card-section multiple-answer">
+      <div v-for="(item, index) in question.choices.list"
+           :key="item.order"
+           class="col-lg-6 col-12">
         <div class="card-section-header">
-          <q-btn
-            class="icon-type"
-            icon="isax:close-square5"
-            color="negative"
-            flat
-            @click="removeChoice(item.order)"
-          />
-          <q-radio
-            v-model="choice"
-            dense
-            :val="'choice' + index"
-            :label="'گزینه ' + (index + 1)"
-            color="primary"
-            @click="choiceClicked(item.order)"
-          />
+          <q-btn class="icon-type"
+                 icon="isax:close-square5"
+                 color="negative"
+                 flat
+                 @click="removeChoice(item.order)" />
+          <q-radio v-model="choice"
+                   dense
+                   :val="'choice' + index"
+                   :label="'گزینه ' + (index + 1)"
+                   color="primary"
+                   @click="choiceClicked(item.order)" />
         </div>
         <div class="multiple-answer-box">
-          <QuestionField
-            :ref="'tiptapChoice' + index"
-            :key="'choices' + index + domKey"
-            :editor-value="item.title"
-          />
+          <question-field :ref="'tiptapChoice' + index"
+                          :key="'choices' + index + domKey"
+                          :editor-value="item.title" />
         </div>
       </div>
     </q-card-section>
     <q-card-section class="row main-card-section">
       <div class="col-12">
         <div class="card-section-header">
-          <q-btn
-            class="icon-type"
-            icon="isax:add-square5"
-            color="positive"
-            flat
-            @click="addChoice"
-          />
+          <q-btn class="icon-type"
+                 icon="isax:add-square5"
+                 color="positive"
+                 flat
+                 @click="addChoice" />
           <span>گزینه جدید</span>
         </div>
       </div>
@@ -64,11 +50,9 @@
     <q-card-section class="main-card-section long-answer">
       <div class="card-section-header">پاسخ تشریحی</div>
       <div class="answer-box">
-        <QuestionField
-          ref="tiptapDescriptiveAnswer"
-          :key="'descriptive_answer' + domKey"
-          :editor-value="question.descriptive_answer"
-        />
+        <question-field ref="tiptapDescriptiveAnswer"
+                        :key="'descriptive_answer' + domKey"
+                        :editor-value="question.descriptive_answer" />
       </div>
     </q-card-section>
   </q-card>
@@ -90,6 +74,12 @@ export default {
   mixins: [
     AdminActionOnQuestion
   ],
+  inject: {
+    question: {
+      from: 'providedQuestion', // this is optional if using the same key for injection
+      default: new Question()
+    }
+  },
   props: {
     loading: {
       default: false,
@@ -109,12 +99,6 @@ export default {
       allProps: {
         loading: false
       }
-    }
-  },
-  inject: {
-    question: {
-      from: 'providedQuestion', // this is optional if using the same key for injection
-      default: new Question()
     }
   },
   created () {

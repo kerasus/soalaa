@@ -9,8 +9,7 @@
               <div v-for="(layer, index) in layersList"
                    :key="index"
                    class="detail-box"
-                   :class="getDefaultLayerClassName(layer)"
-              >
+                   :class="getDefaultLayerClassName(layer)">
                 <div class="detail-box-title">{{layer.label}}</div>
                 <q-select v-model="layer.selectedValue"
                           filled

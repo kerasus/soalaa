@@ -1,18 +1,16 @@
 <template>
   <div class="row justify-center">
     <div class="col-12 q-mb-xl">
-      <entity-show
-        ref="entityEdit"
-        v-model:value="inputs"
-        :show-save-button="false"
-        :title="'شماره تیکت ' + searchForInputVal('id') + ' در ' + searchForInputVal('department_title')"
-        :api="api"
-        :entity-id-key="entityIdKey"
-        :entity-param-key="entityParamKey"
-        :index-route-name="indexRouteName"
-        :after-load-input-data="checkLoadInputData"
-        :show-edit-button="false"
-      >
+      <entity-show ref="entityEdit"
+                   v-model:value="inputs"
+                   :show-save-button="false"
+                   :title="'شماره تیکت ' + searchForInputVal('id') + ' در ' + searchForInputVal('department_title')"
+                   :api="api"
+                   :entity-id-key="entityIdKey"
+                   :entity-param-key="entityParamKey"
+                   :index-route-name="indexRouteName"
+                   :after-load-input-data="checkLoadInputData"
+                   :show-edit-button="false">
         <template #before-form-builder>
           <div class="flex justify-around">
             <q-btn rounded
@@ -35,18 +33,16 @@
           </div>
         </template>
         <template #after-form-builder>
-          <ticket-rate
-            v-if="!isUserAdmin"
-            :rate="searchForInputVal('rate')"
-            :ticket-id="searchForInputVal('id')"
-            class="q-ml-lg q-mt-lg" />
+          <ticket-rate v-if="!isUserAdmin"
+                       :rate="searchForInputVal('rate')"
+                       :ticket-id="searchForInputVal('id')"
+                       class="q-ml-lg q-mt-lg" />
         </template>
       </entity-show>
       <messages v-for="item in userMessageArray"
                 :key="item"
                 :is-user-admin="isUserAdmin"
-                :data="item"
-      />
+                :data="item" />
       <send-message-input ref="SendMessageInput"
                           :send-loading="sendMessageLoading"
                           :show-send-private="false"
@@ -54,27 +50,23 @@
                           @sendText="sendMessageText"
                           @sendImage="sendMessageImage"
                           @sendVoice="sendMessageVoice"
-                          @creatTicket="sendTicket"
-      />
+                          @creatTicket="sendTicket" />
       <drawer :is-open="logDrawer"
               max-width="310px"
-              side="left"
-      >
+              side="left">
         <q-scroll-area class="fit">
           <q-btn icon="mdi-close"
                  unelevated
                  class="close-btn"
                  @click="logDrawer = false" />
           <div class="q-my-md flex content-between">
-            <q-tabs
-              v-model="panel"
-              dense
-              class="text-grey"
-              active-color="primary"
-              indicator-color="primary"
-              align="justify"
-              narrow-indicator
-            >
+            <q-tabs v-model="panel"
+                    dense
+                    class="text-grey"
+                    active-color="primary"
+                    indicator-color="primary"
+                    align="justify"
+                    narrow-indicator>
               <q-tab name="events"
                      label="رویداد ها" />
             </q-tabs>
@@ -89,8 +81,7 @@
         </q-scroll-area>
       </drawer>
       <drawer :is-open="orderDrawer"
-              max-width="1016px"
-      >
+              max-width="1016px">
         <q-scroll-area class="fit">
           <q-btn icon="mdi-close"
                  class="close-btn"
@@ -118,8 +109,8 @@ import { mixinDateOptions, mixinTicket } from 'src/mixin/Mixins'
 
 export default {
   name: 'Show',
-  mixins: [mixinDateOptions, mixinTicket],
   components: { EntityShow, Messages, LogList, UserOrderList, TicketRate, SendMessageInput, Drawer },
+  mixins: [mixinDateOptions, mixinTicket],
   data () {
     return {
       isUserAdmin: false,
@@ -232,6 +223,12 @@ export default {
       }
       return logs
     }
+  },
+  created () {
+    this.initPageData()
+  },
+  mounted () {
+    this.isUserAdmin = this.$store.getters['Auth/user'].has_admin_permission
   },
   methods: {
     initPageData () {
@@ -369,12 +366,6 @@ export default {
           })
         })
     }
-  },
-  created () {
-    this.initPageData()
-  },
-  mounted () {
-    this.isUserAdmin = this.$store.getters['Auth/user'].has_admin_permission
   }
 }
 </script>

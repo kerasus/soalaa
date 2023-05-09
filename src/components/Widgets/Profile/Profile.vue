@@ -4,10 +4,8 @@
          :hidden="$q.screen.lt.md">اطلاعات کاربری</div>
     <div v-if="$q.screen.lt.md"
          class="flex justify-start profile-btn">
-      <q-btn
-        color="dark"
-        flat
-      >
+      <q-btn color="dark"
+             flat>
         <svg width="22"
              height="22"
              viewBox="0 0 22 22"
@@ -33,28 +31,23 @@
     </div>
 
     <div class="profile-card relative-position">
-      <entity-crud-form-builder
-        ref="EntityCrudFormBuilder"
-        v-model:value="inputs"
-      />
+      <entity-crud-form-builder ref="EntityCrudFormBuilder"
+                                v-model:value="inputs" />
 
       <div class="card-actions">
         <div class="card-actions-button dont-save-button"
-             @click="goToDashboard()"
-        >
+             @click="goToDashboard()">
           انصراف
         </div>
 
         <div class="card-actions-button save-button"
-             @click="edit"
-        >
+             @click="edit">
           ذخیره
         </div>
       </div>
 
       <q-inner-loading :showing="loading"
-                       label="کمی صبر کنید..."
-      />
+                       label="کمی صبر کنید..." />
 
     </div>
   </div>
@@ -97,10 +90,6 @@ export default {
     }
   },
 
-  mounted() {
-    this.onLoadPage()
-  },
-
   computed: {
     user () {
       return this.$store.getters['Auth/user']
@@ -118,6 +107,10 @@ export default {
       }
       this.setCityInputOptions(this.getCitiesOfProvince(typeof this.provinceInputValue === 'object' ? this.provinceInputValue.value : this.provinceInputValue))
     }
+  },
+
+  mounted() {
+    this.onLoadPage()
   },
 
   methods: {

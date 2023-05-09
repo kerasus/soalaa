@@ -19,13 +19,11 @@
       </div>
     </div>
     <div class="subscription-statistics">
-      <q-tabs
-        v-model="tab"
-        color="secondary"
-        class="subscription-tabs"
-        active-class="text-secondary"
-        align="left"
-      >
+      <q-tabs v-model="tab"
+              color="secondary"
+              class="subscription-tabs"
+              active-class="text-secondary"
+              align="left">
         <q-tab name="tests"
                label="ساخت آزمون" />
         <q-tab name="pdf"
@@ -40,8 +38,7 @@
             محدودیت ساخت آزمون
           </div>
           <highcharts class="flex flex-center"
-                      :options="chartOptionsExam"
-          />
+                      :options="chartOptionsExam" />
           <div v-if="subscribe.abilities_n.exam !== -1"
                class="subscription-status-test-tab-info">
             <span><q-icon name="circle"
@@ -58,8 +55,7 @@
             محدودیت دانلود PDF
           </div>
           <highcharts class="flex flex-center"
-                      :options="chartOptionsPdf"
-          />
+                      :options="chartOptionsPdf" />
           <div class="subscription-status-test-tab-info">
             <span><q-icon name="circle"
                           color="warning"
@@ -79,14 +75,14 @@ import { Chart } from 'highcharts-vue'
 
 export default {
   name: 'SubscriptionStatus',
+  components: {
+    highcharts: Chart
+  },
   props: {
     subscribe: {
       type: Object,
       default: null
     }
-  },
-  components: {
-    highcharts: Chart
   },
   data() {
     return {

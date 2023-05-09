@@ -3,8 +3,7 @@
        class="html-katex"
        style="overflow: hidden"
        :dir="!isLtrString ? 'rtl' : 'ltr'"
-       v-html="computedKatex"
-  />
+       v-html="computedKatex" />
 <!--  <canvas v-show="false"-->
 <!--          ref="convertor" />-->
 </template>

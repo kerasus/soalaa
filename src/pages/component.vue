@@ -1,38 +1,26 @@
 <template>
   <h5 class="q-ml-lg">نمونه استایل دکمه ها:</h5>
-  <div
-    class="flex justify-center q-mb-xl q-mt-xl"
-  >
-    <div
-      v-for="item in btnStyle"
-      :key="item"
-    >
-      <q-btn
-        v-if="item.class === 'second-type'"
-        unelevated
-        :color="item.color"
-        class="q-mr-xl"
-        :class="'btn-' + item.size"
-      >
+  <div class="flex justify-center q-mb-xl q-mt-xl">
+    <div v-for="item in btnStyle"
+         :key="item">
+      <q-btn v-if="item.class === 'second-type'"
+             unelevated
+             :color="item.color"
+             class="q-mr-xl"
+             :class="'btn-' + item.size">
         {{ item.title }}
       </q-btn>
     </div>
   </div>
-  <div
-    class="flex justify-center"
-  >
-    <div
-      v-for="item in btnStyle"
-      :key="item"
-      class="flex justify-center"
-    >
-      <q-btn
-        v-if="item.class === 'first-type'"
-        unelevated
-        :color="item.color"
-        class="q-mr-xl"
-        :class="'btn-' + item.size"
-      >
+  <div class="flex justify-center">
+    <div v-for="item in btnStyle"
+         :key="item"
+         class="flex justify-center">
+      <q-btn v-if="item.class === 'first-type'"
+             unelevated
+             :color="item.color"
+             class="q-mr-xl"
+             :class="'btn-' + item.size">
         {{ item.title }}
       </q-btn>
     </div>
@@ -42,19 +30,15 @@
                color="primary" />
   <h5 class="q-ml-lg">نمونه استایل دکمه های آیکن دار:</h5>
   <div class="flex justify-center">
-    <div
-      v-for="item in btnStyle"
-      :key="item"
-      :class="item.margin"
-    >
-      <q-btn
-        v-if="item.class === 'icon-type'"
-        unelevated
-        :outline="item.outline"
-        :flat="item.flat"
-        :color="item.color"
-        :icon="'isax:'+item.icon"
-      ></q-btn>
+    <div v-for="item in btnStyle"
+         :key="item"
+         :class="item.margin">
+      <q-btn v-if="item.class === 'icon-type'"
+             unelevated
+             :outline="item.outline"
+             :flat="item.flat"
+             :color="item.color"
+             :icon="'isax:'+item.icon" />
     </div>
   </div>
   <q-separator style="width: 60%; margin: 50px 20%"
@@ -63,12 +47,11 @@
   <h5 class="q-ml-lg">نمونه استایل Radio Button:</h5>
   <div class="flex justify-center">
     <div class="radio">
-      <q-radio
-        v-for="item in radioBtnVals"
-        :key="item"
-        v-model="person"
-        :checked-icon="item.icon"
-        :val="item.val" />
+      <q-radio v-for="item in radioBtnVals"
+               :key="item"
+               v-model="person"
+               :checked-icon="item.icon"
+               :val="item.val" />
     </div>
   </div>
   <q-separator style="width: 60%; margin: 50px 20%"

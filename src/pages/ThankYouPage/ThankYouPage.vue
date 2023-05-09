@@ -1,45 +1,33 @@
 <template>
   <div class="cart-container">
     <div class="cart-image">
-      <q-img
-        v-if="hasPaid"
-        src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/thankyou_page.png"
-      />
-      <q-icon
-        v-else
-        name="error"
-        color="red"
-      />
+      <q-img v-if="hasPaid"
+             src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/thankyou_page.png" />
+      <q-icon v-else
+              name="error"
+              color="red" />
     </div>
 
-    <div
-      v-if="hasPaid"
-      class="title"
-    >
+    <div v-if="hasPaid"
+         class="title">
       ثبت نام شما با موفقیت انجام شد
     </div>
-    <div
-      v-else
-      class="title"
-    >
+    <div v-else
+         class="title">
       متاسفانه پرداخت انجام نشد :(
     </div>
     <!--    <div class="tracking-code-container">-->
     <!--      <span class="tracking-code-title">کد پیگیری:</span>-->
     <!--      <span class="tracking-code">{{ trackingCode }}</span>-->
     <!--    </div>-->
-    <router-link
-      v-if="hasPaid"
-      :to="{name: 'dashboard'}"
-      class="redirect-element"
-    >
+    <router-link v-if="hasPaid"
+                 :to="{name: 'dashboard'}"
+                 class="redirect-element">
       مشاهده آزمون در پنل کاربری
     </router-link>
-    <router-link
-      v-else
-      :to="{name: 'HomePage'}"
-      class="redirect-element"
-    >
+    <router-link v-else
+                 :to="{name: 'HomePage'}"
+                 class="redirect-element">
       بازگشت به فروشگاه
     </router-link>
   </div>
@@ -55,13 +43,13 @@ export default {
       hasPaid: false
     }
   },
-  created () {
-    this.onLoadPage()
-  },
   computed: {
     orderId () {
       return this.$route.params.orderId
     }
+  },
+  created () {
+    this.onLoadPage()
   },
   methods: {
     onLoadPage () {

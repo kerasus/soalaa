@@ -1,14 +1,12 @@
 <template>
   <div>
-    <entity-index
-      v-model:value="inputs"
-      title="لیست تیکت ها"
-      :api="api"
-      :table="table"
-      :table-keys="tableKeys"
-      :create-route-name="'User.Ticket.Create'"
-      :show-expand-button="false"
-    >
+    <entity-index v-model:value="inputs"
+                  title="لیست تیکت ها"
+                  :api="api"
+                  :table="table"
+                  :table-keys="tableKeys"
+                  :create-route-name="'User.Ticket.Create'"
+                  :show-expand-button="false">
       <template v-slot:table-cell="{inputData}">
         <q-td :props="inputData.props">
           <template v-if="inputData.props.col.name === 'status'">

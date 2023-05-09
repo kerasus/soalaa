@@ -2,15 +2,13 @@
   <div class="statistic-result">
     <div class="row justify-center">
       <div class="col col-12 col-md-9 default-result-table statistic-result-table d-flex justify-center">
-        <q-table
-          :rows="dataTable"
-          :columns="columns1"
-          row-key="name"
-          color="amber"
-          hide-bottom
-          flat
-          :rows-per-page-options="[0]"
-        ></q-table>
+        <q-table :rows="dataTable"
+                 :columns="columns1"
+                 row-key="name"
+                 color="amber"
+                 hide-bottom
+                 flat
+                 :rows-per-page-options="[0]" />
       </div>
       <div class="col-12 row">
         <div class="col">

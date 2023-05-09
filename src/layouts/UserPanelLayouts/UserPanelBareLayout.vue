@@ -1,7 +1,7 @@
 <template>
   <div class="row user-panel-bare-layout">
     <div class="col-12">
-      <Router :include="keepAliveComponents" />
+      <router :include="keepAliveComponents" />
     </div>
   </div>
 </template>

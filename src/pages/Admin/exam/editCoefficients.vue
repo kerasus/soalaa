@@ -1,32 +1,26 @@
 <template>
   <div class="row justify-end">
     <div class="col-md-12 q-pa-sm">
-      <q-input
-        v-model="sourceExamInfoForCopyCoefficient.id"
-        :loading="sourceExamInfoForCopyCoefficient.loading"
-        :disabled="sourceExamInfoForCopyCoefficient.loading"
-        label="شناسه آزمون جهت کپی کردن ضرایب"
-        class="q-mb-md"
-      >
-        <q-btn
-          color="green"
-          icon="mdi-eye"
-          size="md"
-          flat
-          rounded
-          fab-mini
-          @click="getExamInfo"
-        />
+      <q-input v-model="sourceExamInfoForCopyCoefficient.id"
+               :loading="sourceExamInfoForCopyCoefficient.loading"
+               :disabled="sourceExamInfoForCopyCoefficient.loading"
+               label="شناسه آزمون جهت کپی کردن ضرایب"
+               class="q-mb-md">
+        <q-btn color="green"
+               icon="mdi-eye"
+               size="md"
+               flat
+               rounded
+               fab-mini
+               @click="getExamInfo" />
       </q-input>
       <br>
-      <q-btn
-        v-if="sourceExamInfoForCopyCoefficient.title"
-        class="copy-coefficient"
-        block
-        color="cyan"
-        dark
-        @click="copyCoefficient"
-      >
+      <q-btn v-if="sourceExamInfoForCopyCoefficient.title"
+             class="copy-coefficient"
+             block
+             color="cyan"
+             dark
+             @click="copyCoefficient">
         کپی کردن ضرایب آزمون {
         {{ sourceExamInfoForCopyCoefficient.title }}
         }
@@ -53,17 +47,15 @@
       </p>
     </div>
     <div class="col-md-6 q-pa-sm">
-      <q-select
-        v-model="selectedSubgroup"
-        outlined
-        dense
-        :options="notExistingSubGroups"
-        option-label="value"
-        option-value="id"
-        label="زیرگروه"
-        emit-value
-        map-options
-      >
+      <q-select v-model="selectedSubgroup"
+                outlined
+                dense
+                :options="notExistingSubGroups"
+                option-label="value"
+                option-value="id"
+                label="زیرگروه"
+                emit-value
+                map-options>
         <template v-slot:no-option>
           <p class="no-data">
             متاسفانه گزینه ای برای انتخاب وجود ندارد!
@@ -72,101 +64,81 @@
       </q-select>
     </div>
     <div class="col-md-6 q-pa-sm">
-      <q-btn
-        class="full-width"
-        block
-        color="blue"
-        @click="addSubgroup"
-      >
+      <q-btn class="full-width"
+             block
+             color="blue"
+             @click="addSubgroup">
         افزودن زیرگروه
       </q-btn>
     </div>
     <div class="col-md-12 q-pa-sm">
-      <q-expansion-item
-        v-for="(subGroup, index) in subGroups"
-        :key="index"
-        class="bg-white rounded-borders q-mb-md"
-        :label='subGroup.title'
-      >
+      <q-expansion-item v-for="(subGroup, index) in subGroups"
+                        :key="index"
+                        class="bg-white rounded-borders q-mb-md"
+                        :label='subGroup.title'>
         <q-card>
           <q-card-section>
             <div class="row">
               <div class="col-md-4 q-pa-sm">
-                <q-select
-                  v-model="selectedCategory"
-                  label="دفترچه"
-                  outlined
-                  dense
-                  :options="categoryList.list"
-                  option-label="title"
-                  option-value="title"
-                  emit-value
-                  map-options
-                />
+                <q-select v-model="selectedCategory"
+                          label="دفترچه"
+                          outlined
+                          dense
+                          :options="categoryList.list"
+                          option-label="title"
+                          option-value="title"
+                          emit-value
+                          map-options />
               </div>
               <div class="col-md-4 q-pa-sm">
-                <q-select
-                  v-model="selectedSubcategory"
-                  label="درس"
-                  outlined
-                  dense
-                  :options="notExistingSubcategories(subGroup)"
-                  option-label="title"
-                  option-value="id"
-                  emit-value
-                  map-options
-                />
+                <q-select v-model="selectedSubcategory"
+                          label="درس"
+                          outlined
+                          dense
+                          :options="notExistingSubcategories(subGroup)"
+                          option-label="title"
+                          option-value="id"
+                          emit-value
+                          map-options />
               </div>
               <div class="col-md-4 q-pa-sm">
-                <q-btn
-                  class="full-width"
-                  dense
-                  color="blue"
-                  block
-                  @click="addSubcategory(subGroup)"
-                >
+                <q-btn class="full-width"
+                       dense
+                       color="blue"
+                       block
+                       @click="addSubcategory(subGroup)">
                   اضافه کردن درس
                 </q-btn>
               </div>
               <div class="col-md-12 q-pa-sm">
-                <q-markup-table
-                  flat
-                  dense
-                >
+                <q-markup-table flat
+                                dense>
                   <template v-slot:default>
                     <thead class="text-left">
                       <tr>
                         <th>اسم درس</th>
-                        <th
-                          v-for="(subCategory,sIindex) in subGroup.sub_category"
-                          :key="sIindex"
-                        >
+                        <th v-for="(subCategory,sIindex) in subGroup.sub_category"
+                            :key="sIindex">
                           <div class="th-inline-style">
                             <div class="category-title-size">
-                              <q-tooltip
-                                anchor="top middle"
-                                self="top middle"
-                                :offset="[10, 35]"
-                              >
+                              <q-tooltip anchor="top middle"
+                                         self="top middle"
+                                         :offset="[10, 35]">
                                 <span>{{ subCategory.category_title }}</span>
                               </q-tooltip>
                               <p class="small-fontsize">
                                 {{ subCategory.sub_category_title }}
                               </p>
                             </div>
-                            <q-btn
-                              size="12px"
-                              flat
-                              round
-                              icon="mdi-close"
-                              color="red"
-                              @click="deleteSubcategory(subGroup, subCategory.sub_category_title)"
-                            >
-                              <q-tooltip
-                                anchor="top middle"
-                                self="bottom middle"
-                                :offset="[10, 10]"
-                              >
+                            <q-btn size="12px"
+                                   flat
+                                   round
+                                   icon="mdi-close"
+                                   color="red"
+                                   @click="deleteSubcategory(subGroup, subCategory.sub_category_title)">
+                              <q-tooltip anchor="top middle"
+                                         self="bottom middle"
+                                         :offset="[10, 10]">
                                 <span>حذف درس</span>
                               </q-tooltip>
                             </q-btn>
@@ -179,30 +151,22 @@
                         <td width="130px">
                           ضریب درس
                         </td>
-                        <td
-                          v-for="(subCategory,sIindex) in subGroup.sub_category"
-                          :key="sIindex"
-                        >
-                          <q-input
-                            v-model="subCategory.sub_category_zarib"
-                            dense
-                            type="number"
-                          />
+                        <td v-for="(subCategory,sIindex) in subGroup.sub_category"
+                            :key="sIindex">
+                          <q-input v-model="subCategory.sub_category_zarib"
+                                   dense
+                                   type="number" />
                         </td>
                       </tr>
                       <tr>
                         <td width="130px">
                           ضریب دفترچه
                         </td>
-                        <td
-                          v-for="(subCategory,sIindex) in subGroup.sub_category"
-                          :key="sIindex"
-                        >
-                          <q-input
-                            v-model="subCategory.category_zarib"
-                            dense
-                            type="number"
-                          />
+                        <td v-for="(subCategory,sIindex) in subGroup.sub_category"
+                            :key="sIindex">
+                          <q-input v-model="subCategory.category_zarib"
+                                   dense
+                                   type="number" />
                         </td>
                       </tr>
                     </tbody>
@@ -217,14 +181,12 @@
   </div>
   <div class="row">
     <div class="col-md-12 q-pa-sm">
-      <q-btn
-        class="confirm-btn"
-        color="green"
-        dark
-        block
-        x-large
-        @click="save"
-      >
+      <q-btn class="confirm-btn"
+             color="green"
+             dark
+             block
+             x-large
+             @click="save">
         ثبت
       </q-btn>
     </div>
@@ -275,10 +237,6 @@ export default {
       }
     }
   },
-  created () {
-    this.examId = this.$route.params.id
-    this.getData()
-  },
   watch: {
     loading () {
       const that = this
@@ -288,6 +246,10 @@ export default {
         that.$store.dispatch('loading/linearLoading', false)
       }
     }
+  },
+  created () {
+    this.examId = this.$route.params.id
+    this.getData()
   },
   methods: {
     getData () {

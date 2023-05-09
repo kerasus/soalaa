@@ -2,8 +2,7 @@
   <transition v-if="!pageLoading"
               appear
               enter-active-class="animated fadeIn"
-              leave-active-class="animated fadeOut"
-  >
+              leave-active-class="animated fadeOut">
     <q-page-builder v-model:sections="currenSections"
                     v-model:options="pageConfig"
                     :editable="pageBuilderEditable" />
@@ -11,8 +10,7 @@
   <q-inner-loading :showing="pageLoading"
                    label="کمی صبر کنید ...."
                    label-class="text-teal"
-                   label-style="font-size: 1.1em"
-  />
+                   label-style="font-size: 1.1em" />
 </template>
 
 <script>

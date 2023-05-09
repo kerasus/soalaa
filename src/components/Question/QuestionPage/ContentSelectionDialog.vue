@@ -2,26 +2,22 @@
   <q-dialog :model-value="dialog">
     <q-card class="content-selection-card">
       <q-card-section class="row items-center justify-center">
-        <entity-index
-          v-model:value="inputs"
-          v-model:table-selected-values="selected"
-          title="لیست محتوا"
-          show-no-entity-slot
-          :api="api"
-          :table="table"
-          :table-keys="tableKeys"
-          :table-selection-mode="'single'"
-          :item-indicator-key="'id'"
-          :default-layout="true"
-        >
+        <entity-index v-model:value="inputs"
+                      v-model:table-selected-values="selected"
+                      title="لیست محتوا"
+                      show-no-entity-slot
+                      :api="api"
+                      :table="table"
+                      :table-keys="tableKeys"
+                      :table-selection-mode="'single'"
+                      :item-indicator-key="'id'"
+                      :default-layout="true">
           <template #entity-index-table-cell="{inputData}">
             <template v-if="inputData.col.name === 'photo'">
-              <q-img
-                :src="inputData.col.value"
-                class="content-photo"
-                spinner-color="primary"
-                spinner-size="82px"
-              />
+              <q-img :src="inputData.col.value"
+                     class="content-photo"
+                     spinner-color="primary"
+                     spinner-size="82px" />
             </template>
           </template>
         </entity-index>

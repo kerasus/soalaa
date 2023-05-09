@@ -1,46 +1,35 @@
 <template>
-  <div
-    class="profile-card"
-  >
-    <q-img
-      style="background-color: #e8e8e8;"
-      :src="user.photo"
-      width="300px"
-      height="300px"
-      dark
-    >
-    </q-img>
-    <q-btn
-      style="letter-spacing: inherit;"
-      href="https://alaatv.com/"
-      large
-      dark
-      block
-      color="amber-7"
-    >
+  <div class="profile-card">
+    <q-img style="background-color: #e8e8e8;"
+           :src="user.photo"
+           width="300px"
+           height="300px"
+           dark />
+    <q-btn style="letter-spacing: inherit;"
+           href="https://alaatv.com/"
+           large
+           dark
+           block
+           color="amber-7">
       آلاء
     </q-btn>
-    <q-btn
-      style="letter-spacing: inherit;"
-      :to="{ name: 'dashboard' }"
-      large
-      dark
-      tile
-      block
-      color="orange"
-      elevation="0"
-    >
+    <q-btn style="letter-spacing: inherit;"
+           :to="{ name: 'dashboard' }"
+           large
+           dark
+           tile
+           block
+           color="orange"
+           elevation="0">
       سه آ
     </q-btn>
-    <q-btn
-      style="letter-spacing: inherit;"
-      large
-      dark
-      tile
-      block
-      color="red"
-      @click="logout"
-    >
+    <q-btn style="letter-spacing: inherit;"
+           large
+           dark
+           tile
+           block
+           color="red"
+           @click="logout">
       خروج
     </q-btn>
   </div>

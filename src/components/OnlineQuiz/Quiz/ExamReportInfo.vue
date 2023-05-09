@@ -16,71 +16,51 @@
           <!--            </div>-->
           <!--          </div>-->
           <div class="col-12">
-            <q-input
-              v-model="exam.report_config.maximum_question_answered"
-              type="number"
-              label="maximum_question_answered"
-            />
+            <q-input v-model="exam.report_config.maximum_question_answered"
+                     type="number"
+                     label="maximum_question_answered" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.include_abnormal"
-              label="include_abnormal"
-            />
+            <q-checkbox v-model="exam.report_config.include_abnormal"
+                        label="include_abnormal" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.include_unranked"
-              label="include_unranked"
-            />
+            <q-checkbox v-model="exam.report_config.include_unranked"
+                        label="include_unranked" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.make_report_for_before_delay"
-              label="make_report_for_before_delay"
-            />
+            <q-checkbox v-model="exam.report_config.make_report_for_before_delay"
+                        label="make_report_for_before_delay" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.make_report_for_remaining_only"
-              label="make_report_for_remaining_only"
-            />
+            <q-checkbox v-model="exam.report_config.make_report_for_remaining_only"
+                        label="make_report_for_remaining_only" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.temp_exams_in_exam_interval"
-              label="temp_exams_in_exam_interval"
-            />
+            <q-checkbox v-model="exam.report_config.temp_exams_in_exam_interval"
+                        label="temp_exams_in_exam_interval" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.consider_negative_point"
-              label="consider_negative_point"
-            />
+            <q-checkbox v-model="exam.report_config.consider_negative_point"
+                        label="consider_negative_point" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.populate_school_ranking"
-              label="populate_school_ranking"
-            />
+            <q-checkbox v-model="exam.report_config.populate_school_ranking"
+                        label="populate_school_ranking" />
           </div>
           <div class="col-12">
-            <q-input
-              v-model="exam.report_config.right_answer_weight"
-              type="number"
-              label="right_answer_weight"
-            />
+            <q-input v-model="exam.report_config.right_answer_weight"
+                     type="number"
+                     label="right_answer_weight" />
           </div>
         </div>
         <div class="row">
           <div class="col">
             <div class="text-center">
-              <q-btn
-                :disabled="exam.loading"
-                :loading="exam.loading"
-                elevation="2"
-                @click="save"
-              >
+              <q-btn :disabled="exam.loading"
+                     :loading="exam.loading"
+                     elevation="2"
+                     @click="save">
                 ثبت
               </q-btn>
             </div>

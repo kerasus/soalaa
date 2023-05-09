@@ -1,46 +1,36 @@
 <template>
   <div>
-    <entity-show
-      v-model:value="inputs"
-      title="اطلاعات آزمون"
-      :api="api"
-      :entity-id-key="entityIdKey"
-      :entity-param-key="entityParamKey"
-      :edit-route-name="editRouteName"
-      :index-route-name="indexRouteName"
-      :copy-on-click="true"
-      @onCopyToClipboard="onCopyToClipboard"
-    >
+    <entity-show v-model:value="inputs"
+                 title="اطلاعات آزمون"
+                 :api="api"
+                 :entity-id-key="entityIdKey"
+                 :entity-param-key="entityParamKey"
+                 :edit-route-name="editRouteName"
+                 :index-route-name="indexRouteName"
+                 :copy-on-click="true"
+                 @onCopyToClipboard="onCopyToClipboard">
       <template #after-form-builder>
-        <div
-          v-for="(category , index) in inputs[examCategoriesIndex].value"
-          :key="index"
-          class="row"
-        >
-          <q-select
-            v-model="category.title"
-            class="q-pa-md col-md-4"
-            :value="category.id"
-            label="دفترچه"
-            :options="inputs[examCategoriesIndex].value"
-            option-value="title"
-            option-label="title"
-            emit-value
-            map-options
-            disable
-          />
-          <q-input
-            v-model="category.order"
-            class="q-pa-md col-md-3"
-            label="ترتیب"
-            disable
-          />
-          <q-input
-            v-model="category.time"
-            class="q-pa-md col-md-3"
-            label="زمان"
-            disable
-          />
+        <div v-for="(category , index) in inputs[examCategoriesIndex].value"
+             :key="index"
+             class="row">
+          <q-select v-model="category.title"
+                    class="q-pa-md col-md-4"
+                    :value="category.id"
+                    label="دفترچه"
+                    :options="inputs[examCategoriesIndex].value"
+                    option-value="title"
+                    option-label="title"
+                    emit-value
+                    map-options
+                    disable />
+          <q-input v-model="category.order"
+                   class="q-pa-md col-md-3"
+                   label="ترتیب"
+                   disable />
+          <q-input v-model="category.time"
+                   class="q-pa-md col-md-3"
+                   label="زمان"
+                   disable />
         </div>
       </template>
     </entity-show>
@@ -103,6 +93,14 @@ export default {
       ]
     }
   },
+  computed: {
+    examCategoriesIndex () {
+      return this.inputs.findIndex(item => item.name === 'categories')
+    }
+  },
+  created () {
+    this.api += '/' + this.$route.params.id
+  },
   methods: {
     onCopyToClipboard (data) {
       this.$q.notify({
@@ -135,14 +133,6 @@ export default {
     getRemoveMessage (row) {
       const title = row.title
       return 'آیا از حذف ' + title + ' اطمینان دارید؟'
-    }
-  },
-  created () {
-    this.api += '/' + this.$route.params.id
-  },
-  computed: {
-    examCategoriesIndex () {
-      return this.inputs.findIndex(item => item.name === 'categories')
     }
   }
 }

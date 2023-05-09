@@ -31,28 +31,20 @@
   <div v-else
        class="exam-info-component">
     <div class="exam-info-form">
-      <entity-crud-form-builder
-        ref="EntityCrudFormBuilder"
-        :key="formBuilderCrud"
-        v-model:value="inputList"
-      />
+      <entity-crud-form-builder ref="EntityCrudFormBuilder"
+                                :key="formBuilderCrud"
+                                v-model:value="inputList" />
     </div>
     <div class="exam-info-buttons">
-      <div
-        class="exam-info-button back-button"
-        @click="cancelExam"
-      >
+      <div class="exam-info-button back-button"
+           @click="cancelExam">
         لغو
       </div>
-      <div
-        class="exam-info-button next-button"
-        @click="goToNextStep"
-      >
+      <div class="exam-info-button next-button"
+           @click="goToNextStep">
         مرحله بعد
-        <q-icon
-          class="next-button-icon"
-          name="isax:arrow-left"
-        />
+        <q-icon class="next-button-icon"
+                name="isax:arrow-left" />
       </div>
     </div>
   </div>
@@ -245,6 +237,12 @@ export default {
       this.loadExamData()
     }
   },
+  mounted() {
+    if (this.exam.id) {
+      this.loadExamData(true)
+    }
+    this.forceRender()
+  },
   methods: {
     loadSelectInputOptions (inputName, options) {
       const inputIndex = this.inputList.findIndex(input => input.name === inputName)
@@ -325,12 +323,6 @@ export default {
     forceRender() {
       this.formBuilderCrud += 1
     }
-  },
-  mounted() {
-    if (this.exam.id) {
-      this.loadExamData(true)
-    }
-    this.forceRender()
   }
 }
 </script>

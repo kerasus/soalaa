@@ -11,8 +11,7 @@
         <div class="log-text">
           {{item.action}}
           <span v-if="item.before"
-                class="flex q-my-xs"
-          >
+                class="flex q-my-xs">
             <br>
             از
             {{item.before}}
@@ -49,6 +48,9 @@ export default {
       departmentStatus: []
     }
   },
+  created() {
+    this.initStatusData()
+  },
   methods: {
     initStatusData() {
       this.departmentStatus = [
@@ -81,9 +83,6 @@ export default {
 
       return status.color
     }
-  },
-  created() {
-    this.initStatusData()
   }
 }
 </script>

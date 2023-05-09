@@ -1,14 +1,11 @@
 <template>
-  <div
-    v-intersection="inView"
-    class="question-field"
-  >
+  <div v-intersection="inView"
+       class="question-field">
     <q-card v-if="considerActiveCategory && !source.in_active_category && !showWithAnswer"
             class="alert-sheet shadow-2"
             :class="currentQuestion.id === source.id ? 'red-sheet' : 'orange-sheet'"
             rounded
-            dark
-    >
+            dark>
       <q-card-section class="alert-sheet-text">
         (
         سوال شماره
@@ -20,110 +17,82 @@
     </q-card>
     <div v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || showWithAnswer"
          class="question-box"
-         :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
-    >
+         :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}">
       <div class="question-head">
-        <p
-          :id="'question' + source.id"
-          class="question-body"
-          :class="{ ltr: isRtl }"
-        >
-          <vue-katex
-            :input="(source.index + 1) + ') ' + source.statement"
-          />
+        <p :id="'question' + source.id"
+           class="question-body"
+           :class="{ ltr: isRtl }">
+          <vue-katex :input="(source.index + 1) + ') ' + source.statement" />
         </p>
-        <div
-          class="question-icons"
-          :style="{ float: isRtlString ? 'left' : 'right' }"
-        >
-          <q-btn
-            v-if="getChoiceStatus() !== 'o'"
-            text-color="grey"
-            icon="mdi-checkbox-blank-circle-outline"
-            flat
-            fab-mini
-            :disable="showWithAnswer"
-            @click="changeStatus(source.id, 'o')"
-          />
-          <q-btn
-            v-else
-            icon="mdi-checkbox-blank-circle"
-            text-color="yellow"
-            flat
-            fab-mini
-            :disable="showWithAnswer"
-            @click="changeStatus(source.id, 'o')"
-          />
-          <q-btn
-            v-if="getChoiceStatus() === 'x'"
-            text-color="red"
-            icon="mdi-close"
-            flat
-            fab-mini
-            :disable="showWithAnswer"
-            @click="changeStatus(source.id ,'x')"
-          />
-          <q-btn
-            v-else
-            text-color="grey"
-            icon="mdi-close"
-            flat
-            fab-mini
-            :disable="showWithAnswer"
-            @click="changeStatus(source.id ,'x')"
-          />
-          <q-btn
-            v-if="getChoiceBookmark()"
-            text-color="blue"
-            icon="mdi-bookmark"
-            flat
-            fab-mini
-            :disable="showWithAnswer"
-            @click="changeBookmark(source.id)"
-          />
-          <q-btn
-            v-else
-            text-color="grey"
-            icon="mdi-bookmark-outline"
-            flat
-            fab-mini
-            :disable="showWithAnswer"
-            @click="changeBookmark(source.id)"
-          />
+        <div class="question-icons"
+             :style="{ float: isRtlString ? 'left' : 'right' }">
+          <q-btn v-if="getChoiceStatus() !== 'o'"
+                 text-color="grey"
+                 icon="mdi-checkbox-blank-circle-outline"
+                 flat
+                 fab-mini
+                 :disable="showWithAnswer"
+                 @click="changeStatus(source.id, 'o')" />
+          <q-btn v-else
+                 icon="mdi-checkbox-blank-circle"
+                 text-color="yellow"
+                 flat
+                 fab-mini
+                 :disable="showWithAnswer"
+                 @click="changeStatus(source.id, 'o')" />
+          <q-btn v-if="getChoiceStatus() === 'x'"
+                 text-color="red"
+                 icon="mdi-close"
+                 flat
+                 fab-mini
+                 :disable="showWithAnswer"
+                 @click="changeStatus(source.id ,'x')" />
+          <q-btn v-else
+                 text-color="grey"
+                 icon="mdi-close"
+                 flat
+                 fab-mini
+                 :disable="showWithAnswer"
+                 @click="changeStatus(source.id ,'x')" />
+          <q-btn v-if="getChoiceBookmark()"
+                 text-color="blue"
+                 icon="mdi-bookmark"
+                 flat
+                 fab-mini
+                 :disable="showWithAnswer"
+                 @click="changeBookmark(source.id)" />
+          <q-btn v-else
+                 text-color="grey"
+                 icon="mdi-bookmark-outline"
+                 flat
+                 fab-mini
+                 :disable="showWithAnswer"
+                 @click="changeBookmark(source.id)" />
         </div>
       </div>
       <q-list class="choices-box row">
-        <q-item
-          v-for="(choice, index) in source.choices.list"
-          :key="choice.id"
-          class="choices"
-          :class="choiceClass"
-        >
-          <q-item-section
-            ref="choices"
-            class="choice"
-            :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
-            @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
-          >
+        <q-item v-for="(choice, index) in source.choices.list"
+                :key="choice.id"
+                class="choices"
+                :class="choiceClass">
+          <q-item-section ref="choices"
+                          class="choice"
+                          :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
+                          @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})">
             <div class="choice-inside">
-              <q-icon
-                class="check-icon col"
-                color="green"
-                size="20px"
-                name="check"
-              />
-              <vue-katex
-                :input="(choiceNumber[index]) + choice.title"
-                :ltr="isLtrQuestion"
-              />
+              <q-icon class="check-icon col"
+                      color="green"
+                      size="20px"
+                      name="check" />
+              <vue-katex :input="(choiceNumber[index]) + choice.title"
+                         :ltr="isLtrQuestion" />
             </div>
           </q-item-section>
         </q-item>
       </q-list>
       <div v-if="source.descriptive_answer">
         <p class="answer-body"
-           :class="{ ltr: isRtl }"
-        >
+           :class="{ ltr: isRtl }">
           <vue-katex :input="'پاسخ تشریحی) ' + source.descriptive_answer" />
         </p>
       </div>
@@ -177,8 +146,6 @@ export default {
       }
     }
   },
-  created () {
-  },
   computed: {
     isLtrQuestion () {
       const string = this.source.statement
@@ -215,6 +182,8 @@ export default {
       }
       return 'col-md-3'
     }
+  },
+  created () {
   },
   mounted () {
     this.observer = new IntersectionObserver(this.intersectionObserver, { threshold: [0.7, 0.75, 0.8] })

@@ -16,17 +16,15 @@
     <!--        dense-->
     <!--      />-->
     <!--    </div>-->
-    <q-pagination
-      ref="pagination"
-      v-model="localCurrentPage"
-      input
-      direction-links
-      color="black"
-      :max="meta.last_page"
-      :max-pages="10"
-      :disable="disable"
-      @update:model-value="updatePage"
-    />
+    <q-pagination ref="pagination"
+                  v-model="localCurrentPage"
+                  input
+                  direction-links
+                  color="black"
+                  :max="meta.last_page"
+                  :max-pages="10"
+                  :disable="disable"
+                  @update:model-value="updatePage" />
   </div>
 </template>
 

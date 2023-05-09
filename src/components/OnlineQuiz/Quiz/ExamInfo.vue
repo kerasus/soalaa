@@ -1,89 +1,63 @@
 <template>
-  <div
-    v-if="examInfo"
-    class="exam-info-body"
-  >
-    <q-input
-      v-model="examInfo.title"
-      :disable="show"
-      label-color="grey-8"
-      label="عنوان"
-    />
+  <div v-if="examInfo"
+       class="exam-info-body">
+    <q-input v-model="examInfo.title"
+             :disable="show"
+             label-color="grey-8"
+             label="عنوان" />
     <br>
-    <q-select
-      v-model="typeValue"
-      :options="types"
-      emit-value
-      map-options
-      :disable="show"
-      label-color="grey-8"
-      label="انتخاب نوع آزمون"
-    />
+    <q-select v-model="typeValue"
+              :options="types"
+              emit-value
+              map-options
+              :disable="show"
+              label-color="grey-8"
+              label="انتخاب نوع آزمون" />
     <br>
     <div class="date-part">
       <p class="date-label">زمان شروع:</p>
-      <q-input
-        v-model="dateTime.startDate"
-        filled
-        mask="date"
-        :disable="show"
-      >
+      <q-input v-model="dateTime.startDate"
+               filled
+               mask="date"
+               :disable="show">
         <template v-slot:prepend>
-          <q-icon
-            name="event"
-            class="cursor-pointer"
-          >
-            <q-popup-proxy
-              ref="qDateProxy"
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-date
-                v-model="dateTime.startDate"
-                mask="YYYY-MM-DD"
-                calendar="persian"
-                today-btn
-              >
+          <q-icon name="event"
+                  class="cursor-pointer">
+            <q-popup-proxy ref="qDateProxy"
+                           transition-show="scale"
+                           transition-hide="scale">
+              <q-date v-model="dateTime.startDate"
+                      mask="YYYY-MM-DD"
+                      calendar="persian"
+                      today-btn>
                 <div class="row items-center justify-end">
-                  <q-btn
-                    v-close-popup
-                    label="Close"
-                    color="primary"
-                    flat
-                  />
+                  <q-btn v-close-popup
+                         label="Close"
+                         color="primary"
+                         flat />
                 </div>
               </q-date>
             </q-popup-proxy>
           </q-icon>
         </template>
       </q-input>
-      <q-input
-        v-model="dateTime.startTime"
-        filled
-        mask="fulltime"
-        :disable="show"
-      >
+      <q-input v-model="dateTime.startTime"
+               filled
+               mask="fulltime"
+               :disable="show">
         <template v-slot:append>
-          <q-icon
-            name="access_time"
-            class="cursor-pointer"
-          >
-            <q-popup-proxy
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-time
-                v-model="dateTime.startTime"
-                mask="HH:mm:ss"
-                format24h
-              >
+          <q-icon name="access_time"
+                  class="cursor-pointer">
+            <q-popup-proxy transition-show="scale"
+                           transition-hide="scale">
+              <q-time v-model="dateTime.startTime"
+                      mask="HH:mm:ss"
+                      format24h>
                 <div class="row items-center justify-end">
-                  <q-btn
-                    v-close-popup
-                    label="Close"
-                    color="primary"
-                    flat
-                  />
+                  <q-btn v-close-popup
+                         label="Close"
+                         color="primary"
+                         flat />
                 </div>
               </q-time>
             </q-popup-proxy>
@@ -94,66 +68,47 @@
     <br>
     <div class="date-part">
       <p class="date-label">زمان پایان:</p>
-      <q-input
-        v-model="dateTime.finishDate"
-        filled
-        mask="date"
-        :disable="show"
-      >
+      <q-input v-model="dateTime.finishDate"
+               filled
+               mask="date"
+               :disable="show">
         <template v-slot:prepend>
-          <q-icon
-            name="event"
-            class="cursor-pointer"
-          >
-            <q-popup-proxy
-              ref="qDateProxy"
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-date
-                v-model="dateTime.finishDate"
-                calendar="persian"
-                mask="YYYY-MM-DD"
-              >
+          <q-icon name="event"
+                  class="cursor-pointer">
+            <q-popup-proxy ref="qDateProxy"
+                           transition-show="scale"
+                           transition-hide="scale">
+              <q-date v-model="dateTime.finishDate"
+                      calendar="persian"
+                      mask="YYYY-MM-DD">
                 <div class="row items-center justify-end">
-                  <q-btn
-                    v-close-popup
-                    label="Close"
-                    color="primary"
-                    flat
-                  />
+                  <q-btn v-close-popup
+                         label="Close"
+                         color="primary"
+                         flat />
                 </div>
               </q-date>
             </q-popup-proxy>
           </q-icon>
         </template>
       </q-input>
-      <q-input
-        v-model="dateTime.finishTime"
-        filled
-        mask="fulltime"
-        :disable="show"
-      >
+      <q-input v-model="dateTime.finishTime"
+               filled
+               mask="fulltime"
+               :disable="show">
         <template v-slot:append>
-          <q-icon
-            name="access_time"
-            class="cursor-pointer"
-          >
-            <q-popup-proxy
-              transition-show="scale"
-              transition-hide="scale">
-              <q-time
-                v-model="dateTime.finishTime"
-                mask="HH:mm:ss"
-                format24h
-              >
+          <q-icon name="access_time"
+                  class="cursor-pointer">
+            <q-popup-proxy transition-show="scale"
+                           transition-hide="scale">
+              <q-time v-model="dateTime.finishTime"
+                      mask="HH:mm:ss"
+                      format24h>
                 <div class="row items-center justify-end">
-                  <q-btn
-                    v-close-popup
-                    label="Close"
-                    color="primary"
-                    flat
-                  />
+                  <q-btn v-close-popup
+                         label="Close"
+                         color="primary"
+                         flat />
                 </div>
               </q-time>
             </q-popup-proxy>
@@ -162,55 +117,41 @@
       </q-input>
     </div>
     <br>
-    <q-input
-      v-model="examInfo.delay_time"
-      type="number"
-      :disable="show"
-      label-color="grey-8"
-      label="زمان تاخیر (دقیقه)"
-    />
+    <q-input v-model="examInfo.delay_time"
+             type="number"
+             :disable="show"
+             label-color="grey-8"
+             label="زمان تاخیر (دقیقه)" />
     <br>
     <div>
-      <q-checkbox
-        v-model="examInfo.enable"
-        class="options-check-box"
-        label="فعال"
-        :disable="show"
-      />
-      <q-checkbox
-        v-model="examInfo.is_free"
-        class="options-check-box"
-        label="رایگان"
-        :disable="show"
-      />
+      <q-checkbox v-model="examInfo.enable"
+                  class="options-check-box"
+                  label="فعال"
+                  :disable="show" />
+      <q-checkbox v-model="examInfo.is_free"
+                  class="options-check-box"
+                  label="رایگان"
+                  :disable="show" />
       <br>
-      <q-checkbox
-        v-model="examInfo.is_register_open"
-        class="options-check-box"
-        label="ثبت نام باز است."
-        :disable="show"
-      />
+      <q-checkbox v-model="examInfo.is_register_open"
+                  class="options-check-box"
+                  label="ثبت نام باز است."
+                  :disable="show" />
       <br>
-      <q-checkbox
-        v-model="examInfo.is_open"
-        class="options-check-box"
-        label="شرکت در آزمون باز است."
-        :disable="show"
-      />
+      <q-checkbox v-model="examInfo.is_open"
+                  class="options-check-box"
+                  label="شرکت در آزمون باز است."
+                  :disable="show" />
       <br>
-      <q-checkbox
-        v-model="examInfo.confirm"
-        class="options-check-box"
-        label="تولید خودکار کارنامه"
-        :disable="show"
-      />
+      <q-checkbox v-model="examInfo.confirm"
+                  class="options-check-box"
+                  label="تولید خودکار کارنامه"
+                  :disable="show" />
       <br>
-      <q-checkbox
-        v-model="examInfo.generate_questions_automatically"
-        class="options-check-box"
-        label="تولید خودکار سوال"
-        :disable="show"
-      />
+      <q-checkbox v-model="examInfo.generate_questions_automatically"
+                  class="options-check-box"
+                  label="تولید خودکار سوال"
+                  :disable="show" />
     </div>
     <br>
     <div v-if="!examInfo.id">
@@ -218,46 +159,38 @@
       <br>
       <div class="row">
         <div class="col-6">
-          <q-select
-            v-model="selectedCategory"
-            class="create-mode-category"
-            :options="categoryTitles"
-            emit-value
-            map-options
-            label="category"
-            :disable="show"
-          />
+          <q-select v-model="selectedCategory"
+                    class="create-mode-category"
+                    :options="categoryTitles"
+                    emit-value
+                    map-options
+                    label="category"
+                    :disable="show" />
         </div>
         <div class="col-6">
-          <q-input
-            v-model="selectedCategoryTime"
-            class="create-mode-category"
-            type="number"
-            label-color="grey-8"
-            label="زمان"
-            :disable="show"
-          />
+          <q-input v-model="selectedCategoryTime"
+                   class="create-mode-category"
+                   type="number"
+                   label-color="grey-8"
+                   label="زمان"
+                   :disable="show" />
         </div>
       </div>
       <br>
       <div class="row">
         <div class="col-6">
-          <q-input
-            v-model="selectedCategoryOrder"
-            class="create-mode-category"
-            type="number"
-            label-color="grey-8"
-            label="ترتیب"
-            :disable="show"
-          />
+          <q-input v-model="selectedCategoryOrder"
+                   class="create-mode-category"
+                   type="number"
+                   label-color="grey-8"
+                   label="ترتیب"
+                   :disable="show" />
         </div>
         <div class="col-6 category-btn-parent">
-          <q-btn
-            class="category-btn"
-            label="اضافه کردن category"
-            :disable="show"
-            @click="addCategory"
-          />
+          <q-btn class="category-btn"
+                 label="اضافه کردن category"
+                 :disable="show"
+                 @click="addCategory" />
         </div>
       </div>
       <br>
@@ -265,58 +198,47 @@
       <br>
       <q-separator inset />
       <br>
-      <div
-        v-for="item in examInfo.categories.list"
-        :key="item.id"
-        class="row"
-      >
+      <div v-for="item in examInfo.categories.list"
+           :key="item.id"
+           class="row">
         <div class="col-5">
-          <q-select
-            v-model="item.title"
-            class="create-mode-category"
-            :options="categoryTitles"
-            label-color="grey-8"
-            label="category"
-            :disable="show"
-          />
+          <q-select v-model="item.title"
+                    class="create-mode-category"
+                    :options="categoryTitles"
+                    label-color="grey-8"
+                    label="category"
+                    :disable="show" />
         </div>
         <div class="col-3">
-          <q-input
-            v-model="item.time"
-            class="create-mode-category"
-            type="number"
-            label-color="grey-8"
-            label="زمان"
-            :disable="show"
-          />
+          <q-input v-model="item.time"
+                   class="create-mode-category"
+                   type="number"
+                   label-color="grey-8"
+                   label="زمان"
+                   :disable="show" />
         </div>
         <div class="col">
-          <q-input
-            v-model="item.order"
-            class="create-mode-category"
-            type="number"
-            label-color="grey-8"
-            label="ترتیب"
-            :disable="show"
-          />
+          <q-input v-model="item.order"
+                   class="create-mode-category"
+                   type="number"
+                   label-color="grey-8"
+                   label="ترتیب"
+                   :disable="show" />
         </div>
         <div class="col">
-          <q-btn
-            flat
-            color="red"
-            icon="close"
-            :disable="show"
-            @click="deleteCategory(item.id)" />
+          <q-btn flat
+                 color="red"
+                 icon="close"
+                 :disable="show"
+                 @click="deleteCategory(item.id)" />
         </div>
       </div>
     </div>
     <br>
     <div class="bottom-btn">
-      <q-btn
-        label="ثبت"
-        :disable="show"
-        @click="createExam"
-      />
+      <q-btn label="ثبت"
+             :disable="show"
+             @click="createExam" />
     </div>
   </div>
 
@@ -352,6 +274,13 @@ export default {
       show: false
     }
   },
+  watch: {
+    typeValue () {
+      const selectedType = this.options.find(option => option.value === this.typeValue)
+      this.examInfo.type_id = selectedType.id
+      return this.examInfo.type_id
+    }
+  },
   mounted () {
     this.showMode()
   },
@@ -360,13 +289,6 @@ export default {
     this.getData()
     this.getOptions()
     this.getCategories()
-  },
-  watch: {
-    typeValue () {
-      const selectedType = this.options.find(option => option.value === this.typeValue)
-      this.examInfo.type_id = selectedType.id
-      return this.examInfo.type_id
-    }
   },
   methods: {
     getData () {

@@ -41,6 +41,10 @@ export default {
       countDown: 0
     }
   },
+  created() {
+    this.getExams()
+    this.countDownTimer()
+  },
   methods: {
     getExams() {
       this.calendarDate = moment(new Date())
@@ -72,10 +76,6 @@ export default {
         }, 1000)
       }
     }
-  },
-  created() {
-    this.getExams()
-    this.countDownTimer()
   }
 }
 </script>

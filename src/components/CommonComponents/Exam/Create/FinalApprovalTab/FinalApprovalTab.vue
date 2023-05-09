@@ -1,10 +1,8 @@
 <template>
-  <div
-    class="main-container ">
+  <div class="main-container ">
     <div class="row">
-      <div
-        :hidden="$q.screen.lt.sm"
-        class="exam-detail-container col-xs-12 col-lg-3">
+      <div :hidden="$q.screen.lt.sm"
+           class="exam-detail-container col-xs-12 col-lg-3">
         <sticky-both-sides :max-width="1440">
           <q-skeleton v-if="exam.loading"
                       width="300px"
@@ -69,12 +67,12 @@
                       </div>
                       <div class="chart-titles">
                         <q-badge class="titles-icon medium"
-                                 rounded></q-badge>
+                                 rounded />
                         <div>متوسط</div>
                       </div>
                       <div class="chart-titles">
                         <q-badge class="titles-icon easy"
-                                 rounded></q-badge>
+                                 rounded />
                         <div>آسان</div>
                       </div>
                     </div>
@@ -86,24 +84,20 @@
                   </div>
                   <div class="row q-col-gutter-sm action-btn">
                     <div class=" confirm-b col-lg-12 col-sm-6">
-                      <q-btn
-                        unelevated
-                        color="primary"
-                        :disable="exam.loading"
-                        class="full-width confirm q-mr-xl"
-                        @click="confirmExam"
-                      >
+                      <q-btn unelevated
+                             color="primary"
+                             :disable="exam.loading"
+                             class="full-width confirm q-mr-xl"
+                             @click="confirmExam">
                         تایید نهایی
                         <span :hidden="$q.screen.lt.lg">و ساخت آزمون</span>
                       </q-btn>
                     </div>
                     <div class="previous-b col-lg-12 col-sm-6">
-                      <q-btn
-                        unelevated
-                        :disable="exam.loading"
-                        class="full-width q-mr-xl previous"
-                        @click="goToPrevious"
-                      >
+                      <q-btn unelevated
+                             :disable="exam.loading"
+                             class="full-width q-mr-xl previous"
+                             @click="goToPrevious">
                         بازگشت
                       </q-btn>
                     </div>
@@ -121,37 +115,31 @@
           <question-item v-if="exam.loading"
                          :question="loadingQuestion" />
           <template v-else-if="exam.questions.list.length > 0">
-            <q-virtual-scroll
-              ref="scroller"
-              :items="exam.questions.list"
-              :virtual-scroll-item-size="450"
-              :virtual-scroll-slice-size="5"
-            >
+            <q-virtual-scroll ref="scroller"
+                              :items="exam.questions.list"
+                              :virtual-scroll-item-size="450"
+                              :virtual-scroll-slice-size="5">
               <template v-slot="{ item , index}">
-                <question-item
-                  :key="item.id"
-                  :question="item"
-                  :questionIndex="index"
-                  :questionsLength="exam.questions.list.length"
-                  pageStrategy="question-bank"
-                  final-approval-mode
-                  @changeOrder="changeSelectedQuestionOrder"
-                  @checkSelect="onClickedCheckQuestionBtn"
-                />
+                <question-item :key="item.id"
+                               :question="item"
+                               :questionIndex="index"
+                               :questionsLength="exam.questions.list.length"
+                               pageStrategy="question-bank"
+                               final-approval-mode
+                               @changeOrder="changeSelectedQuestionOrder"
+                               @checkSelect="onClickedCheckQuestionBtn" />
               </template>
             </q-virtual-scroll>
           </template>
         </div>
       </div>
     </div>
-    <questions-general-info
-      :loading="exam.loading"
-      final-approval-mode
-      :selectedQuestions="exam.questions.list"
-      :examInformation="examInfo"
-      @lastTab="goToPrevious"
-      @nextTab="confirmExam"
-    />
+    <questions-general-info :loading="exam.loading"
+                            final-approval-mode
+                            :selectedQuestions="exam.questions.list"
+                            :examInformation="examInfo"
+                            @lastTab="goToPrevious"
+                            @nextTab="confirmExam" />
   </div>
 </template>
 
@@ -172,7 +160,6 @@ export default {
     Chart,
     QuestionsGeneralInfo
   },
-  emits: ['detachQuestion'],
   props: {
     exam: {
       type: Exam,
@@ -187,31 +174,7 @@ export default {
       default: () => []
     }
   },
-  watch: {
-    'exam.loading': {
-      handler() {
-        this.loadingQuestion.loading = this.exam.loading
-      }
-    },
-    'exam.questions.list': {
-      deep: true,
-      handler(val) {
-        this.reIndexEamQuestions(this.exam.questions.list)
-        this.questions = new QuestionList({ ...this.exam.questions })
-        this.$nextTick(() => {
-          this.setDifficultyLevelsChart()
-          this.replaceTitle()
-        })
-      }
-    }
-  },
-  mounted() {
-    if (!this.exam.loading && this.exam.questions.list.length > 0) {
-      this.setDifficultyLevelsChart()
-      this.replaceTitle()
-      // this.reIndexEamQuestions(this.exam.questions.list)
-    }
-  },
+  emits: ['detachQuestion'],
   data: () => ({
     chartOptions: {
       chart: {
@@ -291,9 +254,6 @@ export default {
       total: 0
     }
   }),
-  created() {
-    this.initPageData()
-  },
   computed: {
     examInfo() {
       return {
@@ -312,6 +272,34 @@ export default {
         easy: this.exam.questions.list.filter(question => parseInt(question.level) === 1).length
       }
     }
+  },
+  watch: {
+    'exam.loading': {
+      handler() {
+        this.loadingQuestion.loading = this.exam.loading
+      }
+    },
+    'exam.questions.list': {
+      deep: true,
+      handler(val) {
+        this.reIndexEamQuestions(this.exam.questions.list)
+        this.questions = new QuestionList({ ...this.exam.questions })
+        this.$nextTick(() => {
+          this.setDifficultyLevelsChart()
+          this.replaceTitle()
+        })
+      }
+    }
+  },
+  mounted() {
+    if (!this.exam.loading && this.exam.questions.list.length > 0) {
+      this.setDifficultyLevelsChart()
+      this.replaceTitle()
+      // this.reIndexEamQuestions(this.exam.questions.list)
+    }
+  },
+  created() {
+    this.initPageData()
   },
   methods: {
     async initPageData() {

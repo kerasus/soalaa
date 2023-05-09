@@ -34,13 +34,10 @@
     </div>
     <div v-else
          class="quiz-page-wrapper">
-      <div
-        class="userExamList"
-        style="font-size: 16px;"
-      >
+      <div class="userExamList"
+           style="font-size: 16px;">
         <div v-if="allExamsList.list.length > 0 || myExams.list.length > 0"
-             class="fit row wrap justify-center items-start content-start"
-        >
+             class="fit row wrap justify-center items-start content-start">
           <div v-if="$q.screen.lt.sm"
                class="col-12">
             <div class="flex justify-start my-exam-btn">
@@ -61,14 +58,12 @@
                 <div class="exam-list-title">
                   آزمون ها
                 </div>
-                <q-tabs
-                  v-model="tab"
-                  color="light1"
-                  class="exam-tabs"
-                  active-class="active-tab"
-                  active-color="secondary"
-                  align="left"
-                >
+                <q-tabs v-model="tab"
+                        color="light1"
+                        class="exam-tabs"
+                        active-class="active-tab"
+                        active-color="secondary"
+                        align="left">
                   <q-tab name="exam"
                          label="آزمون های سه آ" />
                   <q-tab name="myExam"
@@ -78,28 +73,24 @@
                               class="quiz-panels"
                               animated>
                   <q-tab-panel name="exam">
-                    <quiz-list
-                      :key="examPagination"
-                      :pagination="pagination.exam.current_page"
-                      :pageCount="pageCount"
-                      :quiz-type="'exam'"
-                      :exams="allExamsList"
-                      :personal="false"
-                      @onFilter="filterAllExams"
-                      @changePage="paginateList($event,'exam')"
-                    />
+                    <quiz-list :key="examPagination"
+                               :pagination="pagination.exam.current_page"
+                               :pageCount="pageCount"
+                               :quiz-type="'exam'"
+                               :exams="allExamsList"
+                               :personal="false"
+                               @onFilter="filterAllExams"
+                               @changePage="paginateList($event,'exam')" />
                   </q-tab-panel>
                   <q-tab-panel name="myExam">
-                    <quiz-list
-                      :key="myExamPagination"
-                      :pagination="pagination.myExam.current_page"
-                      :pageCount="pageCount"
-                      :quiz-type="'myExam'"
-                      :exams="myExams"
-                      :personal="true"
-                      @onFilter="filterMyExams"
-                      @changePage="paginateList($event,'myExam')"
-                    />
+                    <quiz-list :key="myExamPagination"
+                               :pagination="pagination.myExam.current_page"
+                               :pageCount="pageCount"
+                               :quiz-type="'myExam'"
+                               :exams="myExams"
+                               :personal="true"
+                               @onFilter="filterMyExams"
+                               @changePage="paginateList($event,'myExam')" />
                   </q-tab-panel>
                 </q-tab-panels>
               </div>

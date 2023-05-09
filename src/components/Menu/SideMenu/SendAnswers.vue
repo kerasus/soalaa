@@ -1,41 +1,33 @@
 <template>
-  <div
-    :style="{'width':'240px'}"
-    class="send-answer-box"
-  >
-    <q-btn
-      v-if="quiz.user_exam_id"
-      :color="'#4caf50'"
-      :style="{ backgroundColor: '#4caf50 !important' }"
-      class=" end-exam-btn full-width"
-      :loading="confirmationBtnLoading"
-      :disabled="confirmationBtnLoading"
-      @click="getConfirmation"
-    >
+  <div :style="{'width':'240px'}"
+       class="send-answer-box">
+    <q-btn v-if="quiz.user_exam_id"
+           :color="'#4caf50'"
+           :style="{ backgroundColor: '#4caf50 !important' }"
+           class=" end-exam-btn full-width"
+           :loading="confirmationBtnLoading"
+           :disabled="confirmationBtnLoading"
+           @click="getConfirmation">
       ارسال پاسخنامه
     </q-btn>
-    <q-btn
-      v-if="false && quiz.user_exam_id"
-      :color="'#4caf50'"
-      :style="{ backgroundColor: '#4caf50 !important'}"
-      class=" end-exam-btn full-width"
-      @click="showSendAnswerPhotoDialog"
-    >
+    <q-btn v-if="false && quiz.user_exam_id"
+           :color="'#4caf50'"
+           :style="{ backgroundColor: '#4caf50 !important'}"
+           class=" end-exam-btn full-width"
+           @click="showSendAnswerPhotoDialog">
       آپلود برگه پاسخنامه
     </q-btn>
-    <q-dialog
-      v-model="confirmationBubbleSheet"
-      persistent
-      maximized
-      transition-show="slide-up"
-      transition-hide="slide-down"
-    >
+    <q-dialog v-model="confirmationBubbleSheet"
+              persistent
+              maximized
+              transition-show="slide-up"
+              transition-hide="slide-down">
       <q-card class="">
         <q-bar class="bg-blue text-white q-pa-lg">
           <div>
             پاسخنامه کاربر
           </div>
-          <q-space></q-space>
+          <q-space />
           <q-btn v-close-popup
                  dense
                  flat
@@ -49,18 +41,14 @@
               از ارسال پاسخ ها اطمینان دارید؟
             </q-card-section>
             <q-card-section>
-              <q-btn
-                flat
-                style="color: #585858"
-                @click="confirmationBubbleSheet = false"
-              >
+              <q-btn flat
+                     style="color: #585858"
+                     @click="confirmationBubbleSheet = false">
                 ادامه میدم
               </q-btn>
-              <q-btn
-                flat
-                color="secondary"
-                @click="confirmSendingAllAnswers"
-              >
+              <q-btn flat
+                     color="secondary"
+                     @click="confirmSendingAllAnswers">
                 ثبت میکنم
               </q-btn>
             </q-card-section>
@@ -68,10 +56,8 @@
         </q-card-section>
 
         <q-card-section>
-          <bubble-sheet
-            :info="{ type: 'pasokh-nameh' }"
-            delay-time="0"
-          />
+          <bubble-sheet :info="{ type: 'pasokh-nameh' }"
+                        delay-time="0" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -86,11 +72,11 @@ import { Exam } from 'src/models/Exam'
 
 export default {
   name: 'SendAnswers',
-  mixins: [mixinQuiz],
-  js: [ExamData],
   components: {
     BubbleSheet
   },
+  mixins: [mixinQuiz],
+  js: [ExamData],
   data: () => ({
     confirmationBubbleSheet: false,
     confirmationBtnLoading: false,

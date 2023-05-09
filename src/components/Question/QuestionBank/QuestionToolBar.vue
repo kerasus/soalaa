@@ -1,37 +1,30 @@
 <template>
   <q-card class="question-Bank-ToolBar custom-card">
-    <q-expansion-item
-      expand-icon-toggle
-      expand-icon="isax:arrow-down-1"
-    >
+    <q-expansion-item expand-icon-toggle
+                      expand-icon="isax:arrow-down-1">
       <template v-slot:header>
         <q-card-section class="toolbar-card q-pa-0">
           <div class="row toolbar-card-actions">
             <div class="toolbar-btn">
-              <q-btn
-                class="delete-choices-btn"
-                flat
-                @click=deleteAllChoose()
-              >
+              <q-btn class="delete-choices-btn"
+                     flat
+                     @click=deleteAllChoose()>
                 حذف انتخاب ها
               </q-btn>
               <q-btn class="add-to-btn"
                      flat>
-                <q-icon name="isax:add">
-                </q-icon>
+                <q-icon name="isax:add" />
                 <span>
                   افزودن به
                 </span>
               </q-btn>
             </div>
             <div class="toolbar-checkbox">
-              <q-checkbox
-                v-model="checkbox"
-                class="choices-checkbox"
-                label="انتخاب همه"
-                indeterminate-value="maybe"
-                @click="selectAllQuestions">
-              </q-checkbox>
+              <q-checkbox v-model="checkbox"
+                          class="choices-checkbox"
+                          label="انتخاب همه"
+                          indeterminate-value="maybe"
+                          @click="selectAllQuestions" />
             </div>
             <div class="choices-number">
               {{ this.numberOfQuestions() }}
@@ -47,14 +40,12 @@
               سوالات انتخاب شده:
             </div>
             <q-card-actions class="chosen-question-items">
-              <q-chip
-                v-for="item in countOfSelectedSubCategory"
-                :key="item"
-                class="filter-items"
-                icon-remove="mdi-close"
-                removable
-                @remove="RemoveSelectedChoice(item)"
-              >
+              <q-chip v-for="item in countOfSelectedSubCategory"
+                      :key="item"
+                      class="filter-items"
+                      icon-remove="mdi-close"
+                      removable
+                      @remove="RemoveSelectedChoice(item)">
                 {{ item.title }}: {{ item.selectedQuestionsCount }}
               </q-chip>
             </q-card-actions>
@@ -69,12 +60,12 @@
                 </div>
                 <div class="chart-titles">
                   <q-badge class="titles-icon medium"
-                           rounded></q-badge>
+                           rounded />
                   <div>متوسط</div>
                 </div>
                 <div class="chart-titles">
                   <q-badge class="titles-icon easy"
-                           rounded></q-badge>
+                           rounded />
                   <div>آسان</div>
                 </div>
               </div>
@@ -85,20 +76,16 @@
           </div>
           <div class="question-deActive">
             <div class=" delete-all">
-              <q-btn
-                rounded
-                flat
-                @click=deleteAllChoose()
-              >
+              <q-btn rounded
+                     flat
+                     @click=deleteAllChoose()>
                 حذف انتخاب ها
               </q-btn>
             </div>
             <div class="deactivate-all">
-              <q-btn
-                style="width: 130px"
-                rounded
-                flat
-              >
+              <q-btn style="width: 130px"
+                     rounded
+                     flat>
                 غیر فعال کردن همه
               </q-btn>
             </div>
@@ -111,45 +98,39 @@
                  position="bottom">
     <div class="shapes flex ">
       <div class="circle">
-        <q-btn
-          :style="{'height': '36px' }"
-          class="openDialouge"
-          round
-          :icon="this.ToolbarDialog? 'isax:arrow-down-1' : 'isax:arrow-up-2'"
-          @click="this.ToolbarDialog = !this.ToolbarDialog"
-        />
+        <q-btn :style="{'height': '36px' }"
+               class="openDialouge"
+               round
+               :icon="this.ToolbarDialog? 'isax:arrow-down-1' : 'isax:arrow-up-2'"
+               @click="this.ToolbarDialog = !this.ToolbarDialog" />
       </div>
       <div class="top-style">
         <div class="top-style-right">
-          <div class="near-circle"></div>
+          <div class="near-circle" />
           <div class="near-btn">
-            <div class="near-btn-top"></div>
+            <div class="near-btn-top" />
           </div>
         </div>
         <div class="top-style-left">
           <div class="near-btn">
-            <div class="near-btn-top"></div>
+            <div class="near-btn-top" />
           </div>
-          <div class="near-circle">
-          </div>
+          <div class="near-circle" />
         </div>
       </div>
       <div class="stickyFeatures">
         <div class="toolbar-btn">
           <div class="delete-choices-btn-container">
-            <q-btn
-              class="delete-choices-btn"
-              flat
-              @click=deleteAllChoose()
-            >
+            <q-btn class="delete-choices-btn"
+                   flat
+                   @click=deleteAllChoose()>
               حذف انتخاب ها
             </q-btn>
           </div>
           <div class="add-to-btn-container">
             <q-btn class="add-to-btn"
                    flat>
-              <q-icon name="isax:add">
-              </q-icon>
+              <q-icon name="isax:add" />
               <span>
                 افزودن به
               </span>
@@ -159,12 +140,11 @@
         <div class="toolbar-checkBox-number">
           <div class="toolbar-checkbox-container">
             <div class="toolbar-checkbox">
-              <q-checkbox
-                v-model="selectAllCheckbox"
-                class="choices-checkbox"
-                label="انتخاب همه"
-                name="checkbox"
-                @click="selectAllQuestions" />
+              <q-checkbox v-model="selectAllCheckbox"
+                          class="choices-checkbox"
+                          label="انتخاب همه"
+                          name="checkbox"
+                          @click="selectAllQuestions" />
             </div>
           </div>
           <div class="choices-number-container">
@@ -184,22 +164,19 @@
       <div class="dialogHeader">
         <div class="dialogTitle"> سوالات انتخاب شده:</div>
         <div class="dialogBtn">
-          <q-btn
-            rounded
-            flat>
+          <q-btn rounded
+                 flat>
             غیر فعال کردن همه
           </q-btn>
         </div>
       </div>
       <div class="dialogChip">
-        <q-chip
-          v-for="item in countOfSelectedSubCategory"
-          :key="item"
-          class="filter-items"
-          icon-remove="mdi-close"
-          removable
-          @remove="RemoveSelectedChoice(item)"
-        >
+        <q-chip v-for="item in countOfSelectedSubCategory"
+                :key="item"
+                class="filter-items"
+                icon-remove="mdi-close"
+                removable
+                @remove="RemoveSelectedChoice(item)">
           {{ item.title }}: {{ item.selectedQuestionsCount }}
         </q-chip>
       </div>
@@ -212,12 +189,12 @@
           </div>
           <div class="chart-titles">
             <q-badge class="titles-icon medium"
-                     rounded></q-badge>
+                     rounded />
             <div>متوسط</div>
           </div>
           <div class="chart-titles">
             <q-badge class="titles-icon easy"
-                     rounded></q-badge>
+                     rounded />
             <div>آسان</div>
           </div>
         </div>
@@ -234,8 +211,8 @@ import { Chart } from 'highcharts-vue'
 import { QuestionList } from 'src/models/Question'
 
 export default {
-  components: { highcharts: Chart },
   name: 'QuestionBankToolBar',
+  components: { highcharts: Chart },
   props: {
     selectedQuestions: {
       type: [Array, QuestionList],
@@ -248,6 +225,7 @@ export default {
       }
     }
   },
+  emits: ['selectAllQuestions', 'deleteAllQuestions', 'remove'],
   data () {
     return {
       selectAllCheckbox: false,
@@ -306,16 +284,6 @@ export default {
       }
     }
   },
-  watch: {
-    'questions.list.length': function () {
-      this.setDifficultyLevelsChart()
-      this.numberOfQuestions()
-      this.replaceTitle()
-    }
-  },
-  mounted () {
-    this.questions = new QuestionList(this.selectedQuestions)
-  },
   computed: {
     countOfSelectedSubCategory () {
       const lessons = this.questions.list.filter((v, i, a) => a.findIndex(question => {
@@ -341,7 +309,16 @@ export default {
       }
     }
   },
-  emits: ['selectAllQuestions', 'deleteAllQuestions', 'remove'],
+  watch: {
+    'questions.list.length': function () {
+      this.setDifficultyLevelsChart()
+      this.numberOfQuestions()
+      this.replaceTitle()
+    }
+  },
+  mounted () {
+    this.questions = new QuestionList(this.selectedQuestions)
+  },
   created () {
     this.setDifficultyLevelsChart()
     this.replaceTitle()

@@ -11,14 +11,12 @@
                         width="150px" />
           </template>
         </div>
-        <q-btn
-          class="q-mx-sm float-right"
-          round
-          dark-percentage
-          color="primary"
-          icon="isax:arrow-left-2"
-          @click="goToCategoryList"
-        >
+        <q-btn class="q-mx-sm float-right"
+               round
+               dark-percentage
+               color="primary"
+               icon="isax:arrow-left-2"
+               @click="goToCategoryList">
           <q-tooltip anchor="top middle"
                      self="bottom middle"
                      :offset="[10, 10]">
@@ -43,51 +41,40 @@
           <tbody>
             <template v-if="!subcategoryList.loading">
               <template v-if="subcategoryList.length">
-                <tr
-                  v-for="subcategory in subcategoryList"
-                  :key="subcategory.id"
-                >
+                <tr v-for="subcategory in subcategoryList"
+                    :key="subcategory.id">
                   <td>{{ subcategory.title }}</td>
                   <td class="actionsColumn">
                     <div>
-                      <q-input
-                        v-model="subcategory.order"
-                        type="number"
-                        :loading="subcategory.loading"
-                        :disabled="subcategory.loading"
-                        label="ترتیب درس"
-                        hide-details="auto"
-                        class="mb-2"
-                      >
-                        <q-btn
-                          class="q-mx-sm float-right"
-                          size="1px"
-                          fab-mini
-                          dark-percentage
-                          color="primary"
-                          flat
-                          @click="updateOrder(subcategory)"
-                        >
-                          <q-icon
-                            name="mdi-pencil"
-                            size="sm"
-                          />
+                      <q-input v-model="subcategory.order"
+                               type="number"
+                               :loading="subcategory.loading"
+                               :disabled="subcategory.loading"
+                               label="ترتیب درس"
+                               hide-details="auto"
+                               class="mb-2">
+                        <q-btn class="q-mx-sm float-right"
+                               size="1px"
+                               fab-mini
+                               dark-percentage
+                               color="primary"
+                               flat
+                               @click="updateOrder(subcategory)">
+                          <q-icon name="mdi-pencil"
+                                  size="sm" />
                         </q-btn>
                       </q-input>
                     </div>
                     <div class="row q-pt-sm">
                       <div class="col-6">
-                        <q-btn
-                          :style="{ 'width':'90%' , 'height':'90%' }"
-                          class="q-mx-sm"
-                          size="12px"
-                          dark-percentage
-                          color="green"
-                          @click="redirectToSubCategoryQuestions(subcategory.id)">
-                          <q-icon
-                            name="mdi-notebook-outline"
-                            size="sm"
-                          />
+                        <q-btn :style="{ 'width':'90%' , 'height':'90%' }"
+                               class="q-mx-sm"
+                               size="12px"
+                               dark-percentage
+                               color="green"
+                               @click="redirectToSubCategoryQuestions(subcategory.id)">
+                          <q-icon name="mdi-notebook-outline"
+                                  size="sm" />
                           <q-tooltip anchor="top middle"
                                      self="bottom middle"
                                      :offset="[10, 10]">
@@ -105,12 +92,9 @@
                                       params: {
                                         subcategory_id: subcategory.id,
                                         examId: examId
-                                      }}"
-                        >
-                          <q-icon
-                            name="mdi-video"
-                            size="sm"
-                          />
+                                      }}">
+                          <q-icon name="mdi-video"
+                                  size="sm" />
                           <q-tooltip anchor="top middle"
                                      self="bottom middle"
                                      :offset="[10, 10]">
@@ -130,8 +114,7 @@
             </template>
             <template v-else>
               <tr v-for="counter in [1, 2, 3, 4, 5]"
-                  :key="counter"
-              >
+                  :key="counter">
                 <td>
                   <q-skeleton type="text" />
                 </td>
@@ -167,17 +150,13 @@ import { QuestCategoryList } from 'src/models/QuestCategory'
 
 export default {
   name: 'ExamSubCategoryList',
+  mixins: [mixinAuth, mixinQuiz, mixinGetQuizData],
   data: () => ({
     subcategoryList: new QuestSubcategoryList(),
     categoryList: new QuestCategoryList(),
     examTitle: '',
     exam: new Exam()
   }),
-  mixins: [mixinAuth, mixinQuiz, mixinGetQuizData],
-  created () {
-    this.setExam()
-    this.loadLessons()
-  },
   computed: {
     examId () {
       return this.$route.params.exam_id
@@ -185,6 +164,10 @@ export default {
     categoryId () {
       return this.$route.params.category_id
     }
+  },
+  created () {
+    this.setExam()
+    this.loadLessons()
   },
   methods: {
     goToCategoryList () {

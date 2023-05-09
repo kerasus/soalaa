@@ -3,12 +3,10 @@
     <nav-bar @onClickRegisterBtn="scrollToExamsTable"
              @onClickConditionsBtn="scrollToExamRules"
              @onClickFaqsBtn="scrollToFaqs"
-             @onClickUserExamListBtn="goToUserExamList"
-    />
+             @onClickUserExamListBtn="goToUserExamList" />
     <landing-header @onClickRegisterBtn="scrollToExamsTable" />
     <why class="landing-width" />
-    <banner
-      class="landing-width" />
+    <banner class="landing-width" />
     <features class="landing-width" />
     <submit-table ref="SubmitTable"
                   class="landing-width" />

@@ -26,14 +26,10 @@ const dropAreaHTML = `
 
 export default {
   name: 'UploadImage',
-  data () {
-    return {
-      pond: FilePond.create({
-        allowMultiple: true,
-        name: 'filepond',
-        labelIdle: dropAreaHTML,
-        instantUpload: false
-      })
+  inject: {
+    question: {
+      from: 'providedQuestion', // this is optional if using the same key for injection
+      default: new Question()
     }
   },
   props: {
@@ -46,6 +42,16 @@ export default {
       type: String,
       default: 'آپلود عکس',
       required: false
+    }
+  },
+  data () {
+    return {
+      pond: FilePond.create({
+        allowMultiple: true,
+        name: 'filepond',
+        labelIdle: dropAreaHTML,
+        instantUpload: false
+      })
     }
   },
   mounted () {
@@ -63,12 +69,6 @@ export default {
           load(myBlob)
         })
       })
-    }
-  },
-  inject: {
-    question: {
-      from: 'providedQuestion', // this is optional if using the same key for injection
-      default: new Question()
     }
   }
 }

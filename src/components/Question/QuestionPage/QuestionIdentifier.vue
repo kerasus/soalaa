@@ -5,70 +5,60 @@
       <div class="detail-box col-3"
            style="padding-right:0;">
         <div class="detail-box-title">مرجع</div>
-        <q-select
-          v-model="questionAuthor"
-          borderless
-          option-value="id"
-          option-label="value"
-          use-input
-          use-chips
-          multiple
-          :options="questionAuthorsList"
-          :disable="!editable"
-        />
+        <q-select v-model="questionAuthor"
+                  borderless
+                  option-value="id"
+                  option-label="value"
+                  use-input
+                  use-chips
+                  multiple
+                  :options="questionAuthorsList"
+                  :disable="!editable" />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title">تاریخ تالیف</div>
-        <q-select
-          v-model="authorshipDate"
-          borderless
-          option-value="id"
-          option-label="value"
-          :options="authorshipDatesList"
-          use-input
-          use-chips
-          multiple
-          :disable="!editable"
-        />
+        <q-select v-model="authorshipDate"
+                  borderless
+                  option-value="id"
+                  option-label="value"
+                  :options="authorshipDatesList"
+                  use-input
+                  use-chips
+                  multiple
+                  :disable="!editable" />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title">درجه سختی</div>
-        <q-select
-          v-model="questionLevel"
-          option-value="id"
-          option-label="value"
-          borderless
-          :options="levels"
-          emit-value
-          map-options
-          :disable="!editable"
-        />
+        <q-select v-model="questionLevel"
+                  option-value="id"
+                  option-label="value"
+                  borderless
+                  :options="levels"
+                  emit-value
+                  map-options
+                  :disable="!editable" />
       </div>
       <div class="detail-box col-3">
-        <attach-exam
-          class="col-3"
-          :exams="exams"
-          :lessons="lessons"
-          :categories="categories"
-          :buffer="buffer"
-          @attach="emitAttachExam"
-          @detach="emitDetachExam"
-        />
+        <attach-exam class="col-3"
+                     :exams="exams"
+                     :lessons="lessons"
+                     :categories="categories"
+                     :buffer="buffer"
+                     @attach="emitAttachExam"
+                     @detach="emitDetachExam" />
       </div>
       <div class="detail-box col-3"
            style="padding-right:0;">
         <div class="detail-box-title">هدف سوال</div>
-        <q-select
-          v-model="questionTargets"
-          borderless
-          option-value="id"
-          option-label="value"
-          use-input
-          use-chips
-          multiple
-          :options="questionTargetList"
-          :disable="!editable"
-        />
+        <q-select v-model="questionTargets"
+                  borderless
+                  option-value="id"
+                  option-label="value"
+                  use-input
+                  use-chips
+                  multiple
+                  :options="questionTargetList"
+                  :disable="!editable" />
       </div>
       <!--      <div class="detail-box detail-box-first col-3">-->
       <!--        <div class="detail-box-title">پایه تحصیلی</div>-->
@@ -84,17 +74,15 @@
       <!--      </div>-->
       <div class="detail-box col-3">
         <div class="detail-box-title">رشته تحصیلی</div>
-        <q-select
-          v-model="majors"
-          borderless
-          option-value="id"
-          option-label="value"
-          :options="majorList"
-          use-input
-          use-chips
-          multiple
-          :disable="!editable"
-        />
+        <q-select v-model="majors"
+                  borderless
+                  option-value="id"
+                  option-label="value"
+                  :options="majorList"
+                  use-input
+                  use-chips
+                  multiple
+                  :disable="!editable" />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title">مبحث</div>
@@ -105,13 +93,11 @@
                      disable />
           </div>
           <div class="icon-box">
-            <q-btn
-              unelevated
-              icon="isax:tree"
-              class="open-modal-btn default-detail-btn"
-              :disable="!isTreeModalAvailable"
-              @click="dialogValue = true"
-            />
+            <q-btn unelevated
+                   icon="isax:tree"
+                   class="open-modal-btn default-detail-btn"
+                   :disable="!isTreeModalAvailable"
+                   @click="dialogValue = true" />
           </div>
         </div>
       </div>
@@ -124,12 +110,10 @@
                      disable />
           </div>
           <div class="icon-box">
-            <q-btn
-              unelevated
-              icon="isax:tree"
-              class="open-modal-btn default-detail-btn"
-              @click="subjectTagsTreeModal = true"
-            />
+            <q-btn unelevated
+                   icon="isax:tree"
+                   class="open-modal-btn default-detail-btn"
+                   @click="subjectTagsTreeModal = true" />
           </div>
         </div>
       </div>
@@ -144,22 +128,18 @@
     <!--      ثبت مباحث انتخاب شده-->
     <!--    </q-btn>-->
     <div>
-      <tree-modal
-        ref="questionTreeModal"
-        v-model:dialogValue="dialogValue"
-        v-model:selected-nodes="selectedNodes"
-        :tree-type="'test'"
-        :layers-config="treeLayersConfig"
-        exchange-last-layer-only
-        @gradeSelected="groupSelected"
-        @lessonSelected="lessonSelected"
-      />
-      <tree-modal
-        v-model:dialogValue="subjectTagsTreeModal"
-        v-model:selected-nodes="selectedTreeTags"
-        :tree-type="'subject-tree'"
-        exchange-last-layer-only
-      />
+      <tree-modal ref="questionTreeModal"
+                  v-model:dialogValue="dialogValue"
+                  v-model:selected-nodes="selectedNodes"
+                  :tree-type="'test'"
+                  :layers-config="treeLayersConfig"
+                  exchange-last-layer-only
+                  @gradeSelected="groupSelected"
+                  @lessonSelected="lessonSelected" />
+      <tree-modal v-model:dialogValue="subjectTagsTreeModal"
+                  v-model:selected-nodes="selectedTreeTags"
+                  :tree-type="'subject-tree'"
+                  exchange-last-layer-only />
     </div>
   </div>
 </template>
@@ -179,6 +159,12 @@ export default {
   components: {
     TreeModal,
     AttachExam
+  },
+  inject: {
+    question: {
+      from: 'providedQuestion', // this is optional if using the same key for injection
+      default: new Question()
+    }
   },
   props: {
     buffer: {
@@ -252,12 +238,6 @@ export default {
     'attach',
     'attach'
   ],
-  inject: {
-    question: {
-      from: 'providedQuestion', // this is optional if using the same key for injection
-      default: new Question()
-    }
-  },
   data () {
     return {
       dialogValue: false,

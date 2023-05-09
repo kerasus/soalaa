@@ -1,30 +1,22 @@
 <template>
   <div class="konkoor-view row">
-    <div
-      id="questions"
-      ref="questionsColumn"
-      class="col-md-5 right-side"
-    >
-      <q-virtual-scroll
-        ref="scroller"
-        class="konkoor-view-scroll"
-        :items="questions"
-        :virtual-scroll-item-size="450"
-        :virtual-scroll-slice-size="5"
-        @virtual-scroll="onScroll"
-      >
+    <div id="questions"
+         ref="questionsColumn"
+         class="col-md-5 right-side">
+      <q-virtual-scroll ref="scroller"
+                        class="konkoor-view-scroll"
+                        :items="questions"
+                        :virtual-scroll-item-size="450"
+                        :virtual-scroll-slice-size="5"
+                        @virtual-scroll="onScroll">
         <template v-slot="{ item, index }">
-          <q-item
-            :key="index"
-            class="question-field"
-            dense
-          >
+          <q-item :key="index"
+                  class="question-field"
+                  dense>
             <q-item-section>
-              <Item
-                :source="item"
-                :questions-column="$refs.questionsColumn"
-                @inView="isInView"
-              />
+              <item :source="item"
+                    :questions-column="$refs.questionsColumn"
+                    @inView="isInView" />
             </q-item-section>
           </q-item>
         </template>
@@ -32,72 +24,56 @@
     </div>
     <div class="left-side col-md-7">
       <div class="konkoor-view-navbar">
-        <q-btn
-          icon="mdi-table-split-cell"
-          color="grey"
-          flat
-          fab-mini
-          @click="changeView(getAlaaViewRouteName())"
-        />
-        <q-btn-dropdown
-          class="dropdown-button"
-          icon="account_circle"
-          :label="user.full_name "
-          color="grey-14"
-          dropdown-icon="false"
-          flat
-        >
+        <q-btn icon="mdi-table-split-cell"
+               color="grey"
+               flat
+               fab-mini
+               @click="changeView(getAlaaViewRouteName())" />
+        <q-btn-dropdown class="dropdown-button"
+                        icon="account_circle"
+                        :label="user.full_name "
+                        color="grey-14"
+                        dropdown-icon="false"
+                        flat>
           <top-menu />
         </q-btn-dropdown>
       </div>
-      <div
-        class="bubbleSheet-warpper"
-      >
-        <BubbleSheet
-          :info="{ type: 'pasokh-barg'}"
-          :delay-time="0"
-          :questions="questions"
-          :bubble-sheet-height="windowSize.y"
-          @clickChoice="choiceClicked"
-          @scrollTo="scrollTo"
-        />
+      <div class="bubbleSheet-warpper">
+        <bubble-sheet :info="{ type: 'pasokh-barg'}"
+                      :delay-time="0"
+                      :questions="questions"
+                      :bubble-sheet-height="windowSize.y"
+                      @clickChoice="choiceClicked"
+                      @scrollTo="scrollTo" />
       </div>
       <div class="row timer-row">
-        <q-btn
-          class="end-exam-btn"
-          :loading="confirmationBtnLoading"
-          :disabled="confirmationBtnLoading"
-          @click="getConfirmation"
-        >
+        <q-btn class="end-exam-btn"
+               :loading="confirmationBtnLoading"
+               :disabled="confirmationBtnLoading"
+               @click="getConfirmation">
           ارسال پاسخنامه
         </q-btn>
-        <div
-          class="col"
-          :class="{ 'high-z-index': timerIsOpen}"
-        >
-          <Timer
-            :daftarche="'عمومی'"
-            :quiz-started-at="1607963897"
-            :daftarche-end-time="1607999897"
-            :height="100"
-            @timerOpen="timerOpen"
-          />
+        <div class="col"
+             :class="{ 'high-z-index': timerIsOpen}">
+          <timer :daftarche="'عمومی'"
+                 :quiz-started-at="1607963897"
+                 :daftarche-end-time="1607999897"
+                 :height="100"
+                 @timerOpen="timerOpen" />
         </div>
       </div>
     </div>
-    <q-dialog
-      v-model="confirmationBubbleSheet"
-      persistent
-      maximized
-      transition-show="slide-up"
-      transition-hide="slide-down"
-    >
+    <q-dialog v-model="confirmationBubbleSheet"
+              persistent
+              maximized
+              transition-show="slide-up"
+              transition-hide="slide-down">
       <q-card class="">
         <q-bar class="bg-blue text-white q-pa-lg">
           <div>
             پاسخنامه کاربر
           </div>
-          <q-space></q-space>
+          <q-space />
           <q-btn v-close-popup
                  dense
                  flat
@@ -111,18 +87,14 @@
               از ارسال پاسخ ها اطمینان دارید؟
             </q-card-section>
             <q-card-section>
-              <q-btn
-                flat
-                style="color: #585858"
-                @click="confirmationBubbleSheet = false"
-              >
+              <q-btn flat
+                     style="color: #585858"
+                     @click="confirmationBubbleSheet = false">
                 ادامه میدم
               </q-btn>
-              <q-btn
-                flat
-                color="secondary"
-                @click="confirmSendingAllAnswers"
-              >
+              <q-btn flat
+                     color="secondary"
+                     @click="confirmSendingAllAnswers">
                 ثبت میکنم
               </q-btn>
             </q-card-section>
@@ -130,10 +102,8 @@
         </q-card-section>
 
         <q-card-section>
-          <bubble-sheet
-            :info="{ type: 'pasokh-nameh' }"
-            delay-time="0"
-          />
+          <bubble-sheet :info="{ type: 'pasokh-nameh' }"
+                        delay-time="0" />
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -181,6 +151,11 @@ export default {
       leftSideList: ref(null)
     }
   },
+  computed: {
+    ...mapGetters('AppLayout', [
+      'windowSize'
+    ])
+  },
   watch: {
     'windowSize.x': function () {
       this.view()
@@ -206,11 +181,6 @@ export default {
   },
   unmounted () {
     this.changeAppBarAndDrawer(true)
-  },
-  computed: {
-    ...mapGetters('AppLayout', [
-      'windowSize'
-    ])
   },
   methods: {
     startExamProcess () {

@@ -3,36 +3,28 @@
     <div class="input-group">
       <div v-show="canShowMic"
            class="input-group-prepend">
-        <q-btn
-          v-longpress="recordVoice"
-          class="btn  actionBtn btnRecordVoiceForUpload"
-          color="positive"
-          icon="isax:microphone"
-        >
-        </q-btn>
+        <q-btn v-longpress="recordVoice"
+               class="btn  actionBtn btnRecordVoiceForUpload"
+               color="positive"
+               icon="isax:microphone" />
       </div>
       <div v-show="canShowSelectPic"
            class="input-group-append">
-        <q-btn
-          class="btn  actionBtn"
-          color="positive"
-          icon="isax:image"
-          @click="getFile"
-        >
-          <input
-            ref="myFileInput"
-            style="display:none"
-            type="file"
-            accept="image/*"
-            @change="loadImage($event)"
-          />
+        <q-btn class="btn  actionBtn"
+               color="positive"
+               icon="isax:image"
+               @click="getFile">
+          <input ref="myFileInput"
+                 style="display:none"
+                 type="file"
+                 accept="image/*"
+                 @change="loadImage($event)">
         </q-btn>
 
         <q-dialog v-model="showModalStatus"
                   persistent
                   class="imageModal"
-                  @close="clearMessage"
-        >
+                  @close="clearMessage">
           <q-card style="width: 500px;">
             <div>
               <cropper ref="cropper"
@@ -44,14 +36,12 @@
                          maxHeight: 2048,
                          maxWidth: 2048,
                        }"
-                       @change="change"
-              />
+                       @change="change" />
 
               <div class="slider_box">
                 <q-btn class="cancel-pic"
                        label="حذف"
-                       @click="clearMessage"
-                />
+                       @click="clearMessage" />
                 <div class="angle-slider">
                   <p class="title">میزان چرخش:</p>
                   <input id="slider"
@@ -60,34 +50,26 @@
                          type="range"
                          min="0"
                          max="360"
-                         @change="rotate"
-                  />
+                         @change="rotate">
                 </div>
               </div>
 
-              <q-input
-                v-model="newMessageTextInModal"
-                borderless
-                class="imageInput"
-                placeholder="متن پیام ..." />
+              <q-input v-model="newMessageTextInModal"
+                       borderless
+                       class="imageInput"
+                       placeholder="متن پیام ..." />
 
             </div>
-            <div
-              :class="[(true) ? 'adminSendPic' : '']"
-            >
-              <q-btn
-                class="imageBtn BtnSuccess"
-                :loading="sendLoading"
-                icon="isax:tick-square"
-                @click="emitData(false)"
-              />
-              <q-btn
-                v-if="true"
-                class="imageBtn BtnWarning"
-                :loading="sendLoading"
-                icon="isax:card-send"
-                @click="emitData(true)"
-              />
+            <div :class="[(true) ? 'adminSendPic' : '']">
+              <q-btn class="imageBtn BtnSuccess"
+                     :loading="sendLoading"
+                     icon="isax:tick-square"
+                     @click="emitData(false)" />
+              <q-btn v-if="true"
+                     class="imageBtn BtnWarning"
+                     :loading="sendLoading"
+                     icon="isax:card-send"
+                     @click="emitData(true)" />
             </div>
           </q-card>
 
@@ -100,72 +82,57 @@
                class="btn actionBtn sendBtn BtnSuccess"
                :loading="sendLoading"
                icon="isax:send-1"
-               @click="emitData(false)"
-        />
+               @click="emitData(false)" />
         <q-btn v-if="showSendPrivate"
                size="12px"
                class="btn actionBtn sendBtn BtnWarning"
                :loading="sendLoading"
                icon="isax:directbox-send"
-               @click="emitData(true)"
-        />
+               @click="emitData(true)" />
       </div>
-      <av-waveform
-        v-if="recordedVoice !== null"
-        v-show="showVoicePlayer"
-        ref="playAudio"
-        class="av-waveform"
-        :audio-src="recordedVoice"
-        :playtime-font-family="'IRANSans'"
-        :audio-controls="false"
-        :canv-width="1285"
-        :canv-height="64"
-      ></av-waveform>
-      <av-media
-        v-show="showVoiceVisualizer"
-        class="voiceVisualizer"
-        type="wform"
-        :media="streamVoice"
-        line-color="#ff9000"
-        :canv-width="1285"
-        :canv-height="64"
-      />
-      <q-input
-        v-show="canShowTextarea"
-        v-model="newMessage.text"
-        borderless
-        class="newMessageText"
-        placeholder="متن پیام ...">
-      </q-input>
-      <div
-        v-if="recordedVoice !== null"
-        v-show="showVoicePlayer"
-        class="input-group-prepend">
-        <q-btn
-          v-if="!showVoicePlayerIsPlaying"
-          color="primary"
-          class="btn  actionBtn"
-          icon="isax:play"
-          @click="playRecordedVoice"
-        />
-        <q-btn
-          v-else
-          color="primary"
-          class="btn  actionBtn"
-          icon="isax:pause"
-          @click="pauseRecordedVoice" />
+      <av-waveform v-if="recordedVoice !== null"
+                   v-show="showVoicePlayer"
+                   ref="playAudio"
+                   class="av-waveform"
+                   :audio-src="recordedVoice"
+                   :playtime-font-family="'IRANSans'"
+                   :audio-controls="false"
+                   :canv-width="1285"
+                   :canv-height="64" />
+      <av-media v-show="showVoiceVisualizer"
+                class="voiceVisualizer"
+                type="wform"
+                :media="streamVoice"
+                line-color="#ff9000"
+                :canv-width="1285"
+                :canv-height="64" />
+      <q-input v-show="canShowTextarea"
+               v-model="newMessage.text"
+               borderless
+               class="newMessageText"
+               placeholder="متن پیام ..." />
+      <div v-if="recordedVoice !== null"
+           v-show="showVoicePlayer"
+           class="input-group-prepend">
+        <q-btn v-if="!showVoicePlayerIsPlaying"
+               color="primary"
+               class="btn  actionBtn"
+               icon="isax:play"
+               @click="playRecordedVoice" />
+        <q-btn v-else
+               color="primary"
+               class="btn  actionBtn"
+               icon="isax:pause"
+               @click="pauseRecordedVoice" />
 
       </div>
-      <div
-        v-if="recordedVoice !== null"
-        v-show="showVoicePlayer"
-        class="input-group-prepend">
-        <q-btn
-          color="primary"
-          class="btn  actionBtn"
-          icon="isax:play-remove"
-          @click="clearMessage"
-        />
+      <div v-if="recordedVoice !== null"
+           v-show="showVoicePlayer"
+           class="input-group-prepend">
+        <q-btn color="primary"
+               class="btn  actionBtn"
+               icon="isax:play-remove"
+               @click="clearMessage" />
       </div>
     </div>
   </div>
@@ -179,6 +146,66 @@ import 'vue-advanced-cropper/dist/style.css'
 
 export default {
   name: 'SendMessageInput',
+  components: {
+    AvWaveform,
+    Cropper,
+    AvMedia
+  },
+  directives: {
+    longpress: {
+      created(el, binding, vNode) {
+        if (typeof binding.value !== 'function') {
+          const compName = vNode.context.name
+          let warn = `[longpress:] provided expression '${binding.expression}' is not a function, but has to be`
+          if (compName) {
+            warn += `Found in component '${compName}' `
+          }
+
+          console.error(warn)
+        }
+
+        // Define variable
+        let pressTimer = null
+
+        const start = (e) => {
+          if (e.type === 'click' && e.button !== 0) {
+            return
+          }
+
+          handler('longpress-start')
+
+          if (pressTimer === null) {
+            pressTimer = setTimeout(() => {
+              // Run function
+              handler('longpress-holding')
+            }, 1)
+          }
+        }
+
+        const cancel = (e) => {
+          if (pressTimer !== null) {
+            clearTimeout(pressTimer)
+            pressTimer = null
+            handler('longpress-left')
+          }
+        }
+
+        // Run
+        const handler = (e) => {
+          binding.value(e)
+        }
+
+        // Add Event listeners
+        el.addEventListener('mousedown', start)
+        el.addEventListener('touchstart', start)
+        // Cancel timeouts if these events happen
+        el.addEventListener('click', cancel)
+        el.addEventListener('mouseout', cancel)
+        el.addEventListener('touchend', cancel)
+        el.addEventListener('touchcancel', cancel)
+      }
+    }
+  },
   props: {
     sendLoading: {
       type: Boolean,
@@ -188,11 +215,6 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-  components: {
-    AvWaveform,
-    Cropper,
-    AvMedia
   },
   data() {
     return {
@@ -226,28 +248,6 @@ export default {
       }
     }
   },
-  watch: {
-    imgURL: {
-      handler(newValue) {
-        if (newValue) {
-          this.showModalStatus = true
-          this.userPicClipped = false
-          this.userPicSelected = true
-        }
-      }
-    },
-    resultURL: {
-      handler(val) {
-        this.userPicClipped = true
-        if (val) this.userPicSelected = true
-      }
-    },
-    sendLoading: {
-      handler(newVal) {
-        this.Loading = newVal
-      }
-    }
-  },
   computed: {
     isAdmin() {
       return this.$store.getters.appProps.isAdmin
@@ -269,6 +269,28 @@ export default {
     },
     canShowImageTools() {
       return !this.userPicClipped && this.userPicSelected
+    }
+  },
+  watch: {
+    imgURL: {
+      handler(newValue) {
+        if (newValue) {
+          this.showModalStatus = true
+          this.userPicClipped = false
+          this.userPicSelected = true
+        }
+      }
+    },
+    resultURL: {
+      handler(val) {
+        this.userPicClipped = true
+        if (val) this.userPicSelected = true
+      }
+    },
+    sendLoading: {
+      handler(newVal) {
+        this.Loading = newVal
+      }
     }
   },
   methods: {
@@ -415,61 +437,6 @@ export default {
       })
     }
 
-  },
-  directives: {
-    longpress: {
-      created(el, binding, vNode) {
-        if (typeof binding.value !== 'function') {
-          const compName = vNode.context.name
-          let warn = `[longpress:] provided expression '${binding.expression}' is not a function, but has to be`
-          if (compName) {
-            warn += `Found in component '${compName}' `
-          }
-
-          console.error(warn)
-        }
-
-        // Define variable
-        let pressTimer = null
-
-        const start = (e) => {
-          if (e.type === 'click' && e.button !== 0) {
-            return
-          }
-
-          handler('longpress-start')
-
-          if (pressTimer === null) {
-            pressTimer = setTimeout(() => {
-              // Run function
-              handler('longpress-holding')
-            }, 1)
-          }
-        }
-
-        const cancel = (e) => {
-          if (pressTimer !== null) {
-            clearTimeout(pressTimer)
-            pressTimer = null
-            handler('longpress-left')
-          }
-        }
-
-        // Run
-        const handler = (e) => {
-          binding.value(e)
-        }
-
-        // Add Event listeners
-        el.addEventListener('mousedown', start)
-        el.addEventListener('touchstart', start)
-        // Cancel timeouts if these events happen
-        el.addEventListener('click', cancel)
-        el.addEventListener('mouseout', cancel)
-        el.addEventListener('touchend', cancel)
-        el.addEventListener('touchcancel', cancel)
-      }
-    }
   }
 }
 </script>

@@ -1,113 +1,111 @@
 <template>
-  <entity-create
-    v-model:value="inputs"
-    title="ساخت آزمون"
-    :api="api"
-    :entity-id-key-in-response="entityIdKeyInResponse"
-    :show-route-param-key="showRouteParamKey"
-    :index-route-name="indexRouteName"
-    :show-route-name="showRouteName"
-  >
-    <!--    <form-builder-separator/>-->
-    <!--    <template #after-form-builder >-->
-    <!--      <q-card class="category-card">-->
-    <!--        <q-card-section>-->
-    <!--          <h6 class="category-header q-ma-md">لیست دفترچه ها</h6>-->
-    <!--        </q-card-section>-->
-    <!--        <q-separator/>-->
-    <!--        <q-card-section class="flex">-->
-    <!--          <div class="row bg-grey-3 add-category-box">-->
-    <!--            <q-select-->
-    <!--              class="q-pa-md col-md-4"-->
-    <!--              v-model="category"-->
-    <!--              :value="category"-->
-    <!--              label="دفترچه"-->
-    <!--              :options="categoryOptions"-->
-    <!--              option-value="categoryOptions"-->
-    <!--              option-label="title"-->
-    <!--              emit-value-->
-    <!--              map-options-->
-    <!--              :disable="totalCategory"-->
-    <!--            />-->
-    <!--            <q-input-->
-    <!--              class="q-pa-md col-md-3"-->
-    <!--              v-model="category.order"-->
-    <!--              label="ترتیب"-->
-    <!--              :disable="totalCategory"-->
-    <!--            />-->
-    <!--            <q-input-->
-    <!--              class="q-pa-md col-md-3"-->
-    <!--              v-model="category.time"-->
-    <!--              label="زمان"-->
-    <!--              :disable="totalCategory"-->
-    <!--            />-->
-    <!--            <div class="q-pa-md col-md-2 flex">-->
-    <!--              <q-btn-->
-    <!--                class="q-ma-md"-->
-    <!--                icon="add"-->
-    <!--                color="green"-->
-    <!--                flat-->
-    <!--                dense-->
-    <!--                fab-mini-->
-    <!--                :disable="totalCategory"-->
-    <!--                @click="addCategory"-->
-    <!--              />-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </q-card-section>-->
-    <!--        <q-card-section>-->
-    <!--          <div-->
-    <!--            class="category-list"-->
-    <!--            v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length === 0">-->
-    <!--            <p class="bg-red-2 alert">در حال حاضر دفترچه ای به آزمون اضافه نشده است !</p>-->
-    <!--          </div>-->
-    <!--          <div-->
-    <!--            v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length > 0"-->
-    <!--            class="row category-list-row"-->
-    <!--          >-->
-    <!--            <div-->
-    <!--              v-for="(category , index) in inputs[examCategoriesIndex].value"-->
-    <!--              :key="index"-->
-    <!--              class="row col-md-12"-->
-    <!--            >-->
-    <!--              <q-select-->
-    <!--                class="q-pa-md col-md-4"-->
-    <!--                v-model="category.title"-->
-    <!--                :value="category.id"-->
-    <!--                label="دفترچه"-->
-    <!--                :options="categoryOptions"-->
-    <!--                option-value="categoryOptions"-->
-    <!--                option-label="title"-->
-    <!--                emit-value-->
-    <!--                map-options-->
-    <!--              />-->
-    <!--              <q-input-->
-    <!--                class="q-pa-md col-md-3"-->
-    <!--                v-model="category.order"-->
-    <!--                label="ترتیب"-->
-    <!--              />-->
-    <!--              <q-input-->
-    <!--                class="q-pa-md col-md-3"-->
-    <!--                v-model="category.time"-->
-    <!--                label="زمان"-->
-    <!--              />-->
-    <!--              <div class="q-pa-md col-md-2 flex">-->
-    <!--                <q-btn-->
-    <!--                  class="q-ma-md"-->
-    <!--                  icon="close"-->
-    <!--                  color="red"-->
-    <!--                  flat-->
-    <!--                  dense-->
-    <!--                  fab-mini-->
-    <!--                  @click="deleteCategory(category.id)"-->
-    <!--                />-->
-    <!--              </div>-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </q-card-section>-->
-    <!--      </q-card>-->
+  <entity-create v-model:value="inputs"
+                 title="ساخت آزمون"
+                 :api="api"
+                 :entity-id-key-in-response="entityIdKeyInResponse"
+                 :show-route-param-key="showRouteParamKey"
+                 :index-route-name="indexRouteName"
+                 :show-route-name="showRouteName">
+                 <!--    <form-builder-separator/>-->
+                 <!--    <template #after-form-builder >-->
+                 <!--      <q-card class="category-card">-->
+                 <!--        <q-card-section>-->
+                 <!--          <h6 class="category-header q-ma-md">لیست دفترچه ها</h6>-->
+                 <!--        </q-card-section>-->
+                 <!--        <q-separator/>-->
+                 <!--        <q-card-section class="flex">-->
+                 <!--          <div class="row bg-grey-3 add-category-box">-->
+                 <!--            <q-select-->
+                 <!--              class="q-pa-md col-md-4"-->
+                 <!--              v-model="category"-->
+                 <!--              :value="category"-->
+                 <!--              label="دفترچه"-->
+                 <!--              :options="categoryOptions"-->
+                 <!--              option-value="categoryOptions"-->
+                 <!--              option-label="title"-->
+                 <!--              emit-value-->
+                 <!--              map-options-->
+                 <!--              :disable="totalCategory"-->
+                 <!--            />-->
+                 <!--            <q-input-->
+                 <!--              class="q-pa-md col-md-3"-->
+                 <!--              v-model="category.order"-->
+                 <!--              label="ترتیب"-->
+                 <!--              :disable="totalCategory"-->
+                 <!--            />-->
+                 <!--            <q-input-->
+                 <!--              class="q-pa-md col-md-3"-->
+                 <!--              v-model="category.time"-->
+                 <!--              label="زمان"-->
+                 <!--              :disable="totalCategory"-->
+                 <!--            />-->
+                 <!--            <div class="q-pa-md col-md-2 flex">-->
+                 <!--              <q-btn-->
+                 <!--                class="q-ma-md"-->
+                 <!--                icon="add"-->
+                 <!--                color="green"-->
+                 <!--                flat-->
+                 <!--                dense-->
+                 <!--                fab-mini-->
+                 <!--                :disable="totalCategory"-->
+                 <!--                @click="addCategory"-->
+                 <!--              />-->
+                 <!--            </div>-->
+                 <!--          </div>-->
+                 <!--        </q-card-section>-->
+                 <!--        <q-card-section>-->
+                 <!--          <div-->
+                 <!--            class="category-list"-->
+                 <!--            v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length === 0">-->
+                 <!--            <p class="bg-red-2 alert">در حال حاضر دفترچه ای به آزمون اضافه نشده است !</p>-->
+                 <!--          </div>-->
+                 <!--          <div-->
+                 <!--            v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length > 0"-->
+                 <!--            class="row category-list-row"-->
+                 <!--          >-->
+                 <!--            <div-->
+                 <!--              v-for="(category , index) in inputs[examCategoriesIndex].value"-->
+                 <!--              :key="index"-->
+                 <!--              class="row col-md-12"-->
+                 <!--            >-->
+                 <!--              <q-select-->
+                 <!--                class="q-pa-md col-md-4"-->
+                 <!--                v-model="category.title"-->
+                 <!--                :value="category.id"-->
+                 <!--                label="دفترچه"-->
+                 <!--                :options="categoryOptions"-->
+                 <!--                option-value="categoryOptions"-->
+                 <!--                option-label="title"-->
+                 <!--                emit-value-->
+                 <!--                map-options-->
+                 <!--              />-->
+                 <!--              <q-input-->
+                 <!--                class="q-pa-md col-md-3"-->
+                 <!--                v-model="category.order"-->
+                 <!--                label="ترتیب"-->
+                 <!--              />-->
+                 <!--              <q-input-->
+                 <!--                class="q-pa-md col-md-3"-->
+                 <!--                v-model="category.time"-->
+                 <!--                label="زمان"-->
+                 <!--              />-->
+                 <!--              <div class="q-pa-md col-md-2 flex">-->
+                 <!--                <q-btn-->
+                 <!--                  class="q-ma-md"-->
+                 <!--                  icon="close"-->
+                 <!--                  color="red"-->
+                 <!--                  flat-->
+                 <!--                  dense-->
+                 <!--                  fab-mini-->
+                 <!--                  @click="deleteCategory(category.id)"-->
+                 <!--                />-->
+                 <!--              </div>-->
+                 <!--            </div>-->
+                 <!--          </div>-->
+                 <!--        </q-card-section>-->
+                 <!--      </q-card>-->
 
-    <!--    </template>-->
+                 <!--    </template>-->
   </entity-create>
 </template>
 
@@ -171,10 +169,6 @@ export default {
       category: { title: '', id: '', order: 0, time: 0 }
     }
   },
-  created () {
-    this.getType()
-    this.getCategories()
-  },
   computed: {
     examCategoriesIndex () {
       return this.inputs.findIndex(item => item.name === 'categories')
@@ -182,6 +176,10 @@ export default {
     totalCategory () {
       return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 2
     }
+  },
+  created () {
+    this.getType()
+    this.getCategories()
   },
   methods: {
     getType () {

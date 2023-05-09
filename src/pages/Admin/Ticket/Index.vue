@@ -1,13 +1,11 @@
 <template>
   <div>
-    <entity-index
-      v-model:value="inputs"
-      title="لیست تیکت ها"
-      :api="api"
-      :table="table"
-      :table-keys="tableKeys"
-      :create-route-name="'Admin.Ticket.Create'"
-    >
+    <entity-index v-model:value="inputs"
+                  title="لیست تیکت ها"
+                  :api="api"
+                  :table="table"
+                  :table-keys="tableKeys"
+                  :create-route-name="'Admin.Ticket.Create'">
       <template v-slot:entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
         <template v-if="inputData.col.name === 'status'">
           <q-chip :color="checkStatusColor(inputData.props.row.status.id)"

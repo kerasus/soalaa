@@ -3,29 +3,23 @@
     <!--    v-model:value="inputs"-->
     <template v-if="loading">
       <div class="text-center q-mt-xl">
-        <q-spinner-ball
-          color="primary"
-          size="5em"
-        />
+        <q-spinner-ball color="primary"
+                        size="5em" />
       </div>
     </template>
     <template v-else>
-      <entity-index
-        title="لیست دروس"
-        :api="api"
-        :table="table"
-        :table-keys="tableKeys"
-        :create-route-name="'Admin.subCategory.Create'"
-      >
+      <entity-index title="لیست دروس"
+                    :api="api"
+                    :table="table"
+                    :table-keys="tableKeys"
+                    :create-route-name="'Admin.subCategory.Create'">
         <template #entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
           <template v-if="inputData.col.name === 'icon'">
-            <q-avatar
-              size="40px"
-              round
-              text-color="white"
-              :color="iconPicker(inputData.props.row.title).color"
-              :icon="iconPicker(inputData.props.row.title).icon"
-            />
+            <q-avatar size="40px"
+                      round
+                      text-color="white"
+                      :color="iconPicker(inputData.props.row.title).color"
+                      :icon="iconPicker(inputData.props.row.title).icon" />
           </template>
           <template v-if="inputData.col.name === 'actions'">
             <q-btn round
@@ -50,15 +44,14 @@
                 ویرایش
               </q-tooltip>
             </q-btn>
-            <q-btn
-              round
-              flat
-              dense
-              size="md"
-              color="negative"
-              icon="delete"
-              class="q-ml-md"
-              @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   color="negative"
+                   icon="delete"
+                   class="q-ml-md"
+                   @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
               <q-tooltip>
                 حذف درس
               </q-tooltip>
@@ -138,9 +131,6 @@ export default {
         // { type: 'dateRange', name: 'created_at_range', value: [], label: 'بازه تاریخ عضویت', col: 'col-md-6' }
       ]
     }
-  },
-  created () {
-    this.loadCategories()
   },
   computed: {
     iconPicker () {
@@ -223,6 +213,9 @@ export default {
         }
       }
     }
+  },
+  created () {
+    this.loadCategories()
   },
   methods: {
     getRemoveMessage (row) {

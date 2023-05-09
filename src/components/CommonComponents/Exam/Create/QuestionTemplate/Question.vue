@@ -7,15 +7,11 @@
                   class="q-mt-sm"
                   width="50%"
                   height="25px" />
-      <vue-katex
-        v-if="question.statement"
-        :input="question.statement"
-      />
+      <vue-katex v-if="question.statement"
+                 :input="question.statement" />
       <div v-else-if="question.statement_photo?.length>0">
-        <div
-          v-for="(photo, index) in question.statement_photo"
-          :key="index"
-        >
+        <div v-for="(photo, index) in question.statement_photo"
+             :key="index">
           <q-img :src="photo" />
         </div>
       </div>
@@ -23,47 +19,37 @@
 
     <div class="multiple-choices-container">
       <template v-if="question.loading">
-        <div
-          v-for="item in 4"
-          :key="item"
-          class="choice-column col-3"
-        >
+        <div v-for="item in 4"
+             :key="item"
+             class="choice-column col-3">
           <div class="flex items-center">
             <div class="question-choice bg-primary">
               {{ item }}
             </div>
-            <q-skeleton
-              type="text"
-              width="200px"
-              height="25px"
-            />
+            <q-skeleton type="text"
+                        width="200px"
+                        height="25px" />
           </div>
 
         </div>
       </template>
 
-      <div
-        v-else-if="question.choices.list"
-        class="multiple-choices"
-      >
-        <multiple-choices-template
-          v-for="(choice , index) in question.choices.list"
-          id="test"
-          ref="questionChoice"
-          :key="index"
-          class=" col-lg-3 col-md-3 col-sm-12"
-          :class="questionCol"
-          :isLtr="isLtrQuestion()"
-          :dir="isLtrQuestion()? 'ltr':''"
-          :choice="choice"
-        />
+      <div v-else-if="question.choices.list"
+           class="multiple-choices">
+        <multiple-choices-template v-for="(choice , index) in question.choices.list"
+                                   id="test"
+                                   ref="questionChoice"
+                                   :key="index"
+                                   class=" col-lg-3 col-md-3 col-sm-12"
+                                   :class="questionCol"
+                                   :isLtr="isLtrQuestion()"
+                                   :dir="isLtrQuestion()? 'ltr':''"
+                                   :choice="choice" />
       </div>
 
       <div v-else-if="question.answer_photos?.length>0">
-        <div
-          v-for="(photo, index) in question.answer_photos"
-          :key="index"
-        >
+        <div v-for="(photo, index) in question.answer_photos"
+             :key="index">
           <q-img :src="photo" />
         </div>
       </div>

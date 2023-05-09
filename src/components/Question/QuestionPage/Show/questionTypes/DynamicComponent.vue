@@ -1,8 +1,6 @@
 <template>
-  <component
-    :is="comp"
-    v-bind="allProps"
-  ></component>
+  <component :is="comp"
+             v-bind="allProps" />
 </template>
 <script>
 /* eslint-disable no-var */
@@ -22,7 +20,6 @@ export default {
       allPropsNeeded: {}
     }
   },
-  mounted () {},
   computed: {
     comp () {
       // ToDo: must check this
@@ -30,6 +27,7 @@ export default {
       return defineAsyncComponent(() => import(gg))
     }
   },
+  mounted () {},
   methods: {}
 }
 </script>

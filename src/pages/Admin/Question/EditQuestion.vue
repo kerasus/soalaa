@@ -1,89 +1,70 @@
 <template>
   <div class="editQ-text-container">
-    <q-linear-progress
-      v-if="loadingState"
-      size="md"
-      indeterminate
-      rounded
-      color="primary"
-    />
-    <navbar
-      :mode="'edit'"
-      @panelClicked="openCloseImgPanel"
-    />
+    <q-linear-progress v-if="loadingState"
+                       size="md"
+                       indeterminate
+                       rounded
+                       color="primary" />
+    <navbar :mode="'edit'"
+            @panelClicked="openCloseImgPanel" />
     <div class="relative-position">
-      <div
-        :class="{ 'row reverse': (isPanelOpened && !imgFloatMode) }"
-      >
-        <div
-          v-if="isPanelOpened"
-          class="image-panel"
-          :class="{ 'col-5 image-panel-side-mode': !imgFloatMode , 'image-panel-float-mode' : imgFloatMode }"
-        >
-          <image-panel
-            :editable="true"
-            :mode="'edit'"
-            @closePanelBtnClicked="openCloseImgPanel"
-            @deleteImage="deleteImage"
-            @uploadStatement="updateStatementPhoto(question)"
-            @uploadAnswer="updateAnswerPhoto(question)"
-            @imgPanelModeChanged="changeImagePAnelMode"
-          />
+      <div :class="{ 'row reverse': (isPanelOpened && !imgFloatMode) }">
+        <div v-if="isPanelOpened"
+             class="image-panel"
+             :class="{ 'col-5 image-panel-side-mode': !imgFloatMode , 'image-panel-float-mode' : imgFloatMode }">
+          <image-panel :editable="true"
+                       :mode="'edit'"
+                       @closePanelBtnClicked="openCloseImgPanel"
+                       @deleteImage="deleteImage"
+                       @uploadStatement="updateStatementPhoto(question)"
+                       @uploadAnswer="updateAnswerPhoto(question)"
+                       @imgPanelModeChanged="changeImagePAnelMode" />
         </div>
-        <component
-          :is="getComponent"
-          v-if="question.type"
-          v-bind="allProps"
-          ref="currentEditComponent"
-          :key="editComponentKey"
-          :class="{ 'col-7': !imgFloatMode}"
-        />
+        <component :is="getComponent"
+                   v-if="question.type"
+                   v-bind="allProps"
+                   ref="currentEditComponent"
+                   :key="editComponentKey"
+                   :class="{ 'col-7': !imgFloatMode}" />
       </div>
     </div>
     <div class="relative-position">
       <div class="attach-btn row">
-        <question-identifier
-          ref="questionIdentifier"
-          class="col-12"
-          editable
-          :exams="examList"
-          :lessons="subCategoriesList"
-          :categories="categoryList"
-          :gradesList="gradesList"
-          :groups-list="lessonGroupList"
-          :lessons-list="lessonsList"
-          :major-list="majorList"
-          :authorship-dates-list="authorshipDatesList"
-          :question-authors-list="questionAuthorsList"
-          :question-target-list="questionTargetList"
-          @gradeSelected="getLessonsList"
-          @groupSelected="getLessonsList"
-          @attach="attachExam"
-          @detach="detachExam"
-          @tags-collected="setTags"
-        />
+        <question-identifier ref="questionIdentifier"
+                             class="col-12"
+                             editable
+                             :exams="examList"
+                             :lessons="subCategoriesList"
+                             :categories="categoryList"
+                             :gradesList="gradesList"
+                             :groups-list="lessonGroupList"
+                             :lessons-list="lessonsList"
+                             :major-list="majorList"
+                             :authorship-dates-list="authorshipDatesList"
+                             :question-authors-list="questionAuthorsList"
+                             :question-target-list="questionTargetList"
+                             @gradeSelected="getLessonsList"
+                             @groupSelected="getLessonsList"
+                             @attach="attachExam"
+                             @detach="detachExam"
+                             @tags-collected="setTags" />
       </div>
       <question-video-answer :contentId="question.content_id"
                              :timePointId="question.time_point_id"
                              @update-value="updateQuestionContent($event)" />
-      <btn-box
-        class="col-12"
-        editeQuestion
-        @saveQuestion="saveQuestion"
-        @deletefromDb="deleteQuestion"
-      />
-      <status-change
-        :statuses="questionStatuses"
-        @update="changeStatus"
-      />
+      <btn-box class="col-12"
+               editeQuestion
+               @saveQuestion="saveQuestion"
+               @deletefromDb="deleteQuestion" />
+      <status-change :statuses="questionStatuses"
+                     @update="changeStatus" />
     </div>
     <div v-if="question.logs && question.logs.list && question.logs.list.length > 0">
       <log-list-component :logs="question.logs"
                           :loading="loadingState"
                           :mode="'edit'"
                           @addComment="addComment"
-                          @restoreQuestion="restoreQuestion"
-      />
+                          @restoreQuestion="restoreQuestion" />
     </div>
     <div class="q-mt-md">
       <entity-index ref="reportIndex"
@@ -93,8 +74,7 @@
                     :table="logIndexTable"
                     :table-keys="logIndexTableKeys"
                     :create-route-name="false"
-                    :show-search-button="false"
-      >
+                    :show-search-button="false">
         <template #entity-index-table-cell="{inputData}">
           <template v-if="inputData.col.name === 'status'">
             <template v-if="!questionReportStatusesLoading">
@@ -104,8 +84,7 @@
                         option-label="description"
                         :map-options="true"
                         :options="questionReportStatuses"
-                        @update:model-value="onChangeReportStatus($event, inputData.props.row)"
-              />
+                        @update:model-value="onChangeReportStatus($event, inputData.props.row)" />
             </template>
             <div v-else>
               ...
@@ -163,6 +142,11 @@ export default {
     AdminActionOnQuestion,
     mixinTree
   ],
+  provide () {
+    return {
+      providedQuestion: computed(() => this.question)
+    }
+  },
   props: {},
   data () {
     return {
@@ -220,6 +204,20 @@ export default {
       editComponentKey: 0
     }
   },
+  computed: {
+    getComponent () {
+      // updates even if properties inside are updated
+      return this.chosenComponent(this.question.type)
+    }
+  },
+  watch: {
+    question: {
+      handler (newValue, oldValue) {
+        // console.log('question', newValue)
+      },
+      deep: true
+    }
+  },
   created () {
     this.logIndexApi = API_ADDRESS.question.reportLog(this.$route.params.question_id)
     this.getQuestionReportStatuses()
@@ -235,11 +233,6 @@ export default {
     this.loadAuthorshipDates()
     this.loadMajorList()
     this.setlogIndexInputsValues()
-  },
-  provide () {
-    return {
-      providedQuestion: computed(() => this.question)
-    }
   },
   mounted () {},
   methods: {
@@ -375,20 +368,6 @@ export default {
     updateQuestionContent(data) {
       this.question.content_id = data.content_id
       this.question.time_point_id = data.time_point_id
-    }
-  },
-  computed: {
-    getComponent () {
-      // updates even if properties inside are updated
-      return this.chosenComponent(this.question.type)
-    }
-  },
-  watch: {
-    question: {
-      handler (newValue, oldValue) {
-        // console.log('question', newValue)
-      },
-      deep: true
     }
   }
 }

@@ -47,17 +47,14 @@
                      unelevated
                      :loading="subscribeLoading"
                      disable
-                     @click="subscribe(item.id)"
-              />
+                     @click="subscribe(item.id)" />
             </div>
           </template>
           <div v-else
                class="flex justify-center items-center q-ma-lg q-pa-lg">
             <div class="text-center">
-              <q-spinner-grid
-                color="primary"
-                size="2em"
-              />
+              <q-spinner-grid color="primary"
+                              size="2em" />
               <div class="q-mt-lg">
                 کمی صبر کنید ...
               </div>
@@ -81,13 +78,13 @@ export default defineComponent({
       subscribeLoading: false
     })
   },
-  created() {
-    this.getData()
-  },
   computed: {
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
     }
+  },
+  created() {
+    this.getData()
   },
   methods: {
     getData() {

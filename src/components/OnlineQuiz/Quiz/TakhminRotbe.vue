@@ -21,15 +21,13 @@
                 </span>
                 <br>
                 <br>
-                <q-table
-                  :rows="takhminReport.sub_category"
-                  :columns="columns1"
-                  row-key="name"
-                  color="amber"
-                  hide-bottom
-                  flat
-                  :rows-per-page-options="[0]"
-                >
+                <q-table :rows="takhminReport.sub_category"
+                         :columns="columns1"
+                         row-key="name"
+                         color="amber"
+                         hide-bottom
+                         flat
+                         :rows-per-page-options="[0]">
                   <template v-slot:body="props">
                     <q-tr :props="props">
                       <q-td key="sub_category"
@@ -39,40 +37,34 @@
                       <q-td key="right_answer"
                             :props="props">
                         <!--                    {{ props.row.right_answer }}-->
-                        <q-input
-                          v-model="answerCounts[props.row.sub_category_id].correct"
-                          type="number"
-                          debounce="500"
-                          :rules="[numberRule]"
-                          dense
-                          autofocus
-                          @change="calcPercent(props.row.sub_category_id, $event.target)"
-                        />
+                        <q-input v-model="answerCounts[props.row.sub_category_id].correct"
+                                 type="number"
+                                 debounce="500"
+                                 :rules="[numberRule]"
+                                 dense
+                                 autofocus
+                                 @change="calcPercent(props.row.sub_category_id, $event.target)" />
                       </q-td>
                       <q-td key="wrong_answer"
                             :props="props">
                         <!--                    {{ props.row.wrong_answer }}-->
-                        <q-input
-                          v-model="answerCounts[props.row.sub_category_id].incorrect"
-                          type="number"
-                          debounce="500"
-                          :rules="[numberRule]"
-                          dense
-                          autofocus
-                          @change="calcPercent(props.row.sub_category_id, $event.target)"
-                        />
+                        <q-input v-model="answerCounts[props.row.sub_category_id].incorrect"
+                                 type="number"
+                                 debounce="500"
+                                 :rules="[numberRule]"
+                                 dense
+                                 autofocus
+                                 @change="calcPercent(props.row.sub_category_id, $event.target)" />
                       </q-td>
                       <q-td key="percent"
                             :props="props">
                         <!--                    {{ props.row.percent }}-->
-                        <q-input
-                          v-model="percents[props.row.sub_category_id]"
-                          type="number"
-                          :rules="[numberRule, percentRule]"
-                          dense
-                          autofocus
-                          @change="resetAnswerCount(props.row.sub_category_id)"
-                        />
+                        <q-input v-model="percents[props.row.sub_category_id]"
+                                 type="number"
+                                 :rules="[numberRule, percentRule]"
+                                 dense
+                                 autofocus
+                                 @change="resetAnswerCount(props.row.sub_category_id)" />
                       </q-td>
                       <q-td key="rank_city"
                             :props="props">
@@ -96,9 +88,7 @@
               </div>
             </div>
           </div>
-          <div
-            class="col col-md-5 col-12 default-result-table"
-          >
+          <div class="col col-md-5 col-12 default-result-table">
             <div class="row default-result-table default-resultTable-row">
               <div class="col default-resultTable-col">
                 <span class="tableTitle col-12">
@@ -106,15 +96,13 @@
                 </span>
                 <br>
                 <br>
-                <q-table
-                  :rows="takhminReport.zirgorooh"
-                  :columns="columns2"
-                  row-key="name"
-                  color="amber"
-                  hide-bottom
-                  flat
-                  :rows-per-page-options="[0]"
-                ></q-table>
+                <q-table :rows="takhminReport.zirgorooh"
+                         :columns="columns2"
+                         row-key="name"
+                         color="amber"
+                         hide-bottom
+                         flat
+                         :rows-per-page-options="[0]" />
               </div>
             </div>
             <div class="row final-report-scoreboard">

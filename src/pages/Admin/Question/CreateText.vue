@@ -1,41 +1,31 @@
 <template>
   <div class="createQ-text">
-    <navbar
-      :componentTabs="componentTabs"
-      :loading="componentTabs.loading"
-    />
+    <navbar :componentTabs="componentTabs"
+            :loading="componentTabs.loading" />
     <div class="relative-position">
       <!--      <component-->
       <!--        v-if="question.type"-->
       <!--        :is="getComponent"-->
       <!--        v-bind="allProps"-->
       <!--      />-->
-      <q-inner-loading
-        :showing="question.loading"
-        color="primary"
-        class="QComponents-inner-loading"
-        label-style="font-size: 1.1em"
-      />
+      <q-inner-loading :showing="question.loading"
+                       color="primary"
+                       class="QComponents-inner-loading"
+                       label-style="font-size: 1.1em" />
     </div>
     <div class="relative-position">
-      <attach-exam
-        :exams="examList"
-        :lessons="subCategoriesList"
-      />
+      <attach-exam :exams="examList"
+                   :lessons="subCategoriesList" />
       <div class="attach-btn row">
         <question-identifier class="col-9" />
-        <btn-box
-          class="col-3"
-          @saveQuestion="setQuestionContents"
-        />
+        <btn-box class="col-3"
+                 @saveQuestion="setQuestionContents" />
       </div>
       <comment-box />
-      <q-inner-loading
-        :showing="question.exams.loading"
-        color="primary"
-        class="QComponents-inner-loading"
-        label-style="font-size: 1.1em"
-      />
+      <q-inner-loading :showing="question.exams.loading"
+                       color="primary"
+                       class="QComponents-inner-loading"
+                       label-style="font-size: 1.1em" />
     </div>
   </div>
 </template>
@@ -67,6 +57,11 @@ export default {
   mixins: [
     AdminActionOnQuestion
   ],
+  provide () {
+    return {
+      question: this.question
+    }
+  },
   props: {},
   data () {
     return {
@@ -80,14 +75,23 @@ export default {
       subCategoriesList: new QuestSubcategoryList()
     }
   },
+  computed: {
+    getComponent () {
+      // updates even if properties inside are updated
+      return this.chosenComponent(this.question.type)
+    }
+  },
+  watch: {
+    question: {
+      handler (newValue, oldValue) {
+        // console.log('question', newValue)
+      },
+      deep: true
+    }
+  },
   created () {
     // console.log(this.$route, 'this.$route')
     // console.log(this.$router, 'this.$router')
-  },
-  provide () {
-    return {
-      question: this.question
-    }
   },
   mounted () {
     this.setAllQuestionLoadings()
@@ -111,20 +115,6 @@ export default {
     },
     setQuestionContents () {
       this.allProps.setContentToQuestion = true
-    }
-  },
-  computed: {
-    getComponent () {
-      // updates even if properties inside are updated
-      return this.chosenComponent(this.question.type)
-    }
-  },
-  watch: {
-    question: {
-      handler (newValue, oldValue) {
-        // console.log('question', newValue)
-      },
-      deep: true
     }
   }
 }

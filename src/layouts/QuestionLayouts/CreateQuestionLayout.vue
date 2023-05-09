@@ -1,7 +1,7 @@
 <template>
   <div class="createQ-text-container">
     <navbar />
-    <Router :include="keepAliveComponents" />
+    <router :include="keepAliveComponents" />
   </div>
 </template>
 

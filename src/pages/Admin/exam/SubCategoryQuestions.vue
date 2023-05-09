@@ -14,70 +14,58 @@
                           {label: 'نمایش همه', value:'not-filtered'},
                           {label: ' کلا تایید نشده', value:'not-confirmed-at-all'},
                           {label: 'من تایید نکردم', value:'not-confirmed-by-me'}
-                        ]"
-          />
+                        ]" />
           <q-btn v-if="false"
                  round
                  color="primary"
                  unelevated
                  icon="isax:printer"
-                 @click="printQuestions"
-          />
+                 @click="printQuestions" />
         </div>
         <div class="col-4 flex justify-end">
           <div class="search-box q-pr-md">
             <div>
-              <q-input
-                v-model="searchedQuestionOrder"
-                type="number"
-                outlined
-                dense
-                label="شماره سوال"
-                @keydown.enter="paginateToQuestion"
-              >
+              <q-input v-model="searchedQuestionOrder"
+                       type="number"
+                       outlined
+                       dense
+                       label="شماره سوال"
+                       @keydown.enter="paginateToQuestion">
                 <template v-slot:append>
                   <div @click="paginateToQuestion">
-                    <i class="fi fi-rr-search search-icon cursor-pointer"></i>
+                    <i class="fi fi-rr-search search-icon cursor-pointer" />
                   </div>
                 </template>
               </q-input>
             </div>
             <i class="fi fi-rr-refresh refresh-icon cursor-pointer q-ml-md"
-               @click="reload"
-            />
+               @click="reload" />
           </div>
-          <q-btn
-            round
-            color="primary"
-            unelevated
-            @click="this.$router.go(-1)"
-          >
+          <q-btn round
+                 color="primary"
+                 unelevated
+                 @click="this.$router.go(-1)">
             <i class="fi-rr-angle-left row" />
           </q-btn>
         </div>
       </div>
     </q-card>
-    <div  v-if="pageLoading"
-          class="text-center ">
-      <q-spinner-ball
-        class="q-my-xl"
-        color="primary"
-        size="5em"
-      />
+    <div v-if="pageLoading"
+         class="text-center ">
+      <q-spinner-ball class="q-my-xl"
+                      color="primary"
+                      size="5em" />
     </div>
     <template v-else>
-      <q-virtual-scroll
-        ref="scroller"
-        :key="questionListKey"
-        class="konkoor-view-scroll q-pa-md q-mt-md"
-        :items="filteredQuestions"
-        @virtual-scroll="onScroll"
-      >
+      <q-virtual-scroll ref="scroller"
+                        :key="questionListKey"
+                        class="konkoor-view-scroll q-pa-md q-mt-md"
+                        :items="filteredQuestions"
+                        @virtual-scroll="onScroll">
         <template v-slot="{ item, index }">
           <q-item :key="index"
                   class="question-field no-padding q-mb-md"
-                  dense
-          >
+                  dense>
             <q-item-section class="no-wrap">
               <!--            :sub-category="quizData.sub_categories"-->
               <!--            :exam-id="$route.params.quizId"-->
@@ -92,20 +80,17 @@
                              @deleteFromExam="detachQuestion"
                              @deleteFromDb="deleteQuestion"
                              @copyIdToClipboard="copyIdToClipboard"
-                             @confirmQuestion="confirmQuestion"
-              />
+                             @confirmQuestion="confirmQuestion" />
             </q-item-section>
           </q-item>
         </template>
       </q-virtual-scroll>
     </template>
     <div class="pagination">
-      <pagination
-        :key="paginationKey"
-        :meta="paginationMeta"
-        :disable="pageLoading"
-        @updateCurrentPage="updateQuizData"
-      />
+      <pagination :key="paginationKey"
+                  :meta="paginationMeta"
+                  :disable="pageLoading"
+                  @updateCurrentPage="updateQuizData" />
     </div>
 
   </div>
@@ -182,9 +167,6 @@ export default {
       paginationKey: 0
     }
   },
-  created () {
-    this.loadQuizDataAndSubCategories(false, this.$route.params.page)
-  },
   computed: {
     filteredQuestions () {
       this.quizData.questions.list.forEach((item, index) => {
@@ -205,6 +187,9 @@ export default {
     examId () {
       return this.$route.params.exam_id
     }
+  },
+  created () {
+    this.loadQuizDataAndSubCategories(false, this.$route.params.page)
   },
   methods: {
     printQuestions () {

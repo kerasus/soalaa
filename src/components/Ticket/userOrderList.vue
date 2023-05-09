@@ -9,27 +9,20 @@
   </div>
   <div v-if="loading=== false">
     <!--  ----------------------------  لیست پرداخت شده  ---------------------------------------------------------------        -->
-    <q-expansion-item
-      v-if="this.userOrdersList.map(object => object.inputData.paymentstatus.id).indexOf(3) !== -1"
-      group="parentGroup"
-      label="لیست پرداخت شده"
-      default-opened
-      class="panel-color"
-    >
-      <q-btn
-        rounded
-        unelevated
-        class="action-btn"
-        @click="extendAll(3)"
-      >تمدید کل سفارشات</q-btn>
+    <q-expansion-item v-if="this.userOrdersList.map(object => object.inputData.paymentstatus.id).indexOf(3) !== -1"
+                      group="parentGroup"
+                      label="لیست پرداخت شده"
+                      default-opened
+                      class="panel-color">
+      <q-btn rounded
+             unelevated
+             class="action-btn"
+             @click="extendAll(3)">تمدید کل سفارشات</q-btn>
       <template v-for="order in userOrdersList"
-                :key="order"
-      >
-        <q-expansion-item
-          v-if="order.inputData.paymentstatus.id === 3"
-          group="childGroup"
-          class="panel-color"
-        >
+                :key="order">
+        <q-expansion-item v-if="order.inputData.paymentstatus.id === 3"
+                          group="childGroup"
+                          class="panel-color">
           <template v-slot:header>
             <q-item-section>
               <div class="cart-item-info-section">
@@ -41,14 +34,12 @@
                   <q-btn rounded
                          unelevated
                          class="action-btn"
-                         :to="'/product/'+order.inputData.id+'/edit'"
-                  >
+                         :to="'/product/'+order.inputData.id+'/edit'">
                     ویرایش</q-btn>
                   <q-btn rounded
                          unelevated
                          class="action-btn q-ml-md"
-                         @click="extendAllOrders(order.inputData.orderproducts)"
-                  >
+                         @click="extendAllOrders(order.inputData.orderproducts)">
                     تمدید کل سفارش</q-btn>
                 </div>
               </div>
@@ -61,10 +52,9 @@
                    :key="item"
                    class="row product">
                 <div class="col-2">
-                  <q-img
-                    :src="item.photo"
-                    width="120px"
-                    height="120px" />
+                  <q-img :src="item.photo"
+                         width="120px"
+                         height="120px" />
                 </div>
                 <div class="col-6">
                   <div class="title">{{item.product.title}}</div>
@@ -74,24 +64,20 @@
                       قیمت پایه:
                       {{toman(item.price.base)}}
                     </span>
-                    <q-btn
-                      unelevated
-                      rounded
-                      color="blue"
-                      size="11px"
-                      class="action-btn q-mr-xs"
-                      :href="item.product.url.web"
-                      target="_blank"
-                    >
+                    <q-btn unelevated
+                           rounded
+                           color="blue"
+                           size="11px"
+                           class="action-btn q-mr-xs"
+                           :href="item.product.url.web"
+                           target="_blank">
                       مشاهده محصول
                     </q-btn>
-                    <q-btn
-                      unelevated
-                      rounded
-                      size="11px"
-                      class="action-btn"
-                      @click="extendAnOrder(item.id)"
-                    >
+                    <q-btn unelevated
+                           rounded
+                           size="11px"
+                           class="action-btn"
+                           @click="extendAnOrder(item.id)">
                       تمدید سفارش
                     </q-btn>
                   </div>
@@ -133,27 +119,20 @@
       </template>
     </q-expansion-item>
     <!--  ----------------------------  لیست پرداخت نشده  ---------------------------------------------------------------        -->
-    <q-expansion-item
-      v-if="this.userOrdersList.map(object => object.inputData.paymentstatus.id).indexOf(1) !== -1"
-      group="parentGroup"
-      label="لیست پرداخت نشده"
-      class="panel-color"
-    >
-      <q-btn
-        rounded
-        unelevated
-        class="action-btn"
-        @click="extendAll(1)"
-      >تمدید کل سفارشات</q-btn>
+    <q-expansion-item v-if="this.userOrdersList.map(object => object.inputData.paymentstatus.id).indexOf(1) !== -1"
+                      group="parentGroup"
+                      label="لیست پرداخت نشده"
+                      class="panel-color">
+      <q-btn rounded
+             unelevated
+             class="action-btn"
+             @click="extendAll(1)">تمدید کل سفارشات</q-btn>
       <template v-for="order in userOrdersList"
-                :key="order"
-      >
-        <q-expansion-item
-          v-if="order.inputData.paymentstatus.id === 1"
-          group="childGroup"
-          header-class="text-primary"
-          class="panel-color"
-        >
+                :key="order">
+        <q-expansion-item v-if="order.inputData.paymentstatus.id === 1"
+                          group="childGroup"
+                          header-class="text-primary"
+                          class="panel-color">
           <template v-slot:header>
             <q-item-section>
               <div class="cart-item-info-section">
@@ -165,14 +144,12 @@
                   <q-btn rounded
                          unelevated
                          class="action-btn"
-                         :to="'/product/'+order.inputData.id+'/edit'"
-                  >
+                         :to="'/product/'+order.inputData.id+'/edit'">
                     ویرایش</q-btn>
                   <q-btn rounded
                          unelevated
                          class="action-btn q-ml-md"
-                         @click="extendAllOrders(order.inputData.orderproducts)"
-                  >
+                         @click="extendAllOrders(order.inputData.orderproducts)">
                     تمدید کل سفارش</q-btn>
                 </div>
               </div>
@@ -185,10 +162,9 @@
                    :key="item"
                    class="row product">
                 <div class="col-2">
-                  <q-img
-                    :src="item.photo"
-                    width="120px"
-                    height="120px" />
+                  <q-img :src="item.photo"
+                         width="120px"
+                         height="120px" />
                 </div>
                 <div class="col-6">
                   <div class="title">{{item.product.title}}</div>
@@ -198,23 +174,19 @@
                       قیمت پایه:
                       {{toman(item.price.base)}}
                     </span>
-                    <q-btn
-                      unelevated
-                      rounded
-                      color="blue"
-                      size="11px"
-                      class="action-btn q-mr-xs"
-                      :href="item.product.url.web"
-                      target="_blank"
-                    >
+                    <q-btn unelevated
+                           rounded
+                           color="blue"
+                           size="11px"
+                           class="action-btn q-mr-xs"
+                           :href="item.product.url.web"
+                           target="_blank">
                       مشاهده محصول
                     </q-btn>
-                    <q-btn
-                      unelevated
-                      rounded
-                      size="11px"
-                      class="action-btn"
-                    >
+                    <q-btn unelevated
+                           rounded
+                           size="11px"
+                           class="action-btn">
                       تمدید سفارش
                     </q-btn>
                   </div>
@@ -284,6 +256,8 @@ export default {
       extendProductArray: []
     }
   },
+  created () {
+  },
   methods: {
     toman (key, suffix) {
       let string = key.toLocaleString('fa')
@@ -328,8 +302,6 @@ export default {
           // console.log(e)
         })
     }
-  },
-  created () {
   }
 }
 </script>

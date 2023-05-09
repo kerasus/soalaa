@@ -1,13 +1,11 @@
 <template>
-  <entity-show
-    v-model:value="inputs"
-    title="اطلاعات کاربر"
-    :api="api"
-    :entity-id-key="entityIdKey"
-    :entity-param-key="entityParamKey"
-    :edit-route-name="editRouteName"
-    :index-route-name="indexRouteName"
-  />
+  <entity-show v-model:value="inputs"
+               title="اطلاعات کاربر"
+               :api="api"
+               :entity-id-key="entityIdKey"
+               :entity-param-key="entityParamKey"
+               :edit-route-name="editRouteName"
+               :index-route-name="indexRouteName" />
   <portlet ref="portlet">
     <template #title>
       روزهای آزاد کاربر

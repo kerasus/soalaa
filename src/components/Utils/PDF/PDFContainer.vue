@@ -2,8 +2,7 @@
   <div class="col-md-5 right-side">
     <div v-if="pageChunks.length === 0"
          :style="{ width: pageSize.w + 'mm', paddingRight:parseInt(pdfConfig.rightMargin)+'mm', paddingLeft: parseInt(pdfConfig.leftMargin)+'mm' }"
-         class="prepare-question-section"
-    >
+         class="prepare-question-section">
       <pdf-question-field v-for="question in questions"
                           :key="'question-item-'+question.id"
                           v-model:height="question.height"
@@ -15,13 +14,11 @@
                           :display-descriptive-answer="mode === 'onlyDescriptiveAnswers'"
                           :questionAndChoices="pdfConfig.questionAndChoices"
                           :betweenChoices="pdfConfig.betweenChoices"
-                          @questionLoaded="onQuestionLoaded(question)"
-      />
+                          @questionLoaded="onQuestionLoaded(question)" />
     </div>
     <div v-else>
-      <div
-        v-if="mode === 'questionsNoAnswer'"
-        class="questionsNoAnswer-mode">
+      <div v-if="mode === 'questionsNoAnswer'"
+           class="questionsNoAnswer-mode">
         <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
                   :key="pageIndex"
                   :title="exam.title"
@@ -30,12 +27,10 @@
                   :page="(pageIndex+parseInt(pdfConfig.paginateStart)).toString()"
                   :paddingRight="parseInt(pdfConfig.rightMargin)+9"
                   :paddingLeft="parseInt(pdfConfig.leftMargin)+9"
-                  :pdf-config="pdfConfig"
-        >
+                  :pdf-config="pdfConfig">
           <template v-slot:body>
             <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
-                 :key="'chunk-index-'+pageQuestionIndex"
-            >
+                 :key="'chunk-index-'+pageQuestionIndex">
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
@@ -44,16 +39,14 @@
                                   :betweenChoices="pdfConfig.betweenChoices"
                                   display-choices
                                   display-statement
-                                  :display-descriptive-answer="false"
-              />
+                                  :display-descriptive-answer="false" />
             </div>
           </template>
         </pdf-page>
-        <div class="page-break"></div>
+        <div class="page-break" />
       </div>
-      <div
-        v-if="mode === 'onlyDescriptiveAnswers'"
-        class="onlyDescriptiveAnswers-mode">
+      <div v-if="mode === 'onlyDescriptiveAnswers'"
+           class="onlyDescriptiveAnswers-mode">
         <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
                   :key="pageIndex"
                   :title="exam.title"
@@ -62,12 +55,10 @@
                   :page="(pageIndex+parseInt(pdfConfig.paginateStart)).toString()"
                   :paddingRight="parseInt(pdfConfig.rightMargin)+9"
                   :paddingLeft="parseInt(pdfConfig.leftMargin)+9"
-                  :pdf-config="pdfConfig"
-        >
+                  :pdf-config="pdfConfig">
           <template v-slot:body>
             <div v-for="(pageQuestion, pageQuestionIndex) in pageQuestions"
-                 :key="'chunk-index-'+pageQuestionIndex"
-            >
+                 :key="'chunk-index-'+pageQuestionIndex">
               <pdf-question-field v-if="pageQuestion"
                                   :question="pageQuestion"
                                   :order="pageQuestion.order"
@@ -76,8 +67,7 @@
                                   :display-statement="false"
                                   :questionAndChoices="pdfConfig.questionAndChoices"
                                   :betweenChoices="pdfConfig.betweenChoices"
-                                  display-descriptive-answer
-              />
+                                  display-descriptive-answer />
             </div>
           </template>
         </pdf-page>

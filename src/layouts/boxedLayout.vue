@@ -1,7 +1,7 @@
 <template>
   <div class="user-panel-no-navigation-container">
     <breadcrumbs />
-    <Router :include="keepAliveComponents" />
+    <router :include="keepAliveComponents" />
   </div>
 </template>
 

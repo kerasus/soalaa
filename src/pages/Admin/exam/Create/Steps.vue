@@ -3,47 +3,37 @@
     <div v-if="!loading"
          class="exam-info step step-1"
          :class="{ 'current-step' : this.currentStep === 'createPage','passed' : this.currentStep === 'chooseQuestion' || this.currentStep === 'finalApproval' || isConfirmd }"
-         @click="changeCurrentStep('createPage')"
-    >
+         @click="changeCurrentStep('createPage')">
       <q-icon name="isax:edit"
-              class="icon"
-      />
+              class="icon" />
       <div class="exam-info-title title "
            :class="{ 'hidden-mobile' : this.currentStep !== 'createPage' }">
         اطلاعات آزمون
       </div>
       <div class="line"
-           :class="{ 'border-mobile' : this.currentStep !== 'createPage','passed' : this.currentStep === 'chooseQuestion' || this.currentStep === 'finalApproval' || isConfirmd }"
-      />
+           :class="{ 'border-mobile' : this.currentStep !== 'createPage','passed' : this.currentStep === 'chooseQuestion' || this.currentStep === 'finalApproval' || isConfirmd }" />
     </div>
     <div v-if="!loading"
          class="choose-questions step step-2"
          :class="{ 'current-step' : this.currentStep === 'chooseQuestion','passed' : this.currentStep === 'finalApproval' || isConfirmd }"
-         @click="changeCurrentStep('chooseQuestion')"
-    >
+         @click="changeCurrentStep('chooseQuestion')">
       <q-icon name="isax:task-square"
-              class="icon"
-      />
+              class="icon" />
       <div class="choose-questions-title title"
-           :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }"
-      >
+           :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }">
         انتخاب سوال
       </div>
       <div class="line"
-           :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion','passed' : this.currentStep === 'finalApproval' || isConfirmd }"
-      />
+           :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion','passed' : this.currentStep === 'finalApproval' || isConfirmd }" />
     </div>
     <div v-if="!loading"
          class="final-approval step step-3"
          :class="{ 'current-step' : this.currentStep === 'finalApproval','passed' : isConfirmd}"
-         @click="changeCurrentStep('finalApproval')"
-    >
+         @click="changeCurrentStep('finalApproval')">
       <q-icon name="isax:tick-square"
-              class="icon"
-      />
+              class="icon" />
       <div class="final-approval-title"
-           :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }"
-      >
+           :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }">
         تایید نهایی
       </div>
     </div>
@@ -74,6 +64,7 @@ export default {
       default: false
     }
   },
+  emits: ['update:step'],
 
   data () {
     return {
@@ -110,7 +101,6 @@ export default {
       }
     }
   },
-  emits: ['update:step'],
   methods: {
     changeCurrentStep (step) {
       if (this.disabled) {

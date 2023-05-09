@@ -1,13 +1,9 @@
 <template>
   <span class="topic-component">
-    <topic
-      v-if="topic.parentTopic"
-      :topic="topic.parentTopic"
-    />
-    <q-chip
-      text-color="white"
-      color="purple-5"
-    >
+    <topic v-if="topic.parentTopic"
+           :topic="topic.parentTopic" />
+    <q-chip text-color="white"
+            color="purple-5">
       {{ topic.name }}
     </q-chip>
   </span>

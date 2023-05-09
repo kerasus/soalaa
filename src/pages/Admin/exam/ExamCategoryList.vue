@@ -10,13 +10,11 @@
                       width="150px" />
         </template>
       </div>
-      <q-btn
-        round
-        dark-percentage
-        color="primary"
-        icon="isax:arrow-left-2"
-        @click="goToExamList"
-      >
+      <q-btn round
+             dark-percentage
+             color="primary"
+             icon="isax:arrow-left-2"
+             @click="goToExamList">
         <q-tooltip anchor="top middle"
                    self="bottom middle"
                    :offset="[10, 10]">
@@ -40,19 +38,16 @@
           <template v-if="!categoryList.loading">
             <template v-if="categoryList.list.length > 0">
               <tr v-for="category in categoryList.list"
-                  :key="category.id"
-              >
+                  :key="category.id">
                 <td>{{ category.title }}</td>
                 <td class="actionsColumn">
                   <div class="row q-pt-sm justify-center">
                     <div class="col-auto">
-                      <q-btn
-                        round
-                        dark-percentage
-                        color="primary"
-                        icon="isax:arrow-left-2"
-                        @click="goToSubCategoryList(category.id)"
-                      >
+                      <q-btn round
+                             dark-percentage
+                             color="primary"
+                             icon="isax:arrow-left-2"
+                             @click="goToSubCategoryList(category.id)">
                         <q-tooltip anchor="top middle"
                                    self="bottom middle"
                                    :offset="[10, 10]">
@@ -71,10 +66,8 @@
             </template>
           </template>
           <template v-else>
-            <tr
-              v-for="counter in [1, 2, 3, 4, 5]"
-              :key="counter"
-            >
+            <tr v-for="counter in [1, 2, 3, 4, 5]"
+                :key="counter">
               <td>
                 <q-skeleton type="text" />
               </td>
@@ -118,14 +111,14 @@ export default {
       categoryList: new QuestCategoryList()
     }
   },
-  created () {
-    this.setExam()
-    this.loadLessons()
-  },
   computed: {
     examId () {
       return this.$route.params.exam_id
     }
+  },
+  created () {
+    this.setExam()
+    this.loadLessons()
   },
   methods: {
     goToExamList () {

@@ -1,12 +1,10 @@
 <template>
   <!--  v-model:index-inputs="indexInputs"-->
-  <entity-crud
-    v-model:default-inputs="defaultInputs"
-    v-model:index-inputs="indexInputs"
-    v-model:create-inputs="createInputs"
-    v-model:edit-inputs="editInputs"
-    v-bind="allProps"
-  >
+  <entity-crud v-model:default-inputs="defaultInputs"
+               v-model:index-inputs="indexInputs"
+               v-model:create-inputs="createInputs"
+               v-model:edit-inputs="editInputs"
+               v-bind="allProps">
     <!--    {inputData, showConfirmRemoveDialog}-->
     <template v-slot:entity-crud-table-cell="{inputData, showConfirmRemoveDialog}">
       <template v-if="inputData.col.name === 'actions'">
@@ -149,6 +147,15 @@ export default {
       ]
     }
   },
+  watch: {
+    // editInputs: {
+    //   handler (newValue, oldValue) {
+    //     console.log('inputs', newValue)
+    //   },
+    //   deep: true
+    // }
+  },
+  created () {},
   methods: {
     // for index.vue
     getRemoveMessage (row) {
@@ -176,16 +183,7 @@ export default {
         done(val, 'toggle')
       }
     }
-  },
-  watch: {
-    // editInputs: {
-    //   handler (newValue, oldValue) {
-    //     console.log('inputs', newValue)
-    //   },
-    //   deep: true
-    // }
-  },
-  created () {}
+  }
 }
 </script>
 

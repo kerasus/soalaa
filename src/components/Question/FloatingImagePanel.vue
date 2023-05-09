@@ -2,30 +2,24 @@
   <div class="main">
     <div class="popup">
       <div class="popup-header">
-        <q-card
-          class="question-card default-questions-card image-panel-box"
-        >
+        <q-card class="question-card default-questions-card image-panel-box">
           <q-card-section class="image-panel-header default-Qcard-title row justify-between">
-            <q-btn
-              class="change-mode-btn"
-              color="white"
-              text-color="accent"
-              label="تغییر حالت"
-              flat
-              rounded
-              unelevated
-              @click="imgPanelModeChanged"
-            />
-            <q-btn
-              class="close-panel-btn"
-              icon="isax:close-circle"
-              color="white"
-              text-color="accent"
-              dense
-              unelevated
-              rounded
-              @click="closePanelBtnClicked"
-            />
+            <q-btn class="change-mode-btn"
+                   color="white"
+                   text-color="accent"
+                   label="تغییر حالت"
+                   flat
+                   rounded
+                   unelevated
+                   @click="imgPanelModeChanged" />
+            <q-btn class="close-panel-btn"
+                   icon="isax:close-circle"
+                   color="white"
+                   text-color="accent"
+                   dense
+                   unelevated
+                   rounded
+                   @click="closePanelBtnClicked" />
           </q-card-section>
           <div>
             <q-card-section v-if="src">
@@ -44,12 +38,18 @@ import { initDragElement, initResizeElement } from 'src/assets/js/DragAndResize.
 
 export default {
   name: 'FloatingImagePanel',
+  props: {
+    src: {
+      required: false,
+      default: ''
+    }
+  },
   data: () => ({
     name: ''
   }),
-  created () {
-  },
   computed: {
+  },
+  created () {
   },
   mounted () {
     initDragElement()
@@ -61,12 +61,6 @@ export default {
     },
     imgPanelModeChanged () {
       this.$emit('imgPanelModeChanged')
-    }
-  },
-  props: {
-    src: {
-      required: false,
-      default: ''
     }
   }
 }

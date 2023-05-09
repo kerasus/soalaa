@@ -1,74 +1,54 @@
 <template>
   <div class="showQ-text-container">
-    <q-linear-progress
-      v-if="loadingState"
-      size="md"
-      indeterminate
-      rounded
-      color="primary"
-    />
-    <navbar
-      :mode="'show'"
-      @panelClicked="openCloseImgPanel"
-    />
+    <q-linear-progress v-if="loadingState"
+                       size="md"
+                       indeterminate
+                       rounded
+                       color="primary" />
+    <navbar :mode="'show'"
+            @panelClicked="openCloseImgPanel" />
     <div class="relative-position">
-      <div
-        :class="{ 'row reverse': (isPanelOpened && !imgFloatMode) }"
-      >
-        <div
-          v-if="isPanelOpened"
-          class="image-panel"
-          :class="{ 'col-5 image-panel-side-mode': !imgFloatMode , 'image-panel-float-mode' : imgFloatMode }"
-        >
-          <image-panel
-            :mode="'show'"
-            :editable="false"
-            @closePanelBtnClicked="openCloseImgPanel"
-            @imgPanelModeChanged="changeImagePAnelMode"
-          />
+      <div :class="{ 'row reverse': (isPanelOpened && !imgFloatMode) }">
+        <div v-if="isPanelOpened"
+             class="image-panel"
+             :class="{ 'col-5 image-panel-side-mode': !imgFloatMode , 'image-panel-float-mode' : imgFloatMode }">
+          <image-panel :mode="'show'"
+                       :editable="false"
+                       @closePanelBtnClicked="openCloseImgPanel"
+                       @imgPanelModeChanged="changeImagePAnelMode" />
         </div>
-        <component
-          :is="getComponent"
-          v-if="question.type"
-          v-bind="allProps"
-          :class="{ 'col-7': isPanelOpened }"
-        />
+        <component :is="getComponent"
+                   v-if="question.type"
+                   v-bind="allProps"
+                   :class="{ 'col-7': isPanelOpened }" />
       </div>
     </div>
     <div class="relative-position">
       <div class="attach-btn row">
-        <question-identifier
-          ref="questionIdentifier"
-          class="col-12"
-          :exams="examList"
-          :lessons="subCategoriesList"
-          :categories="categoryList"
-          :gradesList="gradesList"
-          :groups-list="lessonGroupList"
-          :lessons-list="lessonsList"
-          :major-list="majorList"
-          :authorship-dates-list="authorshipDatesList"
-          :question-authors-list="questionAuthorsList"
-          :question-target-list="questionTargetList"
-          @gradeSelected="getLessonsList"
-          @groupSelected="getLessonsList"
-          @attach="attachExam"
-          @detach="detachExam"
-          @tags-collected="setTags"
-        />
+        <question-identifier ref="questionIdentifier"
+                             class="col-12"
+                             :exams="examList"
+                             :lessons="subCategoriesList"
+                             :categories="categoryList"
+                             :gradesList="gradesList"
+                             :groups-list="lessonGroupList"
+                             :lessons-list="lessonsList"
+                             :major-list="majorList"
+                             :authorship-dates-list="authorshipDatesList"
+                             :question-authors-list="questionAuthorsList"
+                             :question-target-list="questionTargetList"
+                             @gradeSelected="getLessonsList"
+                             @groupSelected="getLessonsList"
+                             @attach="attachExam"
+                             @detach="detachExam"
+                             @tags-collected="setTags" />
       </div>
-      <status-change
-        :statuses="questionStatuses"
-        @update="changeStatus"
-      />
+      <status-change :statuses="questionStatuses"
+                     @update="changeStatus" />
     </div>
-    <div
-      v-if="question.logs && question.logs.list && question.logs.list.length > 0"
-    >
-      <log-list-component
-        :logs="question.logs"
-        @addComment="addComment"
-      />
+    <div v-if="question.logs && question.logs.list && question.logs.list.length > 0">
+      <log-list-component :logs="question.logs"
+                          @addComment="addComment" />
     </div>
   </div>
 </template>
@@ -112,6 +92,11 @@ export default {
     AdminActionOnQuestion,
     mixinTree
   ],
+  provide () {
+    return {
+      providedQuestion: computed(() => this.question)
+    }
+  },
   props: {},
   data () {
     return {
@@ -128,6 +113,20 @@ export default {
       totalLoading: false
     }
   },
+  computed: {
+    getComponent () {
+      // updates even if properties inside are updated
+      return this.chosenComponent(this.question.type)
+    }
+  },
+  watch: {
+    question: {
+      handler (newValue, oldValue) {
+        // console.log('question', newValue)
+      },
+      deep: true
+    }
+  },
   created () {
     this.enableLoading()
     this.getQuestionTypeForTypeId(this.question)
@@ -140,11 +139,6 @@ export default {
     this.loadQuestionTargets()
     this.loadAuthorshipDates()
     this.loadMajorList()
-  },
-  provide () {
-    return {
-      providedQuestion: computed(() => this.question)
-    }
   },
   mounted () {
     this.$nextTick(() => {
@@ -178,20 +172,6 @@ export default {
     },
     disableLoading () {
       this.question.loading = false
-    }
-  },
-  computed: {
-    getComponent () {
-      // updates even if properties inside are updated
-      return this.chosenComponent(this.question.type)
-    }
-  },
-  watch: {
-    question: {
-      handler (newValue, oldValue) {
-        // console.log('question', newValue)
-      },
-      deep: true
     }
   }
 }

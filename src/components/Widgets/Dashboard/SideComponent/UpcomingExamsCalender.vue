@@ -16,11 +16,9 @@
               </div>
             </div>
             <div class="calendar-view-type">
-              <q-tabs
-                v-model="tab"
-                active-color="white"
-                class="text-accent"
-              >
+              <q-tabs v-model="tab"
+                      active-color="white"
+                      class="text-accent">
                 <q-tab name="week"
                        label="هفته" />
                 <q-tab name="month"
@@ -35,7 +33,7 @@
             <div class="col-1 calendar-col"
                  :class="{'weekly': tab === 'week'}">
               <span class="day-name">شنبه</span>
-              <span v-if="tab === 'week'  && chartWeek[0].persianDate !== undefined"
+              <span v-if="tab === 'week' && chartWeek[0].persianDate !== undefined"
                     class="day-date">
                 {{chartWeek[0].persianDate.toString().substring(5,10)}}
               </span>
@@ -43,7 +41,7 @@
             <div class="col-1 calendar-col"
                  :class="{'weekly': tab === 'week'}">
               <span class="day-name">یکشنبه</span>
-              <span v-if="tab === 'week'  && chartWeek[1].persianDate !== undefined"
+              <span v-if="tab === 'week' && chartWeek[1].persianDate !== undefined"
                     class="day-date">
                 {{chartWeek[1].persianDate.toString().substring(5,10)}}
               </span>
@@ -51,7 +49,7 @@
             <div class="col-1 calendar-col"
                  :class="{'weekly': tab === 'week'}">
               <span class="day-name">دوشنبه</span>
-              <span v-if="tab === 'week'  && chartWeek[2].persianDate !== undefined"
+              <span v-if="tab === 'week' && chartWeek[2].persianDate !== undefined"
                     class="day-date">
                 {{chartWeek[2].persianDate.toString().substring(5,10)}}
               </span>
@@ -59,7 +57,7 @@
             <div class="col-1 calendar-col"
                  :class="{'weekly': tab === 'week'}">
               <span class="day-name">سه‌شنبه</span>
-              <span v-if="tab === 'week'  && chartWeek[3].persianDate !== undefined"
+              <span v-if="tab === 'week' && chartWeek[3].persianDate !== undefined"
                     class="day-date">
                 {{chartWeek[3].persianDate.toString().substring(5,10)}}
               </span>
@@ -67,7 +65,7 @@
             <div class="col-1 calendar-col"
                  :class="{'weekly': tab === 'week'}">
               <span class="day-name">چهارشنبه</span>
-              <span v-if="tab === 'week'  && chartWeek[4].persianDate !== undefined"
+              <span v-if="tab === 'week' && chartWeek[4].persianDate !== undefined"
                     class="day-date">
                 {{chartWeek[4].persianDate.toString().substring(5,10)}}
               </span>
@@ -83,7 +81,7 @@
             <div class="col-1 calendar-col"
                  :class="{'weekly': tab === 'week'}">
               <span class="day-name">جمعه</span>
-              <span v-if="tab === 'week'  && chartWeek[6].persianDate !== undefined"
+              <span v-if="tab === 'week' && chartWeek[6].persianDate !== undefined"
                     class="day-date">
                 {{chartWeek[6].persianDate.toString().substring(5,10)}}
               </span>
@@ -104,7 +102,7 @@
                                 'bottom-right': row === 6 && col === 1 ,
                                 'bottom-left':row === 6 && col === 7,
                                 'holiday': month[row-1][col-1].is_holiday}">
-                    {{ month[row-1][col-1].num !== 0 ? month[row-1][col-1].num : '' }} <br />
+                    {{ month[row-1][col-1].num !== 0 ? month[row-1][col-1].num : '' }} <br>
                     <div class="flex">
                       <q-icon v-for="event in month[row-1][col-1].events"
                               :key="event"
@@ -138,8 +136,7 @@
                     <div v-for="event in chartWeek[day - 1].events"
                          :key="event.id"
                          class="weekly-event"
-                         :style = "{ top: ((parseInt(event.start_at.substring(11,13)) + (parseInt(event.start_at.substring(14,16))/60) )- baseHour) * baseHight + 'px', height: (parseInt(event.finish_at.substring(11,13)) - parseInt(event.start_at.substring(11,13))) * baseHight + 'px' }"
-                    >
+                         :style = "{ top: ((parseInt(event.start_at.substring(11,13)) + (parseInt(event.start_at.substring(14,16))/60) )- baseHour) * baseHight + 'px', height: (parseInt(event.finish_at.substring(11,13)) - parseInt(event.start_at.substring(11,13))) * baseHight + 'px' }">
                       <q-tooltip class="flex column flex-center"
                                  anchor="top middle"
                                  self="center middle">
@@ -161,7 +158,7 @@
       <q-card class="calendar-dialog">
         <q-card-section class="row items-center content-section">
           <div class="calendar-dialog-header">
-            {{calendarMonth + ' '  + calendarYear}}
+            {{calendarMonth + ' ' + calendarYear}}
           </div>
           <div class="row month-row">
             <div v-for="item in monthList"
@@ -585,6 +582,10 @@ export default defineComponent({
       setAttr
     }
   },
+  created() {
+    this.loadCalendar(Time.now(), true)
+    this.getEvents()
+  },
   methods: {
     getEvents() {
       this.$axios.get(API_ADDRESS.exam.userExamList.base(), { params: { start_at_from: this.startFrom, start_at_till: this.startTill } }).then((res) => {
@@ -613,10 +614,6 @@ export default defineComponent({
         this.getEvents()
       }
     }
-  },
-  created() {
-    this.loadCalendar(Time.now(), true)
-    this.getEvents()
   }
 })
 </script>

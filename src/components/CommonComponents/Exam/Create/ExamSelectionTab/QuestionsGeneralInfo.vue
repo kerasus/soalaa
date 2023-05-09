@@ -1,41 +1,31 @@
 <template>
   <q-card :hidden="finalApprovalMode"
           class="questions-general-info-ToolBar custom-card">
-    <q-expansion-item
-      expand-icon-toggle
-      expand-icon="isax:arrow-down-1"
-    >
+    <q-expansion-item expand-icon-toggle
+                      expand-icon="isax:arrow-down-1">
       <template v-slot:header>
         <q-card-section class="general-info-expansion-header">
           <div class="general-info-buttons">
-            <div
-              class="general-info-button back-button"
-              @click="goToLastStep"
-            >
+            <div class="general-info-button back-button"
+                 @click="goToLastStep">
               بازگشت
             </div>
-            <div
-              class="general-info-button next-button"
-              @click="goToNextStep"
-            >
+            <div class="general-info-button next-button"
+                 @click="goToNextStep">
               مرحله بعد
 
-              <q-icon
-                class="next-button-icon"
-                name="isax:arrow-left"
-              />
+              <q-icon class="next-button-icon"
+                      name="isax:arrow-left" />
             </div>
           </div>
 
           <div class="chosen-questions-general-info">
             <div class="check-all">
-              <q-checkbox
-                v-model="checkBoxValue"
-                class="check-all-checkbox"
-                label="انتخاب همه"
-                indeterminate-value="maybe"
-                @click="selectAllQuestions">
-              </q-checkbox>
+              <q-checkbox v-model="checkBoxValue"
+                          class="check-all-checkbox"
+                          label="انتخاب همه"
+                          indeterminate-value="maybe"
+                          @click="selectAllQuestions" />
             </div>
 
             <div class="chosen-questions">
@@ -54,14 +44,12 @@
               سوالات انتخاب شده:
             </div>
             <q-card-actions class="chosen-question-items">
-              <q-chip
-                v-for="item in countOfSelectedSubCategory"
-                :key="item"
-                class="filter-items"
-                icon-remove="mdi-close"
-                removable
-                @remove="RemoveSelectedChoice(item)"
-              >
+              <q-chip v-for="item in countOfSelectedSubCategory"
+                      :key="item"
+                      class="filter-items"
+                      icon-remove="mdi-close"
+                      removable
+                      @remove="RemoveSelectedChoice(item)">
                 {{ item.title }}: {{ item.selectedQuestionsCount }}
               </q-chip>
             </q-card-actions>
@@ -77,12 +65,12 @@
                 </div>
                 <div class="chart-titles">
                   <q-badge class="titles-icon medium"
-                           rounded></q-badge>
+                           rounded />
                   <div>متوسط</div>
                 </div>
                 <div class="chart-titles">
                   <q-badge class="titles-icon easy"
-                           rounded></q-badge>
+                           rounded />
                   <div>آسان</div>
                 </div>
               </div>
@@ -95,20 +83,16 @@
           <div v-if="false"
                class="question-deActive">
             <div class=" delete-all">
-              <q-btn
-                rounded
-                flat
-                @click=deleteAllChoose()
-              >
+              <q-btn rounded
+                     flat
+                     @click=deleteAllChoose()>
                 حذف انتخاب ها
               </q-btn>
             </div>
             <div class="deactivate-all">
-              <q-btn
-                style="width: 130px"
-                rounded
-                flat
-              >
+              <q-btn style="width: 130px"
+                     rounded
+                     flat>
                 غیر فعال کردن همه
               </q-btn>
             </div>
@@ -118,75 +102,59 @@
     </q-expansion-item>
   </q-card>
 
-  <q-page-sticky
-    class="pageSticky lg-hide"
-    position="bottom"
-  >
+  <q-page-sticky class="pageSticky lg-hide"
+                 position="bottom">
     <div class="shapes flex ">
       <div class="circle">
-        <q-btn
-          :style="{'height': '36px' }"
-          class="openDialouge"
-          round
-          :icon="this.ToolbarDialog? 'isax:arrow-down-1' : 'isax:arrow-up-2'"
-          @click="this.ToolbarDialog = !this.ToolbarDialog"
-        />
+        <q-btn :style="{'height': '36px' }"
+               class="openDialouge"
+               round
+               :icon="this.ToolbarDialog? 'isax:arrow-down-1' : 'isax:arrow-up-2'"
+               @click="this.ToolbarDialog = !this.ToolbarDialog" />
       </div>
 
       <div class="top-style">
         <div class="top-style-right">
-          <div class="near-circle"></div>
+          <div class="near-circle" />
           <div class="near-btn">
-            <div class="near-btn-top"></div>
+            <div class="near-btn-top" />
           </div>
         </div>
 
         <div class="top-style-left">
           <div class="near-btn">
-            <div class="near-btn-top"></div>
+            <div class="near-btn-top" />
           </div>
-          <div class="near-circle">
-          </div>
+          <div class="near-circle" />
         </div>
       </div>
 
       <div class=" questions-general-info-sticky">
         <div class="general-info-buttons"
-             :class="{'top-space': finalApprovalMode}"
-        >
-          <div
-            class="general-info-button back-button"
-            @click="goToLastStep"
-          >
-            <q-icon
-              class="next-button-icon"
-              name="isax:arrow-right-3"
-            />
+             :class="{'top-space': finalApprovalMode}">
+          <div class="general-info-button back-button"
+               @click="goToLastStep">
+            <q-icon class="next-button-icon"
+                    name="isax:arrow-right-3" />
             بازگشت
           </div>
-          <div
-            class="general-info-button next-button"
-            @click="goToNextStep"
-          >
+          <div class="general-info-button next-button"
+               @click="goToNextStep">
             {{finalApprovalMode ? 'تایید آزمون' : '   مرحله بعد'}}
-            <q-icon
-              class="next-button-icon"
-              name="isax:arrow-left-2"
-            />
+            <q-icon class="next-button-icon"
+                    name="isax:arrow-left-2" />
           </div>
         </div>
 
         <div v-if="!finalApprovalMode"
              class="chosen-questions-general-info">
           <div class="check-all">
-            <q-checkbox
-              v-model="checkBoxValue"
-              class="check-all-checkbox"
-              label="انتخاب همه"
-              :disable="loading"
-              indeterminate-value="maybe"
-              @click="selectAllQuestions">
-            </q-checkbox>
+            <q-checkbox v-model="checkBoxValue"
+                        class="check-all-checkbox"
+                        label="انتخاب همه"
+                        :disable="loading"
+                        indeterminate-value="maybe"
+                        @click="selectAllQuestions" />
           </div>
 
           <div class="chosen-questions">
@@ -198,19 +166,16 @@
     </div>
   </q-page-sticky>
 
-  <q-dialog
-    v-model="ToolbarDialog"
-    class="dialogueCard"
-  >
+  <q-dialog v-model="ToolbarDialog"
+            class="dialogueCard">
     <q-card class="dialogueCardContainer">
       <div v-if="!finalApprovalMode"
            class="dialogHeader">
         <div class="dialogTitle"> سوالات انتخاب شده:</div>
 
         <div class="dialogBtn">
-          <q-btn
-            rounded
-            flat>
+          <q-btn rounded
+                 flat>
             غیر فعال کردن همه
           </q-btn>
         </div>
@@ -218,14 +183,12 @@
 
       <div v-if="!finalApprovalMode"
            class="dialogChip">
-        <q-chip
-          v-for="item in countOfSelectedSubCategory"
-          :key="item"
-          class="filter-items"
-          icon-remove="mdi-close"
-          removable
-          @remove="RemoveSelectedChoice(item)"
-        >
+        <q-chip v-for="item in countOfSelectedSubCategory"
+                :key="item"
+                class="filter-items"
+                icon-remove="mdi-close"
+                removable
+                @remove="RemoveSelectedChoice(item)">
           {{ item.title }}: {{ item.selectedQuestionsCount }}
         </q-chip>
       </div>
@@ -283,12 +246,12 @@
           </div>
           <div class="chart-titles">
             <q-badge class="titles-icon medium"
-                     rounded></q-badge>
+                     rounded />
             <div>متوسط</div>
           </div>
           <div class="chart-titles">
             <q-badge class="titles-icon easy"
-                     rounded></q-badge>
+                     rounded />
             <div>آسان</div>
           </div>
         </div>
@@ -342,6 +305,15 @@ export default {
       }
     }
   },
+
+  emits: [
+    'selectAllQuestions',
+    'deselectAllQuestions',
+    'remove',
+    'nextTab',
+    'lastTab',
+    'update:checkbox'
+  ],
 
   data () {
     return {
@@ -402,17 +374,6 @@ export default {
     }
   },
 
-  watch: {
-    'selectedQuestions.length': function () {
-      this.setDifficultyLevelsChart()
-      this.numberOfQuestions()
-      this.replaceTitle()
-    },
-    checkBox (newVal) {
-      this.checkBoxValue = newVal
-    }
-  },
-
   computed: {
     countOfSelectedSubCategory () {
       const lessons = this.selectedQuestions.filter((v, i, a) => a.findIndex(question => {
@@ -440,14 +401,16 @@ export default {
     }
   },
 
-  emits: [
-    'selectAllQuestions',
-    'deselectAllQuestions',
-    'remove',
-    'nextTab',
-    'lastTab',
-    'update:checkbox'
-  ],
+  watch: {
+    'selectedQuestions.length': function () {
+      this.setDifficultyLevelsChart()
+      this.numberOfQuestions()
+      this.replaceTitle()
+    },
+    checkBox (newVal) {
+      this.checkBoxValue = newVal
+    }
+  },
 
   created () {
     this.setDifficultyLevelsChart()

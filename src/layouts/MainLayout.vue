@@ -32,17 +32,14 @@
       </div>
     </template>
     <template #content>
-      <q-linear-progress
-        v-if="linearLoading"
-        color="primary"
-        reverse
-        class="q-mt-sm"
-        indeterminate
-      />
+      <q-linear-progress v-if="linearLoading"
+                         color="primary"
+                         reverse
+                         class="q-mt-sm"
+                         indeterminate />
       <div ref="contentInside"
            class="content-inside"
-           :class="{ 'user-panel' : getTemplateLeftSideBarType === 'default' }"
-      >
+           :class="{ 'user-panel' : getTemplateLeftSideBarType === 'default' }">
         <q-dialog v-model="confirmDialogData.show"
                   persistent>
           <q-card class="q-pa-md q-pb-none">
@@ -69,7 +66,7 @@
         <q-dialog v-model="loginDialog">
           <auth />
         </q-dialog>
-        <Router :include="keepAliveComponents" />
+        <router :include="keepAliveComponents" />
         <floating-action-button v-if="user.hasPermission('examStore') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams' || $route.name === 'Public.Product.Show')" />
       </div>
     </template>

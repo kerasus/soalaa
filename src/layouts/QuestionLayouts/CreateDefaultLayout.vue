@@ -1,5 +1,5 @@
 <template>
-  <Router :exclude="['MultipleChoiceQ', 'MBTIQ']" />
+  <router :exclude="['MultipleChoiceQ', 'MBTIQ']" />
 </template>
 <script>
 import Router from 'src/router/Router'

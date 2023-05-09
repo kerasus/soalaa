@@ -5,8 +5,7 @@
       <div v-for="(item, index) in questionCategories.list"
            :key="index"
            class="row upload-file-side"
-           style="width: 400px"
-      >
+           style="width: 400px">
         <div class="col">
           <q-file :ref="item.id + 'questionFile'"
                   v-model="item.questionFile"
@@ -16,15 +15,12 @@
                   :loading="dataLoading"
                   filled
                   :disable="item.loading.question ? true : false"
-                  @update:model-value="addFiles (item.questionFile, item, 'question')"
-          >
+                  @update:model-value="addFiles (item.questionFile, item, 'question')">
             <template v-slot:append>
-              <q-icon
-                v-if="!item.loading.question"
-                name="cancel"
-                class="cursor-pointer"
-                @click="deleteFile (item, 'questionFile', 'question')"
-              />
+              <q-icon v-if="!item.loading.question"
+                      name="cancel"
+                      class="cursor-pointer"
+                      @click="deleteFile (item, 'questionFile', 'question')" />
             </template>
           </q-file>
           <div class="buttons-block">
@@ -36,21 +32,18 @@
                    label="آپلود"
                    :loading="dataLoading || item.loading.question"
                    :disabled="!item.canUpload['question']"
-                   @click="upload(item, 'questionFile', 'questions_booklet', 'question')"
-            />
+                   @click="upload(item, 'questionFile', 'questions_booklet', 'question')" />
             <a v-if="item.questions_booklet"
                :href="item.questions_booklet"
                target="_blank"
-               :style="{ textDecoration: 'none'}"
-            >
+               :style="{ textDecoration: 'none'}">
               <q-btn class="full-width upload-file-btn"
                      dense
                      color="orange"
                      flat
                      icon-right="file_download"
                      label="دانلود"
-                     :loading="dataLoading"
-              />
+                     :loading="dataLoading" />
             </a>
           </div>
           <br>
@@ -62,16 +55,13 @@
                   :loading="dataLoading"
                   filled
                   :disable="item.loading.answer ? true :false"
-                  @update:model-value="addFiles (item.questionFile, item, 'answer')"
-          >
+                  @update:model-value="addFiles (item.questionFile, item, 'answer')">
             <template v-if="item.answerFile"
                       v-slot:append>
-              <q-icon
-                v-if="!item.loading.answer"
-                name="cancel"
-                class="cursor-pointer"
-                @click="deleteFile (item, 'answerFile', 'answer')"
-              />
+              <q-icon v-if="!item.loading.answer"
+                      name="cancel"
+                      class="cursor-pointer"
+                      @click="deleteFile (item, 'answerFile', 'answer')" />
             </template>
           </q-file>
           <div class="buttons-block">
@@ -83,21 +73,18 @@
                    label="آپلود"
                    :loading="dataLoading || item.loading.answer"
                    :disabled="!item.canUpload['answer']"
-                   @click="upload(item, 'answerFile', 'descriptive_answers_booklet','answer')"
-            />
+                   @click="upload(item, 'answerFile', 'descriptive_answers_booklet','answer')" />
             <a v-if="item.descriptive_answers_booklet"
                :href="item.descriptive_answers_booklet"
                target="_blank"
-               :style="{ textDecoration: 'none' }"
-            >
+               :style="{ textDecoration: 'none' }">
               <q-btn class="full-width upload-file-btn"
                      dense
                      color="orange"
                      flat
                      icon-right="file_download"
                      label="دانلود"
-                     :loading="dataLoading"
-              />
+                     :loading="dataLoading" />
             </a>
           </div>
         </div>

@@ -4,20 +4,17 @@
     <steps v-model:step="currentTab"
            :loading="draftExam.loading"
            :isConfirmd="draftExamIsConfirmed"
-           :disabled="draftExamIsConfirmed || !subscribed"
-    />
+           :disabled="draftExamIsConfirmed || !subscribed" />
     <q-tab-panels v-if="subscribed && !draftExamIsConfirmed"
                   v-model="currentTab"
-                  animated
-    >
+                  animated>
       <q-tab-panel :disable="draftExamIsConfirmed"
                    name="createPage">
         <exam-info-tab ref="createPage"
                        v-model:exam="draftExam"
                        :gradesList="gradesList"
                        :majorList="majorList"
-                       @nextTab="goToNextStep"
-        />
+                       @nextTab="goToNextStep" />
       </q-tab-panel>
       <q-tab-panel :disable="draftExamIsConfirmed"
                    name="chooseQuestion">
@@ -27,8 +24,7 @@
                                 @nextTab="goToNextStep"
                                 @lastTab="goToPrevStep"
                                 @addQuestionToExam="bulkAttachQuestionsOfDraftExam"
-                                @deleteQuestionFromExam="bulkDetachQuestionsOfDraftExam"
-        />
+                                @deleteQuestionFromExam="bulkDetachQuestionsOfDraftExam" />
       </q-tab-panel>
       <q-tab-panel :disable="draftExamIsConfirmed"
                    name="finalApproval">
@@ -39,8 +35,7 @@
                             @detachQuestion="bulkDetachQuestionsOfDraftExam"
                             @updateOrders="replaceQuestionsOfDraftExam"
                             @previousStep="goToPrevStep"
-                            @confirmExam="confirmDraftExam"
-        />
+                            @confirmExam="confirmDraftExam" />
       </q-tab-panel>
     </q-tab-panels>
     <div v-else-if="subscribed && draftExamIsConfirmed">
@@ -55,12 +50,11 @@
                     cy="145.5"
                     r="122.5"
                     fill="url(#paint0_linear_2989_11788)" />
-            <path
-              d="M145 235C194.5 235 235 194.5 235 145C235 95.5 194.5 55 145 55C95.5 55 55 95.5 55 145C55 194.5 95.5 235 145 235Z"
-              stroke="#4CAF50"
-              stroke-width="10"
-              stroke-linecap="round"
-              stroke-linejoin="round" />
+            <path d="M145 235C194.5 235 235 194.5 235 145C235 95.5 194.5 55 145 55C95.5 55 55 95.5 55 145C55 194.5 95.5 235 145 235Z"
+                  stroke="#4CAF50"
+                  stroke-width="10"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
             <path d="M106.75 145L132.22 170.47L183.25 119.53"
                   stroke="#4CAF50"
                   stroke-width="10"
@@ -87,8 +81,7 @@
         <div class="actions-section">
           <q-btn flat
                  class="btn-go-to-exam-list"
-                 :to="{name: 'User.Exam.List'}"
-          >
+                 :to="{name: 'User.Exam.List'}">
             مشاهده آزمون در پنل کاربری
           </q-btn>
           <q-btn flat
@@ -107,18 +100,14 @@
              @click="gotoSubscription" />
     </div>
     <q-dialog v-model="createDraftExamMessageDialog">
-      <q-card
-        flat
-        class="report-problem-dialog"
-      >
-        <q-btn
-          v-close-popup
-          flat
-          round
-          dense
-          icon="close"
-          class="close-btn"
-        />
+      <q-card flat
+              class="report-problem-dialog">
+        <q-btn v-close-popup
+               flat
+               round
+               dense
+               icon="close"
+               class="close-btn" />
         <q-card-section class="problem-type no-padding">
           <q-icon name="isax:tick-circle"
                   size="110px" />
@@ -126,12 +115,10 @@
                style="padding-bottom: 20px">
             آزمون شما با موفقیت ثبت شد
           </div>
-          <q-btn
-            unelevated
-            color="primary"
-            class="btn-lg final-btn"
-            :to="{name :'Admin.Exam.Index'}"
-          >
+          <q-btn unelevated
+                 color="primary"
+                 class="btn-lg final-btn"
+                 :to="{name :'Admin.Exam.Index'}">
             رفتن به صفحه لیست آزمون
           </q-btn>
         </q-card-section>
@@ -163,13 +150,11 @@
           <q-btn label="خیر"
                  class="cancel-draft"
                  unelevated
-                 @click="clearDraftExam"
-          />
+                 @click="clearDraftExam" />
           <q-btn label="بله، ادامه می‌دهم"
                  color="primary"
                  unelevated
-                 @click="setDraftExam"
-          />
+                 @click="setDraftExam" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -194,19 +179,19 @@ export default {
     FinalApprovalTab,
     QuestionSelectionTab
   },
-  props: {
-    userRule: {
-      type: String
-    }
-  },
+  mixins: [
+    mixinTree
+  ],
   provide() {
     return {
       scrollInfo: computed(() => this.scrollInfo)
     }
   },
-  mixins: [
-    mixinTree
-  ],
+  props: {
+    userRule: {
+      type: String
+    }
+  },
   data() {
     return {
       scrollInfo: {},
@@ -221,22 +206,6 @@ export default {
       createDraftExamMessageDialog: false,
       continueWithOldDraftExamConfirmationDialog: false
     }
-  },
-  created() {
-    this.draftExam.loading = true
-    this.checkSubscription().then((res) => {
-      if (res.data.data) {
-        this.subscribed = true
-        this.getData()
-      } else {
-        this.currentTab = 'notSubscribed'
-        this.draftExam.loading = false
-        this.subscribed = false
-      }
-    }).catch((e) => {
-      this.subscribed = false
-      this.draftExam.loading = false
-    })
   },
   computed: {
     draftMajor() {
@@ -258,6 +227,22 @@ export default {
     currentTab(newStep) {
       this.onChangeTab(newStep)
     }
+  },
+  created() {
+    this.draftExam.loading = true
+    this.checkSubscription().then((res) => {
+      if (res.data.data) {
+        this.subscribed = true
+        this.getData()
+      } else {
+        this.currentTab = 'notSubscribed'
+        this.draftExam.loading = false
+        this.subscribed = false
+      }
+    }).catch((e) => {
+      this.subscribed = false
+      this.draftExam.loading = false
+    })
   },
   methods: {
     onScroll(info) {

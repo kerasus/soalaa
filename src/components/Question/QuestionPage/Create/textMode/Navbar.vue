@@ -2,66 +2,48 @@
   <div class="question-txtMode-navbar">
     <div class="fit row wrap justify-between">
       <div class="col-auto">
-        <div
-          v-if="mode === 'create'"
-          class="question-type row items-center relative-position"
-        >
+        <div v-if="mode === 'create'"
+             class="question-type row items-center relative-position">
           <div class="col">نوع سوال</div>
           <div>
-            <q-tabs
-              v-if="componentTabs?.list[0] && !qTabLoading"
-              v-model="questionTab"
-              no-caps
-              dense
-              shrink
-              :breakpoint="0"
-              class="col question-type-tabs"
-            >
-              <q-route-tab
-                v-for="(item, index) in componentTabs.list"
-                :key="index"
-                class="question-type-tab"
-                :name="item.value"
-                :label="item.tabName"
-                :to="getCurrentRoute(item.componentName)"
-              />
+            <q-tabs v-if="componentTabs?.list[0] && !qTabLoading"
+                    v-model="questionTab"
+                    no-caps
+                    dense
+                    shrink
+                    :breakpoint="0"
+                    class="col question-type-tabs">
+              <q-route-tab v-for="(item, index) in componentTabs.list"
+                           :key="index"
+                           class="question-type-tab"
+                           :name="item.value"
+                           :label="item.tabName"
+                           :to="getCurrentRoute(item.componentName)" />
             </q-tabs>
-            <q-skeleton
-              v-if="qTabLoading"
-              type="QToolbar"
-              width="268px"
-              height="30px"
-              class="q-ml-md"
-            />
+            <q-skeleton v-if="qTabLoading"
+                        type="QToolbar"
+                        width="268px"
+                        height="30px"
+                        class="q-ml-md" />
           </div>
         </div>
-        <div
-          v-if="mode === 'show'"
-        >
-          <q-btn
-            unelevated
-            color="primary"
-            label="ویرایش سوال"
-            class="save-btn default-detail-btn"
-            @click="redirectToEditPage"
-          />
+        <div v-if="mode === 'show'">
+          <q-btn unelevated
+                 color="primary"
+                 label="ویرایش سوال"
+                 class="save-btn default-detail-btn"
+                 @click="redirectToEditPage" />
         </div>
       </div>
       <div class="col-auto">
-        <div
-          v-if="!(mode === 'create')"
-          class="question-img-btn row"
-        >
-          <div
-            v-ripple.early
-            class="relative-position container bg-primary text-black flex flex-center question-pics"
-            @click="panelClicked"
-          >
-            <q-img
-              src="/img/img-panel-btn.png"
-              spinner-color="white"
-              class="question-pics-img"
-            />
+        <div v-if="!(mode === 'create')"
+             class="question-img-btn row">
+          <div v-ripple.early
+               class="relative-position container bg-primary text-black flex flex-center question-pics"
+               @click="panelClicked">
+            <q-img src="/img/img-panel-btn.png"
+                   spinner-color="white"
+                   class="question-pics-img" />
             <div class="text-white text-center question-pics-txt">تصاویر سوال</div>
           </div>
         </div>
@@ -78,6 +60,9 @@ import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'Navbar',
+  mixins: [
+    AdminActionOnQuestion
+  ],
   props: {
     mode: {
       type: String,
@@ -94,20 +79,18 @@ export default {
       qTabLoading: false
     }
   },
-  mixins: [
-    AdminActionOnQuestion
-  ],
-  created () {
-    this.qTabLoading = true
-  },
-  mounted () {
-    this.init()
-  },
   computed: {
     doesHaveImage () {
       // return !!()
       return null
     }
+  },
+  watch: {},
+  created () {
+    this.qTabLoading = true
+  },
+  mounted () {
+    this.init()
   },
   methods: {
     async init() {
@@ -167,8 +150,7 @@ export default {
         }
       }
     }
-  },
-  watch: {}
+  }
 }
 </script>
 

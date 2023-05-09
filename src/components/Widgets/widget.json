@@ -1,5 +1,5 @@
 {
-  "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets",
+  "path": "/home/alaa/projects/soalaa/src/components/Widgets",
   "name": "Widgets",
   "self_type": "folder",
   "children": [
@@ -118,13 +118,13 @@
       "type": "widget"
     },
     {
-      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/PageBuilderComponents.js",
+      "path": "/home/alaa/projects/soalaa/src/components/Widgets/PageBuilderComponents.js",
       "name": "PageBuilderComponents",
       "self_type": "file",
       "file_type": "js"
     },
     {
-      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/PageBuilderOptionPanels.js",
+      "path": "/home/alaa/projects/soalaa/src/components/Widgets/PageBuilderOptionPanels.js",
       "name": "PageBuilderOptionPanels",
       "self_type": "file",
       "file_type": "js"
@@ -138,7 +138,7 @@
       "optionPanelName": "PersonSliderOptionPanel"
     },
     {
-      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/Product",
+      "path": "/home/alaa/projects/soalaa/src/components/Widgets/Product",
       "name": "Product",
       "self_type": "folder",
       "children": [
@@ -250,7 +250,7 @@
       "type": "widget"
     },
     {
-      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/Subscription",
+      "path": "/home/alaa/projects/soalaa/src/components/Widgets/Subscription",
       "name": "Subscription",
       "self_type": "folder",
       "children": [
@@ -312,13 +312,13 @@
       "optionPanelName": "VideoPlayerWidgetOptionPanel"
     },
     {
-      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/readme.md",
+      "path": "/home/alaa/projects/soalaa/src/components/Widgets/readme.md",
       "name": "readme",
       "self_type": "file",
       "file_type": "md"
     },
     {
-      "path": "/home/alaa/projects/3a-quasar-brach/src/components/Widgets/widget.json",
+      "path": "/home/alaa/projects/soalaa/src/components/Widgets/widget.json",
       "name": "widget",
       "self_type": "file",
       "file_type": "json"

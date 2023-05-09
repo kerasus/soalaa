@@ -1,35 +1,31 @@
 <template>
   <div class="type-section">
-    <q-btn
-      unelevated
-      color="primary"
-      :loading="btnLoading"
-      label="اصلاح فرمول سوال"
-      class="default-detail-btn"
-      @click="setModifiedValue(true)"
-    />
-    <vue-tiptap-katex
-      ref="tiptap"
-      :loading="loading"
-      :options="{
-        bubbleMenu: false,
-        floatingMenu: false,
-        poem: true,
-        reading: true,
-        persianKeyboard: true,
-        uploadServer: {
-          url: getQuestionUploadURL,
-          headers: {
-            Authorization: getAuthorizationCode
-          }
-        },
-        persianKeyboard: true,
-        mathliveOptions: {
-          locale: 'fa',
-        }
-      }"
-      @update:modelValue="updateValue"
-    />
+    <q-btn unelevated
+           color="primary"
+           :loading="btnLoading"
+           label="اصلاح فرمول سوال"
+           class="default-detail-btn"
+           @click="setModifiedValue(true)" />
+    <vue-tiptap-katex ref="tiptap"
+                      :loading="loading"
+                      :options="{
+                        bubbleMenu: false,
+                        floatingMenu: false,
+                        poem: true,
+                        reading: true,
+                        persianKeyboard: true,
+                        uploadServer: {
+                          url: getQuestionUploadURL,
+                          headers: {
+                            Authorization: getAuthorizationCode
+                          }
+                        },
+                        persianKeyboard: true,
+                        mathliveOptions: {
+                          locale: 'fa',
+                        }
+                      }"
+                      @update:modelValue="updateValue" />
   </div>
 </template>
 
@@ -43,6 +39,12 @@ export default {
   name: 'QuestionField',
   components: {
     VueTiptapKatex
+  },
+  inject: {
+    question: {
+      from: 'providedQuestion', // this is optional if using the same key for injection
+      default: new Question()
+    }
   },
   props: {
     editorValue: {
@@ -62,12 +64,6 @@ export default {
       btnLoading: false,
       isValueChangeAllowed: false,
       modifiedContent: ''
-    }
-  },
-  inject: {
-    question: {
-      from: 'providedQuestion', // this is optional if using the same key for injection
-      default: new Question()
     }
   },
   computed: {

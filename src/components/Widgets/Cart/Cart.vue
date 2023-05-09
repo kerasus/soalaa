@@ -5,37 +5,28 @@
   <!--      @click="add"-->
   <!--    />-->
   <!--  </div>-->
-  <div
-    v-if="cart.count > 0"
-    class="cart-count">
+  <div v-if="cart.count > 0"
+       class="cart-count">
     سبدخرید شما ({{cart.count}} محصول)
   </div>
-  <div
-    v-else
-    class="cart-count"
-  >
+  <div v-else
+       class="cart-count">
     سبدخرید شما ({{cart.count}})
   </div>
   <div class="cart-template row">
-    <div
-      v-if="cart.count !== 0"
-      class="cart-item col-md-8 col-12"
-    >
+    <div v-if="cart.count !== 0"
+         class="cart-item col-md-8 col-12">
       <cart-view :cart="cart"
                  @cartReview="cartReview" />
     </div>
 
-    <div
-      v-if="cart.count"
-      class="side-invoice col-md-4 col-12"
-    >
+    <div v-if="cart.count"
+         class="side-invoice col-md-4 col-12">
       <cart-invoice :cart="cart" />
     </div>
 
-    <div
-      v-if="cart.count === 0"
-      class="empty-cart col-12"
-    >
+    <div v-if="cart.count === 0"
+         class="empty-cart col-12">
       <cart-empty />
     </div>
 
@@ -63,14 +54,14 @@ export default {
     }
   },
 
-  created () {
-    this.cartReview()
-  },
-
   computed: {
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
     }
+  },
+
+  created () {
+    this.cartReview()
   },
 
   methods: {

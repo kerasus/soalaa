@@ -38,10 +38,6 @@ export default {
       pageConfig: {}
     }
   },
-  created() {
-    // this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
-    // this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
-  },
   computed: {
     pageBuilderEditable() {
       return this.$store.getters['AppLayout/pageBuilderEditable']
@@ -49,6 +45,10 @@ export default {
     calculateHeightStyle() {
       return this.$store.getters['AppLayout/calculateContainerFullHeight']
     }
+  },
+  created() {
+    // this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
+    // this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
   }
 }
 </script>

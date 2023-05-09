@@ -4,10 +4,8 @@
       <q-img src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_cart.png" />
     </div>
     <div class="title">سبد خرید شما خالی است!</div>
-    <router-link
-      :to="{name: 'Landing.3aExams'}"
-      class="back"
-    >
+    <router-link :to="{name: 'Landing.3aExams'}"
+                 class="back">
       بازگشت به فروشگاه
     </router-link>
   </div>
@@ -16,10 +14,10 @@
 <script>
 export default {
   name: 'CartEmpty',
-  created() {},
   data() {
     return {}
   },
+  created() {},
   methods: {}
 }
 </script>

@@ -66,10 +66,8 @@
               {{getExamStartAtTime(slide.start_at)}}
             </div>
           </div>
-          <div
-            class="test-box-footer"
-            :class="true ? 'active' : ''"
-          >
+          <div class="test-box-footer"
+               :class="true ? 'active' : ''">
             <div v-if="!isExamStarted"
                  class="test-time">
               {{ getExamRemainingTime(slide.start_at) }}
@@ -79,13 +77,10 @@
                  class="test-time">
               آزمون شروع شده
             </div>
-            <div
-              v-if="isExamStarted"
-              class="test-link">
-              <router-link
-                :to="getExamRoute(slide)"
-                style="text-decoration: none; color: #FFFFFF;"
-              >
+            <div v-if="isExamStarted"
+                 class="test-link">
+              <router-link :to="getExamRoute(slide)"
+                           style="text-decoration: none; color: #FFFFFF;">
                 ورود به آزمون
                 <q-icon name="arrow_back_ios" />
               </router-link>
@@ -118,6 +113,35 @@ export default defineComponent({
       default: new ExamList()
     }
   },
+  setup() {
+    const isExamStarted = ref(false)
+    const carousel = ref()
+    const nextSlide = () => {
+      carousel.value.next()
+    }
+    const prevSlide = () => {
+      carousel.value.prev()
+    }
+
+    return {
+      carousel,
+      nextSlide,
+      prevSlide,
+      isExamStarted
+    }
+  },
+  computed: {
+    getExamRoute () {
+      return (exam) => {
+        let routeName = 'onlineQuiz.alaaView'
+        if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
+          routeName = 'onlineQuiz.mbtiBartle'
+        }
+
+        return { name: routeName, params: { quizId: exam.id, questNumber: 1 } }
+      }
+    }
+  },
   methods: {
     getExamStartAtTitledDate (dateTime) {
       return ShamsiDate.getTitledDate(dateTime)
@@ -141,35 +165,6 @@ export default defineComponent({
         return Math.round(timePieces[0] / 24) + ' روز'
       }
       return time
-    }
-  },
-  computed: {
-    getExamRoute () {
-      return (exam) => {
-        let routeName = 'onlineQuiz.alaaView'
-        if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
-          routeName = 'onlineQuiz.mbtiBartle'
-        }
-
-        return { name: routeName, params: { quizId: exam.id, questNumber: 1 } }
-      }
-    }
-  },
-  setup() {
-    const isExamStarted = ref(false)
-    const carousel = ref()
-    const nextSlide = () => {
-      carousel.value.next()
-    }
-    const prevSlide = () => {
-      carousel.value.prev()
-    }
-
-    return {
-      carousel,
-      nextSlide,
-      prevSlide,
-      isExamStarted
     }
   }
 })

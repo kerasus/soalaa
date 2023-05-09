@@ -1,59 +1,46 @@
 <template>
   <div class="create-exam-panel">
     <div class="exam-create-panel">
-      <steps
-        v-model:currentComponent="currentTab"
-        @currentStepChanged = "changeTab"
-      />
-      <q-tab-panels
-        v-model="currentTab"
-        animated
-      >
+      <steps v-model:currentComponent="currentTab"
+             @currentStepChanged = "changeTab" />
+      <q-tab-panels v-model="currentTab"
+                    animated>
         <q-tab-panel name="createPage">
           <exam-info-tab ref="createExam"
                          v-model:exam="draftExam"
                          :gradesList="gradesList"
                          :majorList="majorList"
-                         @nextTab="goToNextStep"
-          />
+                         @nextTab="goToNextStep" />
         </q-tab-panel>
         <q-tab-panel name="chooseQuestion">
-          <question-selection-tab
-            v-model:lesson="exam.temp.lesson"
-            v-model:exam="exam"
-            :questionLoading="exam.questions.loading"
-            @nextTab="goToNextStep"
-            @lastTab="goToLastStep"
-            @addQuestionToExam="addQuestionToExam"
-            @deleteQuestionFromExam="deleteQuestionFromExam"
-          />
+          <question-selection-tab v-model:lesson="exam.temp.lesson"
+                                  v-model:exam="exam"
+                                  :questionLoading="exam.questions.loading"
+                                  @nextTab="goToNextStep"
+                                  @lastTab="goToLastStep"
+                                  @addQuestionToExam="addQuestionToExam"
+                                  @deleteQuestionFromExam="deleteQuestionFromExam" />
         </q-tab-panel>
         <q-tab-panel name="finalApproval">
           <!--          deleteQuestionFromExam-->
-          <final-approval-tab
-            v-model:exam="exam"
-            :majors="majorList"
-            :grades="gradesList"
-            @detachQuestion="bulkDetachLastStep"
-            @updateOrders="updateQuestionOrder"
-            @creatFinalExam="submitFinalExam"
-            @goToNextStep="goToNextStep"
-          />
+          <final-approval-tab v-model:exam="exam"
+                              :majors="majorList"
+                              :grades="gradesList"
+                              @detachQuestion="bulkDetachLastStep"
+                              @updateOrders="updateQuestionOrder"
+                              @creatFinalExam="submitFinalExam"
+                              @goToNextStep="goToNextStep" />
         </q-tab-panel>
       </q-tab-panels>
       <q-dialog v-model="createDraftExamMessageDialog">
-        <q-card
-          flat
-          class="report-problem-dialog"
-        >
-          <q-btn
-            v-close-popup
-            flat
-            round
-            dense
-            icon="close"
-            class="close-btn"
-          />
+        <q-card flat
+                class="report-problem-dialog">
+          <q-btn v-close-popup
+                 flat
+                 round
+                 dense
+                 icon="close"
+                 class="close-btn" />
           <q-card-section class="problem-type no-padding">
             <q-icon name="isax:tick-circle"
                     size="110px" />
@@ -61,12 +48,10 @@
                  style="padding-bottom: 20px">
               آزمون شما با موفقیت ثبت شد
             </div>
-            <q-btn
-              unelevated
-              color="primary"
-              class="btn-lg final-btn"
-              :to="{name :'Admin.Exam.Index'}"
-            >
+            <q-btn unelevated
+                   color="primary"
+                   class="btn-lg final-btn"
+                   :to="{name :'Admin.Exam.Index'}">
               رفتن به صفحه لیست آزمون
             </q-btn>
           </q-card-section>
@@ -114,14 +99,14 @@ export default {
     ExamInfoTab,
     Steps
   },
+  mixins: [
+    mixinTree
+  ],
   props: {
     userRule: {
       type: String
     }
   },
-  mixins: [
-    mixinTree
-  ],
   data() {
     return {
       draftExam: new Exam(),

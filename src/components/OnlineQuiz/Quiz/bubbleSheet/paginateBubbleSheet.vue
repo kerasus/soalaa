@@ -1,31 +1,24 @@
 <template>
-  <div
-    class="bubbleSheet"
-  >
-    <div
-      ref="bubbleSheet"
-      class="row bubbleSheet-body q-col-gutter bubble-sheet questions-list"
-      :class="{
-        'pasokh-nameh': info.type === 'pasokh-nameh',
-        'pasokh-barg': info.type === 'pasokh-barg',
-      }"
-    >
+  <div class="bubbleSheet">
+    <div ref="bubbleSheet"
+         class="row bubbleSheet-body q-col-gutter bubble-sheet questions-list"
+         :class="{
+           'pasokh-nameh': info.type === 'pasokh-nameh',
+           'pasokh-barg': info.type === 'pasokh-barg',
+         }">
       <div v-for="(group, index) in questionsInGroups"
            :key="index"
            class="col col-auto question-group"
-           :class="{'none-question-in-list': !group.length}"
-      >
+           :class="{'none-question-in-list': !group.length}">
         <div v-for="question in group"
              :key="question.id"
-             class="question-in-list"
-        >
+             class="question-in-list">
           <div :class="{
             'question-number-in-list': true,
             circle: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o',
             cross: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x',
             bookmark: getUserQuestionData(question.id) && getUserQuestionData(question.id).bookmarked
-          }"
-          >
+          }">
             <span>
               {{ question.order }}
             </span>
@@ -36,18 +29,15 @@
                  'choice-in-list': true,
                  active: getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id,
                  answer: choice.answer
-               }"
-          >
+               }">
             <q-icon v-if="info.type === 'pasokh-nameh' && choice.answer"
                     size="12"
                     icon="mdi-check"
-                    :color="getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id ? '#fff' : '#00c753'"
-            />
+                    :color="getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id ? '#fff' : '#00c753'" />
             <q-icon v-if="info.type === 'pasokh-nameh' && getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id && !choice.answer"
                     size="12"
                     icon="mdi-close"
-                    color="#fff"
-            />
+                    color="#fff" />
           </div>
         </div>
       </div>
@@ -68,7 +58,6 @@ export default {
     mixinQuiz,
     mixinUserActionOnQuestion
   ],
-  emits: ['loaded'],
   props: {
     questions: {
       default: null
@@ -80,6 +69,7 @@ export default {
       default: 2000
     }
   },
+  emits: ['loaded'],
   data: () => ({
     showDateOfAnsweredAt: false,
     overlay: false,
@@ -101,9 +91,6 @@ export default {
       return groups
     }
   },
-  mounted () {
-    this.checkForShowDateOfAnsweredAt()
-  },
   watch: {
     overlay () {
       if (this.overlay) {
@@ -112,6 +99,9 @@ export default {
         this.$store.dispatch('loading/overlayLoading', false)
       }
     }
+  },
+  mounted () {
+    this.checkForShowDateOfAnsweredAt()
   },
   methods: {
     onBubbleSheetLoaded () {

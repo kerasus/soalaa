@@ -1,58 +1,44 @@
 <template>
   <div class="participate-mbti-bartle">
-    <div  class="row q-pt-lg q-mb-md">
+    <div class="row q-pt-lg q-mb-md">
       <div class="col-5 q-mx-xl">
         <a href="https://alaatv.com">
-          <q-img
-            src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-logo.png"
-            width="27px"
-            height="40ox"
-          />
+          <q-img src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-logo.png"
+                 width="27px"
+                 height="40ox" />
         </a>
       </div>
       <div class="col-6">
         <a href="https://alaatv.com">
-          <q-img
-            src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-text.png"
-            width="134px"
-            height="40px"
-          />
+          <q-img src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-text.png"
+                 width="134px"
+                 height="40px" />
         </a>
       </div>
     </div>
     <div class="row justify-between">
-      <div
-        v-if="quiz"
-        class="q-mx-xl text-subtitle1 text-grey-10"
-        v-text="quiz.title"
-      />
-      <div
-        class="q-mx-xl text-h6 text-grey-10"
-        v-text="counter.string"
-      />
+      <div v-if="quiz"
+           class="q-mx-xl text-subtitle1 text-grey-10"
+           v-text="quiz.title" />
+      <div class="q-mx-xl text-h6 text-grey-10"
+           v-text="counter.string" />
     </div>
-    <q-linear-progress
-      size="15px"
-      :value="((counter.value)+1)/100"
-      color="warning"
-      track-color="grey-3"
-      reverse
-      class="q-mt-sm"
-    />
-    <div
-      class="question-box-parent"
-    >
+    <q-linear-progress size="15px"
+                       :value="((counter.value)+1)/100"
+                       color="warning"
+                       track-color="grey-3"
+                       reverse
+                       class="q-mt-sm" />
+    <div class="question-box-parent">
       <div class="row justify-center">
         <div class="question-box">
           <div class="arrow-box prev">
-            <q-btn
-              text-color="white"
-              class="answer-btn"
-              :style=" ($route.params.questNumber.toString() === '1') ?'background: #eaeaea' : 'background: #ffe082'"
-              unelevated
-              :disabled="$route.params.questNumber.toString() === '1'"
-              @click="goToPrevQuestion('onlineQuiz.mbtiBartle')"
-            >
+            <q-btn text-color="white"
+                   class="answer-btn"
+                   :style=" ($route.params.questNumber.toString() === '1') ?'background: #eaeaea' : 'background: #ffe082'"
+                   unelevated
+                   :disabled="$route.params.questNumber.toString() === '1'"
+                   @click="goToPrevQuestion('onlineQuiz.mbtiBartle')">
               <i class="fi-rr-angle-right" />
             </q-btn>
           </div>
@@ -61,81 +47,59 @@
               سوال
               {{ $route.params.questNumber }}
             </p>
-            <p
-              v-if="currentQuestion"
-              class="statement"
-              v-html="currentQuestion.statement"
-            />
-            <div
-              v-if="currentQuestion"
-              class="choices"
-              :class="{
-                agree: stringMeanThumbUpOrDown(currentQuestion.choices.list[0].title) === 'ThumbUp',
-                disagree: stringMeanThumbUpOrDown(currentQuestion.choices.list[0].title) === 'ThumbDown'
-              }"
-            >
-              <div
-                v-for="(choice, index) in currentQuestion.choices.list"
-                :key="index+choiceKey"
-                class="choice"
-                :class="{
-                  agree: stringMeanThumbUpOrDown(choice.title) === 'ThumbUp',
-                  disagree: stringMeanThumbUpOrDown(choice.title) === 'ThumbDown',
-                  active: choice.active
-                }"
-              >
-                <div
-                  v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp' || stringMeanThumbUpOrDown(choice.title) === 'ThumbDown'"
-                  class="choice-circle"
-                  @click="choiceClick(choice.id)"
-                >
+            <p v-if="currentQuestion"
+               class="statement"
+               v-html="currentQuestion.statement" />
+            <div v-if="currentQuestion"
+                 class="choices"
+                 :class="{
+                   agree: stringMeanThumbUpOrDown(currentQuestion.choices.list[0].title) === 'ThumbUp',
+                   disagree: stringMeanThumbUpOrDown(currentQuestion.choices.list[0].title) === 'ThumbDown'
+                 }">
+              <div v-for="(choice, index) in currentQuestion.choices.list"
+                   :key="index+choiceKey"
+                   class="choice"
+                   :class="{
+                     agree: stringMeanThumbUpOrDown(choice.title) === 'ThumbUp',
+                     disagree: stringMeanThumbUpOrDown(choice.title) === 'ThumbDown',
+                     active: choice.active
+                   }">
+                <div v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp' || stringMeanThumbUpOrDown(choice.title) === 'ThumbDown'"
+                     class="choice-circle"
+                     @click="choiceClick(choice.id)">
                   <div class="row items-center choice-inner-circle">
-                    <i
-                      v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp'"
-                      class="fi-rr-thumbs-up"
-                    />
-                    <i
-                      v-else
-                      class="fi-rr-thumbs-down"
-                    />
-                    <i class="fi fi-rr-Angle-left"></i>
+                    <i v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp'"
+                       class="fi-rr-thumbs-up" />
+                    <i v-else
+                       class="fi-rr-thumbs-down" />
+                    <i class="fi fi-rr-Angle-left" />
                   </div>
                 </div>
-                <p
-                  v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp' || stringMeanThumbUpOrDown(choice.title) === 'ThumbDown'"
-                  v-html="choice.title"
-                />
-                <div
-                  v-else
-                  class="choice-rect"
-                  @click="choiceClick(choice.id)"
-                >
-                  <div
-                    class="choice-inner-rect"
-                    v-html="choice.title"
-                  />
+                <p v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp' || stringMeanThumbUpOrDown(choice.title) === 'ThumbDown'"
+                   v-html="choice.title" />
+                <div v-else
+                     class="choice-rect"
+                     @click="choiceClick(choice.id)">
+                  <div class="choice-inner-rect"
+                       v-html="choice.title" />
                 </div>
               </div>
             </div>
           </div>
           <div class="next arrow-box">
-            <q-btn
-              text-color="white"
-              class="answer-btn"
-              :style=" (!isCurrentQuestionAnswered || getQuestionNumberFromId(currentQuestion.id) === getCurrentExamQuestionsInArray().length) ?'background: #eaeaea' : 'background: #ffe082'"
-              unelevated
-              :disabled="!isCurrentQuestionAnswered || getQuestionNumberFromId(currentQuestion.id) === getCurrentExamQuestionsInArray().length"
-              @click="goToNextQuestion('onlineQuiz.mbtiBartle')"
-            >
+            <q-btn text-color="white"
+                   class="answer-btn"
+                   :style=" (!isCurrentQuestionAnswered || getQuestionNumberFromId(currentQuestion.id) === getCurrentExamQuestionsInArray().length) ?'background: #eaeaea' : 'background: #ffe082'"
+                   unelevated
+                   :disabled="!isCurrentQuestionAnswered || getQuestionNumberFromId(currentQuestion.id) === getCurrentExamQuestionsInArray().length"
+                   @click="goToNextQuestion('onlineQuiz.mbtiBartle')">
               <i class="fi-rr-angle-left" />
             </q-btn>
           </div>
         </div>
       </div>
     </div>
-    <q-dialog>
-
-    </q-dialog>
+    <q-dialog />
   </div>
 </template>
 

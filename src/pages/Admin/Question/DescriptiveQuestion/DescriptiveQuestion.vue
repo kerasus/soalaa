@@ -1,61 +1,51 @@
 <template>
-  <q-linear-progress
-    v-if="this.question.loading"
-    size="md"
-    indeterminate
-    rounded
-    color="primary"
-  />
+  <q-linear-progress v-if="this.question.loading"
+                     size="md"
+                     indeterminate
+                     rounded
+                     color="primary" />
   <q-card class="create-question-main-card custom-card">
     <q-card-section class="main-card-section question">
       <div class="card-section-header">
         <span>صورت سوال</span>
       </div>
       <div class="question-box">
-        <QuestionField
-          ref="tiptapQuestionStatement"
-          :key="'statement' + domKey"
-        />
+        <question-field ref="tiptapQuestionStatement"
+                        :key="'statement' + domKey" />
       </div>
     </q-card-section>
     <q-card-section class="main-card-section long-answer">
       <div class="card-section-header">پاسخ تشریحی</div>
       <div class="answer-box">
-        <QuestionField
-          ref="tiptapDescriptiveAnswer"
-          :key="'descriptive_answer' + domKey"
-        />
+        <question-field ref="tiptapDescriptiveAnswer"
+                        :key="'descriptive_answer' + domKey" />
       </div>
     </q-card-section>
   </q-card>
   <div class="relative-position">
     <div class="attach-btn row">
-      <question-identifier
-        ref="questionIdentifier"
-        editable
-        class="col-12"
-        :exams="examList"
-        :lessons="subCategoriesList"
-        :categories="categoryList"
-        :gradesList="gradesList"
-        :groups-list="lessonGroupList"
-        :lessons-list="lessonsList"
-        :major-list="majorList"
-        :authorship-dates-list="authorshipDatesList"
-        :question-authors-list="questionAuthorsList"
-        :question-target-list="questionTargetList"
-        :buffer="true"
-        @gradeSelected="getLessonsList"
-        @groupSelected="getLessonsList"
-        @attach="attachExam"
-        @detach="detachExam"
-        @tags-collected="setTagsOnCreate"
-      />
+      <question-identifier ref="questionIdentifier"
+                           editable
+                           class="col-12"
+                           :exams="examList"
+                           :lessons="subCategoriesList"
+                           :categories="categoryList"
+                           :gradesList="gradesList"
+                           :groups-list="lessonGroupList"
+                           :lessons-list="lessonsList"
+                           :major-list="majorList"
+                           :authorship-dates-list="authorshipDatesList"
+                           :question-authors-list="questionAuthorsList"
+                           :question-target-list="questionTargetList"
+                           :buffer="true"
+                           @gradeSelected="getLessonsList"
+                           @groupSelected="getLessonsList"
+                           @attach="attachExam"
+                           @detach="detachExam"
+                           @tags-collected="setTagsOnCreate" />
     </div>
-    <btn-box
-      class="col-12"
-      @saveQuestion="saveQuestion"
-    />
+    <btn-box class="col-12"
+             @saveQuestion="saveQuestion" />
   </div>
 </template>
 
@@ -83,15 +73,15 @@ export default {
     AdminActionOnQuestion,
     mixinTree
   ],
+  provide () {
+    return {
+      providedQuestion: computed(() => this.question)
+    }
+  },
   props: {
     status: {
       type: Boolean,
       default: () => false
-    }
-  },
-  provide () {
-    return {
-      providedQuestion: computed(() => this.question)
     }
   },
   data () {

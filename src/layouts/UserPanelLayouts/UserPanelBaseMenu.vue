@@ -1,45 +1,30 @@
 <template>
-  <div
-    class="user-panel-base-menu"
-    :class="{ 'list-side-mode' :  mode === 'sideBar' , 'list-drawer-mode' : mode === 'drawer'}"
-
-  >
-    <q-list
-      class="side-menu-list"
-      padding
-      dark
-    >
-      <div
-        v-for="(item , index) in titlesList"
-        :key="index"
-      >
-        <div
-          v-if="showMenuItem(item)"
-        >
-          <q-expansion-item
-            v-if="item.children.length"
-            :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
-            :label="item.title"
-            :icon="item.icon"
-            class="side-expansion-list"
-            dark
-          >
+  <div class="user-panel-base-menu"
+       :class="{ 'list-side-mode' : mode === 'sideBar' , 'list-drawer-mode' : mode === 'drawer'}">
+    <q-list class="side-menu-list"
+            padding
+            dark>
+      <div v-for="(item , index) in titlesList"
+           :key="index">
+        <div v-if="showMenuItem(item)">
+          <q-expansion-item v-if="item.children.length"
+                            :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
+                            :label="item.title"
+                            :icon="item.icon"
+                            class="side-expansion-list"
+                            dark>
             <div class="expansion-body">
               <q-separator dark
                            size="2px"
                            vertical
                            class="vertical-separator" />
               <q-list class="list-expansion">
-                <q-item
-                  v-for="(subItem , i) in item.children"
-                  :key="i"
-                  :to="{ name: subItem.routeName, params: subItem.params }"
-                  class="list-child-item"
-                  :exact-active-class="getQItemExactActiveClass"
-                >
-                  <q-item-section
-                    class="list-child-section"
-                  >
+                <q-item v-for="(subItem , i) in item.children"
+                        :key="i"
+                        :to="{ name: subItem.routeName, params: subItem.params }"
+                        class="list-child-item"
+                        :exact-active-class="getQItemExactActiveClass">
+                  <q-item-section class="list-child-section">
                     {{ subItem.displayName }}
                   </q-item-section>
                   <span class="indicator" />
@@ -47,14 +32,12 @@
               </q-list>
             </div>
           </q-expansion-item>
-          <q-item
-            v-else
-            v-model="clickedItem"
-            :to="(item.routeName) ? {name: item.routeName} : null"
-            class="item-list"
-            :class="{ 'alone-item': !item.children.length , 'alone-item-mode-drawer' : mode === 'drawer'}"
-            :exact-active-class="getQItemExactActiveClass"
-          >
+          <q-item v-else
+                  v-model="clickedItem"
+                  :to="(item.routeName) ? {name: item.routeName} : null"
+                  class="item-list"
+                  :class="{ 'alone-item': !item.children.length , 'alone-item-mode-drawer' : mode === 'drawer'}"
+                  :exact-active-class="getQItemExactActiveClass">
             <div class="section-title">
               <q-item-section class="list-section title-icon"
                               avatar>
@@ -70,11 +53,9 @@
         </div>
       </div>
     </q-list>
-    <div
-      v-if="isUserLogin"
-      class="log-out"
-      @click="logOut"
-    >
+    <div v-if="isUserLogin"
+         class="log-out"
+         @click="logOut">
       <span>
         <q-avatar icon="isax:logout"
                   size="30"
@@ -82,11 +63,9 @@
       </span>
       <span class="logout-text">خروج </span>
     </div>
-    <div
-      v-else
-      class="log-out"
-      @click="goToLogin"
-    >
+    <div v-else
+         class="log-out"
+         @click="goToLogin">
       <span>
         <q-avatar icon="isax:logout"
                   size="30"
@@ -173,17 +152,6 @@ export default {
       ]
     }
   },
-  methods: {
-    logOut () {
-      this.$store.dispatch('Auth/logOut')
-        .then(() => {
-          this.$router.push({ name: 'login' })
-        })
-    },
-    goToLogin() {
-      this.$router.push({ name: 'login' })
-    }
-  },
   computed: {
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
@@ -204,6 +172,17 @@ export default {
         return 'item-mode-drawer'
       }
       return 'active-route-side-mode'
+    }
+  },
+  methods: {
+    logOut () {
+      this.$store.dispatch('Auth/logOut')
+        .then(() => {
+          this.$router.push({ name: 'login' })
+        })
+    },
+    goToLogin() {
+      this.$router.push({ name: 'login' })
     }
   }
 }

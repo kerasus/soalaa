@@ -4,14 +4,12 @@
       <div class="content-label">
         پاسخ ویدیویی
       </div>
-      <q-btn
-        label="انتخاب محتوا"
-        color="primary"
-        class="dialog-btn"
-        :loading="loading"
-        unelevated
-        @click="toggleVideoAnswerDialog()"
-      >
+      <q-btn label="انتخاب محتوا"
+             color="primary"
+             class="dialog-btn"
+             :loading="loading"
+             unelevated
+             @click="toggleVideoAnswerDialog()">
         <q-badge v-if="contentId !== null"
                  color="warning"
                  floating

@@ -2,7 +2,7 @@
   <div class="container-box text-center">
     <div class="img-box text-center">
       <q-img class="img"
-             src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/404.png"></q-img>
+             src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/404.png" />
     </div>
     <div class="main-text">
       صفحه‌ای یافت نشد!

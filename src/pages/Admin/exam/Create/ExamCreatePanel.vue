@@ -11,41 +11,33 @@
           <create-exam-page ref="createExam" />
         </q-tab-panel>
         <q-tab-panel name="chooseQuestion">
-          <question-bank
-            v-model="exam.questions.list"
-            @onFilter="onFilter"
-            @addQuestionToExam="addQuestionToExam"
-            @deleteQuestionFromExam="deleteQuestionFromExam"
-          />
+          <question-bank v-model="exam.questions.list"
+                         @onFilter="onFilter"
+                         @addQuestionToExam="addQuestionToExam"
+                         @deleteQuestionFromExam="deleteQuestionFromExam" />
         </q-tab-panel>
         <q-tab-panel name="finalApproval">
-          <final-exam-approval
-            @deleteQuestionFromExam="deleteQuestionFromExam"
-            @goToLastStep = goToLastStep
-            @goToNextStep = goToNextStep
-          />
+          <final-exam-approval @deleteQuestionFromExam="deleteQuestionFromExam"
+                               @goToLastStep ="goToLastStep"
+                               @goToNextStep = "goToNextStep" />
         </q-tab-panel>
       </q-tab-panels>
       <div class="btn-box flex justify-end items-center">
-        <q-btn
-          unelevated
-          color="white"
-          text-color="black"
-          class="q-mr-xl btn-md"
-          :icon="'isax:arrow-right-3'"
-          style="margin-right: 18px;"
-          @click="goToLastStep"
-        >
+        <q-btn unelevated
+               color="white"
+               text-color="black"
+               class="q-mr-xl btn-md"
+               :icon="'isax:arrow-right-3'"
+               style="margin-right: 18px;"
+               @click="goToLastStep">
           بازگشت
         </q-btn>
-        <q-btn
-          unelevated
-          color="primary"
-          class="q-mr-xl btn-md"
-          style="margin-right: 18px;"
-          :icon-right="'isax:arrow-left-2'"
-          @click="goToNextStep"
-        >
+        <q-btn unelevated
+               color="primary"
+               class="q-mr-xl btn-md"
+               style="margin-right: 18px;"
+               :icon-right="'isax:arrow-left-2'"
+               @click="goToNextStep">
           مرحله بعد
         </q-btn>
       </div>
@@ -65,12 +57,10 @@
                  style="padding-bottom: 20px">
               آزمون شما با موفقیت ثبت شد
             </div>
-            <q-btn
-              unelevated
-              color="primary"
-              class="btn-lg final-btn"
-              :to="{name :'Admin.Exam.Index'}"
-            >
+            <q-btn unelevated
+                   color="primary"
+                   class="btn-lg final-btn"
+                   :to="{name :'Admin.Exam.Index'}">
               رفتن به صفحه لیست آزمون
             </q-btn>
           </q-card-section>
@@ -97,6 +87,11 @@ export default {
     CreateExamPage,
     Steps
   },
+  provide () {
+    return {
+      providedExam: computed(() => this.exam)
+    }
+  },
   data () {
     return {
       exam: new Exam(),
@@ -107,10 +102,14 @@ export default {
       accept: false
     }
   },
-  provide () {
-    return {
-      providedExam: computed(() => this.exam)
-    }
+  computed: {},
+  watch: {
+    /* exam: {
+      handler (val) {
+        console.log(val)
+      },
+      deep: true
+    } */
   },
   methods: {
     onFilter (filterData) {
@@ -237,16 +236,7 @@ export default {
         this.showMessagesInNotify(messages)
       }
     }
-  },
-  watch: {
-    /* exam: {
-      handler (val) {
-        console.log(val)
-      },
-      deep: true
-    } */
-  },
-  computed: {}
+  }
 }
 </script>
 

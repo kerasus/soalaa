@@ -1,15 +1,13 @@
 <template>
   <div>
-    <entity-edit
-      ref="entityEdit"
-      v-model:value="inputs"
-      title="ویرایش اطلاعات لیست دروس"
-      :api="api"
-      :entity-id-key="entityIdKey"
-      :entity-param-key="entityParamKey"
-      :show-route-name="showRouteName"
-      :before-get-data="loadCategories"
-    />
+    <entity-edit ref="entityEdit"
+                 v-model:value="inputs"
+                 title="ویرایش اطلاعات لیست دروس"
+                 :api="api"
+                 :entity-id-key="entityIdKey"
+                 :entity-param-key="entityParamKey"
+                 :show-route-name="showRouteName"
+                 :before-get-data="loadCategories" />
   </div>
 </template>
 

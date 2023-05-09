@@ -1,13 +1,11 @@
 <template>
   <div class="exam-index">
-    <entity-index
-      v-model:value="inputs"
-      title="لیست آزمون ها"
-      :api="api"
-      :table="table"
-      :table-keys="tableKeys"
-      :create-route-name="'Admin.Exam.Create'"
-    >
+    <entity-index v-model:value="inputs"
+                  title="لیست آزمون ها"
+                  :api="api"
+                  :table="table"
+                  :table-keys="tableKeys"
+                  :create-route-name="'Admin.Exam.Create'">
       <!--            :show-search-button="false"
 -->
       <template #entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
@@ -22,8 +20,7 @@
                  size="md"
                  color="info"
                  icon="isax:eye"
-                 :to="{name:'Admin.Exam.Show', params: {id: inputData.props.row.id}}"
-          >
+                 :to="{name:'Admin.Exam.Show', params: {id: inputData.props.row.id}}">
             <q-tooltip anchor="top middle"
                        self="bottom middle">
               مشاهده
@@ -40,8 +37,7 @@
                  size="md"
                  color="indigo"
                  icon="auto_stories"
-                 :to="{name:'Admin.Exam.Categories', params: {exam_id: inputData.props.row.id , examTitle: inputData.props.row.title}}"
-          >
+                 :to="{name:'Admin.Exam.Categories', params: {exam_id: inputData.props.row.id , examTitle: inputData.props.row.title}}">
             <q-tooltip anchor="top middle"
                        self="bottom middle">
               مشاهده دروس
@@ -53,27 +49,21 @@
                  size="md"
                  color="blue"
                  icon="assignment">
-            <q-menu
-              class="options-menu"
-              transition-show="jump-down"
-              transition-hide="jump-up"
-              :offset="[150,5]"
-            >
+            <q-menu class="options-menu"
+                    transition-show="jump-down"
+                    transition-hide="jump-up"
+                    :offset="[150,5]">
               <q-list style="min-width: 100px">
-                <q-item
-                  v-ripple:yellow
-                  clickable
-                  manual-focus
-                  :to="{name:'Admin.Exam.AllResults', params: {id: inputData.props.row.id}}"
-                >
+                <q-item v-ripple:yellow
+                        clickable
+                        manual-focus
+                        :to="{name:'Admin.Exam.AllResults', params: {id: inputData.props.row.id}}">
                   <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>
                 </q-item>
-                <q-item
-                  v-ripple:yellow
-                  clickable
-                  manual-focus
-                  :to="{name:'Admin.Exam.Lessons.List', params: {quizId: inputData.props.row.id, quizTitle: inputData.props.row.title}}"
-                >
+                <q-item v-ripple:yellow
+                        clickable
+                        manual-focus
+                        :to="{name:'Admin.Exam.Lessons.List', params: {quizId: inputData.props.row.id, quizTitle: inputData.props.row.title}}">
                   <q-item-section>کارنامه سرگروه</q-item-section>
                 </q-item>
               </q-list>
@@ -114,8 +104,7 @@
                  color="black"
                  icon="isax:book-1"
                  :loading="attendExamBtnLoading"
-                 @click="attendExam(inputData.props.row.id)"
-          >
+                 @click="attendExam(inputData.props.row.id)">
             <q-tooltip anchor="top middle"
                        self="bottom middle">
               شرکت در آزمون
@@ -210,12 +199,12 @@ export default {
       ]
     }
   },
+  computed: {},
   created () {
     // if (this.tableKeys.currentPage) {
     //   this.api = API_ADDRESS.exam.base(this.tableKeys.currentPage)
     // }
   },
-  computed: {},
   methods: {
     registerExam (examId) {
       return this.$axios.post(API_ADDRESS.exam.registerExam, { exam_id: examId })

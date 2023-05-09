@@ -1,68 +1,53 @@
 <template>
   <div ref="questionField"
-       class="question-field"
-  >
+       class="question-field">
     <div class="question-box"
-         :class="{ 'current-question': this.currentQuestion.id === question.id, ltr: isLtrQuestion}"
-    >
+         :class="{ 'current-question': this.currentQuestion.id === question.id, ltr: isLtrQuestion}">
       <div v-if="displayStatement"
            class="question-head"
-           :style="{marginBottom: questionAndChoices + 'mm'}"
-      >
+           :style="{marginBottom: questionAndChoices + 'mm'}">
         <p :id="'question' + question.id"
-           class="question-body"
-        >
+           class="question-body">
           <vue-katex class="vue-katex"
                      :input="'<span class='+'number'+'>'+ order +') </span>' + question.statement"
                      base64
-                     @loaded="onStatementLoaded"
-          />
+                     @loaded="onStatementLoaded" />
         </p>
         <div class="PDF-LINE-BREAK" />
       </div>
-      <q-list
-        v-if="displayChoices"
-        class="choices-box row"
-      >
+      <q-list v-if="displayChoices"
+              class="choices-box row">
         <q-item v-for="(choice, index) in question.choices"
                 :key="choice.id"
                 class="choices"
                 :class="choiceClass"
-                :style="{marginBottom: betweenChoices + 'mm'}"
-        >
+                :style="{marginBottom: betweenChoices + 'mm'}">
           <q-item-section ref="choices"
                           class="choice"
-                          :class="{ltr: isRtl}"
-          >
+                          :class="{ltr: isRtl}">
             <div class="choice-inside">
-              <q-icon
-                class="check-icon col"
-                color="green"
-                size="20px"
-                name="check"
-              />
+              <q-icon class="check-icon col"
+                      color="green"
+                      size="20px"
+                      name="check" />
               <vue-katex class="vue-katex"
                          :input="'<span class='+'number'+'>'+ (index + 1) +') </span>' + choice.title"
                          :ltr="isLtrQuestion"
                          base64
-                         @loaded="onChoiceLoaded(choice)"
-              />
+                         @loaded="onChoiceLoaded(choice)" />
             </div>
           </q-item-section>
         </q-item>
       </q-list>
       <div v-if="displayDescriptiveAnswer"
-           class="question-descriptiveAnswer"
-      >
+           class="question-descriptiveAnswer">
         <p :id="'question' + question.id"
            class="question-body"
-           :class="{ ltr: isRtl }"
-        >
+           :class="{ ltr: isRtl }">
           <vue-katex class="vue-katex"
                      :input="getQuestionCompleteAnswerInput(order, question.descriptive_answer)"
                      base64
-                     @loaded="onDescriptiveAnswerLoaded"
-          />
+                     @loaded="onDescriptiveAnswerLoaded" />
         </p>
         <div class="PDF-LINE-BREAK" />
       </div>

@@ -1,31 +1,23 @@
 <template>
-  <div
-    class="question-image-panel"
-  >
-    <q-card
-      class="question-card default-questions-card image-panel-box"
-    >
+  <div class="question-image-panel">
+    <q-card class="question-card default-questions-card image-panel-box">
       <q-card-section class="image-panel-header default-Qcard-title row justify-between">
-        <q-btn
-          class="close-panel-btn"
-          icon="isax:close-circle"
-          color="white"
-          text-color="accent"
-          dense
-          unelevated
-          rounded
-          @click="closePanelBtnClicked"
-        />
-        <q-btn
-          class="change-mode-btn"
-          color="white"
-          text-color="accent"
-          label="تغییر حالت"
-          flat
-          rounded
-          unelevated
-          @click="ChangeImgPanelMode"
-        />
+        <q-btn class="close-panel-btn"
+               icon="isax:close-circle"
+               color="white"
+               text-color="accent"
+               dense
+               unelevated
+               rounded
+               @click="closePanelBtnClicked" />
+        <q-btn class="change-mode-btn"
+               color="white"
+               text-color="accent"
+               label="تغییر حالت"
+               flat
+               rounded
+               unelevated
+               @click="ChangeImgPanelMode" />
       </q-card-section>
       <div>
         <q-card-section>
@@ -39,6 +31,7 @@
 <script>
 export default {
   name: 'ImageSidePanel',
+  components: {},
   props: {
     mode: {
       type: String,
@@ -47,7 +40,6 @@ export default {
       }
     }
   },
-  components: {},
   data () {
     return {
       floatMode: false

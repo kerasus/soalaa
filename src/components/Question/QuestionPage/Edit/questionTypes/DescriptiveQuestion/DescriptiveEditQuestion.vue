@@ -1,32 +1,26 @@
 <template>
-  <q-linear-progress
-    v-if="this.question.loading"
-    size="md"
-    indeterminate
-    rounded
-    color="primary"
-  />
+  <q-linear-progress v-if="this.question.loading"
+                     size="md"
+                     indeterminate
+                     rounded
+                     color="primary" />
   <q-card class="edit-question-main-card custom-card">
     <q-card-section class="main-card-section question">
       <div class="card-section-header">
         <span>صورت سوال</span>
       </div>
       <div class="question-box">
-        <QuestionField
-          ref="tiptapQuestionStatement"
-          :key="'statement' + domKey"
-          :editorValue="question.statement"
-        />
+        <question-field ref="tiptapQuestionStatement"
+                        :key="'statement' + domKey"
+                        :editorValue="question.statement" />
       </div>
     </q-card-section>
     <q-card-section class="main-card-section long-answer">
       <div class="card-section-header">پاسخ تشریحی</div>
       <div class="answer-box">
-        <QuestionField
-          ref="tiptapDescriptiveAnswer"
-          :key="'descriptive_answer' + domKey"
-          :editor-value="question.descriptive_answer"
-        />
+        <question-field ref="tiptapDescriptiveAnswer"
+                        :key="'descriptive_answer' + domKey"
+                        :editor-value="question.descriptive_answer" />
       </div>
     </q-card-section>
   </q-card>
@@ -49,16 +43,16 @@ export default {
   mixins: [
     AdminActionOnQuestion
   ],
-  props: {
-    status: {
-      type: Boolean,
-      default: () => false
-    }
-  },
   inject: {
     question: {
       from: 'providedQuestion', // this is optional if using the same key for injection
       default: new Question()
+    }
+  },
+  props: {
+    status: {
+      type: Boolean,
+      default: () => false
     }
   },
   data () {

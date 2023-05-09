@@ -8,8 +8,7 @@
                    :entity-id-key="entityIdKey"
                    :entity-param-key="entityParamKey"
                    :show-route-name="showRouteName"
-                   :before-load-input-data="beforeLoadInputData"
-      />
+                   :before-load-input-data="beforeLoadInputData" />
     </div>
     <q-card class="category-card">
       <q-card-section>
@@ -18,30 +17,24 @@
       <q-separator />
       <q-card-section class="flex">
         <div class="row bg-grey-3 add-category-box">
-          <q-select
-            v-model="category.title"
-            class="q-pa-md col-md-4"
-            :value="category"
-            label="دفترچه"
-            :options="categoryOptions"
-            option-value="categoryOptions"
-            option-label="title"
-            emit-value
-            map-options
-            :disable="totalCategory"
-          />
-          <q-input
-            v-model="category.order"
-            class="q-pa-md col-md-3"
-            label="ترتیب"
-            :disable="totalCategory"
-          />
-          <q-input
-            v-model="category.time"
-            class="q-pa-md col-md-3"
-            label="زمان"
-            :disable="totalCategory"
-          />
+          <q-select v-model="category.title"
+                    class="q-pa-md col-md-4"
+                    :value="category"
+                    label="دفترچه"
+                    :options="categoryOptions"
+                    option-value="categoryOptions"
+                    option-label="title"
+                    emit-value
+                    map-options
+                    :disable="totalCategory" />
+          <q-input v-model="category.order"
+                   class="q-pa-md col-md-3"
+                   label="ترتیب"
+                   :disable="totalCategory" />
+          <q-input v-model="category.time"
+                   class="q-pa-md col-md-3"
+                   label="زمان"
+                   :disable="totalCategory" />
           <div class="q-pa-md col-md-2 flex">
             <q-btn class="q-ma-md"
                    icon="add"
@@ -50,8 +43,7 @@
                    dense
                    fab-mini
                    :disable="totalCategory"
-                   @click="addCategory"
-            />
+                   @click="addCategory" />
           </div>
         </div>
       </q-card-section>
@@ -61,12 +53,10 @@
           <p class="bg-red-2 alert">در حال حاضر دفترچه ای به آزمون اضافه نشده است !</p>
         </div>
         <div v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length > 0"
-             class="row"
-        >
+             class="row">
           <div v-for="(category , index) in inputs[examCategoriesIndex].value"
                :key="index"
-               class="row col-md-12 category-list-row"
-          >
+               class="row col-md-12 category-list-row">
             <q-select v-model="category.title"
                       class="q-pa-md col-md-4"
                       :value="category.id"
@@ -75,16 +65,13 @@
                       option-value="id"
                       option-label="title"
                       emit-value
-                      map-options
-            />
+                      map-options />
             <q-input v-model="category.order"
                      class="q-pa-md col-md-3"
-                     label="ترتیب"
-            />
+                     label="ترتیب" />
             <q-input v-model="category.time"
                      class="q-pa-md col-md-3"
-                     label="زمان"
-            />
+                     label="زمان" />
             <div class="q-pa-md col-md-2 flex">
               <q-btn class="q-ma-md"
                      icon="close"
@@ -92,8 +79,7 @@
                      flat
                      dense
                      fab-mini
-                     @click="deleteCategory(category.id)"
-              />
+                     @click="deleteCategory(category.id)" />
             </div>
           </div>
         </div>
@@ -113,15 +99,6 @@ import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'Edit',
   components: { EntityEdit },
-  computed: {
-    examCategoriesIndex () {
-      return this.inputs.findIndex(item => item.name === 'categories')
-    },
-    totalCategory () {
-      return false
-      // return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 3
-    }
-  },
   data () {
     return {
       entityEdit: Date.now(),
@@ -179,6 +156,15 @@ export default {
       ],
       category: { title: '', id: '', order: 0, time: 0 },
       categoryOptions: []
+    }
+  },
+  computed: {
+    examCategoriesIndex () {
+      return this.inputs.findIndex(item => item.name === 'categories')
+    },
+    totalCategory () {
+      return false
+      // return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 3
     }
   },
   created () {

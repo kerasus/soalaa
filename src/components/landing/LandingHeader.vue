@@ -13,13 +13,11 @@
       <q-btn unelevated
              class="submit-btn"
              label="ثبت نام آزمون"
-             @click="onClickRegisterBtn"
-      />
+             @click="onClickRegisterBtn" />
     </div>
     <div class="video-box flex items-center justify-center">
-      <video-player
-        :sources="videosSrc"
-        poster="https://nodes.alaatv.com/upload/vast/videos/3A_LANDING/video%20tubmail.jpg?w=350&h=196" />
+      <video-player :sources="videosSrc"
+                    poster="https://nodes.alaatv.com/upload/vast/videos/3A_LANDING/video%20tubmail.jpg?w=350&h=196" />
     </div>
   </div>
 </template>

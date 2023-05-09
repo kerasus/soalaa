@@ -41,6 +41,27 @@ export default {
       imgData: []
     }
   },
+  computed: {
+    getImg () {
+      return (id, mode) => {
+        return 'https://nodes.alaatv.com/upload/ticket-rate-' + id + '-' + mode + '.png'
+      }
+    }
+  },
+  watch: {
+    rate (newVal, oldVal) {
+      setTimeout(() => {
+        this.imgData.forEach(item => {
+          if (this.rate === item.id) {
+            item.url = this.getImg(item.id, 'on')
+          }
+        })
+      }, 50)
+    }
+  },
+  created() {
+    this.initImgData()
+  },
   methods: {
     isImgActive(url, id) {
       return url === this.getImg(id, 'on')
@@ -98,27 +119,6 @@ export default {
         }
       ]
     }
-  },
-  computed: {
-    getImg () {
-      return (id, mode) => {
-        return 'https://nodes.alaatv.com/upload/ticket-rate-' + id + '-' + mode + '.png'
-      }
-    }
-  },
-  watch: {
-    rate (newVal, oldVal) {
-      setTimeout(() => {
-        this.imgData.forEach(item => {
-          if (this.rate === item.id) {
-            item.url = this.getImg(item.id, 'on')
-          }
-        })
-      }, 50)
-    }
-  },
-  created() {
-    this.initImgData()
   }
 }
 </script>

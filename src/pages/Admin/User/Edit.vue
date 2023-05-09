@@ -1,13 +1,11 @@
 <template>
-  <entity-edit
-    ref="entityEdit"
-    v-model:value="inputs"
-    title="ویرایش اطلاعات کاربر"
-    :api="api"
-    :entity-id-key="entityIdKey"
-    :entity-param-key="entityParamKey"
-    :show-route-name="showRouteName"
-  />
+  <entity-edit ref="entityEdit"
+               v-model:value="inputs"
+               title="ویرایش اطلاعات کاربر"
+               :api="api"
+               :entity-id-key="entityIdKey"
+               :entity-param-key="entityParamKey"
+               :show-route-name="showRouteName" />
 </template>
 
 <script>

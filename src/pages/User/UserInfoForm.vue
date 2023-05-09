@@ -2,76 +2,65 @@
   <div id="q-app"
        class="q-ma-lg row justify-center"
        style="min-height: 100vh">
-    <q-linear-progress
-      v-if="percentageOfInformationCompletion"
-      size="30px"
-      :value="percentageOfInformationCompletion"
-      color="primary"
-      class="q-mt-sm">
+    <q-linear-progress v-if="percentageOfInformationCompletion"
+                       size="30px"
+                       :value="percentageOfInformationCompletion"
+                       color="primary"
+                       class="q-mt-sm">
       <div class="absolute-full flex flex-center">
-        <q-badge
-          text-color="black"
-          color="transparent"
-          class="text-subtitle1 text-weight-bold"
-          align="middle"
-          :label="percentageOfInformationCompletionLabel">
-        </q-badge>
+        <q-badge text-color="black"
+                 color="transparent"
+                 class="text-subtitle1 text-weight-bold"
+                 align="middle"
+                 :label="percentageOfInformationCompletionLabel" />
       </div>
     </q-linear-progress>
     <div class="col-9 form-box">
       <div class="q-pa-md">
         <div class="row justify-between  q-col-gutter-xl">
           <div class="col-md-6 col-12">
-            <q-input
-              v-model="userData.first_name"
-              label="نام"
-              :rules="[
-                val => val !== null && val !== '' || 'پر کردن این فیلد اجباری است' ]"
-            ></q-input>
+            <q-input v-model="userData.first_name"
+                     label="نام"
+                     :rules="[
+                       val => val !== null && val !== '' || 'پر کردن این فیلد اجباری است' ]" />
           </div>
           <div class="col-md-6 col-12">
-            <q-input
-              v-model="userData.last_name"
-              label=" نام خانوادگی"
-              :rules="[
-                val => val !== null && val !== '' || 'پر کردن این فیلد اجباری است' ]"
-            ></q-input>
+            <q-input v-model="userData.last_name"
+                     label=" نام خانوادگی"
+                     :rules="[
+                       val => val !== null && val !== '' || 'پر کردن این فیلد اجباری است' ]" />
           </div>
         </div>
       </div>
       <div class="q-pa-md">
-        <q-select
-          v-model="userData.gender.id"
-          use-input
-          label="جنسیت"
-          color="light-blue-6"
-          :options="genders"
-          option-label="title"
-          option-value="id"
-          map-options
-          emit-value
-          :rules="[
-            val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
-        />
+        <q-select v-model="userData.gender.id"
+                  use-input
+                  label="جنسیت"
+                  color="light-blue-6"
+                  :options="genders"
+                  option-label="title"
+                  option-value="id"
+                  map-options
+                  emit-value
+                  :rules="[
+                    val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]" />
       </div>
       <div class="q-pa-md">
         <div class="row justify-between  q-col-gutter-xl">
           <div class="col-md-6 col-12">
-            <q-select
-              v-model="selectedProvince"
-              use-input
-              color="light-blue-6"
-              input-debounce="0"
-              label="استان"
-              :options="provinces"
-              option-label="title"
-              option-value="id"
-              map-options
-              emit-value
-              :rules="[
-                val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
-              @filter="filterProvinces"
-            >
+            <q-select v-model="selectedProvince"
+                      use-input
+                      color="light-blue-6"
+                      input-debounce="0"
+                      label="استان"
+                      :options="provinces"
+                      option-label="title"
+                      option-value="id"
+                      map-options
+                      emit-value
+                      :rules="[
+                        val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
+                      @filter="filterProvinces">
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -82,21 +71,19 @@
             </q-select>
           </div>
           <div class="col-md-6 col-12">
-            <q-select
-              v-model="selectedCity"
-              use-input
-              input-debounce="0"
-              map-options
-              color="light-blue-6"
-              emit-value
-              label="شهر"
-              :options="citiesForSelectedProvince"
-              option-label="title"
-              option-value="id"
-              :rules="[
-                val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
-              @filter="filterCity"
-            >
+            <q-select v-model="selectedCity"
+                      use-input
+                      input-debounce="0"
+                      map-options
+                      color="light-blue-6"
+                      emit-value
+                      label="شهر"
+                      :options="citiesForSelectedProvince"
+                      option-label="title"
+                      option-value="id"
+                      :rules="[
+                        val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
+                      @filter="filterCity">
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -111,53 +98,45 @@
       <div class="q-pa-md">
         <div class="row justify-between  q-col-gutter-xl">
           <div class="col-md-6 col-12">
-            <q-select
-              v-model="userData.major.id"
-              color="light-blue-6"
-              label="رشته"
-              :options="majors"
-              option-label="title"
-              emit-value
-              option-value="id"
-              map-options
-              :model-value="userData.major.id"
-              :rules="[
-                val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
-            >
-            </q-select>
+            <q-select v-model="userData.major.id"
+                      color="light-blue-6"
+                      label="رشته"
+                      :options="majors"
+                      option-label="title"
+                      emit-value
+                      option-value="id"
+                      map-options
+                      :model-value="userData.major.id"
+                      :rules="[
+                        val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]" />
           </div>
           <div class="col-md-6 col-12">
-            <q-select
-              v-model="userData.grade.id"
-              label="مقطع"
-              color="light-blue-6"
-              :options="grades"
-              option-label="title"
-              option-value="id"
-              emit-value
-              map-options
-              :rules="[
-                val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
-            />
+            <q-select v-model="userData.grade.id"
+                      label="مقطع"
+                      color="light-blue-6"
+                      :options="grades"
+                      option-label="title"
+                      option-value="id"
+                      emit-value
+                      map-options
+                      :rules="[
+                        val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]" />
           </div>
         </div>
       </div>
       <!--      verify ------------------------------------------------------------------------------------------------------------>
-      <verify
-        v-if="needVerify"
-        @verified="verified"
-      />
+      <verify v-if="needVerify"
+              @verified="verified" />
       <div class="row justify-end q-mt-lg">
         <!--        submit form ---------------------------------------------------------------------------------->
-        <q-btn
-          :disabl="!this.user.mobile_verified_at"
-          color="blue"
-          class="q-px-xl"
-          rounded
-          dark
-          type="submit"
-          size="16px"
-          @click="checkForSubmit">
+        <q-btn :disabl="!this.user.mobile_verified_at"
+               color="blue"
+               class="q-px-xl"
+               rounded
+               dark
+               type="submit"
+               size="16px"
+               @click="checkForSubmit">
           ثبت
         </q-btn>
       </div>
@@ -175,8 +154,8 @@ import Verify from 'pages/Auth/Verify'
 
 export default {
   name: 'UserInfoForm',
-  mixins: [mixinAuth],
   components: { Verify },
+  mixins: [mixinAuth],
   props: {
     requiredItems: {
       type: Array,

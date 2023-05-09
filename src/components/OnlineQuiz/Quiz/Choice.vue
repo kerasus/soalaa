@@ -1,26 +1,20 @@
 <template>
   <div class="answer-box"
-       @click="answerClicked"
-  >
+       @click="answerClicked">
     <div class="answer-sheet"
          :class="{ active: isSelected , 'bg-deep-purple-1': isSelected, 'ltr' : !isRtl }">
       <div class="answer-text renderedPanel"
-           :class="{'ltr' : !isRtl}"
-      >
-        <vue-katex
-          class="vue-katex"
-          :input="choice.title"
-          :ltr="!isRtl"
-        />
+           :class="{'ltr' : !isRtl}">
+        <vue-katex class="vue-katex"
+                   :input="choice.title"
+                   :ltr="!isRtl" />
         <span class="choice-number">{{ '('+choiceNumber }}</span>
       </div>
       <div class="answer-checkbox">
-        <q-checkbox
-          v-model="isSelected"
-          dense
-          size="60px"
-          @click="answerClicked"
-        />
+        <q-checkbox v-model="isSelected"
+                    dense
+                    size="60px"
+                    @click="answerClicked" />
       </div>
     </div>
   </div>

@@ -17,8 +17,7 @@
                       ['bold', 'italic', 'strike', 'underline'],
                       ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
                       ['viewsource']
-                    ]">
-          </q-editor>
+                    ]" />
         </div>
       </div>
     </template>

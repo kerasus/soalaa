@@ -1,11 +1,10 @@
 <template>
   <div class="page-wrapper">
     <div class="page-header">
-      <div class="logo"></div>
+      <div class="logo" />
       <div class="info">
         <div class="titles-column"
-             :class="{'full-width': !pdfConfig.hasPaginate}"
-        >
+             :class="{'full-width': !pdfConfig.hasPaginate}">
           <div v-if="pdfConfig.hasTitle"
                class="row">
             <div class="col-12 exam-title">
@@ -21,8 +20,7 @@
           <div class="row q-col-gutter-sm">
             <div v-if="pdfConfig.hasMajor"
                  :class="{'col-6': pdfConfig.hasGrade, 'col-12': !pdfConfig.hasGrade}"
-                 class="major-title"
-            >
+                 class="major-title">
               <div class="header-field right-mark">
                 <span class="subject">
                   رشته تحصیلی
@@ -33,8 +31,7 @@
             </div>
             <div v-if="pdfConfig.hasGrade"
                  :class="{'col-6': pdfConfig.hasMajor, 'col-12': !pdfConfig.hasMajor}"
-                 class="grade-title"
-            >
+                 class="grade-title">
               <div class="header-field right-mark">
                 <span class="subject">
                   پایه تحصیلی
@@ -55,9 +52,8 @@
       </div>
     </div>
     <div class="page-body"
-         :style="{paddingRight: paddingRight + 'mm', paddingLeft: paddingLeft + 'mm', paddingTop:paddingTop + 'mm', paddingBottom:paddingBottom + 'mm'}"
-    >
-      <slot name="body"></slot>
+         :style="{paddingRight: paddingRight + 'mm', paddingLeft: paddingLeft + 'mm', paddingTop:paddingTop + 'mm', paddingBottom:paddingBottom + 'mm'}">
+      <slot name="body" />
     </div>
   </div>
 </template>

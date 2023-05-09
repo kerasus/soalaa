@@ -1,17 +1,15 @@
 <template>
   <div class="row  justify-center">
     <div class="col-8 q-mb-xl">
-      <entity-edit
-        ref="entityEdit"
-        v-model:value="inputs"
-        :show-save-button="false"
-        :title="'شماره تیکت ' + searchForInputVal('id') + ' در ' + searchForInputVal('department_title')"
-        :api="api"
-        :entity-id-key="entityIdKey"
-        :entity-param-key="entityParamKey"
-        :show-route-name="indexRouteName"
-        :after-load-input-data="checkLoadInputData"
-      >
+      <entity-edit ref="entityEdit"
+                   v-model:value="inputs"
+                   :show-save-button="false"
+                   :title="'شماره تیکت ' + searchForInputVal('id') + ' در ' + searchForInputVal('department_title')"
+                   :api="api"
+                   :entity-id-key="entityIdKey"
+                   :entity-param-key="entityParamKey"
+                   :show-route-name="indexRouteName"
+                   :after-load-input-data="checkLoadInputData">
         <template #before-form-builder>
           <div class="flex justify-around">
             <q-btn rounded
@@ -58,8 +56,7 @@
                      class="full-width"
                      icon="isax:sms"
                      color="blue"
-                     @click="sendTicketStatusNotice(this.searchForInputVal('id'))"
-              >
+                     @click="sendTicketStatusNotice(this.searchForInputVal('id'))">
                 <q-tooltip>ارسال پیامک اگاه سازی تغییر وضعیت</q-tooltip>
               </q-btn>
             </div>
@@ -70,44 +67,37 @@
             <q-btn unelevated
                    color="blue">ویرایش اپراتورها</q-btn>
           </div>
-          <ticket-rate
-            v-if="!isUserAdmin"
-            :rate="searchForInputVal('rate')"
-            :ticket-id="searchForInputVal('id')"
-            class="q-ml-lg q-mt-lg" />
+          <ticket-rate v-if="!isUserAdmin"
+                       :rate="searchForInputVal('rate')"
+                       :ticket-id="searchForInputVal('id')"
+                       class="q-ml-lg q-mt-lg" />
         </template>
       </entity-edit>
       <messages v-for="item in userMessageArray"
                 :key="item"
                 :is-user-admin="isUserAdmin"
                 :data="item" />
-      <SendMessageInput
-        ref="SendMessageInput"
-        :send-loading="sendMessageLoading"
-        @sendText="sendMessageText"
-        @sendImage="sendMessageImage"
-        @sendVoice="sendMessageVoice"
-      />
-      <drawer
-        :is-open="logDrawer"
-        max-width="310px"
-        side="left"
-      >
+      <send-message-input ref="SendMessageInput"
+                          :send-loading="sendMessageLoading"
+                          @sendText="sendMessageText"
+                          @sendImage="sendMessageImage"
+                          @sendVoice="sendMessageVoice" />
+      <drawer :is-open="logDrawer"
+              max-width="310px"
+              side="left">
         <q-scroll-area class="fit">
           <q-btn icon="mdi-close"
                  unelevated
                  class="close-btn"
                  @click="logDrawer = false" />
           <div class="q-my-md flex content-between">
-            <q-tabs
-              v-model="panel"
-              dense
-              class="text-grey"
-              active-color="primary"
-              indicator-color="primary"
-              align="justify"
-              narrow-indicator
-            >
+            <q-tabs v-model="panel"
+                    dense
+                    class="text-grey"
+                    active-color="primary"
+                    indicator-color="primary"
+                    align="justify"
+                    narrow-indicator>
               <q-tab name="events"
                      label="رویداد ها" />
               <q-tab name="otherTickets"
@@ -124,7 +114,7 @@
               <template v-for="ticket in searchForInputVal('otherTickets')"
                         :key="ticket">
                 <div class="other-ticket">
-                  <div class="right-side-squere"></div>
+                  <div class="right-side-squere" />
                   <div>
                     <q-btn class="link-btn"
                            :href="'/ticket/' + ticket.id"
@@ -138,10 +128,8 @@
           </q-tab-panels>
         </q-scroll-area>
       </drawer>
-      <drawer
-        :is-open="orderDrawer"
-        max-width="1016px"
-      >
+      <drawer :is-open="orderDrawer"
+              max-width="1016px">
         <q-scroll-area class="fit">
           <q-btn icon="mdi-close"
                  class="close-btn"
@@ -169,8 +157,8 @@ import { mixinDateOptions } from 'src/mixin/Mixins'
 
 export default {
   name: 'Show',
-  mixins: [mixinDateOptions],
   components: { EntityEdit, Messages, LogList, UserOrderList, TicketRate, SendMessageInput, Drawer },
+  mixins: [mixinDateOptions],
   data () {
     return {
       isUserAdmin: false,
@@ -408,6 +396,12 @@ export default {
       ]
     }
   },
+  created () {
+    this.initPageData()
+  },
+  mounted () {
+    this.isUserAdmin = this.$store.getters['Auth/user'].has_admin_permission
+  },
   methods: {
     initPageData () {
       this.api += '/' + this.$route.params.id
@@ -531,12 +525,6 @@ export default {
           })
         })
     }
-  },
-  created () {
-    this.initPageData()
-  },
-  mounted () {
-    this.isUserAdmin = this.$store.getters['Auth/user'].has_admin_permission
   }
 }
 </script>

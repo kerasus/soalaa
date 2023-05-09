@@ -1,14 +1,13 @@
 <template>
   <div class="row user-panel-layout">
     <div v-if="getTemplateLeftSideBarType === 'default'"
-         class="user-side-bar col-xl-3 col-lg-3 col-md-3"
-    >
+         class="user-side-bar col-xl-3 col-lg-3 col-md-3">
       <sticky-both-sides>
         <user-side-bar />
       </sticky-both-sides>
     </div>
     <div class="col-xl-9 col-lg-9 col-md-9 col-12 user-panel-content">
-      <Router :include="keepAliveComponents" />
+      <router :include="keepAliveComponents" />
     </div>
   </div>
 </template>

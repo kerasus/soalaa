@@ -1,13 +1,11 @@
 <template>
-  <entity-create
-    v-model:value="inputs"
-    title="تعریف کاربر"
-    :api="api"
-    :entity-id-key-in-response="entityIdKeyInResponse"
-    :show-route-param-key="showRouteParamKey"
-    :index-route-name="indexRouteName"
-    :show-route-name="showRouteName"
-  />
+  <entity-create v-model:value="inputs"
+                 title="تعریف کاربر"
+                 :api="api"
+                 :entity-id-key-in-response="entityIdKeyInResponse"
+                 :show-route-param-key="showRouteParamKey"
+                 :index-route-name="indexRouteName"
+                 :show-route-name="showRouteName" />
 </template>
 
 <script>

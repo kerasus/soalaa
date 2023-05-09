@@ -1,14 +1,12 @@
 <template>
-  <div
-    v-if="$route.name !== 'HomePage'"
-    class="user-panel-side-bar"
-  >
+  <div v-if="$route.name !== 'HomePage'"
+       class="user-panel-side-bar">
     <div v-if="isUserLogin"
          class="bg-primary profile-box">
       <div class="profile-detail">
         <div class="profile-photo-box">
           <div class="profile-photo-img">
-            <q-img :src="previewImg"></q-img>
+            <q-img :src="previewImg" />
             <q-file ref="file"
                     v-model="file"
                     :model-value="file"
@@ -60,10 +58,8 @@
           <!--            </svg>-->
           <!--          </div>-->
         </div>
-        <div
-          v-if="isUserLogin"
-          class="profile-detail-info"
-        >
+        <div v-if="isUserLogin"
+             class="profile-detail-info">
           <div class="info-name">{{user.full_name}}</div>
           <div class="info-phoneNumber">{{user.mobile}}</div>
         </div>
@@ -87,17 +83,13 @@
       <!--        </div>-->
       <!--      </div>-->
     </div>
-    <div
-      class="bg-primary side-menu-main-layout"
-      :class="{ 'loggedIn' : isUserLogin }"
-    >
+    <div class="bg-primary side-menu-main-layout"
+         :class="{ 'loggedIn' : isUserLogin }">
       <user-panel-base-menu />
     </div>
   </div>
-  <div
-    v-else
-    class="user-panel-side-drawer-container"
-  >
+  <div v-else
+       class="user-panel-side-drawer-container">
     <user-panel-side-drawer />
   </div>
 </template>
@@ -117,6 +109,25 @@ export default {
       previewImg: null,
       file: null,
       controls: false
+    }
+  },
+  computed: {
+    user () {
+      if (this.$store.getters['Auth/user']) {
+        return this.$store.getters['Auth/user']
+      }
+      return new User()
+    },
+    isUserLogin() {
+      return this.$store.getters['Auth/isUserLogin']
+    },
+    showMenuItem () {
+      return (item) => {
+        return (item.permission === 'all' || this.user.hasPermission(item.permission))
+      }
+    },
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
     }
   },
   mounted() {
@@ -147,25 +158,6 @@ export default {
       this.$axios.put(API_ADDRESS.user.updatePhoto(), fd).then((d) => {
         this.controls = false
       })
-    }
-  },
-  computed: {
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    },
-    isUserLogin() {
-      return this.$store.getters['Auth/isUserLogin']
-    },
-    showMenuItem () {
-      return (item) => {
-        return (item.permission === 'all' || this.user.hasPermission(item.permission))
-      }
-    },
-    windowSize () {
-      return this.$store.getters['AppLayout/windowSize']
     }
   }
 }

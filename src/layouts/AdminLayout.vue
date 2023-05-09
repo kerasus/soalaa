@@ -1,7 +1,7 @@
 <template>
   <div class="admin-layout">
     <q-scroll-observer @scroll="onscroll" />
-    <Router :include="keepAliveComponents" />
+    <router :include="keepAliveComponents" />
   </div>
 </template>
 
@@ -12,15 +12,15 @@ import { computed } from 'vue'
 
 export default {
   components: { Router },
+  provide() {
+    return {
+      scrollInfo: computed(() => this.scrollInfo)
+    }
+  },
   data() {
     return {
       keepAliveComponents: KeepAliveComponents,
       scrollInfo: {}
-    }
-  },
-  provide() {
-    return {
-      scrollInfo: computed(() => this.scrollInfo)
     }
   },
   methods: {

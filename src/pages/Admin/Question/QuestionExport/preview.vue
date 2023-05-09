@@ -4,111 +4,87 @@
       <div class="row q-col-gutter-md shadow-1 q-pa-md">
         <div class="col-md-10" />
         <div class="col-md-1">
-          <q-input
-            v-model="fontSize"
-            dense
-            outlined
-            label="text font size"
-            type="number"
-            @input="updateFontSize"
-          />
+          <q-input v-model="fontSize"
+                   dense
+                   outlined
+                   label="text font size"
+                   type="number"
+                   @input="updateFontSize" />
         </div>
         <div class="col-md-1">
-          <q-input
-            v-model="formulaFontSize"
-            dense
-            outlined
-            label="formula font size"
-            type="number"
-            @input="updateFontSize"
-          />
+          <q-input v-model="formulaFontSize"
+                   dense
+                   outlined
+                   label="formula font size"
+                   type="number"
+                   @input="updateFontSize" />
         </div>
       </div>
     </div>
     <div class="print-page col-md-12">
-      <div
-        v-for="(question) in quizData.questions.list"
-        :key="question.id"
-        class="question-parent row"
-        :class="{ 'ltr': question.ltr, 'rtl': !question.ltr }"
-      >
+      <div v-for="(question) in quizData.questions.list"
+           :key="question.id"
+           class="question-parent row"
+           :class="{ 'ltr': question.ltr, 'rtl': !question.ltr }">
         <div class="vertical-choice not-visible-in-print">
-          <q-input
-            v-model="question.verticalChoice"
-            type="number"
-            outlined
-            label="فاصله"
-            @input="changeVertical(question.id, $event)"
-          />
+          <q-input v-model="question.verticalChoice"
+                   type="number"
+                   outlined
+                   label="فاصله"
+                   @input="changeVertical(question.id, $event)" />
         </div>
         <div class="question-box">
           <div class="statement">
-            <q-btn
-              color="blue"
-              class="edit-button"
-              icon="isax:edit"
-              @click="toggleEditMode(question)"
-            />
-            <vue-katex
-              v-if="!question.editMode"
-              :input="question.statement"
-            />
-            <vue-tiptap-katex
-              v-else
-              v-model="question.statement"
-              class="vue-tiptap-katex"
-              :options="{
-                bubbleMenu: false,
-                floatingMenu: false,
-                poem: true,
-                reading: true,
-                persianKeyboard: true,
-                mathliveOptions: { smartFence: false },
-                uploadServer: {
-                  url: imageUrl,
-                  instantUpload: true,
-                  headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] }
-                }
-              }"
-            />
+            <q-btn color="blue"
+                   class="edit-button"
+                   icon="isax:edit"
+                   @click="toggleEditMode(question)" />
+            <vue-katex v-if="!question.editMode"
+                       :input="question.statement" />
+            <vue-tiptap-katex v-else
+                              v-model="question.statement"
+                              class="vue-tiptap-katex"
+                              :options="{
+                                bubbleMenu: false,
+                                floatingMenu: false,
+                                poem: true,
+                                reading: true,
+                                persianKeyboard: true,
+                                mathliveOptions: { smartFence: false },
+                                uploadServer: {
+                                  url: imageUrl,
+                                  instantUpload: true,
+                                  headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] }
+                                }
+                              }" />
           </div>
-          <div
-            :id="`question${question.id}`"
-            class="choice-parent"
-          >
-            <div
-              v-for="(choice, cIndex) in question.choices.list"
-              :key="cIndex"
-              class="choice"
-            >
-              <q-btn
-                color="blue"
-                class="edit-button"
-                icon="isax:edit"
-                @click="toggleEditMode(choice)"
-              />
-              <vue-katex
-                v-if="!choice.editMode"
-                :input="choice.title"
-              />
-              <vue-tiptap-katex
-                v-else
-                v-model="choice.title"
-                class="vue-tiptap-katex"
-                :options="{
-                  bubbleMenu: false,
-                  floatingMenu: false,
-                  poem: true,
-                  reading: true,
-                  persianKeyboard: true,
-                  mathliveOptions: { smartFence: false },
-                  uploadServer: {
-                    url: imageUrl,
-                    instantUpload: true,
-                    headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] }
-                  }
-                }"
-              />
+          <div :id="`question${question.id}`"
+               class="choice-parent">
+            <div v-for="(choice, cIndex) in question.choices.list"
+                 :key="cIndex"
+                 class="choice">
+              <q-btn color="blue"
+                     class="edit-button"
+                     icon="isax:edit"
+                     @click="toggleEditMode(choice)" />
+              <vue-katex v-if="!choice.editMode"
+                         :input="choice.title" />
+              <vue-tiptap-katex v-else
+                                v-model="choice.title"
+                                class="vue-tiptap-katex"
+                                :options="{
+                                  bubbleMenu: false,
+                                  floatingMenu: false,
+                                  poem: true,
+                                  reading: true,
+                                  persianKeyboard: true,
+                                  mathliveOptions: { smartFence: false },
+                                  uploadServer: {
+                                    url: imageUrl,
+                                    instantUpload: true,
+                                    headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] }
+                                  }
+                                }" />
             </div>
           </div>
         </div>

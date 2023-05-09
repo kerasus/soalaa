@@ -14,13 +14,11 @@
           <!--          />-->
         </span>
         <div class="action-buttons">
-          <q-btn
-            label="تایپ سوال"
-            color="primary"
-            class="change-type"
-            :to="{ name: 'Admin.Question.Create.Text.MultipleChoice' }"
-            unelevated
-          />
+          <q-btn label="تایپ سوال"
+                 color="primary"
+                 class="change-type"
+                 :to="{ name: 'Admin.Question.Create.Text.MultipleChoice' }"
+                 unelevated />
         </div>
       </div>
     </div>
@@ -38,35 +36,31 @@
     </div>
     <div class="relative-position">
       <div class="attach-btn row">
-        <question-identifier
-          ref="questionIdentifier"
-          editable
-          class="col-12"
-          :exams="examList"
-          :lessons="subCategoriesList"
-          :categories="categoryList"
-          :gradesList="gradesList"
-          :groups-list="lessonGroupList"
-          :lessons-list="lessonsList"
-          :major-list="majorList"
-          :authorship-dates-list="authorshipDatesList"
-          :question-authors-list="questionAuthorsList"
-          :question-target-list="questionTargetList"
-          :buffer="true"
-          @gradeSelected="getLessonsList"
-          @groupSelected="getLessonsList"
-          @attach="attachExam"
-          @detach="detachExam"
-          @tags-collected="setTagsOnCreate"
-        />
+        <question-identifier ref="questionIdentifier"
+                             editable
+                             class="col-12"
+                             :exams="examList"
+                             :lessons="subCategoriesList"
+                             :categories="categoryList"
+                             :gradesList="gradesList"
+                             :groups-list="lessonGroupList"
+                             :lessons-list="lessonsList"
+                             :major-list="majorList"
+                             :authorship-dates-list="authorshipDatesList"
+                             :question-authors-list="questionAuthorsList"
+                             :question-target-list="questionTargetList"
+                             :buffer="true"
+                             @gradeSelected="getLessonsList"
+                             @groupSelected="getLessonsList"
+                             @attach="attachExam"
+                             @detach="detachExam"
+                             @tags-collected="setTagsOnCreate" />
       </div>
       <question-video-answer :contentId="question.content_id"
                              :timePointId="question.time_point_id"
                              @update-value="updateQuestionContent($event)" />
-      <btn-box
-        class="col-12"
-        @saveQuestion="createQuestionImage(question)"
-      />
+      <btn-box class="col-12"
+               @saveQuestion="createQuestionImage(question)" />
     </div>
   </div>
 </template>
@@ -97,6 +91,14 @@ export default {
     AdminActionOnQuestion,
     mixinTree
   ],
+  provide () {
+    return {
+      providedQuestion: computed(() => this.question)
+    }
+  },
+  beforeRouteUpdate () {
+    this.getPageReady()
+  },
   data () {
     return {
       question: new Question(),
@@ -106,9 +108,6 @@ export default {
       categoryList: new QuestCategoryList(),
       questionVideoAnswerDialog: false
     }
-  },
-  beforeRouteUpdate () {
-    this.getPageReady()
   },
   created () {
     this.getPageReady()
@@ -121,11 +120,6 @@ export default {
   updated () {
   },
   mounted () {
-  },
-  provide () {
-    return {
-      providedQuestion: computed(() => this.question)
-    }
   },
   methods: {
     updateQuestionContent(data) {

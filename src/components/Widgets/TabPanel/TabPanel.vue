@@ -2,24 +2,21 @@
   <div class="page-width"
        :style="options.style">
     <div class="tab-panel-container">
-      <q-tabs
-        v-model="activeTab"
-        inline-label
-        outside-arrows
-        mobile-arrows
-        left-icon="isax:arrow-left-2"
-        right-icon="isax:arrow-right-3"
-        indicator-color="transparent"
-        active-class="active-tab"
-        class="tab-box"
-      >
+      <q-tabs v-model="activeTab"
+              inline-label
+              outside-arrows
+              mobile-arrows
+              left-icon="isax:arrow-left-2"
+              right-icon="isax:arrow-right-3"
+              indicator-color="transparent"
+              active-class="active-tab"
+              class="tab-box">
         <q-tab v-for="(tab, index) in options.tabs"
                :key="index"
                :name="index"
                :icon="tabIcon(index, tab.icon, tab.icon2)"
                class="tab-style"
-               :label="tab.title"
-        />
+               :label="tab.title" />
       </q-tabs>
       <q-tab-panels v-model="activeTab"
                     animated
@@ -31,17 +28,16 @@
           <div class="content">
             <div class="title"> {{ tabData.title }}</div>
             <span class="description"
-                  v-html="tabData.editor"></span>
+                  v-html="tabData.editor" />
             <div v-if="tabData.button.url"
                  class="more-detail text-right">
-              <q-btn
-                flat
-                :href="tabData.button.url"
-                :style="{background: tabData.button.bgColor, color: tabData.button.color}"
-                class="btn"
-                padding="9px 17px"
-                icon-right="west"
-                :label="tabData.button.text" />
+              <q-btn flat
+                     :href="tabData.button.url"
+                     :style="{background: tabData.button.bgColor, color: tabData.button.color}"
+                     class="btn"
+                     padding="9px 17px"
+                     icon-right="west"
+                     :label="tabData.button.text" />
             </div>
           </div>
           <div class="img-box">
@@ -61,10 +57,6 @@ import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'TabPanel',
-  data: () => ({
-    tabs: [],
-    activeTab: 0
-  }),
   props: {
     options: {
       type: Object,
@@ -73,6 +65,10 @@ export default {
       }
     }
   },
+  data: () => ({
+    tabs: [],
+    activeTab: 0
+  }),
   created() {
     // this.initPageData()
   },
