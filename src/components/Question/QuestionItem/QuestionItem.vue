@@ -663,7 +663,7 @@ export default {
         return
       }
       this.contentLoading = true
-      this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
+      this.$alaaApiInstance.get(API_ADDRESS.content.get(this.question.content_id))
         .then(res => {
           this.content = new Content(res.data.data)
           this.getTimePoints()

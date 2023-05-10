@@ -85,7 +85,7 @@ export default {
       if (!this.isSelected(this.selectedId, rateId)) {
         return false
       }
-      this.$axios.post(API_ADDRESS.ticket.ticketRate(this.ticketId), {
+      this.$alaaApiInstance.post(API_ADDRESS.ticket.ticketRate(this.ticketId), {
         rate: rateId
       })
         .then((res) => {

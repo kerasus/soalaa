@@ -56,7 +56,7 @@ export default {
     },
     sendCodeRequest(userInfo) {
       this.setLoading(true)
-      this.$axios.get(API_ADDRESS.user.resendGuest + '?mobile=' + userInfo.mobile)
+      this.$alaaApiInstance.get(API_ADDRESS.user.resendGuest + '?mobile=' + userInfo.mobile)
       // this.$apiGateway.user.resendGuest(userInfo)
         .then(response => {
           const message = response.data.message

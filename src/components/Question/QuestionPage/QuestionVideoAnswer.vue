@@ -91,7 +91,7 @@ export default {
     },
     getContent(contentId) {
       this.loading = true
-      this.$axios.get(API_ADDRESS.content.get(contentId))
+      this.$alaaApiInstance.get(API_ADDRESS.content.get(contentId))
         .then(res => {
           this.content = new Content(res.data.data)
           this.timePointOptions = this.content.timepoints.list

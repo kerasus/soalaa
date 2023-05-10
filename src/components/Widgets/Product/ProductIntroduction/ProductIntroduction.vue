@@ -116,7 +116,7 @@ export default {
       }])
     },
     getProduct() {
-      return this.$axios.get(API_ADDRESS.product.show.base + '/' + this.productId)
+      return this.$alaaApiInstance.get(API_ADDRESS.product.show.base + '/' + this.productId)
       // return APIGateway.product.show(this.productId)
     }
   }

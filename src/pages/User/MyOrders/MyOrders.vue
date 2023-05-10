@@ -287,6 +287,7 @@ export default {
         perPage: 'meta.per_page',
         pageKey: 'page'
       },
+      user: new User(),
       currentOrder: new Order(),
       detailsDialog: false,
       detailsCardToggle: {},
@@ -295,12 +296,6 @@ export default {
     }
   },
   computed: {
-    user() {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    },
     paymentStatus() {
       return this.getInput('filterInputs', 'paymentStatuses').value
     },
@@ -339,7 +334,13 @@ export default {
   created() {
     this.getPaymentStatus()
   },
+  mounted () {
+    this.loadAuthData()
+  },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+    },
     onPageChange(response) {
       if (!this.isFirstReq) {
         return

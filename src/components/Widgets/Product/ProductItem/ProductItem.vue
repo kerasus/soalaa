@@ -173,7 +173,7 @@ export default {
     } else if (this.options.productId || this.options.paramKey || this.$route.params.id) {
       this.loading = true
       const productId = this.options.productId ? this.options.productId : this.options.paramKey ? this.$route.params[this.options.paramKey] : this.$route.params.id
-      return this.$axios.get(API_ADDRESS.product.show.base + '/' + productId)
+      return this.$alaaApiInstance.get(API_ADDRESS.product.show.base + '/' + productId)
       // this.$apiGateway.product.show(productId)
         .then(response => {
           const product = response.data.data

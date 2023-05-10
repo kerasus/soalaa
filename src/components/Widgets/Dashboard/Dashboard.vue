@@ -212,6 +212,8 @@ export default {
   components: { NextExam, UpcomingExamsCalender, SubscriptionStatus, DashboardHeader },
   data () {
     return {
+      user: new User(),
+      isUserLogin: false,
       lastSubscribeLoading: false,
       lastSubscribeDate: null
     }
@@ -219,21 +221,19 @@ export default {
   computed: {
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']
-    },
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    },
-    isUserLogin() {
-      return this.$store.getters['Auth/isUserLogin']
     }
   },
   created() {
     this.getLastSubscribe()
   },
+  mounted () {
+    this.loadAuthData()
+  },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+      this.isUserLogin = this.$store.getters['Auth/isUserLogin']
+    },
     getLastSubscribe () {
       this.lastSubscribeLoading = true
       this.$axios.get(API_ADDRESS.subscription.last)

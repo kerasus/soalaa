@@ -1,7 +1,7 @@
 import { boot } from 'quasar/wrappers'
 import merge from 'deepmerge'
 
-const key = process.env.VUEX_PERSISTED_STATE_KEY
+const key = process.env.VUEX_PERSISTED_STATE_KEY ? process.env.VUEX_PERSISTED_STATE_KEY : 'vuex'
 
 export default boot(({ store, ssrContext }) => {
   if (ssrContext) {

@@ -264,15 +264,18 @@ import { User } from 'src/models/User.js'
 export default {
   // eslint-disable-next-line vue/no-reserved-component-names
   name: 'Footer',
-  computed: {
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
+  data () {
+    return {
+      user: new User()
     }
   },
+  mounted () {
+    this.loadAuthData()
+  },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+    },
     scrollToTop() {
       document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }

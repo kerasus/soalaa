@@ -107,20 +107,13 @@ export default {
     return {
       clickedItem: null,
       previewImg: null,
+      user: new User(),
+      isUserLogin: false,
       file: null,
       controls: false
     }
   },
   computed: {
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    },
-    isUserLogin() {
-      return this.$store.getters['Auth/isUserLogin']
-    },
     showMenuItem () {
       return (item) => {
         return (item.permission === 'all' || this.user.hasPermission(item.permission))
@@ -131,9 +124,14 @@ export default {
     }
   },
   mounted() {
+    this.loadAuthData()
     this.previewImg = this.user.photo
   },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+      this.isUserLogin = this.$store.getters['Auth/isUserLogin']
+    },
     logOut () {
       this.$store.dispatch('Auth/logOut')
         .then(() => {
@@ -155,7 +153,7 @@ export default {
     confirmUpdate() {
       const fd = new FormData()
       fd.append('photo', this.file)
-      this.$axios.put(API_ADDRESS.user.updatePhoto(), fd).then((d) => {
+      this.$alaaApiInstance.put(API_ADDRESS.user.updatePhoto(), fd).then((d) => {
         this.controls = false
       })
     }

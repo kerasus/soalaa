@@ -178,7 +178,7 @@ export default {
     },
     getTags() {
       // this.$apiGateway.forrest.getTags(['major', 'grade'])
-      this.$axios.get(API_ADDRESS.tree.getMultiType(['major', 'grade']))
+      this.$alaaApiInstance.get(API_ADDRESS.tree.getMultiType(['major', 'grade']))
         .then(response => {
           const res = response.data.data
           this.stringOptions = []
@@ -195,7 +195,7 @@ export default {
       this.form.mobile = this.userInfo.mobile
       this.form.code = this.userInfo.code
       this.setLoading(true)
-      this.$axios.post(API_ADDRESS.user.newsletter, {
+      this.$alaaApiInstance.post(API_ADDRESS.user.newsletter, {
         mobile: this.form.mobile, // String
         code: this.form.code, // String
         first_name: this.form.first_name, // String

@@ -106,28 +106,16 @@ export default {
     SideMenuDashboard: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu-dashboard.vue')),
     onlineQuizTemplateHeader: defineAsyncComponent(() => import('components/Headers/onlineQuizTemplateHeader.vue')),
     sideMenuMapOfQuestions: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu_MapOfQuestions.vue'))
-
-    // UserSideBar,
-    // Router,
-    // SideMenuDashboard,
-    // sideMenuMapOfQuestions,
-    // templateHeader,
-    // onlineQuizTemplateHeader,
-    // UserTemplateHeader,
-    // Auth
   },
   data () {
     return {
+      user: new User(),
+      isAdmin: true,
+      isUserLogin: false,
       keepAliveComponents: KeepAliveComponents
     }
   },
   computed: {
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    },
     loginDialog: {
       get () {
         return this.$store.getters['AppLayout/loginDialog']
@@ -153,13 +141,15 @@ export default {
       return this.$store.getters['AppLayout/layoutLeftSideBarType']
     }
   },
-  watch: {
-  },
   mounted () {
-  },
-  created () {
+    this.loadAuthData()
   },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+      this.isAdmin = this.$store.getters['Auth/isAdmin']
+      this.isUserLogin = this.$store.getters['Auth/isUserLogin']
+    },
     confirmDialogAction (data) {
       if (this.confirmDialogData) this.confirmDialogData.callback(data)
       else {

@@ -82,7 +82,7 @@ export default {
       this.products.loading = false
     },
     getPriductCifts() {
-      return this.$axios.get(API_ADDRESS.product.gifts(this.productId))
+      return this.$alaaApiInstance.get(API_ADDRESS.product.gifts(this.productId))
       // return APIGateway.product.gifts(this.productId)
     }
   }

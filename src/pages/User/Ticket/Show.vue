@@ -299,7 +299,7 @@ export default {
     },
     postMessage (formData) {
       this.sendLoading = true
-      this.$axios.post(API_ADDRESS.ticket.show.ticketMessage, formData)
+      this.$alaaApiInstance.post(API_ADDRESS.ticket.show.ticketMessage, formData)
         .then(res => {
           this.userMessageArray.unshift(res.data.data.ticketMessage)
           this.$refs.SendMessageInput.clearMessage()
@@ -314,7 +314,7 @@ export default {
         })
     },
     saveChanges () {
-      this.$axios.put(API_ADDRESS.ticket.show.base + '/' + this.searchForInputVal('id'), {
+      this.$alaaApiInstance.put(API_ADDRESS.ticket.show.base + '/' + this.searchForInputVal('id'), {
         department_id: this.searchForInputVal('department'),
         id: this.searchForInputVal('id'),
         priority_id: this.searchForInputVal('priority-id'),
@@ -358,7 +358,7 @@ export default {
       this.logDrawer = this.logDrawer === false
     },
     sendTicketStatusNotice (ticketId) {
-      this.$axios.post(API_ADDRESS.ticket.show.statusNotice(ticketId))
+      this.$alaaApiInstance.post(API_ADDRESS.ticket.show.statusNotice(ticketId))
         .then((res) => {
           this.$q.notify({
             message: res.data.message,

@@ -290,7 +290,7 @@ export default {
       this.batchExtendPostRequest()
     },
     batchExtendPostRequest () {
-      this.$axios.post(API_ADDRESS.ticket.show.batchExtend, {
+      this.$alaaApiInstance.post(API_ADDRESS.ticket.show.batchExtend, {
         orderproducts: this.extendProductArray
       })
         .then((res) => {

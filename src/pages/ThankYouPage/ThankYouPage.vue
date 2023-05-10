@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     onLoadPage () {
-      this.$axios.get(API_ADDRESS.cart.orderWithTransaction(this.orderId))
+      this.$alaaApiInstance.get(API_ADDRESS.cart.orderWithTransaction(this.orderId))
         .then((response) => {
           const paymentStatus = response.data.data.paymentstatus
 

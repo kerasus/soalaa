@@ -1528,7 +1528,7 @@ export default {
     },
 
     callProductApi() {
-      return this.$axios.get(API_ADDRESS.product.landing.sea.all)
+      return this.$alaaApiInstance.get(API_ADDRESS.product.landing.sea.all)
     },
 
     updateActiveTab(exam) {

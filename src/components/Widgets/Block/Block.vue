@@ -167,15 +167,15 @@ export default {
     },
     getApiRequest() {
       if (this.localOptions.apiName === 'home') {
-        return this.$axios.get(API_ADDRESS.block.home)
+        return this.$alaaApiInstance.get(API_ADDRESS.block.home)
         // return this.$apiGateway.pages.home()
       }
       if (this.localOptions.apiName === 'shop') {
-        return this.$axios.get(API_ADDRESS.block.shop)
+        return this.$alaaApiInstance.get(API_ADDRESS.block.shop)
         // return this.$apiGateway.pages.shop()
       }
       if (this.localOptions.apiName === 'content') {
-        return this.$axios.get(API_ADDRESS.content.relatedProducts(this.$route.params.id))
+        return this.$alaaApiInstance.get(API_ADDRESS.content.relatedProducts(this.$route.params.id))
         // return this.$apiGateway.content.relatedProducts(this.$route.params.id)
       }
       return Promise.reject('wrong api name')

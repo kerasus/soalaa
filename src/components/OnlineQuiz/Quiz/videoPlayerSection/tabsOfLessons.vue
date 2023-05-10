@@ -148,7 +148,7 @@ export default {
   methods: {
     getContent (contentId, subCategoryIndex) {
       const that = this
-      this.$axios.get(API_ADDRESS.content.base + '/' + contentId)
+      this.$alaaApiInstance.get(API_ADDRESS.content.base + '/' + contentId)
       // this.alaaContent.show(contentId)
         .then((response) => {
           that.currentVideoContent = response.data.data

@@ -257,12 +257,12 @@ export default {
         })
       }
       this.product.loading = true
-      return this.$axios.get(API_ADDRESS.product.show.base + '/' + this.productId)
+      return this.$alaaApiInstance.get(API_ADDRESS.product.show.base + '/' + this.productId)
       // return this.$apiGateway.product.show(this.productId)
     },
     getSet(id) {
       this.set.loading = true
-      this.$axios.get(API_ADDRESS.set.base + '/' + id)
+      this.$alaaApiInstance.get(API_ADDRESS.set.base + '/' + id)
       // this.$apiGateway.set.show(id)
         .then(response => {
           const set = new Set(response.data.data)
@@ -283,7 +283,7 @@ export default {
         })
     },
     downloadPamphlet(pamphlet) {
-      this.$axios.get(API_ADDRESS.content.base + '/' + pamphlet.id)
+      this.$alaaApiInstance.get(API_ADDRESS.content.base + '/' + pamphlet.id)
       // this.$apiGateway.content.show(pamphlet.id)
         .then(response => {
           const content = new Content(response.data.data)

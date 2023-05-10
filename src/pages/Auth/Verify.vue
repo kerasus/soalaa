@@ -78,7 +78,7 @@ export default {
     verifyCode () {
       const that = this
       //  that.modelValue.loading = true
-      this.$axios.post(API_ADDRESS.user.mobile.verify, { code: this.typedCode })
+      this.$alaaApiInstance.post(API_ADDRESS.user.mobile.verify, { code: this.typedCode })
         .then(() => {
           // that.user.loading = false
           that.$emit('verified')
@@ -102,7 +102,7 @@ export default {
     sendCode () {
       const that = this
       // this.user.loading = true
-      this.$axios.get(API_ADDRESS.user.mobile.resend)
+      this.$alaaApiInstance.get(API_ADDRESS.user.mobile.resend)
         .then((resp) => {
         //  that.user.loading = false
           that.code = resp

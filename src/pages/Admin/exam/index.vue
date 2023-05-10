@@ -200,7 +200,6 @@ export default {
       ]
     }
   },
-  computed: {},
   created () {
     // if (this.tableKeys.currentPage) {
     //   this.api = API_ADDRESS.exam.base(this.tableKeys.currentPage)

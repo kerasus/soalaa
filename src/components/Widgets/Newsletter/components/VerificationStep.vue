@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     verifyCode() {
-      this.$axios.post(API_ADDRESS.user.verifyMoshavereh, {
+      this.$alaaApiInstance.post(API_ADDRESS.user.verifyMoshavereh, {
         mobile: this.userInfo.mobile, // String
         code: this.bindModal // String
       })
@@ -127,7 +127,7 @@ export default {
     },
     resendRequest(userInfo) {
       this.setLoading(true)
-      this.$axios.get(API_ADDRESS.user.resendGuest + '?mobile=' + userInfo.mobile)
+      this.$alaaApiInstance.get(API_ADDRESS.user.resendGuest + '?mobile=' + userInfo.mobile)
       // this.$apiGateway.user.resendGuest(userInfo)
         .then(response => {
           const message = response.data.message

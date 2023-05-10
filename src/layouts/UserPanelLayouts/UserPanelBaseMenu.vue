@@ -92,6 +92,8 @@ export default {
   data () {
     return {
       clickedItem: null,
+      user: new User(),
+      isUserLogin: false,
       titlesList: [
         {
           title: 'داشبورد',
@@ -153,15 +155,6 @@ export default {
     }
   },
   computed: {
-    isUserLogin() {
-      return this.$store.getters['Auth/isUserLogin']
-    },
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    },
     showMenuItem () {
       return (item) => {
         return (item.permission === 'all' || this.user.hasPermission(item.permission))
@@ -174,7 +167,14 @@ export default {
       return 'active-route-side-mode'
     }
   },
+  mounted () {
+    this.loadAuthData()
+  },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+      this.isUserLogin = this.$store.getters['Auth/isUserLogin']
+    },
     logOut () {
       this.$store.dispatch('Auth/logOut')
         .then(() => {

@@ -153,6 +153,7 @@ export default boot(({ app, store, router, ssrContext }) => {
   if (cookiesAccessToken) {
     const tokenType = 'Bearer'
     store.$accessToken = cookiesAccessToken
+    store.$accessToken = cookiesAccessToken
     alaaApiInstance.defaults.headers.common.Authorization = tokenType + ' ' + cookiesAccessToken
     appApiInstance.defaults.headers.common.Authorization = tokenType + ' ' + cookiesAccessToken
   }
@@ -174,8 +175,8 @@ export default boot(({ app, store, router, ssrContext }) => {
   store.$alaaApiInstance = alaaApiInstance
   router.$alaaApiInstance = alaaApiInstance
 
-  store.$axios = alaaApiInstance
-  router.$axios = alaaApiInstance
+  store.$axios = appApiInstance
+  router.$axios = appApiInstance
 
   app.config.globalProperties.$axios = alaaApiInstance
   app.config.globalProperties.$alaaApiInstance = alaaApiInstance

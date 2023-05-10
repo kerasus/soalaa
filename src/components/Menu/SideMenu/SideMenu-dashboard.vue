@@ -147,6 +147,7 @@ export default {
   data () {
     return {
       clickedItem: null,
+      user: new User(),
       titlesList: [
         {
           title: 'صفحه اصلی',
@@ -357,19 +358,19 @@ export default {
     }
   },
   computed: {
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    },
     showMenuItem () {
       return (item) => {
         return (item.permission === 'all' || this.user.hasPermission(item.permission))
       }
     }
   },
+  mounted () {
+    this.loadAuthData()
+  },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+    },
     logOut () {
       this.$store.dispatch('Auth/logOut')
         .then(() => {

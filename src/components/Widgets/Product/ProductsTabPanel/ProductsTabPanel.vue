@@ -70,7 +70,7 @@ export default {
     getProductsPromise() {
       this.extractProducts(this.localOptions.data)
       const productIdList = this.productFlatList.map(product => product.id)
-      return this.$axios.get(API_ADDRESS.product.bulk(productIdList))
+      return this.$alaaApiInstance.get(API_ADDRESS.product.bulk(productIdList))
       // return this.$apiGateway.product.getProductList(productIdList)
     },
     prefetchServerDataPromise () {

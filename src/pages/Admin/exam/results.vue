@@ -254,7 +254,7 @@ export default {
   methods: {
     getUserFormData () {
       this.showLoading()
-      this.$axios.get(API_ADDRESS.user.formData)
+      this.$alaaApiInstance.get(API_ADDRESS.user.formData)
         .then((resp) => {
           // console.log('getUserFormData res :', resp)
           this.genders = resp.data.data.genders

@@ -2,14 +2,15 @@
  * Auth middleware example.
  */
 export default function auth (/* { to, from, next, store } */ { next, to, store }) {
-  if (!store.getters['Auth/accessToken']) {
-    const loginRouteName = 'login'
-    const currentRoute = to
-    if (currentRoute && currentRoute.name !== loginRouteName) {
-      store.commit('Auth/updateRedirectTo', currentRoute)
-    }
+  const accessToken = store.$accessToken
+  const loginRouteName = 'login'
+  // const hasSessionToken = Object.keys(store.$sessions).filter(sessionName => !!store.$sessions[sessionName]).length === Object.keys(store.$sessions).length
 
+  // if (!accessToken || !hasSessionToken) {
+  if (!accessToken) {
+    store.commit('Auth/updateRedirectTo', { name: to.name, params: to.params })
     return next({ name: loginRouteName })
   }
+
   return next()
 }

@@ -219,7 +219,7 @@ export default {
     handleProductBookmark () {
       this.bookmarkLoading = true
       if (this.product.is_favored) {
-        this.$axios.post(API_ADDRESS.product.unfavored(this.product.id))
+        this.$alaaApiInstance.post(API_ADDRESS.product.unfavored(this.product.id))
         // this.$apiGateway.product.unfavored(this.product.id)
           .then(() => {
             this.product.is_favored = !this.product.is_favored
@@ -230,7 +230,7 @@ export default {
           })
         return
       }
-      this.$axios.post(API_ADDRESS.product.favored(this.product.id))
+      this.$alaaApiInstance.post(API_ADDRESS.product.favored(this.product.id))
       // this.$apiGateway.product.favored(this.product.id)
         .then(() => {
           this.product.is_favored = !this.product.is_favored
@@ -275,7 +275,7 @@ export default {
       this.getProduct(productId)
     },
     getProduct() {
-      return this.$axios.get(API_ADDRESS.product.show.base + '/' + this.productId)
+      return this.$alaaApiInstance.get(API_ADDRESS.product.show.base + '/' + this.productId)
       // return APIGateway.product.show(this.productId)
     },
 

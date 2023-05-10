@@ -56,16 +56,17 @@
 <script>
 import API_ADDRESS from 'src/api/Addresses.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
+import { User } from 'src/models/User'
 
 export default {
   name: 'Profile',
   components: {
     EntityCrudFormBuilder
   },
-
   data () {
     return {
       loading: false,
+      user: new User(),
       inputs: [
         { type: 'input', name: 'first_name', responseKey: 'first_name', label: 'نام', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
         { type: 'input', name: 'last_name', responseKey: 'last_name', label: 'نام خانوادگی', col: 'col-xs-12 col-sm-6 col-md-4 col-lg-4 col-xl-4', placeholder: ' ' },
@@ -89,17 +90,11 @@ export default {
       isCityLocked: false
     }
   },
-
   computed: {
-    user () {
-      return this.$store.getters['Auth/user']
-    },
-
     provinceInputValue () {
       return this.findInput(this.inputs, 'province').value
     }
   },
-
   watch: {
     provinceInputValue (newValue) {
       if (!newValue) {
@@ -108,12 +103,14 @@ export default {
       this.setCityInputOptions(this.getCitiesOfProvince(typeof this.provinceInputValue === 'object' ? this.provinceInputValue.value : this.provinceInputValue))
     }
   },
-
   mounted() {
+    this.loadAuthData()
     this.onLoadPage()
   },
-
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+    },
     onLoadPage () {
       this.loading = true
       this.getFormData()
@@ -219,7 +216,7 @@ export default {
       const formData = this.$refs.EntityCrudFormBuilder.getFormData()
 
       // console.log('formData', formData)
-      this.$axios.put(API_ADDRESS.user.edit(this.user.id), formData)
+      this.$alaaApiInstance.put(API_ADDRESS.user.edit(this.user.id), formData)
         .then(() => {
           this.loading = false
         })

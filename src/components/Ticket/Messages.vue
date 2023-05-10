@@ -169,7 +169,7 @@ export default {
       this.showVoicePlayerIsPlaying = false
     },
     sendReport () {
-      this.$axios.post(API_ADDRESS.ticket.show.reportMessage(this.data.user.id), {
+      this.$alaaApiInstance.post(API_ADDRESS.ticket.show.reportMessage(this.data.user.id), {
         report_description: this.userReportDescription
       })
         .then((res) => {

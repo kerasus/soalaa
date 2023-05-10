@@ -109,7 +109,7 @@ export default {
       this.getSampleContents()
     },
     getProduct() {
-      return this.$axios.get(API_ADDRESS.product.show.base + '/' + this.productId)
+      return this.$alaaApiInstance.get(API_ADDRESS.product.show.base + '/' + this.productId)
       // return APIGateway.product.show(this.productId)
         .then(response => {
           const product = new Product(response.data.data)
@@ -120,7 +120,7 @@ export default {
         })
     },
     getSampleContents() {
-      return this.$axios.get(API_ADDRESS.product.sampleContent(this.productId))
+      return this.$alaaApiInstance.get(API_ADDRESS.product.sampleContent(this.productId))
       // return APIGateway.product.sampleContent(this.productId)
         .then(response => {
           this.contents = new ContentList(response.data.data)

@@ -288,6 +288,7 @@ export default {
   name: 'MainFooter',
   data() {
     return {
+      user: new User(),
       footerItems: [
         {
           title: 'profile',
@@ -316,15 +317,13 @@ export default {
       ]
     }
   },
-  computed: {
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    }
+  mounted () {
+    this.loadAuthData()
   },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+    },
     scrollToTop() {
       document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
     },

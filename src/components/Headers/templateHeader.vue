@@ -1,6 +1,6 @@
 <template>
   <div class="drawer-btn"
-       :class="{'col-6': windowSize.x < 599}">
+       :class="{'col-6': localWindowSize.x < 599}">
     <q-btn class="toolbar-button"
            icon="isax:menu-1"
            color="white"
@@ -10,7 +10,7 @@
            @click="toggleLeftDrawer" />
   </div>
   <div class="right-side"
-       :class="{'col-6': windowSize.x > 1439, 'col-12': windowSize.x < 599}">
+       :class="{'col-6': localWindowSize.x > 1439, 'col-12': localWindowSize.x < 599}">
     <div v-if="breadcrumbsVisibility">
       <q-skeleton v-if="!breadcrumbs.path"
                   width="100px"
@@ -38,7 +38,7 @@
     </div>
   </div>
   <div class="left-side"
-       :class="{'col-6': windowSize.x < 599, 'col-6': windowSize.x > 1439}">
+       :class="{'col-6': localWindowSize.x < 599, 'col-6': localWindowSize.x > 1439}">
     <q-btn-dropdown v-if="false"
                     class="toolbar-button"
                     content-class="profile-menu"
@@ -92,17 +92,21 @@
 </template>
 
 <script>
+import { User } from 'src/models/User.js'
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'templateHeader',
   data () {
-    return {}
+    return {
+      user: new User(),
+      localWindowSize: {
+        x: 0,
+        y: 0
+      }
+    }
   },
   computed: {
-    ...mapGetters('Auth', [
-      'user'
-    ]),
     ...mapGetters('AppLayout', [
       'breadcrumbsVisibility',
       'breadcrumbs',
@@ -112,10 +116,15 @@ export default {
     ])
   },
   mounted () {
+    this.loadAuthData()
+    this.localWindowSize = this.windowSize
     this.$store.commit('AppLayout/updateBreadcrumbLoading', false)
     this.$store.commit('AppLayout/updateVisibilityBreadcrumb', true)
   },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+    },
     ...mapMutations('AppLayout', [
       'updateVisibilityBreadcrumb',
       'updateBreadcrumbs',

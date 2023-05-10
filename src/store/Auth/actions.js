@@ -8,6 +8,7 @@ export function login (context, data) {
       context.commit('updateAccessToken', accessToken)
       Cookies.set('BearerAccessToken', accessToken)
       const tokenType = 'Bearer'
+      this.$accessToken = accessToken
       this.$alaaApiInstance.defaults.headers.common.Authorization = tokenType + ' ' + accessToken
       this.$alaaApiInstance.defaults.headers.common.Authorization = tokenType + ' ' + accessToken
     })
