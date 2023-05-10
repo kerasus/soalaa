@@ -659,7 +659,6 @@ const routes = [
             component: () => import('pages/Admin/SubjectTree/index'),
             breadcrumbs: { title: 'درخت تگ موضوعی' }
           },
-
           {
             path: 'ticket',
             component: () => import('layouts/bareLayout.vue'),
