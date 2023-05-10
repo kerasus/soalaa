@@ -430,7 +430,7 @@ const API_ADDRESS = {
       productIds.forEach((productId, productIndex) => {
         idParams.push('ids' + '[' + productIndex + ']=' + productId)
       })
-      const queryParams = idParams.join('&')
+      const queryParams = idParams.join('&') + '&seller=2'
       return authServer + '/product?' + queryParams
     },
 
