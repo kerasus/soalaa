@@ -178,6 +178,7 @@ const API_ADDRESS = {
         return lumenServer + '/exam-report/show?user_exam_id=' + userExamId
       },
       adminGetReport: lumenServer + '/exam-report/show/admin',
+      takhminRotbeExamList: lumenServer + '/exam-report/rank',
       updateReportOptions (examId) {
         return lumenServer + '/exam/config/' + examId
       }
