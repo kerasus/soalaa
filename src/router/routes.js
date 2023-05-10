@@ -11,16 +11,19 @@ function getEntityCrudRouteObject (path, baseRouteName, componentPath, breadcrum
   // console.log('removedFirstPart', removedFirstPart[0])
   AllNeededRoutes.forEach((item, index) => {
     // Todo : find a way for 'pages/'
-    children.push({
-      name: baseRouteName + '.' + item.mode,
-      path: item.path,
-      component: () => import('pages/' + componentPath.replace(removedFirstPart[0] + '/', '')),
-      meta: {
-        middlewares: [
-          Permissions.hasPermission(permissions[index])
-        ]
-      }
-    })
+    // children.push({
+    //   name: baseRouteName + '.' + item.mode,
+    //   path: item.path,
+    //   component: () => import('../pages/' + componentPath.replace(removedFirstPart[0] + '/', '')),
+    //   meta: {
+    //     middlewares: [
+    //       Permissions.hasPermission(permissions[index])
+    //     ]
+    //   }
+    // })
+
+    children.push({ name: baseRouteName + '.' + item.mode, path: item.path, component: () => import('../pages/' + componentPath.replace(removedFirstPart[0] + '/', '') + '.vue') })
+
     // Even this is not working
     // children.push({ name: baseRouteName + '.' + item.mode, path: item.path, component: () => import(removedFirstPart[0] + '/' + componentPath.replace(removedFirstPart[0] + '/', '')) })
   })
@@ -78,7 +81,7 @@ const allEntityCrudRouteObjects = [
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('src/layouts/MainLayout.vue'),
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     layoutConfig: {
       layoutHeaderVisible: true,
@@ -213,7 +216,7 @@ const routes = [
       {
         path: 'login',
         name: 'login',
-        component: () => import('pages/Auth/Login.vue')
+        component: () => import('src/pages/Auth/Login.vue')
       },
       {
         path: 'subscription',

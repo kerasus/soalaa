@@ -41,12 +41,11 @@
              label="ثبت نام / ورود"
              @click="login" />
     </div>
-
   </q-card>
 </template>
 
 <script>
-import { mixinAuth } from 'src/mixin/Mixins'
+import { mixinAuth } from 'src/mixin/Mixins.js'
 export default {
   name: 'Auth',
   mixins: [mixinAuth],

@@ -1,28 +1,24 @@
-import API_ADDRESS from 'src/api/Addresses'
-import { axios } from 'boot/axios'
+import { Cookies } from 'quasar'
+import { APIGateway } from 'src/api/APIGateway.js'
 
-const actions = {
-  login: (context, data) => {
-    return new Promise((resolve, reject) => {
-      axios.post(API_ADDRESS.auth.login, data)
-        .then(response => {
-          const accessToken = response.data.data.access_token
-          axios.defaults.headers.common.Authorization = 'Bearer ' + accessToken
-          context.commit('updateAccessToken', accessToken)
-          context.commit('updateUser', response.data.data.user)
-          context.commit('setAccessToken', accessToken)
-          resolve(response)
-        })
-        .catch((err) => {
-          reject(err)
-        })
+export function login (context, data) {
+  return APIGateway.auth.login(data)
+    .then(({ accessToken, user }) => {
+      context.commit('updateUser', user)
+      context.commit('updateAccessToken', accessToken)
+      Cookies.set('BearerAccessToken', accessToken)
+      const tokenType = 'Bearer'
+      this.$alaaApiInstance.defaults.headers.common.Authorization = tokenType + ' ' + accessToken
+      this.$alaaApiInstance.defaults.headers.common.Authorization = tokenType + ' ' + accessToken
     })
-  },
-  logOut: (context) => {
-    context.commit('updateAccessToken', null)
-    context.commit('updateUser', null)
-    context.commit('updateRedirectTo', null)
-  }
 }
 
-export default actions
+export function logOut (context, clearRedirectTo = true) {
+  context.commit('updateAccessToken', null)
+  context.commit('updateUser', null)
+  Cookies.set('BearerAccessToken', '')
+  if (clearRedirectTo) {
+    context.commit('updateRedirectTo', null)
+  }
+  this.$router.push({ name: 'login' })
+}

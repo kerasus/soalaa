@@ -1,5 +1,3 @@
-import { axios } from 'boot/axios'
-
 const mutations = {
 
   updateUser: (state, newInfo) => {
@@ -12,7 +10,8 @@ const mutations = {
     state.redirectTo = newInfo
   },
   setAccessToken: (state, newInfo) => {
-    axios.defaults.headers.common.Authorization = 'Bearer ' + newInfo
+    // ToDo: set token
+    // axios.defaults.headers.common.Authorization = 'Bearer ' + newInfo
   }
 }
 

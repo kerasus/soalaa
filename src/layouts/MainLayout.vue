@@ -81,7 +81,7 @@
 import { User } from 'src/models/User.js'
 import { defineAsyncComponent } from 'vue'
 import MainFooter from 'components/Layout/Footer/main.vue'
-import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import KeepAliveComponents from 'assets/js/KeepAliveComponents.js'
 import QuasarTemplateBuilder from 'quasar-template-builder/src/quasar-template-builder.vue'
 import FloatingActionButton from 'components/Template/FloatingActionButton/FloatingActionButton.vue'
 
@@ -99,14 +99,14 @@ export default {
     MainFooter,
     FloatingActionButton,
     QuasarTemplateBuilder,
-    UserSideBar: defineAsyncComponent(() => import('layouts/UserPanelLayouts/UserSideBar')),
-    sideMenuMapOfQuestions: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu_MapOfQuestions')),
-    SideMenuDashboard: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu-dashboard')),
-    Router: defineAsyncComponent(() => import('src/router/Router')),
-    templateHeader: defineAsyncComponent(() => import('components/Headers/templateHeader')),
-    onlineQuizTemplateHeader: defineAsyncComponent(() => import('components/Headers/onlineQuizTemplateHeader')),
-    UserTemplateHeader: defineAsyncComponent(() => import('components/Headers/userTemplateHeader')),
-    Auth: defineAsyncComponent(() => import('components/Auth'))
+    Auth: defineAsyncComponent(() => import('components/Auth.vue')),
+    Router: defineAsyncComponent(() => import('src/router/Router.vue')),
+    UserSideBar: defineAsyncComponent(() => import('layouts/UserPanelLayouts/UserSideBar.vue')),
+    templateHeader: defineAsyncComponent(() => import('components/Headers/templateHeader.vue')),
+    UserTemplateHeader: defineAsyncComponent(() => import('components/Headers/userTemplateHeader.vue')),
+    SideMenuDashboard: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu-dashboard.vue')),
+    onlineQuizTemplateHeader: defineAsyncComponent(() => import('components/Headers/onlineQuizTemplateHeader.vue')),
+    sideMenuMapOfQuestions: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu_MapOfQuestions.vue'))
 
     // UserSideBar,
     // Router,

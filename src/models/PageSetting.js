@@ -1,4 +1,5 @@
 import { Collection, Model } from 'js-abstract-model'
+import { PageSettingValue } from 'src/models/PageSettingValue'
 
 class PageSetting extends Model {
   constructor (data) {
@@ -7,17 +8,9 @@ class PageSetting extends Model {
       { key: 'key' },
       {
         key: 'value',
-        default: {
-          sections: [],
-          layoutConfig: {},
-          seo: {}
-        }
+        relatedModel: PageSettingValue
       }
     ])
-
-    if (typeof this.value === 'string') {
-      this.value = JSON.parse(this.value)
-    }
   }
 
   getStringifyValue () {

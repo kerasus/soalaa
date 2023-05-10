@@ -7,14 +7,14 @@ import API_ADDRESS from '../api/Addresses'
 import { QuestionStatus } from '../models/QuestionStatus'
 import { LogList } from '../models/Log'
 // eslint-disable-next-line import/named
-import { createApp } from 'vue'
+// import { createApp } from 'vue'
 import { QuestionType } from '../models/QuestionType'
 import { AttachedExamList } from '../models/AttachedExam'
 import { TreeNodeList } from 'src/models/TreeNode'
-if (!window.app) {
-// window.app
-  window.app = createApp({})
-}
+// if (!window.app) {
+// // window.app
+//   window.app = createApp({})
+// }
 class Question extends Model {
   constructor (data) {
     super(data, [

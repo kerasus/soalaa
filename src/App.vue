@@ -13,7 +13,7 @@ export default defineComponent({
     updateExists: false
   }),
   created () {
-    this.setServiceWorker()
+    // this.setServiceWorker()
   },
   methods: {
     setServiceWorker () {
