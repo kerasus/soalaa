@@ -52,6 +52,8 @@
                        label="کارنامه"></q-tab>
                 <q-tab name="rank"
                        label="تخمین رتبه"></q-tab>
+                <q-tab name="newRank"
+                       label="تخمین رتبه جدید"></q-tab>
                 <q-tab name="lessons"
                        label="ریزدرس ها"></q-tab>
                 <q-tab name="KeyAnswers"
@@ -73,6 +75,9 @@
                       swipeable>
           <q-tab-panel name="result">
             <PersonalResult :report="report" />
+          </q-tab-panel>
+          <q-tab-panel name="newRank">
+            <new-takhmin-rotbe :report="report" />
           </q-tab-panel>
           <q-tab-panel name="rank">
             <takhmin-rotbe :report="report" />
@@ -192,10 +197,11 @@ import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe'
 import ExamData from 'src/assets/js/ExamData'
 import TabsOfLessons from 'components/OnlineQuiz/Quiz/videoPlayerSection/tabsOfLessons'
 import API_ADDRESS from 'src/api/Addresses'
+import NewTakhminRotbe from 'components/OnlineQuiz/Quiz/NewTakhminRotbe'
 
 export default {
   name: 'Result',
-  components: { TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult, QuestionItem },
+  components: { NewTakhminRotbe, TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult, QuestionItem },
   mixins: [
     mixinAuth,
     mixinQuiz
@@ -356,7 +362,7 @@ export default {
     padding: 12px;
   }
   .default-result-tabs-title {
-    max-width: 700px;
+    max-width: 820px;
     color: rgba(0, 0, 0, 0.54);
   }
   .download-box {
