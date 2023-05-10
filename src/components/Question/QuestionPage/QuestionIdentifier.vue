@@ -157,7 +157,7 @@
       <tree-modal
         v-model:dialogValue="subjectTagsTreeModal"
         v-model:selected-nodes="selectedTreeTags"
-        :tree-type="'subject-tree'"
+        :tree-type="'subject_tags'"
         exchange-last-layer-only
       />
     </div>
