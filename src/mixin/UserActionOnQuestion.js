@@ -1,6 +1,7 @@
-import Time from 'src/plugins/time'
-import API_ADDRESS from 'src/api/Addresses'
-import Assistant from 'src/plugins/assistant'
+import Time from 'src/plugins/time.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import Assistant from 'src/plugins/assistant.js'
+
 const mixinUserActionOnQuestion = {
   methods: {
     userActionOnQuestion (questionId, actionType, data, socket, sendData) {

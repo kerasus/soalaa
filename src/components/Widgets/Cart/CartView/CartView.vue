@@ -172,8 +172,8 @@
 </template>
 
 <script>
-import { Cart } from 'src/models/Cart'
-import { Product } from 'src/models/Product'
+import { Cart } from 'src/models/Cart.js'
+import { Product } from 'src/models/Product.js'
 
 export default {
   name: 'cartView',

@@ -53,10 +53,10 @@
 </template>
 
 <script>
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
-import { Question } from 'src/models/Question'
-import { TypeList } from 'src/models/QuestionType'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Question } from 'src/models/Question.js'
+import { TypeList } from 'src/models/QuestionType.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
 
 export default {
   name: 'Navbar',

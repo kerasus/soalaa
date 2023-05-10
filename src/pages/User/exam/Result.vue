@@ -143,19 +143,19 @@
 </template>
 
 <script>
-import QuestionItem from 'src/components/OnlineQuiz/Quiz/question/questionField'
-import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info'
-import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult'
-import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
-import Assistant from 'src/plugins/assistant'
-import { AlaaSet } from 'src/models/AlaaSet'
-import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
-import { AlaaContent } from 'src/models/AlaaContent'
-import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult'
-import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe'
-import ExamData from 'src/assets/js/ExamData'
-import TabsOfLessons from 'components/OnlineQuiz/Quiz/videoPlayerSection/tabsOfLessons'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { AlaaSet } from 'src/models/AlaaSet.js'
+import Assistant from 'src/plugins/assistant.js'
+import ExamData from 'src/assets/js/ExamData.js'
+import { AlaaContent } from 'src/models/AlaaContent.js'
+import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
+import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info.vue'
+import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe.vue'
+import QuestionItem from 'src/components/OnlineQuiz/Quiz/question/questionField.vue'
+import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet.vue'
+import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult.vue'
+import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult.vue'
+import TabsOfLessons from 'src/components/OnlineQuiz/Quiz/videoPlayerSection/tabsOfLessons.vue'
 
 export default {
   name: 'Result',

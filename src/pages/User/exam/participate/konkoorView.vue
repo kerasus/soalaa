@@ -111,18 +111,17 @@
 </template>
 
 <script>
-import Item from 'src/components/OnlineQuiz/Quiz/question/questionField'
-import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
-import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
-import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
-import { Exam } from 'src/models/Exam'
-import Assistant from 'src/plugins/assistant'
-import TopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu'
 import { ref } from 'vue'
 import { mapGetters } from 'vuex'
-
+import { Exam } from 'src/models/Exam.js'
 import 'src/assets/scss/markdownKatex.scss'
-import ExamData from 'assets/js/ExamData'
+import Assistant from 'src/plugins/assistant'
+import ExamData from 'src/assets/js/ExamData.js'
+import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer.vue'
+import TopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu.vue'
+import Item from 'src/components/OnlineQuiz/Quiz/question/questionField.vue'
+import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet.vue'
+import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'konkoorView',

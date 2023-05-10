@@ -145,15 +145,15 @@
 
 <script>
 import { EntityEdit } from 'quasar-crud'
-import Messages from 'components/Ticket/Messages'
-import TicketRate from 'components/Ticket/TicketRate'
-import LogList from 'components/Ticket/LogList'
-import Drawer from 'components/CustomDrawer'
-import UserOrderList from 'components/Ticket/userOrderList'
-import API_ADDRESS from 'src/api/Addresses'
-import { CartItemList } from 'src/models/CartItem'
-import SendMessageInput from 'components/Ticket/SendMessageInput'
-import { mixinDateOptions } from 'src/mixin/Mixins'
+import API_ADDRESS from 'src/api/Addresses.js'
+import Drawer from 'src/components/CustomDrawer.vue'
+import { CartItemList } from 'src/models/CartItem.js'
+import { mixinDateOptions } from 'src/mixin/Mixins.js'
+import LogList from 'src/components/Ticket/LogList.vue'
+import Messages from 'src/components/Ticket/Messages.vue'
+import TicketRate from 'src/components/Ticket/TicketRate.vue'
+import UserOrderList from 'src/components/Ticket/userOrderList.vue'
+import SendMessageInput from 'src/components/Ticket/SendMessageInput.vue'
 
 export default {
   name: 'Show',

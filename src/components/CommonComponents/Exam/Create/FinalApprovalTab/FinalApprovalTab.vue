@@ -144,13 +144,12 @@
 </template>
 
 <script>
-import QuestionsGeneralInfo from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo'
-import { Question, QuestionList } from 'src/models/Question'
-import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem'
-import { Exam } from 'src/models/Exam'
-
 import { Chart } from 'highcharts-vue'
-import StickyBothSides from 'components/Utils/StickyBothSides'
+import { Exam } from 'src/models/Exam.js'
+import { Question, QuestionList } from 'src/models/Question.js'
+import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
+import QuestionItem from 'src/components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
+import QuestionsGeneralInfo from 'src/components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo.vue'
 
 export default {
   name: 'FinalApprovalTab',

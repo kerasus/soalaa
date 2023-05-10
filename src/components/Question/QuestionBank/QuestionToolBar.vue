@@ -208,7 +208,7 @@
 
 <script>
 import { Chart } from 'highcharts-vue'
-import { QuestionList } from 'src/models/Question'
+import { QuestionList } from 'src/models/Question.js'
 
 export default {
   name: 'QuestionBankToolBar',

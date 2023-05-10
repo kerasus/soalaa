@@ -1,12 +1,12 @@
 import process from 'process'
-import API_ADDRESS from 'src/api/Addresses'
-import Time from 'src/plugins/time'
-import Assistant from 'src/plugins/assistant'
-import SocketConnection from 'src/plugins/socket'
-import ExamData from 'src/assets/js/ExamData'
-import { Exam } from 'src/models/Exam'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
+import Time from 'src/plugins/time.js'
+import { Exam } from 'src/models/Exam.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import Assistant from 'src/plugins/assistant.js'
+import ExamData from 'src/assets/js/ExamData.js'
+import SocketConnection from 'src/plugins/socket.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory.js'
 
 const mixinQuiz = {
   computed: {

@@ -87,7 +87,8 @@
 </template>
 
 <script>
-import QuestionFilterExpansion from 'components/Question/QuestionBank/QuestionFilterExpansion'
+import QuestionFilterExpansion from 'src/components/Question/QuestionBank/QuestionFilterExpansion.vue'
+
 export default {
   name: 'QuestionBankHeader',
   components: { QuestionFilterExpansion },

@@ -54,8 +54,8 @@
 </template>
 
 <script>
+import API_ADDRESS from 'src/api/Addresses.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'Profile',

@@ -203,12 +203,12 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { Exam, ExamList } from 'src/models/Exam'
-import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
-import API_ADDRESS from 'src/api/Addresses'
-import { FormBuilder, inputMixin } from 'quasar-form-builder'
-import ShamsiDate from 'src/plugins/ShamsiDate'
 import Time from 'src/plugins/time.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import ShamsiDate from 'src/plugins/ShamsiDate.js'
+import { Exam, ExamList } from 'src/models/Exam.js'
+import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
+import { FormBuilder, inputMixin } from 'quasar-form-builder'
 
 export default defineComponent({
   name: 'QuizList',

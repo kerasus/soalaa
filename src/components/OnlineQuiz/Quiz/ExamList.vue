@@ -179,8 +179,8 @@
 </template>
 
 <script>
-import { Exam, ExamList } from 'src/models/Exam'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Exam, ExamList } from 'src/models/Exam.js'
 
 export default {
   name: 'ExamList',

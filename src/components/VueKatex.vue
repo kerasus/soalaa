@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
 import katex from 'katex'
 import 'katex/dist/katex.css'
-import addPersianTo from 'src/Utils/katex-persian-renderer/src/index.mjs'
 import 'src/Utils/katex-persian-renderer/katex-persian-fonts/index.css'
+import addPersianTo from 'src/Utils/katex-persian-renderer/src/index.mjs'
+import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
 import allMetrics from 'src/Utils/katex-persian-renderer/katex-persian-fonts/YekanBakhFontMetrics.json'
 
 addPersianTo(katex, {

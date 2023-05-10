@@ -200,12 +200,13 @@
 </template>
 
 <script>
-import DashboardHeader from 'components/Widgets/Dashboard/SideComponent/DashboardHeader'
-import SubscriptionStatus from 'components/Widgets/Dashboard/SideComponent/SubscriptionStatus'
-import UpcomingExamsCalender from 'components/Widgets/Dashboard/SideComponent/UpcomingExamsCalender'
-import NextExam from 'components/Widgets/Dashboard/SideComponent/NextExam'
-import API_ADDRESS from 'src/api/Addresses'
-import { User } from 'src/models/User'
+import { User } from 'src/models/User.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import NextExam from 'components/Widgets/Dashboard/SideComponent/NextExam.vue'
+import DashboardHeader from 'components/Widgets/Dashboard/SideComponent/DashboardHeader.vue'
+import SubscriptionStatus from 'components/Widgets/Dashboard/SideComponent/SubscriptionStatus.vue'
+import UpcomingExamsCalender from 'components/Widgets/Dashboard/SideComponent/UpcomingExamsCalender.vue'
+
 export default {
   name: 'Dashboard',
   components: { NextExam, UpcomingExamsCalender, SubscriptionStatus, DashboardHeader },

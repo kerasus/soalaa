@@ -101,9 +101,9 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
 import 'src/assets/scss/markdownKatex.scss'
-import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
+import VueKatex from 'src/components/VueKatex.vue'
+import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'questionField',

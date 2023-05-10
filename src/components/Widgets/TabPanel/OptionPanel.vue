@@ -206,10 +206,10 @@
 </template>
 <script>
 import { defineComponent } from 'vue'
+import lazyImg from 'src/components/lazyImg.vue'
+import { TabPanel } from 'src/models/TabPanel.js'
 import mixinOptionPanel from 'quasar-ui-q-page-builder/src/mixin/OptionPanel.js'
 import OptionPanelTabs from 'quasar-ui-q-page-builder/src/components/OptionPanelComponents/OptionPanelTabs.vue'
-import lazyImg from 'components/lazyImg'
-import { TabPanel } from 'src/models/TabPanel.js'
 
 export default defineComponent({
   name: 'OptionPanel',

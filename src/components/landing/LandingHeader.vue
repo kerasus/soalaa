@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import { PlayerSourceList } from 'src/models/PlayerSource'
-import VideoPlayer from 'components/VideoPlayer'
+import VideoPlayer from 'src/components/VideoPlayer.vue'
+import { PlayerSourceList } from 'src/models/PlayerSource.js'
 
 export default {
   name: 'LandingHeader',

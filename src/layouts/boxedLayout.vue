@@ -6,9 +6,10 @@
 </template>
 
 <script>
-import Router from 'src/router/Router'
-import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import Router from 'src/router/Router.vue'
 import { Breadcrumbs } from 'quasar-template-builder'
+import KeepAliveComponents from 'src/assets/js/KeepAliveComponents.js'
+
 export default {
   name: 'userPanelNoNavigationLayout',
   components: {

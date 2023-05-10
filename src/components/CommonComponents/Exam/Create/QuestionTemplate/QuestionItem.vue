@@ -292,11 +292,10 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
-import question from 'components/CommonComponents/Exam/Create/QuestionTemplate/Question'
-// import VideoPlayer from 'src/components/VideoPlayer'
-import { Question } from 'src/models/Question'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Question } from 'src/models/Question.js'
+import VueKatex from 'src/components/VueKatex.vue'
+import question from 'components/CommonComponents/Exam/Create/QuestionTemplate/Question.vue'
 
 export default {
   name: 'QuestionItem',

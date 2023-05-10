@@ -5,6 +5,7 @@
 <script>
 /* eslint-disable no-var */
 import { defineAsyncComponent } from 'vue'
+
 export default {
   name: 'DynamicComponent',
   props: {

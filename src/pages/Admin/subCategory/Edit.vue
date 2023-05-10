@@ -13,8 +13,8 @@
 
 <script>
 import { EntityEdit } from 'quasar-crud'
-// import EntityEdit from 'components/Entity/Edit/EntityEdit'
-import API_ADDRESS from 'src/api/Addresses'
+// import EntityEdit from 'src/components/Entity/Edit/EntityEdit'
+import API_ADDRESS from 'src/api/Addresses.js'
 
 export default {
   name: 'Edit',

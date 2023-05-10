@@ -162,7 +162,8 @@
 </template>
 
 <script>
-import topic from 'src/components/Question/topic'
+import topic from 'src/components/Question/topic.vue'
+
 export default {
   name: 'QuestionCard',
   components: {

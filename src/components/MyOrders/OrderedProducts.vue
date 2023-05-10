@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import { OrderItem } from 'src/models/OrderItem'
+import { OrderItem } from 'src/models/OrderItem.js'
 
 export default {
   name: 'OrderedProducts',

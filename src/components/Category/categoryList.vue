@@ -96,8 +96,8 @@
 </template>
 
 <script>
-import { QuestCategory, QuestCategoryList } from 'src/models/QuestCategory'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { QuestCategory, QuestCategoryList } from 'src/models/QuestCategory.js'
 export default {
   name: 'categoryList',
   data () {

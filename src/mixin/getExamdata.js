@@ -1,4 +1,4 @@
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
 
 const getQuizData = {
   methods: {

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ExamReportInfo from 'src/components/OnlineQuiz/Quiz/ExamReportInfo'
+import ExamReportInfo from 'src/components/OnlineQuiz/Quiz/ExamReportInfo.vue'
 export default {
   name: 'editExamReport',
   components: { ExamReportInfo }

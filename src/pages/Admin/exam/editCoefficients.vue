@@ -194,10 +194,10 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { Exam, ExamList } from 'src/models/Exam'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Exam, ExamList } from 'src/models/Exam.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 
 export default {
   name: 'EditCoefficients',

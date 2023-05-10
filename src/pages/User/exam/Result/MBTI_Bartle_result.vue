@@ -164,9 +164,9 @@
 </template>
 
 <script>
-import { mixinDrawer, mixinQuiz } from 'src/mixin/Mixins'
-import mbtiData from 'src/assets/js/MBTI_Bartle_Data'
-import ExamData from 'src/assets/js/ExamData'
+import ExamData from 'src/assets/js/ExamData.js'
+import mbtiData from 'src/assets/js/MBTI_Bartle_Data.js'
+import { mixinDrawer, mixinQuiz } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'MBTIBartle',

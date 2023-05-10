@@ -33,8 +33,9 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
-import { Question } from 'src/models/Question'
+import { Question } from 'src/models/Question.js'
+import VueKatex from 'src/components/VueKatex.vue'
+
 export default {
   name: 'DescriptiveShowQuestion',
   components: {

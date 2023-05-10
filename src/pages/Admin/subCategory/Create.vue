@@ -10,8 +10,8 @@
 
 <script>
 import { EntityCreate } from 'quasar-crud'
-// import EntityCreate from 'components/Entity/Create/EntityCreate'
-import API_ADDRESS from 'src/api/Addresses'
+// import EntityCreate from 'src/components/Entity/Create/EntityCreate'
+import API_ADDRESS from 'src/api/Addresses.js'
 
 export default {
   name: 'Create',

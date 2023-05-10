@@ -54,25 +54,26 @@
 </template>
 
 <script>
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
 /* eslint-disable no-var */
-import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
+import mixinTree from 'src/mixin/Tree.js'
+import { ExamList } from 'src/models/Exam.js'
+import { Question } from 'src/models/Question.js'
 import { computed, defineAsyncComponent } from 'vue'
-import { Question } from 'src/models/Question'
-import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
-// import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
-import { QuestionType, TypeList } from 'src/models/QuestionType'
-import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
-import StatusChange from 'components/Question/QuestionPage/StatusChange'
-import { ExamList } from 'src/models/Exam'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
-import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
-import mixinTree from 'src/mixin/Tree'
-// import API_ADDRESS from 'src/api/Addresses'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
+import { QuestionType, TypeList } from 'src/models/QuestionType.js'
+import BtnBox from 'src/components/Question/QuestionPage/BtnBox.vue'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
+import ImagePanel from 'src/components/Question/QuestionPage/ImagePanel.vue'
+import StatusChange from 'src/components/Question/QuestionPage/StatusChange.vue'
+import Navbar from 'src/components/Question/QuestionPage/Create/textMode/Navbar.vue'
+import LogListComponent from 'src/components/QuestionBank/EditQuestion/Log/LogList.vue'
+import AttachExam from 'src/components/Question/QuestionPage/AttachExam/AttachExam.vue'
+import QuestionIdentifier from 'src/components/Question/QuestionPage/QuestionIdentifier.vue'
+// import QuestionDetails from 'src/components/Question/QuestionPage/Create/textMode/QuestionDetails'
+// import API_ADDRESS from 'src/api/Addresses.js'
+
 export default {
   name: 'ShowQuestion',
   components: {

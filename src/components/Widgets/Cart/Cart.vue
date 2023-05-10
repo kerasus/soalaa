@@ -35,10 +35,10 @@
 
 <script>
 // import API_ADDRESS from 'src/api/Addresses'
-import cartInvoice from 'components/Widgets/Cart/CartInvoice/CartInvoice'
-import cartView from 'components/Widgets/Cart/CartView/CartView'
-import cartEmpty from 'components/Widgets/Cart/CartEmpty/CartEmpty'
-import { Cart } from 'src/models/Cart'
+import { Cart } from 'src/models/Cart.js'
+import cartView from 'src/components/Widgets/Cart/CartView/CartView.vue'
+import cartEmpty from 'src/components/Widgets/Cart/CartEmpty/CartEmpty.vue'
+import cartInvoice from 'src/components/Widgets/Cart/CartInvoice/CartInvoice.vue'
 
 export default {
   name: 'Cart',

@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
-import { mixinQuiz } from 'src/mixin/Mixins'
 import 'src/assets/scss/markdownKatex.scss'
+import { mixinQuiz } from 'src/mixin/Mixins.js'
+import VueKatex from 'src/components/VueKatex.vue'
 
 export default {
   name: 'Choice',

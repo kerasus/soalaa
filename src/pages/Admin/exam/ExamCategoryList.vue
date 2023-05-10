@@ -89,13 +89,14 @@
 </template>
 
 <script>
-// import ExamSubCategoryList from 'pages/Admin/exam/ExamSubCategoryList'
-import { mixinGetQuizData } from 'src/mixin/Mixins'
-import { Exam } from 'src/models/Exam'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import API_ADDRESS from 'src/api/Addresses'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-// import CategoryList from 'components/Category/categoryList'
+// import ExamSubCategoryList from 'src/pages/Admin/exam/ExamSubCategoryList'
+import { Exam } from 'src/models/Exam.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { mixinGetQuizData } from 'src/mixin/Mixins.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+// import CategoryList from 'src/components/Category/categoryList'
+
 export default {
   name: 'ExamCategoryList',
   components: {

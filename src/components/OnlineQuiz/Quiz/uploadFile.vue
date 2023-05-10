@@ -94,8 +94,8 @@
 </template>
 
 <script>
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
 
 export default {
   name: 'uploadFile',

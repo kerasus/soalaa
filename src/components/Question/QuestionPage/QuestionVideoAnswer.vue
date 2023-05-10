@@ -40,9 +40,10 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Content } from 'src/models/Content.js'
 import ContentSelectionDialog from 'components/Question/QuestionPage/ContentSelectionDialog.vue'
-import { Content } from 'src/models/Content'
+
 export default {
   name: 'QuestionVideoAnswer',
   components: { ContentSelectionDialog },

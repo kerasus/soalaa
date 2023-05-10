@@ -231,8 +231,8 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import { mixinDateOptions } from 'src/mixin/Mixins'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { mixinDateOptions } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'userOrderList',

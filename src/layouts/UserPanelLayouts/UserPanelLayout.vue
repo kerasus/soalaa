@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import UserSideBar from 'layouts/UserPanelLayouts/UserSideBar'
-import KeepAliveComponents from 'assets/js/KeepAliveComponents'
-import Router from 'src/router/Router'
-import StickyBothSides from 'components/Utils/StickyBothSides'
+import Router from 'src/router/Router.vue'
+import UserSideBar from 'src/layouts/UserPanelLayouts/UserSideBar.vue'
+import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
+import KeepAliveComponents from 'src/assets/js/KeepAliveComponents.js'
 
 export default {
   name: 'UserPanelLayout',

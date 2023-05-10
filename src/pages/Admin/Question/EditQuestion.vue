@@ -97,29 +97,30 @@
 </template>
 
 <script>
-import BtnBox from 'components/Question/QuestionPage/BtnBox.vue'
-import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList.vue'
 // detachUnsavedExam
 /* eslint-disable no-var */
-import { computed, defineAsyncComponent } from 'vue'
-import { Question } from 'src/models/Question.js'
-import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar.vue'
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
-import { QuestionType, TypeList } from 'src/models/QuestionType.js'
-import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam.vue'
-import StatusChange from 'components/Question/QuestionPage/StatusChange.vue'
-import { ExamList } from 'src/models/Exam.js'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
-import { QuestionStatusList } from 'src/models/QuestionStatus.js'
-import { QuestCategoryList } from 'src/models/QuestCategory.js'
-import ImagePanel from 'components/Question/QuestionPage/ImagePanel.vue'
-import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier.vue'
-import mixinTree from 'src/mixin/Tree.js'
 import moment from 'moment-jalaali'
-import QuestionVideoAnswer from 'components/Question/QuestionPage/QuestionVideoAnswer.vue'
+import mixinTree from 'src/mixin/Tree.js'
 import { EntityIndex } from 'quasar-crud'
+import { ExamList } from 'src/models/Exam.js'
 import API_ADDRESS from 'src/api/Addresses.js'
-import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
+import { Question } from 'src/models/Question.js'
+import { computed, defineAsyncComponent } from 'vue'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
+import { QuestionType, TypeList } from 'src/models/QuestionType.js'
+import BtnBox from 'src/components/Question/QuestionPage/BtnBox.vue'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
+import ImagePanel from 'src/components/Question/QuestionPage/ImagePanel.vue'
+import StatusChange from 'src/components/Question/QuestionPage/StatusChange.vue'
+import QuestionField from 'src/components/Question/QuestionPage/QuestionField.vue'
+import Navbar from 'src/components/Question/QuestionPage/Create/textMode/Navbar.vue'
+import LogListComponent from 'src/components/QuestionBank/EditQuestion/Log/LogList.vue'
+import AttachExam from 'src/components/Question/QuestionPage/AttachExam/AttachExam.vue'
+import QuestionIdentifier from 'src/components/Question/QuestionPage/QuestionIdentifier.vue'
+import QuestionVideoAnswer from 'src/components/Question/QuestionPage/QuestionVideoAnswer.vue'
+
 export default {
   name: 'EditQuestion',
   components: {

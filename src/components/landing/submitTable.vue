@@ -261,7 +261,7 @@
 
 <script>
 // import tableComponent from 'src/components/landing/table'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
 export default {
   name: 'submitTable',
   components: {

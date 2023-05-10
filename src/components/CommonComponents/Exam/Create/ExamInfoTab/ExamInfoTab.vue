@@ -51,8 +51,8 @@
 </template>
 
 <script>
+import { Exam } from 'src/models/Exam.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
-import { Exam } from 'src/models/Exam'
 
 export default {
   name: 'ExamInfoTab',

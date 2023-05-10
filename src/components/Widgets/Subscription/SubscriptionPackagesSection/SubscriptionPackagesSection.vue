@@ -67,7 +67,7 @@
 </template>
 <script>
 import { defineComponent } from 'vue'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
 
 export default defineComponent({
   name: 'SubscriptionPackageSection',

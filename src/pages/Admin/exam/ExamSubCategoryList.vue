@@ -142,11 +142,11 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { mixinAuth, mixinGetQuizData, mixinQuiz } from 'src/mixin/Mixins'
-import { Exam } from 'src/models/Exam'
-import { QuestCategoryList } from 'src/models/QuestCategory'
+import { Exam } from 'src/models/Exam.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import { mixinAuth, mixinGetQuizData, mixinQuiz } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'ExamSubCategoryList',

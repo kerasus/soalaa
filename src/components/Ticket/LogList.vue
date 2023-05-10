@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mixinDateOptions } from 'src/mixin/Mixins'
+import { mixinDateOptions } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'logList',

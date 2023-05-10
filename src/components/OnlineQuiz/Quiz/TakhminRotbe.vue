@@ -157,7 +157,7 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
 // import Assistant from 'src/plugins/assistant'
 export default {
   name: 'TakhminRotbe',

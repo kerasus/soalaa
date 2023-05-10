@@ -163,9 +163,9 @@
 </template>
 
 <script>
-import { mixinTree } from 'src/mixin/Mixins'
-import TreeComponent from 'components/Tree/Tree'
-import QuestionFilterExpansion from 'components/Question/QuestionBank/QuestionFilterExpansion'
+import { mixinTree } from 'src/mixin/Mixins.js'
+import TreeComponent from 'src/components/Tree/Tree.js'
+import QuestionFilterExpansion from 'src/components/Question/QuestionBank/QuestionFilterExpansion.vue'
 
 export default {
   name: 'QuestionBankFilter',

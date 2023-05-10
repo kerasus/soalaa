@@ -50,9 +50,9 @@
 </template>
 
 <script>
-import moment from 'moment-jalaali'
-import API_ADDRESS from 'src/api/Addresses'
 import { ref } from 'vue'
+import moment from 'moment-jalaali'
+import API_ADDRESS from 'src/api/Addresses.js'
 import { EntityShow, Portlet } from 'quasar-crud'
 
 export default {

@@ -90,10 +90,9 @@
 </template>
 
 <script>
-
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import API_ADDRESS from 'src/api/Addresses'
-import { mixinGetQuizData } from 'src/mixin/Mixins'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { mixinGetQuizData } from 'src/mixin/Mixins.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 
 export default {
   name: 'SetVideo',

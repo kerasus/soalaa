@@ -162,14 +162,14 @@
 </template>
 
 <script>
-import { Exam } from 'src/models/Exam'
-import mixinTree from 'src/mixin/Tree'
-import API_ADDRESS from 'src/api/Addresses'
-import Steps from 'pages/Admin/exam/Create/Steps'
-import ExamInfoTab from 'components/CommonComponents/Exam/Create/ExamInfoTab/ExamInfoTab'
-import FinalApprovalTab from 'components/CommonComponents/Exam/Create/FinalApprovalTab/FinalApprovalTab'
-import QuestionSelectionTab from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionSelectionTab'
 import { computed } from 'vue'
+import { Exam } from 'src/models/Exam.js'
+import mixinTree from 'src/mixin/Tree.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import Steps from 'src/pages/Admin/exam/Create/Steps.vue'
+import ExamInfoTab from 'src/components/CommonComponents/Exam/Create/ExamInfoTab/ExamInfoTab.vue'
+import FinalApprovalTab from 'src/components/CommonComponents/Exam/Create/FinalApprovalTab/FinalApprovalTab.vue'
+import QuestionSelectionTab from 'src/components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionSelectionTab.vue'
 
 export default {
   name: 'Create',

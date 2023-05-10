@@ -59,10 +59,10 @@
 </template>
 
 <script>
-import ExamData from 'src/assets/js/ExamData'
-import mixinQuiz from 'src/mixin/Quiz'
-import SendAnswers from 'components/Menu/SideMenu/SendAnswers'
-import Time from 'src/plugins/time'
+import Time from 'src/plugins/time.js'
+import mixinQuiz from 'src/mixin/Quiz.js'
+import ExamData from 'src/assets/js/ExamData.js'
+import SendAnswers from 'src/components/Menu/SideMenu/SendAnswers.vue'
 
 export default {
   name: 'SideMenuMapOfQuestions',

@@ -124,13 +124,13 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-import FutureQuizzesCarousel from 'src/components/Quiz/FutureQuizzesCarousel'
-import QuizList from 'src/components/Quiz/QuizList'
-import API_ADDRESS from 'src/api/Addresses'
-import { ExamList } from 'src/models/Exam'
 import moment from 'moment'
+import { defineComponent } from 'vue'
 import Time from 'src/plugins/time.js'
+import { ExamList } from 'src/models/Exam.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import QuizList from 'src/components/Quiz/QuizList.vue'
+import FutureQuizzesCarousel from 'src/components/Quiz/FutureQuizzesCarousel.vue'
 
 export default defineComponent({
   name: 'List',

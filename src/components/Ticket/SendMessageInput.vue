@@ -139,10 +139,10 @@
 </template>
 
 <script>
-import AvWaveform from 'vue-audio-visual/src/components/AvWaveform'
-import AvMedia from 'vue-audio-visual/src/components/AvMedia'
-import { Cropper } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css'
+import { Cropper } from 'vue-advanced-cropper'
+import AvMedia from 'vue-audio-visual/src/components/AvMedia'
+import AvWaveform from 'vue-audio-visual/src/components/AvWaveform'
 
 export default {
   name: 'SendMessageInput',

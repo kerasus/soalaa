@@ -351,13 +351,13 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
-import question from 'components/Question/QuestionItem/Question'
-import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
-import { Question } from 'src/models/Question.js'
 import API_ADDRESS from 'src/api/Addresses.js'
 import { Content } from 'src/models/Content.js'
+import { Question } from 'src/models/Question.js'
+import VueKatex from 'src/components/VueKatex.vue'
 import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
+import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
+import question from 'src/components/Question/QuestionItem/Question.vue'
 
 export default {
   name: 'QuestionItem',

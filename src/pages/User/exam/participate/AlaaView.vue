@@ -115,11 +115,11 @@
 </template>
 
 <script>
-import Assistant from 'src/plugins/assistant'
-import VueKatex from 'src/components/VueKatex'
-import Choice from 'src/components/OnlineQuiz/Quiz/Choice'
-import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
-import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer } from 'src/mixin/Mixins'
+import Assistant from 'src/plugins/assistant.js'
+import VueKatex from 'src/components/VueKatex.vue'
+import Choice from 'src/components/OnlineQuiz/Quiz/Choice.vue'
+import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer.vue'
+import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'AlaaView',

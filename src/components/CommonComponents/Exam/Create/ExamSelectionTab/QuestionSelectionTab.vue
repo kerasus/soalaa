@@ -125,17 +125,17 @@
 </template>
 
 <script>
-import pagination from 'components/Question/QuestionBank/Pagination'
-import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from 'src/models/Exam'
-import { Question, QuestionList } from 'src/models/Question'
-import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
-import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
-import QuestionsGeneralInfo from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo'
-import TreeModal from 'components/Question/QuestionPage/TreeModal'
-import mixinTree from 'src/mixin/Tree'
-import { TreeNode } from 'src/models/TreeNode'
-import StickyBothSides from 'components/Utils/StickyBothSides'
+import { Exam } from 'src/models/Exam.js'
+import mixinTree from 'src/mixin/Tree.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { TreeNode } from 'src/models/TreeNode.js'
+import { Question, QuestionList } from 'src/models/Question.js'
+import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
+import TreeModal from 'src/components/Question/QuestionPage/TreeModal.vue'
+import pagination from 'src/components/Question/QuestionBank/Pagination.vue'
+import QuestionFilter from 'src/components/Question/QuestionBank/QuestionFilter.vue'
+import QuestionItem from 'src/components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
+import QuestionsGeneralInfo from 'src/components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo.vue'
 
 export default {
   name: 'QuestionSelectionTab',

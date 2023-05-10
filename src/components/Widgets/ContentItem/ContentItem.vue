@@ -65,9 +65,9 @@
 </template>
 
 <script>
+import Bookmark from 'components/Bookmark.vue'
 import { Content } from 'src/models/Content.js'
 import LazyImg from 'src/components/lazyImg.vue'
-import Bookmark from 'components/Bookmark.vue'
 import { mixinWidget } from 'src/mixin/Mixins.js'
 
 export default {

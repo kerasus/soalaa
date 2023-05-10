@@ -141,8 +141,7 @@
 </template>
 
 <script>
-
-import { User } from 'src/models/User'
+import { User } from 'src/models/User.js'
 export default {
   name: 'SideMenu-dashboard',
   data () {

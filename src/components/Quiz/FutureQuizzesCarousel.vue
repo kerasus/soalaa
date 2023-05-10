@@ -93,13 +93,13 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import 'vue3-carousel/dist/carousel.css'
-import { Carousel, Slide } from 'vue3-carousel'
-import { ExamList } from 'src/models/Exam'
 import moment from 'moment'
-import ShamsiDate from 'src/plugins/ShamsiDate'
-import Time from 'src/plugins/time'
+import Time from 'src/plugins/time.js'
+import 'vue3-carousel/dist/carousel.css'
+import { defineComponent, ref } from 'vue'
+import { ExamList } from 'src/models/Exam.js'
+import { Carousel, Slide } from 'vue3-carousel'
+import ShamsiDate from 'src/plugins/ShamsiDate.js'
 
 export default defineComponent({
   name: 'FutureQuizzesCarousel',

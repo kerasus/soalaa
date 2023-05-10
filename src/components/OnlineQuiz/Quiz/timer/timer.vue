@@ -15,11 +15,12 @@
 </template>
 
 <script>
-import pcTimer from 'src/components/OnlineQuiz/Quiz/timer/pcTimer'
-import mobileTimer from 'src/components/OnlineQuiz/Quiz/timer/mobileTimer'
-import { mixinQuiz } from 'src/mixin/Mixins'
-import Time from 'src/plugins/time'
-import Assistant from 'src/plugins/assistant'
+import Time from 'src/plugins/time.js'
+import { mixinQuiz } from 'src/mixin/Mixins.js'
+import Assistant from 'src/plugins/assistant.js'
+import pcTimer from 'src/components/OnlineQuiz/Quiz/timer/pcTimer.vue'
+import mobileTimer from 'src/components/OnlineQuiz/Quiz/timer/mobileTimer.vue'
+
 export default {
   name: 'timer',
   components: {

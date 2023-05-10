@@ -95,11 +95,11 @@
 </template>
 
 <script>
+import { User } from 'src/models/User.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import UserPanelBaseMenu from 'src/layouts/UserPanelLayouts/UserPanelBaseMenu.vue'
+import UserPanelSideDrawer from 'src/layouts/UserPanelLayouts/UserPanelSideDrawer.vue'
 
-import { User } from 'src/models/User'
-import UserPanelBaseMenu from 'layouts/UserPanelLayouts/UserPanelBaseMenu'
-import UserPanelSideDrawer from 'layouts/UserPanelLayouts/UserPanelSideDrawer'
-import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'UserSideBar',
   components: { UserPanelSideDrawer, UserPanelBaseMenu },

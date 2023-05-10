@@ -11,8 +11,8 @@
 
 <script>
 import { EntityShow } from 'quasar-crud'
-// import EntityShow from 'components/Entity/Show/EntityShow'
-import API_ADDRESS from 'src/api/Addresses'
+// import EntityShow from 'src/components/Entity/Show/EntityShow'
+import API_ADDRESS from 'src/api/Addresses.js'
 
 export default {
   name: 'Show',

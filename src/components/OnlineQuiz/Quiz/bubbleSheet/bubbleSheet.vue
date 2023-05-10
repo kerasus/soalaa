@@ -65,7 +65,7 @@
 <script>
 import { ref } from 'vue'
 import moment from 'moment-jalaali'
-import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
+import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'BubbleSheet',

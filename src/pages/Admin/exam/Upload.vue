@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import uploadFile from 'src/components/OnlineQuiz/Quiz/uploadFile'
+import uploadFile from 'src/components/OnlineQuiz/Quiz/uploadFile.vue'
 export default {
   name: 'Upload',
   components: { uploadFile },

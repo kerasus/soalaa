@@ -75,11 +75,10 @@
   </q-dialog>
 </template>
 <script>
-
-import Tree from 'components/Tree/Tree.vue'
 import mixinTree from 'src/mixin/Tree.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import Tree from 'src/components/Tree/Tree.vue'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
-import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'TreeModal',

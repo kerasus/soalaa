@@ -145,12 +145,11 @@
 </template>
 
 <script>
-
-import Time from 'src/plugins/time'
-import { mixinAuth } from 'src/mixin/Mixins'
-import API_ADDRESS from 'src/api/Addresses'
-import { User } from 'src/models/User'
-import Verify from 'pages/Auth/Verify'
+import Time from 'src/plugins/time.js'
+import { User } from 'src/models/User.js'
+import Verify from 'src/pages/Auth/Verify.vue'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { mixinAuth } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'UserInfoForm',

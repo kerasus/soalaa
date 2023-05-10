@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { Log } from 'src/models/Log'
+import { Log } from 'src/models/Log.js'
 
 export default {
   name: 'LogItem',

@@ -81,17 +81,18 @@
 </template>
 
 <script>
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
-import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
-import { Question } from 'src/models/Question'
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { ExamList } from 'src/models/Exam'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { computed } from 'vue'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
-import mixinTree from 'src/mixin/Tree'
+import mixinTree from 'src/mixin/Tree.js'
+import { ExamList } from 'src/models/Exam.js'
+import { Question } from 'src/models/Question.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
+import BtnBox from 'src/components/Question/QuestionPage/BtnBox.vue'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
+import QuestionField from 'src/components/Question/QuestionPage/QuestionField.vue'
+import QuestionIdentifier from 'src/components/Question/QuestionPage/QuestionIdentifier.vue'
+
 export default {
   name: 'MultipleChoiceQ',
   components: {

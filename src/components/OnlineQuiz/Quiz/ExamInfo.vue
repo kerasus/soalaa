@@ -245,10 +245,10 @@
 </template>
 
 <script>
-import { Exam, ExamList } from 'src/models/Exam'
-import { QuestCategory, QuestCategoryList } from 'src/models/QuestCategory'
-import API_ADDRESS from 'src/api/Addresses'
 import { date } from 'quasar'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Exam, ExamList } from 'src/models/Exam.js'
+import { QuestCategory, QuestCategoryList } from 'src/models/QuestCategory.js'
 
 export default {
   name: 'ExamInfo',

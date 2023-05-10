@@ -1,4 +1,4 @@
-import { APIGateway } from 'src/api/APIGateway'
+import { APIGateway } from 'src/api/APIGateway.js'
 
 const mixinPageOptions = {
   data() {

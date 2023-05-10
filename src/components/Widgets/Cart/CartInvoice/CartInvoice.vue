@@ -209,7 +209,7 @@
 </template>
 
 <script>
-import { Cart } from 'src/models/Cart'
+import { Cart } from 'src/models/Cart.js'
 
 export default {
   name: 'CartInvoice',

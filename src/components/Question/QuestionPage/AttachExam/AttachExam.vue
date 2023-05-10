@@ -128,12 +128,12 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import { Question } from 'src/models/Question'
-import { ExamList, Exam } from 'src/models/Exam'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Question } from 'src/models/Question.js'
+import { ExamList, Exam } from 'src/models/Exam.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 
 export default {
   name: 'AttachExam',

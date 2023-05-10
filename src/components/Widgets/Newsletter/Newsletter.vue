@@ -42,10 +42,10 @@
 </template>
 
 <script>
-import SignupStep from './components/SignupStep.vue'
-import VerificationStep from './components/VerificationStep.vue'
-import InfoCompletion from './components/InfoCompletion.vue'
 import { mixinWidget } from 'src/mixin/Mixins.js'
+import SignupStep from './components/SignupStep.vue'
+import InfoCompletion from './components/InfoCompletion.vue'
+import VerificationStep from './components/VerificationStep.vue'
 
 export default {
   name: 'SignupModal',

@@ -187,10 +187,10 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
 import moment from 'moment-jalaali'
-import API_ADDRESS from 'src/api/Addresses'
-import Time from 'src/plugins/time'
+import Time from 'src/plugins/time.js'
+import { defineComponent, ref } from 'vue'
+import API_ADDRESS from 'src/api/Addresses.js'
 
 export default defineComponent({
   name: 'UpcomingExamsCalender',

@@ -78,9 +78,9 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
-import MultipleChoicesTemplate from 'components/Question/QuestionItem/MultipleChoicesTemplate'
-import { Question } from 'src/models/Question'
+import VueKatex from 'src/components/VueKatex.vue'
+import { Question } from 'src/models/Question.js'
+import MultipleChoicesTemplate from 'src/components/Question/QuestionItem/MultipleChoicesTemplate.vue'
 
 export default {
   name: 'Question',

@@ -72,12 +72,12 @@
 
 <script>
 import { computed } from 'vue'
-import { Exam } from 'src/models/Exam'
-import Steps from 'pages/Admin/exam/Create/Steps'
-import CreateExamPage from 'pages/Admin/exam/Create/CreateExamPage'
-import FinalExamApproval from 'pages/Admin/exam/Create/FinalExamApproval'
-import API_ADDRESS from 'src/api/Addresses'
-import QuestionBank from 'pages/Admin/Question/QuestionBank/QuestionBank'
+import { Exam } from 'src/models/Exam.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import Steps from 'src/pages/Admin/exam/Create/Steps.vue'
+import CreateExamPage from 'src/pages/Admin/exam/Create/CreateExamPage.vue'
+import FinalExamApproval from 'src/pages/Admin/exam/Create/FinalExamApproval.vue'
+import QuestionBank from 'src/pages/Admin/Question/QuestionBank/QuestionBank.vue'
 
 export default {
   name: 'ExamCreatePanel',

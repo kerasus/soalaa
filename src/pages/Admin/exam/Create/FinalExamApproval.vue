@@ -101,9 +101,9 @@
 </template>
 
 <script>
-import { Question, QuestionList } from 'src/models/Question'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
-import { Exam } from 'src/models/Exam'
+import { Exam } from 'src/models/Exam.js'
+import { Question, QuestionList } from 'src/models/Question.js'
+import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
 
 export default {
   name: 'FinalExamApproval',

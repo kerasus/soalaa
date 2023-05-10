@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import LogItem from 'src/components/Question/QuestionPage/Log/LogItem/LogItem'
-import { LogList } from 'src/models/Log'
+import { LogList } from 'src/models/Log.js'
+import LogItem from 'src/components/Question/QuestionPage/Log/LogItem/LogItem.vue'
 
 export default {
   name: 'LogList',

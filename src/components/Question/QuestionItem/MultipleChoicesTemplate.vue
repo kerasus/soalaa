@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
+import VueKatex from 'src/components/VueKatex.vue'
 
 export default {
   name: 'MultipleChoicesTemplate',

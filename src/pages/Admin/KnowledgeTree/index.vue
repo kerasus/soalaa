@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import { mixinTree } from 'src/mixin/Mixins'
-import Tree from 'src/components/Tree/Tree'
+import { mixinTree } from 'src/mixin/Mixins.js'
+import Tree from 'src/components/Tree/Tree.vue'
 
 export default {
   name: 'PageIndex',

@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import onlineQuizTopMenu from 'components/Menu/topMenu/onlineQuizTopMenu'
+import onlineQuizTopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu.vue'
 
 export default {
   name: 'onlineQuizTemplateHeader',

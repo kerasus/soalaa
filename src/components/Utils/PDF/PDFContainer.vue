@@ -82,6 +82,7 @@ import PdfPage from './PDFPage.vue'
 import PdfQuestionField from 'src/components/Utils/PDF/PdfQuestionField.vue'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
 // import QuestionField from 'components/Question/QuestionPage/QuestionField'
+
 export default {
   name: 'PDFContainer',
   components: { PdfQuestionField, PdfPage },

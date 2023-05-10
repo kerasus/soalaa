@@ -100,12 +100,12 @@
 </template>
 
 <script>
-import Assistant from 'src/plugins/assistant'
-import { AlaaSet } from 'src/models/AlaaSet'
-import { AlaaContent } from 'src/models/AlaaContent'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { AlaaSet } from 'src/models/AlaaSet.js'
+import Assistant from 'src/plugins/assistant.js'
+import { AlaaContent } from 'src/models/AlaaContent.js'
 import VideoPlayer from 'src/components/VideoPlayer.vue'
-import { PlayerSourceList } from 'src/models/PlayerSource'
+import { PlayerSourceList } from 'src/models/PlayerSource.js'
 
 export default {
   name: 'tabsOfLessons',

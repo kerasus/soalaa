@@ -1,16 +1,16 @@
 /* eslint-disable camelcase,array-callback-return */
 import Time from 'src/plugins/time'
+import { ChoiceList } from './Choice.js'
+import { LogList } from '../models/Log.js'
+import API_ADDRESS from '../api/Addresses.js'
 import { Model, Collection } from 'js-abstract-model'
-import { ChoiceList } from './Choice'
-import { CheckingTimeList } from '../models/CheckingTime'
-import API_ADDRESS from '../api/Addresses'
-import { QuestionStatus } from '../models/QuestionStatus'
-import { LogList } from '../models/Log'
+import { TreeNodeList } from 'src/models/TreeNode.js'
+import { CheckingTimeList } from '../models/CheckingTime.js'
+import { QuestionStatus } from '../models/QuestionStatus.js'
 // eslint-disable-next-line import/named
 // import { createApp } from 'vue'
-import { QuestionType } from '../models/QuestionType'
-import { AttachedExamList } from '../models/AttachedExam'
-import { TreeNodeList } from 'src/models/TreeNode'
+import { QuestionType } from '../models/QuestionType.js'
+import { AttachedExamList } from '../models/AttachedExam.js'
 // if (!window.app) {
 // // window.app
 //   window.app = createApp({})

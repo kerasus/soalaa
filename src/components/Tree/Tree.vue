@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
+import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
 
 export default {
   name: 'Tree',

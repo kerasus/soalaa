@@ -1,8 +1,8 @@
-import API_ADDRESS from 'src/api/Addresses'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
-import { Question } from 'src/models/Question'
-import { ExamList } from 'src/models/Exam'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { ExamList } from 'src/models/Exam.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Question } from 'src/models/Question.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 // eslint-disable-next-line no-unused-vars
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import { Log, LogList } from 'src/models/Log'

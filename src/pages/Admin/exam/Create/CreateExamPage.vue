@@ -6,10 +6,10 @@
 </template>
 
 <script>
+import mixinTree from 'src/mixin/Tree.js'
+import { Exam } from 'src/models/Exam.js'
+import API_ADDRESS from 'src/api/Addresses.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from 'src/models/Exam'
-import mixinTree from 'src/mixin/Tree'
 
 export default {
   name: 'CreateExamPage',

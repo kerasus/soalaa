@@ -31,20 +31,21 @@
 </template>
 
 <script>
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
 /* eslint-disable no-var */
 // import { defineAsyncComponent } from 'vue'
-import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
-// import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
-import { Question } from 'src/models/Question'
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
-import { QuestionType, TypeList } from 'src/models/QuestionType'
-import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/StatusChange'
-import { ExamList } from 'src/models/Exam'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
-// import API_ADDRESS from 'src/api/Addresses'
+// import DynamicComponent from 'src/components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
+import { ExamList } from 'src/models/Exam.js'
+import { Question } from 'src/models/Question.js'
+import BtnBox from 'src/components/Question/QuestionPage/BtnBox.vue'
+import { QuestionType, TypeList } from 'src/models/QuestionType.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
+import CommentBox from 'src/components/Question/QuestionPage/StatusChange.vue'
+import Navbar from 'src/components/Question/QuestionPage/Create/textMode/Navbar.vue'
+import AttachExam from 'src/components/Question/QuestionPage/AttachExam/AttachExam.vue'
+import QuestionIdentifier from 'src/components/Question/QuestionPage/QuestionIdentifier.vue'
+// import API_ADDRESS from 'src/api/Addresses.js'
+
 export default {
   name: 'CreateText',
   components: {

@@ -104,9 +104,10 @@
 </template>
 
 <script>
-import { mixinDrawer, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
-import mbtiData from 'src/assets/js/MBTI_Bartle_Data'
+import mbtiData from 'src/assets/js/MBTI_Bartle_Data.js'
+import { mixinDrawer, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
 //  import Assistant from '/plugins/assistant'
+
 export default {
   name: 'MBTIBartle',
   mixins: [mixinDrawer, mixinQuiz, mixinUserActionOnQuestion],

@@ -66,18 +66,18 @@
 </template>
 
 <script>
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
-import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
-import { Question } from 'src/models/Question'
 import { computed } from 'vue'
-import { AdminActionOnQuestion } from 'src/mixin/Mixins'
-import { ExamList } from 'src/models/Exam'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
-import mixinTree from 'src/mixin/Tree'
-import QuestionVideoAnswer from 'components/Question/QuestionPage/QuestionVideoAnswer.vue'
+import mixinTree from 'src/mixin/Tree.js'
+import { ExamList } from 'src/models/Exam.js'
+import { Question } from 'src/models/Question.js'
+import { AdminActionOnQuestion } from 'src/mixin/Mixins.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
+import BtnBox from 'src/components/Question/QuestionPage/BtnBox.vue'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import uploadImage from 'src/components/Question/QuestionPage/UploadImage.vue'
+import QuestionIdentifier from 'src/components/Question/QuestionPage/QuestionIdentifier.vue'
+import QuestionVideoAnswer from 'src/components/Question/QuestionPage/QuestionVideoAnswer.vue'
 
 export default {
   name: 'CreateImage',

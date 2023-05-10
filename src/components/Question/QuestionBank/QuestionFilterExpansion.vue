@@ -22,8 +22,7 @@
 </template>
 
 <script>
-
-import { mixinTree } from 'src/mixin/Mixins'
+import { mixinTree } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'QuestionFilterExpansion',

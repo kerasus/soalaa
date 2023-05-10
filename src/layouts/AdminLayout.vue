@@ -6,9 +6,9 @@
 </template>
 
 <script>
-import Router from 'src/router/Router'
-import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 import { computed } from 'vue'
+import Router from 'src/router/Router.vue'
+import KeepAliveComponents from 'src/assets/js/KeepAliveComponents.js'
 
 export default {
   components: { Router },

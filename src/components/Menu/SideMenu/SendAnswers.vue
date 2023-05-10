@@ -65,10 +65,10 @@
 </template>
 
 <script>
-import BubbleSheet from 'components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
-import ExamData from 'assets/js/ExamData'
-import mixinQuiz from 'src/mixin/Quiz'
-import { Exam } from 'src/models/Exam'
+import mixinQuiz from 'src/mixin/Quiz.js'
+import { Exam } from 'src/models/Exam.js'
+import ExamData from 'src/assets/js/ExamData.js'
+import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet.vue'
 
 export default {
   name: 'SendAnswers',

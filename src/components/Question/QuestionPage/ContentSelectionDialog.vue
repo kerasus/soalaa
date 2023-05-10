@@ -35,8 +35,8 @@
 
 <script>
 import { EntityIndex } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
-import { Content } from 'src/models/Content'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Content } from 'src/models/Content.js'
 
 export default {
   name: 'ContentSelectionDialog',

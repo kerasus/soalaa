@@ -103,8 +103,8 @@
   </q-card>
 </template>
 <script>
-import { mixinDateOptions } from 'src/mixin/Mixins'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { mixinDateOptions } from 'src/mixin/Mixins.js'
 import AvWaveform from 'vue-audio-visual/src/components/AvWaveform'
 
 export default {

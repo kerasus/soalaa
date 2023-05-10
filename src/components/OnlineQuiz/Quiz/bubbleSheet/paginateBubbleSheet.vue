@@ -49,8 +49,8 @@
 <script>
 import { ref } from 'vue'
 import moment from 'moment-jalaali'
-import { QuestionList } from 'src/models/Question'
-import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
+import { QuestionList } from 'src/models/Question.js'
+import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'PaginateBubbleSheet',

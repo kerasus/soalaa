@@ -93,15 +93,15 @@
 </template>
 
 <script>
-import pagination from 'components/Question/QuestionBank/Pagination'
-import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from 'src/models/Exam'
-import { Question, QuestionList } from 'src/models/Question'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
-import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
-import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
-import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
-import StickyBothSides from 'components/Utils/StickyBothSides'
+import { Exam } from 'src/models/Exam.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Question, QuestionList } from 'src/models/Question.js'
+import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
+import pagination from 'src/components/Question/QuestionBank/Pagination.vue'
+import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
+import QuestionFilter from 'src/components/Question/QuestionBank/QuestionFilter.vue'
+import QuestionToolBar from 'src/components/Question/QuestionBank/QuestionToolBar.vue'
+import QuestionBankHeader from 'src/components/Question/QuestionBank/components/QuestionBankHeader.vue'
 
 export default {
   name: 'QuestionBank',

@@ -97,15 +97,16 @@
 </template>
 
 <script>
-import Question from 'src/components/QuizEditor/Question'
-import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { QuestionList } from 'src/models/Question'
-import { Exam } from 'src/models/Exam'
-import API_ADDRESS from 'src/api/Addresses'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { copyToClipboard } from 'quasar'
-import Pagination from 'components/Question/QuestionBank/Pagination'
+import { Exam } from 'src/models/Exam.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { QuestionList } from 'src/models/Question.js'
+import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
+import Question from 'src/components/QuizEditor/Question.vue'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import Pagination from 'src/components/Question/QuestionBank/Pagination.vue'
+import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
+
 export default {
   name: 'SubCategoryQuestions',
   components: {

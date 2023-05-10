@@ -281,8 +281,8 @@
 </template>
 
 <script>
-import QuestionCard from 'src/components/Question/OldQuestionBank/QuestionCard'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
+import QuestionCard from 'src/components/Question/OldQuestionBank/QuestionCard.vue'
 
 export default {
   name: 'QuestionBank',

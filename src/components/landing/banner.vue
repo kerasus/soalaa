@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import LazyImage from 'components/LazyImage'
+import LazyImage from 'src/components/LazyImage.vue'
 export default {
   name: 'banner',
   components: { LazyImage },

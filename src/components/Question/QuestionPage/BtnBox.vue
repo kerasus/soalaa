@@ -25,7 +25,8 @@
 </template>
 
 <script>
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
+
 export default {
   name: 'BtnBox',
   mixins: [AdminActionOnQuestion],

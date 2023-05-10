@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import { Question } from 'src/models/Question'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
+import { Question } from 'src/models/Question.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
 
 export default {
   name: 'StatusChange',

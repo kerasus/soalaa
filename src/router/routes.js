@@ -1,4 +1,4 @@
-import { auth, Permissions } from './middleware/middleware'
+import { auth, Permissions } from './middleware/middleware.js'
 function getEntityCrudRouteObject (path, baseRouteName, componentPath, breadcrumbs, permissions) {
   const AllNeededRoutes = [
     { mode: 'Index', path: '' },
@@ -122,7 +122,7 @@ const routes = [
       {
         path: 'landing',
         name: 'Landing',
-        component: () => import('layouts/LandingLayout'),
+        component: () => import('layouts/LandingLayout.vue'),
         children: [
           // {
           //   path: ':landing_name',
@@ -151,7 +151,7 @@ const routes = [
               layoutLeftDrawer: false,
               layoutFooter: true
             },
-            component: () => import('pages/User/landing/landing')
+            component: () => import('pages/User/landing/landing.vue')
           }
         ]
       },
@@ -201,7 +201,7 @@ const routes = [
       {
         path: 'dashboard',
         name: 'dashboard',
-        component: () => import('pages/User/exam/List'),
+        component: () => import('pages/User/exam/List.vue'),
         breadcrumbs: { title: 'پیشخوان' },
         layoutConfig: {
           layoutHeaderVisible: true,
@@ -221,7 +221,7 @@ const routes = [
       {
         path: 'subscription',
         name: 'subscription',
-        component: () => import('pages/User/Subscription'),
+        component: () => import('pages/User/Subscription.vue'),
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
@@ -232,7 +232,7 @@ const routes = [
       {
         path: 'user',
         name: 'User',
-        component: () => import('layouts/UserPanelLayouts/UserPanelBareLayout'),
+        component: () => import('layouts/UserPanelLayouts/UserPanelBareLayout.vue'),
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'default',
@@ -248,22 +248,22 @@ const routes = [
 
             path: '',
             name: 'User.First.Layout',
-            component: () => import('layouts/UserPanelLayouts/UserPanelLayout'),
+            component: () => import('layouts/UserPanelLayouts/UserPanelLayout.vue'),
             children: [
               {
                 path: 'profile',
                 name: 'User.Profile',
-                component: () => import('pages/User/profile/profile')
+                component: () => import('pages/User/profile/profile.vue')
               },
               {
                 path: 'dashboard',
                 name: 'User.Dashboard',
-                component: () => import('pages/User/Dashboard/Dashboard')
+                component: () => import('pages/User/Dashboard/Dashboard.vue')
               },
               {
                 path: 'my-orders',
                 name: 'User.MyOrders',
-                component: () => import('pages/User/MyOrders/MyOrders'),
+                component: () => import('pages/User/MyOrders/MyOrders.vue'),
                 breadcrumbs: { title: 'سفارش های من' }
               },
               {
@@ -273,7 +273,7 @@ const routes = [
                   layoutHeaderVisible: true,
                   layoutHeaderType: 'default'
                 },
-                component: () => import('pages/User/exam/List')
+                component: () => import('pages/User/exam/List.vue')
               },
               {
                 path: 'ticket',
@@ -300,26 +300,26 @@ const routes = [
               {
                 path: '/onlineQuiz/results/:exam_id/:user_exam_id',
                 name: 'user.exam.results',
-                component: () => import('pages/User/exam/Result')
+                component: () => import('pages/User/exam/Result.vue')
               }
             ]
           },
           {
             path: 'download_exam/:examId',
             name: 'User.Download',
-            component: () => import('layouts/boxedLayout'),
+            component: () => import('layouts/boxedLayout.vue'),
             children: [
               {
                 name: 'User.Exam.Download',
                 path: '',
-                component: () => import('pages/User/exam/Download/Download')
+                component: () => import('pages/User/exam/Download/Download.vue')
               }
             ]
           },
           {
             path: 'exam/create',
             name: 'User.Create',
-            component: () => import('layouts/boxedLayout'),
+            component: () => import('layouts/boxedLayout.vue'),
             children: [
               {
                 path: '',
@@ -344,7 +344,7 @@ const routes = [
                     { title: 'ساخت آزمون' }
                   ]
                 },
-                component: () => import('pages/User/exam/Create/Create')
+                component: () => import('pages/User/exam/Create/Create.vue')
               }
             ]
           }
@@ -353,7 +353,7 @@ const routes = [
       {
         path: 'component',
         name: 'component',
-        component: () => import('src/pages/component'),
+        component: () => import('src/pages/component.vue'),
         breadcrumbs: { title: 'component' },
         meta: {
           middlewares: [auth]
@@ -385,7 +385,7 @@ const routes = [
               {
                 name: 'Admin.Exam.Index',
                 path: '',
-                component: () => import('pages/Admin/exam/index'),
+                component: () => import('pages/Admin/exam/index.vue'),
                 breadcrumbs: { title: 'لیست آزمون ها', loading: false },
                 middlewares: [
                   Permissions.hasPermission('examIndex')
@@ -394,7 +394,7 @@ const routes = [
               {
                 name: 'Admin.Exam.Create',
                 path: 'create',
-                component: () => import('pages/Admin/exam/Create'),
+                component: () => import('pages/Admin/exam/Create.vue'),
                 middlewares: [
                   Permissions.hasPermission('examStore')
                 ]
@@ -402,7 +402,7 @@ const routes = [
               {
                 name: 'Admin.Exam.Create.AttachQuestion',
                 path: 'create/attachQuestion',
-                component: () => import('pages/Admin/exam/Create/ExamCreatePanel'),
+                component: () => import('pages/Admin/exam/Create/ExamCreatePanel.vue'),
                 breadcrumbs: { title: 'صفحه ساخت آزمون', loading: false },
                 middlewares: [
                   Permissions.hasPermission('examStore')
@@ -411,7 +411,7 @@ const routes = [
               {
                 name: 'Admin.Exam.Show',
                 path: ':id',
-                component: () => import('pages/Admin/exam/Show'),
+                component: () => import('pages/Admin/exam/Show.vue'),
                 breadcrumbs: { title: 'مشاهده آزمون' },
                 middlewares: [
                   Permissions.hasPermission('examShow')
@@ -420,7 +420,7 @@ const routes = [
               {
                 name: 'Admin.Exam.MoreActions',
                 path: ':id/moreActions',
-                component: () => import('pages/Admin/exam/MoreActions'),
+                component: () => import('pages/Admin/exam/MoreActions.vue'),
                 breadcrumbs: { title: 'عملیات دیگر', loading: false },
                 middlewares: [
                   Permissions.hasOneOfThese(['examquestionFile', 'examquestionBookletUpload', 'examquestionBooklet', 'examquestionZirgoroohCopyzirgorooh'])
@@ -429,7 +429,7 @@ const routes = [
               {
                 name: 'Admin.Exam.Edit',
                 path: ':id/edit',
-                component: () => import('pages/Admin/exam/Edit'),
+                component: () => import('pages/Admin/exam/Edit.vue'),
                 breadcrumbs: { title: 'ویرایش آزمون' },
                 middlewares: [
                   Permissions.hasPermission('examUpdate')
@@ -438,7 +438,7 @@ const routes = [
               {
                 name: 'Admin.Exam.AllResults',
                 path: 'results/:id',
-                component: () => import('pages/Admin/exam/results'),
+                component: () => import('pages/Admin/exam/results.vue'),
                 middlewares: [
                   Permissions.hasOneOfThese(['examreportIndexParticipants', 'examreportIndexLessons'])
                 ]
@@ -462,7 +462,7 @@ const routes = [
               {
                 path: ':exam_id/sub-category/:subcategory_id/questions/:page',
                 name: 'Admin.Exam.SubCategory.Questions',
-                component: () => import('pages/Admin/exam/SubCategoryQuestions'),
+                component: () => import('pages/Admin/exam/SubCategoryQuestions.vue'),
                 middleware: [
                   Permissions.hasPermission('examquestionAttachShow')
                 ]
@@ -478,7 +478,7 @@ const routes = [
               {
                 path: '/results/mbti_bartle/:exam_id/:user_exam_id',
                 name: 'mbtiBartle.result',
-                component: () => import('pages/User/exam/Result/MBTI_Bartle_result'),
+                component: () => import('pages/User/exam/Result/MBTI_Bartle_result.vue'),
                 meta: {
                   middlewares: [auth]
                 }
@@ -497,13 +497,13 @@ const routes = [
               {
                 path: '',
                 name: 'Admin.Question.Bank',
-                component: () => import('pages/Admin/Question/QuestionBank/QuestionBank'),
+                component: () => import('pages/Admin/Question/QuestionBank/QuestionBank.vue'),
                 meta: { middlewares: [auth] }
               },
               {
                 path: 'list',
                 name: 'Admin.Question.Factory',
-                component: () => (import('pages/Admin/Question/QuestionFactory')),
+                component: () => (import('pages/Admin/Question/QuestionFactory.vue')),
                 meta: {
                   middlewares: [
                     auth,
@@ -558,7 +558,7 @@ const routes = [
                     path: 'image/:questionType',
                     name: 'Admin.Question.Create.Image',
                     breadcrumbs: { title: 'آپلود عکس', loading: false },
-                    component: () => (import('pages/Admin/Question/CreateImage')),
+                    component: () => (import('pages/Admin/Question/CreateImage.vue')),
                     meta: {
                       middlewares: [
                         Permissions.hasAllOfThese(['questionUpload', 'questionAttachStatementphoto', 'questionAttachAnswerphoto'])
@@ -571,7 +571,7 @@ const routes = [
                 path: ':question_id',
                 name: 'Admin.Question.Show',
                 breadcrumbs: { title: 'مشاهده سوال', loading: false },
-                component: () => (import('pages/Admin/Question/ShowQuestion')),
+                component: () => (import('pages/Admin/Question/ShowQuestion.vue')),
                 meta: {
                   middlewares: [
                     auth,
@@ -583,7 +583,7 @@ const routes = [
                 path: ':question_id/edit',
                 name: 'Admin.Question.Edit',
                 breadcrumbs: { title: 'ویرایش سوال', loading: false },
-                component: () => (import('pages/Admin/Question/EditQuestion')),
+                component: () => (import('pages/Admin/Question/EditQuestion.vue')),
                 meta: {
                   middlewares: [
                     Permissions.hasPermission('questionUpdate')
@@ -603,7 +603,7 @@ const routes = [
               {
                 name: 'Admin.Category.Index',
                 path: '',
-                component: () => import('pages/Admin/category/Index'),
+                component: () => import('pages/Admin/category/Index.vue'),
                 middlewares: [
                   Permissions.hasPermission('categoryIndex')
                 ]
@@ -611,7 +611,7 @@ const routes = [
               {
                 name: 'Admin.Category.Create',
                 path: 'create',
-                component: () => import('pages/Admin/category/Create'),
+                component: () => import('pages/Admin/category/Create.vue'),
                 middlewares: [
                   Permissions.hasPermission('categoryCreate')
                 ]
@@ -619,7 +619,7 @@ const routes = [
               {
                 name: 'Admin.Category.Show',
                 path: ':id',
-                component: () => import('pages/Admin/category/Show'),
+                component: () => import('pages/Admin/category/Show.vue'),
                 middlewares: [
                   Permissions.hasPermission('categoryShow')
                 ]
@@ -627,7 +627,7 @@ const routes = [
               {
                 name: 'Admin.Category.Edit',
                 path: ':id/edit',
-                component: () => import('pages/Admin/category/Edit'),
+                component: () => import('pages/Admin/category/Edit.vue'),
                 middlewares: [
                   Permissions.hasPermission('categoryUpdate')
                 ]
@@ -642,10 +642,10 @@ const routes = [
               middlewares: [auth]
             },
             children: [
-              { name: 'Admin.subCategory.Index', path: '', component: () => import('pages/Admin/subCategory/Index') },
-              { name: 'Admin.subCategory.Show', path: ':id', component: () => import('pages/Admin/subCategory/Show') },
-              { name: 'Admin.subCategory.Edit', path: ':id/edit', component: () => import('pages/Admin/subCategory/Edit') },
-              { name: 'Admin.subCategory.Create', path: 'create', component: () => import('pages/Admin/subCategory/Create') }
+              { name: 'Admin.subCategory.Index', path: '', component: () => import('pages/Admin/subCategory/Index.vue') },
+              { name: 'Admin.subCategory.Show', path: ':id', component: () => import('pages/Admin/subCategory/Show.vue') },
+              { name: 'Admin.subCategory.Edit', path: ':id/edit', component: () => import('pages/Admin/subCategory/Edit.vue') },
+              { name: 'Admin.subCategory.Create', path: 'create', component: () => import('pages/Admin/subCategory/Create.vue') }
             ]
           },
           ...allEntityCrudRouteObjects,
@@ -653,7 +653,7 @@ const routes = [
           {
             name: 'Admin.KnowledgeTree.tree',
             path: 'knowledge-tree',
-            component: () => import('pages/Admin/KnowledgeTree/index'),
+            component: () => import('pages/Admin/KnowledgeTree/index.vue'),
             breadcrumbs: { title: 'درخت دانش' }
           },
 
@@ -682,19 +682,19 @@ const routes = [
               }
             ]
           },
-          { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings'), breadcrumbs: { title: 'تنظیمات' } }
+          { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings.vue'), breadcrumbs: { title: 'تنظیمات' } }
         ]
       },
       {
         path: '/onlineQuiz/results/:exam_id/:user_exam_id',
         name: 'user.exam.results',
-        component: () => import('pages/User/exam/Result'),
+        component: () => import('pages/User/exam/Result.vue'),
         middleware: [auth]
       },
       {
         path: '/onlineQuiz/alaaView/:quizId/:questNumber',
         name: 'onlineQuiz.alaaView',
-        component: () => import('pages/User/exam/participate/AlaaView'),
+        component: () => import('pages/User/exam/participate/AlaaView.vue'),
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'quiz',
@@ -708,7 +708,7 @@ const routes = [
       {
         path: '/onlineQuiz/alaaView/retake/:quizId/:questNumber',
         name: 'onlineQuiz.alaaView.retake',
-        component: () => import('pages/User/exam/participate/AlaaView'),
+        component: () => import('pages/User/exam/participate/AlaaView.vue'),
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'quiz',
@@ -722,7 +722,7 @@ const routes = [
       {
         path: '/onlineQuiz/alaaView/personal/:quizId/:questNumber',
         name: 'onlineQuiz.alaaView.personal',
-        component: () => import('pages/User/exam/participate/AlaaView'),
+        component: () => import('pages/User/exam/participate/AlaaView.vue'),
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'quiz',
@@ -736,7 +736,7 @@ const routes = [
       {
         path: '/onlineQuiz/konkoorView/:quizId',
         name: 'konkoorView',
-        component: () => import('pages/User/exam/participate/konkoorView'),
+        component: () => import('pages/User/exam/participate/konkoorView.vue'),
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'quiz',
@@ -750,7 +750,7 @@ const routes = [
       {
         path: '/onlineQuiz/konkoorView/:quizId',
         name: 'onlineQuiz.konkoorView',
-        component: () => import('pages/User/exam/participate/konkoorView'),
+        component: () => import('pages/User/exam/participate/konkoorView.vue'),
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'quiz',
@@ -764,7 +764,7 @@ const routes = [
       {
         path: '/onlineQuiz/konkoorView/retake/:quizId',
         name: 'onlineQuiz.konkoorView.retake',
-        component: () => import('pages/User/exam/participate/konkoorView'),
+        component: () => import('pages/User/exam/participate/konkoorView.vue'),
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'quiz',
@@ -778,7 +778,7 @@ const routes = [
       {
         path: '/onlineQuiz/konkoorView/personal/:quizId',
         name: 'onlineQuiz.konkoorView.personal',
-        component: () => import('pages/User/exam/participate/konkoorView'),
+        component: () => import('pages/User/exam/participate/konkoorView.vue'),
         layoutConfig: {
           layoutHeaderVisible: true,
           layoutHeaderType: 'quiz',
@@ -792,7 +792,7 @@ const routes = [
       {
         path: '/cart',
         name: 'cart',
-        component: () => import('pages/Cart/Cart'),
+        component: () => import('pages/Cart/Cart.vue'),
         // meta: {
         //   middlewares: [
         //     Permissions.hasPermission('examStore')]
@@ -806,7 +806,7 @@ const routes = [
       {
         path: '/order/:orderId/thankYou',
         name: 'thankYouPage',
-        component: () => import('pages/ThankYouPage/ThankYouPage'),
+        component: () => import('pages/ThankYouPage/ThankYouPage.vue'),
         // meta: {
         //   middlewares: [
         //     Permissions.hasPermission('examStore')]
@@ -837,7 +837,7 @@ const routes = [
   {
     path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
     name: 'onlineQuiz.mbtiBartle',
-    component: () => import('pages/User/exam/participate/MBTI_Bartle'),
+    component: () => import('pages/User/exam/participate/MBTI_Bartle.vue'),
     meta: {
       middlewares: [auth]
     }
@@ -845,7 +845,7 @@ const routes = [
   {
     path: '/user-info',
     name: 'user-info',
-    component: () => import('pages/User/UserInfoForm'),
+    component: () => import('pages/User/UserInfoForm.vue'),
     meta: {
       middlewares: [auth]
     }

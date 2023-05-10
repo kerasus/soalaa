@@ -38,9 +38,10 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
-import { Question } from 'src/models/Question'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
+import { Question } from 'src/models/Question.js'
+import VueKatex from 'src/components/VueKatex.vue'
+import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
+
 export default {
   name: 'GroupQuestionShow',
   components: {

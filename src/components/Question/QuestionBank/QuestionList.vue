@@ -9,8 +9,9 @@
 </template>
 
 <script>
-import QuestionItem from '../QuestionItem/QuestionItem'
-import { Question, QuestionList } from 'src/models/Question'
+import QuestionItem from '../QuestionItem/QuestionItem.vue'
+import { Question, QuestionList } from 'src/models/Question.js'
+
 export default {
   name: 'QuestionList',
   components: { QuestionItem },

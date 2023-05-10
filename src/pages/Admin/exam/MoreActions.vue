@@ -42,10 +42,10 @@
 
 <script>
 import { copyToClipboard } from 'quasar'
-import EditExamReport from 'pages/Admin/exam/editExamReport'
-import Upload from 'pages/Admin/exam/Upload'
-import EditCoefficients from 'pages/Admin/exam/editCoefficients'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
+import Upload from 'src/pages/Admin/exam/Upload.vue'
+import EditExamReport from 'src/pages/Admin/exam/editExamReport.vue'
+import EditCoefficients from 'src/pages/Admin/exam/editCoefficients.vue'
 
 export default {
   name: 'MoreActions',

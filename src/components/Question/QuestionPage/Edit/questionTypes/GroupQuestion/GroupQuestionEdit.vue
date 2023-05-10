@@ -75,15 +75,16 @@
 </template>
 
 <script>
+import { ExamList } from 'src/models/Exam.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Question } from 'src/models/Question.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
-import { Question } from 'src/models/Question'
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { ExamList } from 'src/models/Exam'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import API_ADDRESS from 'src/api/Addresses'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
+import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
+
 export default {
   name: 'GroupQuestionEdit',
   components: {

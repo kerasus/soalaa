@@ -202,15 +202,16 @@
 </template>
 
 <script>
-import { EntityIndex } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
-import { User } from 'src/models/User'
 import moment from 'moment-jalaali'
-import { Order } from 'src/models/Order'
-import OrderDetailsDialog from 'components/MyOrders/OrderDetailsDialog'
-import OrderDetailsCard from 'components/MyOrders/OrderDetailsCard'
+import { EntityIndex } from 'quasar-crud'
+import { User } from 'src/models/User.js'
+import { Order } from 'src/models/Order.js'
+import API_ADDRESS from 'src/api/Addresses.js'
 import { FormBuilder } from 'quasar-form-builder'
-import ActionBtn from 'pages/User/MyOrders/actionBtn'
+import ActionBtn from 'src/pages/User/MyOrders/actionBtn.vue'
+import OrderDetailsCard from 'src/components/MyOrders/OrderDetailsCard.vue'
+import OrderDetailsDialog from 'src/components/MyOrders/OrderDetailsDialog.vue'
+
 export default {
   name: 'MyOrders',
   components: {

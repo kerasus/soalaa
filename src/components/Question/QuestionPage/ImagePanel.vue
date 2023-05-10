@@ -101,11 +101,11 @@
 </template>
 
 <script>
-import { Question } from 'src/models/Question.js'
 import * as FilePond from 'filepond'
 import 'filepond/dist/filepond.min.css'
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
+import { Question } from 'src/models/Question.js'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 FilePond.registerPlugin(FilePondPluginImagePreview)
 
 const dropAreaHTML = `

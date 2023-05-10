@@ -77,7 +77,6 @@
 </template>
 
 <script>
-
 import { User } from 'src/models/User.js'
 import { defineAsyncComponent } from 'vue'
 import MainFooter from 'components/Layout/Footer/main.vue'

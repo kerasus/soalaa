@@ -155,7 +155,7 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
 // import { axios } from 'src/boot/axios'
 export default {
   name: 'home-page',

@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import UserLayoutHeader from 'src/mixin/UserLayoutHeader'
+import UserLayoutHeader from 'src/mixin/UserLayoutHeader.js'
 
 export default {
   name: 'UserPanelSideDrawer',

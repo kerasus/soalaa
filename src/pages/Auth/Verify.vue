@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import { User } from 'src/models/User'
+import { User } from 'src/models/User.js'
+import API_ADDRESS from 'src/api/Addresses.js'
 
 export default {
   name: 'Verify',

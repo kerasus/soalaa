@@ -80,12 +80,12 @@
 
 <script>
 import { Block } from 'src/models/Block.js'
+import API_ADDRESS from 'src/api/Addresses.js'
 import { mixinWidget } from 'src/mixin/Mixins.js'
 import Slider from 'components/Widgets/Slider/Slider.vue'
 import SetItem from 'components/Widgets/SetItem/SetItem.vue'
 import ContentItem from 'components/Widgets/ContentItem/ContentItem.vue'
 import ProductItem from 'src/components/Widgets/Product/ProductItem/ProductItem.vue'
-import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'Block',

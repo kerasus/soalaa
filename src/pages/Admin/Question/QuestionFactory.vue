@@ -143,9 +143,9 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
-import { QuestionList } from 'src/models/Question'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { QuestionList } from 'src/models/Question.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
 
 export default {
   name: 'QuestionFactory',

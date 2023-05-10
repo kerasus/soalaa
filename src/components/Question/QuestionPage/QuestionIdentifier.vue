@@ -145,14 +145,14 @@
 </template>
 
 <script>
-import { Question } from 'src/models/Question'
-import { ExamList } from 'src/models/Exam'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
-import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
-import TreeModal from 'components/Question/QuestionPage/TreeModal'
-import API_ADDRESS from 'src/api/Addresses'
+import { ExamList } from 'src/models/Exam.js'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Question } from 'src/models/Question.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import TreeModal from 'src/components/Question/QuestionPage/TreeModal.js'
+import AttachExam from 'src/components/Question/QuestionPage/AttachExam/AttachExam.js'
 
 export default {
   name: 'QuestionIdentifier',

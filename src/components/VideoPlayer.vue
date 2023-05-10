@@ -34,11 +34,11 @@
 
 <script>
 import videojs from 'video.js'
-import fa from 'video.js/dist/lang/fa.json'
-import { Content } from 'src/models/Content'
-import { PlayerSourceList } from 'src/models/PlayerSource'
-import videoJsResolutionSwitcher from 'src/assets/js/videoJsResolutionSwitcher.js'
 import videojsBrand from 'videojs-brand'
+import fa from 'video.js/dist/lang/fa.json'
+import { Content } from 'src/models/Content.js'
+import { PlayerSourceList } from 'src/models/PlayerSource.js'
+import videoJsResolutionSwitcher from 'src/assets/js/videoJsResolutionSwitcher.js'
 
 import 'videojs-hls-quality-selector'
 // import 'videojs-contrib-quality-levels'

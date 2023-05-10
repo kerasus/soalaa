@@ -94,13 +94,13 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
+import { Exam } from 'src/models/Exam.js'
 import VueTiptapKatex from 'vue3-tiptap-katex'
 import API_ADDRESS from 'src/api/Addresses.js'
-import { Exam } from 'src/models/Exam'
-import { QuestionList } from 'src/models/Question'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { mixinAuth, mixinQuiz, mixinDrawer } from 'src/mixin/Mixins'
+import VueKatex from 'src/components/VueKatex.vue'
+import { QuestionList } from 'src/models/Question.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import { mixinAuth, mixinQuiz, mixinDrawer } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'QuestionPreview',

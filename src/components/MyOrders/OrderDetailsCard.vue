@@ -17,9 +17,9 @@
 </template>
 
 <script>
-import OrderedProducts from 'components/MyOrders/OrderedProducts'
-import { Order } from 'src/models/Order'
 import moment from 'moment-jalaali'
+import { Order } from 'src/models/Order.js'
+import OrderedProducts from 'src/components/MyOrders/OrderedProducts.vue'
 
 export default {
   name: 'OrderDetailsCard',
