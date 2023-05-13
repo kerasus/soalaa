@@ -56,7 +56,8 @@
 <script>
 import API_ADDRESS from 'src/api/Addresses.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
-import { User } from 'src/models/User'
+import { User } from 'src/models/User.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 
 export default {
   name: 'Profile',
@@ -140,13 +141,13 @@ export default {
 
     getFormData () {
       return new Promise((resolve, reject) => {
-        this.$axios.get(API_ADDRESS.user.formData)
-          .then((response) => {
-            this.genders = response.data.data.genders
-            this.provinces = response.data.data.provinces
-            this.cities = response.data.data.cities
-            this.majors = response.data.data.majors
-            this.grades = response.data.data.grades
+        APIGateway.profile.getFormData()
+          .then(formData => {
+            this.genders = formData.genders
+            this.provinces = formData.provinces
+            this.cities = formData.cities
+            this.majors = formData.majors
+            this.grades = formData.grades
             resolve(true)
           })
           .catch(() => {
