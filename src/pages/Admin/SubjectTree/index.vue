@@ -2,33 +2,31 @@
   <div>
     <div v-if="loading">لطفا کمی صبر کنید...</div>
     <div v-show="!loading">
-      <tree
-        ref="tree"
-        tick-strategy="strict"
-        :editable="true"
-        :get-node-by-id="getNodeById"
-        :add-new-node="createNode"
-        :edit-node="editNode"
-        @ticked="onTicked"
-      />
+      <tree ref="tree"
+            tick-strategy="strict"
+            :editable="true"
+            :get-node-by-id="getNodeById"
+            :add-new-node="createNode"
+            :edit-node="editNode"
+            @ticked="onTicked" />
     </div>
   </div>
 </template>
 
 <script>
-import { mixinTree } from 'src/mixin/Mixins'
-import Tree from 'src/components/Tree/Tree'
+import { mixinTree } from 'src/mixin/Mixins.js'
+import Tree from 'src/components/Tree/Tree.vue'
 
 export default {
   name: 'SubjectTree',
+  components: { Tree },
+  mixins: [mixinTree],
   data: () => {
     return {
       loading: false,
       nodeIds: []
     }
   },
-  mixins: [mixinTree],
-  components: { Tree },
   created () {
     this.loading = true
     this.showTree('tree', this.getRootNode('subject_tags'))
