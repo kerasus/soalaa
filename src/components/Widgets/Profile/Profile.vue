@@ -58,8 +58,9 @@ import API_ADDRESS from 'src/api/Addresses.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
 import { User } from 'src/models/User.js'
 import { APIGateway } from 'src/api/APIGateway.js'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'Profile',
   components: {
     EntityCrudFormBuilder
@@ -253,7 +254,7 @@ export default {
     }
 
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
