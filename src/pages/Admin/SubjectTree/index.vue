@@ -52,8 +52,8 @@ export default {
 <style scoped lang='scss'>
 .node-title{
   &:hover {
-  .edit-btn {
-    color: #f18305;
+    .edit-btn {
+      color: #f18305;
     }
   }
 }
