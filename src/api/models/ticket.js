@@ -1,10 +1,10 @@
 import APIRepository from '../classes/APIRepository'
-import { apiV2 } from 'src/boot/axios'
+import { alaaApiInstance } from 'src/boot/axios'
 import { User } from 'src/models/User'
 
 export default class TicketAPI extends APIRepository {
   constructor() {
-    super('ticket', apiV2, '/ticket')
+    super('ticket', alaaApiInstance, '/ticket')
     this.APIAdresses = {
       base: '/ticket',
       updateTicketApi: (ticketId) => '/ticket/' + ticketId,
@@ -28,6 +28,20 @@ export default class TicketAPI extends APIRepository {
         return error
       },
       data
+    })
+  }
+
+  getTicketData() {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.base,
+      resolveCallback: (response) => {
+        return response
+      },
+      rejectCallback: (error) => {
+        return error
+      }
     })
   }
 

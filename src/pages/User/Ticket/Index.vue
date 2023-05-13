@@ -43,14 +43,14 @@
 
 <script>
 import { EntityIndex } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 
 export default {
   name: 'Index',
   components: { EntityIndex },
   data () {
     return {
-      api: API_ADDRESS.ticket.index.base,
+      api: APIGateway.ticket.APIAdresses.base,
       tableKeys: {
         data: 'data',
         total: 'meta.total',
