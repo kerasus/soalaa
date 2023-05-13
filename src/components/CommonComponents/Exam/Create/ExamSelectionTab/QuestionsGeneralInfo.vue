@@ -265,8 +265,15 @@
 </template>
 
 <script>
-import { Chart } from 'highcharts-vue'
 import { QuestionList } from 'src/models/Question.js'
+
+let Chart
+if (typeof window !== 'undefined') {
+  import('highcharts-vue')
+    .then((ChartLib) => {
+      Chart = ChartLib.default.Chart
+    })
+}
 
 export default {
   name: 'QuestionsGeneralInfo',
