@@ -3,6 +3,8 @@
 .env
 node_modules
 /src/components/Widgets/widget.json
+/src/components/Widgets/PageBuilderComponents.js
+/src/components/Widgets/PageBuilderOptionPanels.js
 
 # Quasar core related directories
 .quasar
