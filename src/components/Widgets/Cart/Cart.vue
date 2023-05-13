@@ -77,8 +77,8 @@ export default {
     cartReview() {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('Cart/reviewCart')
-        .then((response) => {
-          const invoice = response.data.data
+        .then((cartData) => {
+          const invoice = cartData
 
           const cart = new Cart(invoice)
 
@@ -87,8 +87,8 @@ export default {
               cart.items.list.push(order)
             })
           }
-          this.cart = cart
           this.$store.dispatch('loading/overlayLoading', false)
+          this.cart = cart
         })
     }
   }
