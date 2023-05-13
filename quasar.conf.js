@@ -13,6 +13,8 @@ const { generateWidgetList } = require('./src/widgetListGetter/index')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 // const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
+require('dotenv').config() // Add .env file to process.env
+
 const path = require('path')
 
 module.exports = configure(function (ctx) {
@@ -79,7 +81,7 @@ module.exports = configure(function (ctx) {
       // extractCSS: false,
 
       distDir: 'dist',
-      env: require('dotenv').config().parsed,
+      env: process.env,
 
       // https://v2.quasar.dev/quasar-cli/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
