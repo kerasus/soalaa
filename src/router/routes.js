@@ -653,7 +653,12 @@ const routes = [
             component: () => import('pages/Admin/KnowledgeTree/index'),
             breadcrumbs: { title: 'درخت دانش' }
           },
-
+          {
+            name: 'Admin.SubjectTree',
+            path: 'subject-tree',
+            component: () => import('pages/Admin/SubjectTree/index'),
+            breadcrumbs: { title: 'درخت تگ موضوعی' }
+          },
           {
             path: 'ticket',
             component: () => import('layouts/bareLayout.vue'),

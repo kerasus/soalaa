@@ -111,8 +111,8 @@ export default {
   },
   methods: {
     async init() {
-      const tabs = await this.getQuestionType()
-      this.componentTabs = new TypeList(tabs.data.data)
+      const response = await this.getQuestionType()
+      this.componentTabs = new TypeList(response.data.data)
       this.$nextTick(() => {
         this.qTabLoading = false
       })

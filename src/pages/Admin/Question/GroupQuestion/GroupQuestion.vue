@@ -107,7 +107,7 @@ export default {
   created () {
     const that = this
     setTimeout(() => {
-      that.domKey = 'Date.now()'
+      that.domKey++
     }, 100)
     this.getPageReady()
     this.getGradesList()

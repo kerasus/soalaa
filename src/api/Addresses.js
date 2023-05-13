@@ -226,30 +226,72 @@ const API_ADDRESS = {
         if (!newFilter) {
           newFilter = {}
         }
-        if (!singleMode) {
-          newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
-          newFilter[paramKey] = newFilter[paramKey].join('&' + paramKey + '[]=')
-          if (newFilter[paramKey]) {
-            newFilter[paramKey] = '&' + paramKey + '[]=' + newFilter[paramKey]
-          }
-        } else {
-          if (newFilter[paramKey]) {
-            newFilter[paramKey] = '&' + paramKey + '=' + newFilter[paramKey]
+        const fillNewFilter = function (paramKey, sign) {
+          if (typeof newFilter[paramKey] !== 'undefined' && newFilter[paramKey] !== '') {
+            newFilter[paramKey] = '&' + paramKey + sign + newFilter[paramKey]
           }
         }
+
+        if (singleMode) {
+          fillNewFilter(paramKey, '=')
+          return
+        }
+
+        newFilter[paramKey] = (typeof newFilter[paramKey] !== 'undefined') ? newFilter[paramKey] : []
+        newFilter[paramKey] = newFilter[paramKey].join('&' + paramKey + '[]=')
+        fillNewFilter(paramKey, '[]=')
       }
-      setQueryParams('statuses')
-      setQueryParams('years')
-      setQueryParams('majors')
-      setQueryParams('reference')
-      setQueryParams('tags')
-      setQueryParams('level')
-      setQueryParams('question_report_type')
-      // setQueryParams('statement', true)
-      setQueryParams('sort_by', true)
-      setQueryParams('report_status', true)
-      setQueryParams('sort_type', true)
-      setQueryParams('tags_with_childrens', true)
+
+      const setQueryParamsKeys = [
+        {
+          key: 'statuses',
+          singleMode: false
+        },
+        {
+          key: 'years',
+          singleMode: false
+        },
+        {
+          key: 'majors',
+          singleMode: false
+        },
+        {
+          key: 'reference',
+          singleMode: false
+        },
+        {
+          key: 'tags',
+          singleMode: false
+        },
+        {
+          key: 'level',
+          singleMode: false
+        },
+        {
+          key: 'question_report_type',
+          singleMode: false
+        },
+        {
+          key: 'sort_by',
+          singleMode: true
+        },
+        {
+          key: 'report_status',
+          singleMode: true
+        },
+        {
+          key: 'sort_type',
+          singleMode: true
+        },
+        {
+          key: 'tags_with_childrens',
+          singleMode: true
+        }
+      ]
+
+      setQueryParamsKeys.forEach(item => {
+        setQueryParams(item.key, item.singleMode)
+      })
 
       if (typeof page !== 'undefined') {
         page = '&page=' + page
@@ -279,6 +321,7 @@ const API_ADDRESS = {
       }
     },
     reportStatuses: lumenServer + '/question/report/statuses',
+    levels: lumenServer + '/question/levels',
     log: {
       base (questionId, pagination) {
         if (!pagination) {
@@ -387,7 +430,7 @@ const API_ADDRESS = {
       productIds.forEach((productId, productIndex) => {
         idParams.push('ids' + '[' + productIndex + ']=' + productId)
       })
-      const queryParams = idParams.join('&')
+      const queryParams = idParams.join('&') + '&seller=2'
       return authServer + '/product?' + queryParams
     },
 
