@@ -151,8 +151,8 @@ import { Question } from 'src/models/Question.js'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
-import TreeModal from 'src/components/Question/QuestionPage/TreeModal.js'
-import AttachExam from 'src/components/Question/QuestionPage/AttachExam/AttachExam.js'
+import TreeModal from 'src/components/Question/QuestionPage/TreeModal.vue'
+import AttachExam from 'src/components/Question/QuestionPage/AttachExam/AttachExam.vue'
 
 export default {
   name: 'QuestionIdentifier',

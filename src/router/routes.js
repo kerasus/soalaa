@@ -658,6 +658,13 @@ const routes = [
           },
 
           {
+            name: 'Admin.SubjectTree.tree',
+            path: 'subject-tree',
+            component: () => import('pages/Admin/SubjectTree/index.vue'),
+            breadcrumbs: { title: 'درخت تگ موضوعی' }
+          },
+
+          {
             path: 'ticket',
             component: () => import('layouts/bareLayout.vue'),
             meta: {
