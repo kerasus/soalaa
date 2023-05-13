@@ -1557,13 +1557,12 @@
   integrity sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==
 
 "@quasar/app-vite@^1.2.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@quasar/app-vite/-/app-vite-1.4.1.tgz#86b599d2b4dce32c5220a39b0c82e9732dfa2a62"
-  integrity sha512-I1uwAhcobaNxZ5o3RIYuGyv2QYZlEiNmo4WHrMYORpzYlRmg7s4iERCAqb1leRzKBt6Q79rspJN0fr2t25E78g==
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/@quasar/app-vite/-/app-vite-1.4.3.tgz#442944cace5008c473411212b04af3a46090ae0a"
+  integrity sha512-5iMs1sk6fyYTFoRVySwFXWL/PS23UEsdk+YSFejhXnSs5fVDmb2GQMguCHwDl3jPIHjZ7A+XKkb2iWx9pjiPXw==
   dependencies:
-    "@quasar/fastclick" "1.1.5"
-    "@quasar/render-ssr-error" "^1.0.0"
-    "@quasar/vite-plugin" "^1.3.2"
+    "@quasar/render-ssr-error" "^1.0.1"
+    "@quasar/vite-plugin" "^1.3.3"
     "@rollup/pluginutils" "^4.1.2"
     "@types/chrome" "^0.0.208"
     "@types/compression" "^1.7.2"
@@ -1597,27 +1596,22 @@
     vite "^2.9.13"
     webpack-merge "^5.8.0"
 
-"@quasar/extras@^1.15.11", "@quasar/extras@^1.16.1", "@quasar/extras@^1.16.3":
+"@quasar/extras@^1.15.11", "@quasar/extras@^1.16.1", "@quasar/extras@^1.16.2":
   version "1.16.3"
   resolved "https://registry.yarnpkg.com/@quasar/extras/-/extras-1.16.3.tgz#72216e2d450a2ee70613957da88191339b90de41"
   integrity sha512-c9p2j4KWrWqOcCcCD9IMjgPZzAiXKSMEMc3uYbqa5mHlEJ1kl88OMaeJUcmP+INRQ29AFSEQ9tZE20jLmdnLXw==
 
-"@quasar/fastclick@1.1.5":
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/@quasar/fastclick/-/fastclick-1.1.5.tgz#948e79c44098cced6c3d1645315683ebc29ed834"
-  integrity sha512-p3JKgTjRlJ1YQXbqTw3Bsa4j0mQdt5dq+WfYvyb7MgKGdephHCKdR/kxA5PCTAmJanGJuDKqRdyGYX/hYN4KGw==
-
-"@quasar/render-ssr-error@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@quasar/render-ssr-error/-/render-ssr-error-1.0.0.tgz#640d9c5df67cf0817e853e2880e7b37cf7e4477d"
-  integrity sha512-UoZqXCOS4ixpxFG6xZmd+sLAVCYgRD0VPElHfovvhfvNBn2RsTrKo8DFlLpAxsB/Ebb5QzZG7vsiuWEpKGzPhA==
+"@quasar/render-ssr-error@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@quasar/render-ssr-error/-/render-ssr-error-1.0.1.tgz#5400b51c1bc55f4ee7bfb62ecb6f7c7d0f88ce7f"
+  integrity sha512-4Shxl079hew/yZnIsDtWpRD8enOmqMjMu/s2bkGN0QBvlsRkpWv9pwOz5geJXZxBa17q1S4txvByBxkhPfhWaQ==
   dependencies:
     stack-trace "^1.0.0-pre2"
 
-"@quasar/vite-plugin@^1.3.2":
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@quasar/vite-plugin/-/vite-plugin-1.3.2.tgz#55d5d6bdf0e6235ee9ee3feb95637d743470970e"
-  integrity sha512-BDHOwRfznmVklRZYhjHgqzypTXdT9zQwfazyj4dtxJ4F1pReWQulX1gZ3sL7VGgJL+7GzRUn6umuYqZcR5jR3A==
+"@quasar/vite-plugin@^1.3.3":
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/@quasar/vite-plugin/-/vite-plugin-1.3.3.tgz#63cd2c3cbcf95dff1dc807a80bce7cf44ea91d58"
+  integrity sha512-HSX/Vgec5/Y8fiJRfpf1MR7+um+rdpbilktBGQkYOKw4A9d0smGq4jtSS/K4O2GTXRYqDmZ/5sgCeBcmhB3OCw==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -5620,7 +5614,7 @@ quasar-ui-q-page-builder@^0.1.39:
     shvl "^3.0.0"
     vue "^3.2.47"
 
-quasar@^2.11.7, quasar@^2.11.9, quasar@^2.12.0:
+quasar@^2.11.10, quasar@^2.11.7, quasar@^2.11.9:
   version "2.12.0"
   resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.12.0.tgz#f145ad2b677a0925ea9ca6a3b44b5502be1cbd87"
   integrity sha512-B8xoeOWNs/Iv7M+FGRvXGYI1qDnJH8AtIb7RiP+zMfMkBcEp+6HJHU/9ODPemC4yteDjO+HPX2f7OhNZKgsPIw==
