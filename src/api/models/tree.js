@@ -1,5 +1,5 @@
 import APIRepository from '../classes/APIRepository'
-import { apiV2 } from 'src/boot/axios'
+import { appApiInstance } from 'src/boot/axios'
 import { TreeNode } from 'src/models/TreeNode.js'
 const APIAdresses = {
   base: '/forrest/tree',
@@ -30,7 +30,7 @@ const APIAdresses = {
 
 export default class TreeAPI extends APIRepository {
   constructor() {
-    super('tree', apiV2, '', '', APIAdresses)
+    super('tree', appApiInstance, '', '', APIAdresses)
     this.CacheList = {
       base: this.name + this.APIAdresses.base,
       getGradesList: this.name + this.APIAdresses.getGradesList,
