@@ -202,10 +202,10 @@
 <script>
 import { User } from 'src/models/User.js'
 import API_ADDRESS from 'src/api/Addresses.js'
-import NextExam from 'components/Widgets/Dashboard/SideComponent/NextExam.vue'
-import DashboardHeader from 'components/Widgets/Dashboard/SideComponent/DashboardHeader.vue'
-import SubscriptionStatus from 'components/Widgets/Dashboard/SideComponent/SubscriptionStatus.vue'
-import UpcomingExamsCalender from 'components/Widgets/Dashboard/SideComponent/UpcomingExamsCalender.vue'
+import NextExam from 'src/components/Widgets/Dashboard/SideComponent/NextExam.vue'
+import DashboardHeader from 'src/components/Widgets/Dashboard/SideComponent/DashboardHeader.vue'
+import SubscriptionStatus from 'src/components/Widgets/Dashboard/SideComponent/SubscriptionStatus.vue'
+import UpcomingExamsCalender from 'src/components/Widgets/Dashboard/SideComponent/UpcomingExamsCalender.vue'
 
 export default {
   name: 'Dashboard',

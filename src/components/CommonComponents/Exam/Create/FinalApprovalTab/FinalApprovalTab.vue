@@ -144,12 +144,19 @@
 </template>
 
 <script>
-import { Chart } from 'highcharts-vue'
 import { Exam } from 'src/models/Exam.js'
 import { Question, QuestionList } from 'src/models/Question.js'
 import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
 import QuestionItem from 'src/components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
 import QuestionsGeneralInfo from 'src/components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo.vue'
+
+let Chart
+if (typeof window !== 'undefined') {
+  import('highcharts-vue')
+    .then((ChartLib) => {
+      Chart = ChartLib.default.Chart
+    })
+}
 
 export default {
   name: 'FinalApprovalTab',

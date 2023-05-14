@@ -178,7 +178,7 @@ export default boot(({ app, store, router, ssrContext }) => {
   store.$axios = appApiInstance
   router.$axios = appApiInstance
 
-  app.config.globalProperties.$axios = alaaApiInstance
+  app.config.globalProperties.$axios = appApiInstance
   app.config.globalProperties.$alaaApiInstance = alaaApiInstance
   app.config.globalProperties.$appApiInstance = appApiInstance
 })
