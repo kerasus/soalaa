@@ -331,10 +331,8 @@ export default {
       this.updateInputsValue('search', value)
     }
   },
-  created() {
-    this.getPaymentStatus()
-  },
   mounted () {
+    this.getPaymentStatus()
     this.loadAuthData()
   },
   methods: {
@@ -378,10 +376,15 @@ export default {
     getInput(src, name) {
       return this[src].find(item => item.name === name)
     },
-    async getPaymentStatus() {
-      const response = await this.$axios.get(API_ADDRESS.user.orders.status)
-      this.loading = false
-      this.getInput('filterInputs', 'paymentStatuses').options = response.data.data
+    getPaymentStatus() {
+      this.$apiGateway.user.orderStatus()
+        .then(options => {
+          this.getInput('filterInputs', 'paymentStatuses').options = options
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
     },
     filterTable() {
       // if (!this.$refs.filterSlot) {
