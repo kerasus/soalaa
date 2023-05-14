@@ -71,7 +71,13 @@
 </template>
 
 <script>
-import { Chart } from 'highcharts-vue'
+let Chart
+if (typeof window !== 'undefined') {
+  import('highcharts-vue')
+    .then((ChartLib) => {
+      Chart = ChartLib.default.Chart
+    })
+}
 
 export default {
   name: 'SubscriptionStatus',
