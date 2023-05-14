@@ -43,7 +43,7 @@
 
 <script>
 import { EntityCrud } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'AuthorshipDates',
@@ -58,10 +58,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: API_ADDRESS.entityCrud.authorshipDates.show,
-            edit: API_ADDRESS.entityCrud.authorshipDates.edit,
-            create: API_ADDRESS.entityCrud.authorshipDates.create,
-            index: API_ADDRESS.entityCrud.authorshipDates.index
+            show: APIGateway.entityCrud.APIAdresses.authorshipDates.show,
+            edit: APIGateway.entityCrud.APIAdresses.authorshipDates.edit,
+            create: APIGateway.entityCrud.APIAdresses.authorshipDates.create,
+            index: APIGateway.entityCrud.APIAdresses.authorshipDates.index
           },
           title: {
             show: 'اطلاعات تاریخ تالیف',

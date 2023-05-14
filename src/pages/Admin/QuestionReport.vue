@@ -37,7 +37,7 @@
 
 <script>
 import { EntityCrud } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'QuestionReport',
@@ -52,10 +52,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: API_ADDRESS.entityCrud.questionReport.show,
-            edit: API_ADDRESS.entityCrud.questionReport.edit,
-            create: API_ADDRESS.entityCrud.questionReport.create,
-            index: API_ADDRESS.entityCrud.questionReport.index
+            show: APIGateway.entityCrud.APIAdresses.questionReport.show,
+            edit: APIGateway.entityCrud.APIAdresses.questionReport.edit,
+            create: APIGateway.entityCrud.APIAdresses.questionReport.create,
+            index: APIGateway.entityCrud.APIAdresses.questionReport.index
           },
           title: {
             show: 'اطلاعات خطا سوال',

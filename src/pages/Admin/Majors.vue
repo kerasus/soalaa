@@ -43,7 +43,7 @@
 
 <script>
 import { EntityCrud } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Majors',
@@ -58,10 +58,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: API_ADDRESS.entityCrud.majors.show,
-            edit: API_ADDRESS.entityCrud.majors.edit,
-            create: API_ADDRESS.entityCrud.majors.create,
-            index: API_ADDRESS.entityCrud.majors.index
+            show: APIGateway.entityCrud.APIAdresses.majors.show,
+            edit: APIGateway.entityCrud.APIAdresses.majors.edit,
+            create: APIGateway.entityCrud.APIAdresses.majors.create,
+            index: APIGateway.entityCrud.APIAdresses.majors.index
           },
           title: {
             show: 'اطلاعات رشته',

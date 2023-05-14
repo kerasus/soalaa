@@ -21,6 +21,7 @@ import PageSettingAPI from 'src/api/models/PageSetting.js'
 // import ReferralCodeAPI from 'src/api/models/ReferralCode.js'
 // import ContentTimepointAPI from 'src/api/models/ContentTimepoint.js'
 // import LiveDescriptionAPI from 'src/api/models/LiveDescription.js'
+import EntityCrudAPI from 'src/api/models/EntityCrud.js'
 
 /* Exporting the APIGateway object. */
 export const APIGateway = {
@@ -43,8 +44,9 @@ export const APIGateway = {
   // abrisham: new AbrishamAPI(),
   // attribute: new AttributeAPI(),
   // studyPlan: new StudyPlanAPI(),
-  pageSetting: new PageSettingAPI()
+  pageSetting: new PageSettingAPI(),
   // referralCode: new ReferralCodeAPI(),
   // liveDescription: new LiveDescriptionAPI(),
   // contentTimepoint: new ContentTimepointAPI()
+  entityCrud: new EntityCrudAPI()
 }
