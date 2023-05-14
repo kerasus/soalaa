@@ -268,6 +268,14 @@ export default {
           children: []
         },
         {
+          title: 'درخت تگ موضوعی',
+          icon: 'isax:tree',
+          permission: 'examStore',
+          routeName: 'Admin.SubjectTree.tree',
+          active: false,
+          children: []
+        },
+        {
           title: 'لیست دروس',
           icon: 'isax:book',
           routeName: 'Admin.subCategory.Index',

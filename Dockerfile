@@ -9,25 +9,25 @@ COPY ./package*.json ./
 RUN yarn install --production --frozen-lockfile
 
 
-ARG ALAA_API_V2_SERVER=https://alaatv.com/api/v2
-ARG ALAA_API_V1_SERVER=https://alaatv.com/api/v1
-ARG ALAA_WEB_SERVER=https://alaatv.com
-ARG ALAA_MINIO_SERVER=https://stage-minio.alaatv.com
-ARG VUEX_PERSISTED_STATE_KEY=vuex
+ARG AUTH_API_SERVER=http://office.alaa.tv:700/api/v2
+ARG AAA_API_SERVER=http://office.alaa.tv:3000/api/v1
+ARG SOCKET_SERVER=http://office.alaatv.com:3006
+
 ARG GET_TIME_SERVER=/time
-ARG ALAA_API_V1=/alaa/api/v1
-ARG ALAA_API_V2=/alaa/api/v2
-ARG ALAA_WEB=/alaa
-ARG ALAA_MINIO=/minio
-ARG NGINX_PORT=8081
-ARG SSR_PORT=3000
+ARG AUTH_API=/alaa/api/v2
+ARG AAA_API=/3a/api/v1
+
+ARG ACTIVE_ALL_CATEGORIES_IN_EXAM=false
+
+ARG NGINX_PORT=8082
+
+ARG SSR_PORT=13100
 
 # Copy all files
-COPY ./ ./
+COPY . .
 
 # Build app on SSR mode
 RUN yarn build:ssr
-
 
 ##############################################
 
@@ -42,7 +42,7 @@ WORKDIR /var/www/app/dist/ssr
 RUN yarn install
 
 # Expose the listening port
-EXPOSE 3000
+EXPOSE 13100
 
 # Run container as non-root (unprivileged) user
 # The "node" user is provided in the Node.js Alpine base image
