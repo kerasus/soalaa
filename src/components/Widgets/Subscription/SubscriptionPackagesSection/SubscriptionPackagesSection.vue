@@ -46,7 +46,6 @@
                      label="شروع کنید"
                      unelevated
                      :loading="subscribeLoading"
-                     disable
                      @click="subscribe(item.id)" />
             </div>
           </template>
@@ -67,7 +66,6 @@
 </template>
 <script>
 import { defineComponent } from 'vue'
-import API_ADDRESS from 'src/api/Addresses.js'
 
 export default defineComponent({
   name: 'SubscriptionPackageSection',
@@ -83,16 +81,15 @@ export default defineComponent({
       return this.$store.getters['Auth/isUserLogin']
     }
   },
-  created() {
+  mounted() {
     this.getData()
   },
   methods: {
     getData() {
       this.loading = true
-      this.$axios.get(API_ADDRESS.subscription.list).then((res) => {
-        this.packageList = res.data.data
-      })
-        .then(() => {
+      this.$apiGateway.user.subscriptionList()
+        .then((packageList) => {
+          this.packageList = packageList
           this.loading = false
         })
         .catch(() => {
@@ -102,11 +99,12 @@ export default defineComponent({
     subscribe(id) {
       if (this.isUserLogin) {
         this.subscribeLoading = true
-        this.$axios.post(API_ADDRESS.subscription.register(id)).then((res) => {
-          if (res.status === 200) {
-            this.$router.push({ name: 'User.Dashboard' })
-          }
-        })
+        this.$apiGateway.user.subscriptionRegister(id)
+          .then((res) => {
+            if (res.status === 200) {
+              this.$router.push({ name: 'User.Dashboard' })
+            }
+          })
           .then(() => {
             this.subscribeLoading = false
           })
