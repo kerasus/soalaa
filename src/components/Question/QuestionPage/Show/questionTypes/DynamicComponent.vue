@@ -24,7 +24,7 @@ export default {
   computed: {
     comp () {
       // ToDo: must check this
-      const gg = 'components/Question/QuestionPage/Create/textMode/questionTypes/' + this.component.componentName + '/' + this.component.componentName + '.vue'
+      const gg = 'src/components/Question/QuestionPage/Create/textMode/questionTypes/' + this.component.componentName + '/' + this.component.componentName + '.vue'
       return defineAsyncComponent(() => import(gg))
     }
   },

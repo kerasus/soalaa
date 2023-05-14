@@ -1,6 +1,7 @@
 import APIRepository from '../classes/APIRepository'
 import { appApiInstance } from 'src/boot/axios'
 import { TreeNode } from 'src/models/TreeNode.js'
+
 const APIAdresses = {
   base: '/forrest/tree',
   getMultiType: (types) => {
