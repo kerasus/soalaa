@@ -52,7 +52,7 @@
     "quasar-app-extension-q-page-builder": "^0.1.39",
     "quasar-crud": "^0.3.21",
     "quasar-form-builder": "^0.1.92",
-    "quasar-template-builder": "^1.0.21",
+    "quasar-template-builder": "^1.0.22",
     "quasar-ui-q-page-builder": "^0.1.39",
     "socket.io-client": "^4.6.1",
     "video.js": "^8.0.4",
