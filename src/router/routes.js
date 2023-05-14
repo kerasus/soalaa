@@ -248,7 +248,11 @@ const routes = [
 
             path: '',
             name: 'User.First.Layout',
-            component: () => import('layouts/UserPanelLayouts/UserPanelLayout.vue'),
+            layoutConfig: {
+              layoutLeftDrawer: true,
+              layoutLeftDrawerVisible: false
+            },
+            component: () => import('src/layouts/UserPanelLayouts/UserPanelLayout.vue'),
             children: [
               {
                 path: 'profile',
