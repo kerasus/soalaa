@@ -38,8 +38,7 @@ const mixinTree = {
     getNodeById (id, done, fail, loadChildOfNode) {
       return new Promise((resolve, reject) => {
         this.getNode(id)
-          .then(response => {
-            const node = response.data.data
+          .then(node => {
             resolve(loadChildOfNode(node, done))
           }).catch(err => {
             console.error(err)
