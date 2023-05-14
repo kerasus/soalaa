@@ -45,12 +45,12 @@ export default {
     }
   },
   created () {
-    if (this.windowSize.x < 1024) {
-      this.$store.dispatch('AppLayout/updateTemplateLayout', {
-        layoutLeftDrawerVisible: false,
-        layoutLeftDrawer: true
-      })
-    }
+    // if (this.windowSize.x < 1024) {
+    //   this.$store.dispatch('AppLayout/updateTemplateLayout', {
+    //     layoutLeftDrawerVisible: false,
+    //     layoutLeftDrawer: true
+    //   })
+    // }
   },
   methods: {
   }
