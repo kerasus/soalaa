@@ -1,5 +1,5 @@
 import APIRepository from '../classes/APIRepository'
-import { apiV2 } from 'src/boot/axios'
+import { appApiInstance } from 'src/boot/axios'
 import { TreeNode } from 'src/models/TreeNode.js'
 const APIAdresses = {
   base: '/forrest/tree',
@@ -30,7 +30,7 @@ const APIAdresses = {
 
 export default class TreeAPI extends APIRepository {
   constructor() {
-    super('tree', apiV2, '', '', APIAdresses)
+    super('tree', appApiInstance, '', '', APIAdresses)
     this.CacheList = {
       base: this.name + this.APIAdresses.base,
       getGradesList: this.name + this.APIAdresses.getGradesList,
@@ -65,6 +65,27 @@ export default class TreeAPI extends APIRepository {
       request: this.APIAdresses.base,
       cacheKey: this.CacheList.base,
       data: data.data,
+      ...(data?.cache && { cache: data.cache }),
+      resolveCallback: (response) => {
+        return new TreeNode(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getNodeBy(value, data) {
+    const methodName = 'getNodeBy' + value
+    let param = data.data.nodeType
+    if (value === 'Id') {
+      param = data.data.id
+    }
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses[methodName](param),
+      cacheKey: this.CacheList[methodName](param),
       ...(data?.cache && { cache: data.cache }),
       resolveCallback: (response) => {
         return new TreeNode(response.data.data)
