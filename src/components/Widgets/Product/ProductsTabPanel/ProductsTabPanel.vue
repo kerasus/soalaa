@@ -3,27 +3,24 @@
        :style="localOptions.style"
        :class="localOptions.className">
     <product-panel :loading="loading"
-                   :data="products"
+                   :data="localOptions.data"
                    :options="localOptions" />
   </div>
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
-import { mixinWidget } from 'src/mixin/Mixins.js'
-import { ProductList } from 'src/models/Product.js'
 import ProductPanel from './components/ProductPanel.vue'
+import { mixinWidget, mixinPrefetchServerData } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'ProductsTabPanel',
   components: {
     ProductPanel
   },
-  mixins: [mixinWidget],
+  mixins: [mixinPrefetchServerData, mixinWidget],
   data() {
     return {
       products: [],
-      productFlatList: [],
       loading: false,
       defaultOptions: {
         className: '',
@@ -32,25 +29,43 @@ export default {
       }
     }
   },
-  created () {
-    this.getProductsPromise()
-      .then((response) => {
-        this.prefetchServerDataPromiseThen(response)
-      })
-      .catch(() => {
-        this.prefetchServerDataPromiseCatch()
-      })
+  computed: {
+    productFlatList() {
+      return this.extractProducts(this.localOptions.data)
+    },
+    productIdList() {
+      return this.productFlatList.map(product => product.id)
+    },
+    productIdListLength() {
+      return this.productIdList.length
+    }
+  },
+  watch: {
+    productIdListLength(vale) {
+      this.loading = true
+      this.getProductsPromise()
+        .then(productList => {
+          this.replaceProducts(this.localOptions.data, productList.list)
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    }
   },
   methods: {
     extractProducts(group) {
+      const products = []
       for (let index = 0; index < group.length; index++) {
         const groupItem = group[index]
         if (groupItem.type === 'GroupList') {
-          this.extractProducts(groupItem.data)
+          const productStack = this.extractProducts(groupItem.data)
+          products.push(...productStack)
         } else {
-          this.productFlatList.push(...groupItem.data)
+          products.push(...groupItem.data)
         }
       }
+      return products
     },
     replaceProducts(optionList, productList) {
       for (let groupIndex = 0; groupIndex < optionList.length; groupIndex++) {
@@ -68,20 +83,20 @@ export default {
       }
     },
     getProductsPromise() {
-      this.extractProducts(this.localOptions.data)
-      const productIdList = this.productFlatList.map(product => product.id)
-      return this.$alaaApiInstance.get(API_ADDRESS.product.bulk(productIdList))
-      // return this.$apiGateway.product.getProductList(productIdList)
+      const data = {
+        productIds: this.productIdList,
+        params: {
+          length: this.productIdListLength
+        }
+      }
+      return this.$apiGateway.product.getProductList(data)
     },
     prefetchServerDataPromise () {
       this.loading = true
       return this.getProductsPromise()
     },
-    prefetchServerDataPromiseThen (response) {
-      const productList = new ProductList(response.data.data)
-      const products = this.localOptions.data
-      this.replaceProducts(products, productList.list)
-      this.products = products
+    prefetchServerDataPromiseThen (productList) {
+      this.replaceProducts(this.localOptions.data, productList.list)
       this.loading = false
     },
     prefetchServerDataPromiseCatch () {

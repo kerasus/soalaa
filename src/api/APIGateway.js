@@ -4,6 +4,8 @@ import AuthAPI from 'src/api/models/Auth.js'
 import ProfileAPI from 'src/api/models/profile.js'
 // import UserAPI from 'src/api/models/user.js'
 import TreeAPI from 'src/api/models/tree.js'
+import UserAPI from 'src/api/models/user.js'
+// import TreeAPI from 'src/api/models/tree.js'
 // import PlanAPI from 'src/api/models/Plan.js'
 // import OrderAPI from 'src/api/models/order.js'
 // import PagesAPI from 'src/api/models/pages.js'
@@ -11,13 +13,14 @@ import TreeAPI from 'src/api/models/tree.js'
 // import CouponAPI from 'src/api/models/coupon.js'
 // import EventsAPI from 'src/api/models/Events.js'
 // import ContentAPI from 'src/api/models/content.js'
-// import ProductAPI from 'src/api/models/product.js'
+import ProductAPI from 'src/api/models/product.js'
 // import ForrestAPI from 'src/api/models/Forrest.js'
 // import CommentAPI from 'src/api/models/comment.js'
 // import AbrishamAPI from 'src/api/models/Abrisham.js'
 // import AttributeAPI from 'src/api/models/attribute.js'
 // import StudyPlanAPI from 'src/api/models/studyPlan.js'
 import PageSettingAPI from 'src/api/models/PageSetting.js'
+import ExamAPI from 'src/api/models/exam.js'
 // import ReferralCodeAPI from 'src/api/models/ReferralCode.js'
 // import ContentTimepointAPI from 'src/api/models/ContentTimepoint.js'
 // import LiveDescriptionAPI from 'src/api/models/LiveDescription.js'
@@ -26,10 +29,12 @@ import PageSettingAPI from 'src/api/models/PageSetting.js'
 export const APIGateway = {
   // set: new SetAPI(),
   auth: new AuthAPI(),
-  // user: new UserAPI(),
+  user: new UserAPI(),
   cart: new CartAPI(),
   profile: new ProfileAPI(),
   tree: new TreeAPI(),
+  exam: new ExamAPI(),
+  // tree: new TreeAPI(),
   // pages: new PagesAPI(),
   // plan: new PlanAPI(),
   // order: new OrderAPI(),
@@ -39,7 +44,7 @@ export const APIGateway = {
   // forrest: new ForrestAPI(),
   // comment: new CommentAPI(),
   // content: new ContentAPI(),
-  // product: new ProductAPI(),
+  product: new ProductAPI(),
   // abrisham: new AbrishamAPI(),
   // attribute: new AttributeAPI(),
   // studyPlan: new StudyPlanAPI(),
