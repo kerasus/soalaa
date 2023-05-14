@@ -5593,10 +5593,10 @@ quasar-form-builder@^0.1.92:
     shvl "^3.0.0"
     vue "^3.2.47"
 
-quasar-template-builder@^1.0.21:
-  version "1.0.21"
-  resolved "https://registry.yarnpkg.com/quasar-template-builder/-/quasar-template-builder-1.0.21.tgz#b959751247e5d3194307e4f465e9620a2ca6460c"
-  integrity sha512-KaqKIRU3R1rsPO6H2ovqEZODqmLG8ab33G2Ysf8hclmXUMfJuZY29HgnOFLg1UNXlpJtqRRFIf4ShN+VpyqmtA==
+quasar-template-builder@^1.0.22:
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/quasar-template-builder/-/quasar-template-builder-1.0.22.tgz#3e85b3e00d59444fff50f15da48808ccc25bd1e9"
+  integrity sha512-A0bBc1JNrMvOxZq/APVde5rTq0hvXDgaECL0fx4Ft+s3SxtCst84EuD2RVRJPFbIfKUdk2nBFXyO6oa3QhjS+g==
   dependencies:
     "@quasar/extras" "^1.15.11"
     quasar "^2.11.7"
