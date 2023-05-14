@@ -100,48 +100,6 @@ export default class TreeAPI extends APIRepository {
     })
   }
 
-  getNodeBy(value, data) {
-    const methodName = 'getNodeBy' + value
-    let param = data.data.nodeType
-    if (value === 'Id') {
-      param = data.data.id
-    }
-    return this.sendRequest({
-      apiMethod: 'get',
-      api: this.api,
-      request: this.APIAdresses[methodName](param),
-      cacheKey: this.CacheList[methodName](param),
-      ...(data?.cache && { cache: data.cache }),
-      resolveCallback: (response) => {
-        return new TreeNode(response.data.data)
-      },
-      rejectCallback: (error) => {
-        return error
-      }
-    })
-  }
-
-  getNodeBy(value, data) {
-    const methodName = 'getNodeBy' + value
-    let param = data.data.nodeType
-    if (value === 'Id') {
-      param = data.data.id
-    }
-    return this.sendRequest({
-      apiMethod: 'get',
-      api: this.api,
-      request: this.APIAdresses[methodName](param),
-      cacheKey: this.CacheList[methodName](param),
-      ...(data?.cache && { cache: data.cache }),
-      resolveCallback: (response) => {
-        return new TreeNode(response.data.data)
-      },
-      rejectCallback: (error) => {
-        return error
-      }
-    })
-  }
-
   getNodeById(data) {
     return this.getNodeBy('Id', {
       data: {
