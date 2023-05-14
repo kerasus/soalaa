@@ -6,7 +6,9 @@ export default class TicketAPI extends APIRepository {
   constructor() {
     super('ticket', alaaApiInstance, '/ticket')
     this.APIAdresses = {
-      base: '/ticket',
+      index: '/ticket',
+      show: '/ticket',
+      create: '/ticket',
       updateTicketApi: (ticketId) => '/ticket/' + ticketId,
       getInfo: '/user/getInfo',
       ticketMessage: '/ticketMessage',
