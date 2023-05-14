@@ -3,12 +3,12 @@
     <div class="row q-px-md">
       <div class="col-6">
         <div class="outsideLabel">type</div>
-        <q-select v-model="localOptions.layout"
+        <q-select v-model="localOptions.options.layout"
                   :options="layoutOptions" />
       </div>
     </div>
 
-    <div v-for="(item, index) in localData"
+    <div v-for="(item, index) in localOptions.data"
          :key="item">
       <q-card class="custom-card">
         <q-card-section>
@@ -18,16 +18,9 @@
                      icon="close"
                      class="q-mr-sm"
                      @click="removeTabPanel(index)" />
-              <q-input v-if="item.type === 'GroupList'"
-                       v-model="item.options.label"
-                       autogrow
-                       class="full-width"
-                       label="label" />
-              <q-input v-else
-                       v-model="item.type"
-                       autogrow
-                       class="full-width"
-                       label="label" />
+              <div class="expansion-label q-mt-sm full-width">
+                {{item.type}}
+              </div>
             </template>
             <recursive-component :options="item" />
           </q-expansion-item>
@@ -39,48 +32,20 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
+import { PageBuilderOptionPanel } from 'src/mixin/Mixins'
 
 export default {
   name: 'groupListShelfOptionPanel',
   components: { recursiveComponent: defineAsyncComponent(() => import('../recursiveComponent.vue')) },
-  props: {
-    data: {
-      type: Array,
-      default: () => []
-    },
-    options: {
-      type: Object,
-      default() {
-        return {}
-      }
-    }
-  },
+  mixins: [PageBuilderOptionPanel],
   data() {
     return {
       layoutOptions: ['ProductTab', 'ProductShelf']
     }
   },
-  computed: {
-    localData: {
-      get() {
-        return this.data
-      },
-      set(newVal) {
-        this.$emit('update:data', newVal)
-      }
-    },
-    localOptions: {
-      get() {
-        return this.options
-      },
-      set(newVal) {
-        this.$emit('update:options', newVal)
-      }
-    }
-  },
   methods: {
     removeTabPanel (itemIndex) {
-      this.localData.splice(itemIndex, 1)
+      this.localOptions.data.splice(itemIndex, 1)
     }
   }
 }
