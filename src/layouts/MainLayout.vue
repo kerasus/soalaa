@@ -98,14 +98,14 @@ export default {
     MainFooter,
     FloatingActionButton,
     QuasarTemplateBuilder,
-    Auth: defineAsyncComponent(() => import('components/Auth.vue')),
+    Auth: defineAsyncComponent(() => import('src/components/Auth.vue')),
     Router: defineAsyncComponent(() => import('src/router/Router.vue')),
-    UserSideBar: defineAsyncComponent(() => import('layouts/UserPanelLayouts/UserSideBar.vue')),
-    templateHeader: defineAsyncComponent(() => import('components/Headers/templateHeader.vue')),
-    UserTemplateHeader: defineAsyncComponent(() => import('components/Headers/userTemplateHeader.vue')),
-    SideMenuDashboard: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu-dashboard.vue')),
-    onlineQuizTemplateHeader: defineAsyncComponent(() => import('components/Headers/onlineQuizTemplateHeader.vue')),
-    sideMenuMapOfQuestions: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu_MapOfQuestions.vue'))
+    UserSideBar: defineAsyncComponent(() => import('src/layouts/UserPanelLayouts/UserSideBar.vue')),
+    templateHeader: defineAsyncComponent(() => import('src/components/Headers/templateHeader.vue')),
+    UserTemplateHeader: defineAsyncComponent(() => import('src/components/Headers/userTemplateHeader.vue')),
+    SideMenuDashboard: defineAsyncComponent(() => import('src/components/Menu/SideMenu/SideMenu-dashboard.vue')),
+    onlineQuizTemplateHeader: defineAsyncComponent(() => import('src/components/Headers/onlineQuizTemplateHeader.vue')),
+    sideMenuMapOfQuestions: defineAsyncComponent(() => import('src/components/Menu/SideMenu/SideMenu_MapOfQuestions.vue'))
   },
   data () {
     return {
