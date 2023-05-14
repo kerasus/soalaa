@@ -5,11 +5,10 @@ const mixinTree = {
     showTree (refKey, callback) {
       return new Promise((resolve, reject) => {
         callback
-          .then(response => {
-            const node = response
+          .then(node => {
             const treeComponent = this.$refs[refKey]
             if (!treeComponent) {
-              resolve(response)
+              resolve(node)
             }
             treeComponent.createRoot({
               title: node.title,
@@ -19,7 +18,7 @@ const mixinTree = {
               parent: node.parent,
               children: node.children
             })
-            resolve(response)
+            resolve(node)
           })
           .catch(err => {
             reject(err)
@@ -54,11 +53,11 @@ const mixinTree = {
         APIGateway.tree.createNode({
           data: { parent_id: parentId, type, title, order }
         })
-          .then(response => {
+          .then(node => {
             if (callback) {
-              callback(response)
+              callback(node)
             }
-            resolve(response)
+            resolve(node)
           }).catch(err => {
             reject(err)
           })
@@ -70,8 +69,8 @@ const mixinTree = {
         APIGateway.tree.editNode(id, {
           data: { title, order }
         })
-          .then(res => {
-            resolve(res)
+          .then(node => {
+            resolve(node)
           }).catch(err => {
             reject(err)
             console.error(err)

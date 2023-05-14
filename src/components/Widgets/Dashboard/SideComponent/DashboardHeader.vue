@@ -61,9 +61,9 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'DashboardHeader',
   data() {
     return {
@@ -75,17 +75,19 @@ export default {
       return this.$store.getters['AppLayout/windowSize']
     }
   },
-  created() {
+  mounted() {
     this.getStatistics()
   },
   methods: {
     getStatistics() {
-      this.$axios.get(API_ADDRESS.user.statistics).then((res) => {
-        this.statistics = res.data.data
-      })
+      this.$apiGateway.user.statistics()
+        .then((statistic) => {
+          this.statistics = statistic
+        })
+        .catch(() => {})
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

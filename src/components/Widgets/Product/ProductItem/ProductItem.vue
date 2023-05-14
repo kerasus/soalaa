@@ -56,8 +56,6 @@
       <router-link :to="getRoutingObject">
         <lazy-img :src="product.photo"
                   :alt="product.title"
-                  width="1"
-                  height="1"
                   class="img" />
       </router-link>
     </div>
@@ -124,15 +122,15 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import { Product } from 'src/models/Product.js'
 import LazyImg from 'src/components/lazyImg.vue'
-import { mixinWidget } from 'src/mixin/Mixins'
-import API_ADDRESS from 'src/api/Addresses'
+import { mixinWidget, mixinPrefetchServerData } from 'src/mixin/Mixins'
 
-export default {
+export default defineComponent({
   name: 'productItem',
   components: { LazyImg },
-  mixins: [mixinWidget],
+  mixins: [mixinWidget, mixinPrefetchServerData],
   data: () => ({
     addToCartLoading: false,
     loading: false,
@@ -167,25 +165,6 @@ export default {
       }
     }
   },
-  created () {
-    if (this.options.product) {
-      this.product = new Product(this.options.product)
-    } else if (this.options.productId || this.options.paramKey || this.$route.params.id) {
-      this.loading = true
-      const productId = this.options.productId ? this.options.productId : this.options.paramKey ? this.$route.params[this.options.paramKey] : this.$route.params.id
-      return this.$alaaApiInstance.get(API_ADDRESS.product.show.base + '/' + productId)
-      // this.$apiGateway.product.show(productId)
-        .then(response => {
-          const product = response.data.data
-          this.product = new Product(product)
-          this.loading = false
-        }).catch(() => {
-          this.loading = false
-        })
-    } else {
-      this.product = new Product(this.options)
-    }
-  },
   methods: {
     getTeacherOfProduct() {
       if (this.product.attributes.info.teacher) {
@@ -194,7 +173,6 @@ export default {
       return null
     },
     addToCart() {
-      this.addToCartLoading = true
       this.$store.dispatch('Cart/addToCart', { product_id: this.product.id })
         .then(() => {
           this.$store.dispatch('Cart/reviewCart')
@@ -204,9 +182,37 @@ export default {
         }).catch(() => {
           this.addToCartLoading = false
         })
+    },
+    getProductItemPromise() {
+      if (this.options.product) {
+        this.product = new Product(this.options.product)
+        return new Promise((resolve) => {
+          resolve(this.product)
+        })
+      } else if (this.options.productId || this.options.paramKey || this.$route.params.id) {
+        this.loading = true
+        const productId = this.options.productId ? this.options.productId : this.options.paramKey ? this.$route.params[this.options.paramKey] : this.$route.params.id
+        return this.$apiGateway.product.show(productId)
+      } else {
+        this.product = new Product(this.options)
+        return new Promise((resolve) => {
+          resolve(this.product)
+        })
+      }
+    },
+    prefetchServerDataPromise () {
+      this.loading = true
+      return this.getProductItemPromise()
+    },
+    prefetchServerDataPromiseThen (product) {
+      this.product = new Product(product)
+      this.loading = false
+    },
+    prefetchServerDataPromiseCatch () {
+      this.loading = false
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
@@ -215,7 +221,7 @@ export default {
   flex-direction: column;
   width: 100%;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin: auto auto 10px;
   position: relative;
   border-radius: 20px;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6),
@@ -233,14 +239,13 @@ export default {
   .img-box {
 
     a {
-      border-radius: inherit;
       box-shadow: none;
       width: 100%;
       height: 270px;
-
+      border-radius: 20px 20px 0 0;
       .img {
+        border-radius: inherit;
         width: inherit;
-        border-radius: 20px 20px 0 0;
 
         @media screen and (max-width: 600px){
           width: 100%;

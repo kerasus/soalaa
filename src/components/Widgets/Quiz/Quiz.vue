@@ -128,7 +128,6 @@ import moment from 'moment'
 import { defineComponent } from 'vue'
 import Time from 'src/plugins/time.js'
 import { ExamList } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import QuizList from 'src/components/Quiz/QuizList.vue'
 import FutureQuizzesCarousel from 'src/components/Quiz/FutureQuizzesCarousel.vue'
 
@@ -188,19 +187,17 @@ export default defineComponent({
   methods: {
     getBaseExamList () {
       this.allExamsList.loading = true
-      this.$axios.get(API_ADDRESS.exam.userExamList.base(), {
-        params:
-          {
-            start_at_till: this.date,
-            page: 1
-          }
+      this.$apiGateway.exam.userExamList({
+        start_at_till: this.date,
+        page: 1
       })
         .then((response) => {
-          this.allExamsList = new ExamList(response.data.data)
-          this.pagination.exam = response.data.meta
+          this.allExamsList = response.ExamList
+          this.pagination.exam = response.meta
           this.allExamsList.loading = false
           this.filterData.to = this.date
-        }).catch(() => {
+        })
+        .catch(() => {
           this.allExamsList.loading = false
         })
     },
@@ -214,19 +211,15 @@ export default defineComponent({
     },
     getAllExams (title, start, end, page) {
       this.allExamsList.loading = true
-      this.$axios.get(API_ADDRESS.exam.userExamList.base(),
-        {
-          params:
-            {
-              ...(title && { title }),
-              ...(start && { start_at_from: start }),
-              ...(end && { start_at_till: end }),
-              ...(page && { page })
-            }
-        })
+      this.$apiGateway.exam.userExamList({
+        ...(title && { title }),
+        ...(start && { start_at_from: start }),
+        ...(end && { start_at_till: end }),
+        ...(page && { page })
+      })
         .then((response) => {
-          this.allExamsList = new ExamList(response.data.data)
-          this.pagination.exam = response.data.meta
+          this.allExamsList = response.examList
+          this.pagination.exam = response.meta
           this.allExamsList.loading = false
           this.examPagination++
         }).catch(() => {
@@ -235,19 +228,20 @@ export default defineComponent({
     },
     getMyExams (title, start, end, page) {
       this.myExams.loading = true
-      this.$axios.get(API_ADDRESS.exam.userExamList.myExams(),
+      this.$apiGateway.exam.myExams(
         {
-          params:
-            {
-              ...(title && { title }),
-              ...(start && { created_at_from: start }),
-              ...(end && { created_at_till: end }),
-              ...(page && { page })
-            }
-        })
+          designerType: 'personal',
+          params: {
+            ...(title && { title }),
+            ...(start && { created_at_from: start }),
+            ...(end && { created_at_till: end }),
+            ...(page && { page })
+          }
+        }
+      )
         .then((response) => {
-          this.myExams = new ExamList(response.data.data)
-          this.pagination.myExam = response.data.meta
+          this.myExams = response.examList
+          this.pagination.myExam = response.meta
           this.myExams.loading = false
           this.myExamPagination++
         }).catch(() => {
@@ -257,9 +251,9 @@ export default defineComponent({
     getUpcomingExams () {
       this.upcomingExams.loading = true
       const today = moment(new Date(Time.now())).format('YYYY-MM-DD')
-      this.$axios.get(API_ADDRESS.exam.userExamList.upcomingExams(today))
-        .then((response) => {
-          this.upcomingExams = new ExamList(response.data.data)
+      this.$apiGateway.exam.upcomingExams(today)
+        .then((examList) => {
+          this.upcomingExams = examList
           this.upcomingExams.loading = false
         }).catch(() => {
           this.allExamsList.loading = false
