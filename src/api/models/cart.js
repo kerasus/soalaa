@@ -1,10 +1,10 @@
 import { Cart } from 'src/models/Cart'
-import { appApiInstance } from 'src/boot/axios'
+import { alaaApiInstance } from 'src/boot/axios'
 import APIRepository from '../classes/APIRepository'
 
 export default class CartAPI extends APIRepository {
   constructor() {
-    super('cart', appApiInstance)
+    super('cart', alaaApiInstance)
     this.seller = 2 // 1: Alaa - 2: Soala
     this.APIAdresses = {
       addToCart: '/orderproduct',
