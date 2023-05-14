@@ -1,4 +1,4 @@
-import { apiV2 } from 'src/boot/axios'
+import { appApiInstance } from 'src/boot/axios'
 import { SetList } from 'src/models/Set.js'
 import { Content, ContentList } from 'src/models/Content.js'
 import APIRepository from '../classes/APIRepository.js'
@@ -7,7 +7,7 @@ import { ProductCategoryList } from 'src/models/ProductCategory'
 
 export default class ProductAPI extends APIRepository {
   constructor() {
-    super('product', apiV2)
+    super('product', appApiInstance)
     this.APIAdresses = {
       base: '/product',
       bulk: (productIds) => {
