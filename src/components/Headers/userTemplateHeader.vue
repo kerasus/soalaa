@@ -261,6 +261,7 @@ export default {
   mixins: [UserLayoutHeader, mixinPageBuilder],
   data () {
     return {
+      isUserLogin: false,
       selected: '',
       headerItems: [
         {
@@ -344,9 +345,6 @@ export default {
     pageBuilderEditable() {
       return this.$store.getters['PageBuilder/pageBuilderEditable']
     },
-    isUserLogin() {
-      return this.$store.getters['Auth/isUserLogin']
-    },
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']
     }
@@ -359,10 +357,14 @@ export default {
     }
   },
   mounted() {
+    this.loadAuthData()
     this.updateLayout()
     this.addAdminItem()
   },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.isUserLogin = this.$store.getters['Auth/isUserLogin']
+    },
     copyPageBuilderConfigs () {
       copyToClipboard(JSON.stringify(this.currenSections))
         .then(() => {

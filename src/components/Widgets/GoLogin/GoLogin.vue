@@ -32,9 +32,17 @@ export default {
       }
     }
   },
-  computed: {
-    isUserLogin() {
-      return this.$store.getters['Auth/isUserLogin']
+  data: () => {
+    return {
+      isUserLogin: false
+    }
+  },
+  mounted () {
+    this.loadAuthData()
+  },
+  methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.isUserLogin = this.$store.getters['Auth/isUserLogin']
     }
   }
 }
