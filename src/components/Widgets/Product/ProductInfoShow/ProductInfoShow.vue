@@ -71,9 +71,9 @@
 <script>
 import { Product } from 'src/models/Product.js'
 import { mixinWidget, mixinPrefetchServerData } from 'src/mixin/Mixins.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import Bookmark from 'components/Bookmark.vue'
 import ShareNetwork from 'src/components/ShareNetwork.vue'
-import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'ProductInfoShow',
@@ -219,8 +219,7 @@ export default {
     handleProductBookmark () {
       this.bookmarkLoading = true
       if (this.product.is_favored) {
-        this.$alaaApiInstance.post(API_ADDRESS.product.unfavored(this.product.id))
-        // this.$apiGateway.product.unfavored(this.product.id)
+        this.$apiGateway.product.unfavored(this.product.id)
           .then(() => {
             this.product.is_favored = !this.product.is_favored
             this.bookmarkLoading = false
@@ -230,8 +229,7 @@ export default {
           })
         return
       }
-      this.$alaaApiInstance.post(API_ADDRESS.product.favored(this.product.id))
-      // this.$apiGateway.product.favored(this.product.id)
+      this.$apiGateway.product.favored(this.product.id)
         .then(() => {
           this.product.is_favored = !this.product.is_favored
           this.bookmarkLoading = false
@@ -244,8 +242,8 @@ export default {
       this.product.loading = true
       return this.getProduct()
     },
-    prefetchServerDataPromiseThen (response) {
-      this.product = new Product(response.data.data)
+    prefetchServerDataPromiseThen (data) {
+      this.product = data
       this.isFavored = this.product.is_favored_2
       this.setInformation()
       this.product.loading = false
@@ -254,29 +252,8 @@ export default {
       this.product.loading = false
     },
 
-    getProductId() {
-      if (this.options.productId) {
-        return this.options.productId
-      }
-      if (this.options.urlParam && this.$route.params[this.options.urlParam]) {
-        return this.$route.params[this.options.urlParam]
-      }
-      if (this.$route.params.id) {
-        return this.$route.params.id
-      }
-      return null
-    },
-    loadProduct() {
-      const productId = this.getProductId()
-      if (!productId) {
-        return
-      }
-
-      this.getProduct(productId)
-    },
     getProduct() {
-      return this.$alaaApiInstance.get(API_ADDRESS.product.show.base + '/' + this.productId)
-      // return APIGateway.product.show(this.productId)
+      return APIGateway.product.show(this.productId)
     },
 
     setInformation() {
