@@ -1,15 +1,15 @@
-import { apiV2 } from 'src/boot/axios.js'
+import { appApiInstance } from 'src/boot/axios.js'
 import { User } from 'src/models/User.js'
 import { ProductList } from 'src/models/Product.js'
 import { CartItemList } from 'src/models/CartItem.js'
 import APIRepository from '../classes/APIRepository'
-import { FavoredList } from 'src/models/Favored'
-import { BankAccountsList } from 'src/models/BankAccounts'
-import { EventResult } from 'src/models/EventResult'
+// import { FavoredList } from 'src/models/Favored'
+// import { BankAccountsList } from 'src/models/BankAccounts'
+// import { EventResult } from 'src/models/EventResult'
 
 export default class UserAPI extends APIRepository {
   constructor() {
-    super('user', apiV2, '/user', new User())
+    super('user', appApiInstance, '/user', new User())
     this.APIAdresses = {
       base: '/user',
       favored: '/user/favored',
@@ -29,7 +29,14 @@ export default class UserAPI extends APIRepository {
       resendGuest: '/mobile/resendGuest',
       getUserRoleAndPermission: '/getUserRoleAndPermission',
       verifyMoshavereh: '/mobile/verifyMoshavereh',
-      newsletter: '/newsletter'
+      newsletter: '/newsletter',
+      subscription: {
+        landing: '/subscribe/landing',
+        list: '/subscribe/user',
+        last: '/subscribe/user/last',
+        register: (userId) => `/subscribe/user/${userId}`
+      },
+      statistics: '/user/dashboard/statistics'
     }
     this.CacheList = {
       base: this.name + this.APIAdresses.base,
@@ -47,7 +54,12 @@ export default class UserAPI extends APIRepository {
       createEventResult: this.name + this.APIAdresses.createEventResult,
       baseAdmin: this.name + this.APIAdresses.baseAdmin,
       nationalCard: this.name + this.APIAdresses.nationalCard,
-      getUserRoleAndPermission: this.name + this.APIAdresses.getUserRoleAndPermission
+      getUserRoleAndPermission: this.name + this.APIAdresses.getUserRoleAndPermission,
+      subscriptionLanding: this.name + this.APIAdresses.subscription.landing,
+      subscriptionList: this.name + this.APIAdresses.subscription.list,
+      subscriptionLast: this.name + this.APIAdresses.subscription.last,
+      subscriptionRegister: (userId) => this.name + this.APIAdresses.subscription.register(userId),
+      statistics: this.name + this.APIAdresses.statistics
     }
     this.restUrl = (id) => this.APIAdresses.base + '/' + id
     /* Setting the callback functions for the CRUD operations. */
@@ -94,20 +106,20 @@ export default class UserAPI extends APIRepository {
     })
   }
 
-  getBankAccounts() {
-    return this.sendRequest({
-      apiMethod: 'get',
-      api: this.api,
-      request: this.APIAdresses.bankAccounts,
-      cacheKey: this.CacheList.bankAccounts,
-      resolveCallback: (response) => {
-        return new BankAccountsList(response.data)
-      },
-      rejectCallback: (error) => {
-        return error
-      }
-    })
-  }
+  // getBankAccounts() {
+  //   return this.sendRequest({
+  //     apiMethod: 'get',
+  //     api: this.api,
+  //     request: this.APIAdresses.bankAccounts,
+  //     cacheKey: this.CacheList.bankAccounts,
+  //     resolveCallback: (response) => {
+  //       return new BankAccountsList(response.data)
+  //     },
+  //     rejectCallback: (error) => {
+  //       return error
+  //     }
+  //   })
+  // }
 
   mobileResend(data = {}) {
     return this.sendRequest({
@@ -236,21 +248,21 @@ export default class UserAPI extends APIRepository {
     })
   }
 
-  eventResult(data = {}) {
-    return this.sendRequest({
-      apiMethod: 'get',
-      api: this.api,
-      request: this.APIAdresses.eventResult,
-      cacheKey: this.CacheList.eventResult,
-      ...(data.cache && { cache: data.cache }),
-      resolveCallback: (response) => {
-        return new EventResult(response.data.data)
-      },
-      rejectCallback: (error) => {
-        return error
-      }
-    })
-  }
+  // eventResult(data = {}) {
+  //   return this.sendRequest({
+  //     apiMethod: 'get',
+  //     api: this.api,
+  //     request: this.APIAdresses.eventResult,
+  //     cacheKey: this.CacheList.eventResult,
+  //     ...(data.cache && { cache: data.cache }),
+  //     resolveCallback: (response) => {
+  //       return new EventResult(response.data.data)
+  //     },
+  //     rejectCallback: (error) => {
+  //       return error
+  //     }
+  //   })
+  // }
 
   createEventResult(data = {}, cache = 100) {
     return this.sendRequest({
@@ -357,36 +369,36 @@ export default class UserAPI extends APIRepository {
     })
   }
 
-  getFavored(data = {}, cache) {
-    return this.sendRequest({
-      apiMethod: 'get',
-      api: this.api,
-      request: this.APIAdresses.favored,
-      cacheKey: this.CacheList.favored + JSON.stringify(data),
-      ...(cache !== undefined && { cache }),
-      data: this.getNormalizedSendData({
-        page: 1 // Number
-      }, data),
-      resolveCallback: (response) => {
-        return {
-          favoredList: new FavoredList(response.data.data),
-          paginate: response.data.meta
-          // {
-          //   current_page: 1,
-          //   from: 1,
-          //   last_page: 1,
-          //   path: '...',
-          //   per_page: 15,
-          //   to: 10,
-          //   total: 10
-          // }
-        }
-      },
-      rejectCallback: (error) => {
-        return error
-      }
-    })
-  }
+  // getFavored(data = {}, cache) {
+  //   return this.sendRequest({
+  //     apiMethod: 'get',
+  //     api: this.api,
+  //     request: this.APIAdresses.favored,
+  //     cacheKey: this.CacheList.favored + JSON.stringify(data),
+  //     ...(cache !== undefined && { cache }),
+  //     data: this.getNormalizedSendData({
+  //       page: 1 // Number
+  //     }, data),
+  //     resolveCallback: (response) => {
+  //       return {
+  //         favoredList: new FavoredList(response.data.data),
+  //         paginate: response.data.meta
+  //         // {
+  //         //   current_page: 1,
+  //         //   from: 1,
+  //         //   last_page: 1,
+  //         //   path: '...',
+  //         //   per_page: 15,
+  //         //   to: 10,
+  //         //   total: 10
+  //         // }
+  //       }
+  //     },
+  //     rejectCallback: (error) => {
+  //       return error
+  //     }
+  //   })
+  // }
 
   resendGuest(data) {
     return this.sendRequest({
@@ -437,6 +449,68 @@ export default class UserAPI extends APIRepository {
       }, data),
       resolveCallback: (response) => {
         return response.data.message
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  subscriptionLast(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.subscription.last,
+      cacheKey: this.CacheList.subscriptionLast,
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return response.data.data.subscribe
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  subscriptionList(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.subscription.list,
+      cacheKey: this.CacheList.subscriptionList,
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return response.data.data
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  subscriptionRegister(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.subscription.register(data),
+      resolveCallback: (response) => {
+        return response
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  statistics(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.statistics,
+      cacheKey: this.CacheList.statistics,
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return response.data.data
       },
       rejectCallback: (error) => {
         return error

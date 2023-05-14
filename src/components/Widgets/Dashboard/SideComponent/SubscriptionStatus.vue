@@ -37,8 +37,10 @@
           <div class="subscription-status-test-tab-title">
             محدودیت ساخت آزمون
           </div>
-          <highcharts class="flex flex-center"
-                      :options="chartOptionsExam" />
+          <q-no-ssr>
+            <highcharts class="flex flex-center"
+                        :options="chartOptionsExam" />
+          </q-no-ssr>
           <div v-if="subscribe.abilities_n.exam !== -1"
                class="subscription-status-test-tab-info">
             <span><q-icon name="circle"

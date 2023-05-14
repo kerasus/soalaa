@@ -204,7 +204,6 @@
 <script>
 import { defineComponent } from 'vue'
 import Time from 'src/plugins/time.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import ShamsiDate from 'src/plugins/ShamsiDate.js'
 import { Exam, ExamList } from 'src/models/Exam.js'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
@@ -459,10 +458,10 @@ export default defineComponent({
     //     })
     // },
     registerExam (exam) {
-      this.$axios.post(API_ADDRESS.exam.registerExam, { exam_id: exam.id })
-        .then((response) => {
-          if (response.data.data.redirect_url) {
-            window.location.href = response.data.data.redirect_url
+      this.$apiGateway.exam.registerExam({ exam_id: exam.id })
+        .then((redirectUrl) => {
+          if (redirectUrl) {
+            window.location.href = redirectUrl
           } else {
             this.$q.notify({
               type: 'positive',
