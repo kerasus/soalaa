@@ -29,7 +29,6 @@ export const APIGateway = {
   // user: new UserAPI(),
   cart: new CartAPI(),
   profile: new ProfileAPI(),
-  // tree: new TreeAPI(),
   tree: new TreeAPI(),
   // pages: new PagesAPI(),
   // plan: new PlanAPI(),
