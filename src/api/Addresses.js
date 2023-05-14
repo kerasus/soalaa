@@ -417,7 +417,7 @@ const API_ADDRESS = {
   product: {
     landing: {
       sea: {
-        all: authServer + '/product/soalaa/all'
+        all: '/product/soalaa/all'
       }
     },
     gifts: (id) => authServer + '/gift-products/' + id,
@@ -430,7 +430,7 @@ const API_ADDRESS = {
         idParams.push('ids' + '[' + productIndex + ']=' + productId)
       })
       const queryParams = idParams.join('&')
-      return authServer + '/product?' + queryParams
+      return '/product?' + queryParams
     },
 
     edit: {

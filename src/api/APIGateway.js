@@ -1,6 +1,7 @@
 // import SetAPI from 'src/api/models/set.js'
 import CartAPI from 'src/api/models/cart.js'
 import AuthAPI from 'src/api/models/Auth.js'
+import ProfileAPI from 'src/api/models/profile.js'
 // import UserAPI from 'src/api/models/user.js'
 import TreeAPI from 'src/api/models/tree.js'
 // import PlanAPI from 'src/api/models/Plan.js'
@@ -27,6 +28,7 @@ export const APIGateway = {
   auth: new AuthAPI(),
   // user: new UserAPI(),
   cart: new CartAPI(),
+  profile: new ProfileAPI(),
   tree: new TreeAPI(),
   // pages: new PagesAPI(),
   // plan: new PlanAPI(),
