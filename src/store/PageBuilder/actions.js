@@ -38,11 +38,10 @@ const actions = {
   getPageWidget: (context, value) => {
     return new Promise((resolve, reject) => {
       APIGateway.pageSetting.get(value)
-        .then(r => {
-          const parsedData = JSON.parse(r.data.data.value)
-          context.commit('updateCurrentSections', parsedData)
-          context.commit('updateInitialSections', parsedData)
-          resolve(r)
+        .then(pageData => {
+          context.commit('updateCurrentSections', pageData.value.sections)
+          context.commit('updateInitialSections', pageData.value.sections)
+          resolve(pageData)
         })
         .catch(e => {
           reject(e)
