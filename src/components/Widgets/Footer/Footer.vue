@@ -190,7 +190,7 @@
               </div>
               <div class="footer-logo-item item-alaa">
                 <a href="https://alaatv.com">
-                  <q-img src="https://nodes.alaatv.com/upload/landing/logo.png"
+                  <q-img src="https://nodes.alaatv.com/upload/alaa-logo-footer.png"
                          alt="آلاء" />
                 </a>
               </div>
