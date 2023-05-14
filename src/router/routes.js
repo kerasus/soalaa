@@ -248,7 +248,11 @@ const routes = [
 
             path: '',
             name: 'User.First.Layout',
-            component: () => import('layouts/UserPanelLayouts/UserPanelLayout.vue'),
+            layoutConfig: {
+              layoutLeftDrawer: true,
+              layoutLeftDrawerVisible: false
+            },
+            component: () => import('src/layouts/UserPanelLayouts/UserPanelLayout.vue'),
             children: [
               {
                 path: 'profile',
@@ -655,6 +659,13 @@ const routes = [
             path: 'knowledge-tree',
             component: () => import('pages/Admin/KnowledgeTree/index.vue'),
             breadcrumbs: { title: 'درخت دانش' }
+          },
+
+          {
+            name: 'Admin.SubjectTree.tree',
+            path: 'subject-tree',
+            component: () => import('pages/Admin/SubjectTree/index.vue'),
+            breadcrumbs: { title: 'درخت تگ موضوعی' }
           },
 
           {
