@@ -180,7 +180,7 @@ export default {
         const dataURL = canvas.toDataURL(outputFormat)
         callback(dataURL)
       }
-      if (img.src.includes('?')) {
+      if (src.includes('?')) {
         img.src = src
       } else {
         img.src = src + '?test=123'
