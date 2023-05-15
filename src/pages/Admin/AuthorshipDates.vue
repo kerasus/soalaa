@@ -58,10 +58,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: APIGateway.entityCrud.APIAdresses.authorshipDates.show,
-            edit: APIGateway.entityCrud.APIAdresses.authorshipDates.edit,
-            create: APIGateway.entityCrud.APIAdresses.authorshipDates.create,
-            index: APIGateway.entityCrud.APIAdresses.authorshipDates.index
+            show: APIGateway.option.APIAdresses.base,
+            edit: APIGateway.option.APIAdresses.base,
+            create: APIGateway.option.APIAdresses.base,
+            index: APIGateway.option.APIAdresses.base
           },
           title: {
             show: 'اطلاعات تاریخ تالیف',

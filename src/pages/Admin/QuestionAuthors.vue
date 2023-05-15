@@ -59,10 +59,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: APIGateway.entityCrud.APIAdresses.questionAuthors.show,
-            edit: APIGateway.entityCrud.APIAdresses.questionAuthors.edit,
-            create: APIGateway.entityCrud.APIAdresses.questionAuthors.create,
-            index: APIGateway.entityCrud.APIAdresses.questionAuthors.index
+            show: APIGateway.option.APIAdresses.base,
+            edit: APIGateway.option.APIAdresses.base,
+            create: APIGateway.option.APIAdresses.base,
+            index: APIGateway.option.APIAdresses.base
           },
           title: {
             show: 'اطلاعات مرجع',

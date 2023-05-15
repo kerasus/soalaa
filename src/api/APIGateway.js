@@ -24,7 +24,7 @@ import ExamAPI from 'src/api/models/exam.js'
 // import ReferralCodeAPI from 'src/api/models/ReferralCode.js'
 // import ContentTimepointAPI from 'src/api/models/ContentTimepoint.js'
 // import LiveDescriptionAPI from 'src/api/models/LiveDescription.js'
-import EntityCrudAPI from 'src/api/models/EntityCrud.js'
+import Option from 'src/api/models/Option.js'
 
 /* Exporting the APIGateway object. */
 export const APIGateway = {
@@ -53,5 +53,5 @@ export const APIGateway = {
   // referralCode: new ReferralCodeAPI(),
   // liveDescription: new LiveDescriptionAPI(),
   // contentTimepoint: new ContentTimepointAPI()
-  entityCrud: new EntityCrudAPI()
+  option: new Option()
 }

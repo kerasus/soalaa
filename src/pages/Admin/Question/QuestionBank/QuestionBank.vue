@@ -102,6 +102,7 @@ import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
 import QuestionFilter from 'src/components/Question/QuestionBank/QuestionFilter.vue'
 import QuestionToolBar from 'src/components/Question/QuestionBank/QuestionToolBar.vue'
 import QuestionBankHeader from 'src/components/Question/QuestionBank/components/QuestionBankHeader.vue'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'QuestionBank',
@@ -353,9 +354,9 @@ export default {
         })
     },
     getFilterOptions() {
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
-          response.data.data.forEach(option => {
+      APIGateway.option.getFilterOptions()
+        .then((filterOptions) => {
+          filterOptions.forEach(option => {
             if (option.type === 'reference_type') {
               this.filterQuestions.reference_type.push(option)
             } else if (option.type === 'year_type') {
@@ -379,26 +380,26 @@ export default {
       })
     },
     getLevelsFilterData() {
-      this.$axios.get(API_ADDRESS.question.levels)
-        .then(response => {
-          this.filterQuestions.levels = response.data.data
+      APIGateway.option.getLevels()
+        .then(levels => {
+          this.filterQuestions.levels = levels
           this.addTypeToFilter('level_type')
         })
         .catch()
     },
     getQuestionStatuses () {
-      this.$axios.get(API_ADDRESS.question.status.base)
-        .then(response => {
-          this.filterQuestions.statuses = response.data.data
+      APIGateway.option.getQuestionStatuses()
+        .then(statuses => {
+          this.filterQuestions.statuses = statuses
           this.addTypeToFilter('statuses')
         })
     },
     getQuestionReportStatuses() {
       this.loadings.reportStatusLoading = true
-      this.$axios.get(API_ADDRESS.question.reportStatuses)
-        .then(response => {
+      APIGateway.option.getQuestionReportStatuses()
+        .then(reportStatuses => {
           this.loadings.reportStatusLoading = false
-          this.filterQuestions.report_status = response.data.data
+          this.filterQuestions.report_status = reportStatuses
           this.addTypeToFilter('report_status')
         })
         .catch(() => {

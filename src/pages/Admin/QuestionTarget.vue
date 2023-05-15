@@ -58,10 +58,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: APIGateway.entityCrud.APIAdresses.questionTarget.show,
-            edit: APIGateway.entityCrud.APIAdresses.questionTarget.edit,
-            create: APIGateway.entityCrud.APIAdresses.questionTarget.create,
-            index: APIGateway.entityCrud.APIAdresses.questionTarget.index
+            show: APIGateway.option.APIAdresses.base,
+            edit: APIGateway.option.APIAdresses.base,
+            create: APIGateway.option.APIAdresses.base,
+            index: APIGateway.option.APIAdresses.base
           },
           title: {
             show: 'اطلاعات هدف',

@@ -52,10 +52,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: APIGateway.entityCrud.APIAdresses.questionReport.show,
-            edit: APIGateway.entityCrud.APIAdresses.questionReport.edit,
-            create: APIGateway.entityCrud.APIAdresses.questionReport.create,
-            index: APIGateway.entityCrud.APIAdresses.questionReport.index
+            show: APIGateway.option.APIAdresses.base,
+            edit: APIGateway.option.APIAdresses.base,
+            create: APIGateway.option.APIAdresses.base,
+            index: APIGateway.option.APIAdresses.base
           },
           title: {
             show: 'اطلاعات خطا سوال',
