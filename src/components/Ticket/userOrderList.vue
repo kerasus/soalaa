@@ -9,7 +9,7 @@
   </div>
   <div v-if="loading=== false">
     <!--  ----------------------------  لیست پرداخت شده  ---------------------------------------------------------------        -->
-    <q-expansion-item v-if="this.userOrdersList.map(object => object.inputData.paymentstatus.id).indexOf(3) !== -1"
+    <q-expansion-item v-if="userOrdersList.map(object => object.inputData.paymentstatus.id).indexOf(3) !== -1"
                       group="parentGroup"
                       label="لیست پرداخت شده"
                       default-opened
@@ -30,7 +30,7 @@
                         class="q-mr-sm"
                         size="24px" />
                 <div class="cart-item-info">
-                  {{ this.cartItemLabel(order) }}
+                  {{ cartItemLabel(order) }}
                   <q-btn rounded
                          unelevated
                          class="action-btn"
@@ -119,7 +119,7 @@
       </template>
     </q-expansion-item>
     <!--  ----------------------------  لیست پرداخت نشده  ---------------------------------------------------------------        -->
-    <q-expansion-item v-if="this.userOrdersList.map(object => object.inputData.paymentstatus.id).indexOf(1) !== -1"
+    <q-expansion-item v-if="userOrdersList.map(object => object.inputData.paymentstatus.id).indexOf(1) !== -1"
                       group="parentGroup"
                       label="لیست پرداخت نشده"
                       class="panel-color">
@@ -140,7 +140,7 @@
                         class="q-mr-sm"
                         size="24px" />
                 <div class="cart-item-info">
-                  {{ this.cartItemLabel(order) }}
+                  {{ cartItemLabel(order) }}
                   <q-btn rounded
                          unelevated
                          class="action-btn"
@@ -255,8 +255,6 @@ export default {
       i: 1,
       extendProductArray: []
     }
-  },
-  created () {
   },
   methods: {
     toman (key, suffix) {

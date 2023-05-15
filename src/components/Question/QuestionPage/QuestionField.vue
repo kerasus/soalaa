@@ -6,39 +6,39 @@
            label="اصلاح فرمول سوال"
            class="default-detail-btn"
            @click="setModifiedValue(true)" />
-    <vue-tiptap-katex ref="tiptap"
-                      :loading="loading"
-                      :options="{
-                        bubbleMenu: false,
-                        floatingMenu: false,
-                        poem: true,
-                        reading: true,
-                        persianKeyboard: true,
-                        uploadServer: {
-                          url: getQuestionUploadURL,
-                          headers: {
-                            Authorization: getAuthorizationCode
-                          }
-                        },
-                        persianKeyboard: true,
-                        mathliveOptions: {
-                          locale: 'fa',
-                        }
-                      }"
-                      @update:modelValue="updateValue" />
+    <!--    <vue-tiptap-katex ref="tiptap"-->
+    <!--                      :loading="loading"-->
+    <!--                      :options="{-->
+    <!--                        bubbleMenu: false,-->
+    <!--                        floatingMenu: false,-->
+    <!--                        poem: true,-->
+    <!--                        reading: true,-->
+    <!--                        persianKeyboard: true,-->
+    <!--                        uploadServer: {-->
+    <!--                          url: getQuestionUploadURL,-->
+    <!--                          headers: {-->
+    <!--                            Authorization: getAuthorizationCode-->
+    <!--                          }-->
+    <!--                        },-->
+    <!--                        persianKeyboard: true,-->
+    <!--                        mathliveOptions: {-->
+    <!--                          locale: 'fa',-->
+    <!--                        }-->
+    <!--                      }"-->
+    <!--                      @update:modelValue="updateValue" />-->
   </div>
 </template>
 
 <script>
 import API_ADDRESS from 'src/api/Addresses.js'
 import { Question } from 'src/models/Question.js'
-import VueTiptapKatex from 'vue3-tiptap-katex/src/vue3-tiptap-katex.vue'
+// import VueTiptapKatex from 'vue3-tiptap-katex/src/vue3-tiptap-katex.vue'
 import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap.js'
 
 export default {
   name: 'QuestionField',
   components: {
-    VueTiptapKatex
+    // VueTiptapKatex
   },
   inject: {
     question: {

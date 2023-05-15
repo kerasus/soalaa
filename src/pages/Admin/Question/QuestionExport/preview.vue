@@ -67,24 +67,25 @@
                      class="edit-button"
                      icon="isax:edit"
                      @click="toggleEditMode(choice)" />
-              <vue-katex v-if="!choice.editMode"
-                         :input="choice.title" />
-              <vue-tiptap-katex v-else
-                                v-model="choice.title"
-                                class="vue-tiptap-katex"
-                                :options="{
-                                  bubbleMenu: false,
-                                  floatingMenu: false,
-                                  poem: true,
-                                  reading: true,
-                                  persianKeyboard: true,
-                                  mathliveOptions: { smartFence: false },
-                                  uploadServer: {
-                                    url: imageUrl,
-                                    instantUpload: true,
-                                    headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] }
-                                  }
-                                }" />
+
+              <!--              v-if="!choice.editMode"-->
+              <vue-katex :input="choice.title" />
+              <!--              <vue-tiptap-katex v-else-->
+              <!--                                v-model="choice.title"-->
+              <!--                                class="vue-tiptap-katex"-->
+              <!--                                :options="{-->
+              <!--                                  bubbleMenu: false,-->
+              <!--                                  floatingMenu: false,-->
+              <!--                                  poem: true,-->
+              <!--                                  reading: true,-->
+              <!--                                  persianKeyboard: true,-->
+              <!--                                  mathliveOptions: { smartFence: false },-->
+              <!--                                  uploadServer: {-->
+              <!--                                    url: imageUrl,-->
+              <!--                                    instantUpload: true,-->
+              <!--                                    headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] }-->
+              <!--                                  }-->
+              <!--                                }" />-->
             </div>
           </div>
         </div>
@@ -100,11 +101,14 @@ import VueKatex from 'src/components/VueKatex.vue'
 import { QuestionList } from 'src/models/Question.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 import { mixinAuth, mixinQuiz, mixinDrawer } from 'src/mixin/Mixins.js'
-import VueTiptapKatex from 'vue3-tiptap-katex/src/vue3-tiptap-katex.vue'
+// import VueTiptapKatex from 'vue3-tiptap-katex/src/vue3-tiptap-katex.vue'
 
 export default {
   name: 'QuestionPreview',
-  components: { VueKatex, VueTiptapKatex },
+  components: {
+    VueKatex
+    // VueTiptapKatex
+  },
   mixins: [mixinAuth, mixinQuiz, mixinDrawer],
   data () {
     return {
