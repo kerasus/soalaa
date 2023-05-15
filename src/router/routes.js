@@ -292,7 +292,7 @@ const routes = [
                   //   path: ':id',
                   //   name: 'User.Ticket.Show',
                   //   component: () => import('src/pages/User/Ticket/Show.vue')
-                  // },
+                  // }
                   // {
                   //   path: 'create',
                   //   name: 'User.Ticket.Create',
