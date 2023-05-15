@@ -24,6 +24,9 @@ import ExamAPI from 'src/api/models/exam.js'
 // import ReferralCodeAPI from 'src/api/models/ReferralCode.js'
 // import ContentTimepointAPI from 'src/api/models/ContentTimepoint.js'
 // import LiveDescriptionAPI from 'src/api/models/LiveDescription.js'
+import QuestionCategoryAPI from 'src/api/models/questionCategory.js'
+import QuestionAPI from 'src/api/models/question.js'
+import OptionAPI from 'src/api/models/option.js'
 
 /* Exporting the APIGateway object. */
 export const APIGateway = {
@@ -48,8 +51,11 @@ export const APIGateway = {
   // abrisham: new AbrishamAPI(),
   // attribute: new AttributeAPI(),
   // studyPlan: new StudyPlanAPI(),
-  pageSetting: new PageSettingAPI()
+  pageSetting: new PageSettingAPI(),
   // referralCode: new ReferralCodeAPI(),
   // liveDescription: new LiveDescriptionAPI(),
-  // contentTimepoint: new ContentTimepointAPI()
+  // contentTimepoint: new ContentTimepointAPI(),
+  questionCategory: new QuestionCategoryAPI(),
+  question: new QuestionAPI(),
+  option: new OptionAPI()
 }
