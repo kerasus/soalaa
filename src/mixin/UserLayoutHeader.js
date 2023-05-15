@@ -54,10 +54,10 @@ const UserLayoutHeader = {
     }
   },
   mounted () {
-    this.loadAuthData()
+    this.loadUserData()
   },
   methods: {
-    loadAuthData () { // prevent Hydration node mismatch
+    loadUserData () { // prevent Hydration node mismatch
       this.user = this.$store.getters['Auth/user']
     }
   }

@@ -22,22 +22,7 @@
         <div v-for="pamphlet in pamphlets"
              :key="pamphlet.id"
              class="pamphlet-image">
-          <!-- <FsLightbox
-            :toggler="toggler"
-            :sources="[
-              pamphlet.photo
-            ]"
-          /> -->
           {{ pamphlet }}
-          <!-- <vue-picture-swipe :items="[
-            {
-              src: pamphlet.photo,
-              thumbnail: pamphlet.photo,
-              w:600,
-              h: 400,
-              title: pamphlet.title
-            }
-          ]"></vue-picture-swipe> -->
         </div>
       </div>
     </div>
@@ -47,22 +32,20 @@
 <script>
 import { dragscroll } from 'vue-dragscroll'
 import { Product } from 'src/models/Product.js'
-import { mixinWidget } from 'src/mixin/Mixins.js'
+import { mixinPrefetchServerData, mixinWidget } from 'src/mixin/Mixins.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { ContentList } from 'src/models/Content.js'
-import ContentItem from 'src/components/Widgets/ContentItem/ContentItem.vue'
-import API_ADDRESS from 'src/api/Addresses'
-// import FsLightbox from 'fslightbox-vue'
+import ContentItem from 'components/Widgets/ContentItem/ContentItem.vue'
 
 export default {
   name: 'productDemos',
   components: {
     ContentItem
-    // FsLightbox
   },
   directives: {
     dragscroll
   },
-  mixins: [mixinWidget],
+  mixins: [mixinWidget, mixinPrefetchServerData],
   props: {
     options: {
       type: Object,
@@ -75,21 +58,11 @@ export default {
     return {
       contents: new ContentList(),
       pamphlets: [],
-      toggler: false
+      toggler: false,
+      product: new Product()
     }
   },
-  serverPrefetch () {
-    return this.loadProduct()
-  },
   computed: {
-    product: {
-      get () {
-        return new Product(this.$store.getters['Widgets/data']('ProductIntroduction'))
-      },
-      set (newData) {
-        this.$store.dispatch('Widgets/updateData', { name: 'ProductIntroduction', data: newData })
-      }
-    },
     productId () {
       if (typeof this.options.productId !== 'undefined' && this.options.productId !== null) {
         return this.options.productId
@@ -104,26 +77,35 @@ export default {
     }
   },
   methods: {
-    loadProduct() {
-      this.getProduct()
+    prefetchServerDataPromise () {
+      this.product.loading = true
+      return this.getProduct()
+    },
+    prefetchServerDataPromiseThen (data) {
+      this.product = data
       this.getSampleContents()
+      this.product.loading = false
+    },
+    prefetchServerDataPromiseCatch () {
+      this.product.loading = false
     },
     getProduct() {
-      return this.$alaaApiInstance.get(API_ADDRESS.product.show.base + '/' + this.productId)
-      // return APIGateway.product.show(this.productId)
-        .then(response => {
-          const product = new Product(response.data.data)
-          this.pamphlets = product.sample_photos
+      if (this.options.product) {
+        return new Promise(resolve => {
+          resolve(new Product(this.options.product))
         })
-        .catch(() => {
-          this.product.loading = false
+      } else if (!this.productId) {
+        return new Promise((resolve) => {
+          resolve()
         })
+      }
+      this.product.loading = true
+      return this.$apiGateway.product.show(this.productId)
     },
     getSampleContents() {
-      return this.$alaaApiInstance.get(API_ADDRESS.product.sampleContent(this.productId))
-      // return APIGateway.product.sampleContent(this.productId)
-        .then(response => {
-          this.contents = new ContentList(response.data.data)
+      return APIGateway.product.sampleContent(this.productId)
+        .then(contentList => {
+          this.contents = contentList
         })
         .catch(() => {
 
