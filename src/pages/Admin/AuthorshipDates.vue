@@ -4,6 +4,7 @@
     v-model:default-inputs="defaultInputs"
     v-model:index-inputs="indexInputs"
     v-model:create-inputs="createInputs"
+    v-model:edit-inputs="editInputs"
     v-bind="allProps"
   >
     <!--    {inputData, showConfirmRemoveDialog}-->
@@ -134,7 +135,10 @@ export default {
         { type: 'hidden', name: 'type', value: 'year_type', label: '', col: 'col-12' },
         { type: 'input', name: 'value', label: 'تاریخ تالیف', col: 'col-md-3', placeholder: ' ', filled: true }
       ],
-      editInputs: [],
+      editInputs: [
+        { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', col: 'col-md-2', placeholder: ' ', filled: true }
+      ],
       showInputs: [],
       indexInputs: [
         { type: 'hidden' }

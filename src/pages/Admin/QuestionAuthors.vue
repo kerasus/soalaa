@@ -140,7 +140,6 @@ export default {
       editInputs: [
         { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true },
         { type: 'input', name: 'order', label: 'ترتیب نمایش', col: 'col-md-2', placeholder: ' ', filled: true },
-        { type: 'select', name: 'sort_by', label: 'نوع نمایش فیلترها', col: 'col-md-2', placeholder: ' ', filled: true, options: ['ASC', 'DESC'] },
         { type: 'file', name: 'image', label: 'تصویر', col: 'col-md-3', placeholder: ' ', filled: true }
       ],
       showInputs: [],
