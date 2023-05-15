@@ -6,7 +6,7 @@
              class="row">
           <div class="col col-12 proceeds-table">
             <div>
-              تخمین رتبه براساس نتایج کنکور سراسری بزودی اضافه خواهد شد
+              تخمین رتبه براساس نتایج کنکور سراسری
             </div>
             <q-btn class="full-width"
                    label="تخمین رتبه"
@@ -22,6 +22,7 @@
                 <br>
                 <br>
                 <q-table
+                  :key="tableKey"
                   :rows="takhminReport.sub_category"
                   :columns="columns1"
                   row-key="name"
@@ -102,7 +103,7 @@
             <div class="row default-result-table default-resultTable-row">
               <div class="col default-resultTable-col">
                 <span class="tableTitle col-12">
-                  نتیجه در زیر گروه ها
+                  انتخاب کنکور
                 </span>
                 <br>
                 <br>
@@ -141,6 +142,7 @@ export default {
   data () {
     return {
       name: '',
+      tableKey: 0,
       numberRule: v => {
         if (!isNaN(v) && v !== ' ' && v !== '') return true
         return 'مقدار وارد شده عدد نیست.'
@@ -179,14 +181,6 @@ export default {
         { name: 'rank_country', label: 'رتبه در کشور', field: row => row.rank_country, align: 'center', sortable: false },
         { name: 'taraaz', label: ' تراز', field: row => row.taraaz, align: 'center', sortable: true }
       ],
-      columns2: [
-        { name: 'title', label: 'زیر گروه', field: row => row.title, align: 'center', sortable: true },
-        { name: 'percent', label: 'درصد خام', field: row => row.percent, align: 'center', sortable: true },
-        { name: 'taraaz', label: ' تراز', field: row => row.taraaz, align: 'center', sortable: true },
-        { name: 'rank_city', label: 'رتبه شهر', field: row => row.rank_city, align: 'center', sortable: true },
-        { name: 'rank_province', label: 'رتبه استان', field: row => row.rank_province, align: 'center', sortable: true },
-        { name: 'rank_country', label: 'رتبه کشور', field: row => row.rank_country, align: 'center', sortable: true }
-      ],
       takhminRotbeLoading: false,
       takhminRotbeExam: '',
       takhminRotbeExamList: []
@@ -195,24 +189,29 @@ export default {
   created () {},
   mounted () {
     this.setTakhminRotbeExamList()
-    this.prepareTakhmineRotbeReport(true)
+    this.prepareTakhmineRotbeReport(this.report, true)
   },
   methods: {
+    logger(data) {
+      console.log(data)
+    },
     onTakhminRotbeExamChanged (id) {
       const takhminRotbeExam = this.takhminRotbeExamList.find(item => item.id === id)
       console.log(takhminRotbeExam)
-    //  sub_category
-    // :
-    //   "ریاضی تجربی"
-    //   sub_category_id
-    //     :
-    //     "60b7875428f350277f04c5e8"
+      const report = this.report
+      report.sub_category = takhminRotbeExam.sub_category.map(item => {
+        return {
+          ...item,
+          sub_category: item.title,
+          sub_category_id: item.id
+        }
+      })
+      this.prepareTakhmineRotbeReport(report, true)
     },
     setTakhminRotbeExamList () {
       this.takhminRotbeLoading = true
       this.$axios.get(API_ADDRESS.exam.report.takhminRotbeExamList)
         .then(res => {
-          console.log('res', res)
           this.takhminRotbeExamList = res.data.data
           this.takhminRotbeLoading = false
         })
@@ -294,10 +293,12 @@ export default {
 
       this.prepareTakhmineRotbeReport()
     },
-    prepareTakhmineRotbeReport (resetPercents) {
-      console.log('this.report', this.report)
-      const that = this,
-        takhminReport = JSON.parse(JSON.stringify(this.report))
+    prepareTakhmineRotbeReport (report = {}, resetPercents = false) {
+      const that = this
+      let takhminReport = JSON.parse(JSON.stringify(this.report))
+      if (report?.id) {
+        takhminReport = JSON.parse(JSON.stringify(report))
+      }
       if (!takhminReport.main) {
         takhminReport.main = {}
       }
@@ -325,7 +326,9 @@ export default {
           that.answerCounts[item.sub_category_id] = { correct: 0, incorrect: 0, totalQuestions: item.total_answer }
         })
       }
+      console.log('this.takhminReport', takhminReport)
       this.takhminReport = takhminReport
+      this.tableKey++
     },
     validateSendData () {
       let status = true
@@ -356,21 +359,21 @@ export default {
       if (!this.validateSendData()) {
         return
       }
-
+      debugger
       const that = this
       const keys = Object.keys(this.percents)
       const sentPercents = []
       for (let i = 0; i < keys.length; i++) {
         sentPercents.push({
           percent: parseFloat(this.percents[keys[i]]),
-          sub_category_id: keys[i]
+          subcategoryId: keys[i]
         })
       }
-      this.$axios.post(API_ADDRESS.exam.takhminRotbe, {
-        exam_user_id: that.takhminReport.exam_user.id,
+      this.$axios.post(API_ADDRESS.exam.konkurTakhminRotbe(this.takhminRotbeExam), {
         percents: sentPercents
       })
         .then(response => {
+          debugger
           that.takhminReport.main = response.data.main
           that.takhminReport.sub_category = response.data.sub_category
           that.takhminReport.zirgorooh = response.data.zirgorooh

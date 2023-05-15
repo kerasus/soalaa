@@ -110,6 +110,9 @@ const API_ADDRESS = {
     sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
+    konkurTakhminRotbe (konkurId) {
+      return lumenServer + '/exam-report/rank/' + konkurId
+    },
     analysisVideo: lumenServer + '/exam-question/attach/sub-category',
     userExamList: {
       base () {
