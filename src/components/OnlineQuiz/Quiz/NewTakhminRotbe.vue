@@ -1,125 +1,100 @@
 <template>
   <div class="takhmin-rotbe">
-    <div style="background-color: rgb(244, 244, 244)">
-      <div class="d-flex justify-center wrapper">
-        <div v-if="report"
-             class="row">
-          <div class="col col-12 proceeds-table">
-            <div>
-              تخمین رتبه براساس نتایج کنکور سراسری
-            </div>
-            <q-btn class="full-width"
-                   label="تخمین رتبه"
-                   style="background-color: #00bcd4; color: #fffaee"
-                   @click="sendData" />
+    <div class="d-flex justify-center wrapper">
+      <div v-if="report"
+           class="row">
+        <div class="col col-12 proceeds-table">
+          <div class="q-pa-md">
+            تخمین رتبه براساس نتایج کنکور سراسری
           </div>
-          <div class="col col-md-7 col-12 default-result-table">
-            <div class="row default-resultTable-row">
-              <div class="col default-resultTable-col">
-                <span class="tableTitle col-12">
-                  جدول عملکرد دروس
-                </span>
-                <br>
-                <br>
-                <q-table
-                  :key="tableKey"
-                  :rows="takhminReport.sub_category"
-                  :columns="columns1"
-                  row-key="name"
-                  color="amber"
-                  hide-bottom
-                  flat
-                  :rows-per-page-options="[0]"
-                >
-                  <template v-slot:body="props">
-                    <q-tr :props="props">
-                      <q-td key="sub_category"
-                            :props="props">
-                        {{ props.row.sub_category }}
-                      </q-td>
-                      <q-td key="right_answer"
-                            :props="props">
-                        <!--                    {{ props.row.right_answer }}-->
-                        <q-input
-                          v-model="answerCounts[props.row.sub_category_id].correct"
-                          type="number"
-                          debounce="500"
-                          :rules="[numberRule]"
-                          dense
-                          autofocus
-                          @change="calcPercent(props.row.sub_category_id, $event.target)"
-                        />
-                      </q-td>
-                      <q-td key="wrong_answer"
-                            :props="props">
-                        <!--                    {{ props.row.wrong_answer }}-->
-                        <q-input
-                          v-model="answerCounts[props.row.sub_category_id].incorrect"
-                          type="number"
-                          debounce="500"
-                          :rules="[numberRule]"
-                          dense
-                          autofocus
-                          @change="calcPercent(props.row.sub_category_id, $event.target)"
-                        />
-                      </q-td>
-                      <q-td key="percent"
-                            :props="props">
-                        <!--                    {{ props.row.percent }}-->
-                        <q-input
-                          v-model="percents[props.row.sub_category_id]"
-                          type="number"
-                          :rules="[numberRule, percentRule]"
-                          dense
-                          autofocus
-                          @change="resetAnswerCount(props.row.sub_category_id)"
-                        />
-                      </q-td>
-                      <q-td key="rank_city"
-                            :props="props">
-                        {{ props.row.rank_city }}
-                      </q-td>
-                      <q-td key="rank_province"
-                            :props="props">
-                        {{ props.row.rank_province }}
-                      </q-td>
-                      <q-td key="rank_country"
-                            :props="props">
-                        {{ props.row.rank_country }}
-                      </q-td>
-                      <q-td key="taraaz"
-                            :props="props">
-                        {{ props.row.taraaz }}
-                      </q-td>
-                    </q-tr>
-                  </template>
-                </q-table>
-              </div>
+          <q-btn class="full-width"
+                 label="تخمین رتبه"
+                 color="primary"
+                 @click="sendData" />
+        </div>
+        <div
+          class="col col-md-5 col-12 default-result-table"
+        >
+          <div class="row default-result-table default-resultTable-row">
+            <div class="col default-resultTable-col">
+              <span class="tableTitle col-12 q-pb-lg">
+                انتخاب کنکور
+              </span>
+              <q-select
+                v-model="takhminRotbeExam"
+                option-value="id"
+                option-label="title"
+                :loading="takhminRotbeLoading"
+                :options="takhminRotbeExamList"
+                label-color="grey-8"
+                label="انتخاب نوع آزمون"
+                emit-value
+                map-options
+                @update:model-value="onTakhminRotbeExamChanged"
+              />
             </div>
           </div>
-          <div
-            class="col col-md-5 col-12 default-result-table"
-          >
-            <div class="row default-result-table default-resultTable-row">
-              <div class="col default-resultTable-col">
-                <span class="tableTitle col-12">
-                  انتخاب کنکور
+          <div class="col col-12 row default-resultTable-row">
+            <div class="col default-resultTable-col">
+              <q-card class="default-result-card">
+                <div class="row card-title-section">
+                  <div v-for="(item, index) in ranks"
+                       :key="index"
+                       class="col col-4 text-center">
+                    {{'رتبه ' + item.title}}
+                  </div>
+                </div>
+                <span class="cardContent">
+                  <div class="row">
+                    <div v-for="(item, index) in ranks"
+                         :key="index"
+                         class="col col-4 text-center">
+                      {{item.rank}}
+                    </div>
+                  </div>
                 </span>
-                <br>
-                <br>
-                <q-select
-                  v-model="takhminRotbeExam"
-                  option-value="id"
-                  option-label="title"
-                  :loading="takhminRotbeLoading"
-                  :options="takhminRotbeExamList"
-                  label-color="grey-8"
-                  label="انتخاب نوع آزمون"
-                  emit-value
-                  map-options
-                  @update:model-value="onTakhminRotbeExamChanged"
-                />
-              </div>
+              </q-card>
+            </div>
+          </div>
+        </div>
+        <div class="col col-md-7 col-12 default-result-table">
+          <div class="row default-resultTable-row">
+            <div class="col default-resultTable-col">
+              <span class="tableTitle col-12">
+                جدول عملکرد دروس
+              </span>
+              <br>
+              <br>
+              <q-table
+                :key="tableKey"
+                :rows="takhminReport.sub_category"
+                :columns="columns"
+                row-key="name"
+                color="amber"
+                hide-bottom
+                flat
+                :rows-per-page-options="[0]"
+              >
+                <template v-slot:body="props">
+                  <q-tr :props="props">
+                    <q-td key="sub_category"
+                          :props="props">
+                      {{ props.row.sub_category }}
+                    </q-td>
+                    <q-td key="percent"
+                          :props="props">
+                      <q-input
+                        v-model="percents[props.row.sub_category_id]"
+                        type="number"
+                        :rules="[numberRule, percentRule]"
+                        dense
+                        autofocus
+                        @change="resetAnswerCount(props.row.sub_category_id)"
+                      />
+                    </q-td>
+                  </q-tr>
+                </template>
+              </q-table>
             </div>
           </div>
         </div>
@@ -152,34 +127,31 @@ export default {
         if (!isNaN(parseFloat(v)) && v >= -33.33 && v <= 100) return true
         return 'درصد می بایست عددی در بازه 33.33- درصد تا 100 درصد باشد.'
       },
+      ranks: [
+        {
+          title: 'منطقه 1',
+          rank: 0
+        },
+        {
+          title: 'منطقه 2',
+          rank: 0
+        },
+        {
+          title: 'منطقه 3',
+          rank: 0
+        }
+      ],
       takhminReport: {
         main: {
-          percent: 0,
-          rank_city: 0,
-          rank_country: 0,
-          taraaz: 0
+          percent: 0
         },
         sub_category: [],
         zirgorooh: []
       },
       percents: {},
-      answerCounts: {},
-      columns1: [
-        // {
-        //   name: 'index',
-        //   align: 'center',
-        //   label: 'ردیف',
-        //   field: row => row.index,
-        //   sortable: true
-        // },
+      columns: [
         { name: 'sub_category', label: 'درس', field: row => row.sub_category, align: 'center', sortable: false },
-        { name: 'right_answer', label: ' تعداد درست', field: row => row.right_answer, align: 'center', sortable: true },
-        { name: 'wrong_answer', label: ' تعداد غلط', field: row => row.wrong_answer, align: 'center', sortable: true },
-        { name: 'percent', label: ' درصد', field: row => row.percent, align: 'center', sortable: true },
-        { name: 'rank_city', label: 'رتبه در شهر', field: row => row.rank_city, align: 'center', sortable: false },
-        { name: 'rank_province', label: 'رتبه در استان', field: row => row.rank_province, align: 'center', sortable: false },
-        { name: 'rank_country', label: 'رتبه در کشور', field: row => row.rank_country, align: 'center', sortable: false },
-        { name: 'taraaz', label: ' تراز', field: row => row.taraaz, align: 'center', sortable: true }
+        { name: 'percent', label: ' درصد', field: row => row.percent, align: 'center', sortable: true }
       ],
       takhminRotbeLoading: false,
       takhminRotbeExam: '',
@@ -192,12 +164,8 @@ export default {
     this.prepareTakhmineRotbeReport(this.report, true)
   },
   methods: {
-    logger(data) {
-      console.log(data)
-    },
     onTakhminRotbeExamChanged (id) {
       const takhminRotbeExam = this.takhminRotbeExamList.find(item => item.id === id)
-      console.log(takhminRotbeExam)
       const report = this.report
       report.sub_category = takhminRotbeExam.sub_category.map(item => {
         return {
@@ -207,6 +175,17 @@ export default {
         }
       })
       this.prepareTakhmineRotbeReport(report, true)
+      this.restTable()
+      this.resetRank()
+      this.setInitialPercents(this.takhminReport.sub_category)
+    },
+    restTable () {
+      this.tableKey++
+    },
+    resetRank () {
+      this.ranks.forEach(item => {
+        item.rank = 0
+      })
     },
     setTakhminRotbeExamList () {
       this.takhminRotbeLoading = true
@@ -220,11 +199,6 @@ export default {
         })
     },
     resetAnswerCount (subcategoryId) {
-      for (const subCategoryId in this.answerCounts) {
-        this.answerCounts[subCategoryId].correct = 0
-        this.answerCounts[subCategoryId].incorrect = 0
-      }
-
       if (this.percents[subcategoryId] < -33.33 || this.percents[subcategoryId] > 100) {
         this.$q.notify({
           type: 'negative',
@@ -233,63 +207,6 @@ export default {
         })
         this.percents[subcategoryId] = 0
       }
-
-      this.prepareTakhmineRotbeReport()
-    },
-    calcValidate (subcategoryId, correct, incorrect, totalQuestions) {
-      if (
-        typeof this.answerCounts[subcategoryId].correct === 'undefined' ||
-                    this.answerCounts[subcategoryId].correct === null ||
-                    isNaN(this.answerCounts[subcategoryId].correct) ||
-                    typeof this.answerCounts[subcategoryId].incorrect === 'undefined' ||
-                    this.answerCounts[subcategoryId].incorrect === null ||
-                    isNaN(this.answerCounts[subcategoryId].incorrect)
-      ) {
-        this.percents[subcategoryId] = 0
-        return false
-      }
-
-      if (correct < 0 || incorrect < 0) {
-        this.answerCounts[subcategoryId].correct = 0
-        this.answerCounts[subcategoryId].incorrect = 0
-        this.$q.notify({
-          type: 'negative',
-          message: 'تعداد موارد درست و غلط نباید منفی باشد',
-          position: 'top'
-        })
-        this.percents[subcategoryId] = 0
-        return false
-      }
-
-      if (correct + incorrect > totalQuestions) {
-        this.answerCounts[subcategoryId].correct = 0
-        this.answerCounts[subcategoryId].incorrect = 0
-        this.$q.notify({
-          type: 'negative',
-          message: 'مجموع گزینه های درست و غلط نباید بیشتر از ' + totalQuestions + ' باشد.',
-          position: 'top'
-        })
-        this.percents[subcategoryId] = 0
-        return false
-      }
-
-      return true
-    },
-    calcPercent (subcategoryId) {
-      const correct = parseInt(this.answerCounts[subcategoryId].correct),
-        incorrect = parseInt(this.answerCounts[subcategoryId].incorrect),
-        totalQuestions = parseInt(this.answerCounts[subcategoryId].totalQuestions)
-      if (!this.calcValidate(subcategoryId, correct, incorrect, totalQuestions)) {
-        this.prepareTakhmineRotbeReport()
-        return
-      }
-
-      let calculated = (((correct * 3) - incorrect) / (totalQuestions * 3)) * 100
-      calculated = parseFloat(calculated).toFixed(1)
-      if (isNaN(calculated)) {
-        calculated = 0
-      }
-      this.percents[subcategoryId] = calculated
 
       this.prepareTakhmineRotbeReport()
     },
@@ -303,32 +220,23 @@ export default {
         takhminReport.main = {}
       }
       takhminReport.main.percent = 0
-      takhminReport.main.rank_city = 0
-      takhminReport.main.rank_province = 0
-      takhminReport.main.rank_country = 0
-      takhminReport.main.taraaz = 0
-      takhminReport.sub_category.forEach(item => {
-        item.taraaz = 0
-        item.rank_city = 0
-        item.rank_province = 0
-        item.rank_country = 0
-      })
       takhminReport.zirgorooh.forEach(item => {
-        item.taraaz = 0
-        item.rank_city = 0
-        item.rank_province = 0
-        item.rank_country = 0
         item.percent = 0
       })
       if (resetPercents) {
         takhminReport.sub_category.forEach(item => {
           that.percents[item.sub_category_id] = 0
-          that.answerCounts[item.sub_category_id] = { correct: 0, incorrect: 0, totalQuestions: item.total_answer }
         })
       }
-      console.log('this.takhminReport', takhminReport)
       this.takhminReport = takhminReport
-      this.tableKey++
+    },
+    setInitialPercents (subCategoryList) {
+      this.percents = {}
+      subCategoryList.forEach(item => {
+        this.percents = Object.assign(this.percents, {
+          [item.sub_category_id]: 0
+        })
+      })
     },
     validateSendData () {
       let status = true
@@ -359,8 +267,6 @@ export default {
       if (!this.validateSendData()) {
         return
       }
-      debugger
-      const that = this
       const keys = Object.keys(this.percents)
       const sentPercents = []
       for (let i = 0; i < keys.length; i++) {
@@ -373,10 +279,7 @@ export default {
         percents: sentPercents
       })
         .then(response => {
-          debugger
-          that.takhminReport.main = response.data.main
-          that.takhminReport.sub_category = response.data.sub_category
-          that.takhminReport.zirgorooh = response.data.zirgorooh
+          this.ranks = response.data.ranks
         })
     }
   }
@@ -459,34 +362,32 @@ export default {
         margin-top: 10px;
         border-radius: 15px;
     }
-</style>
-
-<style lang="scss">
     .takhmin-rotbe {
-  .default-result-table{
-    .q-table__container {
-      border-radius: 20px;
+      background-color: rgb(244, 244, 244);
+      .default-result-table{
+        .q-table__container {
+          border-radius: 20px;
+        }
+        .q-table {
+          border: 1px solid #ececec;
+          thead tr {
+            background-color: #ffecb4;
+            border-radius: 20px;
+            color: rgba(62, 57, 43, 0.96);
+          }
+          tbody tr:nth-of-type(2n) {
+            background-color: rgba(0, 0, 0, 0.02);
+          }
+          tbody td {
+            font-size: 0.875rem;
+          }
+        }
+      }
     }
-    .q-table {
-      border: 1px solid #ececec;
-      thead tr {
-        background-color: #ffecb4;
-        border-radius: 20px;
-        color: rgba(62, 57, 43, 0.96);
-      }
-      tbody tr:nth-of-type(2n) {
-        background-color: rgba(0, 0, 0, 0.02);
-      }
-      tbody td {
-        font-size: 0.875rem;
-      }
-    }
-  }
-}
     .final-report-scoreboard .cardContent {
-        font-size: 22px;
+      font-size: 22px;
     }
     .final-report-scoreboard {
-        display: block;
+      display: block;
     }
 </style>
