@@ -180,7 +180,7 @@ export default {
         const dataURL = canvas.toDataURL(outputFormat)
         callback(dataURL)
       }
-      img.src = src + '?test=123'
+      img.src = src
       if (img.complete || img.complete === undefined) {
         img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='
         img.src = src
