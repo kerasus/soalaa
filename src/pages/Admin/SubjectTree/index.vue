@@ -1,16 +1,17 @@
 <template>
   <div>
     <div v-if="loading">لطفا کمی صبر کنید...</div>
-    <tree
-      v-else
-      ref="tree"
-      tick-strategy="strict"
-      :editable="true"
-      :get-node-by-id="getNodeById"
-      :add-new-node="createNode"
-      :edit-node="editNode"
-      @ticked="onTicked"
-    />
+    <div v-show="!loading">
+      <tree
+        ref="tree"
+        tick-strategy="strict"
+        :editable="true"
+        :get-node-by-id="getNodeById"
+        :add-new-node="createNode"
+        :edit-node="editNode"
+        @ticked="onTicked"
+      />
+    </div>
   </div>
 </template>
 
@@ -52,8 +53,8 @@ export default {
 <style scoped lang='scss'>
 .node-title{
   &:hover {
-  .edit-btn {
-    color: #f18305;
+    .edit-btn {
+      color: #f18305;
     }
   }
 }

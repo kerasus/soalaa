@@ -33,7 +33,16 @@ const reviewCartMerge = function (cartItems = []) {
     }
   })
 
-  return queryParams
+  if (Object.keys(queryParams).length === 0) {
+    return ''
+  }
+
+  let paramsString = ''
+  Object.keys(queryParams).forEach(key => {
+    paramsString += '&' + key + '=' + queryParams[key]
+  })
+
+  return paramsString.substr(1)
 }
 
 export function addToCart(context, newProductData) {
@@ -121,12 +130,11 @@ export function reviewCart(context) {
   })
 
   return new Promise((resolve, reject) => {
-    const params = reviewCartMerge(cartItems)
+    const paramsString = reviewCartMerge(cartItems)
     // APIGateway.cart.reviewCart(cartItems)
-    const paramsString = params.length > 0 ? '&' + params.join('&') : ''
 
     axios
-      .get(API_ADDRESS.cart.review + '?seller=2' + paramsString
+      .get(API_ADDRESS.cart.review + '?' + paramsString
       //   {
       //   // params: {
       //   //   seller: 2,

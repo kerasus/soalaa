@@ -657,7 +657,7 @@ const routes = [
             name: 'Admin.SubjectTree',
             path: 'subject-tree',
             component: () => import('pages/Admin/SubjectTree/index'),
-            breadcrumbs: { title: 'درخت دانش' }
+            breadcrumbs: { title: 'درخت تگ موضوعی' }
           },
           {
             path: 'ticket',
