@@ -582,7 +582,7 @@ export default defineComponent({
       setAttr
     }
   },
-  created() {
+  mounted() {
     this.loadCalendar(Time.now(), true)
     this.getEvents()
   },

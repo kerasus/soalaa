@@ -221,7 +221,7 @@ const mixinQuiz = {
     sendUserQuestionsDataToServerAndFinishExam (userExamId, finishExam) {
       const answers = this.getUserAnswers(userExamId)
 
-      return this.$axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: userExamId, finish: finishExam, questions: answers })
+      return this.$apiGateway.exam.sendAnswers({ exam_user_id: userExamId, finish: finishExam, questions: answers })
     },
     actionOnNoQuestionInExam () {
       this.$q.notify({
@@ -590,7 +590,7 @@ const mixinQuiz = {
     syncUserAnswersWithDBAndSendAnswersToServerInExamTime (userExamId, finishExam) {
       const questions = this.getUserAnswers(userExamId)
 
-      return this.$axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: userExamId, finish: finishExam, questions })
+      return this.$apiGateway.exam.sendAnswers({ exam_user_id: userExamId, finish: finishExam, questions })
     },
     syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime (userExamId, finishExam) {
       const questions = this.getUserAnswers(userExamId)

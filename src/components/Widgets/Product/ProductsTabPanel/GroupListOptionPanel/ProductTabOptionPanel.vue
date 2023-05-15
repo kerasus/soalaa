@@ -3,23 +3,23 @@
     <div class="row q-px-md q-col-gutter-md">
       <div class="col-3">
         <div class="outsideLabel">activeColor</div>
-        <q-input v-model="localOptions.activeColor" />
+        <q-input v-model="localOptions.options.activeColor" />
       </div>
       <div class="col-3">
         <div class="outsideLabel">activeBgColor</div>
-        <q-input v-model="localOptions.activeBgColor" />
+        <q-input v-model="localOptions.options.activeBgColor" />
       </div>
       <div class="col-3">
         <div class="outsideLabel">indicatorColor</div>
-        <q-input v-model="localOptions.indicatorColor" />
+        <q-input v-model="localOptions.options.indicatorColor" />
       </div>
       <div class="col-3">
         <div class="outsideLabel">type</div>
-        <q-select v-model="localOptions.layout"
+        <q-select v-model="localOptions.options.layout"
                   :options="layoutOptions" />
       </div>
     </div>
-    <div v-for="(item, index) in localData"
+    <div v-for="(item, index) in localOptions.data"
          :key="item">
       <q-card class="custom-card">
         <q-card-section>
@@ -29,10 +29,9 @@
                      icon="close"
                      class="q-mr-sm"
                      @click="removeTabPanel(index)" />
-              <q-input v-model="item.options.label"
-                       autogrow
-                       class="full-width"
-                       label="label" />
+              <div class="expansion-label q-mt-sm full-width">
+                {{item.type}}
+              </div>
             </template>
             <recursive-component :options="item" />
           </q-expansion-item>
@@ -44,48 +43,20 @@
 
 <script>
 import { defineAsyncComponent } from 'vue'
+import { PageBuilderOptionPanel } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'groupListTabOptionPanel',
   components: { recursiveComponent: defineAsyncComponent(() => import('../recursiveComponent.vue')) },
-  props: {
-    data: {
-      type: Array,
-      default: () => []
-    },
-    options: {
-      type: Object,
-      default() {
-        return {}
-      }
-    }
-  },
+  mixins: [PageBuilderOptionPanel],
   data() {
     return {
       layoutOptions: ['ProductTab', 'ProductShelf']
     }
   },
-  computed: {
-    localData: {
-      get() {
-        return this.data
-      },
-      set(newVal) {
-        this.$emit('update:data', newVal)
-      }
-    },
-    localOptions: {
-      get() {
-        return this.options
-      },
-      set(newVal) {
-        this.$emit('update:options', newVal)
-      }
-    }
-  },
   methods: {
     removeTabPanel(itemIndex) {
-      this.localData.splice(itemIndex, 1)
+      this.localOptions.data.splice(itemIndex, 1)
     }
   }
 }
