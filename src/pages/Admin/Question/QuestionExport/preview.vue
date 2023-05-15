@@ -95,12 +95,12 @@
 
 <script>
 import { Exam } from 'src/models/Exam.js'
-import VueTiptapKatex from 'vue3-tiptap-katex'
 import API_ADDRESS from 'src/api/Addresses.js'
 import VueKatex from 'src/components/VueKatex.vue'
 import { QuestionList } from 'src/models/Question.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 import { mixinAuth, mixinQuiz, mixinDrawer } from 'src/mixin/Mixins.js'
+import VueTiptapKatex from 'vue3-tiptap-katex/src/vue3-tiptap-katex.vue'
 
 export default {
   name: 'QuestionPreview',

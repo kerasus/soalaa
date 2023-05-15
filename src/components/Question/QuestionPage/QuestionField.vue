@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import VueTiptapKatex from 'vue3-tiptap-katex'
 import API_ADDRESS from 'src/api/Addresses.js'
 import { Question } from 'src/models/Question.js'
-import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
+import VueTiptapKatex from 'vue3-tiptap-katex/src/vue3-tiptap-katex.vue'
+import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap.js'
 
 export default {
   name: 'QuestionField',
