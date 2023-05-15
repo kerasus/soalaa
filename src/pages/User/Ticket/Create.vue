@@ -42,8 +42,8 @@
 
 <script>
 import { EntityCreate } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
 import SendMessageInput from 'src/components/Ticket/SendMessageInput.vue'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Create',
@@ -51,12 +51,15 @@ export default {
     EntityCreate,
     SendMessageInput
   },
+  beforeRouteLeave() {
+    this.$axios.defaults.baseURL = this.$appApiInstance.defaults.baseURL
+  },
   data () {
     return {
       sendLoading: null,
       showDialog: false,
       expanded: true,
-      api: API_ADDRESS.ticket.create.base,
+      api: APIGateway.ticket.APIAdresses.create,
       entityIdKeyInResponse: 'id',
       showRouteParamKey: 'id',
       showRouteName: 'User.Ticket.Show',
@@ -164,6 +167,7 @@ export default {
     }
   },
   created () {
+    this.$axios.defaults.baseURL = this.$alaaApiInstance.defaults.baseURL
     this.setDefaultDepartment()
   },
   methods: {

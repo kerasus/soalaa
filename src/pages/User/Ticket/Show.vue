@@ -106,11 +106,15 @@ import TicketRate from 'src/components/Ticket/TicketRate.vue'
 import UserOrderList from 'src/components/Ticket/userOrderList.vue'
 import { mixinDateOptions, mixinTicket } from 'src/mixin/Mixins.js'
 import SendMessageInput from 'src/components/Ticket/SendMessageInput.vue'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Show',
   components: { EntityShow, Messages, LogList, UserOrderList, TicketRate, SendMessageInput, Drawer },
   mixins: [mixinDateOptions, mixinTicket],
+  beforeRouteLeave() {
+    this.$axios.defaults.baseURL = this.$appApiInstance.defaults.baseURL
+  },
   data () {
     return {
       isUserAdmin: false,
@@ -125,7 +129,7 @@ export default {
       userId: null,
       userMessageArray: [],
       expanded: true,
-      api: API_ADDRESS.ticket.show.base,
+      api: APIGateway.ticket.APIAdresses.show,
       entityIdKey: 'id',
       entityParamKey: 'id',
       indexRouteName: 'User.Ticket.Index',
@@ -225,6 +229,7 @@ export default {
     }
   },
   created () {
+    this.$axios.defaults.baseURL = this.$alaaApiInstance.defaults.baseURL
     this.initPageData()
   },
   mounted () {

@@ -35,8 +35,8 @@
     </div>
     <div v-else
          class="content-wrapper">
-      <div v-if="windowSize">
-        <div v-if="windowSize.x < 1024"
+      <div v-if="$q.screen.lt">
+        <div v-if="$q.screen.lt.md"
              class="profile-container">
           <div class="profile-box">
             <div class="profile-detail">
@@ -65,7 +65,7 @@
             <subscription-status :subscribe="lastSubscribeDate" />
           </div>
         </div>
-        <div v-if="windowSize.x < 1024">
+        <div v-if="$q.screen.lt.md">
           <div v-ripple
                class="relative-position navigation-btn"
                @click="routeTo('User.Exam.List')">
@@ -135,7 +135,7 @@
             </div>
           </div>
         </div>
-        <div v-if="windowSize.x < 600"
+        <div v-if="$q.screen.lt.sm"
              class="bottom-nav">
           <q-btn unelevated
                  class="btn-style profile">
@@ -201,11 +201,10 @@
 
 <script>
 import { User } from 'src/models/User.js'
-import API_ADDRESS from 'src/api/Addresses.js'
-import NextExam from 'src/components/Widgets/Dashboard/SideComponent/NextExam.vue'
-import DashboardHeader from 'src/components/Widgets/Dashboard/SideComponent/DashboardHeader.vue'
-import SubscriptionStatus from 'src/components/Widgets/Dashboard/SideComponent/SubscriptionStatus.vue'
-import UpcomingExamsCalender from 'src/components/Widgets/Dashboard/SideComponent/UpcomingExamsCalender.vue'
+import NextExam from 'components/Widgets/Dashboard/SideComponent/NextExam.vue'
+import DashboardHeader from 'components/Widgets/Dashboard/SideComponent/DashboardHeader.vue'
+import SubscriptionStatus from 'components/Widgets/Dashboard/SideComponent/SubscriptionStatus.vue'
+import UpcomingExamsCalender from 'components/Widgets/Dashboard/SideComponent/UpcomingExamsCalender.vue'
 
 export default {
   name: 'Dashboard',
@@ -218,16 +217,9 @@ export default {
       lastSubscribeDate: null
     }
   },
-  computed: {
-    windowSize () {
-      return this.$store.getters['AppLayout/windowSize']
-    }
-  },
-  created() {
-    this.getLastSubscribe()
-  },
   mounted () {
     this.loadAuthData()
+    this.getLastSubscribe()
   },
   methods: {
     loadAuthData () { // prevent Hydration node mismatch
@@ -236,12 +228,12 @@ export default {
     },
     getLastSubscribe () {
       this.lastSubscribeLoading = true
-      this.$axios.get(API_ADDRESS.subscription.last)
-        .then((response) => {
+      this.$apiGateway.user.subscriptionLast()
+        .then((subscribe) => {
           this.lastSubscribeLoading = false
-          this.lastSubscribeDate = response.data.data.subscribe
+          this.lastSubscribeDate = subscribe
         })
-        .then(() => {
+        .catch(() => {
           this.lastSubscribeLoading = false
         })
     },

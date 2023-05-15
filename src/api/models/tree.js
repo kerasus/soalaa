@@ -1,6 +1,7 @@
 import APIRepository from '../classes/APIRepository'
 import { appApiInstance } from 'src/boot/axios'
 import { TreeNode } from 'src/models/TreeNode.js'
+
 const APIAdresses = {
   base: '/forrest/tree',
   getMultiType: (types) => {
@@ -81,6 +82,9 @@ export default class TreeAPI extends APIRepository {
     if (value === 'Id') {
       param = data.data.id
     }
+    if (value === 'Title') {
+      param = data.data.title
+    }
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
@@ -97,15 +101,27 @@ export default class TreeAPI extends APIRepository {
   }
 
   getNodeById(data) {
-    return this.getNodeBy('Id', data)
+    return this.getNodeBy('Id', {
+      data: {
+        id: data
+      }
+    })
   }
 
   getNodeByType(data) {
-    return this.getNodeBy('Type', data)
+    return this.getNodeBy('Type', {
+      data: {
+        nodeType: data
+      }
+    })
   }
 
   getNodeByTitle(data) {
-    return this.getNodeBy('Title', data)
+    return this.getNodeBy('Title', {
+      data: {
+        title: data
+      }
+    })
   }
 
   editNode(nodeId, data) {

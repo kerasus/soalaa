@@ -40,9 +40,6 @@ export default {
   computed: {
     pageBuilderEditable() {
       return this.$store.getters['AppLayout/pageBuilderEditable']
-    },
-    calculateHeightStyle() {
-      return this.$store.getters['AppLayout/calculateContainerFullHeight']
     }
   }
 }

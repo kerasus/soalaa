@@ -51,7 +51,7 @@ export default {
   width: 100%;
 
   .product-content {
-    justify-content: center;
+    justify-content: flex-start;
     padding: 40px 0;
     width: 100%;
     overflow-x: auto;
