@@ -1,44 +1,46 @@
 <template>
   <div class="row justify-center">
     <div class="col-12 q-mb-xl">
-      <entity-show ref="entityEdit"
-                   v-model:value="inputs"
-                   :show-save-button="false"
-                   :title="'شماره تیکت ' + searchForInputVal('id') + ' در ' + searchForInputVal('department_title')"
-                   :api="api"
-                   :entity-id-key="entityIdKey"
-                   :entity-param-key="entityParamKey"
-                   :index-route-name="indexRouteName"
-                   :after-load-input-data="checkLoadInputData"
-                   :show-edit-button="false">
-        <template #before-form-builder>
-          <div class="flex justify-around">
-            <q-btn rounded
-                   color="blue"
-                   icon="isax:archive-book"
-                   @click="openCloseLogDrawer">
-              <q-tooltip>
-                باز شدن لیست اتفاقات
-              </q-tooltip>
-            </q-btn>
-            <q-btn v-if="isUserAdmin"
-                   rounded
-                   color="blue"
-                   icon="isax:shopping-cart"
-                   @click="openShopLogList">
-              <q-tooltip>
-                باز شدن لیست خرید
-              </q-tooltip>
-            </q-btn>
-          </div>
-        </template>
-        <template #after-form-builder>
-          <ticket-rate v-if="!isUserAdmin"
-                       :rate="searchForInputVal('rate')"
-                       :ticket-id="searchForInputVal('id')"
-                       class="q-ml-lg q-mt-lg" />
-        </template>
-      </entity-show>
+      <q-no-ssr>
+        <entity-show ref="entityEdit"
+                     v-model:value="inputs"
+                     :show-save-button="false"
+                     :title="'شماره تیکت ' + searchForInputVal('id') + ' در ' + searchForInputVal('department_title')"
+                     :api="api"
+                     :entity-id-key="entityIdKey"
+                     :entity-param-key="entityParamKey"
+                     :index-route-name="indexRouteName"
+                     :after-load-input-data="checkLoadInputData"
+                     :show-edit-button="false">
+          <template #before-form-builder>
+            <div class="flex justify-around">
+              <q-btn rounded
+                     color="blue"
+                     icon="isax:archive-book"
+                     @click="openCloseLogDrawer">
+                <q-tooltip>
+                  باز شدن لیست اتفاقات
+                </q-tooltip>
+              </q-btn>
+              <q-btn v-if="isUserAdmin"
+                     rounded
+                     color="blue"
+                     icon="isax:shopping-cart"
+                     @click="openShopLogList">
+                <q-tooltip>
+                  باز شدن لیست خرید
+                </q-tooltip>
+              </q-btn>
+            </div>
+          </template>
+          <template #after-form-builder>
+            <ticket-rate v-if="!isUserAdmin"
+                         :rate="searchForInputVal('rate')"
+                         :ticket-id="searchForInputVal('id')"
+                         class="q-ml-lg q-mt-lg" />
+          </template>
+        </entity-show>
+      </q-no-ssr>
       <messages v-for="item in userMessageArray"
                 :key="item"
                 :is-user-admin="isUserAdmin"
@@ -98,6 +100,7 @@
 <script>
 import { EntityShow } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import Drawer from 'src/components/CustomDrawer.vue'
 import { CartItemList } from 'src/models/CartItem.js'
 import LogList from 'src/components/Ticket/LogList.vue'
@@ -106,11 +109,18 @@ import TicketRate from 'src/components/Ticket/TicketRate.vue'
 import UserOrderList from 'src/components/Ticket/userOrderList.vue'
 import { mixinDateOptions, mixinTicket } from 'src/mixin/Mixins.js'
 import SendMessageInput from 'src/components/Ticket/SendMessageInput.vue'
-import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Show',
-  components: { EntityShow, Messages, LogList, UserOrderList, TicketRate, SendMessageInput, Drawer },
+  components: {
+    Drawer,
+    Messages,
+    LogList,
+    EntityShow,
+    TicketRate,
+    UserOrderList,
+    SendMessageInput
+  },
   mixins: [mixinDateOptions, mixinTicket],
   beforeRouteLeave() {
     this.$axios.defaults.baseURL = this.$appApiInstance.defaults.baseURL
