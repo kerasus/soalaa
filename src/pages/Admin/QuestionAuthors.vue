@@ -44,7 +44,7 @@
 
 <script>
 import { EntityCrud } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'QuestionAuthors',
@@ -59,10 +59,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: API_ADDRESS.entityCrud.questionAuthors.show,
-            edit: API_ADDRESS.entityCrud.questionAuthors.edit,
-            create: API_ADDRESS.entityCrud.questionAuthors.create,
-            index: API_ADDRESS.entityCrud.questionAuthors.index
+            show: APIGateway.option.APIAdresses.base,
+            edit: APIGateway.option.APIAdresses.base,
+            create: APIGateway.option.APIAdresses.base,
+            index: APIGateway.option.APIAdresses.base
           },
           title: {
             show: 'اطلاعات مرجع',
@@ -155,7 +155,6 @@ export default {
     //   deep: true
     // }
   },
-  created () {},
   methods: {
     // for index.vue
     getRemoveMessage (row) {
