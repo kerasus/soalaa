@@ -110,6 +110,9 @@ const API_ADDRESS = {
     sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
+    konkurTakhminRotbe (konkurId) {
+      return lumenServer + '/exam-report/rank/' + konkurId
+    },
     analysisVideo: lumenServer + '/exam-question/attach/sub-category',
     userExamList: {
       base () {
@@ -178,6 +181,7 @@ const API_ADDRESS = {
         return lumenServer + '/exam-report/show?user_exam_id=' + userExamId
       },
       adminGetReport: lumenServer + '/exam-report/show/admin',
+      takhminRotbeExamList: lumenServer + '/exam-report/rank',
       updateReportOptions (examId) {
         return lumenServer + '/exam/config/' + examId
       }
