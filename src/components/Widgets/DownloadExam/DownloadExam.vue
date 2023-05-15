@@ -317,7 +317,16 @@ import API_ADDRESS from 'src/api/Addresses.js'
 import PdfPage from 'src/components/Utils/PDF/PDFPage.vue'
 import PDFContainer from 'src/components/Utils/PDF/PDFContainer.vue'
 // import VuePdfEmbed from 'vue-pdf-embed'
-import html2pdf from 'html2pdf.js'
+// import html2pdf from 'html2pdf.js'
+
+let html2pdf
+if (typeof window !== 'undefined') {
+  import('html2pdf.js')
+    .then((html2pdfLib) => {
+      html2pdf = html2pdfLib.default
+    })
+}
+
 // import html2canvas from 'html2canvas'
 import 'src/Utils/PrintElements/print.css'
 import PaginateBubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/paginateBubbleSheet.vue'

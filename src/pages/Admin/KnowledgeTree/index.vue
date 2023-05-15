@@ -36,7 +36,11 @@ export default {
   },
   created () {
     this.loading = true
-    this.showTree('tree', this.getRootNode('test'))
+    this.showTree('tree', this.getRootNode({
+      data: {
+        nodeType: 'test'
+      }
+    }))
       .then(() => {
         this.loading = false
       })

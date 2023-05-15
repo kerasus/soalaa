@@ -68,6 +68,7 @@ const APIAdresses = {
   registerExam: '/user/registerExam',
   examUser: '/exam-user',
   examUserAfterExam: (examId) => 'exam-user?exam_id=' + examId,
+
   participate: {
     sample: (examId) => '/exam-user/' + examId,
     personal: (examId) => '/exam-user/personal/' + examId
