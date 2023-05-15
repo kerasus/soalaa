@@ -58,10 +58,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: APIGateway.entityCrud.APIAdresses.majors.show,
-            edit: APIGateway.entityCrud.APIAdresses.majors.edit,
-            create: APIGateway.entityCrud.APIAdresses.majors.create,
-            index: APIGateway.entityCrud.APIAdresses.majors.index
+            show: APIGateway.option.APIAdresses.base,
+            edit: APIGateway.option.APIAdresses.base,
+            create: APIGateway.option.APIAdresses.base,
+            index: APIGateway.option.APIAdresses.base
           },
           title: {
             show: 'اطلاعات رشته',
