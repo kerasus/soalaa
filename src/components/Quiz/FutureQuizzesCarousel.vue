@@ -3,20 +3,25 @@
     <div class="future-test-title">
       آزمون های پیش رو
     </div>
-    <div class="carousel-navigation-btn-wrapper">
-      <q-btn color="white"
-             unelevated
-             class="carousel-navigation-btn left"
-             text-color="black"
-             icon="chevron_right"
-             @click="prevSlide()" />
-      <q-btn color="white"
-             unelevated
-             class="carousel-navigation-btn"
-             text-color="black"
-             icon="chevron_left"
-             @click="nextSlide()" />
-    </div>
+    <template v-if="exams.loading">
+      کمی صبر کنید...
+    </template>
+    <template v-else>
+      <div class="carousel-navigation-btn-wrapper">
+        <q-btn color="white"
+               unelevated
+               class="carousel-navigation-btn left"
+               text-color="black"
+               icon="chevron_right"
+               @click="prevSlide()" />
+        <q-btn color="white"
+               unelevated
+               class="carousel-navigation-btn"
+               text-color="black"
+               icon="chevron_left"
+               @click="nextSlide()" />
+      </div>
+    </template>
   </div>
   <carousel v-if="exams.list.length > 0"
             ref="carousel"
