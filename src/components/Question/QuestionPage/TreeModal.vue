@@ -59,7 +59,8 @@
               </div>
             </div>
           </div>
-          <div class="action-btn-box text-right">
+          <div v-if="!isMobile"
+               class="action-btn-box text-right">
             <slot name="tree-dialog-action-box">
               <q-btn v-close-popup
                      class="close-btn"
@@ -69,6 +70,16 @@
             </slot>
           </div>
         </div>
+      </div>
+      <div v-if="isMobile"
+           class="action-btn-box text-right is-sticky">
+        <slot name="tree-dialog-action-box">
+          <q-btn v-close-popup
+                 class="close-btn"
+                 label="بستن"
+                 color="primary"
+                 :disable="persistent" />
+        </slot>
       </div>
       <q-inner-loading :showing="dialogLoading"
                        dark />
@@ -159,6 +170,9 @@ export default {
     }
   },
   computed: {
+    isMobile () {
+      return this.$q.screen.width < 880
+    },
     doesHigherLayerHaveValue () {
       return (layerIndex) => {
         if (layerIndex <= 0) {
@@ -495,6 +509,12 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    &.is-sticky {
+      position: sticky;
+      background-color: #FFFFFF;
+      bottom: -30px;
+      padding-bottom: 30px;
+    }
   }
 }
 .q-card {
