@@ -59,8 +59,7 @@
               </div>
             </div>
           </div>
-          <div v-if="!isMobile"
-               class="action-btn-box text-right">
+          <div class="action-btn-box text-right hide-in-mobile">
             <slot name="tree-dialog-action-box">
               <q-btn v-close-popup
                      class="close-btn"
@@ -71,8 +70,7 @@
           </div>
         </div>
       </div>
-      <div v-if="isMobile"
-           class="action-btn-box text-right is-sticky">
+      <div class="action-btn-box text-right is-sticky show-in-mobile">
         <slot name="tree-dialog-action-box">
           <q-btn v-close-popup
                  class="close-btn"
@@ -170,9 +168,6 @@ export default {
     }
   },
   computed: {
-    isMobile () {
-      return this.$q.screen.width < 880
-    },
     doesHigherLayerHaveValue () {
       return (layerIndex) => {
         if (layerIndex <= 0) {
@@ -494,6 +489,17 @@ export default {
 <style scoped lang="scss">
 .action-btn-box {
   padding-top: 20px;
+  &.hide-in-mobile {
+    @media screen and (max-width: 880px) {
+      display: none;
+    }
+  }
+  &.show-in-mobile {
+    display: none;
+    @media screen and (max-width: 880px) {
+      display: block;
+    }
+  }
   .close-btn {
     color: #FFFFFF;
     font-weight: 500;
