@@ -159,6 +159,7 @@ export default {
         { type: 'input', name: 'order', label: 'ترتیب نمایش', col: 'col-md-2', placeholder: ' ', filled: true }
       ],
       editInputs: [
+        { type: 'hidden', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-1', placeholder: ' ' },
         { type: 'file', name: 'image', label: 'تصویر', col: 'col-md-12', placeholder: ' ', filled: true, class: 'float-left q-mb-md' },
         { type: 'space', col: 'col-md-12' },
         { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true },
