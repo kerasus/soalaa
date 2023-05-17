@@ -1,12 +1,10 @@
 <template>
   <!--  v-model:index-inputs="indexInputs"-->
-  <entity-crud
-    v-model:default-inputs="defaultInputs"
-    v-model:index-inputs="indexInputs"
-    v-model:create-inputs="createInputs"
-    v-model:edit-inputs="editInputs"
-    v-bind="allProps"
-  >
+  <entity-crud v-model:default-inputs="defaultInputs"
+               v-model:index-inputs="indexInputs"
+               v-model:create-inputs="createInputs"
+               v-model:edit-inputs="editInputs"
+               v-bind="allProps">
     <!--    {inputData, showConfirmRemoveDialog}-->
     <template v-slot:entity-crud-table-cell="{inputData,showConfirmRemoveDialog}">
       <template v-if="inputData.col.name === 'actions'">

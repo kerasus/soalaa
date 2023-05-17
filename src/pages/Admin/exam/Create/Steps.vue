@@ -34,8 +34,7 @@
       <q-icon name="isax:tick-square"
               class="icon" />
       <div class="final-approval-title"
-           :class="{ 'hidden-mobile' : currentStep !== 'finalApproval' }"
-      >
+           :class="{ 'hidden-mobile' : currentStep !== 'finalApproval' }">
         تایید نهایی
       </div>
     </div>

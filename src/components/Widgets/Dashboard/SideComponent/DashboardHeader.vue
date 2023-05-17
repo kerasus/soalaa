@@ -49,15 +49,13 @@
       <div class="footer exam-plus">
         {{statistics.self_order}}
         <span class="exam">آزمون</span>
-        <q-btn
-          class="exam-plus-btn md-hide"
-          icon="isax:arrow-left-2"
-          round
-          flat
-          dense
-          size="md"
-          :to="{name: 'User.MyOrders'}"
-        />
+        <q-btn class="exam-plus-btn md-hide"
+               icon="isax:arrow-left-2"
+               round
+               flat
+               dense
+               size="md"
+               :to="{name: 'User.MyOrders'}" />
       </div>
     </div>
   </div>

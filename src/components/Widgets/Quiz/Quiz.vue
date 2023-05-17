@@ -34,13 +34,10 @@
     </div>
     <div v-else
          class="quiz-page-wrapper">
-      <div
-        class="userExamList"
-        style="font-size: 16px;"
-      >
+      <div class="userExamList"
+           style="font-size: 16px;">
         <div v-if="allExamsList.list.length > 0 || myExams.list.length > 0 || upcomingExams.list.length > 0"
-             class="fit row wrap justify-center items-start content-start"
-        >
+             class="fit row wrap justify-center items-start content-start">
           <div v-if="$q.screen.lt.sm"
                class="col-12">
             <div class="flex justify-start my-exam-btn">
