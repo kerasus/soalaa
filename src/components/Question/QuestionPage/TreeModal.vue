@@ -491,7 +491,7 @@ export default {
   padding-top: 20px;
   &.hide-in-mobile {
     @media screen and (max-width: 880px) {
-      display: none;
+      display: none !important;
     }
   }
   &.show-in-mobile {
@@ -512,7 +512,7 @@ export default {
     margin: auto 0 auto auto;
   }
   @media screen and (max-width: 880px) {
-    display: flex;
+    display: flex !important;
     justify-content: center;
     align-items: center;
     &.is-sticky {
