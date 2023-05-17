@@ -292,7 +292,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Question } from 'src/models/Question.js'
 import VueKatex from 'src/components/VueKatex.vue'
 import question from 'components/CommonComponents/Exam/Create/QuestionTemplate/Question.vue'
@@ -544,7 +543,7 @@ export default {
         body: this.reportProblemDialog.description
       }
       try {
-        await this.$axios.post(API_ADDRESS.exam.user.report(this.question.id), params)
+        await this.$apiGateway.exam.userReport({ questionId: this.question.id, params })
         this.$q.notify({
           type: 'positive',
           message: 'گزازش با موفقیت ثبت شد.'

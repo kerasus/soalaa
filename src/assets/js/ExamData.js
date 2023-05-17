@@ -1,4 +1,4 @@
-import API_ADDRESS from 'src/api/Addresses'
+import APIGateway from 'src/boot/api-gateway.js'
 import Assistant from 'src/plugins/assistant'
 import { Exam } from 'src/models/Exam'
 import { QuestionList } from 'src/models/Question'
@@ -151,7 +151,7 @@ class ExamData {
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
       }
-      this.$axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
+      APIGateway.exam.getAnswerOfUserWithCorrect(userExamId)
         .then(response => {
           that.exam = new Exam()
           if (examId) {
@@ -197,7 +197,7 @@ class ExamData {
         const params = {
           user_exam_id: userExamId
         }
-        this.$axios.get(API_ADDRESS.exam.report.adminGetReport, { params })
+        APIGateway.exam.adminGetReport({ params })
           .then(response => {
             that.studentReport = response.data.data
             resolve(response)
@@ -206,7 +206,7 @@ class ExamData {
             reject(error)
           })
       } else {
-        this.$axios.get(API_ADDRESS.exam.report.getReport(userExamId))
+        APIGateway.exam.getReport(userExamId)
           .then(response => {
             that.studentReport = response.data.data
             resolve(response)
@@ -235,7 +235,7 @@ class ExamData {
         userExamId = that.exam.user_exam_id
       }
       // if (navigator.onLine) {
-      this.$axios.get(API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
+      APIGateway.exam.getAllAnswerOfUser(userExamId)
         .then(response => {
           that.userExamData = response.data
           resolve({
@@ -274,8 +274,12 @@ class ExamData {
       if (retake) {
         data.retake = true
       }
-      const url = personal ? API_ADDRESS.exam.participate.personal(examId) : API_ADDRESS.exam.participate.sample(examId)
-      this.$axios.post(url, data)
+      const participateData = {
+        data,
+        personal,
+        examId
+      }
+      APIGateway.exam.participate(participateData)
         .then(response => {
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
@@ -318,7 +322,7 @@ class ExamData {
       if (!examId) {
         examId = that.exam.id
       }
-      this.$axios.get(API_ADDRESS.exam.examUserAfterExam + '?exam_id=' + examId)
+      APIGateway.exam.examUserAfterExam(examId)
         .then(response => {
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id

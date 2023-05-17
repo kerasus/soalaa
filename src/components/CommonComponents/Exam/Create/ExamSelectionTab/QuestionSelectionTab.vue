@@ -127,7 +127,6 @@
 <script>
 import { Exam } from 'src/models/Exam.js'
 import mixinTree from 'src/mixin/Tree.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { TreeNode } from 'src/models/TreeNode.js'
 import { Question, QuestionList } from 'src/models/Question.js'
 import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
@@ -394,10 +393,11 @@ export default {
       this.treeModalValue = !this.treeModalValue
     },
     getReportOptions() {
-      this.$axios.get(API_ADDRESS.exam.user.reportType)
-        .then((response) => {
-          this.reportTypeList = response.data.data
+      this.apiGateway.exam.userReportType()
+        .then((reportTypeList) => {
+          this.reportTypeList = reportTypeList
         })
+        .catch(() => {})
     },
     goToPrevStep() {
       this.$emit('lastTab')
@@ -491,10 +491,11 @@ export default {
         filters.tags.push(this.providedExam.temp.lesson)
       }
       this.showLoading()
-      this.$axios.get(API_ADDRESS.question.index(filters, page))
-        .then((response) => {
-          this.questions = new QuestionList(response.data.data)
-          this.paginationMeta = response.data.meta
+      const isAdmin = false
+      this.$apiGateway.question.getIndex({ filters, page, isAdmin })
+        .then((indexResponse) => {
+          this.questions = new QuestionList(indexResponse.QuestionList)
+          this.paginationMeta = indexResponse.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
           this.setSelectedQuestionOfCurrentMetaPage()
@@ -510,9 +511,9 @@ export default {
         })
     },
     getFilterOptions() {
-      this.$axios.get(API_ADDRESS.option.userIndex)
-        .then((response) => {
-          response.data.data.forEach(option => {
+      this.$apiGateway.option.userIndex
+        .then((options) => {
+          options.forEach(option => {
             if (option.type === 'reference_type') {
               this.filterQuestions.reference_type.push(option)
             } else if (option.type === 'year_type') {
