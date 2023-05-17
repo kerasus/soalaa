@@ -11,6 +11,7 @@ class QuestSubcategory extends Model {
         default: API_ADDRESS.questionSubcategory.base
       },
       { key: 'id' },
+      { key: '_id' },
       { key: 'title' },
       {
         key: 'permissions',
@@ -34,6 +35,10 @@ class QuestSubcategory extends Model {
 
     if (this.title === null) {
       this.title = ''
+    }
+
+    if (this._id) {
+      this.id = this._id
     }
 
     this.apiResource = {

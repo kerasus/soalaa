@@ -28,7 +28,6 @@ import QuestionCategoryAPI from 'src/api/models/questionCategory.js'
 import QuestionAPI from 'src/api/models/question.js'
 import OptionAPI from 'src/api/models/option.js'
 
-
 /* Exporting the APIGateway object. */
 export const APIGateway = {
   // set: new SetAPI(),

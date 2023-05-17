@@ -38,6 +38,8 @@
                        label="کارنامه" />
                 <q-tab name="rank"
                        label="تخمین رتبه" />
+                <q-tab name="newRank"
+                       label="تخمین رتبه جدید" />
                 <q-tab name="lessons"
                        label="ریزدرس ها" />
                 <q-tab name="KeyAnswers"
@@ -59,6 +61,9 @@
                       swipeable>
           <q-tab-panel name="result">
             <personal-result :report="report" />
+          </q-tab-panel>
+          <q-tab-panel name="newRank">
+            <new-takhmin-rotbe :report="report" />
           </q-tab-panel>
           <q-tab-panel name="rank">
             <takhmin-rotbe :report="report" />
@@ -151,6 +156,7 @@ import { AlaaContent } from 'src/models/AlaaContent.js'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info.vue'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe.vue'
+import NewTakhminRotbe from 'src/components/OnlineQuiz/Quiz/NewTakhminRotbe.vue'
 import QuestionItem from 'src/components/OnlineQuiz/Quiz/question/questionField.vue'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet.vue'
 import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult.vue'
@@ -159,7 +165,7 @@ import TabsOfLessons from 'src/components/OnlineQuiz/Quiz/videoPlayerSection/tab
 
 export default {
   name: 'Result',
-  components: { TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult, QuestionItem },
+  components: { NewTakhminRotbe, TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult, QuestionItem },
   mixins: [
     mixinAuth,
     mixinQuiz
@@ -320,7 +326,7 @@ export default {
     padding: 12px;
   }
   .default-result-tabs-title {
-    max-width: 700px;
+    max-width: 820px;
     color: rgba(0, 0, 0, 0.54);
   }
   .download-box {

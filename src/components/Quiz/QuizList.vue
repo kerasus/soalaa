@@ -194,6 +194,11 @@
         <q-btn class="new-link"
                flat
                unelevated
+               label="ثبت نام در آزمون"
+               @click="gotoSubscription" />
+        <q-btn class="new-link"
+               flat
+               unelevated
                label="ساخت آزمون جدید"
                @click="gotoCreateExam" />
       </div>
@@ -532,6 +537,9 @@ export default defineComponent({
     },
     toggleFilter() {
       this.filterBar = !this.filterBar
+    },
+    gotoSubscription() {
+      this.$router.push({ name: 'Landing.3aExams' })
     },
     gotoCreateExam() {
       this.$router.push({ name: 'User.Create.Exam' })

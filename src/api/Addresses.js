@@ -109,6 +109,9 @@ const API_ADDRESS = {
     sendUnBookmark: '/temp-exam/answer/unbookmark',
     userExamsList: '/examAndUser',
     takhminRotbe: '/exam-report/rankSimulator',
+    konkurTakhminRotbe (konkurId) {
+      return '/exam-report/rank/' + konkurId
+    },
     analysisVideo: '/exam-question/attach/sub-category',
     userExamList: {
       base () {
@@ -177,6 +180,7 @@ const API_ADDRESS = {
         return '/exam-report/show?user_exam_id=' + userExamId
       },
       adminGetReport: '/exam-report/show/admin',
+      takhminRotbeExamList: '/exam-report/rank',
       updateReportOptions (examId) {
         return '/exam/config/' + examId
       }

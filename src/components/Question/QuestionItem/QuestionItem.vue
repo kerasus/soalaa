@@ -133,7 +133,6 @@
         <div v-for="(year, index) in question.years"
              :key="index"
              class="question-tag">
-          سال انتشار:
           {{year.value}}
         </div>
       </div>
