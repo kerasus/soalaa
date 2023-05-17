@@ -757,7 +757,7 @@ export default defineComponent({
           align-items: flex-start;
           height: 120px;
           position: absolute;
-          top: 0%;
+          top: 0;
         }
       }
 
