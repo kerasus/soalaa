@@ -92,7 +92,9 @@
             مشاهده آزمون در پنل کاربری
           </q-btn>
           <q-btn flat
-                 class="btn-go-to-print-exam">
+                 class="btn-go-to-print-exam"
+                 :to="{ name: 'User.Exam.Download', params: { examId: draftExam.id } }"
+          >
             دانلود فایل آزمون
           </q-btn>
         </div>

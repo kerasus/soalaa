@@ -1,5 +1,6 @@
 <template>
-  <div class="steps row">
+  <div class="steps row"
+       :class="{ 'exam-confirmed' : currentStep === 'confirmedPage'}">
     <div v-if="!loading"
          class="exam-info step step-1"
          :class="{ 'current-step' : this.currentStep === 'createPage','passed' : this.currentStep === 'chooseQuestion' || this.currentStep === 'finalApproval' || isConfirmd }"
@@ -42,7 +43,7 @@
               class="icon"
       />
       <div class="final-approval-title"
-           :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }"
+           :class="{ 'hidden-mobile' : currentStep !== 'finalApproval' }"
       >
         تایید نهایی
       </div>
@@ -136,7 +137,9 @@ export default {
   background: #FFFFFF;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
   border-radius: 16px;
-
+  &.exam-confirmed {
+    justify-content: center;
+  }
   @media screen and (max-width: 1439px) {
     padding: 20px 30px;
   }

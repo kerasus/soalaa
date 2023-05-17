@@ -186,7 +186,6 @@
           :key="index"
           class="question-tag"
         >
-          سال انتشار:
           {{year.value}}
         </div>
       </div>

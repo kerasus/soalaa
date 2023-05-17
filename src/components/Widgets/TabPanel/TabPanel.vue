@@ -3,12 +3,12 @@
        :style="options.style">
     <div class="tab-panel-container">
       <q-tabs
-        v-model="activeTab"
+        v-model="activeTabIndex"
         inline-label
         outside-arrows
         mobile-arrows
-        left-icon="isax:arrow-left-2"
-        right-icon="isax:arrow-right-3"
+        :left-icon="tabPanelLeftIcon"
+        :right-icon="tabPanelRightIcon"
         indicator-color="transparent"
         active-class="active-tab"
         class="tab-box"
@@ -21,32 +21,52 @@
                :label="tab.title"
         />
       </q-tabs>
-      <q-tab-panels v-model="activeTab"
+      <q-tab-panels v-model="activeTabIndex"
                     animated
+                    infinite
+                    swipeable
                     class="tab-content">
         <q-tab-panel v-for="(tabData, index) in options.tabs"
                      :key="index"
-                     class="q-pa-none tab-panel-box"
+                     class="q-pa-none"
                      :name="index">
-          <div class="content">
-            <div class="title"> {{ tabData.title }}</div>
-            <span class="description"
-                  v-html="tabData.editor"></span>
-            <div v-if="tabData.button.url"
-                 class="more-detail text-right">
-              <q-btn
-                flat
-                :href="tabData.button.url"
-                :style="{background: tabData.button.bgColor, color: tabData.button.color}"
-                class="btn"
-                padding="9px 17px"
-                icon-right="west"
-                :label="tabData.button.text" />
+          <div class="tab-panels">
+            <div v-if="isMobile"
+                 class="arrow-btn right-arrow">
+              <q-btn  v-if="doesHavePrevTab"
+                      icon="isax:arrow-right-3"
+                      flat
+                      @click="selectPrevTab" />
             </div>
-          </div>
-          <div class="img-box">
-            <q-img class="img"
-                   :src="tabData.image" />
+            <div class="tab-panel-box">
+              <div class="content">
+                <div class="title"> {{ tabData.title }}</div>
+                <span class="description"
+                      v-html="tabData.editor"></span>
+                <div v-if="tabData.button.url"
+                     class="more-detail text-right">
+                  <q-btn
+                    flat
+                    :href="tabData.button.url"
+                    :style="{background: tabData.button.bgColor, color: tabData.button.color}"
+                    class="btn"
+                    padding="9px 17px"
+                    icon-right="west"
+                    :label="tabData.button.text" />
+                </div>
+              </div>
+              <div class="img-box">
+                <q-img class="img"
+                       :src="tabData.image" />
+              </div>
+            </div>
+            <div v-if="isMobile"
+                 class="arrow-btn left-arrow">
+              <q-btn v-if="doesHaveNextTab"
+                     icon="isax:arrow-left-2"
+                     flat
+                     @click="selectNextTab" />
+            </div>
           </div>
         </q-tab-panel>
       </q-tab-panels>
@@ -63,7 +83,7 @@ export default {
   name: 'TabPanel',
   data: () => ({
     tabs: [],
-    activeTab: 0
+    activeTabIndex: 0
   }),
   props: {
     options: {
@@ -76,9 +96,38 @@ export default {
   created() {
     // this.initPageData()
   },
+  computed: {
+    isMobile () {
+      return this.$q.screen.lt.md
+    },
+    tabPanelRightIcon () {
+      if (this.isMobile) {
+        return '  '
+      }
+      return 'isax:arrow-right-3'
+    },
+    tabPanelLeftIcon () {
+      if (this.isMobile) {
+        return '  '
+      }
+      return 'isax:arrow-left-2'
+    },
+    doesHaveNextTab () {
+      return !!this.options.tabs[this.activeTabIndex + 1]
+    },
+    doesHavePrevTab () {
+      return !!this.options.tabs[this.activeTabIndex - 1]
+    }
+  },
   methods: {
+    selectNextTab () {
+      this.activeTabIndex++
+    },
+    selectPrevTab () {
+      this.activeTabIndex--
+    },
     tabIcon(index, icon, icon2) {
-      const iconImg = index === this.activeTab ? icon : icon2
+      const iconImg = index === this.activeTabIndex ? icon : icon2
       return 'img:' + iconImg
     },
     async initPageData() {
@@ -97,25 +146,6 @@ export default {
 
 <style scoped lang="scss">
 .page-width {
-  //width: 100%;
-  //display: flex;
-  //justify-content: center;
-  margin: auto;
-  @media screen and (max-width: 1439px) {
-    //width: 954px;
-    //width: 100%;
-  }
-  @media screen and (max-width: 1023px) {
-    //width: 540px;
-    //width: 100%;
-  }
-  @media screen and (max-width: 599px) {
-    //display: flex;
-    //flex-wrap: wrap;
-    //width: 100%;
-    padding-left: 19px;
-    padding-right: 19px;
-  }
 
   .tab-panel-container {
     margin-bottom: 80px;
@@ -184,24 +214,42 @@ export default {
     }
 
     .tab-content {
-      background: rgba(228, 232, 239, .6);
-      border-radius: 20px;
-      padding: 40px 80px;
-      @media screen and (max-width: 1439px) {
-        flex-direction: column;
-        padding: 36px;
+      .tab-panels {
+        display: flex;
+        align-items: center;
+        background-color: #f4f6f9;
+        width: 100%;
+        .arrow-btn {
+          min-width: 40px;
+          position: absolute;
+          &.right-arrow {
+            left: -15px;
+          }
+          &.left-arrow {
+            right: -15px;
+          }
+        }
       }
-      @media screen and (max-width: 1023px) {
-        padding: 24px;
-      }
-      @media screen and (max-width: 599px) {
-        padding: 20px;
-      }
-      &:deep(.q-panel) {
-        overflow: hidden;
-      }
-
       .tab-panel-box {
+        background: rgba(228, 232, 239, .6);
+        border-radius: 20px;
+        padding: 40px 80px;
+        @media screen and (max-width: 1439px) {
+          flex-direction: column;
+          padding: 36px;
+        }
+        @media screen and (max-width: 599px) {
+          width: 100%;
+        }
+        @media screen and (max-width: 1023px) {
+          padding: 24px;
+        }
+        @media screen and (max-width: 599px) {
+          padding: 20px;
+        }
+        &:deep(.q-panel) {
+          overflow: hidden;
+        }
         display: flex;
         justify-content: space-between;
         @media screen and (max-width: 1439px) {
@@ -309,11 +357,12 @@ export default {
             border-radius: 16px;
           }
           @media screen and (max-width: 1023px) {
-            width: 492px;
+            width: 100%;
+            height: 100%;
           }
           @media screen and (max-width: 599px) {
             border-radius: 12px;
-            width: 272px
+            //width: 272px;
           }
 
           .img {
