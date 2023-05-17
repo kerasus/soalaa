@@ -5806,10 +5806,10 @@ quasar-app-extension-q-page-builder@^0.1.39:
   dependencies:
     quasar-ui-q-page-builder "^0.1.39"
 
-quasar-crud@^0.3.21:
-  version "0.3.21"
-  resolved "https://registry.yarnpkg.com/quasar-crud/-/quasar-crud-0.3.21.tgz#cbc7d9ce17fde491e2ef8f83b3953dcdbc074e97"
-  integrity sha512-oZjR1sMg49iyQzUdZJXA4knn53sdohNflhYpNBut3R8o/hMadD9uLTzrwA3VxCtmhNdiW0OsLkq0BNgj9HNBmw==
+quasar-crud@^0.3.22:
+  version "0.3.22"
+  resolved "https://registry.yarnpkg.com/quasar-crud/-/quasar-crud-0.3.22.tgz#d412951e33dbf7897783409ad1c68a5c469b709e"
+  integrity sha512-mIF8avTnJNHzU9ewj7kGnyEG8v7MTrMOI3x3koKl3+4uWL4KuaxbRkcRnAl2NvSbi5v9+119o4VzYqSvxr05Uw==
   dependencies:
     "@quasar/extras" "^1.15.11"
     axios "^1.3.4"
