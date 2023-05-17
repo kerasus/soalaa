@@ -12,8 +12,9 @@
       </div>
       <div class="col-12 row">
         <div class="col">
-          <div :style="{ 'max-width': '100%'}">
-            <highcharts :options="chartOptions" />
+          <div v-if="Chart"
+               :style="{ 'max-width': '100%'}">
+            <high-charts :options="chartOptions" />
           </div>
         </div>
       </div>
@@ -26,13 +27,15 @@ let Chart
 if (typeof window !== 'undefined') {
   import('highcharts-vue')
     .then((ChartLib) => {
-      Chart = ChartLib.default.Chart
+      Chart = ChartLib.Chart
     })
 }
 
 export default {
   name: 'StatisticResult',
-  components: { highcharts: Chart },
+  components: {
+    HighCharts: Chart
+  },
   props: ['report'],
   data () {
     return {
@@ -96,10 +99,10 @@ export default {
       }
     }
   },
-  created () {
+  mounted () {
     if (this.report && this.report.best) {
       if (this.report.sub_category[0].rank_school) {
-        this.headers.splice(9, 0, { text: ' رتبه مدرسه', value: 'rank_school', align: 'center', sortable: true })
+        this.columns1.splice(9, 0, { text: ' رتبه مدرسه', value: 'rank_school', align: 'center', sortable: true })
       }
       this.loadDataTable()
       this.loadChart()
