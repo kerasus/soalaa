@@ -96,7 +96,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { QuestCategory, QuestCategoryList } from 'src/models/QuestCategory.js'
 export default {
   name: 'categoryList',
@@ -134,18 +133,18 @@ export default {
       item.editMode = false
       item.title = item.title.trim()
       item.apply()
-      this.$axios.put(API_ADDRESS.questionCategory.update(item.id), item)
-        .then(response => {
-          item = new QuestCategory(response.data.data)
+      this.$apiGateway.questionCategory.update(item)
+        .then(questCategory => {
+          item = new QuestCategory(questCategory)
         })
     },
     create (item) {
       item.editable = false
       item.title = item.title.trim()
-      this.$axios.post(API_ADDRESS.questionCategory.base, item)
-        .then(response => {
+      this.$apiGateway.questionCategory.create(item)
+        .then(questCategory => {
           this.deleteItem(item)
-          this.categoryList.list.unshift(new QuestCategory(response.data.data))
+          this.categoryList.list.unshift(new QuestCategory(questCategory))
         })
         .catch(() => {
           this.deleteItem(item)
@@ -175,9 +174,9 @@ export default {
     loadCategories () {
       const that = this
       return new Promise(function (resolve, reject) {
-        that.$axios.get(API_ADDRESS.questionCategory.base)
-          .then((response) => {
-            that.categoryList = new QuestCategoryList(response.data.data)
+        that.$apiGateway.questionCategory.get()
+          .then((questCategory) => {
+            that.categoryList = new QuestCategoryList(questCategory)
             resolve()
           })
           .catch(() => {

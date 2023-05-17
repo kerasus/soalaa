@@ -109,6 +109,7 @@ import TicketRate from 'src/components/Ticket/TicketRate.vue'
 import UserOrderList from 'src/components/Ticket/userOrderList.vue'
 import { mixinDateOptions, mixinTicket } from 'src/mixin/Mixins.js'
 import SendMessageInput from 'src/components/Ticket/SendMessageInput.vue'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Show',
