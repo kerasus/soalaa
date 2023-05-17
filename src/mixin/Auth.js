@@ -1,4 +1,3 @@
-import API_ADDRESS from 'src/api/Addresses.js'
 import { User } from 'src/models/User'
 
 const mixinAuth = {
@@ -28,7 +27,7 @@ const mixinAuth = {
       this.isUserLogin = this.$store.getters['Auth/isUserLogin']
     },
     async getUserData () {
-      const response = await this.$alaaApiInstance.get(API_ADDRESS.user.show_user)
+      const response = await this.$apiGateway.user.showUser()
       this.$store.commit('Auth/updateUser', response.data.data)
     }
   }
