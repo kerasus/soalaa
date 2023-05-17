@@ -708,11 +708,13 @@ export default {
     }
 
     .active {
-      background-color: #8075DC;
+      background-color: rgba(128, 117, 220, 0.34);
+      border-radius: 8px;
     }
 
     .active-route {
-      background-color: #8075DC;
+      background-color: rgba(128, 117, 220, 0.34);
+      border-radius: 8px;
 
       .indicator {
         height: 6px;
