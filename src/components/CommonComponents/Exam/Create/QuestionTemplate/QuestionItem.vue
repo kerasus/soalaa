@@ -765,10 +765,10 @@ export default {
     }
 
     .question-source {
-        display: flex;
-        align-items: center;
-        justify-content: left;
-       min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: right;
+      min-height: 36px;
 
       @media only screen and (max-width: 599px) {
         order: 2;
