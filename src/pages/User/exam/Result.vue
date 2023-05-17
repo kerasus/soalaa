@@ -184,8 +184,7 @@ export default {
     innerTab: 'innerMails',
     splitterModel: 20
   }),
-  created () {
-    // console.log('report.exams_booklet', this.report.exams_booklet)
+  mounted () {
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
     this.getUserData()

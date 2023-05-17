@@ -1,4 +1,4 @@
-import { appApiInstance } from 'src/boot/axios.js'
+import { appApiInstance, alaaApiInstance } from 'src/boot/axios.js'
 import { User } from 'src/models/User.js'
 import { ProductList } from 'src/models/Product.js'
 import { CartItemList } from 'src/models/CartItem.js'
@@ -235,7 +235,7 @@ export default class UserAPI extends APIRepository {
   showUser(data = {}) {
     return this.sendRequest({
       apiMethod: 'get',
-      api: this.api,
+      api: alaaApiInstance,
       request: this.APIAdresses.showUser,
       cacheKey: this.CacheList.showUser,
       ...(data.cache && { cache: data.cache }),
