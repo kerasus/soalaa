@@ -63,7 +63,7 @@
           dense
           size="md"
           :to="{name: 'User.MyOrders'}"
-        ></q-btn>
+        />
       </div>
     </div>
   </div>
