@@ -312,6 +312,11 @@ export default defineComponent({
         font-weight: 600;
         font-size: 16px;
         line-height: 25px;
+
+        @media only screen and (max-width: 600px) {
+          font-size: 12px;
+          font-weight: 500;
+        }
       }
   }
 
@@ -331,6 +336,11 @@ export default defineComponent({
     padding-bottom: 8px;
     text-align: center;
     letter-spacing: -0.03em;
+
+    @media only screen and (max-width: 600px) {
+      font-size: 12px;
+      font-weight: 500;
+    }
   }
 
   @media only screen and (max-width: 600px) {
