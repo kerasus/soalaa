@@ -568,7 +568,6 @@ export default {
       this.getQuestionReportOptions()
     },
     getQuestionReportOptions() {
-      console.log('this.reportOptions', this.reportOptions)
       this.reportProblemDialog.options = this.reportOptions
     },
     applyPageStrategy () {
