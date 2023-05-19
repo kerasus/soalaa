@@ -59,7 +59,7 @@
     "vue3-tiptap-katex": "^1.0.51",
     "vuex": "^4.1.0",
     "vuex-persistedstate": "^4.1.0",
-    "webpack": "^5.75.0"
+    "webpack": "^5.81.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",
