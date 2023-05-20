@@ -82,6 +82,7 @@ import { defineAsyncComponent } from 'vue'
 import MainFooter from 'components/Layout/Footer/main.vue'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents.js'
 import QuasarTemplateBuilder from 'quasar-template-builder/src/quasar-template-builder.vue'
+import Router from 'src/router/Router.vue'
 import FloatingActionButton from 'components/Template/FloatingActionButton/FloatingActionButton.vue'
 
 // import templateHeader from 'components/Headers/templateHeader'
@@ -98,8 +99,8 @@ export default {
     MainFooter,
     FloatingActionButton,
     QuasarTemplateBuilder,
+    Router,
     Auth: defineAsyncComponent(() => import('src/components/Auth.vue')),
-    Router: defineAsyncComponent(() => import('src/router/Router.vue')),
     UserSideBar: defineAsyncComponent(() => import('src/layouts/UserPanelLayouts/UserSideBar.vue')),
     templateHeader: defineAsyncComponent(() => import('src/components/Headers/templateHeader.vue')),
     UserTemplateHeader: defineAsyncComponent(() => import('src/components/Headers/userTemplateHeader.vue')),
