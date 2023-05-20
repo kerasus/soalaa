@@ -59,7 +59,7 @@
               </div>
             </div>
           </div>
-          <div class="action-btn-box text-right">
+          <div class="action-btn-box text-right hide-in-mobile">
             <slot name="tree-dialog-action-box">
               <q-btn v-close-popup
                      class="close-btn"
@@ -69,6 +69,15 @@
             </slot>
           </div>
         </div>
+      </div>
+      <div class="action-btn-box text-right is-sticky show-in-mobile">
+        <slot name="tree-dialog-action-box">
+          <q-btn v-close-popup
+                 class="close-btn"
+                 label="بستن"
+                 color="primary"
+                 :disable="persistent" />
+        </slot>
       </div>
       <q-inner-loading :showing="dialogLoading"
                        dark />
@@ -480,6 +489,17 @@ export default {
 <style scoped lang="scss">
 .action-btn-box {
   padding-top: 20px;
+  &.hide-in-mobile {
+    @media screen and (max-width: 880px) {
+      display: none !important;
+    }
+  }
+  &.show-in-mobile {
+    display: none;
+    @media screen and (max-width: 880px) {
+      display: block;
+    }
+  }
   .close-btn {
     color: #FFFFFF;
     font-weight: 500;
@@ -492,9 +512,15 @@ export default {
     margin: auto 0 auto auto;
   }
   @media screen and (max-width: 880px) {
-    display: flex;
+    display: flex !important;
     justify-content: center;
     align-items: center;
+    &.is-sticky {
+      position: sticky;
+      background-color: #FFFFFF;
+      bottom: -30px;
+      padding-bottom: 30px;
+    }
   }
 }
 .q-card {
