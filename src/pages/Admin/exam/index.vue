@@ -37,7 +37,7 @@
                  size="md"
                  color="indigo"
                  icon="auto_stories"
-                 :to="{name:'Admin.Exam.Categories', params: {exam_id: inputData.props.row.id , examTitle: inputData.props.row.title}}">
+                 :to="{name:'Admin.Exam.Categories', params: {exam_id: inputData.props.row.id }}">
             <q-tooltip anchor="top middle"
                        self="bottom middle">
               مشاهده دروس
