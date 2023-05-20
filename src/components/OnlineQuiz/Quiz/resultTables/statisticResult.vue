@@ -12,7 +12,7 @@
       </div>
       <div class="col-12 row">
         <div class="col">
-          <div v-if="Chart"
+          <div v-if="isHighchartsReady"
                :style="{ 'max-width': '100%'}">
             <high-charts :options="chartOptions" />
           </div>
@@ -27,7 +27,7 @@ let Chart
 if (typeof window !== 'undefined') {
   import('highcharts-vue')
     .then((ChartLib) => {
-      Chart = ChartLib.Chart
+      Chart = ChartLib.template
     })
 }
 
@@ -96,7 +96,8 @@ export default {
         xAxis: {
           categories: []
         }
-      }
+      },
+      isHighchartsReady: false
     }
   },
   mounted () {
@@ -107,6 +108,7 @@ export default {
       this.loadDataTable()
       this.loadChart()
     }
+    this.isHighchartsReady = true
   },
   methods: {
     getPercentDataForChart () {
