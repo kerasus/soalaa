@@ -100,7 +100,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { AlaaSet } from 'src/models/AlaaSet.js'
 import Assistant from 'src/plugins/assistant.js'
 import { AlaaContent } from 'src/models/AlaaContent.js'
@@ -148,8 +147,7 @@ export default {
   methods: {
     getContent (contentId, subCategoryIndex) {
       const that = this
-      this.$alaaApiInstance.get(API_ADDRESS.content.base + '/' + contentId)
-      // this.alaaContent.show(contentId)
+      this.$apiGateway.content.show(contentId)
         .then((response) => {
           that.currentVideoContent = response.data.data
           that.initVideoJs(that.currentVideoContent.file.video, that.currentVideoContent.photo, subCategoryIndex)
