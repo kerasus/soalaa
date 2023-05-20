@@ -38,7 +38,7 @@
         class="userExamList"
         style="font-size: 16px;"
       >
-        <div v-if="allExamsList.list.length > 0 || myExams.list.length > 0"
+        <div v-if="allExamsList.list.length > 0 || myExams.list.length > 0 || upcomingExams.list.length > 0"
              class="fit row wrap justify-center items-start content-start"
         >
           <div v-if="$q.screen.lt.sm"
@@ -312,6 +312,11 @@ export default defineComponent({
         font-weight: 600;
         font-size: 16px;
         line-height: 25px;
+
+        @media only screen and (max-width: 600px) {
+          font-size: 12px;
+          font-weight: 500;
+        }
       }
   }
 
@@ -331,6 +336,11 @@ export default defineComponent({
     padding-bottom: 8px;
     text-align: center;
     letter-spacing: -0.03em;
+
+    @media only screen and (max-width: 600px) {
+      font-size: 12px;
+      font-weight: 500;
+    }
   }
 
   @media only screen and (max-width: 600px) {

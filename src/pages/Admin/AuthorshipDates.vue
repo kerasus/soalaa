@@ -115,6 +115,13 @@ export default {
                 field: row => row.created_at
               },
               {
+                name: 'order',
+                required: true,
+                label: 'ترتیب نمایش',
+                align: 'left',
+                field: row => row.order
+              },
+              {
                 name: 'actions',
                 required: true,
                 label: 'عملیات',
@@ -129,13 +136,16 @@ export default {
       defaultInputs: [
         { type: 'hidden', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-1', placeholder: ' ', filled: true },
         { type: 'hidden', name: 'type', label: 'نوع', responseKey: 'data.type', col: 'col-md-1', placeholder: ' ', filled: true },
-        { type: 'input', name: 'value', label: 'تاریخ تالیف', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true }
+        { type: 'input', name: 'value', label: 'تاریخ تالیف', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', col: 'col-md-2', placeholder: ' ', filled: true }
       ],
       createInputs: [
         { type: 'hidden', name: 'type', value: 'year_type', label: '', col: 'col-12' },
-        { type: 'input', name: 'value', label: 'تاریخ تالیف', col: 'col-md-3', placeholder: ' ', filled: true }
+        { type: 'input', name: 'value', label: 'تاریخ تالیف', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', col: 'col-md-2', placeholder: ' ', filled: true }
       ],
       editInputs: [
+        { type: 'hidden', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-1', placeholder: ' ' },
         { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true },
         { type: 'input', name: 'order', label: 'ترتیب نمایش', col: 'col-md-2', placeholder: ' ', filled: true }
       ],

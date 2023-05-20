@@ -765,10 +765,10 @@ export default {
     }
 
     .question-source {
-        display: flex;
-        align-items: center;
-        justify-content: left;
-       min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: right;
+      min-height: 36px;
 
       @media only screen and (max-width: 599px) {
         order: 2;
@@ -968,19 +968,13 @@ export default {
         border-radius: 16px;
         margin-right: 30px;
 
-        @media only screen and (max-width: 1439px) {
-          height: 230px;
-        }
-
         @media only screen and (max-width: 1023px) {
           padding: 16px;
           margin-right: 24px;
-          height: 200px;
         }
 
         @media only screen and (max-width: 599px) {
           max-width: 100%;
-          height: 310px;
           margin-bottom: 20px;
 
         }
