@@ -443,6 +443,7 @@ export default {
   padding-right: 42px;
   padding-left: 42px;
   bottom: 0;
+  left: 20px;
   width: 100%;
   .btn-style {
     width: 44px;
