@@ -254,7 +254,6 @@ export default defineComponent({
     },
 
     lockCityValue() {
-      debugger
       this.isCityLocked = true
     }
 
