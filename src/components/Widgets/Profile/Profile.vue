@@ -262,7 +262,6 @@ export default {
     },
 
     lockCityValue() {
-      debugger
       this.isCityLocked = true
     }
 
