@@ -58,16 +58,14 @@
           <question-item v-if="questions.loading"
                          :question="loadingQuestion" />
           <template v-else>
-            <question-item
-              v-for="question in questions.list"
-              :key="question.id"
-              :question="question"
-              :listOptions="questionsOptions"
-              pageStrategy="question-bank"
-              :report-options="reportIssuesList"
-              @deleteFromDb="deleteQuestionFromDataBase"
-              @checkSelect="onClickedCheckQuestionBtn"
-            />
+            <question-item v-for="question in questions.list"
+                           :key="question.id"
+                           :question="question"
+                           :listOptions="questionsOptions"
+                           pageStrategy="question-bank"
+                           :report-options="reportIssuesList"
+                           @deleteFromDb="deleteQuestionFromDataBase"
+                           @checkSelect="onClickedCheckQuestionBtn" />
           </template>
         </div>
 
