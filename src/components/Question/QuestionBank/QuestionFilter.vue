@@ -89,17 +89,21 @@
 
       </question-filter-expansion>
 
-      <question-filter-expansion header-title="درجه سختی">
-        <q-option-group v-model="selectedLevels"
-                        type="checkbox"
-                        :options="filterQuestions.levels.map(option => {
-                          return {
-                            label: option.trans,
-                            value: option
-                          }
-                        })"
-                        @update:model-value="onChangeLevels" />
-        <div v-if="filterQuestions.levels.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
+      <question-filter-expansion
+        header-title="درجه سختی"
+      >
+        <q-option-group
+          v-model="selectedLevels"
+          type="checkbox"
+          :options="filterQuestions.level_type.map(option => {
+            return {
+              label: option.trans,
+              value: option
+            }
+          })"
+          @update:model-value="onChangeLevels"
+        />
+        <div v-if="filterQuestions.level_type.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
 
       </question-filter-expansion>
 
@@ -118,17 +122,15 @@
 
       </question-filter-expansion>
 
-      <question-filter-expansion v-if="filterQuestions.types"
-                                 header-title="نوع سوال">
-        <q-option-group v-model="selectedTypes"
-                        type="checkbox"
-                        :options="filterQuestions.types.map(option => {
-                          return {
-                            label: option.value,
-                            value: option
-                          }
-                        })"
-                        @update:model-value="onChangeTypes" />
+      <question-filter-expansion
+        v-if="filterQuestions.types"
+        header-title="نوع سوال"
+      >
+        <q-option-group
+          v-model="selectedTypes"
+          :options="singleModeFilterOptions('types', 'value')"
+          @update:model-value="onChangeTypes"
+        />
         <div v-if="filterQuestions.types.length === 0"> هیچ نوع سوالی ایجاد نشده است</div>
 
       </question-filter-expansion>
@@ -148,12 +150,16 @@
 
       </question-filter-expansion>
 
-      <question-filter-expansion v-if="filterQuestions.report_status"
-                                 header-title="وضعیت خطا"
-                                 :loading="localLoadings.reportStatusLoading">
-        <q-option-group v-model="selectedErrorStatus"
-                        :options="reportStatusesOptions()"
-                        @update:model-value="onChangeErrorStatus" />
+      <question-filter-expansion
+        v-if="filterQuestions.report_status"
+        header-title="وضعیت خطا"
+        :loading="localLoadings.reportStatusLoading"
+      >
+        <q-option-group
+          v-model="selectedErrorStatus"
+          :options="singleModeFilterOptions('report_status', 'description')"
+          @update:model-value="onChangeErrorStatus"
+        />
         <div v-if="filterQuestions.report_status.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
 
       </question-filter-expansion>
@@ -234,7 +240,7 @@ export default {
       selectedYears: [],
       selectedMajors: [],
       selectedLevels: [],
-      selectedTypes: [],
+      selectedTypes: {},
       selectedReportType: [],
       selectedErrorStatus: {},
       selectedTags: [],
@@ -245,7 +251,7 @@ export default {
         majors: [],
         level: [],
         years: [],
-        types: [],
+        type_id: '',
         report_type: [],
         statuses: [],
         question_report_type: [],
@@ -319,10 +325,10 @@ export default {
         return filter.display_title || filter.description || filter.title || filter.value || filter.trans || filter
       }
     },
-    reportStatusesOptions() {
-      const options = this.filterQuestions.report_status.map(option => {
+    singleModeFilterOptions(filterKey, labelKey) {
+      const options = this.filterQuestions[filterKey].map(option => {
         return {
-          label: option.description,
+          label: option[labelKey],
           value: option
         }
       })
@@ -380,7 +386,7 @@ export default {
       this.changeFilterData('statuses', value)
     },
     onChangeTypes (value) {
-      this.changeFilterData('types', value)
+      this.changeFilterData('type_id', value)
     },
     onChangeReportTypes (value) {
       this.changeFilterData('question_report_type', value)
@@ -422,10 +428,6 @@ export default {
           key: 'level'
         },
         {
-          filterType: 'question_type',
-          key: 'types'
-        },
-        {
           filterType: 'question_report_type',
           key: 'question_report_type'
         },
@@ -442,6 +444,10 @@ export default {
           this.removeFilterFromFiltersData('level', filter.key, 'key')
         }
       })
+      if (filter.type === 'question_type') {
+        this.selectedTypes = ''
+        this.onChangeTypes(this.selectedTypes)
+      }
       if (filter.type === 'report_status') {
         this.selectedErrorStatus = ''
         this.onChangeErrorStatus(this.selectedErrorStatus)
