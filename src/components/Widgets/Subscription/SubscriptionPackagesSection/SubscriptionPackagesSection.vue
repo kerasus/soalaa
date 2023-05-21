@@ -46,6 +46,7 @@
                      label="شروع کنید"
                      unelevated
                      :loading="subscribeLoading"
+                     disable
                      @click="subscribe(item.id)"
               />
             </div>
