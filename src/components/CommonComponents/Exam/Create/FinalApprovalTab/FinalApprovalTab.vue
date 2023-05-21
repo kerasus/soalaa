@@ -117,7 +117,8 @@
         </sticky-both-sides>
       </div>
       <div class="col-lg-9 col-xs-12">
-        <div class="question-item-content">
+        <div :key="questionItemContentKey"
+             class="question-item-content">
           <question-item v-if="exam.loading"
                          :question="loadingQuestion" />
           <template v-else-if="exam.questions.list.length > 0">
@@ -134,6 +135,7 @@
                   :questionIndex="index"
                   :questionsLength="exam.questions.list.length"
                   pageStrategy="question-bank"
+                  :report-options="reportTypeList"
                   final-approval-mode
                   @changeOrder="changeSelectedQuestionOrder"
                   @checkSelect="onClickedCheckQuestionBtn"
@@ -163,6 +165,7 @@ import { Exam } from 'src/models/Exam'
 
 import { Chart } from 'highcharts-vue'
 import StickyBothSides from 'components/Utils/StickyBothSides'
+import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'FinalApprovalTab',
@@ -211,8 +214,11 @@ export default {
       this.replaceTitle()
       // this.reIndexEamQuestions(this.exam.questions.list)
     }
+    this.setReportOptions()
   },
   data: () => ({
+    reportTypeList: [],
+    questionItemContentKey: 0,
     chartOptions: {
       chart: {
         height: '150',
@@ -314,6 +320,13 @@ export default {
     }
   },
   methods: {
+    setReportOptions() {
+      this.$axios.get(API_ADDRESS.exam.user.reportType)
+        .then((response) => {
+          this.reportTypeList = response.data.data
+          this.questionItemContentKey++
+        })
+    },
     async initPageData() {
       this.questions = new QuestionList({ ...this.exam.questions })
       this.reIndexEamQuestions(this.exam.questions.list)
