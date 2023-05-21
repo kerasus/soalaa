@@ -89,20 +89,16 @@
 
       </question-filter-expansion>
 
-      <question-filter-expansion
-        header-title="درجه سختی"
-      >
-        <q-option-group
-          v-model="selectedLevels"
-          type="checkbox"
-          :options="filterQuestions.level_type.map(option => {
-            return {
-              label: option.trans,
-              value: option
-            }
-          })"
-          @update:model-value="onChangeLevels"
-        />
+      <question-filter-expansion header-title="درجه سختی">
+        <q-option-group v-model="selectedLevels"
+                        type="checkbox"
+                        :options="filterQuestions.level_type.map(option => {
+                          return {
+                            label: option.trans,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeLevels" />
         <div v-if="filterQuestions.level_type.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
 
       </question-filter-expansion>
@@ -122,15 +118,11 @@
 
       </question-filter-expansion>
 
-      <question-filter-expansion
-        v-if="filterQuestions.types"
-        header-title="نوع سوال"
-      >
-        <q-option-group
-          v-model="selectedTypes"
-          :options="singleModeFilterOptions('types', 'value')"
-          @update:model-value="onChangeTypes"
-        />
+      <question-filter-expansion v-if="filterQuestions.types"
+                                 header-title="نوع سوال">
+        <q-option-group v-model="selectedTypes"
+                        :options="singleModeFilterOptions('types', 'value')"
+                        @update:model-value="onChangeTypes" />
         <div v-if="filterQuestions.types.length === 0"> هیچ نوع سوالی ایجاد نشده است</div>
 
       </question-filter-expansion>
@@ -150,16 +142,12 @@
 
       </question-filter-expansion>
 
-      <question-filter-expansion
-        v-if="filterQuestions.report_status"
-        header-title="وضعیت خطا"
-        :loading="localLoadings.reportStatusLoading"
-      >
-        <q-option-group
-          v-model="selectedErrorStatus"
-          :options="singleModeFilterOptions('report_status', 'description')"
-          @update:model-value="onChangeErrorStatus"
-        />
+      <question-filter-expansion v-if="filterQuestions.report_status"
+                                 header-title="وضعیت خطا"
+                                 :loading="localLoadings.reportStatusLoading">
+        <q-option-group v-model="selectedErrorStatus"
+                        :options="singleModeFilterOptions('report_status', 'description')"
+                        @update:model-value="onChangeErrorStatus" />
         <div v-if="filterQuestions.report_status.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
 
       </question-filter-expansion>

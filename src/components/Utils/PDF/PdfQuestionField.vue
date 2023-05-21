@@ -65,7 +65,6 @@ export default {
   name: 'PdfQuestionField',
   components: { VueKatex },
   mixins: [mixinQuiz, mixinUserActionOnQuestion],
-  emits: ['update:height', 'questionLoaded'],
   props: {
     order: {
       type: Number
@@ -112,6 +111,7 @@ export default {
       default: false
     }
   },
+  emits: ['update:height', 'questionLoaded'],
   data () {
     return {
       statementLoaded: false,
