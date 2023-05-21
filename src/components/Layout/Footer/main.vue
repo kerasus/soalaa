@@ -337,6 +337,12 @@ export default {
 <style scoped lang="scss">
 .homePage-footer-container {
   background: #f4f6f9;
+  @media screen and (max-width:600px){
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
   .footer-box-1, .footer-box-2{
     @media screen and (max-width:600px){
       display: none;
