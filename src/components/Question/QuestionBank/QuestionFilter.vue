@@ -152,7 +152,7 @@
       >
         <q-option-group
           v-model="selectedTypes"
-          :options="typesOptions()"
+          :options="singleModeFilterOptions('types', 'value')"
           @update:model-value="onChangeTypes"
         />
         <div v-if="filterQuestions.types.length === 0"> هیچ نوع سوالی ایجاد نشده است</div>
@@ -185,7 +185,7 @@
       >
         <q-option-group
           v-model="selectedErrorStatus"
-          :options="reportStatusesOptions()"
+          :options="singleModeFilterOptions('report_status', 'description')"
           @update:model-value="onChangeErrorStatus"
         />
         <div v-if="filterQuestions.report_status.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
@@ -353,24 +353,10 @@ export default {
         return filter.display_title || filter.description || filter.title || filter.value || filter.trans || filter
       }
     },
-    typesOptions() {
-      const options = this.filterQuestions.types.map(option => {
+    singleModeFilterOptions(filterKey, labelKey) {
+      const options = this.filterQuestions[filterKey].map(option => {
         return {
-          label: option.value,
-          value: option
-        }
-      })
-      const noneOption = {
-        label: 'هیچکدام',
-        value: ''
-      }
-      options.push(noneOption)
-      return options
-    },
-    reportStatusesOptions() {
-      const options = this.filterQuestions.report_status.map(option => {
-        return {
-          label: option.description,
+          label: option[labelKey],
           value: option
         }
       })
