@@ -80,6 +80,7 @@ export default {
   name: 'PdfQuestionField',
   components: { VueKatex },
   mixins: [mixinQuiz, mixinUserActionOnQuestion],
+  emits: ['update:height', 'questionLoaded'],
   props: {
     order: {
       type: Number
@@ -182,7 +183,7 @@ export default {
     choiceClass () {
       const question = this.question
       const largestChoice = this.getLargestChoice(question.choices)
-      const largestChoiceWidth = this.windowSize.x / largestChoice
+      const largestChoiceWidth = 2128 / largestChoice
       if (largestChoiceWidth < 24) {
         return 'col-md-12'
       }
@@ -193,6 +194,9 @@ export default {
         return 'col-md-3'
       }
       return 'col-md-3'
+    },
+    questionFieldHeight() {
+      return this.$refs.questionField.clientHeight
     }
   },
   watch: {
