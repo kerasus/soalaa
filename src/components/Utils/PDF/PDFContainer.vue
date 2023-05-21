@@ -15,8 +15,7 @@
                           :questionAndChoices="pdfConfig.questionAndChoices"
                           :betweenChoices="pdfConfig.betweenChoices"
                           @questionLoaded="onQuestionLoaded(question)"
-                          @update:height="updateQuestionHeight($event, question)"
-      />
+                          @update:height="updateQuestionHeight($event, question)" />
     </div>
     <div v-else>
       <div v-if="mode === 'questionsNoAnswer'"
