@@ -78,6 +78,7 @@
               :question="question"
               :listOptions="questionsOptions"
               pageStrategy="question-bank"
+              :report-options="reportIssuesList"
               @deleteFromDb="deleteQuestionFromDataBase"
               @checkSelect="onClickedCheckQuestionBtn"
             />
@@ -134,6 +135,7 @@ export default {
   },
   data() {
     return {
+      reportIssuesList: [],
       loadings: {
         reportStatusLoading: false
       },
@@ -385,6 +387,7 @@ export default {
               this.filterQuestions.types.push(option)
             } else if (option.type === 'question_report_type') {
               this.filterQuestions.report_type.push(option)
+              this.reportIssuesList.push(option)
             }
           })
         })
