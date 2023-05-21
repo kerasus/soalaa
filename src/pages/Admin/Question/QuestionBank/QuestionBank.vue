@@ -58,13 +58,16 @@
           <question-item v-if="questions.loading"
                          :question="loadingQuestion" />
           <template v-else>
-            <question-item v-for="question in questions.list"
-                           :key="question.id"
-                           :question="question"
-                           :listOptions="questionsOptions"
-                           pageStrategy="question-bank"
-                           @deleteFromDb="deleteQuestionFromDataBase"
-                           @checkSelect="onClickedCheckQuestionBtn" />
+            <question-item
+              v-for="question in questions.list"
+              :key="question.id"
+              :question="question"
+              :listOptions="questionsOptions"
+              pageStrategy="question-bank"
+              :report-options="reportIssuesList"
+              @deleteFromDb="deleteQuestionFromDataBase"
+              @checkSelect="onClickedCheckQuestionBtn"
+            />
           </template>
         </div>
 
@@ -123,6 +126,7 @@ export default {
   emits: ['onFilter'],
   data() {
     return {
+      reportIssuesList: [],
       loadings: {
         reportStatusLoading: false
       },
@@ -367,6 +371,7 @@ export default {
               this.filterQuestions.types.push(option)
             } else if (option.type === 'question_report_type') {
               this.filterQuestions.report_type.push(option)
+              this.reportIssuesList.push(option)
             }
           })
         })

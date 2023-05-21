@@ -111,7 +111,8 @@
         </sticky-both-sides>
       </div>
       <div class="col-lg-9 col-xs-12">
-        <div class="question-item-content">
+        <div :key="questionItemContentKey"
+             class="question-item-content">
           <question-item v-if="exam.loading"
                          :question="loadingQuestion" />
           <template v-else-if="exam.questions.list.length > 0">
@@ -120,14 +121,17 @@
                               :virtual-scroll-item-size="450"
                               :virtual-scroll-slice-size="5">
               <template v-slot="{ item , index}">
-                <question-item :key="item.id"
-                               :question="item"
-                               :questionIndex="index"
-                               :questionsLength="exam.questions.list.length"
-                               pageStrategy="question-bank"
-                               final-approval-mode
-                               @changeOrder="changeSelectedQuestionOrder"
-                               @checkSelect="onClickedCheckQuestionBtn" />
+                <question-item
+                  :key="item.id"
+                  :question="item"
+                  :questionIndex="index"
+                  :questionsLength="exam.questions.list.length"
+                  pageStrategy="question-bank"
+                  :report-options="reportTypeList"
+                  final-approval-mode
+                  @changeOrder="changeSelectedQuestionOrder"
+                  @checkSelect="onClickedCheckQuestionBtn"
+                />
               </template>
             </q-virtual-scroll>
           </template>
@@ -182,6 +186,8 @@ export default {
   },
   emits: ['detachQuestion'],
   data: () => ({
+    reportTypeList: [],
+    questionItemContentKey: 0,
     chartOptions: {
       chart: {
         height: '150',
@@ -303,11 +309,19 @@ export default {
       this.replaceTitle()
       // this.reIndexEamQuestions(this.exam.questions.list)
     }
+    this.setReportOptions()
   },
   created() {
     this.initPageData()
   },
   methods: {
+    setReportOptions() {
+      this.$axios.get(API_ADDRESS.exam.user.reportType)
+        .then((response) => {
+          this.reportTypeList = response.data.data
+          this.questionItemContentKey++
+        })
+    },
     async initPageData() {
       this.questions = new QuestionList({ ...this.exam.questions })
       this.reIndexEamQuestions(this.exam.questions.list)
