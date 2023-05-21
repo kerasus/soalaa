@@ -121,17 +121,15 @@
                               :virtual-scroll-item-size="450"
                               :virtual-scroll-slice-size="5">
               <template v-slot="{ item , index}">
-                <question-item
-                  :key="item.id"
-                  :question="item"
-                  :questionIndex="index"
-                  :questionsLength="exam.questions.list.length"
-                  pageStrategy="question-bank"
-                  :report-options="reportTypeList"
-                  final-approval-mode
-                  @changeOrder="changeSelectedQuestionOrder"
-                  @checkSelect="onClickedCheckQuestionBtn"
-                />
+                <question-item :key="item.id"
+                               :question="item"
+                               :questionIndex="index"
+                               :questionsLength="exam.questions.list.length"
+                               pageStrategy="question-bank"
+                               :report-options="reportTypeList"
+                               final-approval-mode
+                               @changeOrder="changeSelectedQuestionOrder"
+                               @checkSelect="onClickedCheckQuestionBtn" />
               </template>
             </q-virtual-scroll>
           </template>
@@ -149,6 +147,7 @@
 
 <script>
 import { Exam } from 'src/models/Exam.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { Question, QuestionList } from 'src/models/Question.js'
 import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
 import QuestionItem from 'src/components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
@@ -316,10 +315,13 @@ export default {
   },
   methods: {
     setReportOptions() {
-      this.$axios.get(API_ADDRESS.exam.user.reportType)
-        .then((response) => {
-          this.reportTypeList = response.data.data
+      APIGateway.option.userIndex({ type: 'question_report_type' })
+        .then((reportTypeList) => {
+          this.reportTypeList = reportTypeList
           this.questionItemContentKey++
+        })
+        .catch(() => {
+
         })
     },
     async initPageData() {

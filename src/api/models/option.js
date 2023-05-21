@@ -16,12 +16,17 @@ export default class OptionAPI extends APIRepository {
     }
   }
 
-  userIndex(data = {}, cache) {
+  userIndex(data = {}, cache = { TTL: 100 }) {
+    const params = {}
+    if (data.type) {
+      params.type = data.type
+    }
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.userIndex,
       cacheKey: this.CacheList.userIndex,
+      data: params,
       ...(cache && { cache }),
       resolveCallback: (response) => {
         return response.data.data
