@@ -632,6 +632,7 @@ export default defineComponent({
     border-radius: 16px;
     height: 489px;
     padding-bottom: 18px;
+    position: relative;
 
     .calendar-wrapper {
       width: 100%;
@@ -661,7 +662,8 @@ export default defineComponent({
           @media screen and (max-width: 600px) {
             padding: 7px 7px;
             position: absolute;
-            top: -35px;
+            top: 10px;
+            left: 10px;
           }
         }
 
@@ -670,6 +672,11 @@ export default defineComponent({
           justify-content: space-evenly;
           align-items: center;
           padding: 16px 30px;
+
+          @media screen and (max-width: 600px) {
+            margin-top: 40px;
+            padding: 16px 5px;
+          }
 
           .calendar-date {
             padding: 10px 20px;
@@ -689,9 +696,13 @@ export default defineComponent({
               text-align: center;
               color: #434765;
               margin-left: 10px;
+
+              @media screen and (max-width: 600px) {
+                font-size: 10px;
+              }
             }
 
-            @media screen and (max-width: 720px) {
+            @media screen and (max-width: 600px) {
               padding: 10px 10px;
               margin-right: 4px;
               font-weight: 400;
@@ -740,10 +751,10 @@ export default defineComponent({
 
         @media screen and (max-width: 600px) {
           flex-direction: column;
+          align-items: flex-start;
           height: 120px;
           position: absolute;
-          right: 5%;
-          top: 31%;
+          top: 0;
         }
       }
 
