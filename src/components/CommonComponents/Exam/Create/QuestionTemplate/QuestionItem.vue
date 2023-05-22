@@ -468,6 +468,7 @@ export default {
         editQuestion: true,
         switch: false,
         selectQuestion: true,
+        questionYear: false,
         reportProblem: true,
         questionRate: true,
         questionComment: true,
@@ -588,6 +589,7 @@ export default {
         questionRate: true,
         questionComment: true,
         descriptiveAnswer: true,
+        questionYear: false,
         menu: {
           show: true,
           items: {
@@ -602,7 +604,7 @@ export default {
         ...baseConf
       }
       if (this.pageStrategy === 'question-bank') {
-        // return finalConf
+        finalConf.questionYear = true
       }
       if (this.pageStrategy === 'lesson-detail') {
         // return finalConf
@@ -616,6 +618,7 @@ export default {
           ...this.listOptions,
           reportProblem: true,
           editQuestion: false,
+          questionYear: true,
           menu: {
             show: false,
             items: {
@@ -811,57 +814,50 @@ export default {
         }
       }
 
-    .question-tags {
+  }
+
+  .question-tags {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+
+    @media only screen and (max-width: 1439px) {
+      margin-top: 20px;
+    }
+
+    @media screen and (max-width: 599px) {
+      flex-direction: column;
+      margin-top: 0;
+    }
+
+    .question-tag {
       display: flex;
       flex-direction: row;
-      margin-top: 16px;
+      align-items: center;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 19px;
+      color: #434765;
 
-      @media only screen and (max-width: 1439px) {
-        margin-top: 20px;
+      .tag-title{
+        @media screen and (max-width: 599px){
+          order: 2;
+        }
+        div{
+          max-width: 99px;
+        }
       }
 
-      @media screen and (max-width: 599px) {
-        flex-direction: column;
-        margin-top: 0;
-      }
-
-      .question-tag {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 19px;
-        color: #434765;
-
-        .tag-circle {
-          border-radius: 50%;
-          margin: 0 6px;
-          width: 6px;
-          height: 6px;
-          background: #6D708B;
-          opacity: 0.3;
-          @media screen and (max-width: 599px){
-            order: 1;
-          }
-        }
-        .tag-title{
-          @media screen and (max-width: 599px){
-            order: 2;
-          }
-          div{
-            max-width: 99px;
-          }
-        }
-
-        &:last-child {
-          .tag-circle {
-            display: none;
-            @media screen and (max-width: 599px) {
-              display: block;
-            }
-          }
+      .tag-circle {
+        border-radius: 50%;
+        margin: 0 6px;
+        width: 6px;
+        height: 6px;
+        background: #6D708B;
+        opacity: 0.3;
+        @media screen and (max-width: 599px){
+          order: 1;
         }
       }
     }
