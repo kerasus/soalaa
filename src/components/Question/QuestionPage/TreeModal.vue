@@ -566,6 +566,10 @@ export default {
     height: 378px;
     overflow-x: scroll;
     margin-top: 10px;
+    @media screen and (max-width: 880px) {
+      max-height: 378px;
+      height: auto;
+    }
   }
   .default-details-container {
     .detail-box {
