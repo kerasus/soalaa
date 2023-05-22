@@ -214,7 +214,7 @@
              src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_azmuns.png"
              alt="no-item">
         <div class="no-item-title">
-          شما آزمون ساخته شده ای ندارید
+          آزمونی وجود ندارد
         </div>
         <q-btn class="new-link"
                flat

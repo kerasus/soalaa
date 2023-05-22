@@ -483,7 +483,8 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     background: #f4f6f9;
-    @media only screen and (max-width: 599px) {
+
+    @media only screen and (max-width: 600px) {
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -582,6 +583,20 @@ export default {
 
 .main-container {
 
+  @media only screen and (max-width: 1919px) {
+    padding-left: 0;
+    padding-right: 24px;
+  }
+
+  @media only screen and (max-width: 1439px) {
+    padding-left: 30px;
+  }
+
+  @media only screen and (max-width: 599px) {
+    padding-left: 1px;
+    padding-right: 0px;
+  }
+
   .question-bank-header {
     padding-bottom: 30px;
   }
@@ -604,19 +619,12 @@ export default {
 }
 
 @media only screen and (max-width: 1919px) {
-  .main-container {
-    padding-left: 0;
-    padding-right: 24px;
-  }
   .question-bank-filter {
     padding-right: 20px;
   }
 }
 
 @media only screen and (max-width: 1439px) {
-  .main-container {
-    padding-left: 30px;
-  }
   .question-bank-header {
     padding-bottom: 20px;
   }

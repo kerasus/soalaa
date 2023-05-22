@@ -70,7 +70,7 @@
 
       <div
         v-if="listConfig.questionSource || question.loading "
-        class="question-source col-xl-3 col-sm-4 col-xs-6"
+        class="question-source col-xl-3 col-sm-4 col-xs-12"
       >
         <div
           v-if="question.loading"
@@ -137,7 +137,7 @@
       </div>
       <div
         v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-        class="question-tags ellipsis col-sm-12 col-xs-6"
+        class="question-tags ellipsis col-sm-12 col-xs-12"
       >
         <div v-for="i in 3"
              :key="i">
@@ -153,13 +153,15 @@
           :key="index"
           class="question-tag"
         >
-          <div
-            class="tag-box no-wrap flex items-center"
-          >
-            <div class="tag-title ellipsis">{{ item.title }}</div>
-            <div class="tag-circle" />
+          <div v-for="(ancestor,ancestorIndex) in item.ancestors"
+               :key="ancestorIndex"
+               class="ancestors flex flex-center">
+            <div v-if="ancestorIndex !== 0"
+                 class="tag-title ellipsis">{{ ancestor.title }}</div>
+            <div v-if="ancestorIndex !== 0"
+                 class="tag-circle" />
           </div>
-
+          <div class="tag-title ellipsis">{{ item.title }}</div>
         </div>
       </div>
     </q-card-section>
@@ -811,9 +813,9 @@ export default {
         }
       }
 
-    .question-tags {
+      .question-tags {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       margin-top: 16px;
 
       @media only screen and (max-width: 1439px) {
@@ -835,17 +837,6 @@ export default {
         line-height: 19px;
         color: #434765;
 
-        .tag-circle {
-          border-radius: 50%;
-          margin: 0 6px;
-          width: 6px;
-          height: 6px;
-          background: #6D708B;
-          opacity: 0.3;
-          @media screen and (max-width: 599px){
-            order: 1;
-          }
-        }
         .tag-title{
           @media screen and (max-width: 599px){
             order: 2;
@@ -855,12 +846,15 @@ export default {
           }
         }
 
-        &:last-child {
-          .tag-circle {
-            display: none;
-            @media screen and (max-width: 599px) {
-              display: block;
-            }
+        .tag-circle {
+          border-radius: 50%;
+          margin: 0 6px;
+          width: 6px;
+          height: 6px;
+          background: #6D708B;
+          opacity: 0.3;
+          @media screen and (max-width: 599px){
+            order: 1;
           }
         }
       }

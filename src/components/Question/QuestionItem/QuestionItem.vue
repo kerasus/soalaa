@@ -144,7 +144,7 @@
       </div>
       <div
         v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-        class="question-tags ellipsis col-sm-6 col-xs-6"
+        class="question-tags ellipsis col-sm-6 col-xs-10"
       >
         <div v-for="i in 3"
              :key="i">
@@ -173,7 +173,7 @@
       </div>
       <div
         v-if="(listConfig.questionYear && question.years.length > 0) || question.loading"
-        class="question-year ellipsis col-sm-6 col-xs-6 justify-end"
+        class="question-year ellipsis col-sm-6 col-xs-2 justify-end"
       >
         <q-skeleton
           v-if="question.loading"

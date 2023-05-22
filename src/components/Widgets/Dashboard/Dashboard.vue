@@ -172,6 +172,7 @@
           <q-btn
             unelevated
             class="btn-style profile"
+            :to="{ name: 'User.Profile'}"
           >
             <svg width="24"
                  height="24"
