@@ -1235,5 +1235,5 @@ export default {
     }
   }
 }
-
+}
 </style>
