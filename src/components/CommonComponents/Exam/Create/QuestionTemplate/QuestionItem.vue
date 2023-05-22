@@ -70,7 +70,7 @@
 
       <div
         v-if="listConfig.questionSource || question.loading "
-        class="question-source col-xl-3 col-sm-4 col-xs-6"
+        class="question-source col-xl-3 col-sm-4 col-xs-12"
       >
         <div
           v-if="question.loading"
@@ -137,7 +137,7 @@
       </div>
       <div
         v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-        class="question-tags ellipsis col-sm-12 col-xs-6"
+        class="question-tags ellipsis col-sm-12 col-xs-12"
       >
         <div v-for="i in 3"
              :key="i">
@@ -153,13 +153,15 @@
           :key="index"
           class="question-tag"
         >
-          <div
-            class="tag-box no-wrap flex items-center"
-          >
-            <div class="tag-title ellipsis">{{ item.title }}</div>
-            <div class="tag-circle" />
+          <div v-for="(ancestor,ancestorIndex) in item.ancestors"
+               :key="ancestorIndex"
+               class="ancestors flex flex-center">
+            <div v-if="ancestorIndex !== 0"
+                 class="tag-title ellipsis">{{ ancestor.title }}</div>
+            <div v-if="ancestorIndex !== 0"
+                 class="tag-circle" />
           </div>
-
+          <div class="tag-title ellipsis">{{ item.title }}</div>
         </div>
       </div>
     </q-card-section>
@@ -814,8 +816,6 @@ export default {
         }
       }
 
-  }
-
   .question-tags {
     display: flex;
     flex-direction: column;
@@ -858,6 +858,7 @@ export default {
         opacity: 0.3;
         @media screen and (max-width: 599px){
           order: 1;
+
         }
       }
     }

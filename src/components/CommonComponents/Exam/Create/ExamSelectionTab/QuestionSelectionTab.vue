@@ -750,8 +750,6 @@ export default {
 }
 
 .main-container {
-  .question-bank-filter {
-  }
 
   .question-list {
     margin-left: 30px;
