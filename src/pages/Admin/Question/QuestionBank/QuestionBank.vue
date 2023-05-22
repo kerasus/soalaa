@@ -162,7 +162,7 @@ export default {
         reference_type: [],
         year_type: [],
         statuses: [],
-        levels: [],
+        level_type: [],
         types: [],
         report_type: [],
         report_status: []
@@ -333,6 +333,7 @@ export default {
         level: filterData.level.map(item => item.key),
         years: filterData.years.map(item => item.id),
         majors: filterData.majors.map(item => item.id),
+        type_id: filterData.type_id ? filterData.type_id.id : '',
         reference: filterData.reference.map(item => item.id),
         statement: (filterData.statement) ? filterData.statement[0] : '',
         sort_by: (this.searchSelector.value) ? 'created_at' : '',
@@ -403,7 +404,7 @@ export default {
     getLevelsFilterData() {
       this.$axios.get(API_ADDRESS.question.levels)
         .then(response => {
-          this.filterQuestions.levels = response.data.data
+          this.filterQuestions.level_type = response.data.data
           this.addTypeToFilter('level_type')
         })
         .catch()

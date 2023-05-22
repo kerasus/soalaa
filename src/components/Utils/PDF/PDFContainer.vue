@@ -16,6 +16,7 @@
                           :questionAndChoices="pdfConfig.questionAndChoices"
                           :betweenChoices="pdfConfig.betweenChoices"
                           @questionLoaded="onQuestionLoaded(question)"
+                          @update:height="updateQuestionHeight($event, question)"
       />
     </div>
     <div v-else>
@@ -45,6 +46,7 @@
                                   display-choices
                                   display-statement
                                   :display-descriptive-answer="false"
+                                  @update:height="updateQuestionHeight($event, pageQuestion, pageQuestions.length === pageQuestionIndex + 1)"
               />
             </div>
           </template>
@@ -146,7 +148,8 @@ export default {
       pageSize: {
         w: 724,
         h: 880
-      }
+      },
+      questionLoadFlag: false
     }
   },
   computed: {
@@ -205,6 +208,12 @@ export default {
     },
     onQuestionLoaded (question) {
       question.loaded = true
+    },
+    updateQuestionHeight(event, question, lastIndex) {
+      question.height = event
+      if (lastIndex) {
+        this.createPageChunks(this.pageSize.h)
+      }
     }
   }
 }
