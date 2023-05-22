@@ -1,6 +1,6 @@
 <template>
   <div class="download-exam row">
-    <div class="col-3 form">
+    <div class="col-md-3 form">
       <q-card>
         <div class="exam-info q-col-gutter-y-sm row">
           <div class="col-12">
@@ -150,7 +150,7 @@
         </q-btn>
       </q-card>
     </div>
-    <div class="col-9 pdf">
+    <div class="col-md-9 pdf">
       <q-card>
         <q-tabs
           v-model="tab"
@@ -431,6 +431,7 @@ export default {
       html2pdf()
         .set({
           image: { type: 'png', quality: 1 },
+          filename: 'Soalaa.pdf',
           html2canvas: {
             dpi: 500,
             scale: 3
@@ -499,6 +500,12 @@ export default {
   }
 
   .form {
+    padding-right: 15px;
+
+    @media screen and (max-width:600px){
+      padding-right: 0;
+    }
+
     .separator-margin {
       margin: 20px 0;
     }
@@ -515,9 +522,6 @@ export default {
         color: #FFFFFF;
       }
     }
-
-    padding-right: 15px;
-
     .value {
       width: 155px;
       padding: 9px 16px;
@@ -620,6 +624,11 @@ export default {
 
   .pdf {
     padding-left: 15px;
+    overflow-x: auto;
+
+    @media screen and (max-width:600px){
+      padding-left: 0;
+    }
 
     :deep(.q-card) {
       padding: 32px;
@@ -728,6 +737,10 @@ export default {
             letter-spacing: -0.03em;
           }
         }
+      }
+
+      .pdf-container {
+        overflow-x: auto;
       }
     }
   }
