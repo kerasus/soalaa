@@ -500,7 +500,7 @@ export default {
     getFiltersForRequest(filterData) {
       return {
         tags: filterData.tags.map(item => item.id),
-        level: filterData.level.map(item => item.value),
+        level: filterData.level_type.map(item => item.value),
         years: filterData.years.map(item => item.id),
         majors: filterData.majors.map(item => item.id),
         reference: filterData.reference.map(item => item.id),
@@ -551,6 +551,11 @@ export default {
             }
           })
         })
+    },
+    addTypeToFilter(filter) {
+      this.filterQuestions[filter].forEach(item => {
+        item.type = filter
+      })
     },
     selectAllQuestions() {
       this.selectedQuestions = []
