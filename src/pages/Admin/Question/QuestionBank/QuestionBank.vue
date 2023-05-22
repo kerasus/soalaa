@@ -330,7 +330,7 @@ export default {
     getFiltersForRequest(filterData) {
       return {
         tags: filterData.tags.map(item => item.id),
-        level: filterData.level.map(item => item.key),
+        level: filterData.level_type.map(item => item.key),
         years: filterData.years.map(item => item.id),
         majors: filterData.majors.map(item => item.id),
         type_id: filterData.type_id ? filterData.type_id.id : '',
@@ -405,7 +405,7 @@ export default {
       this.$axios.get(API_ADDRESS.question.levels)
         .then(response => {
           this.filterQuestions.level_type = response.data.data
-          this.addTypeToFilter('level_type')
+          // this.addTypeToFilter('level_type')
         })
         .catch()
     },
@@ -413,7 +413,7 @@ export default {
       this.$axios.get(API_ADDRESS.question.status.base)
         .then(response => {
           this.filterQuestions.statuses = response.data.data
-          this.addTypeToFilter('statuses')
+          // this.addTypeToFilter('statuses')
         })
     },
     getQuestionReportStatuses() {
@@ -422,7 +422,7 @@ export default {
         .then(response => {
           this.loadings.reportStatusLoading = false
           this.filterQuestions.report_status = response.data.data
-          this.addTypeToFilter('report_status')
+          // this.addTypeToFilter('report_status')
         })
         .catch(() => {
           this.loadings.reportStatusLoading = false
