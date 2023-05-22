@@ -137,6 +137,9 @@ export default {
     return {
       reportIssuesList: [],
       loadings: {
+        optionsLoading: false,
+        levelTypeLoading: false,
+        statusLoading: false,
         reportStatusLoading: false
       },
       searchInput: '',
@@ -375,8 +378,10 @@ export default {
         })
     },
     getFilterOptions() {
+      this.loadings.optionsLoading = true
       this.$axios.get(API_ADDRESS.option.base)
         .then((response) => {
+          this.loadings.optionsLoading = false
           response.data.data.forEach(option => {
             if (option.type === 'reference_type') {
               this.filterQuestions.reference_type.push(option)
@@ -392,28 +397,33 @@ export default {
             }
           })
         })
+        .catch(() => {
+          this.loadings.optionsLoading = false
+        })
       this.getQuestionStatuses()
       this.getQuestionReportStatuses()
       this.getLevelsFilterData()
     },
-    addTypeToFilter(filter) {
-      this.filterQuestions[filter].forEach(item => {
-        item.type = filter
-      })
-    },
     getLevelsFilterData() {
+      this.loadings.levelTypeLoading = true
       this.$axios.get(API_ADDRESS.question.levels)
         .then(response => {
           this.filterQuestions.level_type = response.data.data
-          // this.addTypeToFilter('level_type')
+          this.loadings.levelTypeLoading = false
         })
-        .catch()
+        .catch(() => {
+          this.loadings.levelTypeLoading = false
+        })
     },
     getQuestionStatuses () {
+      this.loadings.statusLoading = true
       this.$axios.get(API_ADDRESS.question.status.base)
         .then(response => {
           this.filterQuestions.statuses = response.data.data
-          // this.addTypeToFilter('statuses')
+          this.loadings.statusLoading = false
+        })
+        .catch(() => {
+          this.loadings.statusLoading = true
         })
     },
     getQuestionReportStatuses() {
@@ -422,7 +432,6 @@ export default {
         .then(response => {
           this.loadings.reportStatusLoading = false
           this.filterQuestions.report_status = response.data.data
-          // this.addTypeToFilter('report_status')
         })
         .catch(() => {
           this.loadings.reportStatusLoading = false

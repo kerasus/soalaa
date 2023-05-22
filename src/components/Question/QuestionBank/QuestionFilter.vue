@@ -58,6 +58,7 @@
       <!--      header-title="مرجع"-->
       <question-filter-expansion
         header-title="طراح سوال"
+        :loading="localLoadings.optionsLoading"
       >
         <q-option-group
           v-model="selectedReference"
@@ -75,6 +76,7 @@
 
       <question-filter-expansion
         header-title="سال انتشار"
+        :loading="localLoadings.optionsLoading"
       >
         <q-option-group
           v-model="selectedYears"
@@ -93,6 +95,7 @@
       <question-filter-expansion
         v-if="showMajorList"
         header-title="رشته تحصیلی"
+        :loading="localLoadings.optionsLoading"
       >
         <q-option-group
           v-model="selectedMajors"
@@ -111,6 +114,7 @@
 
       <question-filter-expansion
         header-title="درجه سختی"
+        :loading="localLoadings.levelTypeLoading"
       >
         <q-option-group
           v-model="selectedLevels"
@@ -130,6 +134,7 @@
       <question-filter-expansion
         v-if="filterQuestions.statuses"
         header-title="وضعیت سوال"
+        :loading="localLoadings.statusLoading"
       >
         <q-option-group
           v-model="selectedStatuses"
@@ -149,6 +154,7 @@
       <question-filter-expansion
         v-if="filterQuestions.types"
         header-title="نوع سوال"
+        :loading="localLoadings.optionsLoading"
       >
         <q-option-group
           v-model="type_id"
@@ -162,6 +168,7 @@
       <question-filter-expansion
         v-if="filterQuestions.report_type"
         header-title="نوع خطا"
+        :loading="localLoadings.optionsLoading"
       >
         <q-option-group
           v-model="selectedReportType"
