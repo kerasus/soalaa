@@ -246,20 +246,7 @@ export default {
         major_type: [],
         reference_type: [],
         year_type: [],
-        levels: [
-          {
-            value: 1,
-            label: 'آسان'
-          },
-          {
-            value: 2,
-            label: 'متوسط'
-          },
-          {
-            value: 3,
-            label: 'سخت'
-          }
-        ],
+        level_type: [],
         tags_with_childrens: 1
       },
       selectedNodes: [],
@@ -307,6 +294,7 @@ export default {
     // this.getQuestionData()
     this.getFilterOptions()
     this.getReportOptions()
+    this.getLevelsFilterData()
     this.setSelectedQuestionOfCurrentMetaPage()
   },
   mounted() {
@@ -431,6 +419,14 @@ export default {
         .then((response) => {
           this.reportTypeList = response.data.data
         })
+    },
+    getLevelsFilterData() {
+      this.$axios.get(API_ADDRESS.question.levels)
+        .then(response => {
+          this.filterQuestions.level_type = response.data.data
+          this.addTypeToFilter('level_type')
+        })
+        .catch()
     },
     goToPrevStep() {
       this.$emit('lastTab')
