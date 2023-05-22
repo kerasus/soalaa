@@ -16,7 +16,7 @@
   "dependencies": {
     "@babel/core": "^7.20.7",
     "@nodeguy/server-date": "^4.0.3",
-    "@quasar/extras": "^1.15.8",
+    "@quasar/extras": "^1.16.3",
     "@silvermine/videojs-quality-selector": "^1.2.5",
     "axios": "^1.4.0",
     "core-js": "^3.26.1",
