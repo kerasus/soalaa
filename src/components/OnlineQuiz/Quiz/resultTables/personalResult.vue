@@ -231,7 +231,7 @@ export default {
 }
 
     .personal-results {
-      background-color: #f1f1f1;
+      background-color: #f4f6f9;
       .proceeds-table ,  .default-result-table{
         .q-table__container {
           border-radius: 20px;

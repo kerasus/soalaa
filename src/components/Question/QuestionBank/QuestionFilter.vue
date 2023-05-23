@@ -21,14 +21,14 @@
         <div>
           <q-card-actions class="filter-container q-pa-none">
             <q-chip
-              v-for="(filter, index) in selectedFiltersObject"
+              v-for="(filter, index) in selectedFilters"
               :key="index"
-              v-model="selectedFiltersObject[index]"
+              v-model="selectedFilters[index]"
               class="filter-items"
               removable
               @remove="deleteFilterObject(filter)"
             >
-              {{ getFilterTitle(filter) }}
+              {{ getFilterTitle(filter.value) }}
             </q-chip>
           </q-card-actions>
         </div>
@@ -58,6 +58,7 @@
       <!--      header-title="مرجع"-->
       <question-filter-expansion
         header-title="طراح سوال"
+        :loading="localLoadings.optionsLoading"
       >
         <q-option-group
           v-model="selectedReference"
@@ -75,6 +76,7 @@
 
       <question-filter-expansion
         header-title="سال انتشار"
+        :loading="localLoadings.optionsLoading"
       >
         <q-option-group
           v-model="selectedYears"
@@ -93,6 +95,7 @@
       <question-filter-expansion
         v-if="showMajorList"
         header-title="رشته تحصیلی"
+        :loading="localLoadings.optionsLoading"
       >
         <q-option-group
           v-model="selectedMajors"
@@ -111,6 +114,7 @@
 
       <question-filter-expansion
         header-title="درجه سختی"
+        :loading="localLoadings.levelTypeLoading"
       >
         <q-option-group
           v-model="selectedLevels"
@@ -130,6 +134,7 @@
       <question-filter-expansion
         v-if="filterQuestions.statuses"
         header-title="وضعیت سوال"
+        :loading="localLoadings.statusLoading"
       >
         <q-option-group
           v-model="selectedStatuses"
@@ -149,9 +154,10 @@
       <question-filter-expansion
         v-if="filterQuestions.types"
         header-title="نوع سوال"
+        :loading="localLoadings.optionsLoading"
       >
         <q-option-group
-          v-model="selectedTypes"
+          v-model="type_id"
           :options="singleModeFilterOptions('types', 'value')"
           @update:model-value="onChangeTypes"
         />
@@ -162,6 +168,7 @@
       <question-filter-expansion
         v-if="filterQuestions.report_type"
         header-title="نوع خطا"
+        :loading="localLoadings.optionsLoading"
       >
         <q-option-group
           v-model="selectedReportType"
@@ -184,7 +191,7 @@
         :loading="localLoadings.reportStatusLoading"
       >
         <q-option-group
-          v-model="selectedErrorStatus"
+          v-model="report_status"
           :options="singleModeFilterOptions('report_status', 'description')"
           @update:model-value="onChangeErrorStatus"
         />
@@ -210,6 +217,9 @@ export default {
       type: Object,
       default() {
         return {
+          optionsLoading: false,
+          levelTypeLoading: false,
+          statusLoading: false,
           reportStatusLoading: false
         }
       }
@@ -259,6 +269,9 @@ export default {
   data () {
     return {
       defaultLoadings: {
+        optionsLoading: false,
+        levelTypeLoading: false,
+        statusLoading: false,
         reportStatusLoading: false
       },
       treeKey: 0,
@@ -268,16 +281,17 @@ export default {
       selectedYears: [],
       selectedMajors: [],
       selectedLevels: [],
-      selectedTypes: {},
+      type_id: {},
       selectedReportType: [],
-      selectedErrorStatus: {},
+      report_status: {},
       selectedTags: [],
       selectedStatuses: [],
+      selectedFilters: [],
       filtersData: {
         tags: [],
         reference: [],
         majors: [],
-        level: [],
+        level_type: [],
         years: [],
         type_id: '',
         report_type: [],
@@ -301,41 +315,11 @@ export default {
       handler(newVal) {
         this.showTreeModalNode(newVal)
       }
-    },
-    nodeIdsToTick: {
-      deep: true,
-      handler(newVal) {
-        // console.log('nodeIdsToTick')
-        // const tags = newVal.map(function(key) {
-        //   return {
-        //     id: key
-        //   }
-        // })
-        // this.changeFilterData('tags', tags)
-      }
     }
   },
   computed: {
     localLoadings() {
       return Object.assign(this.defaultLoadings, this.loadings)
-    },
-    selectedFiltersObject () {
-      const filtersDataKey = Object.keys(this.filtersData)
-      const filters = []
-      filtersDataKey.forEach(key => {
-        const filterGroup = this.filtersData[key]
-        if (Array.isArray(filterGroup)) {
-          filterGroup.forEach(filterItem => {
-            filters.push(filterItem)
-          })
-        } else if (typeof filterGroup === 'object') {
-          filters.push(filterGroup)
-        } else if (typeof filterGroup === 'number' && !filterGroup) {
-          filters.push(filterGroup)
-        }
-      })
-
-      return filters
     }
   },
   created () {
@@ -344,6 +328,23 @@ export default {
     }
   },
   methods: {
+    updateSelectedFiltersObject (filterType) {
+      const filtersDataKey = Object.keys(this.filtersData)
+      const filters = []
+      filtersDataKey.forEach(key => {
+        const filterGroup = this.filtersData[key]
+        if (Array.isArray(filterGroup) && filterGroup) {
+          filterGroup.forEach(filterItem => {
+            filters.push({ value: filterItem, type: filterType })
+          })
+        } else if (typeof filterGroup === 'object') {
+          filters.push({ value: filterGroup, type: filterType })
+        } else if (typeof filterGroup === 'number' && !filterGroup) {
+          filters.push({ value: filterGroup, type: filterType })
+        }
+      })
+      this.selectedFilters = filters
+    },
     getFilterTitle(filter) {
       if (typeof filter === 'number') {
         if (!filter) {
@@ -396,13 +397,14 @@ export default {
     },
     changeFilterData (key, value) {
       this.filtersData[key] = value
+      this.updateSelectedFiltersObject(key)
       this.onUpdateFilterData()
     },
     onChangeReference (value) {
       this.changeFilterData('reference', value)
     },
     onChangeLevels (value) {
-      this.changeFilterData('level', value)
+      this.changeFilterData('level_type', value)
     },
     onChangeYears (value) {
       this.changeFilterData('years', value)
@@ -427,78 +429,43 @@ export default {
       this.changeFilterData('tags_with_childrens', sendData)
     },
     tickedData (value) {
-      value.forEach(node => {
-        node.type = 'treeNode'
-      })
       this.changeFilterData('tags', value)
     },
-    removeFilterFromFiltersData(filterKey, filterId, Key) {
-      const index = this.filtersData[filterKey].findIndex(filter => filter[Key] === filterId)
-      this.filtersData[filterKey].splice(index, 1)
-      this.onUpdateFilterData()
-    },
-    deleteFilterObject (filter) {
-      const types = [
-        {
-          filterType: 'reference_type',
-          key: 'reference'
-        },
-        {
-          filterType: 'year_type',
-          key: 'years'
-        },
-        {
-          filterType: 'major_type',
-          key: 'majors'
-        },
-        {
-          filterType: 'level_type',
-          key: 'level'
-        },
-        {
-          filterType: 'question_report_type',
-          key: 'question_report_type'
-        },
-        {
-          filterType: 'statuses',
-          key: 'statuses'
+    deleteFilterObject (filterObj) {
+      if (Array.isArray(this.filtersData[filterObj.type])) {
+        let index = null
+        if (filterObj.type === 'level_type') {
+          index = this.filtersData[filterObj.type].findIndex(filter => filter.key === filterObj.value.key)
+        } else if (filterObj.type === 'tags') {
+          this.setTickedMode('tree', filterObj.value.id, false)
+        } else {
+          index = this.filtersData[filterObj.type].findIndex(filter => filter.id === filterObj.value.id)
         }
-      ]
-      types.forEach(type => {
-        if (type.filterType === filter.type) {
-          this.removeFilterFromFiltersData(type.key, filter.id, 'id')
-        }
-        if (type.filterType === 'level_type') {
-          this.removeFilterFromFiltersData('level', filter.key, 'key')
-        }
-      })
-      if (filter.type === 'question_type') {
-        this.selectedTypes = ''
-        this.onChangeTypes(this.selectedTypes)
-      }
-      if (filter.type === 'report_status') {
-        this.selectedErrorStatus = ''
-        this.onChangeErrorStatus(this.selectedErrorStatus)
-      }
-      if (filter.type === 'treeNode') {
-        this.setTickedMode('tree', filter.id, false)
-      }
-      if (typeof filter === 'number') {
+        this.filtersData[filterObj.type].splice(index, 1)
+        this.onUpdateFilterData()
+      } else if (filterObj.type === 'tags_with_childrens') {
         this.searchSingleNode = false
-        this.changeFilterData('tags_with_childrens', 0)
+        this.filtersData.tags_with_childrens = 0
+        this.onUpdateFilterData()
+      } else {
+        this[filterObj.type] = ''
+        this.filtersData[filterObj.type] = ''
+        this.onUpdateFilterData()
       }
     },
     deleteAllFilters () {
       this.filtersData.tags.splice(0, this.filtersData.tags.length)
       this.filtersData.reference.splice(0, this.filtersData.reference.length)
-      this.filtersData.level.splice(0, this.filtersData.level.length)
+      this.filtersData.level_type.splice(0, this.filtersData.level_type.length)
       this.filtersData.years.splice(0, this.filtersData.years.length)
       this.filtersData.majors.splice(0, this.filtersData.majors.length)
       this.filtersData.question_report_type.splice(0, this.filtersData.question_report_type.length)
-      this.filtersData.types.splice(0, this.filtersData.types.length)
+      this.filtersData.type_id = ''
+      this.filtersData.report_status = ''
       this.filtersData.statuses.splice(0, this.filtersData.statuses.length)
       this.showTreeModalNode(this.rootNodeIdToLoad)
       // this.QuestionFilters.splice(0, this.QuestionFilters.length)
+      this.updateSelectedFiltersObject()
       this.onUpdateFilterData()
     }
   }

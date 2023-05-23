@@ -1,9 +1,9 @@
+import Url from 'src/models/Url.js'
+import { SetList } from 'src/models/Set.js'
 import { Model, Collection } from 'js-abstract-model'
-import { SetList } from './Set'
-import Url from './Url'
-import { ContentTimePointList } from './ContentTimePoint'
-import ContentSection from './ContentSection'
-import { PlayerSourceList } from 'src/models/PlayerSource'
+import ContentSection from 'src/models/ContentSection.js'
+import { PlayerSourceList } from 'src/models/PlayerSource.js'
+import { ContentTimePointList } from 'src/models/ContentTimePoint.js'
 
 class Content extends Model {
   constructor(data) {
@@ -30,6 +30,7 @@ class Content extends Model {
       { key: 'lesson_name' },
       { key: 'lesson' },
       { key: 'can_see' },
+      { key: 'can_user_use_timepoint' },
       { key: 'color' },
       { key: 'start' },
       { key: 'end' },
@@ -101,6 +102,10 @@ class Content extends Model {
       this.file.video.forEach((item, key) => {
         this.file.video[key].link = this.file.video[key].link.replace('download=1', '')
       })
+    }
+
+    if (!this.section.id) {
+      this.section = new ContentSection()
     }
 
     // // ToDo: must remove

@@ -9,30 +9,30 @@
                   :poster="content.photo"
                   :over-player="hasTimepoint"
                   :over-player-width="'250px'"
-                  :use-over-player="hasTimepoint"
-                  :hasTimepointSlider="hasTimepointSlider"
-                  @time-update="updateCurrentTime($event)">
-      <template v-if="hasTimepointSlider"
-                #overPlayer>
+                  :use-over-player="hasTimepoint">
+      <template #overPlayer>
         <div class="timepoint-list">
           <q-banner class="timepoint-list-title">
             زمان کوب ها
           </q-banner>
           <q-list class="timepoint-list-items">
-            <q-item v-for="timepoint in content.timepoints.list"
+            <q-item v-for="(timepoint) in currentContent.timepoints.list"
                     :key="timepoint.id"
                     v-ripple
                     clickable
                     @click="goToTimpoint(timepoint)">
               <q-item-section avatar>
-                <bookmark v-model:value="timepoint.is_favored"
-                          color="white"
-                          size="30"
-                          :bookmark-function="bookmarkTimepoint(timepoint)" />
+                <!--                <bookmark color="white"-->
+                <!--                          size="30"-->
+                <!--                          :is-favored="timepoint.is_favored"-->
+                <!--                          :loading="timepoint.loading"-->
+                <!--                          @clicked="handleTimepointBookmark(timepoint.id)" />-->
               </q-item-section>
               <q-item-section class="text-section">
                 <span>{{ timepoint.title }}</span>
-                <span>{{ timepoint.formattedTime() }}</span>
+                <span v-if="currentContent.can_user_use_timepoint">
+                  {{ timepoint.formattedTime() }}
+                </span>
               </q-item-section>
             </q-item>
           </q-list>
@@ -54,18 +54,19 @@
 </template>
 
 <script>
-import Bookmark from 'components/Bookmark.vue'
 import { Content } from 'src/models/Content.js'
+// import Bookmark from 'src/components/Bookmark.vue'
 import VideoPlayer from 'src/components/VideoPlayer.vue'
-import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 
 export default {
   name: 'ContentVideoPlayer',
-  components: { VideoPlayer, Bookmark },
+  components: {
+    VideoPlayer
+    // Bookmark
+  },
   props: {
     content: {
-      type: Content,
-      default: new Content()
+      type: Content
     },
     showTimePoints: {
       type: Boolean,
@@ -77,28 +78,10 @@ export default {
         return ''
       }
     },
-    timePoint: {
-      type: ContentTimePoint
-    },
-    nextTimePoint: {
-      type: ContentTimePoint
-    },
     keepCalculating: {
       type: Boolean,
       default () {
         return true
-      }
-    },
-    bookmarkLoading: {
-      type: Boolean,
-      default () {
-        return false
-      }
-    },
-    hasTimepointSlider: {
-      type: Boolean,
-      default () {
-        return false
       }
     },
     currentTimed: {
@@ -109,8 +92,7 @@ export default {
   data() {
     return {
       playerKey: Date.now(),
-      currentContent: new Content(),
-      currentTime: 0
+      currentContent: new Content()
     }
   },
   computed: {
@@ -119,26 +101,21 @@ export default {
     }
   },
   watch: {
-    content(newValue) {
-      this.playerKey = Date.now()
-      this.currentContent = newValue
-    },
-    currentTime(time) {
-      if (time >= this.nextTimePoint.time) {
-        this.goToTimpoint(this.timePoint)
-        this.$refs.videoPlayer?.player.pause()
-      }
-    },
-    timePoint() {
-      if (this.timePoint.time) {
-        this.goToTimpoint(this.timePoint)
-      }
+    content: {
+      handler (newVal) {
+        this.playerKey = Date.now()
+        this.currentContent = newVal
+        if (!this.currentContent.can_user_use_timepoint) {
+          this.currentContent.timepoints.removeAllTimes()
+        }
+      },
+      deep: true
     }
   },
-  mounted() {
-    if (this.timePoint.time) {
-      this.goToTimpoint(this.timePoint)
-    }
+  created() {
+    console.log('content.photo', this.content.photo)
+    console.log('content.isVideo()', this.content.isVideo())
+    console.log('content.hasVideoSource()', this.content.hasVideoSource())
   },
   beforeUnmount() {
     if (this.player) {
@@ -146,22 +123,53 @@ export default {
     }
   },
   methods: {
-    updateCurrentTime(time) {
-      this.currentTime = time
+    getCurrentContentTimepoint (timepointId) {
+      return this.currentContent.timepoints.list.find(item => item.id === timepointId)
+    },
+    handleTimepointBookmark (timepointId) {
+      const timepointIndex = this.currentContent.timepoints.list.findIndex(item => item.id === timepointId)
+      const currentContentTimepoint = this.getCurrentContentTimepoint(timepointId)
+      this.currentContent.timepoints.list[timepointIndex].loading = true
+      const isFavoredStatus = currentContentTimepoint.is_favored ? 'unfavored' : 'favored'
+      this.changeTimepointStatus({
+        timepointId,
+        isFavoredStatus,
+        timepointIndex,
+        currentContentTimepoint
+      })
+    },
+    changeTimepointStatus (data) {
+      this.$apiGateway.content.setBookmarkTimepointFavoredStatus({
+        id: data.timepointId,
+        status: data.isFavoredStatus
+      })
+        .then(() => {
+          this.currentContent.timepoints.list[data.timepointIndex].is_favored = !data.currentContentTimepoint.is_favored
+          this.toggleFavorite(this.content.id)
+          this.currentContent.timepoints.list[data.timepointIndex].loading = false
+        })
+        .catch(() => {
+          this.currentContent.timepoints.list[data.timepointIndex].loading = false
+        })
     },
     goToTimpoint (timepoint) {
       if (!this.$refs.videoPlayer) {
         return
       }
-      this.$refs.videoPlayer.changeCurrentTime(timepoint.time)
-    },
-    bookmarkTimepoint (timepoint) {
-      return () => {
-        if (timepoint.is_favored) {
-          return this.$apiGateway.contentTimepoint.unfavored(timepoint.id)
-        }
-        return this.$apiGateway.contentTimepoint.favored(timepoint.id)
+      if (!this.currentContent.can_user_use_timepoint) {
+        this.$q.dialog({
+          title: 'استفاده از زمان کوب',
+          message: 'جهت استفاده از زمان کوب می بایست اشتراک خریداری کنید.',
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          this.$router.push({ name: 'Public.Landing.DynamicName', params: { landing_name: 'timepoint' } })
+        }).onCancel(() => {
+          // this.$router.push({ name: 'Public.Home' })
+        })
+        return
       }
+      this.$refs.videoPlayer.changeCurrentTime(timepoint.time)
     },
     activate(time) {
       this.player.currentTime(time)
@@ -188,10 +196,10 @@ export default {
         if (parseInt(item.id) === parseInt(id)) {
           // currentTimepointIndex = index
           item.loading = true
-          item.isFavored = !item.isFavored
+          item.is_favored = !item.is_favored
           that.postIsFavored = {
             id: item.id,
-            isFavored: item.isFavored,
+            isFavored: item.is_favored,
             numberOfTimestamp: count
           }
         }
@@ -241,6 +249,7 @@ export default {
   width: 100%;
   color: white;
   height: 100%;
+  padding-bottom: 30px;
   background: rgba(0,0,0,0.4);
   .timepoint-list-title {
     text-align: center;

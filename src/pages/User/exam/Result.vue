@@ -52,8 +52,8 @@
                        label="کارنامه"></q-tab>
                 <q-tab name="rank"
                        label="تخمین رتبه"></q-tab>
-                <!--                <q-tab name="newRank"-->
-                <!--                       label="تخمین رتبه جدید"></q-tab>-->
+                <q-tab name="newRank"
+                       label="تخمین رتبه بر اساس کنکور"></q-tab>
                 <q-tab name="lessons"
                        label="ریزدرس ها"></q-tab>
                 <q-tab name="KeyAnswers"
@@ -362,7 +362,7 @@ export default {
     padding: 12px;
   }
   .default-result-tabs-title {
-    max-width: 820px;
+    max-width: 870px;
     color: rgba(0, 0, 0, 0.54);
   }
   .download-box {
