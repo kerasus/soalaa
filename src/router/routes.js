@@ -61,7 +61,7 @@ const entityCrudRouteConfigs = [
   {
     path: 'QuestionTarget',
     baseRouteName: 'Admin.QuestionTarget',
-    componentPath: 'pages/Admin/QuestionTarget.vue',
+    componentPath: 'pages/Admin/QuestionTarget',
     breadcrumbs: { title: 'اهداف سوال' },
     permissions: ['optionIndex', 'optionStore', 'optionShow', 'optionUpdate']
 
