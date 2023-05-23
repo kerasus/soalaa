@@ -48,14 +48,10 @@
         </div>
       </div>
 
-      <div
-        v-if="listConfig.questionSource || question.loading "
-        class="question-source col-xl-3 col-sm-4 col-xs-12"
-      >
-        <div
-          v-if="question.loading"
-          class="source-skeleton"
-        >
+      <div v-if="listConfig.questionSource || question.loading "
+           class="question-source col-xl-3 col-sm-4 col-xs-12">
+        <div v-if="question.loading"
+             class="source-skeleton">
           <div class="source-text">
             <q-skeleton type="text"
                         class="source-name"
@@ -96,10 +92,8 @@
           </div>
         </div>
       </div>
-      <div
-        v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-        class="question-tags ellipsis col-sm-12 col-xs-12"
-      >
+      <div v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
+           class="question-tags ellipsis col-sm-12 col-xs-12">
         <div v-for="i in 3"
              :key="i">
           <q-skeleton v-if="question.loading"
@@ -107,11 +101,9 @@
                       type="text"
                       width="80px" />
         </div>
-        <div
-          v-for="(item, index) in question.tags.list"
-          :key="index"
-          class="question-tag"
-        >
+        <div v-for="(item, index) in question.tags.list"
+             :key="index"
+             class="question-tag">
           <div v-for="(ancestor,ancestorIndex) in item.ancestors"
                :key="ancestorIndex"
                class="ancestors flex flex-center">

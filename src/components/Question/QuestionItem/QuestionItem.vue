@@ -76,21 +76,15 @@
                  class="source-name">
               {{ question.reference[0].value }}
             </div>
-            <div
-              v-if="(listConfig.questionYear && question.years.length > 0) || question.loading"
-              class="question-year ellipsis col-sm-6 col-xs-6 justify-end"
-            >
-              <q-skeleton
-                v-if="question.loading"
-                class="info-title q-mx-sm"
-                type="text"
-                width="80px"
-              />
-              <div
-                v-for="(year, index) in question.years"
-                :key="index"
-                class="question-tag"
-              >
+            <div v-if="(listConfig.questionYear && question.years.length > 0) || question.loading"
+                 class="question-year ellipsis col-sm-6 col-xs-6 justify-end">
+              <q-skeleton v-if="question.loading"
+                          class="info-title q-mx-sm"
+                          type="text"
+                          width="80px" />
+              <div v-for="(year, index) in question.years"
+                   :key="index"
+                   class="question-tag">
                 {{year.value}}
               </div>
             </div>
@@ -119,10 +113,8 @@
           </div>
         </div>
       </div>
-      <div
-        v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-        class="question-tags ellipsis col-sm-6 col-xs-10"
-      >
+      <div v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
+           class="question-tags ellipsis col-sm-6 col-xs-10">
         <div v-for="i in 3"
              :key="i">
           <q-skeleton v-if="question.loading"
