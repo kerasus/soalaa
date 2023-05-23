@@ -126,27 +126,100 @@ export default {
 
 <style lang="scss" scoped>
 .filter-card {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 12px 60px;
-  &:deep(.q-card__section) {
-    padding: 0;
-  }
-  .search-section {
-    .search-input {
-      width: 258px;
-    }
-  }
-  .filter-section {
     display: flex;
     flex-direction: row;
-    .filter-input {
-      width: 160px;
+    justify-content: space-between;
+    background: #f4f6f9;
+
+    @media only screen and (max-width: 600px) {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
     }
 
+    &:deep(.q-card__section) {
+      padding: 0;
+
+      .q-field--filled .q-field__inner .q-field__control {
+        background: #FFFFFF;
+      }
+
+      .q-field--filled .q-field__inner .q-field__control .q-field__append, .q-field--filled .q-field__inner .q-field__control .q-field__prepend {
+        padding-right: 16px;
+        padding-left: 12px;
+      }
+
+      @media only screen and (max-width: 599px) {
+        width: 100%;
+      }
+    }
+
+    .search-section {
+      .search-input {
+        width: 300px;
+        background-color: white;
+
+        &:deep(.q-field__append) {
+          padding-right: 8px !important;
+
+          .q-icon {
+            color: #6D708B;
+            cursor: pointer;
+          }
+        }
+
+        &:deep(.q-field__control) {
+          background-color: white;
+        }
+
+        //&:deep(.q-field--filled .q-field__inner .q-field__control .q-field__append, .q-field--filled .q-field__inner .q-field__control .q-field__prepend ){
+        //
+        //}
+        @media only screen and (max-width: 1023px) {
+          width: 352px;
+        }
+        @media only screen and (max-width: 599px) {
+          width: 100%;
+        }
+
+        .search {
+          color: #6D708B;
+
+          :deep(.q-field__inner .q-field__control .q-field__append .q-icon) {
+            color: #6D708B;
+          }
+        }
+      }
+    }
+
+    .filter-section {
+      display: flex;
+      flex-direction: row;
+
+      :deep(.q-field--filled .q-field__inner .q-field__control .q-field__label) {
+        margin-top: -10px;
+      }
+
+      :deep(.q-field--filled .q-field__inner .q-field__control .q-field__native, .q-field--filled .q-field__inner .q-field__control .q-field__prefix, .q-field--filled .q-field__inner .q-field__control .q-field__suffix, .q-field--filled .q-field__inner .q-field__control .q-field__input) {
+        padding-left: 16px;
+        padding-right: 0;
+        min-height: 40px;
+      }
+
+      .filter-input {
+        width: 160px;
+        @media only screen and (max-width: 1023px) {
+          width: 164px;
+        }
+        @media only screen and (max-width: 599px) {
+          width: 100%;
+          padding-top: 16px;
+        }
+      }
+
+    }
   }
-}
 </style>
 <!--<template>-->
 <!--    <q-card class="headerBankCard custom-card">-->

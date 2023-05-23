@@ -220,6 +220,10 @@ export default {
     direction: inherit;
   }
 
+  img {
+    max-width: 100%;
+  }
+
   .katex {
     /*rtl:ignore*/
     direction: ltr !important;
