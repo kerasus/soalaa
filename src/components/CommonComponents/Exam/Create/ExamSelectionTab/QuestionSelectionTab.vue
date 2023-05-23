@@ -99,19 +99,17 @@
 
   </div>
   <div v-if="isTreeLayerConfigReady">
-    <tree-modal
-      ref="questionTreeModal"
-      :key="treeKey"
-      v-model:dialogValue="treeModalValue"
-      v-model:selected-nodes="selectedNodes"
-      :initial-node="treeModalNodeId"
-      :tree-type="'test'"
-      :no-nodes-label="'لطفا یک درس انتخاب کنید'"
-      exchange-last-layer-only
-      :persistent="!doesExamHaveLesson"
-      :layers-config="treeLayersConfig"
-      @layerSelected="onLessonChanged"
-    >
+    <tree-modal ref="questionTreeModal"
+                :key="treeKey"
+                v-model:dialogValue="treeModalValue"
+                v-model:selected-nodes="selectedNodes"
+                :initial-node="treeModalNodeId"
+                :tree-type="'test'"
+                :no-nodes-label="'لطفا یک درس انتخاب کنید'"
+                exchange-last-layer-only
+                :persistent="!doesExamHaveLesson"
+                :layers-config="treeLayersConfig"
+                @layerSelected="onLessonChanged">
       <template v-slot:tree-dialog-action-box>
         <q-btn unelevated
                label="بازگشت"
@@ -129,6 +127,7 @@
 <script>
 import { Exam } from 'src/models/Exam.js'
 import mixinTree from 'src/mixin/Tree.js'
+import API_ADDRESS from 'src/api/Addresses.js'
 import { TreeNode } from 'src/models/TreeNode.js'
 import { Question, QuestionList } from 'src/models/Question.js'
 import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
