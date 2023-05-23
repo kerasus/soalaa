@@ -7,6 +7,7 @@
       <q-btn
         color="dark"
         flat
+        @click="$router.go(-1)"
       >
         <svg width="22"
              height="22"

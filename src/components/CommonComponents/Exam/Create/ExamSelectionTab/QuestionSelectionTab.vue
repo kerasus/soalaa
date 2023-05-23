@@ -137,7 +137,7 @@
       exchange-last-layer-only
       :persistent="!doesExamHaveLesson"
       :layers-config="treeLayersConfig"
-      @lessonnodeSelected="onLessonChanged"
+      @layerSelected="onLessonChanged"
     >
       <template v-slot:tree-dialog-action-box>
         <q-btn
@@ -500,7 +500,7 @@ export default {
     getFiltersForRequest(filterData) {
       return {
         tags: filterData.tags.map(item => item.id),
-        level: filterData.level.map(item => item.value),
+        level: filterData.level_type.map(item => item.value),
         years: filterData.years.map(item => item.id),
         majors: filterData.majors.map(item => item.id),
         reference: filterData.reference.map(item => item.id),
@@ -528,7 +528,7 @@ export default {
           this.questions.loading = false
           this.setSelectedQuestionOfCurrentMetaPage()
           this.setQuestionsInfoCheckBoxStatus()
-          this.setExamTags(this.selectedTags)
+          this.setExamTags(this.selectedNodes)
           this.hideLoading()
         })
         .catch((err) => {
@@ -552,6 +552,11 @@ export default {
           })
         })
     },
+    addTypeToFilter(filter) {
+      this.filterQuestions[filter].forEach(item => {
+        item.type = filter
+      })
+    },
     selectAllQuestions() {
       this.selectedQuestions = []
       this.questions.list.forEach(question => {
@@ -565,15 +570,15 @@ export default {
         this.selectedQuestions.splice(question)
       })
     },
-    onLessonChanged(item) {
-      if (this.isSelectedLessonNew(item)) {
-        this.providedExam.temp.lesson = item.id
+    onLessonChanged(lessonObj) {
+      if (this.isSelectedLessonNew(lessonObj.layer?.selectedValue)) {
+        this.providedExam.temp.lesson = lessonObj.layer.selectedValue.id
         this.$emit('update:exam', this.providedExam)
         if (this.providedExam.questions.list.length > 0) {
           this.detachAllQuestionsFromExam()
         }
       }
-      this.setFilterTreeLesson(item)
+      this.setFilterTreeLesson(lessonObj.layer.selectedValue)
     },
     isSelectedLessonNew(lesson) {
       return this.providedExam.temp.lesson !== lesson.id
@@ -612,7 +617,7 @@ export default {
       this.selectedNodes = this.providedExam.temp.tags
     },
     setSelectedTags(allTags) {
-      this.selectedTags = allTags
+      this.selectedNodes = allTags
     },
     setExamTags(selectedTags) {
       this.providedExam.temp.tags = selectedTags.map(node => ({
@@ -750,8 +755,6 @@ export default {
 }
 
 .main-container {
-  .question-bank-filter {
-  }
 
   .question-list {
     margin-left: 30px;
