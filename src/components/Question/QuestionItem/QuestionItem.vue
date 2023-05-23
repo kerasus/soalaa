@@ -189,6 +189,24 @@
           <div class="tag-title ellipsis">{{ item.title }}</div>
         </div>
       </div>
+      <div
+        v-if="(listConfig.questionYear && question.years.length > 0) || question.loading"
+        class="question-year ellipsis col-sm-6 col-xs-2 justify-end"
+      >
+        <q-skeleton
+          v-if="question.loading"
+          class="info-title q-mx-sm"
+          type="text"
+          width="80px"
+        />
+        <div
+          v-for="(year, index) in question.years"
+          :key="index"
+          class="question-tag"
+        >
+          {{year.value}}
+        </div>
+      </div>
     </q-card-section>
 
     <q-card-section
