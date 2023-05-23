@@ -63,6 +63,7 @@
                            :question="question"
                            :listOptions="questionsOptions"
                            pageStrategy="question-bank"
+                           :report-options="reportIssuesList"
                            @deleteFromDb="deleteQuestionFromDataBase"
                            @checkSelect="onClickedCheckQuestionBtn" />
           </template>
@@ -95,6 +96,7 @@
 <script>
 import { Exam } from 'src/models/Exam.js'
 import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { Question, QuestionList } from 'src/models/Question.js'
 import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
 import pagination from 'src/components/Question/QuestionBank/Pagination.vue'
@@ -102,7 +104,6 @@ import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
 import QuestionFilter from 'src/components/Question/QuestionBank/QuestionFilter.vue'
 import QuestionToolBar from 'src/components/Question/QuestionBank/QuestionToolBar.vue'
 import QuestionBankHeader from 'src/components/Question/QuestionBank/components/QuestionBankHeader.vue'
-import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'QuestionBank',
@@ -123,6 +124,7 @@ export default {
   emits: ['onFilter'],
   data() {
     return {
+      reportIssuesList: [],
       loadings: {
         reportStatusLoading: false
       },
@@ -149,7 +151,7 @@ export default {
         reference_type: [],
         year_type: [],
         statuses: [],
-        levels: [],
+        level_type: [],
         types: [],
         report_type: [],
         report_status: []
@@ -313,6 +315,7 @@ export default {
         level: filterData.level.map(item => item.key),
         years: filterData.years.map(item => item.id),
         majors: filterData.majors.map(item => item.id),
+        type_id: filterData.type_id ? filterData.type_id.id : '',
         reference: filterData.reference.map(item => item.id),
         statement: (filterData.statement) ? filterData.statement[0] : '',
         sort_by: (this.searchSelector.value) ? 'created_at' : '',
@@ -367,6 +370,7 @@ export default {
               this.filterQuestions.types.push(option)
             } else if (option.type === 'question_report_type') {
               this.filterQuestions.report_type.push(option)
+              this.reportIssuesList.push(option)
             }
           })
         })
@@ -382,7 +386,7 @@ export default {
     getLevelsFilterData() {
       APIGateway.option.getLevels()
         .then(levels => {
-          this.filterQuestions.levels = levels
+          this.filterQuestions.level_type = levels
           this.addTypeToFilter('level_type')
         })
         .catch()

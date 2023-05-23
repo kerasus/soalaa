@@ -255,6 +255,10 @@ const API_ADDRESS = {
           singleMode: false
         },
         {
+          key: 'type_id',
+          singleMode: true
+        },
+        {
           key: 'majors',
           singleMode: false
         },
