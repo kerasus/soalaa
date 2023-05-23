@@ -112,11 +112,6 @@ export default {
       deep: true
     }
   },
-  created() {
-    console.log('content.photo', this.content.photo)
-    console.log('content.isVideo()', this.content.isVideo())
-    console.log('content.hasVideoSource()', this.content.hasVideoSource())
-  },
   beforeUnmount() {
     if (this.player) {
       this.player.dispose()
