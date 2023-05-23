@@ -255,7 +255,7 @@ export default {
     async initTreeEssentials () {
       await this.initLayers()
       await this.setupInitialNode()
-      this.updateGlobalStorage()
+      this.updateGlobalStorage(this.selectedNodesArray)
     },
     updateGlobalStorage (nodeList = []) {
       this.globalStorage = nodeList.map(node => {
@@ -312,6 +312,9 @@ export default {
       this.selectedNodesArray = this.getTheLastSelectedNode(finalCollectedNodes)
     },
     async initInitialLayer() {
+      if (this.layersConfig[0].selectedValue?.id) {
+        this.layerNodeSelected(this.layersConfig[0], 0)
+      }
       if (this.layersConfig[0].nodeList.length > 0) {
         return
       }
@@ -548,6 +551,10 @@ export default {
     height: 378px;
     overflow-x: scroll;
     margin-top: 10px;
+    @media screen and (max-width: 880px) {
+      max-height: 378px;
+      height: auto;
+    }
   }
   .default-details-container {
     .detail-box {

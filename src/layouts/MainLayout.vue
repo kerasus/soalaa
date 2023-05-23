@@ -18,18 +18,20 @@
       <q-resize-observer @resize="setHeaderDimension" />
     </template>
     <template #left-drawer>
-      <div v-if="getTemplateLeftSideBarType === 'quiz'"
-           class="drawer-inside-of-MapOfQuestions">
-        <sideMenuMapOfQuestions />
-      </div>
-      <div v-else-if="getTemplateLeftSideBarType === 'panel'"
-           class="drawer-inside">
-        <side-menu-dashboard />
-      </div>
-      <div v-else-if="getTemplateLeftSideBarType === 'default'"
-           class="drawer-inside">
-        <user-side-bar />
-      </div>
+      <q-scroll-area class="scroll">
+        <div v-if="getTemplateLeftSideBarType === 'quiz'"
+             class="drawer-inside-of-MapOfQuestions">
+          <sideMenuMapOfQuestions />
+        </div>
+        <div v-else-if="getTemplateLeftSideBarType === 'panel'"
+             class="drawer-inside">
+          <side-menu-dashboard />
+        </div>
+        <div v-else-if="getTemplateLeftSideBarType === 'default'"
+             class="drawer-inside">
+          <user-side-bar />
+        </div>
+      </q-scroll-area>
     </template>
     <template #content>
       <q-linear-progress v-if="linearLoading"
@@ -179,11 +181,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.scroll {
+  height: 100%;
+}
+
 .main-layout-header {
   .header-inside{
     width: 100%;
   }
-
 }
 
 .drawer-inside{

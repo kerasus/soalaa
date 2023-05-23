@@ -4,8 +4,11 @@
          :hidden="$q.screen.lt.md">اطلاعات کاربری</div>
     <div v-if="$q.screen.lt.md"
          class="flex justify-start profile-btn">
-      <q-btn color="dark"
-             flat>
+      <q-btn
+        color="dark"
+        flat
+        @click="$router.go(-1)"
+      >
         <svg width="22"
              height="22"
              viewBox="0 0 22 22"

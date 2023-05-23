@@ -48,10 +48,14 @@
         </div>
       </div>
 
-      <div v-if="listConfig.questionSource || question.loading "
-           class="question-source col-xl-3 col-sm-4 col-xs-6">
-        <div v-if="question.loading"
-             class="source-skeleton">
+      <div
+        v-if="listConfig.questionSource || question.loading "
+        class="question-source col-xl-3 col-sm-4 col-xs-12"
+      >
+        <div
+          v-if="question.loading"
+          class="source-skeleton"
+        >
           <div class="source-text">
             <q-skeleton type="text"
                         class="source-name"
@@ -92,8 +96,10 @@
           </div>
         </div>
       </div>
-      <div v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-           class="question-tags ellipsis col-sm-12 col-xs-6">
+      <div
+        v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
+        class="question-tags ellipsis col-sm-12 col-xs-12"
+      >
         <div v-for="i in 3"
              :key="i">
           <q-skeleton v-if="question.loading"
@@ -101,14 +107,20 @@
                       type="text"
                       width="80px" />
         </div>
-        <div v-for="(item, index) in question.tags.list"
-             :key="index"
-             class="question-tag">
-          <div class="tag-box no-wrap flex items-center">
-            <div class="tag-title ellipsis">{{ item.title }}</div>
-            <div class="tag-circle" />
+        <div
+          v-for="(item, index) in question.tags.list"
+          :key="index"
+          class="question-tag"
+        >
+          <div v-for="(ancestor,ancestorIndex) in item.ancestors"
+               :key="ancestorIndex"
+               class="ancestors flex flex-center">
+            <div v-if="ancestorIndex !== 0"
+                 class="tag-title ellipsis">{{ ancestor.title }}</div>
+            <div v-if="ancestorIndex !== 0"
+                 class="tag-circle" />
           </div>
-
+          <div class="tag-title ellipsis">{{ item.title }}</div>
         </div>
       </div>
     </q-card-section>
@@ -372,6 +384,7 @@ export default {
         editQuestion: true,
         switch: false,
         selectQuestion: true,
+        questionYear: false,
         reportProblem: true,
         questionRate: true,
         questionComment: true,
@@ -492,6 +505,7 @@ export default {
         questionRate: true,
         questionComment: true,
         descriptiveAnswer: true,
+        questionYear: false,
         menu: {
           show: true,
           items: {
@@ -506,7 +520,7 @@ export default {
         ...baseConf
       }
       if (this.pageStrategy === 'question-bank') {
-        // return finalConf
+        finalConf.questionYear = true
       }
       if (this.pageStrategy === 'lesson-detail') {
         // return finalConf
@@ -520,6 +534,7 @@ export default {
           ...this.listOptions,
           reportProblem: true,
           editQuestion: false,
+          questionYear: true,
           menu: {
             show: false,
             items: {
@@ -715,57 +730,49 @@ export default {
         }
       }
 
-    .question-tags {
+  .question-tags {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
+
+    @media only screen and (max-width: 1439px) {
+      margin-top: 20px;
+    }
+
+    @media screen and (max-width: 599px) {
+      flex-direction: column;
+      margin-top: 0;
+    }
+
+    .question-tag {
       display: flex;
       flex-direction: row;
-      margin-top: 16px;
+      align-items: center;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 19px;
+      color: #434765;
 
-      @media only screen and (max-width: 1439px) {
-        margin-top: 20px;
+      .tag-title{
+        @media screen and (max-width: 599px){
+          order: 2;
+        }
+        div{
+          max-width: 99px;
+        }
       }
 
-      @media screen and (max-width: 599px) {
-        flex-direction: column;
-        margin-top: 0;
-      }
+      .tag-circle {
+        border-radius: 50%;
+        margin: 0 6px;
+        width: 6px;
+        height: 6px;
+        background: #6D708B;
+        opacity: 0.3;
+        @media screen and (max-width: 599px){
+          order: 1;
 
-      .question-tag {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 19px;
-        color: #434765;
-
-        .tag-circle {
-          border-radius: 50%;
-          margin: 0 6px;
-          width: 6px;
-          height: 6px;
-          background: #6D708B;
-          opacity: 0.3;
-          @media screen and (max-width: 599px){
-            order: 1;
-          }
-        }
-        .tag-title{
-          @media screen and (max-width: 599px){
-            order: 2;
-          }
-          div{
-            max-width: 99px;
-          }
-        }
-
-        &:last-child {
-          .tag-circle {
-            display: none;
-            @media screen and (max-width: 599px) {
-              display: block;
-            }
-          }
         }
       }
     }
@@ -1142,5 +1149,5 @@ export default {
     }
   }
 }
-
+}
 </style>

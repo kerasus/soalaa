@@ -135,10 +135,15 @@
             </div>
           </div>
         </div>
-        <div v-if="$q.screen.lt.sm"
-             class="bottom-nav">
-          <q-btn unelevated
-                 class="btn-style profile">
+        <div
+          v-if="windowSize.x < 600"
+          class="bottom-nav"
+        >
+          <q-btn
+            unelevated
+            class="btn-style profile"
+            :to="{ name: 'User.Profile'}"
+          >
             <svg width="24"
                  height="24"
                  viewBox="0 0 24 24"

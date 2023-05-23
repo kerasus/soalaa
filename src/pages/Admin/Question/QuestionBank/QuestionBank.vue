@@ -126,6 +126,9 @@ export default {
     return {
       reportIssuesList: [],
       loadings: {
+        optionsLoading: false,
+        levelTypeLoading: false,
+        statusLoading: false,
         reportStatusLoading: false
       },
       searchInput: '',
@@ -312,7 +315,7 @@ export default {
     getFiltersForRequest(filterData) {
       return {
         tags: filterData.tags.map(item => item.id),
-        level: filterData.level.map(item => item.key),
+        level: filterData.level_type.map(item => item.key),
         years: filterData.years.map(item => item.id),
         majors: filterData.majors.map(item => item.id),
         type_id: filterData.type_id ? filterData.type_id.id : '',
@@ -357,8 +360,10 @@ export default {
         })
     },
     getFilterOptions() {
+      this.loadings.optionsLoading = true
       APIGateway.option.getFilterOptions()
         .then((filterOptions) => {
+          this.loadings.optionsLoading = false
           filterOptions.forEach(option => {
             if (option.type === 'reference_type') {
               this.filterQuestions.reference_type.push(option)
@@ -374,28 +379,33 @@ export default {
             }
           })
         })
+        .catch(() => {
+          this.loadings.optionsLoading = false
+        })
       this.getQuestionStatuses()
       this.getQuestionReportStatuses()
       this.getLevelsFilterData()
     },
-    addTypeToFilter(filter) {
-      this.filterQuestions[filter].forEach(item => {
-        item.type = filter
-      })
-    },
     getLevelsFilterData() {
+      this.loadings.levelTypeLoading = true
       APIGateway.option.getLevels()
         .then(levels => {
           this.filterQuestions.level_type = levels
-          this.addTypeToFilter('level_type')
+          this.loadings.levelTypeLoading = false
         })
-        .catch()
+        .catch(() => {
+          this.loadings.levelTypeLoading = false
+        })
     },
     getQuestionStatuses () {
+      this.loadings.statusLoading = true
       APIGateway.option.getQuestionStatuses()
         .then(statuses => {
           this.filterQuestions.statuses = statuses
-          this.addTypeToFilter('statuses')
+          this.loadings.statusLoading = false
+        })
+        .catch(() => {
+          this.loadings.statusLoading = true
         })
     },
     getQuestionReportStatuses() {
@@ -404,7 +414,6 @@ export default {
         .then(reportStatuses => {
           this.loadings.reportStatusLoading = false
           this.filterQuestions.report_status = reportStatuses
-          this.addTypeToFilter('report_status')
         })
         .catch(() => {
           this.loadings.reportStatusLoading = false
@@ -465,7 +474,8 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     background: #f4f6f9;
-    @media only screen and (max-width: 599px) {
+
+    @media only screen and (max-width: 600px) {
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -564,6 +574,20 @@ export default {
 
 .main-container {
 
+  @media only screen and (max-width: 1919px) {
+    padding-left: 0;
+    padding-right: 24px;
+  }
+
+  @media only screen and (max-width: 1439px) {
+    padding-left: 30px;
+  }
+
+  @media only screen and (max-width: 599px) {
+    padding-left: 1px;
+    padding-right: 0px;
+  }
+
   .question-bank-header {
     padding-bottom: 30px;
   }
@@ -586,19 +610,12 @@ export default {
 }
 
 @media only screen and (max-width: 1919px) {
-  .main-container {
-    padding-left: 0;
-    padding-right: 24px;
-  }
   .question-bank-filter {
     padding-right: 20px;
   }
 }
 
 @media only screen and (max-width: 1439px) {
-  .main-container {
-    padding-left: 30px;
-  }
   .question-bank-header {
     padding-bottom: 20px;
   }
