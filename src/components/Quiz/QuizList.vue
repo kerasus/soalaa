@@ -213,15 +213,22 @@
         <img class="no-item"
              src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_azmuns.png"
              alt="no-item">
-        <div class="no-item-title">
+        <div v-if="personal"
+             class="no-item-title">
+          آزمونی ساخته نشده است
+        </div>
+        <div v-if="!personal"
+             class="no-item-title">
           آزمونی وجود ندارد
         </div>
-        <q-btn class="new-link"
+        <q-btn v-if="!personal"
+               class="new-link"
                flat
                unelevated
                label="ثبت نام در آزمون"
                @click="gotoSubscription" />
-        <q-btn class="new-link"
+        <q-btn v-if="personal"
+               class="new-link"
                flat
                unelevated
                label="ساخت آزمون جدید"
