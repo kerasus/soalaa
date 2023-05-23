@@ -6,7 +6,8 @@
           <div class="col-12">
             <div class="header flex justify-between">
               <div class="title">اطلاعات آزمون</div>
-              <div class="disable-all">غیرفعال کردن همه</div>
+              <div class="disable-all"
+                   @click="deleteAll('info')">غیرفعال کردن همه</div>
             </div>
           </div>
           <div class="col-12">
@@ -52,7 +53,8 @@
         <div class="spaces">
           <div class="header flex justify-between">
             <div class="title">فاصله گذاری</div>
-            <div class="disable-all"> حدف همه</div>
+            <div class="disable-all"
+                 @click="deleteAll('space')"> حذف همه</div>
           </div>
           <div class="sub-title">حاشیه اطراف کاغذ</div>
           <div class="l-t flex justify-between">
@@ -102,7 +104,8 @@
         <div class="question-info">
           <div class="header flex justify-between">
             <div class="title">شماره گذاری</div>
-            <div class="disable-all"> حدف همه</div>
+            <div class="disable-all"
+                 @click="deleteAll('paginate')"> حذف همه</div>
           </div>
           <!-- <div class="sub-title">
             شماره شروع سوالات
@@ -169,7 +172,7 @@
               <div class="pages">
                 تعداد کل صفحات : {{ questionPagesCount }}
               </div>
-              <div class="action-box full-width flex justify-between items-end">
+              <div class="action-box">
                 <div class="description">
                   توضیحات: ندارد.
                 </div>
@@ -178,6 +181,7 @@
                          class="btn cancel"
                          label="انصراف" />
                   <q-btn unelevated
+                         :disable="downloadLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
@@ -226,6 +230,7 @@
                          class="btn cancel"
                          label="انصراف" />
                   <q-btn unelevated
+                         :disable="downloadLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
@@ -375,6 +380,22 @@ export default {
     this.getExamInfo()
   },
   methods: {
+    deleteAll(type) {
+      if (type === 'info') {
+        this.pdfConfig.hasTitle = false
+        this.pdfConfig.hasGrade = false
+        this.pdfConfig.hasMajor = false
+      } else if (type === 'space') {
+        this.pdfConfig.spaceBetweenQuestion = 0
+        this.pdfConfig.rightMargin = 0
+        this.pdfConfig.leftMargin = 0
+        this.pdfConfig.questionAndChoices = 0
+        this.pdfConfig.betweenChoices = 0
+      } else if (type === 'paginate') {
+        this.pdfConfig.hasPaginate = false
+        this.pdfConfig.paginateStart = 0
+      }
+    },
     onQuestionsLoaded (pages) {
       if (!pages) {
         this.questionPagesCount = 0
@@ -426,13 +447,13 @@ export default {
           image: { type: 'png', quality: 1 },
           filename: 'Soalaa.pdf',
           html2canvas: {
-            dpi: 500,
-            scale: 3
+            dpi: 1200,
+            scale: 1
           }
         })
         .from(this.$refs[ref])
         .save()
-        .then(() => {
+        .thenExternal(() => {
           this.downloadLoading = false
         })
     }
@@ -530,6 +551,10 @@ export default {
     .exam-info {
       .header {
         margin-bottom: 16px;
+      }
+
+      :deep(.q-checkbox) {
+        min-width: 128px;
       }
     }
     .spaces {
@@ -707,6 +732,15 @@ export default {
 
       .action-box{
         margin-bottom: 25px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+
+        @media screen and (max-width:600px){
+          flex-direction: column;
+          align-items: flex-start;
+        }
         .description{
           font-weight: 400;
           font-size: 14px;
@@ -714,20 +748,40 @@ export default {
           text-align: right;
           color: #434765;
         }
-        .cancel{
-          margin-right: 12px;
-          background: #F2F5F9;
-          :deep(.q-btn__content){
-            color: #6D708B;
+        .action-btn {
+          @media screen and (max-width:600px){
+            width: 100%;
           }
-        }
-        .btn{
-          width: 120px;
-          :deep(.q-btn__content){
-            font-weight: 600;
-            font-size: 14px;
-            line-height: 22px;
-            letter-spacing: -0.03em;
+
+          .cancel{
+            margin-right: 12px;
+            background: #F2F5F9;
+
+            @media screen and (max-width:600px){
+              margin-right: 0;
+              margin-bottom: 10px;
+            }
+            :deep(.q-btn__content){
+              color: #6D708B;
+            }
+          }
+          .btn{
+            width: 120px;
+            :deep(.q-btn__content){
+              font-weight: 600;
+              font-size: 14px;
+              line-height: 22px;
+              letter-spacing: -0.03em;
+            }
+
+            &:disabled {
+              opacity: .8;
+              cursor: not-allowed;
+            }
+
+            @media screen and (max-width:600px){
+              width: 100%;
+            }
           }
         }
       }

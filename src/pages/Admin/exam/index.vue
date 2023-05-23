@@ -194,7 +194,7 @@ export default {
         pageKey: 'page'
       },
       inputs: [
-        { type: 'input', name: 'statement', col: 'col-md-4', placeholder: 'عنوان' },
+        { type: 'input', name: 'statement', col: 'col-md-4', placeholder: ' ', label: 'عنوان' },
         { type: 'date', name: 'start_at_from', calendarIcon: ' ', col: 'col-md-4', placeholder: 'تاریخ شروع از' },
         { type: 'date', name: 'start_at_till', calendarIcon: ' ', col: 'col-md-4', placeholder: 'تاریخ شروع تا' }
       ]

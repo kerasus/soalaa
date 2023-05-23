@@ -1,7 +1,4 @@
 import { Model, Collection } from 'js-abstract-model'
-// import {Set} from "./Set";
-// import Url from "./Url";
-
 class ContentTimePoint extends Model {
   constructor (data) {
     super(data, [
@@ -19,43 +16,40 @@ class ContentTimePoint extends Model {
         }
       },
       { key: 'isFavored' },
+      { key: 'is_favored' },
       { key: 'time' },
       { key: 'title' }
     ])
+
+    if (this.is_favored === null) {
+      this.is_favored = this.isFavored
+    }
+    if (this.isFavored === null) {
+      this.isFavored = this.is_favored
+    }
   }
 
   contentUrl (contentUrl) {
     return contentUrl + '?t=' + this.time
   }
 
-  createFavorUrl (baseUrl, favored) {
-    return baseUrl + '/c/timepoint/' + this.id + '/' + ((favored) ? 'favored' : 'unfavored')
-  }
-
-  setFavor (url) {
-    if (typeof url === 'undefined') {
-      url = this.favor_url
+  formattedTime () {
+    if (!this.time) {
+      return '00:00:00'
     }
-    if (url === null) {
-      console.error('url is null.')
-    }
-    return this.crud.create(url)
-  }
-
-  setUnfavor (url) {
-    if (typeof url === 'undefined') {
-      url = this.unfavor_url
-    }
-    if (url === null) {
-      console.error('url is null.')
-    }
-    return this.crud.create(url)
+    return new Date(this.time * 1000).toISOString().substring(11, 19)
   }
 }
 
 class ContentTimePointList extends Collection {
   model () {
     return ContentTimePoint
+  }
+
+  removeAllTimes () {
+    this.list.forEach(timepoint => {
+      timepoint.time = 0
+    })
   }
 }
 
