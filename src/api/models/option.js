@@ -27,6 +27,7 @@ export default class OptionAPI extends APIRepository {
       request: this.APIAdresses.userIndex,
       cacheKey: this.CacheList.userIndex,
       data: params,
+
       ...(cache && { cache }),
       resolveCallback: (response) => {
         return response.data.data
