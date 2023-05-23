@@ -56,24 +56,8 @@
                     <div v-if="currentVideoContent">
                       <div class="current-panel-title q-mb-md">{{ currentVideoContent.title }}</div>
                       <div class="answers-video-group">
-                        <div class="timestamp-box">
-                          <div class="timestamp">زمانکوب ها</div>
-                          <q-list dense>
-                            <q-item
-                              v-for="(currentVideoItem, i) in currentVideoContent.timepoints"
-                              :key="i"
-                              v-ripple
-                              clickable
-                              @click="playTimePoint(i)"
-                            >
-                              <q-item-section>{{ currentVideoItem.title }}</q-item-section>
-                            </q-item>
-                          </q-list>
-                        </div>
                         <div class="video-box">
-                          <video-player :sources="contentSources"
-                                        :poster="contentPoster"
-                          />
+                          <content-video-player :content="content" />
                         </div>
                       </div>
                     </div>
@@ -122,16 +106,16 @@
 </template>
 
 <script>
-import Assistant from 'src/plugins/assistant'
-import { AlaaSet } from 'src/models/AlaaSet'
-import { AlaaContent } from 'src/models/AlaaContent'
-import API_ADDRESS from 'src/api/Addresses'
-import VideoPlayer from 'src/components/VideoPlayer.vue'
-import { PlayerSourceList } from 'src/models/PlayerSource'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { AlaaSet } from 'src/models/AlaaSet.js'
+import Assistant from 'src/plugins/assistant.js'
+import { Content } from 'src/models/Content.js'
+import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
+import { PlayerSourceList } from 'src/models/PlayerSource.js'
 
 export default {
   name: 'tabsOfLessons',
-  components: { VideoPlayer },
+  components: { ContentVideoPlayer },
   props: {
     report: {
       type: Object,
@@ -149,7 +133,7 @@ export default {
       splitterModel: 20,
       currentVideoContent: null,
       alaaVideos: null,
-      alaaContent: new AlaaContent(),
+      content: new Content(),
       alaaSet: new AlaaSet(),
       videoLesson: null,
       contentSources: new PlayerSourceList(),
@@ -164,16 +148,15 @@ export default {
   },
   methods: {
     getContent (contentId, subCategoryIndex) {
-      const that = this
       this.$axios.get(API_ADDRESS.content.base + '/' + contentId)
-      // this.alaaContent.show(contentId)
         .then((response) => {
-          that.currentVideoContent = response.data.data
-          that.initVideoJs(that.currentVideoContent.file.video, that.currentVideoContent.photo, subCategoryIndex)
+          this.currentVideoContent = response.data.data
+          this.content = new Content(this.currentVideoContent)
+          // this.initVideoJs(this.currentVideoContent.file.video, this.currentVideoContent.photo, subCategoryIndex)
         })
         .catch((error) => {
           Assistant.reportErrors(error)
-          that.currentVideoContent = null
+          this.currentVideoContent = null
         })
     },
     initVideoJs (srcs, poster) {
@@ -234,18 +217,12 @@ export default {
 .video-js .vjs-current-time, .vjs-no-flex .vjs-current-time {
   display: block;
 }
-.tabs-of-lessons .answers-video-group {
-  display: flex;
-  flex-direction: row;
-}
-.tabs-of-lessons .video-box {
-  width: 70%;
-}
-.tabs-of-lessons .timestamp-box {
-  width: 30%;
-  margin-left: 15px #{"/* rtl:ignore */"};
-  max-height: 435px;
-  overflow-x: scroll;
+.tabs-of-lessons {
+  .answers-video-group {
+    .video-box {
+      width: 100%;
+    }
+  }
 }
 
 .tabs-of-lessons {
@@ -269,9 +246,6 @@ export default {
   }
 }
 @media only screen and (max-width: 1330px) {
-  .tabs-of-lessons .timestamp-box {
-    max-height: 280px;
-  }
   .tabs-of-lessons {
     .q-tab {
       height: 48px;
@@ -282,29 +256,6 @@ export default {
   }
 }
 
-@media only screen and (max-width: 670px) {
-  .tabs-of-lessons .video-box {
-    width: 100%;
-  }
-  .tabs-of-lessons .timestamp-box {
-    width: 100%;
-    margin-left: 0px #{"/* rtl:ignore */"};
-  }
-  .tabs-of-lessons .answers-video-group {
-    flex-direction: column-reverse;
-    justify-content: center;
-    align-items: center;
-  }
-  .tabs-of-lessons .timestamp-box {
-    margin-top: 10px;
-    max-height: 210px;
-  }
-}
-@media only screen and (max-width: 700px) {
-  .tabs-of-lessons .timestamp-box {
-    max-height: 180px;
-  }
-}
 </style>
 <style lang="scss">
 [dir="rtl"] .video-js .vjs-volume-panel .vjs-volume-control.vjs-volume-vertical {
