@@ -209,7 +209,7 @@
 
     <q-card-section class="answer-section">
       <q-expansion-item
-        v-model="descriptiveAnswerExpanded"
+        v-model="listConfig.questionAnswerExpanded"
         header-class="hideExpansionHeader"
       >
         <div class="description-answer-body">
@@ -234,15 +234,20 @@
 
           <div class="description-answer-video"
           >
-            <div class="answer-video flex items-center justify-center"
+            <div v-if="contentLoading"
+                 class="answer-video flex items-center justify-center">
+              <q-spinner-ball
+                color="primary"
+                size="2em"
+              />
+            </div>
+            <div v-else
+                 class="answer-video flex items-center justify-center"
                  :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
             >
-              <div class="soon flex items-center justify-center">
-                به زودی
-              </div>
-
-              <!--              ToDo : uncomment this when backend give you a valid key-->
-              <!--              <video-player />-->
+              <content-video-player :content="content"
+                                    :timePoint="questionTimePoint"
+                                    :nextTimePoint="nextTimePoint" />
             </div>
 
             <div class="answer-video-title">
@@ -814,8 +819,8 @@ export default {
             }
           }
         }
-      }
-
+    }
+  }
   .question-tags {
     display: flex;
     flex-direction: column;
@@ -959,19 +964,26 @@ export default {
 
       .description-answer {
         padding: 20px 24px;
-        max-width: 620px;
-        width: 100%;
+        width: 60%;
         background: #F6F9FF;
         border-radius: 16px;
         margin-right: 30px;
 
+        @media only screen and (max-width: 1439px) {
+          //height: 230px;
+        }
+
         @media only screen and (max-width: 1023px) {
           padding: 16px;
           margin-right: 24px;
+          //height: 200px;
+          width: 50%;
         }
 
         @media only screen and (max-width: 599px) {
           max-width: 100%;
+          width: 100%;
+          //height: 310px;
           margin-bottom: 20px;
 
         }
@@ -991,7 +1003,7 @@ export default {
           line-height: 22px;
           letter-spacing: -0.03em;
           color: #FFFFFF;
-          }
+        }
 
         .question-answer-description {
 
@@ -999,12 +1011,27 @@ export default {
       }
 
       .description-answer-video {
+        min-height: 176px;
+        width: 40%;
+        @media screen and(max-width: 1439px) {
+          width: 38%;
+          height: 130px;
+        }
+        @media screen and(max-width: 1023px) {
+          width: 48%;
+        }
+        @media screen and(max-width: 599px) {
+          width: 100%;
+          height: 158px;
+        }
         .answer-video {
-          width: 316px;
-          height: 176px;
+          height: 100%;
+          width: 100%;
           background: #f6f9ff;
           border-radius: 16px;
           margin-bottom: 10px;
+          padding: 0 15px;
+
           .soon{
             width: 86px;
             height: 32px;
@@ -1014,17 +1041,14 @@ export default {
           }
 
           @media only screen and (max-width: 1439px) {
-            width: 230px;
-            height: 130px;
+
           }
 
           @media only screen and (max-width: 1023px) {
-            width: 238px;
           }
 
           @media only screen and (max-width: 599px) {
-            width: 100%;
-            height: 158px;
+
           }
         }
 
@@ -1235,5 +1259,5 @@ export default {
     }
   }
 }
-}
+
 </style>
