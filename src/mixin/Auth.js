@@ -27,8 +27,8 @@ const mixinAuth = {
       this.isUserLogin = this.$store.getters['Auth/isUserLogin']
     },
     async getUserData () {
-      const response = await this.$apiGateway.user.showUser()
-      this.$store.commit('Auth/updateUser', response.data.data)
+      const user = await this.$apiGateway.user.showUser()
+      this.$store.commit('Auth/updateUser', user)
     }
   }
 }

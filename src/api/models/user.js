@@ -240,7 +240,7 @@ export default class UserAPI extends APIRepository {
       cacheKey: this.CacheList.showUser,
       ...(data.cache && { cache: data.cache }),
       resolveCallback: (response) => {
-        return response
+        return new User(response.data.data)
       },
       rejectCallback: (error) => {
         return error
