@@ -1,6 +1,7 @@
 import APIRepository from '../classes/APIRepository'
 import { appApiInstance } from 'src/boot/axios'
 import { Exam, ExamList } from 'src/models/Exam.js'
+import { QuestionList } from 'src/models/Question'
 
 const APIAdresses = {
   exportExcel: '/exam?excel_export=1',
@@ -313,7 +314,7 @@ export default class ExamAPI extends APIRepository {
       cacheKey: this.CacheList.generateExamFile(data.examId, data.withAnswer),
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response
+        return response // String
       },
       rejectCallback: (error) => {
         return error
@@ -327,7 +328,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.sendAnswers,
       resolveCallback: (response) => {
-        return response.data.data
+        return response // String
       },
       rejectCallback: (error) => {
         return error
@@ -372,7 +373,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.user.draftExam.getAttachedQuestions(data),
       resolveCallback: (response) => {
-        return response.data.data
+        return new QuestionList(response.data.data)
       },
       rejectCallback: (error) => {
         return error
@@ -401,7 +402,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.user.updateOrders(data.examId),
       resolveCallback: (response) => {
-        return response
+        return new Exam(response.data.data)
       },
       rejectCallback: (error) => {
         return error
@@ -416,7 +417,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.user.detachBulk(data.examId),
       resolveCallback: (response) => {
-        return response
+        return new Exam(response.data.data)
       },
       rejectCallback: (error) => {
         return error

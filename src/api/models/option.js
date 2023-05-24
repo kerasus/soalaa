@@ -33,7 +33,7 @@ export default class OptionAPI extends APIRepository {
 
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data
+        return response.data.data // Array of Strings
       },
       rejectCallback: (error) => {
         return error
@@ -77,7 +77,7 @@ export default class OptionAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.base,
       resolveCallback: (response) => {
-        return response.data.data
+        return response.data.data // Array of Strings
       },
       rejectCallback: (error) => {
         return error
@@ -105,7 +105,7 @@ export default class OptionAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.statuses,
       resolveCallback: (response) => {
-        return response.data.data
+        return response.data.data // Array of Strings
       },
       rejectCallback: (error) => {
         return error
@@ -119,7 +119,7 @@ export default class OptionAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.reportStatuses,
       resolveCallback: (response) => {
-        return response.data.data
+        return response.data.data // Array of Strings
       },
       rejectCallback: (error) => {
         return error
@@ -133,7 +133,7 @@ export default class OptionAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.user(data),
       resolveCallback: (response) => {
-        return response.data.data
+        return response.data.data // Array of Strings
       },
       rejectCallback: (error) => {
         return error

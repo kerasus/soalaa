@@ -464,7 +464,7 @@ export default class UserAPI extends APIRepository {
       cacheKey: this.CacheList.subscriptionLast,
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data.questions
+        return response.data.data.questions // Array of Strings Object (key,val)
       },
       rejectCallback: (error) => {
         return error
