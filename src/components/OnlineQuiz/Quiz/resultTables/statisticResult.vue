@@ -12,9 +12,11 @@
       </div>
       <div class="col-12 row">
         <div class="col">
-          <div v-if="isHighchartsReady"
-               :style="{ 'max-width': '100%'}">
-            <high-charts :options="chartOptions" />
+          <div :style="{ 'max-width': '100%'}">
+            <div v-if="isHighchartsReady">
+              <component :is="highChartComponentName"
+                         :options="chartOptions" />
+            </div>
           </div>
         </div>
       </div>
@@ -23,18 +25,20 @@
 </template>
 
 <script>
-let Chart
-if (typeof window !== 'undefined') {
-  import('highcharts-vue')
-    .then((ChartLib) => {
-      Chart = ChartLib.template
-    })
-}
-
+import { defineAsyncComponent } from 'vue'
 export default {
   name: 'StatisticResult',
   components: {
-    HighCharts: Chart
+    HighCharts: defineAsyncComponent(() => {
+      return new Promise((resolve) => {
+        let Chart
+        import('highcharts-vue')
+          .then((ChartLib) => {
+            Chart = ChartLib.Chart
+            resolve(Chart)
+          })
+      })
+    })
   },
   props: ['report'],
   data () {
@@ -97,7 +101,8 @@ export default {
           categories: []
         }
       },
-      isHighchartsReady: false
+      isHighchartsReady: false,
+      highChartComponentName: ''
     }
   },
   mounted () {
@@ -108,9 +113,13 @@ export default {
       this.loadDataTable()
       this.loadChart()
     }
-    this.isHighchartsReady = true
+    this.setUpHighChart()
   },
   methods: {
+    setUpHighChart () {
+      this.isHighchartsReady = true
+      this.highChartComponentName = 'high-charts'
+    },
     getPercentDataForChart () {
       let data = []
       this.dataTable.forEach((item) => {
