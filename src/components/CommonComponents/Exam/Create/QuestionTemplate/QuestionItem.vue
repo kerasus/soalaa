@@ -209,7 +209,7 @@
 
     <q-card-section class="answer-section">
       <q-expansion-item
-        v-model="listConfig.questionAnswerExpanded"
+        v-model="descriptiveAnswerExpanded"
         header-class="hideExpansionHeader"
       >
         <div class="description-answer-body">
@@ -234,20 +234,15 @@
 
           <div class="description-answer-video"
           >
-            <div v-if="contentLoading"
-                 class="answer-video flex items-center justify-center">
-              <q-spinner-ball
-                color="primary"
-                size="2em"
-              />
-            </div>
-            <div v-else
-                 class="answer-video flex items-center justify-center"
+            <div class="answer-video flex items-center justify-center"
                  :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
             >
-              <content-video-player :content="content"
-                                    :timePoint="questionTimePoint"
-                                    :nextTimePoint="nextTimePoint" />
+              <div class="soon flex items-center justify-center">
+                به زودی
+              </div>
+
+              <!--              ToDo : uncomment this when backend give you a valid key-->
+              <!--              <video-player />-->
             </div>
 
             <div class="answer-video-title">
@@ -783,42 +778,42 @@ export default {
       @media only screen and (max-width: 599px) {
         order: 2;
       }
-        .source-content,
-        .source-skeleton {
+      .source-content,
+      .source-skeleton {
+        display: flex;
+
+        .source-text {
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 19px;
+          color: #434765;
+          text-align: right;
           display: flex;
-
-          .source-text {
-            font-style: normal;
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 19px;
-            color: #434765;
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            .source-date {
-              text-align: end;
-            }
-          }
-
-          .source-avatar {
-            margin-left: 10px;
-            display: flex;
-            align-items: center;
-
-            @media only screen and (max-width: 1023px) {
-              margin-left: 4px;
-            }
-
-            .alternate-avatar {
-              width: 36px;
-              height: 36px;
-              border-radius: 50%;
-              background: #9690E4;
-            }
+          flex-direction: column;
+          justify-content: center;
+          .source-date {
+            text-align: end;
           }
         }
+
+        .source-avatar {
+          margin-left: 10px;
+          display: flex;
+          align-items: center;
+
+          @media only screen and (max-width: 1023px) {
+            margin-left: 4px;
+          }
+
+          .alternate-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #9690E4;
+          }
+        }
+      }
     }
   }
   .question-tags {
@@ -964,26 +959,19 @@ export default {
 
       .description-answer {
         padding: 20px 24px;
-        width: 60%;
+        max-width: 620px;
+        width: 100%;
         background: #F6F9FF;
         border-radius: 16px;
         margin-right: 30px;
 
-        @media only screen and (max-width: 1439px) {
-          //height: 230px;
-        }
-
         @media only screen and (max-width: 1023px) {
           padding: 16px;
           margin-right: 24px;
-          //height: 200px;
-          width: 50%;
         }
 
         @media only screen and (max-width: 599px) {
           max-width: 100%;
-          width: 100%;
-          //height: 310px;
           margin-bottom: 20px;
 
         }
@@ -1003,7 +991,7 @@ export default {
           line-height: 22px;
           letter-spacing: -0.03em;
           color: #FFFFFF;
-        }
+          }
 
         .question-answer-description {
 
@@ -1011,27 +999,12 @@ export default {
       }
 
       .description-answer-video {
-        min-height: 176px;
-        width: 40%;
-        @media screen and(max-width: 1439px) {
-          width: 38%;
-          height: 130px;
-        }
-        @media screen and(max-width: 1023px) {
-          width: 48%;
-        }
-        @media screen and(max-width: 599px) {
-          width: 100%;
-          height: 158px;
-        }
         .answer-video {
-          height: 100%;
-          width: 100%;
+          width: 316px;
+          height: 176px;
           background: #f6f9ff;
           border-radius: 16px;
           margin-bottom: 10px;
-          padding: 0 15px;
-
           .soon{
             width: 86px;
             height: 32px;
@@ -1041,14 +1014,17 @@ export default {
           }
 
           @media only screen and (max-width: 1439px) {
-
+            width: 230px;
+            height: 130px;
           }
 
           @media only screen and (max-width: 1023px) {
+            width: 238px;
           }
 
           @media only screen and (max-width: 599px) {
-
+            width: 100%;
+            height: 158px;
           }
         }
 
@@ -1259,5 +1235,4 @@ export default {
     }
   }
 }
-
 </style>
