@@ -128,18 +128,18 @@
     <!--      ثبت مباحث انتخاب شده-->
     <!--    </q-btn>-->
     <div>
-      <!--      <tree-modal ref="questionTreeModal"-->
-      <!--                  v-model:dialogValue="dialogValue"-->
-      <!--                  v-model:selected-nodes="selectedNodes"-->
-      <!--                  :tree-type="'test'"-->
-      <!--                  :layers-config="treeLayersConfig"-->
-      <!--                  exchange-last-layer-only-->
-      <!--                  @gradeSelected="groupSelected"-->
-      <!--                  @lessonSelected="lessonSelected" />-->
-      <!--      <tree-modal v-model:dialogValue="subjectTagsTreeModal"-->
-      <!--                  v-model:selected-nodes="selectedTreeTags"-->
-      <!--                  :tree-type="'subject-tree'"-->
-      <!--                  exchange-last-layer-only />-->
+      <tree-modal ref="questionTreeModal"
+                  v-model:dialogValue="dialogValue"
+                  v-model:selected-nodes="selectedNodes"
+                  :tree-type="'test'"
+                  :layers-config="treeLayersConfig"
+                  exchange-last-layer-only
+                  @gradeSelected="groupSelected"
+                  @lessonSelected="lessonSelected" />
+      <tree-modal v-model:dialogValue="subjectTagsTreeModal"
+                  v-model:selected-nodes="selectedTreeTags"
+                  :tree-type="'subject_tags'"
+                  exchange-last-layer-only />
     </div>
   </div>
 </template>
@@ -151,13 +151,13 @@ import { Question } from 'src/models/Question.js'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
-// import TreeModal from 'src/components/Question/QuestionPage/TreeModal.vue'
+import TreeModal from 'src/components/Question/QuestionPage/TreeModal.vue'
 import AttachExam from 'src/components/Question/QuestionPage/AttachExam/AttachExam.vue'
 
 export default {
   name: 'QuestionIdentifier',
   components: {
-    // TreeModal,
+    TreeModal,
     AttachExam
   },
   inject: {
