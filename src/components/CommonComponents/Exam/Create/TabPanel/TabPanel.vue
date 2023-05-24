@@ -85,7 +85,6 @@
 <script>
 import { Exam } from 'src/models/Exam.js'
 import mixinTree from 'src/mixin/Tree.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import Steps from 'src/pages/Admin/exam/Create/Steps.vue'
 import ExamInfoTab from 'src/components/CommonComponents/Exam/Create/ExamInfoTab/ExamInfoTab.vue'
 import FinalApprovalTab from 'src/components/CommonComponents/Exam/Create/FinalApprovalTab/FinalApprovalTab.vue'
@@ -133,21 +132,18 @@ export default {
     getData () {
       this.getOptions()
         .then(() => {
-          this.getDraftExam()
-            .then((response) => {
+          this.$apiGateway.exam.user.getUserDraftExam()
+            .then((draftExam) => {
               // ToDo: must check
-              if (!response.data?.data) {
+              if (!draftExam) {
                 return
               }
               this.continueWithOldDraftExamConfirmationDialog = true
-              this.loadDraftExam(response.data.data)
+              this.loadDraftExam(draftExam)
             })
             .catch(() => {
             })
         })
-    },
-    getDraftExam () {
-      return this.$axios.get(API_ADDRESS.exam.user.draft())
     },
     getOptions () {
       return Promise.all([
@@ -167,8 +163,8 @@ export default {
     },
     createAndLoadNewDraftExam () {
       this.createExam(this.draftExam)
-        .then(response => {
-          this.draftExam = new Exam(response.data.data)
+        .then(exam => {
+          this.draftExam = new Exam(exam)
         })
         .catch(() => {
 
@@ -261,7 +257,7 @@ export default {
       const hasOldDraftExam = !!this.draftExam.id
       if (hasOldDraftExam) {
         this.updateExam()
-          .then(response => {
+          .then(exam => {
             this.draftExam.loading = false
             this.currentTab = nextStep
           })
@@ -270,8 +266,8 @@ export default {
           })
       } else {
         this.createExam()
-          .then(response => {
-            this.loadDraftExam(response.data.data)
+          .then(exam => {
+            this.loadDraftExam(exam)
             this.currentTab = nextStep
             this.draftExam.loading = false
           })
@@ -293,17 +289,20 @@ export default {
     },
     createExam () {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.create, this.draftExam)
+      return this.$apiGateway.exam.userDraftExamCreate(this.draftExam)
     },
     updateExam (params) {
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam)
+      return this.$apiGateway.exam.userDraftExamUpdate({
+        examId: this.draftExam.id,
+        data: this.draftExam
+      })
     },
 
     loadAttachedQuestions () {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.getAttachedQuestions(this.draftExam.id))
-        .then((response) => {
-          this.draftExam.questions.add(response.data.data)
+      return this.$apiGateway.exam.userDraftExamGetAttachedQuestions(this.draftExam.id)
+        .then((questions) => {
+          this.draftExam.questions.add(questions)
           this.draftExam.loading = false
         })
         .catch(() => {
@@ -312,13 +311,15 @@ export default {
     },
     addQuestionsToExam(questions) {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.bulkAttachQuestions(this.draftExam.id),
-        this.draftExam.questions.list.map(question => {
+      return this.$apiGateway.exam.userDraftExamBulkAttachQuestions({
+        examId: this.draftExam.id,
+        data: this.draftExam.questions.list.map(question => {
           return {
             question_id: question.id,
             order: question.order
           }
-        }))
+        })
+      })
         .then(() => {
           this.loadAttachedQuestions()
           this.draftExam.loading = false
@@ -359,8 +360,8 @@ export default {
     },
     setFinalStep() {
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-      this.createExam().then((createExam) => {
-        this.exam = new Exam(createExam.data.data)
+      this.createExam().then((exam) => {
+        this.exam = new Exam(exam)
         // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         this.createDraftExamMessageDialog = true
       }).catch(err => {
@@ -428,12 +429,6 @@ export default {
         this.showMessagesInNotify(messages)
       }
     },
-    createExammm() {
-      this.$axios.get(API_ADDRESS.exam.user.create)
-        .then((response) => {
-          this.exam = new Exam(response.data.data)
-        })
-    },
     getGradesList () {
       return new Promise((resolve, reject) => {
         this.getRootNode('test')
@@ -447,10 +442,10 @@ export default {
     },
     loadMajorList () {
       return new Promise((resolve, reject) => {
-        this.$axios.get(API_ADDRESS.option.user('major_type'))
-          .then((response) => {
-            this.majorList = response.data.data
-            resolve(response)
+        this.$apiGateway.option.getUserOptions('major_type')
+          .then((options) => {
+            this.majorList = options
+            resolve(options)
           }).catch(() => {
             reject()
           })
@@ -466,7 +461,10 @@ export default {
     async updateQuestionOrder(data) {
       this.exam.questions.loading = true
       try {
-        await this.$axios.post(API_ADDRESS.exam.user.updateOrders('633aed8b3b8e23f84807cca2'), data)
+        await this.$apiGateway.exam.userUpdateOrders({
+          examId: '633aed8b3b8e23f84807cca2',
+          data
+        })
         // console.log('response update exam :', response)
         this.exam.questions.loading = false
       } catch (e) {
@@ -476,7 +474,10 @@ export default {
     async bulkDetachLastStep(data) {
       this.exam.questions.loading = true
       try {
-        await this.$axios.post(API_ADDRESS.exam.user.detachBulk('633aed8b3b8e23f84807cca2'), data)
+        await this.$apiGateway.exam.userDetachBulk({
+          examId: '633aed8b3b8e23f84807cca2',
+          data
+        })
         // console.log('response bulkDetachLastStep:', response)
         this.exam.questions.loading = false
       } catch (e) {
