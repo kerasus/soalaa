@@ -133,10 +133,9 @@ export default {
   },
   methods: {
     getContent (contentId, subCategoryIndex) {
-      const that = this
       this.$apiGateway.content.show(contentId)
         .then((response) => {
-          this.currentVideoContent = response.data.data
+          this.currentVideoContent = response
           this.content = new Content(this.currentVideoContent)
           // this.initVideoJs(this.currentVideoContent.file.video, this.currentVideoContent.photo, subCategoryIndex)
         })

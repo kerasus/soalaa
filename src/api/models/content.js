@@ -61,7 +61,7 @@ export default class ContentAPI extends APIRepository {
       cacheKey: this.CacheList.show(data),
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return new Content(response.data.data)
+        return new Content(response?.data?.data)
       },
       rejectCallback: (error) => {
         return error
