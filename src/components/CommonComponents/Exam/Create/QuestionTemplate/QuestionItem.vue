@@ -778,44 +778,44 @@ export default {
       @media only screen and (max-width: 599px) {
         order: 2;
       }
-        .source-content,
-        .source-skeleton {
-          display: flex;
+      .source-content,
+      .source-skeleton {
+        display: flex;
 
-          .source-text {
-            font-style: normal;
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 19px;
-            color: #434765;
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            .source-date {
-              text-align: end;
-            }
+        .source-text {
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 19px;
+          color: #434765;
+          text-align: right;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          .source-date {
+            text-align: end;
+          }
+        }
+
+        .source-avatar {
+          margin-left: 10px;
+          display: flex;
+          align-items: center;
+
+          @media only screen and (max-width: 1023px) {
+            margin-left: 4px;
           }
 
-          .source-avatar {
-            margin-left: 10px;
-            display: flex;
-            align-items: center;
-
-            @media only screen and (max-width: 1023px) {
-              margin-left: 4px;
-            }
-
-            .alternate-avatar {
-              width: 36px;
-              height: 36px;
-              border-radius: 50%;
-              background: #9690E4;
-            }
+          .alternate-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #9690E4;
           }
         }
       }
-
+    }
+  }
   .question-tags {
     display: flex;
     flex-direction: column;
@@ -1234,6 +1234,5 @@ export default {
       }
     }
   }
-}
 }
 </style>
