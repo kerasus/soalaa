@@ -1,5 +1,5 @@
 <template>
-  <div class="steps row"
+  <div class="steps row justify-center"
        :class="{ 'exam-confirmed' : currentStep === 'confirmedPage'}">
     <div v-if="!loading"
          class="exam-info step step-1"

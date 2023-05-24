@@ -331,20 +331,20 @@ export default {
 .exam-info-component {
   overflow: hidden;
   .exam-info-form {
-    &:deep(.q-field__native.q-placeholder) {
-      color: #6D708B;
-    }
+    // &:deep(.q-field__native.q-placeholder) {
+    //   color: #6D708B;
+    // }
 
-    &:deep(.form-builder-separator-col) {
-      b {
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 25px;
-        letter-spacing: -0.03em;
-        color: #434765;
-      }
-    }
+    // &:deep(.form-builder-separator-col) {
+    //   b {
+    //     font-style: normal;
+    //     font-weight: 400;
+    //     font-size: 16px;
+    //     line-height: 25px;
+    //     letter-spacing: -0.03em;
+    //     color: #434765;
+    //   }
+    // }
   }
 
   .exam-info-buttons {

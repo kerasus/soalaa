@@ -76,6 +76,18 @@
                  class="source-name">
               {{ question.reference[0].value }}
             </div>
+            <div v-if="(listConfig.questionYear && question.years.length > 0) || question.loading"
+                 class="question-year ellipsis col-sm-6 col-xs-6 justify-end">
+              <q-skeleton v-if="question.loading"
+                          class="info-title q-mx-sm"
+                          type="text"
+                          width="80px" />
+              <div v-for="(year, index) in question.years"
+                   :key="index"
+                   class="question-tag">
+                {{year.value}}
+              </div>
+            </div>
           </div>
 
           <div v-if="question.reference[0]"
@@ -102,7 +114,7 @@
         </div>
       </div>
       <div v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-           class="question-tags ellipsis col-sm-6 col-xs-6">
+           class="question-tags ellipsis col-sm-6 col-xs-10">
         <div v-for="i in 3"
              :key="i">
           <q-skeleton v-if="question.loading"
@@ -122,18 +134,6 @@
                  class="tag-circle" />
           </div>
           <div class="tag-title ellipsis">{{ item.title }}</div>
-        </div>
-      </div>
-      <div v-if="(listConfig.questionYear && question.years.length > 0) || question.loading"
-           class="question-year ellipsis col-sm-6 col-xs-6 justify-end">
-        <q-skeleton v-if="question.loading"
-                    class="info-title q-mx-sm"
-                    type="text"
-                    width="80px" />
-        <div v-for="(year, index) in question.years"
-             :key="index"
-             class="question-tag">
-          {{year.value}}
         </div>
       </div>
     </q-card-section>
@@ -890,7 +890,6 @@ export default {
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
-      margin-top: 16px;
 
       @media only screen and (max-width: 1439px) {
         margin-top: 20px;

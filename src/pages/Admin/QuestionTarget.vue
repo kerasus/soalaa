@@ -136,18 +136,18 @@ export default {
         { type: 'hidden', name: 'type', label: 'نوع', responseKey: 'data.type', col: 'col-md-1', placeholder: ' ', filled: true },
         // { type: 'photo', name: 'photo', label: 'تصویر', col: 'col-md-3', placeholder: ' ', filled: true },
         { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true },
-        { type: 'input', name: 'order', label: 'ترتیب نمایش', col: 'col-md-2', placeholder: ' ', filled: true }
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', responseKey: 'data.order', col: 'col-md-2', placeholder: ' ', filled: true }
       ],
       createInputs: [
         // { type: 'photo', name: 'photo', label: 'تصویر', col: 'col-md-3', placeholder: ' ', filled: true },
         { type: 'hidden', name: 'type', value: 'targets_type', label: '', col: 'col-12' },
         { type: 'input', name: 'value', label: 'عنوان', col: 'col-md-3', placeholder: ' ', filled: true },
-        { type: 'input', name: 'order', label: 'ترتیب نمایش', col: 'col-md-2', placeholder: ' ', filled: true }
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', responseKey: 'data.order', col: 'col-md-2', placeholder: ' ', filled: true }
       ],
       editInputs: [
         { type: 'hidden', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-1', placeholder: ' ' },
         { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true },
-        { type: 'input', name: 'order', label: 'ترتیب نمایش', col: 'col-md-2', placeholder: ' ', filled: true }
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', responseKey: 'data.order', col: 'col-md-2', placeholder: ' ', filled: true }
       ],
       showInputs: [],
       indexInputs: [

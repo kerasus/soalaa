@@ -37,7 +37,7 @@
                  size="md"
                  color="indigo"
                  icon="auto_stories"
-                 :to="{name:'Admin.Exam.Categories', params: {exam_id: inputData.props.row.id , examTitle: inputData.props.row.title}}">
+                 :to="{name:'Admin.Exam.Categories', params: {exam_id: inputData.props.row.id }}">
             <q-tooltip anchor="top middle"
                        self="bottom middle">
               مشاهده دروس
@@ -194,7 +194,7 @@ export default {
         pageKey: 'page'
       },
       inputs: [
-        { type: 'input', name: 'statement', col: 'col-md-4', placeholder: 'عنوان' },
+        { type: 'input', name: 'statement', col: 'col-md-4', placeholder: ' ', label: 'عنوان' },
         { type: 'date', name: 'start_at_from', calendarIcon: ' ', col: 'col-md-4', placeholder: 'تاریخ شروع از' },
         { type: 'date', name: 'start_at_till', calendarIcon: ' ', col: 'col-md-4', placeholder: 'تاریخ شروع تا' }
       ]
