@@ -473,10 +473,7 @@ export default {
       if (!(tags?.length > 0)) {
         return []
       }
-      tags.forEach(tag => {
-        if (!tag) {
-          return
-        }
+      tags.filter(tag => tag).forEach(tag => {
         if (typeof tag === 'string') {
           allTags.push(tag)
           return
