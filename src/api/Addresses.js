@@ -396,6 +396,7 @@ const API_ADDRESS = {
   },
   tree: {
     base: lumenServer + '/forrest/tree',
+    treeBox: lumenServer + '/forrest/tree/box',
     getMultiType (types) {
       let treeAddress = authServer + '/forrest/tree?'
       types.forEach(element => {
