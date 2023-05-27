@@ -62,11 +62,11 @@
           <q-tab-panel name="result">
             <personal-result :report="report" />
           </q-tab-panel>
-          <q-tab-panel name="newRank">
-            <new-takhmin-rotbe :report="report" />
-          </q-tab-panel>
           <q-tab-panel name="rank">
             <takhmin-rotbe :report="report" />
+          </q-tab-panel>
+          <q-tab-panel name="newRank">
+            <new-takhmin-rotbe :report="report" />
           </q-tab-panel>
           <q-tab-panel name="lessons">
             <statistic-result :report="report" />
@@ -148,11 +148,7 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
-import { AlaaSet } from 'src/models/AlaaSet.js'
-import Assistant from 'src/plugins/assistant.js'
 import ExamData from 'src/assets/js/ExamData.js'
-import { AlaaContent } from 'src/models/AlaaContent.js'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info.vue'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe.vue'
@@ -175,8 +171,6 @@ export default {
     selectedTimepoint: null,
     timepointsHeights: 0,
     videoLesson: null,
-    alaaSet: new AlaaSet(),
-    alaaContent: new AlaaContent(),
     alaaVideos: null,
     report: null,
     tab2: null,
@@ -184,8 +178,7 @@ export default {
     innerTab: 'innerMails',
     splitterModel: 20
   }),
-  created () {
-    // console.log('report.exams_booklet', this.report.exams_booklet)
+  mounted () {
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
     this.getUserData()
@@ -197,7 +190,7 @@ export default {
       const that = this
       const userExamId = this.$route.params.user_exam_id
       const examId = this.$route.params.exam_id
-      const examData = new ExamData(this.$axios)
+      const examData = new ExamData(this.$alaaApiInstance)
       examData.getUserExamWithCorrectAnswers(userExamId, examId)
         .loadQuestionsFromFile()
         .getUserExamData(userExamId)
@@ -275,32 +268,6 @@ export default {
         item.percent = parseFloat(item.percent).toFixed(1)
         item.taraaz = parseFloat(item.taraaz).toFixed(0)
       })
-    },
-    getContent (contentId, subCategoryIndex) {
-      const that = this
-      this.$alaaApiInstance.get(API_ADDRESS.content.base + '/' + contentId)
-        .then((response) => {
-          that.currentVideo = response.data.data
-          that.initVideoJs(that.currentVideo.file.video, subCategoryIndex)
-        })
-        .catch((error) => {
-          Assistant.reportErrors(error)
-          that.currentVideo = null
-        })
-    },
-    getAlaaSet (setId, subCategoryIndex) {
-      const that = this
-      this.alaaSet.loading = true
-      this.alaaSet.show(setId)
-        .then((response) => {
-          that.alaaSet.loading = false
-          that.alaaSet = new AlaaSet(response.data.data)
-          that.alaaVideos = that.alaaSet.contents.getVideos()
-          that.getContent(that.alaaVideos[0].id, subCategoryIndex)
-        })
-        .catch(() => {
-          that.alaaSet.loading = false
-        })
     }
   }
 }
