@@ -198,7 +198,7 @@ export default {
       const personal = this.$route.name === 'onlineQuiz.alaaView.personal'
       this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView', retake, personal)
         .then(() => {
-          // this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
+          this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
           if (!this.getCurrentExamQuestionsInArray() || this.getCurrentExamQuestionsInArray().length === 0) {
             this.$q.notify({
               type: 'negative',
