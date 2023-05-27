@@ -55,11 +55,14 @@ export default {
     }
   },
   mounted () {
-    document.getElementById('filepond-wrapper-' + this.fieldKey).innerHTML = ''
-    document.getElementById('filepond-wrapper-' + this.fieldKey).appendChild(this.pond.element)
-    document.addEventListener('FilePond:addfile', () => {
-      this.question[this.fieldKey] = this.pond.getFiles().map(({ file }) => file)
-    })
+    console.log(document.getElementById('filepond-wrapper-' + this.fieldKey))
+    if (document.getElementById('filepond-wrapper-' + this.fieldKey)) {
+      document.getElementById('filepond-wrapper-' + this.fieldKey).innerHTML = ''
+      document.getElementById('filepond-wrapper-' + this.fieldKey).appendChild(this.pond.element)
+      document.addEventListener('FilePond:addfile', () => {
+        this.question[this.fieldKey] = this.pond.getFiles().map(({ file }) => file)
+      })
+    }
   },
   methods: {
     load: (source, load, error, progress, abort, headers) => {

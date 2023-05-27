@@ -282,9 +282,9 @@ export default {
     getGradesList() {
       return new Promise((resolve, reject) => {
         this.getRootNode('test')
-          .then(response => {
-            this.gradesList = response.data.data.children
-            resolve(response)
+          .then(tree => {
+            this.gradesList = tree.children
+            resolve(tree)
           }).catch(() => {
             reject()
           })

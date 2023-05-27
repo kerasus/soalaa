@@ -87,7 +87,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { AlaaSet } from 'src/models/AlaaSet.js'
 import Assistant from 'src/plugins/assistant.js'
 import { Content } from 'src/models/Content.js'
@@ -134,9 +133,9 @@ export default {
   },
   methods: {
     getContent (contentId, subCategoryIndex) {
-      this.$axios.get(API_ADDRESS.content.base + '/' + contentId)
-        .then((response) => {
-          this.currentVideoContent = response.data.data
+      this.$apiGateway.content.show(contentId)
+        .then((content) => {
+          this.currentVideoContent = content
           this.content = new Content(this.currentVideoContent)
           // this.initVideoJs(this.currentVideoContent.file.video, this.currentVideoContent.photo, subCategoryIndex)
         })
