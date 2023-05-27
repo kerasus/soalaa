@@ -91,6 +91,10 @@
                 :class="{ ltr: isLtrString(currentQuestion.statement)}"
                 class="renderedPanel"
               >
+                <div v-if="currentQuestion.parent.id"
+                     class="q-pb-md">
+                  <vue-katex :input="currentQuestion.parent.statement" />
+                </div>
                 <vue-katex :input="currentQuestion.statement" />
               </div>
               <q-card
@@ -194,7 +198,7 @@ export default {
       const personal = this.$route.name === 'onlineQuiz.alaaView.personal'
       this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView', retake, personal)
         .then(() => {
-          this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
+          // this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
           if (!this.getCurrentExamQuestionsInArray() || this.getCurrentExamQuestionsInArray().length === 0) {
             this.$q.notify({
               type: 'negative',

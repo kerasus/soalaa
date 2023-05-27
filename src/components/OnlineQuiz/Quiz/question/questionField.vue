@@ -29,7 +29,11 @@
           :class="{ ltr: isRtl }"
         >
           <vue-katex
-            :input="(source.index + 1) + ') ' + source.statement"
+            v-if="source.parent.id"
+            :input="questionParentStatement"
+          />
+          <vue-katex
+            :input="questionStatement"
           />
         </p>
         <div
@@ -214,6 +218,15 @@ export default {
         return 'col-md-3'
       }
       return 'col-md-3'
+    },
+    questionParentStatement () {
+      return (this.source.index + 1) + ') ' + this.source.parent.statement
+    },
+    questionStatement () {
+      if (this.source.parent.id) {
+        return this.source.statement
+      }
+      return (this.source.index + 1) + ') ' + this.source.statement
     }
   },
   mounted () {
