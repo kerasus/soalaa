@@ -82,6 +82,7 @@ const APIAdresses = {
       return '/exam-report/show?user_exam_id=' + userExamId
     },
     adminGetReport: '/exam-report/show/admin',
+    takhminRotbeExamList: '/exam-report/rank',
     updateReportOptions (examId) {
       return '/exam/config/' + examId
     }
@@ -121,6 +122,8 @@ export default class ExamAPI extends APIRepository {
   constructor() {
     super('exam', appApiInstance, '', '', APIAdresses)
     this.CacheList = {
+      showExam: (examId) => this.APIAdresses.showExam(examId),
+      takhminRotbeExamList: this.APIAdresses.report.takhminRotbeExamList
     }
   }
 
@@ -423,6 +426,53 @@ export default class ExamAPI extends APIRepository {
         return error
       },
       data: data.data
+    })
+  }
+
+  showExam(examId, cache = { TTL: 100 }) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.showExam(examId),
+      cacheKey: this.CacheList.showExam(examId),
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return new Exam(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  updateReportOptions(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.report.updateReportOptions(data.examId),
+      resolveCallback: (response) => {
+        return response
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  takhminRotbeExamList(examId, cache = { TTL: 100 }) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.report.takhminRotbeExamList,
+      cacheKey: this.CacheList.takhminRotbeExamList,
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return new ExamList(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
     })
   }
 }

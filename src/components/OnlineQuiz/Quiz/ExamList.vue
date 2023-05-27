@@ -179,7 +179,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Exam, ExamList } from 'src/models/Exam.js'
 
 export default {
@@ -223,7 +222,9 @@ export default {
     },
     getExams () {
       this.$store.dispatch('loading/linearLoading', true)
-      this.$axios.get(API_ADDRESS.exam.base(this.pagination.page))
+      this.$apiGateway.exam.userExamList({
+        page: this.pagination.page
+      })
         .then((response) => {
           this.$store.dispatch('loading/linearLoading', false)
           this.pagination.rowsNumber = response.data.meta.total
@@ -292,7 +293,10 @@ export default {
     },
     generateJsonFile (exams, withAnswer) {
       this.$store.dispatch('loading/linearLoading', true)
-      this.$axios.post(API_ADDRESS.exam.generateExamFile(exams.id, withAnswer))
+      this.$apiGateway.exam.generateExamFile({
+        examId: exams.id,
+        withAnswer
+      })
         .then(() => {
           this.$q.notify({
             type: 'positive',

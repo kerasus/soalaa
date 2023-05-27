@@ -246,7 +246,6 @@
 
 <script>
 import { date } from 'quasar'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Exam, ExamList } from 'src/models/Exam.js'
 import { QuestCategory, QuestCategoryList } from 'src/models/QuestCategory.js'
 
@@ -293,9 +292,9 @@ export default {
   methods: {
     getData () {
       this.$store.dispatch('loading/linearLoading', true)
-      this.$axios.get(API_ADDRESS.exam.base())
-        .then((response) => {
-          this.examList = new ExamList(response.data.data)
+      this.$apiGateway.exam.userExamList()
+        .then((examList) => {
+          this.examList = new ExamList(examList)
           this.examInfo = new Exam(this.examList.list.find(exam => exam.id === this.examId))
           this.typeValue = this.examInfo.type.value
           this.dateTime.startDate = this.dateFormat(this.examInfo.start_at, 'start_at')
@@ -332,10 +331,10 @@ export default {
     },
     getOptions () {
       this.$store.dispatch('loading/linearLoading', true)
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
+      this.$apiGateway.wxam.getFilterOptions()
+        .then((options) => {
           this.$store.dispatch('loading/linearLoading', false)
-          this.options = response.data.data.filter(data => data.type === 'exam_type')
+          this.options = options.filter(data => data.type === 'exam_type')
           this.options.forEach(option => {
             this.types.push(option.value)
           })
@@ -345,10 +344,10 @@ export default {
         })
     },
     getCategories () {
-      this.$axios.get(API_ADDRESS.questionCategory.base)
-        .then((response) => {
+      this.$apiGateway.questionCategory.get()
+        .then((questCategoryList) => {
           this.$store.dispatch('loading/linearLoading', false)
-          this.categoryList = new QuestCategoryList(response.data.data)
+          this.categoryList = new QuestCategoryList(questCategoryList)
           this.categoryList.list.forEach(category => {
             this.categoryTitles.push(category.title)
           })
@@ -379,7 +378,7 @@ export default {
       this.examInfo.finish_at = this.makeCompleteDate(this.dateTime.finishDate, this.dateTime.finishTime)
       this.examInfo.photo = 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719'
       if (this.examInfo.id) {
-        this.examInfo.update(API_ADDRESS.exam.editExam + '/' + this.examInfo.id)
+        this.examInfo.update(this.$apiGateway.exam.APIAdresses.editExam + '/' + this.examInfo.id)
           .then(() => {
             this.$store.dispatch('loading/overlayLoading', false)
             this.$q.notify({

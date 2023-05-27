@@ -33,7 +33,7 @@ export default class OptionAPI extends APIRepository {
 
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data // Array of Strings
+        return response.data.data // Array of Option Object
       },
       rejectCallback: (error) => {
         return error

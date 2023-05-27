@@ -192,7 +192,7 @@ export default defineComponent({
         page: 1
       })
         .then((response) => {
-          this.allExamsList = response.ExamList
+          this.allExamsList = response.examList
           this.pagination.exam = response.meta
           this.allExamsList.loading = false
           this.filterData.to = this.date

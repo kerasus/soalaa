@@ -45,7 +45,12 @@ export default class ProductAPI extends APIRepository {
       gifts: (id) => this.name + this.APIAdresses.gifts(id),
       sampleContent: (id) => this.name + this.APIAdresses.sampleContent(id),
       categories: this.name + this.APIAdresses.categories,
-      edit: this.name + this.APIAdresses.edit
+      edit: this.name + this.APIAdresses.edit,
+      landing: {
+        sea: {
+          all: '/product/soalaa/all'
+        }
+      }
     }
     this.restUrl = (id) => this.APIAdresses.base + '/' + id
     /* Setting the callback functions for the CRUD operations. */
@@ -214,6 +219,20 @@ export default class ProductAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.userLastState(id),
       ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return new Content(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  landingSeaAll() {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.landing.sea.all,
       resolveCallback: (response) => {
         return new Content(response.data.data)
       },
