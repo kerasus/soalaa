@@ -129,7 +129,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .page-wrapper {
   width: 794px;
-  height: 1123px;
+  height: 1122px;
   //background: url(../../../../public/img/PdfBackground.png) no-repeat;
   background: url(../../../../public/img/PdfBackground-empty.png) no-repeat;
   background-size: cover;
