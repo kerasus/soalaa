@@ -219,14 +219,17 @@ export default {
       }
       return 'col-md-3'
     },
+    questionIndexString () {
+      return (this.source.index + 1) + ') '
+    },
     questionParentStatement () {
-      return (this.source.index + 1) + ') ' + this.source.parent.statement
+      return this.questionIndexString + this.source.parent.statement
     },
     questionStatement () {
       if (this.source.parent.id) {
         return this.source.statement
       }
-      return (this.source.index + 1) + ') ' + this.source.statement
+      return this.questionIndexString + this.source.statement
     }
   },
   mounted () {
