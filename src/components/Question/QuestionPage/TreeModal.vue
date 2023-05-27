@@ -336,8 +336,8 @@ export default {
     loadLayerList (layerRoute) {
       return new Promise((resolve, reject) => {
         this.getTreeNode(layerRoute, false)
-          .then((response) => {
-            resolve(response.data.data)
+          .then((node) => {
+            resolve(node)
           }).catch(() => {
             reject()
           })
@@ -361,9 +361,9 @@ export default {
       const route = this.getRouteForNode(value, isValueNode, hasTreeType)
       return new Promise((resolve, reject) => {
         this.dialogLoading = true
-        this.$axios.get(route)
+        this.$appApiInstance.get(route)
           .then((response) => {
-            resolve(response)
+            resolve(new TreeNode(response.data.data))
             this.dialogLoading = false
           }).catch(() => {
             reject()
@@ -439,12 +439,12 @@ export default {
       this.dialogLoading = true
       this.treeKey += 1
       this.showTree('tree', this.getTreeNode(id, isValueNode, hasTreeType))
-        .then((response) => {
-          const allNodes = response.data.data.children
-          allNodes.push(new TreeNode({
+        .then((node) => {
+          const allChildNodes = node.children
+          allChildNodes.push(new TreeNode({
             id
           }))
-          this.updateCurrentTreeFlags(allNodes)
+          this.updateCurrentTreeFlags(allChildNodes)
           this.syncAllCheckedIds()
           this.dialogLoading = false
         })

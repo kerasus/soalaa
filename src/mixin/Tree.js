@@ -5,8 +5,7 @@ const mixinTree = {
     showTree (refKey, callback) {
       return new Promise((resolve, reject) => {
         callback
-          .then(response => {
-            const node = response.data.data
+          .then(node => {
             const treeComponent = this.$refs[refKey]
             if (!treeComponent) {
               resolve(node)
