@@ -85,9 +85,9 @@
 </template>
 <script>
 import mixinTree from 'src/mixin/Tree.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import Tree from 'src/components/Tree/Tree.vue'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'TreeModal',
@@ -162,7 +162,7 @@ export default {
       treeKey: 0,
       globalStorage: [],
       localInitialNode: new TreeNode(),
-      routeNameToGetNode: (layerId) => API_ADDRESS.tree.getNodeById(layerId)
+      routeNameToGetNode: (layerId) => APIGateway.tree.APIAdresses.getNodeById(layerId)
     }
   },
   computed: {
@@ -252,8 +252,7 @@ export default {
           'initialNode must include either an id or an object with id')
         return
       }
-      const response = await this.getTreeNode(node.id)
-      this.localInitialNode = response.data.data
+      this.localInitialNode = await this.getTreeNode(node.id)
     },
     async initTreeByType () {
       if (!this.treeType) {
@@ -331,7 +330,7 @@ export default {
       if (this.layersConfig[0].nodeList.length > 0) {
         return
       }
-      await this.setLayerList(API_ADDRESS.tree.getNodeByType(this.treeType))
+      await this.setLayerList(APIGateway.tree.APIAdresses.getNodeByType(this.treeType))
     },
     loadLayerList (layerRoute) {
       return new Promise((resolve, reject) => {
@@ -349,11 +348,11 @@ export default {
     },
     getRouteForNode (value, isValueNode, hasTreeType) {
       if (hasTreeType) {
-        return API_ADDRESS.tree.getNodeByType(value)
+        return APIGateway.tree.APIAdresses.getNodeByType(value)
       }
       if (isValueNode && typeof value) {
         const nodeId = typeof value === 'string' ? value : value.id
-        return API_ADDRESS.tree.getNodeById(nodeId)
+        return APIGateway.tree.APIAdresses.getNodeById(nodeId)
       }
       return value
     },
@@ -361,9 +360,9 @@ export default {
       const route = this.getRouteForNode(value, isValueNode, hasTreeType)
       return new Promise((resolve, reject) => {
         this.dialogLoading = true
-        this.$appApiInstance.get(route)
-          .then((response) => {
-            resolve(new TreeNode(response.data.data))
+        APIGateway.tree.getNodeByRoute(route)
+          .then((node) => {
+            resolve(node)
             this.dialogLoading = false
           }).catch(() => {
             reject()
