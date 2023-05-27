@@ -1,4 +1,4 @@
-import { appApiInstance } from 'src/boot/axios.js'
+import { appApiInstance, alaaApiInstance } from 'src/boot/axios.js'
 import { User } from 'src/models/User.js'
 import { ProductList } from 'src/models/Product.js'
 import { CartItemList } from 'src/models/CartItem.js'
@@ -235,12 +235,12 @@ export default class UserAPI extends APIRepository {
   showUser(data = {}) {
     return this.sendRequest({
       apiMethod: 'get',
-      api: this.api,
+      api: alaaApiInstance,
       request: this.APIAdresses.showUser,
       cacheKey: this.CacheList.showUser,
       ...(data.cache && { cache: data.cache }),
       resolveCallback: (response) => {
-        return response
+        return new User(response.data.data)
       },
       rejectCallback: (error) => {
         return error
@@ -449,6 +449,22 @@ export default class UserAPI extends APIRepository {
       }, data),
       resolveCallback: (response) => {
         return response.data.message
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  subscriptionLanding(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.subscription.landing,
+      cacheKey: this.CacheList.subscriptionLast,
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return response.data.data.questions // Array of Strings Object (key,val)
       },
       rejectCallback: (error) => {
         return error

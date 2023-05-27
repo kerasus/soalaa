@@ -5,33 +5,34 @@ import APIRepository from '../classes/APIRepository.js'
 import { Product, ProductList } from 'src/models/Product.js'
 import { ProductCategoryList } from 'src/models/ProductCategory'
 
+const APIAdresses = {
+  base: '/product',
+  bulk: (productIds) => {
+    const idParams = []
+    productIds.forEach((productId, productIndex) => {
+      idParams.push('ids' + '[' + productIndex + ']=' + productId)
+    })
+    const queryParams = idParams.join('&')
+    return '/product?' + queryParams
+  },
+  create: '/reqres/api/users',
+  edit: '/admin/product',
+  index: '/admin/product',
+  getSets: id => `/product/${id}/sets`,
+  getComments: id => `/product/${id}/content-comments`,
+  getContents: id => `/product/${id}/contents`,
+  favored: (id) => '/product/' + id + '/favored',
+  unfavored: (id) => '/product/' + id + '/unfavored',
+  show: (id) => '/product/' + id,
+  gifts: (id) => '/gift-products/' + id,
+  sampleContent: (id) => '/product/' + id + '/sample',
+  categories: '/product-categories',
+  userLastState: (id) => '/product/' + id + '/toWatch'
+}
 export default class ProductAPI extends APIRepository {
   constructor() {
-    super('product', appApiInstance)
-    this.APIAdresses = {
-      base: '/product',
-      bulk: (productIds) => {
-        const idParams = []
-        productIds.forEach((productId, productIndex) => {
-          idParams.push('ids' + '[' + productIndex + ']=' + productId)
-        })
-        const queryParams = idParams.join('&')
-        return '/product?' + queryParams
-      },
-      create: '/reqres/api/users',
-      edit: '/admin/product',
-      index: '/admin/product',
-      getSets: id => `/product/${id}/sets`,
-      getComments: id => `/product/${id}/content-comments`,
-      getContents: id => `/product/${id}/contents`,
-      favored: (id) => '/product/' + id + '/favored',
-      unfavored: (id) => '/product/' + id + '/unfavored',
-      show: (id) => '/product/' + id,
-      gifts: (id) => '/gift-products/' + id,
-      sampleContent: (id) => '/product/' + id + '/sample',
-      categories: '/product-categories',
-      userLastState: (id) => '/product/' + id + '/toWatch'
-    }
+    super('product', appApiInstance, '', '', APIAdresses)
+
     this.CacheList = {
       base: this.name + this.APIAdresses.base,
       bulk: (productIds) => this.name + this.APIAdresses.bulk(productIds),

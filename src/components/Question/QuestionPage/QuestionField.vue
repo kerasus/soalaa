@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Question } from 'src/models/Question.js'
 // import VueTiptapKatex from 'vue3-tiptap-katex/src/vue3-tiptap-katex.vue'
 import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap.js'
@@ -68,7 +67,7 @@ export default {
   },
   computed: {
     getQuestionUploadURL () {
-      return API_ADDRESS.question.uploadImage(this.question.id)
+      return this.$apiGateway.question.APIAdresses.uploadImage(this.question.id)
     },
     getAuthorizationCode () {
       return 'Bearer ' + this.$store.getters['Auth/accessToken']

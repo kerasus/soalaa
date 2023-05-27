@@ -1,12 +1,12 @@
 import APIRepository from '../classes/APIRepository'
-import { apiV2 } from 'src/boot/axios'
+import { appApiInstance, alaaApiInstance } from 'src/boot/axios'
 import { Content } from 'src/models/Content'
 import { ProductList } from 'src/models/Product'
 import { Comment } from 'src/models/Comment'
 import { APIGateway } from 'src/api/APIGateway'
 const APIAdresses = {
   search: '/search',
-  admin: '/admin/contents',
+  admin: '/admin/c',
   timestampSet: '/timepoint',
   show: (id) => '/c/' + id,
   delete: '/admin/contents/destroy',
@@ -31,7 +31,7 @@ const APIAdresses = {
 }
 export default class ContentAPI extends APIRepository {
   constructor() {
-    super('content', apiV2, '/c/', new Content(), APIAdresses)
+    super('content', appApiInstance, '/c/', new Content(), APIAdresses)
     this.CacheList = {
       admin: this.name + this.APIAdresses.admin,
       show: id => this.name + this.APIAdresses.show(id),
@@ -56,12 +56,12 @@ export default class ContentAPI extends APIRepository {
   show(data, cache = { TTL: 100 }) {
     return this.sendRequest({
       apiMethod: 'get',
-      api: this.api,
+      api: alaaApiInstance,
       request: this.APIAdresses.show(data),
       cacheKey: this.CacheList.show(data),
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return new Content(response.data.data)
+        return new Content(response?.data?.data)
       },
       rejectCallback: (error) => {
         return error
