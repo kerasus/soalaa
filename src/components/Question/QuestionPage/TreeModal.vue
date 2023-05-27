@@ -85,7 +85,6 @@
 </template>
 <script>
 import mixinTree from 'src/mixin/Tree.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import Tree from 'src/components/Tree/Tree.vue'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
 import { APIGateway } from 'src/api/APIGateway'
