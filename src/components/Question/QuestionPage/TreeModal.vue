@@ -161,8 +161,7 @@ export default {
       selectedNodesIDs: [],
       treeKey: 0,
       globalStorage: [],
-      localInitialNode: new TreeNode(),
-      routeNameToGetNode: (layerId) => APIGateway.tree.APIAdresses.getNodeById(layerId)
+      localInitialNode: new TreeNode()
     }
   },
   computed: {
@@ -258,7 +257,7 @@ export default {
       if (!this.treeType) {
         return
       }
-      await this.showTreeModalNode(this.treeType, false, true)
+      await this.showTreeModalNode(this.treeType, 'treeType')
     },
     async initTreeEssentials () {
       await this.initLayers()
@@ -330,11 +329,12 @@ export default {
       if (this.layersConfig[0].nodeList.length > 0) {
         return
       }
-      await this.setLayerList(APIGateway.tree.APIAdresses.getNodeByType(this.treeType))
+      await this.setLayerList(APIGateway.tree.getNodeByType(this.treeType))
     },
-    loadLayerList (layerRoute) {
+    loadLayerList (callBackPromise) {
+      debugger
       return new Promise((resolve, reject) => {
-        this.getTreeNode(layerRoute, false)
+        callBackPromise
           .then((node) => {
             resolve(node)
           }).catch(() => {
@@ -342,25 +342,26 @@ export default {
           })
       })
     },
-    async setLayerList (layerRoute, layerIndex = 0) {
-      const treeNode = await this.loadLayerList(layerRoute)
+    async setLayerList (layerLoadPromise, layerIndex = 0) {
+      const treeNode = await this.loadLayerList(layerLoadPromise)
       this.layersList[layerIndex].nodeList = treeNode.children
     },
-    getRouteForNode (value, isValueNode, hasTreeType) {
-      if (hasTreeType) {
-        return APIGateway.tree.APIAdresses.getNodeByType(value)
+
+    getNodePromise (value, valueType = 'node') {
+      if (!value) {
+        return
       }
-      if (isValueNode && typeof value) {
+      if (valueType === 'node') {
         const nodeId = typeof value === 'string' ? value : value.id
-        return APIGateway.tree.APIAdresses.getNodeById(nodeId)
+        return APIGateway.tree.getNodeById(nodeId)
       }
-      return value
+      return APIGateway.tree.getNodeByType(value)
     },
-    getTreeNode(value, isValueNode = true, hasTreeType) {
-      const route = this.getRouteForNode(value, isValueNode, hasTreeType)
+
+    getTreeNode(value, valueType = 'node') {
       return new Promise((resolve, reject) => {
         this.dialogLoading = true
-        APIGateway.tree.getNodeByRoute(route)
+        this.getNodePromise(value, valueType)
           .then((node) => {
             resolve(node)
             this.dialogLoading = false
@@ -422,7 +423,7 @@ export default {
       }
       this.treeKey += 1
       this.layersList[nextLayerIndex].selectedValue = ''
-      this.setLayerList(this.getLayerRoute(layer.selectedValue.id), nextLayerIndex)
+      this.setLayerList(this.getLayerPromise(layer.selectedValue.id), nextLayerIndex)
     },
     layerNodeSelected (layer, layerIndex) {
       this.$emit('layerSelected', {
@@ -431,17 +432,17 @@ export default {
       })
       this.setNextLayer(layer, layerIndex + 1)
     },
-    getLayerRoute(layerId) {
-      return this.routeNameToGetNode(layerId)
+    getLayerPromise(layerId) {
+      return APIGateway.tree.getNodeById(layerId)
     },
-    showTreeModalNode (id, isValueNode = true, hasTreeType = false) {
+    showTreeModalNode (value, valueType = 'node') {
       this.dialogLoading = true
       this.treeKey += 1
-      this.showTree('tree', this.getTreeNode(id, isValueNode, hasTreeType))
+      this.showTree('tree', this.getTreeNode(value, valueType))
         .then((node) => {
           const allChildNodes = node.children
           allChildNodes.push(new TreeNode({
-            id
+            id: node.id
           }))
           this.updateCurrentTreeFlags(allChildNodes)
           this.syncAllCheckedIds()
