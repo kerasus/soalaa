@@ -172,4 +172,18 @@ export default class TreeAPI extends APIRepository {
       }
     })
   }
+
+  getNodeByRoute(data = '') {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: data,
+      resolveCallback: (response) => {
+        return new TreeNode(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
 }
