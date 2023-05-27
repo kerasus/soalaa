@@ -12,7 +12,7 @@ import UserAPI from 'src/api/models/user.js'
 import TicketAPI from 'src/api/models/ticket.js'
 // import CouponAPI from 'src/api/models/coupon.js'
 // import EventsAPI from 'src/api/models/Events.js'
-// import ContentAPI from 'src/api/models/content.js'
+import ContentAPI from 'src/api/models/content.js'
 import ProductAPI from 'src/api/models/product.js'
 // import ForrestAPI from 'src/api/models/Forrest.js'
 // import CommentAPI from 'src/api/models/comment.js'
@@ -46,7 +46,7 @@ export const APIGateway = {
   ticket: new TicketAPI(),
   // forrest: new ForrestAPI(),
   // comment: new CommentAPI(),
-  // content: new ContentAPI(),
+  content: new ContentAPI(),
   product: new ProductAPI(),
   // abrisham: new AbrishamAPI(),
   // attribute: new AttributeAPI(),

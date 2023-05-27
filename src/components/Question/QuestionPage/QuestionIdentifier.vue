@@ -146,7 +146,7 @@
 
 <script>
 import { ExamList } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 import { Question } from 'src/models/Question.js'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
@@ -254,7 +254,7 @@ export default {
           name: 'grade',
           selectedValue: new TreeNode(),
           nodeList: [],
-          routeNameToGetNode: API_ADDRESS.tree.getGradesList,
+          routeNameToGetNode: APIGateway.tree.APIAdresses.getGradesList,
           disable: false,
           label: 'پایه تحصیلی'
         },
@@ -262,7 +262,7 @@ export default {
           name: 'lesson',
           selectedValue: new TreeNode(),
           nodeList: [],
-          routeNameToGetNode: (layerId) => API_ADDRESS.tree.getNodeById(layerId),
+          routeNameToGetNode: (layerId) => APIGateway.tree.APIAdresses.getNodeById(layerId),
           disable: false,
           label: 'نام درس'
         }
@@ -317,10 +317,11 @@ export default {
   },
   methods: {
     setGradeList () {
-      this.$axios.get(API_ADDRESS.tree.getGradesList)
-        .then((response) => {
-          this.gradesList = response.data.data.children
+      this.$apiGateway.tree.getGradesList()
+        .then((gradeList) => {
+          this.gradesList = gradeList
         })
+        .catch(() => {})
     },
     loadQuestionDataFromResponse () {
       this.authorshipDate = this.question.years

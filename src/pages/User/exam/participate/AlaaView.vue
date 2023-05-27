@@ -66,9 +66,15 @@
               </div>
             </div>
             <div class="col question-body">
-              <div v-if="currentQuestion.in_active_category"
-                   :class="{ ltr: isLtrString(currentQuestion.statement)}"
-                   class="renderedPanel">
+              <div
+                v-if="currentQuestion.in_active_category"
+                :class="{ ltr: isLtrString(currentQuestion.statement)}"
+                class="renderedPanel"
+              >
+                <div v-if="currentQuestion.parent.id"
+                     class="q-pb-md">
+                  <vue-katex :input="currentQuestion.parent.statement" />
+                </div>
                 <vue-katex :input="currentQuestion.statement" />
               </div>
               <q-card v-if="!currentQuestion.in_active_category"

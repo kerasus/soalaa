@@ -1,4 +1,4 @@
-import APIGateway from 'src/boot/api-gateway.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import Assistant from 'src/plugins/assistant'
 import { Exam } from 'src/models/Exam'
 import { QuestionList } from 'src/models/Question'
