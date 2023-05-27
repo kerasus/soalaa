@@ -253,11 +253,11 @@ export default {
       }
       this.localInitialNode = await this.getTreeNode(node.id)
     },
-    async initTreeByType () {
+    initTreeByType () {
       if (!this.treeType) {
         return
       }
-      await this.showTreeModalNode(this.treeType, 'treeType')
+      this.showTreeModalNode(this.treeType, 'treeType')
     },
     async initTreeEssentials () {
       await this.initLayers()
@@ -278,11 +278,11 @@ export default {
         isInCurrentTree
       })
     },
-    async initTree() {
+    initTree() {
       if (this.modalHasLayer()) {
         return
       }
-      await this.initTreeByType()
+      this.initTreeByType()
       if (!this.localInitialNode?.id) {
         return
       }
