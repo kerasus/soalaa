@@ -5,7 +5,10 @@ import { appApiInstance } from 'src/boot/axios.js'
 const APIAdresses = {
   base: '/option',
   userIndex: '/option/user',
-  user(type) { return '/option/user?type=' + type }
+  user(type) { return '/option/user?type=' + type },
+  levels: '/question/levels',
+  statuses: '/question/statuses',
+  reportStatuses: '/question/report/statuses'
 }
 
 export default class OptionAPI extends APIRepository {
@@ -30,7 +33,7 @@ export default class OptionAPI extends APIRepository {
 
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data
+        return response.data.data // Array of Strings
       },
       rejectCallback: (error) => {
         return error
@@ -65,6 +68,76 @@ export default class OptionAPI extends APIRepository {
         return new QuestionList()
       },
       data
+    })
+  }
+
+  getFilterOptions() {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.base,
+      resolveCallback: (response) => {
+        return response.data.data // Array of Strings
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getLevels() {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.levels,
+      resolveCallback: (response) => {
+        return response.data.data
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getQuestionStatuses() {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.statuses,
+      resolveCallback: (response) => {
+        return response.data.data // Array of Strings
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getQuestionReportStatuses() {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.reportStatuses,
+      resolveCallback: (response) => {
+        return response.data.data // Array of Strings
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getUserOptions(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.user(data),
+      resolveCallback: (response) => {
+        return response.data.data // Array of Strings
+      },
+      rejectCallback: (error) => {
+        return error
+      }
     })
   }
 }

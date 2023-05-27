@@ -456,6 +456,22 @@ export default class UserAPI extends APIRepository {
     })
   }
 
+  subscriptionLanding(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.subscription.landing,
+      cacheKey: this.CacheList.subscriptionLast,
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return response.data.data.questions // Array of Strings Object (key,val)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
   subscriptionLast(data = {}, cache) {
     return this.sendRequest({
       apiMethod: 'get',
