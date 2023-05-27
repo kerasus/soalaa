@@ -305,7 +305,24 @@ export default {
       this.draftExam = new Exam(draftExam)
       if (this.draftExam.id) {
         this.loadAttachedQuestions()
+        this.loadDraftedTags()
       }
+    },
+    loadDraftedTags() {
+      const draftExamTempTags = this.draftExam.temp?.tags?.filter(tag => typeof tag === 'string')
+      if (!(draftExamTempTags?.length > 0)) {
+        return
+      }
+      this.draftExam.loading = true
+      return this.$axios.get(API_ADDRESS.tree.treeBox, { params: { grids: draftExamTempTags } })
+        .then((response) => {
+          this.draftExam.temp.tags = []
+          this.draftExam.temp.tags.push(...response.data.data)
+          this.draftExam.loading = false
+        })
+        .catch(() => {
+          this.draftExam.loading = false
+        })
     },
     setDraftExam() {
       this.currentTab = this.allTabs[this.draftExam.temp.level - 1]
@@ -430,10 +447,26 @@ export default {
           major: this.draftExam.temp.major,
           lesson: this.draftExam.temp.lesson,
           grade: this.draftExam.temp.grade,
-          tags: this.draftExam.temp.tags,
+          tags: this.getDraftExamTags(this.draftExam.temp.tags),
           level: newStep === 'createPage' ? 1 : newStep === 'chooseQuestion' ? 2 : 3
         }
       })
+    },
+    getDraftExamTags (tags) {
+      const allTags = []
+      if (!(tags?.length > 0)) {
+        return []
+      }
+      tags.filter(tag => tag).forEach(tag => {
+        if (typeof tag === 'string') {
+          allTags.push(tag)
+          return
+        }
+        if (!allTags.includes(tag.id)) {
+          allTags.push(tag.id)
+        }
+      })
+      return allTags
     },
     loadAttachedQuestions() {
       this.draftExam.loading = true
