@@ -332,7 +332,6 @@ export default {
       await this.setLayerList(APIGateway.tree.getNodeByType(this.treeType))
     },
     loadLayerList (callBackPromise) {
-      debugger
       return new Promise((resolve, reject) => {
         callBackPromise
           .then((node) => {

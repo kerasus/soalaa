@@ -18,9 +18,6 @@ const APIAdresses = {
   getNodeByType(nodeType) {
     return '/forrest/tree?type=' + nodeType
   },
-  getNodeByTitle(nodeType) {
-    return '/forrest/tree?title=' + nodeType
-  },
   editNode(id) {
     return '/forrest/tree/' + id
   },
@@ -37,7 +34,6 @@ export default class TreeAPI extends APIRepository {
       getGradesList: this.name + this.APIAdresses.getGradesList,
       getNodeById: nodeId => this.name + this.APIAdresses.getNodeById(nodeId),
       getNodeByType: nodeType => this.name + this.APIAdresses.getNodeByType(nodeType),
-      getNodeByTitle: nodeTitle => this.name + this.APIAdresses.getNodeByTitle(nodeTitle),
       editNode: id => this.name + this.APIAdresses.editNode(id),
       getLessonList: id => this.name + this.APIAdresses.getLessonList(id)
     }
@@ -76,21 +72,12 @@ export default class TreeAPI extends APIRepository {
     })
   }
 
-  getNodeBy(value, data) {
-    const methodName = 'getNodeBy' + value
-    let param = data.data.nodeType
-    if (value === 'Id') {
-      param = data.data.id
-    }
-    if (value === 'Title') {
-      param = data.data.title
-    }
+  getNodeById(id) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
-      request: this.APIAdresses[methodName](param),
-      cacheKey: this.CacheList[methodName](param),
-      ...(data?.cache && { cache: data.cache }),
+      request: this.APIAdresses.getNodeById(id),
+      cacheKey: this.CacheList.getNodeById(id),
       resolveCallback: (response) => {
         return new TreeNode(response.data.data)
       },
@@ -100,26 +87,17 @@ export default class TreeAPI extends APIRepository {
     })
   }
 
-  getNodeById(data) {
-    return this.getNodeBy('Id', {
-      data: {
-        id: data
-      }
-    })
-  }
-
-  getNodeByType(data) {
-    return this.getNodeBy('Type', {
-      data: {
-        nodeType: data
-      }
-    })
-  }
-
-  getNodeByTitle(data) {
-    return this.getNodeBy('Title', {
-      data: {
-        title: data
+  getNodeByType(type) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.getNodeByType(type),
+      cacheKey: this.CacheList.getNodeByType(type),
+      resolveCallback: (response) => {
+        return new TreeNode(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
       }
     })
   }
