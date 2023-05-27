@@ -6,7 +6,7 @@ import { Comment } from 'src/models/Comment'
 import { APIGateway } from 'src/api/APIGateway'
 const APIAdresses = {
   search: '/search',
-  admin: '/admin/contents',
+  admin: '/admin/c',
   timestampSet: '/timepoint',
   show: (id) => '/c/' + id,
   delete: '/admin/contents/destroy',

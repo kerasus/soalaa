@@ -35,12 +35,15 @@
 
 <script>
 import { EntityIndex } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 import { Content } from 'src/models/Content.js'
 
 export default {
   name: 'ContentSelectionDialog',
   components: { EntityIndex },
+  beforeRouteUpdate() {
+    this.$axios.defaults.baseURL = this.$appApiInstance.defaults.baseURL
+  },
   props: {
     dialog: {
       type: Boolean,
@@ -53,7 +56,7 @@ export default {
   emits: ['updateValue', 'toggleDialog'],
   data () {
     return {
-      api: API_ADDRESS.content.admin,
+      api: APIGateway.content.APIAdresses.admin,
       selected: [],
       tableKeys: {
         data: 'data',
@@ -130,6 +133,9 @@ export default {
     content(newContent) {
       this.selected[0] = newContent
     }
+  },
+  created() {
+    this.$axios.defaults.baseURL = this.$alaaApiInstance.defaults.baseURL
   }
 }
 </script>

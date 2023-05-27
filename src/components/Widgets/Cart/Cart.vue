@@ -34,7 +34,6 @@
 </template>
 
 <script>
-// import API_ADDRESS from 'src/api/Addresses'
 import { Cart } from 'src/models/Cart.js'
 import cartView from 'src/components/Widgets/Cart/CartView/CartView.vue'
 import cartEmpty from 'src/components/Widgets/Cart/CartEmpty/CartEmpty.vue'

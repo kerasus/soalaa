@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 import { Content } from 'src/models/Content.js'
 import ContentSelectionDialog from 'components/Question/QuestionPage/ContentSelectionDialog.vue'
 
@@ -61,7 +61,7 @@ export default {
   emits: ['updateValue'],
   data () {
     return {
-      api: API_ADDRESS.content.admin,
+      api: APIGateway.content.APIAdresses.admin,
       content: new Content(),
       timePoint: null,
       timePointOptions: [],
@@ -91,9 +91,9 @@ export default {
     },
     getContent(contentId) {
       this.loading = true
-      this.$alaaApiInstance.get(API_ADDRESS.content.get(contentId))
-        .then(res => {
-          this.content = new Content(res.data.data)
+      this.$apiGateway.content.show(contentId)
+        .then(content => {
+          this.content = new Content(content)
           this.timePointOptions = this.content.timepoints.list
           this.timePoint = this.content.timepoints.list.find(x => x.id === this.timePointId)
           this.loading = false
