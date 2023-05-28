@@ -451,7 +451,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.report.updateReportOptions(data.examId),
       resolveCallback: (response) => {
-        return response
+        return response.data // String
       },
       rejectCallback: (error) => {
         return error
@@ -475,5 +475,4 @@ export default class ExamAPI extends APIRepository {
       }
     })
   }
-
 }

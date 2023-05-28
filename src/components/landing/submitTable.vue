@@ -1527,7 +1527,7 @@ export default {
     },
 
     callProductApi() {
-      return this.$apiGateway.product.landingSeaAll()
+      return this.$apiGateway.product.landingAllProducts()
     },
 
     updateActiveTab(exam) {

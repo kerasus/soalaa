@@ -219,7 +219,7 @@ export default class QuestionAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.levels,
       resolveCallback: (response) => {
-        return response.data.data
+        return response.data.data // List of Options Objects [{key,Value}]
       },
       rejectCallback: (error) => {
         return error
