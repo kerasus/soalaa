@@ -72,12 +72,13 @@ export default class TreeAPI extends APIRepository {
     })
   }
 
-  getNodeById(id) {
+  getNodeById(id, cache = { TTL: 100 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.getNodeById(id),
       cacheKey: this.CacheList.getNodeById(id),
+      ...(cache && { cache }),
       resolveCallback: (response) => {
         return new TreeNode(response.data.data)
       },
@@ -87,12 +88,13 @@ export default class TreeAPI extends APIRepository {
     })
   }
 
-  getNodeByType(type) {
+  getNodeByType(type, cache = { TTL: 100 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.getNodeByType(type),
       cacheKey: this.CacheList.getNodeByType(type),
+      ...(cache && { cache }),
       resolveCallback: (response) => {
         return new TreeNode(response.data.data)
       },
