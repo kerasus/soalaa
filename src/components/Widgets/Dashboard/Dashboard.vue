@@ -135,7 +135,7 @@
             </div>
           </div>
         </div>
-        <div v-if="windowSize.x < 600"
+        <div v-if="$q.screen.lt.sm"
              class="bottom-nav">
           <q-btn unelevated
                  class="btn-style profile"
