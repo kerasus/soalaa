@@ -206,8 +206,7 @@
                                :exam="examInfo"
                                :questions="questions"
                                :pdfConfig="pdfConfig"
-                               @loaded="onQuestionsLoaded"
-              />
+                               @loaded="onQuestionsLoaded" />
             </div>
           </q-tab-panel>
           <q-tab-panel class="tab-panel-style"
@@ -255,8 +254,7 @@
                                :questions="questions"
                                :pdfConfig="pdfConfig"
                                :mode="'onlyDescriptiveAnswers'"
-                               @loaded="onQuestionsLoaded"
-              />
+                               @loaded="onQuestionsLoaded" />
             </div>
           </q-tab-panel>
           <q-tab-panel class="tab-panel-style"
