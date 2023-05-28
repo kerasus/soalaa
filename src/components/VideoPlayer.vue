@@ -16,16 +16,15 @@
     </video>
     <div v-if="useOverPlayer"
          ref="overPlayer"
-         class="over-player-wrapper"
-         :style="{width: overPlayerWidth}">
-      <q-btn v-if="!hasTimepointSlider"
-             icon-right="isax:menu-1"
+         class="over-player-wrapper">
+      <q-btn icon-right="isax:menu-1"
              size="sm"
              color="primary"
              class="toggleSideBarBtn"
              @click="toggleSideBar" />
       <div class="over-player-slot"
-           :class="{'show': localOverPlayer, 'hide': !localOverPlayer}">
+           :class="{'show': localOverPlayer, 'hide': !localOverPlayer}"
+           :style="{width: overPlayerWidth}">
         <slot name="overPlayer" />
       </div>
     </div>
@@ -34,14 +33,35 @@
 
 <script>
 import videojs from 'video.js'
-import fa from 'video.js/dist/lang/fa.json'
-import { Content } from 'src/models/Content'
-import { PlayerSourceList } from 'src/models/PlayerSource'
-import videoJsResolutionSwitcher from 'src/assets/js/videoJsResolutionSwitcher.js'
 import videojsBrand from 'videojs-brand'
+import fa from 'video.js/dist/lang/fa.json'
+import { Content } from 'src/models/Content.js'
+import { PlayerSourceList } from 'src/models/PlayerSource.js'
+import videoJsResolutionSwitcher from 'src/assets/js/videoJsResolutionSwitcher.js'
 
 import 'videojs-hls-quality-selector'
 // import 'videojs-contrib-quality-levels'
+
+// // redefineTap
+// // https://stackoverflow.com/questions/28070934/video-js-player-pause-play-with-a-single-tap-on-a-mobile
+// if (typeof window !== 'undefined') {
+//   videojs.MediaTechController.prototype.onTap = function() {
+//     if (this.player().controls()) {
+//       if (this.player().paused()) {
+//         this.player().play()
+//       } else {
+//         this.player().pause()
+//       }
+//     }
+//   }
+//   player.on('click', function() {
+//     if (player.paused()) {
+//       player.play();
+//     } else {
+//       player.pause();
+//     }
+//   });
+// }
 
 // https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8 (Live)
 // https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8
@@ -85,17 +105,12 @@ export default {
     },
     currentTimed: {
       type: Number
-    },
-    hasTimepointSlider: {
-      type: Boolean,
-      default () {
-        return false
-      }
     }
   },
-  emits: ['seeked', 'timeUpdate'],
+  emits: ['seeked', 'update:sideBar'],
   data() {
     return {
+      width: '',
       drawer: false,
       player: null,
       localOverPlayer: false,
@@ -121,7 +136,7 @@ export default {
             'PictureInPictureToggle'
           ],
           volumePanel: {
-            inline: false,
+            inline: true,
             vertical: true
           }
         },
@@ -129,10 +144,11 @@ export default {
         languages: {
           fa
         },
+        responsive: true,
         autoplay: false,
         controls: true,
-        playbackRates: [0.25, 0.5, 1, 1.5, 2, 2.5, 3, 4],
-        nativeControlsForTouch: false,
+        playbackRates: [0.5, 1, 1.5, 2, 3, 4],
+        nativeControlsForTouch: true,
         sources: [],
         poster: null,
         plugins: {
@@ -183,6 +199,7 @@ export default {
     }
   },
   created() {
+    this.width = this.overPlayerWidth
     this.setPoster()
     this.setSources()
   },
@@ -193,14 +210,6 @@ export default {
         this.moveSideBarElementIntoVideoPlayerElements()
       })
     }
-
-    this.$refs.videoPlayer.addEventListener('timeupdate', (event) => {
-      if (this.$refs.videoPlayer) {
-        this.$emit('timeUpdate', this.$refs.videoPlayer.currentTime)
-      } else {
-        this.$emit('timeUpdate', 0)
-      }
-    })
   },
   beforeUnmount() {
     if (this.player) {
@@ -208,9 +217,36 @@ export default {
     }
   },
   methods: {
+    focusOnPlayer () {
+      this.player.el().focus()
+    },
+    setPlayerBrand () {
+      this.player.brand({
+        image: 'https://nodes.alaatv.com/upload/landing/chatr/alaa%20logo.png?w=30&h=30',
+        title: 'آلاء',
+        destination: '/',
+        destinationTarget: '_blank'
+      })
+    },
+    redefineTap () {
+      this.player.on('touchend', function() { // tap
+        if (this.player().controls()) {
+          if (this.player().paused()) {
+            this.player().play()
+          } else {
+            this.player().pause()
+          }
+        }
+      })
+    },
+    hasPlugin (pluginName) {
+      return Object.keys(videojs.getPlugins()).includes(pluginName)
+    },
     initPlayer () {
-      videojs.registerPlugin('brand', videojsBrand)
-      if (this.isPlayerSourceList(this.source)) { // old multiple quality type
+      if (!this.hasPlugin('brand')) {
+        videojs.registerPlugin('brand', videojsBrand)
+      }
+      if (this.isPlayerSourceList(this.source) && !this.hasPlugin('videoJsResolutionSwitcher')) { // old multiple quality type
         videoJsResolutionSwitcher(videojs)
         this.options.plugins.videoJsResolutionSwitcher = {
           default: 'کیفیت بالا',
@@ -218,13 +254,9 @@ export default {
         }
       }
       this.player = videojs(this.$refs.videoPlayer, this.options, () => {
-        this.player.brand({
-          image: 'https://nodes.alaatv.com/upload/landing/chatr/alaa%20logo.png?w=30&h=30',
-          title: 'آلاء',
-          destination: '/',
-          destinationTarget: '_blank'
-        })
-        this.player.el().focus()
+        this.setPlayerBrand()
+        this.focusOnPlayer()
+        this.redefineTap()
         // this.on('timeupdate', function () {
         //   if (that.keepCalculating) {
         //     that.calcWatchedPercentage(this.currentTime(), this.duration())
@@ -300,7 +332,7 @@ export default {
     },
     toggleSideBar () {
       this.localOverPlayer = !this.localOverPlayer
-      this.$emit('update:sideBar', this.localOverPlayer)
+      // this.$emit('update:sideBar', this.localOverPlayer)
     },
     activate(time) {
       this.player.currentTime(time)
@@ -352,7 +384,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    height: calc( 100% - 30px );
+    height: 100%;
     z-index: 1;
     .over-player-wrapper {
       position: absolute;
@@ -361,7 +393,6 @@ export default {
       height: 100%;
       .over-player-slot {
         left: 2000px;
-        width: 100%;
         height: 100%;
         color: initial;
         transition: 0.4s;
@@ -372,6 +403,7 @@ export default {
           right: 0;
         }
         &.hide {
+          width: 0 !important;
           right: 2500px;
         }
       }
@@ -384,6 +416,7 @@ export default {
     z-index: 2;
   }
   .video-js {
+    background-color: transparent;
     .vjs-loading-spinner {
       right: 50%;
       margin: -25px -25px 0 0;
@@ -396,6 +429,10 @@ export default {
       border-radius: 100%;
       background: $primary;
       border-color: $primary;
+
+      @media screen and(max-width: 600px) {
+        margin-top: -60px;
+      }
       .vjs-icon-placeholder:before {
         display: flex;
         font-size: 65px;
@@ -422,6 +459,14 @@ export default {
             }
           }
         }
+      }
+    }
+    .vjs-play-progress {
+      &:before {
+        /*rtl:ignore*/
+        right: -0.5em;
+        /*rtl:ignore*/
+        left: auto;
       }
     }
   }
