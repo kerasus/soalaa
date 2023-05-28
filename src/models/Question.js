@@ -45,6 +45,10 @@ class Question extends Model {
         default: []
       },
       {
+        key: 'parent',
+        default: {}
+      },
+      {
         key: 'years',
         default: []
       },

@@ -63,6 +63,7 @@
                            :question="question"
                            :listOptions="questionsOptions"
                            pageStrategy="question-bank"
+                           :report-options="reportIssuesList"
                            @deleteFromDb="deleteQuestionFromDataBase"
                            @checkSelect="onClickedCheckQuestionBtn" />
           </template>
@@ -95,6 +96,7 @@
 <script>
 import { Exam } from 'src/models/Exam.js'
 import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { Question, QuestionList } from 'src/models/Question.js'
 import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
 import pagination from 'src/components/Question/QuestionBank/Pagination.vue'
@@ -122,7 +124,11 @@ export default {
   emits: ['onFilter'],
   data() {
     return {
+      reportIssuesList: [],
       loadings: {
+        optionsLoading: false,
+        levelTypeLoading: false,
+        statusLoading: false,
         reportStatusLoading: false
       },
       searchInput: '',
@@ -148,7 +154,7 @@ export default {
         reference_type: [],
         year_type: [],
         statuses: [],
-        levels: [],
+        level_type: [],
         types: [],
         report_type: [],
         report_status: []
@@ -309,9 +315,10 @@ export default {
     getFiltersForRequest(filterData) {
       return {
         tags: filterData.tags.map(item => item.id),
-        level: filterData.level.map(item => item.key),
+        level: filterData.level_type.map(item => item.key),
         years: filterData.years.map(item => item.id),
         majors: filterData.majors.map(item => item.id),
+        type_id: filterData.type_id ? filterData.type_id.id : '',
         reference: filterData.reference.map(item => item.id),
         statement: (filterData.statement) ? filterData.statement[0] : '',
         sort_by: (this.searchSelector.value) ? 'created_at' : '',
@@ -353,9 +360,11 @@ export default {
         })
     },
     getFilterOptions() {
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
-          response.data.data.forEach(option => {
+      this.loadings.optionsLoading = true
+      APIGateway.option.getFilterOptions()
+        .then((filterOptions) => {
+          this.loadings.optionsLoading = false
+          filterOptions.forEach(option => {
             if (option.type === 'reference_type') {
               this.filterQuestions.reference_type.push(option)
             } else if (option.type === 'year_type') {
@@ -366,40 +375,45 @@ export default {
               this.filterQuestions.types.push(option)
             } else if (option.type === 'question_report_type') {
               this.filterQuestions.report_type.push(option)
+              this.reportIssuesList.push(option)
             }
           })
+        })
+        .catch(() => {
+          this.loadings.optionsLoading = false
         })
       this.getQuestionStatuses()
       this.getQuestionReportStatuses()
       this.getLevelsFilterData()
     },
-    addTypeToFilter(filter) {
-      this.filterQuestions[filter].forEach(item => {
-        item.type = filter
-      })
-    },
     getLevelsFilterData() {
-      this.$axios.get(API_ADDRESS.question.levels)
-        .then(response => {
-          this.filterQuestions.levels = response.data.data
-          this.addTypeToFilter('level_type')
+      this.loadings.levelTypeLoading = true
+      APIGateway.option.getLevels()
+        .then(levels => {
+          this.filterQuestions.level_type = levels
+          this.loadings.levelTypeLoading = false
         })
-        .catch()
+        .catch(() => {
+          this.loadings.levelTypeLoading = false
+        })
     },
     getQuestionStatuses () {
-      this.$axios.get(API_ADDRESS.question.status.base)
-        .then(response => {
-          this.filterQuestions.statuses = response.data.data
-          this.addTypeToFilter('statuses')
+      this.loadings.statusLoading = true
+      APIGateway.option.getQuestionStatuses()
+        .then(statuses => {
+          this.filterQuestions.statuses = statuses
+          this.loadings.statusLoading = false
+        })
+        .catch(() => {
+          this.loadings.statusLoading = true
         })
     },
     getQuestionReportStatuses() {
       this.loadings.reportStatusLoading = true
-      this.$axios.get(API_ADDRESS.question.reportStatuses)
-        .then(response => {
+      APIGateway.option.getQuestionReportStatuses()
+        .then(reportStatuses => {
           this.loadings.reportStatusLoading = false
-          this.filterQuestions.report_status = response.data.data
-          this.addTypeToFilter('report_status')
+          this.filterQuestions.report_status = reportStatuses
         })
         .catch(() => {
           this.loadings.reportStatusLoading = false
@@ -460,7 +474,8 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     background: #f4f6f9;
-    @media only screen and (max-width: 599px) {
+
+    @media only screen and (max-width: 600px) {
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -559,6 +574,20 @@ export default {
 
 .main-container {
 
+  @media only screen and (max-width: 1919px) {
+    padding-left: 0;
+    padding-right: 24px;
+  }
+
+  @media only screen and (max-width: 1439px) {
+    padding-left: 30px;
+  }
+
+  @media only screen and (max-width: 599px) {
+    padding-left: 1px;
+    padding-right: 0px;
+  }
+
   .question-bank-header {
     padding-bottom: 30px;
   }
@@ -581,19 +610,12 @@ export default {
 }
 
 @media only screen and (max-width: 1919px) {
-  .main-container {
-    padding-left: 0;
-    padding-right: 24px;
-  }
   .question-bank-filter {
     padding-right: 20px;
   }
 }
 
 @media only screen and (max-width: 1439px) {
-  .main-container {
-    padding-left: 30px;
-  }
   .question-bank-header {
     padding-bottom: 20px;
   }

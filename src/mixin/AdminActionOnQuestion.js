@@ -9,7 +9,9 @@ import { Log, LogList } from 'src/models/Log'
 import { AttachedExamList } from 'src/models/AttachedExam'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import { Notify } from 'quasar'
+import mixinTree from 'src/mixin/Tree.js'
 const AdminActionOnQuestion = {
+  mixins: [mixinTree],
   data () {
     return {
       typeIdLoading: false,
@@ -453,8 +455,8 @@ const AdminActionOnQuestion = {
     setNodesList () {},
     getGradesList () {
       // console.log('getGradesList')
-      this.getRootNode('test').then(response => {
-        this.gradesList = response.data.data.children
+      this.getRootNode('test').then(gradesList => {
+        this.gradesList = gradesList
       })
     },
     loadQuestionAuthors () {

@@ -12,7 +12,7 @@ import UserAPI from 'src/api/models/user.js'
 import TicketAPI from 'src/api/models/ticket.js'
 // import CouponAPI from 'src/api/models/coupon.js'
 // import EventsAPI from 'src/api/models/Events.js'
-// import ContentAPI from 'src/api/models/content.js'
+import ContentAPI from 'src/api/models/content.js'
 import ProductAPI from 'src/api/models/product.js'
 // import ForrestAPI from 'src/api/models/Forrest.js'
 // import CommentAPI from 'src/api/models/comment.js'
@@ -24,6 +24,9 @@ import ExamAPI from 'src/api/models/exam.js'
 // import ReferralCodeAPI from 'src/api/models/ReferralCode.js'
 // import ContentTimepointAPI from 'src/api/models/ContentTimepoint.js'
 // import LiveDescriptionAPI from 'src/api/models/LiveDescription.js'
+import QuestionCategoryAPI from 'src/api/models/questionCategory.js'
+import QuestionAPI from 'src/api/models/question.js'
+import OptionAPI from 'src/api/models/option.js'
 
 /* Exporting the APIGateway object. */
 export const APIGateway = {
@@ -43,13 +46,17 @@ export const APIGateway = {
   ticket: new TicketAPI(),
   // forrest: new ForrestAPI(),
   // comment: new CommentAPI(),
-  // content: new ContentAPI(),
+  content: new ContentAPI(),
   product: new ProductAPI(),
   // abrisham: new AbrishamAPI(),
   // attribute: new AttributeAPI(),
   // studyPlan: new StudyPlanAPI(),
-  pageSetting: new PageSettingAPI()
+  pageSetting: new PageSettingAPI(),
   // referralCode: new ReferralCodeAPI(),
   // liveDescription: new LiveDescriptionAPI(),
-  // contentTimepoint: new ContentTimepointAPI()
+  // contentTimepoint: new ContentTimepointAPI(),
+  questionCategory: new QuestionCategoryAPI(),
+  question: new QuestionAPI(),
+  option: new OptionAPI()
+
 }

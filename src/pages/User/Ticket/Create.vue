@@ -2,7 +2,7 @@
   <div class="ticket">
     <entity-create ref="EntityCreate"
                    v-model:value="inputs"
-                   :title=this.department.title
+                   :title="department.title"
                    :api="api"
                    :entity-id-key-in-response="entityIdKeyInResponse"
                    :show-route-param-key="showRouteParamKey"

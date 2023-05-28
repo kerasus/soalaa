@@ -3,6 +3,7 @@
   <entity-crud v-model:default-inputs="defaultInputs"
                v-model:index-inputs="indexInputs"
                v-model:create-inputs="createInputs"
+               v-model:edit-inputs="editInputs"
                v-bind="allProps">
     <!--    {inputData, showConfirmRemoveDialog}-->
     <template v-slot:entity-crud-table-cell="{inputData}">
@@ -37,7 +38,7 @@
 
 <script>
 import { EntityCrud } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'QuestionReport',
@@ -52,10 +53,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: API_ADDRESS.entityCrud.questionReport.show,
-            edit: API_ADDRESS.entityCrud.questionReport.edit,
-            create: API_ADDRESS.entityCrud.questionReport.create,
-            index: API_ADDRESS.entityCrud.questionReport.index
+            show: APIGateway.option.APIAdresses.base,
+            edit: APIGateway.option.APIAdresses.base,
+            create: APIGateway.option.APIAdresses.base,
+            index: APIGateway.option.APIAdresses.base
           },
           title: {
             show: 'اطلاعات خطا سوال',
@@ -106,6 +107,13 @@ export default {
                 field: row => row.created_at
               },
               {
+                name: 'order',
+                required: true,
+                label: 'ترتیب نمایش',
+                align: 'left',
+                field: row => row.order
+              },
+              {
                 name: 'actions',
                 required: true,
                 label: 'عملیات',
@@ -120,15 +128,20 @@ export default {
       defaultInputs: [
         { type: 'hidden', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-1', placeholder: ' ', filled: true },
         { type: 'hidden', name: 'type', label: 'نوع', responseKey: 'data.type', col: 'col-md-1', placeholder: ' ', filled: true },
-        // { type: 'file', name: 'image', label: 'تصویر', col: 'col-md-3', placeholder: ' ', filled: true },
-        { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true }
+        { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', responseKey: 'data.order', col: 'col-md-2', placeholder: ' ', filled: true }
       ],
       createInputs: [
         // { type: 'file', name: 'image', label: 'تصویر', col: 'col-md-3', placeholder: ' ', filled: true },
         { type: 'hidden', name: 'type', value: 'question_report_type', label: '', col: 'col-12' },
-        { type: 'input', name: 'value', label: 'عنوان', col: 'col-md-3', placeholder: ' ', filled: true }
+        { type: 'input', name: 'value', label: 'عنوان', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', responseKey: 'data.order', col: 'col-md-2', placeholder: ' ', filled: true }
       ],
-      editInputs: [],
+      editInputs: [
+        { type: 'hidden', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-1', placeholder: ' ' },
+        { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', responseKey: 'data.order', col: 'col-md-2', placeholder: ' ', filled: true }
+      ],
       showInputs: [],
       indexInputs: [
         { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true }

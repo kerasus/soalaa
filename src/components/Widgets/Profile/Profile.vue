@@ -5,7 +5,8 @@
     <div v-if="$q.screen.lt.md"
          class="flex justify-start profile-btn">
       <q-btn color="dark"
-             flat>
+             flat
+             @click="$router.go(-1)">
         <svg width="22"
              height="22"
              viewBox="0 0 22 22"
@@ -159,15 +160,15 @@ export default defineComponent({
 
     setInputsInitData () {
       this.$refs.EntityCrudFormBuilder.loadInputData(this.user, this.inputs)
+      this.setInputOption('gender', this.customizedOptionList(this.genders))
+      this.setInputOption('province', this.customizedOptionList(this.provinces))
+      this.setInputOption('major', this.customizedOptionList(this.majors))
+      this.setInputOption('grade', this.customizedOptionList(this.grades))
       this.setProvinceValue(this.user.province)
       if (this.user.city) {
         this.setCityValue(this.user.city)
         this.lockCityValue()
       }
-      this.setInputOption('gender', this.customizedOptionList(this.genders))
-      this.setInputOption('province', this.customizedOptionList(this.provinces))
-      this.setInputOption('major', this.customizedOptionList(this.majors))
-      this.setInputOption('grade', this.customizedOptionList(this.grades))
     },
 
     setInputOption (inputName, optionList) {
@@ -234,18 +235,22 @@ export default defineComponent({
       if (!this.user.province && this.user.city) {
         provinceValue = this.cities.find(item => item.title === this.user.city)
       }
-      this.inputs[indexOfInput].value = {
-        label: provinceValue.title,
-        value: provinceValue.id
+      if (!provinceValue) {
+        this.inputs[indexOfInput].value = {
+          label: provinceValue.title,
+          value: provinceValue.id
+        }
       }
     },
 
     setCityValue(title) {
       const indexOfInput = this.inputs.findIndex(input => input.name === 'city')
       const cityValue = this.cities.find(item => item.title === title)
-      this.inputs[indexOfInput].value = {
-        label: cityValue.title,
-        value: cityValue.id
+      if (!cityValue) {
+        this.inputs[indexOfInput].value = {
+          label: cityValue.title,
+          value: cityValue.id
+        }
       }
     },
 

@@ -35,6 +35,9 @@
       <template v-else-if="inputData.col.name === 'description'">
         <div v-html="inputData.col.value" />
       </template>
+      <template v-else-if="inputData.col.name === 'image'">
+        <q-img :src="inputData.col.value" />
+      </template>
       <template v-else>
         {{ inputData.col.value }}
       </template>
@@ -44,7 +47,7 @@
 
 <script>
 import { EntityCrud } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'QuestionAuthors',
@@ -59,10 +62,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: API_ADDRESS.entityCrud.questionAuthors.show,
-            edit: API_ADDRESS.entityCrud.questionAuthors.edit,
-            create: API_ADDRESS.entityCrud.questionAuthors.create,
-            index: API_ADDRESS.entityCrud.questionAuthors.index
+            show: APIGateway.option.APIAdresses.base,
+            edit: APIGateway.option.APIAdresses.base,
+            create: APIGateway.option.APIAdresses.base,
+            index: APIGateway.option.APIAdresses.base
           },
           title: {
             show: 'اطلاعات مرجع',
@@ -113,6 +116,20 @@ export default {
                 field: row => row.created_at
               },
               {
+                name: 'order',
+                required: true,
+                label: 'ترتیب نمایش',
+                align: 'left',
+                field: row => row.order
+              },
+              {
+                name: 'image',
+                required: true,
+                label: 'تصویر',
+                align: 'left',
+                field: row => row.image
+              },
+              {
                 name: 'actions',
                 required: true,
                 label: 'عملیات',
@@ -127,17 +144,24 @@ export default {
       defaultInputs: [
         { type: 'hidden', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-1', placeholder: ' ', filled: true },
         { type: 'hidden', name: 'type', label: 'نوع', responseKey: 'data.type', col: 'col-md-1', placeholder: ' ', filled: true },
+        { type: 'file', name: 'image', label: 'تصویر', responseKey: 'data.image', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'space', col: 'col-md-12' },
         { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true },
-        { type: 'file', name: 'image', label: 'تصویر', col: 'col-md-3', placeholder: ' ', filled: true }
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', responseKey: 'data.order', col: 'col-md-2', placeholder: ' ', filled: true }
       ],
       createInputs: [
-        // { type: 'file', name: 'image', label: 'تصویر', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'file', name: 'image', label: 'تصویر', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'space', col: 'col-md-12' },
         { type: 'hidden', name: 'type', value: 'reference_type', label: '', col: 'col-12' },
-        { type: 'input', name: 'value', label: 'عنوان', col: 'col-md-3', placeholder: ' ', filled: true }
+        { type: 'input', name: 'value', label: 'عنوان', col: 'col-md-3', placeholder: ' ', filled: true },
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', responseKey: 'data.order', col: 'col-md-2', placeholder: ' ', filled: true }
       ],
       editInputs: [
+        { type: 'hidden', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-1', placeholder: ' ' },
+        { type: 'file', name: 'image', label: 'تصویر', responseKey: 'data.image', col: 'col-md-12', placeholder: ' ', filled: true, class: 'float-left q-mb-md' },
+        { type: 'space', col: 'col-md-12' },
         { type: 'input', name: 'value', label: 'عنوان', responseKey: 'data.value', col: 'col-md-3', placeholder: ' ', filled: true },
-        { type: 'file', name: 'image', label: 'تصویر', col: 'col-md-3', placeholder: ' ', filled: true }
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', responseKey: 'data.order', col: 'col-md-2', placeholder: ' ', filled: true }
       ],
       showInputs: [],
       indexInputs: [
@@ -155,7 +179,6 @@ export default {
     //   deep: true
     // }
   },
-  created () {},
   methods: {
     // for index.vue
     getRemoveMessage (row) {

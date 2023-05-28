@@ -22,7 +22,9 @@
         <p :id="'question' + source.id"
            class="question-body"
            :class="{ ltr: isRtl }">
-          <vue-katex :input="(source.index + 1) + ') ' + source.statement" />
+          <vue-katex v-if="source.parent.id"
+                     :input="questionParentStatement" />
+          <vue-katex :input="questionStatement" />
         </p>
         <div class="question-icons"
              :style="{ float: isRtlString ? 'left' : 'right' }">
@@ -181,9 +183,19 @@ export default {
         return 'col-md-3'
       }
       return 'col-md-3'
+    },
+    questionIndexString () {
+      return (this.source.index + 1) + ') '
+    },
+    questionParentStatement () {
+      return this.questionIndexString + this.source.parent.statement
+    },
+    questionStatement () {
+      if (this.source.parent.id) {
+        return this.source.statement
+      }
+      return this.questionIndexString + this.source.statement
     }
-  },
-  created () {
   },
   mounted () {
     this.observer = new IntersectionObserver(this.intersectionObserver, { threshold: [0.7, 0.75, 0.8] })

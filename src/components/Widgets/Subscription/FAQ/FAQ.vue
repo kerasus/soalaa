@@ -30,7 +30,6 @@
   </div>
 </template>
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 
 export default {
   name: 'FAQ',
@@ -50,9 +49,9 @@ export default {
   },
   methods: {
     loadData () {
-      this.$axios.get(API_ADDRESS.subscription.landing)
-        .then(res => {
-          this.info = res.data.data.questions
+      this.$apiGateway.user.subscriptionLanding()
+        .then(questions => {
+          this.info = questions
         })
     }
   }

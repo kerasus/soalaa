@@ -58,7 +58,7 @@
               </div>
             </div>
           </div>
-          <div class="action-btn-box text-right">
+          <div class="action-btn-box text-right hide-in-mobile">
             <slot name="tree-dialog-action-box">
               <q-btn v-close-popup
                      class="close-btn"
@@ -69,6 +69,15 @@
           </div>
         </div>
       </div>
+      <div class="action-btn-box text-right is-sticky show-in-mobile">
+        <slot name="tree-dialog-action-box">
+          <q-btn v-close-popup
+                 class="close-btn"
+                 label="بستن"
+                 color="primary"
+                 :disable="persistent" />
+        </slot>
+      </div>
       <q-inner-loading :showing="dialogLoading"
                        dark />
     </q-card>
@@ -76,9 +85,9 @@
 </template>
 <script>
 import mixinTree from 'src/mixin/Tree.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import Tree from 'src/components/Tree/Tree.vue'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'TreeModal',
@@ -152,8 +161,7 @@ export default {
       selectedNodesIDs: [],
       treeKey: 0,
       globalStorage: [],
-      localInitialNode: new TreeNode(),
-      routeNameToGetNode: (layerId) => API_ADDRESS.tree.getNodeById(layerId)
+      localInitialNode: new TreeNode()
     }
   },
   computed: {
@@ -229,6 +237,9 @@ export default {
   updated () {},
   methods: {
     async setupInitialNode() {
+      if (!this.initialNode?.id) {
+        return
+      }
       const typeOfNode = typeof this.initialNode
       let node = this.initialNode
       if (typeOfNode === 'string') {
@@ -240,13 +251,18 @@ export default {
           'initialNode must include either an id or an object with id')
         return
       }
-      const response = await this.getTreeNode(node.id)
-      this.localInitialNode = response.data.data
+      this.localInitialNode = await this.getTreeNode(node.id)
+    },
+    initTreeByType () {
+      if (!this.treeType) {
+        return
+      }
+      this.showTreeModalNode(this.treeType, 'treeType')
     },
     async initTreeEssentials () {
       await this.initLayers()
       await this.setupInitialNode()
-      this.updateGlobalStorage()
+      this.updateGlobalStorage(this.selectedNodesArray)
     },
     updateGlobalStorage (nodeList = []) {
       this.globalStorage = nodeList.map(node => {
@@ -264,6 +280,10 @@ export default {
     },
     initTree() {
       if (this.modalHasLayer()) {
+        return
+      }
+      this.initTreeByType()
+      if (!this.localInitialNode?.id) {
         return
       }
       this.showTreeModalNode(this.localInitialNode.id)
@@ -303,39 +323,46 @@ export default {
       this.selectedNodesArray = this.getTheLastSelectedNode(finalCollectedNodes)
     },
     async initInitialLayer() {
+      if (this.layersConfig[0].selectedValue?.id) {
+        this.layerNodeSelected(this.layersConfig[0], 0)
+      }
       if (this.layersConfig[0].nodeList.length > 0) {
         return
       }
-      await this.setLayerList(API_ADDRESS.tree.getNodeByType(this.treeType))
+      await this.setLayerList(APIGateway.tree.getNodeByType(this.treeType))
     },
-    loadLayerList (layerRoute) {
+    loadLayerList (callBackPromise) {
       return new Promise((resolve, reject) => {
-        this.getTreeNode(layerRoute, false)
-          .then((response) => {
-            resolve(response.data.data)
+        callBackPromise
+          .then((node) => {
+            resolve(node)
           }).catch(() => {
             reject()
           })
       })
     },
-    async setLayerList (layerRoute, layerIndex = 0) {
-      const treeNode = await this.loadLayerList(layerRoute)
+    async setLayerList (layerLoadPromise, layerIndex = 0) {
+      const treeNode = await this.loadLayerList(layerLoadPromise)
       this.layersList[layerIndex].nodeList = treeNode.children
     },
-    getRouteForNode (value, isValueNode) {
-      if (isValueNode && typeof value) {
-        const nodeId = typeof value === 'string' ? value : value.id
-        return API_ADDRESS.tree.getNodeById(nodeId)
+
+    getNodePromise (value, valueType = 'node') {
+      if (!value) {
+        return
       }
-      return value
+      if (valueType === 'node') {
+        const nodeId = typeof value === 'string' ? value : value.id
+        return APIGateway.tree.getNodeById(nodeId)
+      }
+      return APIGateway.tree.getNodeByType(value)
     },
-    getTreeNode(value, isValueNode = true) {
-      const route = this.getRouteForNode(value, isValueNode)
+
+    getTreeNode(value, valueType = 'node') {
       return new Promise((resolve, reject) => {
         this.dialogLoading = true
-        this.$axios.get(route)
-          .then((response) => {
-            resolve(response)
+        this.getNodePromise(value, valueType)
+          .then((node) => {
+            resolve(node)
             this.dialogLoading = false
           }).catch(() => {
             reject()
@@ -395,7 +422,7 @@ export default {
       }
       this.treeKey += 1
       this.layersList[nextLayerIndex].selectedValue = ''
-      this.setLayerList(this.getLayerRoute(layer.selectedValue.id), nextLayerIndex)
+      this.setLayerList(this.getLayerPromise(layer.selectedValue.id), nextLayerIndex)
     },
     layerNodeSelected (layer, layerIndex) {
       this.$emit('layerSelected', {
@@ -404,19 +431,19 @@ export default {
       })
       this.setNextLayer(layer, layerIndex + 1)
     },
-    getLayerRoute(layerId) {
-      return this.routeNameToGetNode(layerId)
+    getLayerPromise(layerId) {
+      return APIGateway.tree.getNodeById(layerId)
     },
-    showTreeModalNode (id) {
+    showTreeModalNode (value, valueType = 'node') {
       this.dialogLoading = true
       this.treeKey += 1
-      this.showTree('tree', this.getTreeNode(id))
-        .then((response) => {
-          const allNodes = response.data.data.children
-          allNodes.push(new TreeNode({
-            id
+      this.showTree('tree', this.getTreeNode(value, valueType))
+        .then((node) => {
+          const allChildNodes = node.children
+          allChildNodes.push(new TreeNode({
+            id: node.id
           }))
-          this.updateCurrentTreeFlags(allNodes)
+          this.updateCurrentTreeFlags(allChildNodes)
           this.syncAllCheckedIds()
           this.dialogLoading = false
         })
@@ -462,6 +489,17 @@ export default {
 <style scoped lang="scss">
 .action-btn-box {
   padding-top: 20px;
+  &.hide-in-mobile {
+    @media screen and (max-width: 880px) {
+      display: none !important;
+    }
+  }
+  &.show-in-mobile {
+    display: none;
+    @media screen and (max-width: 880px) {
+      display: block;
+    }
+  }
   .close-btn {
     color: #FFFFFF;
     font-weight: 500;
@@ -474,9 +512,15 @@ export default {
     margin: auto 0 auto auto;
   }
   @media screen and (max-width: 880px) {
-    display: flex;
+    display: flex !important;
     justify-content: center;
     align-items: center;
+    &.is-sticky {
+      position: sticky;
+      background-color: #FFFFFF;
+      bottom: -30px;
+      padding-bottom: 30px;
+    }
   }
 }
 .q-card {
@@ -522,6 +566,10 @@ export default {
     height: 378px;
     overflow-x: scroll;
     margin-top: 10px;
+    @media screen and (max-width: 880px) {
+      max-height: 378px;
+      height: auto;
+    }
   }
   .default-details-container {
     .detail-box {

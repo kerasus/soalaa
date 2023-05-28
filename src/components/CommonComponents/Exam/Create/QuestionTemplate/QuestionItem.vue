@@ -49,7 +49,7 @@
       </div>
 
       <div v-if="listConfig.questionSource || question.loading "
-           class="question-source col-xl-3 col-sm-4 col-xs-6">
+           class="question-source col-xl-3 col-sm-4 col-xs-12">
         <div v-if="question.loading"
              class="source-skeleton">
           <div class="source-text">
@@ -93,7 +93,7 @@
         </div>
       </div>
       <div v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-           class="question-tags ellipsis col-sm-12 col-xs-6">
+           class="question-tags ellipsis col-sm-12 col-xs-12">
         <div v-for="i in 3"
              :key="i">
           <q-skeleton v-if="question.loading"
@@ -104,11 +104,15 @@
         <div v-for="(item, index) in question.tags.list"
              :key="index"
              class="question-tag">
-          <div class="tag-box no-wrap flex items-center">
-            <div class="tag-title ellipsis">{{ item.title }}</div>
-            <div class="tag-circle" />
+          <div v-for="(ancestor,ancestorIndex) in item.ancestors"
+               :key="ancestorIndex"
+               class="ancestors flex flex-center">
+            <div v-if="ancestorIndex !== 0"
+                 class="tag-title ellipsis">{{ ancestor.title }}</div>
+            <div v-if="ancestorIndex !== 0"
+                 class="tag-circle" />
           </div>
-
+          <div class="tag-title ellipsis">{{ item.title }}</div>
         </div>
       </div>
     </q-card-section>
@@ -292,7 +296,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Question } from 'src/models/Question.js'
 import VueKatex from 'src/components/VueKatex.vue'
 import question from 'components/CommonComponents/Exam/Create/QuestionTemplate/Question.vue'
@@ -373,6 +376,7 @@ export default {
         editQuestion: true,
         switch: false,
         selectQuestion: true,
+        questionYear: false,
         reportProblem: true,
         questionRate: true,
         questionComment: true,
@@ -493,6 +497,7 @@ export default {
         questionRate: true,
         questionComment: true,
         descriptiveAnswer: true,
+        questionYear: false,
         menu: {
           show: true,
           items: {
@@ -507,7 +512,7 @@ export default {
         ...baseConf
       }
       if (this.pageStrategy === 'question-bank') {
-        // return finalConf
+        finalConf.questionYear = true
       }
       if (this.pageStrategy === 'lesson-detail') {
         // return finalConf
@@ -521,6 +526,7 @@ export default {
           ...this.listOptions,
           reportProblem: true,
           editQuestion: false,
+          questionYear: true,
           menu: {
             show: false,
             items: {
@@ -544,7 +550,7 @@ export default {
         body: this.reportProblemDialog.description
       }
       try {
-        await this.$axios.post(API_ADDRESS.exam.user.report(this.question.id), params)
+        await this.$apiGateway.exam.userReport({ questionId: this.question.id, params })
         this.$q.notify({
           type: 'positive',
           message: 'گزازش با موفقیت ثبت شد.'
@@ -670,103 +676,95 @@ export default {
     }
 
     .question-source {
-        display: flex;
-        align-items: center;
-        justify-content: left;
-       min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: right;
+      min-height: 36px;
 
       @media only screen and (max-width: 599px) {
         order: 2;
       }
-        .source-content,
-        .source-skeleton {
-          display: flex;
+      .source-content,
+      .source-skeleton {
+        display: flex;
 
-          .source-text {
-            font-style: normal;
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 19px;
-            color: #434765;
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            .source-date {
-              text-align: end;
-            }
+        .source-text {
+          font-style: normal;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 19px;
+          color: #434765;
+          text-align: right;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          .source-date {
+            text-align: end;
+          }
+        }
+
+        .source-avatar {
+          margin-left: 10px;
+          display: flex;
+          align-items: center;
+
+          @media only screen and (max-width: 1023px) {
+            margin-left: 4px;
           }
 
-          .source-avatar {
-            margin-left: 10px;
-            display: flex;
-            align-items: center;
-
-            @media only screen and (max-width: 1023px) {
-              margin-left: 4px;
-            }
-
-            .alternate-avatar {
-              width: 36px;
-              height: 36px;
-              border-radius: 50%;
-              background: #9690E4;
-            }
+          .alternate-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #9690E4;
           }
         }
       }
+    }
+  }
+  .question-tags {
+    display: flex;
+    flex-direction: column;
+    margin-top: 16px;
 
-    .question-tags {
+    @media only screen and (max-width: 1439px) {
+      margin-top: 20px;
+    }
+
+    @media screen and (max-width: 599px) {
+      flex-direction: column;
+      margin-top: 0;
+    }
+
+    .question-tag {
       display: flex;
       flex-direction: row;
-      margin-top: 16px;
+      align-items: center;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 19px;
+      color: #434765;
 
-      @media only screen and (max-width: 1439px) {
-        margin-top: 20px;
+      .tag-title{
+        @media screen and (max-width: 599px){
+          order: 2;
+        }
+        div{
+          max-width: 99px;
+        }
       }
 
-      @media screen and (max-width: 599px) {
-        flex-direction: column;
-        margin-top: 0;
-      }
+      .tag-circle {
+        border-radius: 50%;
+        margin: 0 6px;
+        width: 6px;
+        height: 6px;
+        background: #6D708B;
+        opacity: 0.3;
+        @media screen and (max-width: 599px){
+          order: 1;
 
-      .question-tag {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 19px;
-        color: #434765;
-
-        .tag-circle {
-          border-radius: 50%;
-          margin: 0 6px;
-          width: 6px;
-          height: 6px;
-          background: #6D708B;
-          opacity: 0.3;
-          @media screen and (max-width: 599px){
-            order: 1;
-          }
-        }
-        .tag-title{
-          @media screen and (max-width: 599px){
-            order: 2;
-          }
-          div{
-            max-width: 99px;
-          }
-        }
-
-        &:last-child {
-          .tag-circle {
-            display: none;
-            @media screen and (max-width: 599px) {
-              display: block;
-            }
-          }
         }
       }
     }
@@ -873,19 +871,13 @@ export default {
         border-radius: 16px;
         margin-right: 30px;
 
-        @media only screen and (max-width: 1439px) {
-          height: 230px;
-        }
-
         @media only screen and (max-width: 1023px) {
           padding: 16px;
           margin-right: 24px;
-          height: 200px;
         }
 
         @media only screen and (max-width: 599px) {
           max-width: 100%;
-          height: 310px;
           margin-bottom: 20px;
 
         }
@@ -1149,5 +1141,4 @@ export default {
     }
   }
 }
-
 </style>

@@ -109,6 +109,9 @@ const API_ADDRESS = {
     sendUnBookmark: '/temp-exam/answer/unbookmark',
     userExamsList: '/examAndUser',
     takhminRotbe: '/exam-report/rankSimulator',
+    konkurTakhminRotbe (konkurId) {
+      return '/exam-report/rank/' + konkurId
+    },
     analysisVideo: '/exam-question/attach/sub-category',
     userExamList: {
       base () {
@@ -177,6 +180,7 @@ const API_ADDRESS = {
         return '/exam-report/show?user_exam_id=' + userExamId
       },
       adminGetReport: '/exam-report/show/admin',
+      takhminRotbeExamList: '/exam-report/rank',
       updateReportOptions (examId) {
         return '/exam/config/' + examId
       }
@@ -249,6 +253,10 @@ const API_ADDRESS = {
         {
           key: 'years',
           singleMode: false
+        },
+        {
+          key: 'type_id',
+          singleMode: true
         },
         {
           key: 'majors',
@@ -386,7 +394,8 @@ const API_ADDRESS = {
     }
   },
   tree: {
-    base: '/forrest/tree',
+    base: lumenServer + '/forrest/tree',
+    treeBox: lumenServer + '/forrest/tree/box',
     getMultiType (types) {
       let treeAddress = authServer + '/forrest/tree?'
       types.forEach(element => {

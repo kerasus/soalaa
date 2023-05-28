@@ -109,7 +109,7 @@
                 exchange-last-layer-only
                 :persistent="!doesExamHaveLesson"
                 :layers-config="treeLayersConfig"
-                @lessonnodeSelected="onLessonChanged">
+                @layerSelected="onLessonChanged">
       <template v-slot:tree-dialog-action-box>
         <q-btn unelevated
                label="بازگشت"
@@ -213,20 +213,7 @@ export default {
         major_type: [],
         reference_type: [],
         year_type: [],
-        levels: [
-          {
-            value: 1,
-            label: 'آسان'
-          },
-          {
-            value: 2,
-            label: 'متوسط'
-          },
-          {
-            value: 3,
-            label: 'سخت'
-          }
-        ],
+        level_type: [],
         tags_with_childrens: 1
       },
       selectedNodes: [],
@@ -307,6 +294,7 @@ export default {
     // this.getQuestionData()
     this.getFilterOptions()
     this.getReportOptions()
+    this.getLevelsFilterData()
     this.setSelectedQuestionOfCurrentMetaPage()
   },
   mounted() {
@@ -394,10 +382,19 @@ export default {
       this.treeModalValue = !this.treeModalValue
     },
     getReportOptions() {
-      this.$axios.get(API_ADDRESS.exam.user.reportType)
-        .then((response) => {
-          this.reportTypeList = response.data.data
+      this.apiGateway.exam.userReportType()
+        .then((reportTypeList) => {
+          this.reportTypeList = reportTypeList
         })
+        .catch(() => {})
+    },
+    getLevelsFilterData() {
+      this.$axios.get(API_ADDRESS.question.levels)
+        .then(response => {
+          this.filterQuestions.level_type = response.data.data
+          this.addTypeToFilter('level_type')
+        })
+        .catch()
     },
     goToPrevStep() {
       this.$emit('lastTab')
@@ -471,7 +468,7 @@ export default {
     getFiltersForRequest(filterData) {
       return {
         tags: filterData.tags.map(item => item.id),
-        level: filterData.level.map(item => item.value),
+        level: filterData.level_type.map(item => item.value),
         years: filterData.years.map(item => item.id),
         majors: filterData.majors.map(item => item.id),
         reference: filterData.reference.map(item => item.id),
@@ -491,15 +488,16 @@ export default {
         filters.tags.push(this.providedExam.temp.lesson)
       }
       this.showLoading()
-      this.$axios.get(API_ADDRESS.question.index(filters, page))
-        .then((response) => {
-          this.questions = new QuestionList(response.data.data)
-          this.paginationMeta = response.data.meta
+      const isAdmin = false
+      this.$apiGateway.question.getIndex({ filters, page, isAdmin })
+        .then((indexResponse) => {
+          this.questions = new QuestionList(indexResponse.QuestionList)
+          this.paginationMeta = indexResponse.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
           this.setSelectedQuestionOfCurrentMetaPage()
           this.setQuestionsInfoCheckBoxStatus()
-          this.setExamTags(this.selectedTags)
+          this.setExamTags(this.selectedNodes)
           this.hideLoading()
         })
         .catch((err) => {
@@ -510,9 +508,9 @@ export default {
         })
     },
     getFilterOptions() {
-      this.$axios.get(API_ADDRESS.option.userIndex)
-        .then((response) => {
-          response.data.data.forEach(option => {
+      this.$apiGateway.option.userIndex
+        .then((options) => {
+          options.forEach(option => {
             if (option.type === 'reference_type') {
               this.filterQuestions.reference_type.push(option)
             } else if (option.type === 'year_type') {
@@ -522,6 +520,11 @@ export default {
             }
           })
         })
+    },
+    addTypeToFilter(filter) {
+      this.filterQuestions[filter].forEach(item => {
+        item.type = filter
+      })
     },
     selectAllQuestions() {
       this.selectedQuestions = []
@@ -536,15 +539,15 @@ export default {
         this.selectedQuestions.splice(question)
       })
     },
-    onLessonChanged(item) {
-      if (this.isSelectedLessonNew(item)) {
-        this.providedExam.temp.lesson = item.id
+    onLessonChanged(lessonObj) {
+      if (this.isSelectedLessonNew(lessonObj.layer?.selectedValue)) {
+        this.providedExam.temp.lesson = lessonObj.layer.selectedValue.id
         this.$emit('update:exam', this.providedExam)
         if (this.providedExam.questions.list.length > 0) {
           this.detachAllQuestionsFromExam()
         }
       }
-      this.setFilterTreeLesson(item)
+      this.setFilterTreeLesson(lessonObj.layer.selectedValue)
     },
     isSelectedLessonNew(lesson) {
       return this.providedExam.temp.lesson !== lesson.id
@@ -583,7 +586,7 @@ export default {
       this.selectedNodes = this.providedExam.temp.tags
     },
     setSelectedTags(allTags) {
-      this.selectedTags = allTags
+      this.selectedNodes = allTags
     },
     setExamTags(selectedTags) {
       this.providedExam.temp.tags = selectedTags.map(node => ({
@@ -721,8 +724,6 @@ export default {
 }
 
 .main-container {
-  .question-bank-filter {
-  }
 
   .question-list {
     margin-left: 30px;
@@ -744,6 +745,12 @@ export default {
       :deep(.question-card) {
         margin-bottom: 16px;
       }
+    }
+  }
+
+  .pagination {
+    @media only screen and (max-width: 600px) {
+      margin-bottom: 150px;
     }
   }
 

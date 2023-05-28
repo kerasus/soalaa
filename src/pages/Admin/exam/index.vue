@@ -37,7 +37,7 @@
                  size="md"
                  color="indigo"
                  icon="auto_stories"
-                 :to="{name:'Admin.Exam.Categories', params: {exam_id: inputData.props.row.id , examTitle: inputData.props.row.title}}">
+                 :to="{name:'Admin.Exam.Categories', params: {exam_id: inputData.props.row.id }}">
             <q-tooltip anchor="top middle"
                        self="bottom middle">
               مشاهده دروس
@@ -122,7 +122,7 @@
 <script>
 import moment from 'moment-jalaali'
 import { EntityIndex } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Admin.Exam.Index',
@@ -185,7 +185,7 @@ export default {
         ],
         data: []
       },
-      api: API_ADDRESS.exam.base(),
+      api: APIGateway.exam.APIAdresses.base(),
       tableKeys: {
         data: 'data',
         total: 'meta.total',
@@ -194,7 +194,7 @@ export default {
         pageKey: 'page'
       },
       inputs: [
-        { type: 'input', name: 'statement', col: 'col-md-4', placeholder: 'عنوان' },
+        { type: 'input', name: 'statement', col: 'col-md-4', placeholder: ' ', label: 'عنوان' },
         { type: 'date', name: 'start_at_from', calendarIcon: ' ', col: 'col-md-4', placeholder: 'تاریخ شروع از' },
         { type: 'date', name: 'start_at_till', calendarIcon: ' ', col: 'col-md-4', placeholder: 'تاریخ شروع تا' }
       ]
@@ -207,7 +207,7 @@ export default {
   },
   methods: {
     registerExam (examId) {
-      return this.$axios.post(API_ADDRESS.exam.registerExam, { exam_id: examId })
+      return this.$apiGateway.exam.registerExam({ exam_id: examId })
     },
     attendExam (examId) {
       this.attendExamBtnLoading = true
@@ -254,7 +254,10 @@ export default {
     },
     generateJsonFile (exams, withAnswer) {
       this.$store.dispatch('loading/linearLoading', true)
-      this.$axios.post(API_ADDRESS.exam.generateExamFile(exams.id, withAnswer))
+      this.$apiGateway.exam.generateExamFile({
+        examId: exams.id,
+        withAnswer
+      })
         .then(() => {
           this.$q.notify({
             type: 'positive',

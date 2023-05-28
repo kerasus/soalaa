@@ -54,7 +54,8 @@
                round
                flat
                dense
-               size="md" />
+               size="md"
+               :to="{name: 'User.MyOrders'}" />
       </div>
     </div>
   </div>

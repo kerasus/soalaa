@@ -1,6 +1,7 @@
 import APIRepository from '../classes/APIRepository'
 import { appApiInstance } from 'src/boot/axios'
-import { ExamList } from 'src/models/Exam.js'
+import { Exam, ExamList } from 'src/models/Exam.js'
+import { QuestionList } from 'src/models/Question'
 
 const APIAdresses = {
   exportExcel: '/exam?excel_export=1',
@@ -67,6 +68,8 @@ const APIAdresses = {
   },
   registerExam: '/user/registerExam',
   examUser: '/exam-user',
+  examUserAfterExam: (examId) => 'exam-user?exam_id=' + examId,
+
   participate: {
     sample: (examId) => '/exam-user/' + examId,
     personal: (examId) => '/exam-user/personal/' + examId
@@ -89,7 +92,7 @@ const APIAdresses = {
   detachCategory: (examId, categoryId) => '/exam/detach/category/' + examId + '/' + categoryId,
   attachCategories: (examId) => '/exam/attach/category/' + examId,
   user: {
-    draft () { return '/exam/user/draft' },
+    draft: '/exam/user/draft',
     reportType: '/option/user?type=question_report_type',
     report(questionId) { return '/question/report/store/' + questionId },
     attach: '/exam-question/user/attach/v3',
@@ -173,13 +176,126 @@ export default class ExamAPI extends APIRepository {
     })
   }
 
-  registerExam(data = {}, cache) {
+  getAnswerOfUserWithCorrect(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.getAnswerOfUserWithCorrect(data),
+      resolveCallback: (response) => {
+        return response
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  adminGetReport(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.report.adminGetReport,
+      resolveCallback: (response) => {
+        return response
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.params
+    })
+  }
+
+  getReport(userExamId, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.report.getReport(userExamId),
+      resolveCallback: (response) => {
+        return response
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  userReportType(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.user.reportType,
+      resolveCallback: (response) => {
+        return response.data.data
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  userReport(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.user.report(data.questionId),
+      resolveCallback: (response) => {
+        return response.data.data
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.params
+    })
+  }
+
+  getAllAnswerOfUser(userExamId, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.getAllAnswerOfUser(userExamId),
+      resolveCallback: (response) => {
+        return response
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  examUserAfterExam(userExamId, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.examUserAfterExam(userExamId),
+      resolveCallback: (response) => {
+        return response
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  participate(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: data.personal ? this.APIAdresses.participate.personal(data.examId) : this.APIAdresses.participate.sample(data.examId),
+      resolveCallback: (response) => {
+        return response.data.data?.redirect_url
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  registerExam(data = {}) {
     return this.sendRequest({
       apiMethod: 'post',
       api: this.api,
       request: this.APIAdresses.registerExam,
-      cacheKey: this.CacheList.registerExam,
-      ...(cache && { cache }),
       resolveCallback: (response) => {
         return response.data.data?.redirect_url
       },
@@ -190,20 +306,123 @@ export default class ExamAPI extends APIRepository {
     })
   }
 
+  generateExamFile(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.generateExamFile(data.examId, data.withAnswer),
+      cacheKey: this.CacheList.generateExamFile(data.examId, data.withAnswer),
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return response // String
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
   sendAnswers(data = {}, cache) {
     return this.sendRequest({
       apiMethod: 'post',
       api: this.api,
       request: this.APIAdresses.sendAnswers,
-      cacheKey: this.CacheList.sendAnswers,
-      ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data
+        return response // String
       },
       rejectCallback: (error) => {
         return error
       },
       data
+    })
+  }
+
+  userDraftExamCreate(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.user.draftExam.create,
+      resolveCallback: (response) => {
+        return new Exam(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data
+    })
+  }
+
+  userDraftExamUpdate(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.user.draftExam.update(data.examId),
+      resolveCallback: (response) => {
+        return new Exam(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  userDraftExamGetAttachedQuestions(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.user.draftExam.getAttachedQuestions(data),
+      resolveCallback: (response) => {
+        return new QuestionList(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  userDraftExamBulkAttachQuestions(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.user.draftExam.bulkAttachQuestions(data.examId),
+      resolveCallback: (response) => {
+        return new Exam(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  userUpdateOrders(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.user.updateOrders(data.examId),
+      resolveCallback: (response) => {
+        return new Exam(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  userDetachBulk(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.user.detachBulk(data.examId),
+      resolveCallback: (response) => {
+        return new Exam(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
     })
   }
 }

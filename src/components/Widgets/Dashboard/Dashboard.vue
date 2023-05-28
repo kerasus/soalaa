@@ -135,10 +135,11 @@
             </div>
           </div>
         </div>
-        <div v-if="$q.screen.lt.sm"
+        <div v-if="windowSize.x < 600"
              class="bottom-nav">
           <q-btn unelevated
-                 class="btn-style profile">
+                 class="btn-style profile"
+                 :to="{ name: 'User.Profile'}">
             <svg width="24"
                  height="24"
                  viewBox="0 0 24 24"
@@ -396,6 +397,7 @@ export default {
   padding-right: 42px;
   padding-left: 42px;
   bottom: 0;
+  left: 20px;
   width: 100%;
   .btn-style {
     width: 44px;

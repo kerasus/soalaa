@@ -38,6 +38,8 @@
                        label="کارنامه" />
                 <q-tab name="rank"
                        label="تخمین رتبه" />
+                <q-tab name="newRank"
+                       label="تخمین رتبه بر اساس کنکور" />
                 <q-tab name="lessons"
                        label="ریزدرس ها" />
                 <q-tab name="KeyAnswers"
@@ -62,6 +64,9 @@
           </q-tab-panel>
           <q-tab-panel name="rank">
             <takhmin-rotbe :report="report" />
+          </q-tab-panel>
+          <q-tab-panel name="newRank">
+            <new-takhmin-rotbe :report="report" />
           </q-tab-panel>
           <q-tab-panel name="lessons">
             <statistic-result :report="report" />
@@ -143,14 +148,11 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
-import { AlaaSet } from 'src/models/AlaaSet.js'
-import Assistant from 'src/plugins/assistant.js'
 import ExamData from 'src/assets/js/ExamData.js'
-import { AlaaContent } from 'src/models/AlaaContent.js'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info.vue'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe.vue'
+import NewTakhminRotbe from 'src/components/OnlineQuiz/Quiz/NewTakhminRotbe.vue'
 import QuestionItem from 'src/components/OnlineQuiz/Quiz/question/questionField.vue'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet.vue'
 import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult.vue'
@@ -159,7 +161,7 @@ import TabsOfLessons from 'src/components/OnlineQuiz/Quiz/videoPlayerSection/tab
 
 export default {
   name: 'Result',
-  components: { TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult, QuestionItem },
+  components: { NewTakhminRotbe, TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult, QuestionItem },
   mixins: [
     mixinAuth,
     mixinQuiz
@@ -169,8 +171,6 @@ export default {
     selectedTimepoint: null,
     timepointsHeights: 0,
     videoLesson: null,
-    alaaSet: new AlaaSet(),
-    alaaContent: new AlaaContent(),
     alaaVideos: null,
     report: null,
     tab2: null,
@@ -178,8 +178,7 @@ export default {
     innerTab: 'innerMails',
     splitterModel: 20
   }),
-  created () {
-    // console.log('report.exams_booklet', this.report.exams_booklet)
+  mounted () {
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
     this.getUserData()
@@ -191,7 +190,7 @@ export default {
       const that = this
       const userExamId = this.$route.params.user_exam_id
       const examId = this.$route.params.exam_id
-      const examData = new ExamData(this.$axios)
+      const examData = new ExamData(this.$alaaApiInstance)
       examData.getUserExamWithCorrectAnswers(userExamId, examId)
         .loadQuestionsFromFile()
         .getUserExamData(userExamId)
@@ -269,32 +268,6 @@ export default {
         item.percent = parseFloat(item.percent).toFixed(1)
         item.taraaz = parseFloat(item.taraaz).toFixed(0)
       })
-    },
-    getContent (contentId, subCategoryIndex) {
-      const that = this
-      this.$alaaApiInstance.get(API_ADDRESS.content.base + '/' + contentId)
-        .then((response) => {
-          that.currentVideo = response.data.data
-          that.initVideoJs(that.currentVideo.file.video, subCategoryIndex)
-        })
-        .catch((error) => {
-          Assistant.reportErrors(error)
-          that.currentVideo = null
-        })
-    },
-    getAlaaSet (setId, subCategoryIndex) {
-      const that = this
-      this.alaaSet.loading = true
-      this.alaaSet.show(setId)
-        .then((response) => {
-          that.alaaSet.loading = false
-          that.alaaSet = new AlaaSet(response.data.data)
-          that.alaaVideos = that.alaaSet.contents.getVideos()
-          that.getContent(that.alaaVideos[0].id, subCategoryIndex)
-        })
-        .catch(() => {
-          that.alaaSet.loading = false
-        })
     }
   }
 }
@@ -320,7 +293,7 @@ export default {
     padding: 12px;
   }
   .default-result-tabs-title {
-    max-width: 700px;
+    max-width: 870px;
     color: rgba(0, 0, 0, 0.54);
   }
   .download-box {

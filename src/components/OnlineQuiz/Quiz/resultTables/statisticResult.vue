@@ -13,7 +13,10 @@
       <div class="col-12 row">
         <div class="col">
           <div :style="{ 'max-width': '100%'}">
-            <highcharts :options="chartOptions" />
+            <div v-if="isHighchartsReady">
+              <component :is="highChartComponentName"
+                         :options="chartOptions" />
+            </div>
           </div>
         </div>
       </div>
@@ -22,17 +25,21 @@
 </template>
 
 <script>
-let Chart
-if (typeof window !== 'undefined') {
-  import('highcharts-vue')
-    .then((ChartLib) => {
-      Chart = ChartLib.default.Chart
-    })
-}
-
+import { defineAsyncComponent } from 'vue'
 export default {
   name: 'StatisticResult',
-  components: { highcharts: Chart },
+  components: {
+    HighCharts: defineAsyncComponent(() => {
+      return new Promise((resolve) => {
+        let Chart
+        import('highcharts-vue')
+          .then((ChartLib) => {
+            Chart = ChartLib.Chart
+            resolve(Chart)
+          })
+      })
+    })
+  },
   props: ['report'],
   data () {
     return {
@@ -93,19 +100,26 @@ export default {
         xAxis: {
           categories: []
         }
-      }
+      },
+      isHighchartsReady: false,
+      highChartComponentName: ''
     }
   },
-  created () {
+  mounted () {
     if (this.report && this.report.best) {
       if (this.report.sub_category[0].rank_school) {
-        this.headers.splice(9, 0, { text: ' رتبه مدرسه', value: 'rank_school', align: 'center', sortable: true })
+        this.columns1.splice(9, 0, { text: ' رتبه مدرسه', value: 'rank_school', align: 'center', sortable: true })
       }
       this.loadDataTable()
       this.loadChart()
     }
+    this.setUpHighChart()
   },
   methods: {
+    setUpHighChart () {
+      this.isHighchartsReady = true
+      this.highChartComponentName = 'high-charts'
+    },
     getPercentDataForChart () {
       let data = []
       this.dataTable.forEach((item) => {
