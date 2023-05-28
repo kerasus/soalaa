@@ -748,6 +748,12 @@ export default {
     }
   }
 
+  .pagination {
+    @media only screen and (max-width: 600px) {
+      margin-bottom: 150px;
+    }
+  }
+
 }
 
 @media only screen and (max-width: 1919px) {

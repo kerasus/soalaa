@@ -46,7 +46,8 @@
                      label="شروع کنید"
                      unelevated
                      :loading="subscribeLoading"
-                     @click="subscribe(item.id)" />
+                     @click="subscribe(item.id)"
+              />
             </div>
           </template>
           <div v-else
