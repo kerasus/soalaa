@@ -217,6 +217,9 @@ export default {
       type: Object,
       default() {
         return {
+          optionsLoading: false,
+          levelTypeLoading: false,
+          statusLoading: false,
           reportStatusLoading: false
         }
       }
@@ -266,6 +269,9 @@ export default {
   data () {
     return {
       defaultLoadings: {
+        optionsLoading: false,
+        levelTypeLoading: false,
+        statusLoading: false,
         reportStatusLoading: false
       },
       treeKey: 0,
@@ -323,16 +329,21 @@ export default {
   },
   methods: {
     updateSelectedFiltersObject (filterType) {
-      const filterGroup = this.filtersData[filterType]
-      if (Array.isArray(filterGroup)) {
-        filterGroup.forEach(filterItem => {
-          this.selectedFilters.push({ value: filterItem, type: filterType })
-        })
-      } else if (typeof filterGroup === 'object') {
-        this.selectedFilters.push({ value: filterGroup, type: filterType })
-      } else if (typeof filterGroup === 'number' && !filterGroup) {
-        this.selectedFilters.push({ value: filterGroup, type: filterType })
-      }
+      const filtersDataKey = Object.keys(this.filtersData)
+      const filters = []
+      filtersDataKey.forEach(key => {
+        const filterGroup = this.filtersData[key]
+        if (Array.isArray(filterGroup) && filterGroup) {
+          filterGroup.forEach(filterItem => {
+            filters.push({ value: filterItem, type: filterType })
+          })
+        } else if (typeof filterGroup === 'object') {
+          filters.push({ value: filterGroup, type: filterType })
+        } else if (typeof filterGroup === 'number' && !filterGroup) {
+          filters.push({ value: filterGroup, type: filterType })
+        }
+      })
+      this.selectedFilters = filters
     },
     getFilterTitle(filter) {
       if (typeof filter === 'number') {
@@ -434,7 +445,8 @@ export default {
         this.onUpdateFilterData()
       } else if (filterObj.type === 'tags_with_childrens') {
         this.searchSingleNode = false
-        this.changeFilterData('tags_with_childrens', 0)
+        this.filtersData.tags_with_childrens = 0
+        this.onUpdateFilterData()
       } else {
         this[filterObj.type] = ''
         this.filtersData[filterObj.type] = ''
@@ -448,10 +460,12 @@ export default {
       this.filtersData.years.splice(0, this.filtersData.years.length)
       this.filtersData.majors.splice(0, this.filtersData.majors.length)
       this.filtersData.question_report_type.splice(0, this.filtersData.question_report_type.length)
-      this.filtersData.types.splice(0, this.filtersData.types.length)
+      this.filtersData.type_id = ''
+      this.filtersData.report_status = ''
       this.filtersData.statuses.splice(0, this.filtersData.statuses.length)
       this.showTreeModalNode(this.rootNodeIdToLoad)
       // this.QuestionFilters.splice(0, this.QuestionFilters.length)
+      this.updateSelectedFiltersObject()
       this.onUpdateFilterData()
     }
   }
