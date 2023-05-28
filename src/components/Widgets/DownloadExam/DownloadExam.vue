@@ -182,6 +182,7 @@
                          label="انصراف" />
                   <q-btn unelevated
                          :disable="downloadLoading"
+                         :loading="downloadLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
@@ -196,19 +197,16 @@
                 <q-skeleton height="900px"
                             class="pdf-skeleton" />
               </div>
-              <p-d-f-container v-else-if="doesHaveQuestion"
+              <div v-else-if="!doesHaveQuestion"
+                   class="no-question">
+                <q-skeleton height="900px"
+                            class="pdf-skeleton" />
+              </div>
+              <p-d-f-container v-else
                                :exam="examInfo"
                                :questions="questions"
                                :pdfConfig="pdfConfig"
                                @loaded="onQuestionsLoaded" />
-            <!--            <vue-pdf-embed-->
-            <!--              v-else-->
-            <!--              ref="pdfRef"-->
-            <!--              :page="page"-->
-            <!--              class="pdf"-->
-            <!--              :source="pdfSrc"-->
-            <!--              @rendered="handleDocumentRender"-->
-            <!--            />-->
             </div>
           </q-tab-panel>
           <q-tab-panel class="tab-panel-style"
@@ -231,6 +229,7 @@
                          label="انصراف" />
                   <q-btn unelevated
                          :disable="downloadLoading"
+                         :loading="downloadLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
@@ -245,20 +244,17 @@
                 <q-skeleton height="900px"
                             class="pdf-skeleton" />
               </div>
-              <p-d-f-container v-else-if="doesHaveQuestion"
+              <div v-else-if="!doesHaveQuestion"
+                   class="no-question">
+                <q-skeleton height="900px"
+                            class="pdf-skeleton" />
+              </div>
+              <p-d-f-container v-else
                                :exam="examInfo"
                                :questions="questions"
                                :pdfConfig="pdfConfig"
                                :mode="'onlyDescriptiveAnswers'"
                                @loaded="onQuestionsLoaded" />
-            <!--            <vue-pdf-embed-->
-            <!--              v-else-->
-            <!--              ref="pdfRef"-->
-            <!--              :page="page"-->
-            <!--              class="pdf"-->
-            <!--              :source="pdfSrc"-->
-            <!--              @rendered="handleDocumentRender"-->
-            <!--            />-->
             </div>
           </q-tab-panel>
           <q-tab-panel class="tab-panel-style"
@@ -281,6 +277,7 @@
                          label="انصراف" />
                   <q-btn unelevated
                          :disable="downloadLoading"
+                         :loading="downloadLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
@@ -288,7 +285,8 @@
                 </div>
               </div>
             </div>
-            <div ref="keyAnswerPdf">
+            <div ref="keyAnswerPdf"
+                 class="pdf-container">
               <pdf-page :title="examInfo.title"
                         :grade="examInfo.gradeTitle"
                         :major="examInfo.majorTitle"
@@ -402,6 +400,7 @@ export default {
         return
       }
       this.questionPagesCount = pages.length
+      this.loading = false
     },
     handleDocumentRender(data) {
       this.pageCount = this.$refs.pdfRef.pageCount
@@ -454,7 +453,9 @@ export default {
         .from(this.$refs[ref])
         .save()
         .thenExternal(() => {
-          this.downloadLoading = false
+          setTimeout(() => {
+            this.downloadLoading = false
+          }, 5000)
         })
     }
   }

@@ -55,7 +55,6 @@ export default {
     }
   },
   mounted () {
-    console.log(document.getElementById('filepond-wrapper-' + this.fieldKey))
     if (document.getElementById('filepond-wrapper-' + this.fieldKey)) {
       document.getElementById('filepond-wrapper-' + this.fieldKey).innerHTML = ''
       document.getElementById('filepond-wrapper-' + this.fieldKey).appendChild(this.pond.element)
