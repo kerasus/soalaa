@@ -237,12 +237,13 @@
             <div class="answer-video flex items-center justify-center"
                  :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
             >
-              <div class="soon flex items-center justify-center">
-                به زودی
+              <content-video-player v-if="content.hasVideoSource()"
+                                    :content="content"
+                                    :timePoint="questionTimePoint"
+                                    :nextTimePoint="nextTimePoint" />
+              <div v-else>
+                ویدیویی وجود ندارد!
               </div>
-
-              <!--              ToDo : uncomment this when backend give you a valid key-->
-              <!--              <video-player />-->
             </div>
 
             <div class="answer-video-title">
@@ -390,15 +391,18 @@
 <script>
 import VueKatex from 'src/components/VueKatex'
 import question from 'components/CommonComponents/Exam/Create/QuestionTemplate/Question'
-// import VideoPlayer from 'src/components/VideoPlayer'
 import { Question } from 'src/models/Question'
 import API_ADDRESS from 'src/api/Addresses'
+import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
+import { Content } from 'src/models/Content.js'
+import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 
 export default {
   name: 'QuestionItem',
   components: {
     VueKatex,
-    question
+    question,
+    ContentVideoPlayer
     // VideoPlayer
   },
   props: {
@@ -458,6 +462,7 @@ export default {
   emits: ['checkSelect', 'changeOrder'],
   data () {
     return {
+      contentLoading: false,
       questionChoiceList: [],
       confirmQuestion: false,
       descriptiveAnswerExpanded: false,
@@ -518,7 +523,10 @@ export default {
         problemType: '',
         options: [],
         description: ''
-      }
+      },
+      content: new Content(),
+      questionTimePoint: new ContentTimePoint(),
+      nextTimePoint: new ContentTimePoint()
     }
   },
   created () {
@@ -655,6 +663,34 @@ export default {
           message: 'مشکلی به وجود آمده.'
         })
       }
+    },
+    toggleContent() {
+      this.listConfig.questionAnswerExpanded = !this.listConfig.questionAnswerExpanded
+      if (this.listConfig.questionAnswerExpanded) {
+        this.getQuestionContent()
+      }
+    },
+    getQuestionContent() {
+      if (!this.question.content_id) {
+        return
+      }
+      this.contentLoading = true
+      this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
+        .then(res => {
+          this.content = new Content(res.data.data)
+          this.getTimePoints()
+          this.contentLoading = false
+        })
+        .catch(() => {
+          this.contentLoading = false
+        })
+    },
+    getTimePoints() {
+      this.questionTimePoint = this.content.timepoints.list.find(x => x.id === this.question.time_point_id)
+      const timePointList = this.content.timepoints.list
+      timePointList.sort((a, b) => (a.time > b.time ? 1 : -1))
+      const timePointIndex = timePointList.findIndex(x => x.id === this.question.time_point_id) + 1
+      this.nextTimePoint = timePointList[timePointIndex]
     }
   }
 }
@@ -776,7 +812,7 @@ export default {
       min-height: 36px;
 
       @media only screen and (max-width: 599px) {
-        order: 2;
+        //order: 2;
       }
       .source-content,
       .source-skeleton {
