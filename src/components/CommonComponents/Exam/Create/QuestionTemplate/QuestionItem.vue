@@ -305,7 +305,7 @@
           class="see-answer-button no-padding"
           :label="descriptiveAnswerExpanded ? '' : ''"
           :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-          @click="descriptiveAnswerExpanded = !descriptiveAnswerExpanded"
+          @click="toggleContent"
         >
           <span v-if="descriptiveAnswerExpanded">
             پاسخ تشریحی
