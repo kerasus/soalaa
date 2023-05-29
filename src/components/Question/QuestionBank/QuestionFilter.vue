@@ -437,7 +437,7 @@ export default {
         if (filterObj.type === 'level_type') {
           index = this.filtersData[filterObj.type].findIndex(filter => filter.key === filterObj.value.key)
         } else if (filterObj.type === 'tags') {
-          this.setTickedMode('tree', filterObj.value.id, false)
+          index = this.selectedFilters.findIndex(filter => filter.type === 'tags' && filter.value.id === filterObj.value.id)
         } else {
           index = this.filtersData[filterObj.type].findIndex(filter => filter.id === filterObj.value.id)
         }
