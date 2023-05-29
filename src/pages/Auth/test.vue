@@ -1,13 +1,41 @@
 <template>
-  <h5>THIS COMPONENT IS JUST FOR TEST</h5>
+  <div v-if="mounted">
+    <component :is="highChartComponentName"
+               ref="tiptap"
+               v-model="content"
+               :options="{
+                 poem: true,
+                 reading: true,
+                 bubbleMenu: false,
+                 floatingMenu: false,
+                 onResizeEnd: onResizeEnd,
+                 persianKeyboard: true,
+                 // mathliveOptions: {
+                 //   locale: 'fa',
+                 // }
+               }" />
+  </div>
 </template>
 
 <script>
 import API_ADDRESS from 'src/api/Addresses.js'
+import { defineAsyncComponent } from 'vue'
 
 export default {
   name: 'Test',
-  components: { },
+  components: {
+    VueTiptapKatex: defineAsyncComponent(() => {
+      return new Promise((resolve) => {
+        let Chart
+        import('vue3-tiptap-katex')
+          .then(({ VueTiptapKatex }) => {
+            console.log('VueTiptapKatex', VueTiptapKatex)
+            Chart = VueTiptapKatex
+            resolve(Chart)
+          })
+      })
+    })
+  },
   mixins: [],
   beforeRouteEnter () {
     // console.log('debug beforeRouteEnter')
@@ -29,7 +57,11 @@ export default {
   data () {
     return {
       testValue: '',
-      testValue1: ''
+      testValue1: '',
+      content: 'test',
+      mounted: false,
+      isHighchartsReady: false,
+      highChartComponentName: ''
     }
   },
   computed: {
@@ -37,6 +69,9 @@ export default {
       return API_ADDRESS.question.uploadImage('dfbdgbdgbgfnhfn')
     },
     test2 () {
+      return 'Bearer ' + this.$store.getters['Auth/accessToken']
+    },
+    getAuthorizationCode () {
       return 'Bearer ' + this.$store.getters['Auth/accessToken']
     }
   },
@@ -58,8 +93,14 @@ export default {
   },
   mounted () {
     // console.log('debug mounted')
+    this.mounted = true
+    this.highChartComponentName = 'vue-tiptap-katex'
   },
-  methods: {}
+  methods: {
+    onResizeEnd(url, width, height) {
+      return `${url.split('?w=')[0]}?w=${width}&h=${height}`
+    }
+  }
 }
 </script>
 
