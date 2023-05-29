@@ -19,18 +19,12 @@
          class="question-box"
          :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}">
       <div class="question-head">
-        <p
-          :id="'question' + source.id"
-          class="question-body"
-          :class="{ ltr: isRtl }"
-        >
-          <vue-katex
-            v-if="source.parent.id"
-            :input="questionParentStatement"
-          />
-          <vue-katex
-            :input="questionStatement"
-          />
+        <p :id="'question' + source.id"
+           class="question-body"
+           :class="{ ltr: isRtl }">
+          <vue-katex v-if="source.parent.id"
+                     :input="questionParentStatement" />
+          <vue-katex :input="questionStatement" />
         </p>
         <div class="question-icons"
              :style="{ float: isRtlString ? 'left' : 'right' }">
