@@ -15,6 +15,9 @@ const APIAdresses = {
   userExamsList: '/examAndUser',
   takhminRotbe: '/exam-report/rankSimulator',
   analysisVideo: '/exam-question/attach/sub-category',
+  konkurTakhminRotbe (konkurId) {
+    return '/exam-report/rank/' + konkurId
+  },
   userExamList: {
     base: '/examAndUser',
     upcomingExams(start) {
@@ -122,14 +125,10 @@ export default class ExamAPI extends APIRepository {
   constructor() {
     super('exam', appApiInstance, '', '', APIAdresses)
     this.CacheList = {
-<<<<<<< HEAD
-      showExam: (examId) => this.APIAdresses.showExam(examId),
-      takhminRotbeExamList: this.APIAdresses.report.takhminRotbeExamList
-=======
       showExam: (examId) => this.name + this.APIAdresses.showExam(examId),
       takhminRotbeExamList: this.name + this.APIAdresses.report.takhminRotbeExamList,
-      userExamList: this.name + this.APIAdresses.userExamList.base
->>>>>>> kerasus/vite
+      userExamList: this.name + this.APIAdresses.userExamList.base,
+      pdf: (examId) => this.name + this.APIAdresses.pdf(examId)
     }
   }
 
@@ -254,6 +253,36 @@ export default class ExamAPI extends APIRepository {
         return error
       },
       data: data.params
+    })
+  }
+
+  userExamInfo(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.user.examInfo(data.examId),
+      resolveCallback: (response) => {
+        return response.data.data
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      ...(data.params && { data: data.params })
+    })
+  }
+
+  userQuestionsWithAnswer(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.user.questionsWithAnswer(data.examId),
+      resolveCallback: (response) => {
+        return new QuestionList(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
     })
   }
 
@@ -466,6 +495,36 @@ export default class ExamAPI extends APIRepository {
     })
   }
 
+  konkurTakhminRotbe(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.konkurTakhminRotbe(data.examId),
+      resolveCallback: (response) => {
+        return response.data.ranks
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  takhminRotbe(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.takhminRotbe,
+      resolveCallback: (response) => {
+        return response.data // object that contains main&sub_category&Zirgorooh
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data
+    })
+  }
+
   takhminRotbeExamList(examId, cache = { TTL: 100 }) {
     return this.sendRequest({
       apiMethod: 'get',
@@ -475,6 +534,22 @@ export default class ExamAPI extends APIRepository {
       ...(cache && { cache }),
       resolveCallback: (response) => {
         return new ExamList(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getExamAnswersFiles(examId, cache = { TTL: 100 }) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.pdf(examId),
+      cacheKey: this.CacheList.pdf(examId),
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return response.data // file list
       },
       rejectCallback: (error) => {
         return error
