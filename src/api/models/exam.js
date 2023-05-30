@@ -130,7 +130,8 @@ export default class ExamAPI extends APIRepository {
       userExamList: this.name + this.APIAdresses.userExamList.base,
       pdf: (examId) => this.name + this.APIAdresses.pdf(examId),
       user: {
-        examInfo: (examId) => this.name + this.APIAdresses.user.examInfo(examId)
+        examInfo: (examId) => this.name + this.APIAdresses.user.examInfo(examId),
+        report: (examId) => this.name + this.APIAdresses.user.report(examId)
       }
     }
   }
@@ -244,13 +245,15 @@ export default class ExamAPI extends APIRepository {
     })
   }
 
-  userReport(data = {}, cache) {
+  userReport(data = {}, cache = { TTL: 100 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.user.report(data.questionId),
+      cacheKey: this.CacheList.user.report(data.examId),
+      ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data
+        return response.data.data // String
       },
       rejectCallback: (error) => {
         return error
@@ -267,7 +270,7 @@ export default class ExamAPI extends APIRepository {
       cacheKey: this.CacheList.user.examInfo(data.examId),
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data
+        return response.data.data // Exam Info
       },
       rejectCallback: (error) => {
         return error
@@ -276,7 +279,7 @@ export default class ExamAPI extends APIRepository {
     })
   }
 
-  userQuestionsWithAnswer(data = {}, cache) {
+  userQuestionsWithAnswer(data = {}) {
     return this.sendRequest({
       apiMethod: 'post',
       api: this.api,
@@ -506,7 +509,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.konkurTakhminRotbe(data.examId),
       resolveCallback: (response) => {
-        return response.data.ranks
+        return response.data.ranks // String
       },
       rejectCallback: (error) => {
         return error
