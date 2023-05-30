@@ -419,7 +419,7 @@ export default {
           this.examInfo.title = response.data.data.title
           this.examInfo.gradeTitle = response.data.data.temp.grade.title
           if (response.data.data.temp.major) {
-            this.examInfo.majorTitle = response.data.data.temp.major.title
+            this.examInfo.majorTitle = response.data.data.temp.major.value
           }
           this.examInfo.n_questions = response.data.data.n_questions
           this.loading = false
