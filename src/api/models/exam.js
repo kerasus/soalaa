@@ -128,7 +128,10 @@ export default class ExamAPI extends APIRepository {
       showExam: (examId) => this.name + this.APIAdresses.showExam(examId),
       takhminRotbeExamList: this.name + this.APIAdresses.report.takhminRotbeExamList,
       userExamList: this.name + this.APIAdresses.userExamList.base,
-      pdf: (examId) => this.name + this.APIAdresses.pdf(examId)
+      pdf: (examId) => this.name + this.APIAdresses.pdf(examId),
+      user: {
+        examInfo: (examId) => this.name + this.APIAdresses.user.examInfo(examId)
+      }
     }
   }
 
@@ -256,11 +259,13 @@ export default class ExamAPI extends APIRepository {
     })
   }
 
-  userExamInfo(data = {}, cache) {
+  userExamInfo(data = {}, cache = { TTL: 100 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.user.examInfo(data.examId),
+      cacheKey: this.CacheList.user.examInfo(data.examId),
+      ...(cache && { cache }),
       resolveCallback: (response) => {
         return response.data.data
       },
