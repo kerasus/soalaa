@@ -126,6 +126,8 @@ export default class ExamAPI extends APIRepository {
     super('exam', appApiInstance, '', '', APIAdresses)
     this.CacheList = {
       showExam: (examId) => this.name + this.APIAdresses.showExam(examId),
+      getAllAnswerOfUser: (examId) => this.name + this.APIAdresses.getAllAnswerOfUser(examId),
+      examUserAfterExam: (examId) => this.name + this.APIAdresses.examUserAfterExam(examId),
       takhminRotbeExamList: this.name + this.APIAdresses.report.takhminRotbeExamList,
       userExamList: this.name + this.APIAdresses.userExamList.base,
       pdf: (examId) => this.name + this.APIAdresses.pdf(examId),
@@ -294,11 +296,13 @@ export default class ExamAPI extends APIRepository {
     })
   }
 
-  getAllAnswerOfUser(userExamId, cache) {
+  getAllAnswerOfUser(userExamId, cache = { TTL: 100 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.getAllAnswerOfUser(userExamId),
+      cacheKey: this.CacheList.user.getAllAnswerOfUser(userExamId),
+      ...(cache && { cache }),
       resolveCallback: (response) => {
         return response
       },
@@ -308,11 +312,13 @@ export default class ExamAPI extends APIRepository {
     })
   }
 
-  examUserAfterExam(userExamId, cache) {
+  examUserAfterExam(userExamId, cache = { TTL: 100 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.examUserAfterExam(userExamId),
+      cacheKey: this.CacheList.user.examUserAfterExam(userExamId),
+      ...(cache && { cache }),
       resolveCallback: (response) => {
         return response
       },
@@ -352,13 +358,11 @@ export default class ExamAPI extends APIRepository {
     })
   }
 
-  generateExamFile(data = {}, cache) {
+  generateExamFile(data = {}) {
     return this.sendRequest({
       apiMethod: 'post',
       api: this.api,
       request: this.APIAdresses.generateExamFile(data.examId, data.withAnswer),
-      cacheKey: this.CacheList.generateExamFile(data.examId, data.withAnswer),
-      ...(cache && { cache }),
       resolveCallback: (response) => {
         return response // String
       },
@@ -368,7 +372,7 @@ export default class ExamAPI extends APIRepository {
     })
   }
 
-  sendAnswers(data = {}, cache) {
+  sendAnswers(data = {}) {
     return this.sendRequest({
       apiMethod: 'post',
       api: this.api,
