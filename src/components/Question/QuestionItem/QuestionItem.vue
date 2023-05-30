@@ -70,7 +70,7 @@
 
       <div
         v-if="listConfig.questionSource || question.loading "
-        class="question-source col-xl-3 col-sm-4 col-xs-6"
+        class="question-source col-xl-3 col-sm-4 col-xs-12"
       >
         <div
           v-if="question.loading"
@@ -269,9 +269,13 @@
                  class="answer-video flex items-center justify-center"
                  :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
             >
-              <content-video-player :content="content"
+              <content-video-player v-if="content.hasVideoSource()"
+                                    :content="content"
                                     :timePoint="questionTimePoint"
                                     :nextTimePoint="nextTimePoint" />
+              <div v-else>
+                ویدیویی وجود ندارد!
+              </div>
             </div>
 
             <div class="answer-video-title">
@@ -900,7 +904,7 @@ export default {
       min-height: 36px;
 
       @media only screen and (max-width: 599px) {
-        order: 2;
+        //order: 2;
       }
       .source-content,
       .source-skeleton {
