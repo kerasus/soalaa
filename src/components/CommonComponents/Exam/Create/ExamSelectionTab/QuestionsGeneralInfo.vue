@@ -608,9 +608,9 @@ export default {
 
         .check-all-checkbox {
           &:deep(.q-checkbox__bg) {
-            background: #FFFFFF;
-            border: 1px solid #6D708B;
-            border-radius: 5px;
+              background: #FFFFFF;
+              border: 1px solid #6D708B;
+              border-radius: 5px;
           }
 
           &:deep(.q-checkbox__svg) {
@@ -1205,10 +1205,13 @@ export default {
           margin-right: 50px;
 
           .check-all-checkbox {
-            &:deep(.q-checkbox__bg) {
-              background: #FFFFFF;
-              border: 1px solid #6D708B;
-              border-radius: 5px;
+
+            &:deep(.q-checkbox__inner--falsy) {
+              .q-checkbox__bg{
+                background: #FFFFFF;
+                border: 1px solid #6D708B;
+                border-radius: 5px;
+              }
             }
 
             &:deep(.q-checkbox__label) {
