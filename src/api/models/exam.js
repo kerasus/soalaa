@@ -122,8 +122,14 @@ export default class ExamAPI extends APIRepository {
   constructor() {
     super('exam', appApiInstance, '', '', APIAdresses)
     this.CacheList = {
+<<<<<<< HEAD
       showExam: (examId) => this.APIAdresses.showExam(examId),
       takhminRotbeExamList: this.APIAdresses.report.takhminRotbeExamList
+=======
+      showExam: (examId) => this.name + this.APIAdresses.showExam(examId),
+      takhminRotbeExamList: this.name + this.APIAdresses.report.takhminRotbeExamList,
+      userExamList: this.name + this.APIAdresses.userExamList.base
+>>>>>>> kerasus/vite
     }
   }
 
@@ -131,8 +137,8 @@ export default class ExamAPI extends APIRepository {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
-      request: this.APIAdresses.base,
-      cacheKey: this.CacheList.base,
+      request: this.APIAdresses.userExamList.base,
+      cacheKey: this.CacheList.userExamList.base,
       ...(cache && { cache }),
       resolveCallback: (response) => {
         return {
