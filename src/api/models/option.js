@@ -1,7 +1,7 @@
 import { Question, QuestionList } from 'src/models/Question.js'
 import APIRepository from '../classes/APIRepository.js'
 import { appApiInstance } from 'src/boot/axios.js'
-
+import { OptionList } from 'src/models/Option.js'
 const APIAdresses = {
   base: '/option',
   userIndex: '/option/user',
@@ -33,7 +33,7 @@ export default class OptionAPI extends APIRepository {
 
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data // Array of Strings
+        return new OptionList(response.data.data)
       },
       rejectCallback: (error) => {
         return error

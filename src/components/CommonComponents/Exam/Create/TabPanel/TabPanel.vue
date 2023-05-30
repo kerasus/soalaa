@@ -301,8 +301,8 @@ export default {
     loadAttachedQuestions () {
       this.draftExam.loading = true
       return this.$apiGateway.exam.userDraftExamGetAttachedQuestions(this.draftExam.id)
-        .then((questions) => {
-          this.draftExam.questions.add(questions)
+        .then((questionList) => {
+          this.draftExam.questions.add(questionList.list)
           this.draftExam.loading = false
         })
         .catch(() => {

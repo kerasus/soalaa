@@ -39,7 +39,7 @@
 
 <script>
 import { EntityShow } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Show',
@@ -48,7 +48,7 @@ export default {
   },
   data () {
     return {
-      api: API_ADDRESS.exam.base(),
+      api: APIGateway.exam.APIAdresses.base(),
       entityIdKey: 'data.id',
       entityParamKey: 'data.id',
       editRouteName: 'Admin.Exam.Edit',
@@ -109,7 +109,10 @@ export default {
     },
     generateJsonFile (id, withAnswer) {
       this.$store.dispatch('loading/linearLoading', true)
-      this.$axios.post(API_ADDRESS.exam.generateExamFile(id, withAnswer))
+      this.$apiGateway.exam.generateExamFile({
+        examId: id,
+        withAnswer
+      })
         .then(() => {
           this.$q.notify({
             type: 'positive',

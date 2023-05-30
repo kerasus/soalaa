@@ -22,7 +22,7 @@
                         option-value="id"
                         option-label="title"
                         :loading="takhminRotbeLoading"
-                        :options="takhminRotbeExamList"
+                        :options="takhminRotbeExamList.list"
                         label-color="grey-8"
                         label="انتخاب نوع آزمون"
                         emit-value
@@ -181,9 +181,9 @@ export default {
     },
     setTakhminRotbeExamList () {
       this.takhminRotbeLoading = true
-      this.$axios.get(API_ADDRESS.exam.report.takhminRotbeExamList)
-        .then(res => {
-          this.takhminRotbeExamList = res.data.data
+      this.$apiGateway.exam.report.takhminRotbeExamList()
+        .then(examList => {
+          this.takhminRotbeExamList = examList
           this.takhminRotbeLoading = false
         })
         .catch(() => {

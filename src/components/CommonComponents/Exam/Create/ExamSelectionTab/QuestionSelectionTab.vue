@@ -127,7 +127,6 @@
 <script>
 import { Exam } from 'src/models/Exam.js'
 import mixinTree from 'src/mixin/Tree.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { TreeNode } from 'src/models/TreeNode.js'
 import { Question, QuestionList } from 'src/models/Question.js'
 import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
@@ -389,9 +388,9 @@ export default {
         .catch(() => {})
     },
     getLevelsFilterData() {
-      this.$axios.get(API_ADDRESS.question.levels)
-        .then(response => {
-          this.filterQuestions.level_type = response.data.data
+      this.$apiGateway.question.getLevels()
+        .then(options => {
+          this.filterQuestions.level_type = options
           this.addTypeToFilter('level_type')
         })
         .catch()
