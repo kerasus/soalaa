@@ -42,7 +42,7 @@
     "quasar-ui-q-page-builder": "^0.1.39",
     "socket.io-client": "^4.5.4",
     "vue-dragscroll": "^4.0.5",
-    "video.js": "^8.0.4",
+    "video.js": "^8.3.0",
     "videojs-brand": "^0.0.4",
     "videojs-contrib-quality-levels": "^3.0.0",
     "videojs-hls-quality-selector": "^1.1.4",
