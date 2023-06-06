@@ -191,6 +191,7 @@
                          label="انصراف"></q-btn>
                   <q-btn unelevated
                          :disable="downloadLoading"
+                         :loading="downloadLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
@@ -239,6 +240,7 @@
                          label="انصراف"></q-btn>
                   <q-btn unelevated
                          :disable="downloadLoading"
+                         :loading="downloadLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
@@ -288,6 +290,7 @@
                          label="انصراف"></q-btn>
                   <q-btn unelevated
                          :disable="downloadLoading"
+                         :loading="downloadLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
@@ -457,7 +460,9 @@ export default {
         .from(this.$refs[ref])
         .save()
         .thenExternal(() => {
-          this.downloadLoading = false
+          setTimeout(() => {
+            this.downloadLoading = false
+          }, 5000)
         })
     }
   }

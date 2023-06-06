@@ -424,7 +424,6 @@ export default {
       this.$axios.get(API_ADDRESS.question.levels)
         .then(response => {
           this.filterQuestions.level_type = response.data.data
-          this.addTypeToFilter('level_type')
         })
         .catch()
     },
@@ -434,8 +433,13 @@ export default {
     goToNextStep() {
       this.$emit('nextTab')
     },
+    SyncTreeSelectedNodesWithFilters(filterData) {
+      this.selectedNodes = filterData.tags
+      this.selectedNodesIds = this.selectedNodes.map(node => node.id)
+    },
     onFilter(filterData) {
       // this.$emit('onFilter', filterData)
+      this.SyncTreeSelectedNodesWithFilters(filterData)
       this.filterData = this.getFiltersForRequest(filterData)
       this.getQuestionData(1, this.filterData)
     },
@@ -551,11 +555,6 @@ export default {
             }
           })
         })
-    },
-    addTypeToFilter(filter) {
-      this.filterQuestions[filter].forEach(item => {
-        item.type = filter
-      })
     },
     selectAllQuestions() {
       this.selectedQuestions = []
@@ -776,6 +775,12 @@ export default {
       :deep(.question-card) {
         margin-bottom: 16px;
       }
+    }
+  }
+
+  .pagination {
+    @media only screen and (max-width: 600px) {
+      margin-bottom: 150px;
     }
   }
 
