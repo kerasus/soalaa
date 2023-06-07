@@ -340,6 +340,7 @@ import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import question from 'src/components/Question/QuestionItem/Question.vue'
 import QuestionTags from 'src/components/CommonComponents/Exam/Create/QuestionTags/QuestionTags.vue'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'QuestionItem',
@@ -623,7 +624,8 @@ export default {
         body: this.reportProblemDialog.description
       }
       try {
-        await this.$axios.post(API_ADDRESS.exam.user.report(this.question.id), params)
+        await APIGateway.exam.userReport({ questionId: this.question.id, params })
+        // await this.$axios.post(API_ADDRESS.exam.user.report(this.question.id), params)
         this.$q.notify({
           type: 'positive',
           message: 'گزازش با موفقیت ثبت شد.'
@@ -646,9 +648,9 @@ export default {
         return
       }
       this.contentLoading = true
-      this.$alaaApiInstance.get(API_ADDRESS.content.get(this.question.content_id))
-        .then(res => {
-          this.content = new Content(res.data.data)
+      APIGateway.content.show(this.question.content_id)
+        .then(content => {
+          this.content = content
           this.getTimePoints()
           this.contentLoading = false
         })

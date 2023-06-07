@@ -1,8 +1,6 @@
 <template>
-  <q-card
-    class="question-card custom-card"
-    :class="{ 'selected': ( selected || question.selected) && !finalApprovalMode }"
-  >
+  <q-card class="question-card custom-card"
+          :class="{ 'selected': ( selected || question.selected) && !finalApprovalMode }">
     <!--    <q-resize-observer @resize="onResize" />-->
     <q-card-section class="question-card-header items-center row">
       <div class="question-info col-xl-9 col-sm-8 col-xs-12">
@@ -281,6 +279,7 @@
 import { Content } from 'src/models/Content.js'
 import { Question } from 'src/models/Question.js'
 import VueKatex from 'src/components/VueKatex.vue'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import question from 'src/components/CommonComponents/Exam/Create/QuestionTemplate/Question.vue'
