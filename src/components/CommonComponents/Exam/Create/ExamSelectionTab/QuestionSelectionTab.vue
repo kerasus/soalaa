@@ -85,6 +85,7 @@
             <q-card-section class="filter-section q-mb-md">
               <q-btn icon="isax:setting-4"
                      class="filter-btn q-mt-md"
+                     flat
                      @click="showFilters = true" />
               <q-select
                 v-model="searchSelector"
@@ -844,6 +845,7 @@ export default {
 
       .filter-btn {
         display: none;
+        background-color: white;
         @media only screen and (max-width: 599px) {
           margin-right: 8px;
           width: 40px;
