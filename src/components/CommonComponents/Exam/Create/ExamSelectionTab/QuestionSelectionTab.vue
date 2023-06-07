@@ -64,15 +64,22 @@
               </q-input>
             </q-card-section>
 
-            <q-card-section class="filter-section">
-              <q-select v-model="searchSelector"
-                        filled
-                        dropdown-icon="isax:arrow-down-1"
-                        option-value="value"
-                        option-label="title"
-                        :options="searchInputOptions"
-                        class="backGround-gray-input filter-input"
-                        @update:model-value="sortByCreatedAt" />
+            <q-card-section class="filter-section q-mb-md">
+              <q-btn icon="isax:setting-4"
+                     class="filter-btn q-mt-md"
+                     flat
+                     @click="showFilters = true" />
+              <q-select
+                v-model="searchSelector"
+                filled
+                dropdown-icon="isax:arrow-down-1"
+                option-value="value"
+                option-label="title"
+                :options="searchInputOptions"
+                class="backGround-gray-input filter-input"
+                @update:model-value="sortByCreatedAt"
+              >
+              </q-select>
             </q-card-section>
           </q-card>
         </div>
@@ -138,16 +145,19 @@
                  @click="showFilters = false" />
         </div>
         <div class="full-width">
-          <question-filter ref="filter"
-                           :show-major-list="false"
-                           :mobile-mode="true"
-                           :availableSearchSingleNode="false"
-                           :filterQuestions="filterQuestions"
-                           :root-node-id-to-load="rootNodeIdInFilter"
-                           :node-ids-to-tick="selectedNodesIds"
-                           @tagsChanged="setSelectedTags"
-                           @onFilter="onFilter"
-                           @delete-filter="deleteFilterItem" />
+          <question-filter
+            ref="filter2"
+            :show-major-list="false"
+            :mobile-mode="true"
+            :availableSearchSingleNode="false"
+            :filterQuestions="filterQuestions"
+            :root-node-id-to-load="rootNodeIdInFilter"
+            :node-ids-to-tick="selectedNodesIds"
+            @tagsChanged="setSelectedTags"
+            @onFilter="onFilter"
+            @delete-filter="deleteFilterItem"
+            @update-selected-filters="updateSelectedFilters"
+          />
         </div>
       </div>
       <div class="action-buttons col-12">
@@ -352,8 +362,12 @@ export default {
     this.setupTreeModal()
   },
   methods: {
+    updateSelectedFilters(key, value) {
+      this.$refs.filter.changeFilterData(key, value)
+    },
     deleteAllFilters() {
       this.$refs.filter.deleteAllFilters()
+      this.$refs.filter2.deleteAllFilters()
     },
     showLoading() {
       this.$q.loading.show()
@@ -798,6 +812,17 @@ export default {
         min-height: 40px;
       }
 
+      .filter-btn {
+        display: none;
+        background-color: white;
+        @media only screen and (max-width: 599px) {
+          margin-right: 8px;
+          width: 40px;
+          height: 40px;
+          display: block;
+        }
+        }
+
       .filter-input {
         width: 160px;
         @media only screen and (max-width: 1023px) {
@@ -805,6 +830,7 @@ export default {
         }
         @media only screen and (max-width: 599px) {
           width: 100%;
+          margin-left: 8px;
           padding-top: 16px;
         }
       }
