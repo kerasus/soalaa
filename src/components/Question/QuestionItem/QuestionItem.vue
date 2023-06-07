@@ -48,14 +48,10 @@
         </div>
       </div>
 
-      <div
-        v-if="listConfig.questionSource || question.loading "
-        class="question-source col-xl-3 col-sm-4 col-xs-12"
-      >
-        <div
-          v-if="question.loading"
-          class="source-skeleton"
-        >
+      <div v-if="listConfig.questionSource || question.loading "
+           class="question-source col-xl-3 col-sm-4 col-xs-12">
+        <div v-if="question.loading"
+             class="source-skeleton">
           <div class="source-text">
             <q-skeleton type="text"
                         class="source-name"
@@ -198,8 +194,7 @@
             </div>
             <div v-else
                  class="answer-video flex items-center justify-center"
-                 :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
-            >
+                 :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}">
               <content-video-player v-if="content.hasVideoSource()"
                                     :content="content"
                                     :timePoint="questionTimePoint"

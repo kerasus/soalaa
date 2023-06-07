@@ -4,18 +4,16 @@
          :hidden="$q.screen.gt.sm">
       <div class="question-list">
         <div class="question-bank-toolbar">
-          <questions-general-info
-            v-model:check-box="checkBox"
-            v-model:show-filters="showFilters"
-            :loading="questionLoading"
-            :check-box="checkBox"
-            :selectedQuestions="providedExam.questions.list"
-            @remove="RemoveChoice"
-            @nextTab="goToNextStep"
-            @lastTab="goToPrevStep"
-            @deselectAllQuestions="deleteAllQuestions"
-            @selectAllQuestions="selectAllQuestions"
-          />
+          <questions-general-info v-model:check-box="checkBox"
+                                  v-model:show-filters="showFilters"
+                                  :loading="questionLoading"
+                                  :check-box="checkBox"
+                                  :selectedQuestions="providedExam.questions.list"
+                                  @remove="RemoveChoice"
+                                  @nextTab="goToNextStep"
+                                  @lastTab="goToPrevStep"
+                                  @deselectAllQuestions="deleteAllQuestions"
+                                  @selectAllQuestions="selectAllQuestions" />
         </div>
       </div>
     </div>
@@ -140,30 +138,26 @@
                  @click="showFilters = false" />
         </div>
         <div class="full-width">
-          <question-filter
-            ref="filter"
-            :show-major-list="false"
-            :mobile-mode="true"
-            :availableSearchSingleNode="false"
-            :filterQuestions="filterQuestions"
-            :root-node-id-to-load="rootNodeIdInFilter"
-            :node-ids-to-tick="selectedNodesIds"
-            @tagsChanged="setSelectedTags"
-            @onFilter="onFilter"
-            @delete-filter="deleteFilterItem"
-          />
+          <question-filter ref="filter"
+                           :show-major-list="false"
+                           :mobile-mode="true"
+                           :availableSearchSingleNode="false"
+                           :filterQuestions="filterQuestions"
+                           :root-node-id-to-load="rootNodeIdInFilter"
+                           :node-ids-to-tick="selectedNodesIds"
+                           @tagsChanged="setSelectedTags"
+                           @onFilter="onFilter"
+                           @delete-filter="deleteFilterItem" />
         </div>
       </div>
       <div class="action-buttons col-12">
         <div class="row justify-around">
           <div class="action-btn remove-all-button col-5"
-               @click="deleteAllFilters"
-          >
+               @click="deleteAllFilters">
             حذف همه
           </div>
           <div class="action-btn register-button col-5"
-               @click="showFilters = false"
-          >
+               @click="showFilters = false">
             اعمال فیلتر
           </div>
         </div>

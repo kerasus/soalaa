@@ -13,22 +13,16 @@
                      @click="showFiltersOnMobile()" />
             </div>
             <div class="row">
-              <div
-                class="general-info-button back-button"
-                @click="goToLastStep"
-              >
+              <div class="general-info-button back-button"
+                   @click="goToLastStep">
                 بازگشت
               </div>
-              <div
-                class="general-info-button next-button"
-                @click="goToNextStep"
-              >
+              <div class="general-info-button next-button"
+                   @click="goToNextStep">
                 مرحله بعد
 
-                <q-icon
-                  class="next-button-icon"
-                  name="isax:arrow-left"
-                />
+                <q-icon class="next-button-icon"
+                        name="isax:arrow-left" />
               </div>
             </div>
           </div>
@@ -180,10 +174,8 @@
     </div>
   </q-page-sticky>
 
-  <q-dialog
-    v-model="ToolbarDialog"
-    class="dialogueCard full-height"
-  >
+  <q-dialog v-model="ToolbarDialog"
+            class="dialogueCard full-height">
     <q-card class="dialogueCardContainer">
       <div v-if="!finalApprovalMode"
            class="dialogHeader">
