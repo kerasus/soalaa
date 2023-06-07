@@ -8,22 +8,30 @@
       <template v-slot:header>
         <q-card-section class="general-info-expansion-header">
           <div class="general-info-buttons">
-            <div
-              class="general-info-button back-button"
-              @click="goToLastStep"
-            >
-              بازگشت
+            <div class="filter">
+              <q-btn icon="isax:setting-4"
+                     flat
+                     label="فیلتر"
+                     @click="showFiltersOnMobile()" />
             </div>
-            <div
-              class="general-info-button next-button"
-              @click="goToNextStep"
-            >
-              مرحله بعد
+            <div class="row">
+              <div
+                class="general-info-button back-button"
+                @click="goToLastStep"
+              >
+                بازگشت
+              </div>
+              <div
+                class="general-info-button next-button"
+                @click="goToNextStep"
+              >
+                مرحله بعد
 
-              <q-icon
-                class="next-button-icon"
-                name="isax:arrow-left"
-              />
+                <q-icon
+                  class="next-button-icon"
+                  name="isax:arrow-left"
+                />
+              </div>
             </div>
           </div>
 
@@ -200,7 +208,7 @@
 
   <q-dialog
     v-model="ToolbarDialog"
-    class="dialogueCard"
+    class="dialogueCard full-height"
   >
     <q-card class="dialogueCardContainer">
       <div v-if="!finalApprovalMode"
@@ -311,6 +319,10 @@ export default {
   components: { highcharts: Chart },
 
   props: {
+    showFilters: {
+      type: Boolean,
+      default: false
+    },
     examInformation: {
       type: Object,
       default: () => {
@@ -463,6 +475,9 @@ export default {
   },
 
   methods: {
+    showFiltersOnMobile() {
+      this.$emit('update:showFilters', true)
+    },
     goToLastStep () {
       this.$emit('lastTab')
     },
@@ -540,9 +555,16 @@ export default {
       display: flex;
       align-items: center;
 
+      .filter {
+        display: none;
+      }
       @media only screen and (max-width: 1023px) {
-        justify-content: left;
+        justify-content: space-between;
         margin-right: -68px;
+
+        .filter {
+          display: block;
+        }
       }
 
       .general-info-button {
