@@ -160,35 +160,8 @@
           </div>
         </div>
       </div>
-      <div
-        v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-        class="question-tags ellipsis col-sm-6 col-xs-10"
-      >
-        <div v-for="i in 3"
-             :key="i">
-          <q-skeleton
-            v-if="question.loading"
-            class="info-title q-mx-sm"
-            type="text"
-            width="80px"
-          />
-        </div>
-        <div
-          v-for="(item, index) in question.tags.list"
-          :key="index"
-          class="question-tag"
-        >
-          <div v-for="(ancestor,ancestorIndex) in item.ancestors"
-               :key="ancestorIndex"
-               class="ancestors flex flex-center">
-            <div v-if="ancestorIndex !== 0"
-                 class="tag-title ellipsis">{{ ancestor.title }}</div>
-            <div v-if="ancestorIndex !== 0"
-                 class="tag-circle" />
-          </div>
-          <div class="tag-title ellipsis">{{ item.title }}</div>
-        </div>
-      </div>
+      <tags-component :question="question"
+                      :list-config="listConfig" />
     </q-card-section>
 
     <q-card-section
@@ -462,13 +435,15 @@ import { Question } from 'src/models/Question.js'
 import API_ADDRESS from 'src/api/Addresses.js'
 import { Content } from 'src/models/Content.js'
 import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
+import tagsComponent from 'components/CommonComponents/Exam/Create/QuestionTemplate/tagsComponent'
 
 export default {
   name: 'QuestionItem',
   components: {
     VueKatex,
     question,
-    ContentVideoPlayer
+    ContentVideoPlayer,
+    tagsComponent
   },
   props: {
     questionsLength: {
