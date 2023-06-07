@@ -1,9 +1,7 @@
 <template>
-  <div
-    v-for="(item, index) in tags"
-    :key="index"
-    class="question-tag ellipsis"
-  >
+  <div v-for="(item, index) in tags"
+       :key="index"
+       class="question-tag ellipsis">
     <span v-for="(ancestor,ancestorIndex) in item.ancestors"
           :key="ancestorIndex"
           class="ancestors">

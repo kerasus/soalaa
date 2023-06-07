@@ -69,17 +69,14 @@
                      class="filter-btn q-mt-md"
                      flat
                      @click="showFilters = true" />
-              <q-select
-                v-model="searchSelector"
-                filled
-                dropdown-icon="isax:arrow-down-1"
-                option-value="value"
-                option-label="title"
-                :options="searchInputOptions"
-                class="backGround-gray-input filter-input"
-                @update:model-value="sortByCreatedAt"
-              >
-              </q-select>
+              <q-select v-model="searchSelector"
+                        filled
+                        dropdown-icon="isax:arrow-down-1"
+                        option-value="value"
+                        option-label="title"
+                        :options="searchInputOptions"
+                        class="backGround-gray-input filter-input"
+                        @update:model-value="sortByCreatedAt" />
             </q-card-section>
           </q-card>
         </div>
@@ -145,19 +142,17 @@
                  @click="showFilters = false" />
         </div>
         <div class="full-width">
-          <question-filter
-            ref="filter2"
-            :show-major-list="false"
-            :mobile-mode="true"
-            :availableSearchSingleNode="false"
-            :filterQuestions="filterQuestions"
-            :root-node-id-to-load="rootNodeIdInFilter"
-            :node-ids-to-tick="selectedNodesIds"
-            @tagsChanged="setSelectedTags"
-            @onFilter="onFilter"
-            @delete-filter="deleteFilterItem"
-            @update-selected-filters="updateSelectedFilters"
-          />
+          <question-filter ref="filter2"
+                           :show-major-list="false"
+                           :mobile-mode="true"
+                           :availableSearchSingleNode="false"
+                           :filterQuestions="filterQuestions"
+                           :root-node-id-to-load="rootNodeIdInFilter"
+                           :node-ids-to-tick="selectedNodesIds"
+                           @tagsChanged="setSelectedTags"
+                           @onFilter="onFilter"
+                           @delete-filter="deleteFilterItem"
+                           @update-selected-filters="updateSelectedFilters" />
         </div>
       </div>
       <div class="action-buttons col-12">
