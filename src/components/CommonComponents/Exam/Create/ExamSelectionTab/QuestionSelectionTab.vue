@@ -82,7 +82,10 @@
               </q-input>
             </q-card-section>
 
-            <q-card-section class="filter-section">
+            <q-card-section class="filter-section q-mb-md">
+              <q-btn icon="isax:setting-4"
+                     class="filter-btn q-mt-md"
+                     @click="showFilters = true" />
               <q-select
                 v-model="searchSelector"
                 filled
@@ -172,7 +175,7 @@
         </div>
         <div class="full-width">
           <question-filter
-            ref="filter"
+            ref="filter2"
             :show-major-list="false"
             :mobile-mode="true"
             :availableSearchSingleNode="false"
@@ -182,6 +185,7 @@
             @tagsChanged="setSelectedTags"
             @onFilter="onFilter"
             @delete-filter="deleteFilterItem"
+            @update-selected-filters="updateSelectedFilters"
           />
         </div>
       </div>
@@ -390,8 +394,12 @@ export default {
     }
   },
   methods: {
+    updateSelectedFilters(key, value) {
+      this.$refs.filter.changeFilterData(key, value)
+    },
     deleteAllFilters() {
       this.$refs.filter.deleteAllFilters()
+      this.$refs.filter2.deleteAllFilters()
     },
     showLoading() {
       this.$q.loading.show()
@@ -834,6 +842,16 @@ export default {
         min-height: 40px;
       }
 
+      .filter-btn {
+        display: none;
+        @media only screen and (max-width: 599px) {
+          margin-right: 8px;
+          width: 40px;
+          height: 40px;
+          display: block;
+        }
+        }
+
       .filter-input {
         width: 160px;
         @media only screen and (max-width: 1023px) {
@@ -841,6 +859,7 @@ export default {
         }
         @media only screen and (max-width: 599px) {
           width: 100%;
+          margin-left: 8px;
           padding-top: 16px;
         }
       }
