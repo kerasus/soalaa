@@ -53,12 +53,12 @@ export default class ContentAPI extends APIRepository {
     }
   }
 
-  show(data, cache = { TTL: 100 }) {
+  show(contentId, cache = { TTL: 100 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: alaaApiInstance,
-      request: this.APIAdresses.show(data),
-      cacheKey: this.CacheList.show(data),
+      request: this.APIAdresses.show(contentId),
+      cacheKey: this.CacheList.show(contentId),
       ...(cache && { cache }),
       resolveCallback: (response) => {
         return new Content(response?.data?.data)

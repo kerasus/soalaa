@@ -168,8 +168,7 @@
 
           <div class="description-answer-video">
             <div class="answer-video flex items-center justify-center"
-                 :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
-            >
+                 :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}">
               <content-video-player v-if="content.hasVideoSource()"
                                     :content="content"
                                     :timePoint="questionTimePoint"
@@ -221,15 +220,13 @@
                class="report-button"
                @click="reportProblemDialog.show = true" />
 
-        <q-btn
-          v-if="listConfig.descriptiveAnswer"
-          flat
-          role="presentation"
-          class="see-answer-button no-padding"
-          :label="descriptiveAnswerExpanded ? '' : ''"
-          :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-          @click="toggleContent"
-        >
+        <q-btn v-if="listConfig.descriptiveAnswer"
+               flat
+               role="presentation"
+               class="see-answer-button no-padding"
+               :label="descriptiveAnswerExpanded ? '' : ''"
+               :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
+               @click="toggleContent">
           <span v-if="descriptiveAnswerExpanded">
             پاسخ تشریحی
             <!--            بستن پاسخ تشریحی-->
@@ -303,6 +300,7 @@
 import { Content } from 'src/models/Content.js'
 import { Question } from 'src/models/Question.js'
 import VueKatex from 'src/components/VueKatex.vue'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import question from 'src/components/CommonComponents/Exam/Create/QuestionTemplate/Question.vue'
@@ -585,9 +583,9 @@ export default {
         return
       }
       this.contentLoading = true
-      this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
-        .then(res => {
-          this.content = new Content(res.data.data)
+      APIGateway.content.show(this.question.content_id)
+        .then(content => {
+          this.content = content
           this.getTimePoints()
           this.contentLoading = false
         })
