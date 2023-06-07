@@ -160,8 +160,8 @@
           </div>
         </div>
       </div>
-      <tags-component :question="question"
-                      :list-config="listConfig" />
+      <question-tags :question="question"
+                     :list-config="listConfig" />
     </q-card-section>
 
     <q-card-section
@@ -435,7 +435,7 @@ import { Question } from 'src/models/Question.js'
 import API_ADDRESS from 'src/api/Addresses.js'
 import { Content } from 'src/models/Content.js'
 import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
-import tagsComponent from 'components/CommonComponents/Exam/Create/QuestionTemplate/tagsComponent'
+import QuestionTags from 'components/CommonComponents/Exam/Create/QuestionTags/QuestionTags'
 
 export default {
   name: 'QuestionItem',
@@ -443,7 +443,7 @@ export default {
     VueKatex,
     question,
     ContentVideoPlayer,
-    tagsComponent
+    QuestionTags
   },
   props: {
     questionsLength: {

@@ -3,7 +3,7 @@
     class="question-card custom-card"
     :class="{ 'selected': ( selected || question.selected) && !finalApprovalMode }"
   >
-    <q-resize-observer @resize="onResize" />
+    <!--    <q-resize-observer @resize="onResize" />-->
     <q-card-section class="question-card-header items-center row">
       <div class="question-info col-xl-9 col-sm-8 col-xs-12">
         <div
@@ -135,8 +135,8 @@
           </div>
         </div>
       </div>
-      <tags-component :question="question"
-                      :list-config="listConfig" />
+      <question-tags :question="question"
+                     :list-config="listConfig" />
     </q-card-section>
 
     <q-card-section
@@ -369,7 +369,7 @@ import API_ADDRESS from 'src/api/Addresses'
 import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import { Content } from 'src/models/Content.js'
 import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
-import tagsComponent from 'components/CommonComponents/Exam/Create/QuestionTemplate/tagsComponent'
+import QuestionTags from 'components/CommonComponents/Exam/Create/QuestionTags/QuestionTags'
 
 export default {
   name: 'QuestionItem',
@@ -377,7 +377,7 @@ export default {
     VueKatex,
     question,
     ContentVideoPlayer,
-    tagsComponent
+    QuestionTags
     // VideoPlayer
   },
   props: {
