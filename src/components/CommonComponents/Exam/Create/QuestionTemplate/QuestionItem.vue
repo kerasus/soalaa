@@ -168,13 +168,15 @@
 
           <div class="description-answer-video">
             <div class="answer-video flex items-center justify-center"
-                 :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}">
-              <div class="soon flex items-center justify-center">
-                به زودی
+                 :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
+            >
+              <content-video-player v-if="content.hasVideoSource()"
+                                    :content="content"
+                                    :timePoint="questionTimePoint"
+                                    :nextTimePoint="nextTimePoint" />
+              <div v-else>
+                ویدیویی وجود ندارد!
               </div>
-
-              <!--              ToDo : uncomment this when backend give you a valid key-->
-              <!--              <video-player />-->
             </div>
 
             <div class="answer-video-title">
@@ -219,13 +221,15 @@
                class="report-button"
                @click="reportProblemDialog.show = true" />
 
-        <q-btn v-if="listConfig.descriptiveAnswer"
-               flat
-               role="presentation"
-               class="see-answer-button no-padding"
-               :label="descriptiveAnswerExpanded ? '' : ''"
-               :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-               @click="descriptiveAnswerExpanded = !descriptiveAnswerExpanded">
+        <q-btn
+          v-if="listConfig.descriptiveAnswer"
+          flat
+          role="presentation"
+          class="see-answer-button no-padding"
+          :label="descriptiveAnswerExpanded ? '' : ''"
+          :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
+          @click="toggleContent"
+        >
           <span v-if="descriptiveAnswerExpanded">
             پاسخ تشریحی
             <!--            بستن پاسخ تشریحی-->
@@ -296,15 +300,19 @@
 </template>
 
 <script>
+import { Content } from 'src/models/Content.js'
 import { Question } from 'src/models/Question.js'
 import VueKatex from 'src/components/VueKatex.vue'
-import question from 'components/CommonComponents/Exam/Create/QuestionTemplate/Question.vue'
+import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
+import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
+import question from 'src/components/CommonComponents/Exam/Create/QuestionTemplate/Question.vue'
 
 export default {
   name: 'QuestionItem',
   components: {
     VueKatex,
-    question
+    question,
+    ContentVideoPlayer
     // VideoPlayer
   },
   props: {
@@ -364,6 +372,7 @@ export default {
   emits: ['checkSelect', 'changeOrder'],
   data () {
     return {
+      contentLoading: false,
       questionChoiceList: [],
       confirmQuestion: false,
       descriptiveAnswerExpanded: false,
@@ -424,7 +433,10 @@ export default {
         problemType: '',
         options: [],
         description: ''
-      }
+      },
+      content: new Content(),
+      questionTimePoint: new ContentTimePoint(),
+      nextTimePoint: new ContentTimePoint()
     }
   },
   computed: {
@@ -561,6 +573,34 @@ export default {
           message: 'مشکلی به وجود آمده.'
         })
       }
+    },
+    toggleContent() {
+      this.listConfig.questionAnswerExpanded = !this.listConfig.questionAnswerExpanded
+      if (this.listConfig.questionAnswerExpanded) {
+        this.getQuestionContent()
+      }
+    },
+    getQuestionContent() {
+      if (!this.question.content_id) {
+        return
+      }
+      this.contentLoading = true
+      this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
+        .then(res => {
+          this.content = new Content(res.data.data)
+          this.getTimePoints()
+          this.contentLoading = false
+        })
+        .catch(() => {
+          this.contentLoading = false
+        })
+    },
+    getTimePoints() {
+      this.questionTimePoint = this.content.timepoints.list.find(x => x.id === this.question.time_point_id)
+      const timePointList = this.content.timepoints.list
+      timePointList.sort((a, b) => (a.time > b.time ? 1 : -1))
+      const timePointIndex = timePointList.findIndex(x => x.id === this.question.time_point_id) + 1
+      this.nextTimePoint = timePointList[timePointIndex]
     }
   }
 }
@@ -682,7 +722,7 @@ export default {
       min-height: 36px;
 
       @media only screen and (max-width: 599px) {
-        order: 2;
+        //order: 2;
       }
       .source-content,
       .source-skeleton {
