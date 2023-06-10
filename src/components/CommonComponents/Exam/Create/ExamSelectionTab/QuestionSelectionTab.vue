@@ -5,6 +5,7 @@
       <div class="question-list">
         <div class="question-bank-toolbar">
           <questions-general-info v-model:check-box="checkBox"
+                                  v-model:show-filters="showFilters"
                                   :loading="questionLoading"
                                   :check-box="checkBox"
                                   :selectedQuestions="providedExam.questions.list"
@@ -63,7 +64,11 @@
               </q-input>
             </q-card-section>
 
-            <q-card-section class="filter-section">
+            <q-card-section class="filter-section q-mb-md">
+              <q-btn icon="isax:setting-4"
+                     class="filter-btn q-mt-md"
+                     flat
+                     @click="showFilters = true" />
               <q-select v-model="searchSelector"
                         filled
                         dropdown-icon="isax:arrow-down-1"
@@ -122,6 +127,48 @@
       </template>
     </tree-modal>
   </div>
+
+  <q-dialog v-model="showFilters"
+            class="dialog-container">
+    <div class="dialog-filter q-pa-md row justify-between">
+      <div class="col-12">
+        <div class="row header-buttons justify-between">
+          <div class="title">
+            فیلتر سوالات
+          </div>
+          <q-btn icon-right="isax:arrow-left"
+                 flat
+                 label="بازگشت"
+                 @click="showFilters = false" />
+        </div>
+        <div class="full-width">
+          <question-filter ref="filter2"
+                           :show-major-list="false"
+                           :mobile-mode="true"
+                           :availableSearchSingleNode="false"
+                           :filterQuestions="filterQuestions"
+                           :root-node-id-to-load="rootNodeIdInFilter"
+                           :node-ids-to-tick="selectedNodesIds"
+                           @tagsChanged="setSelectedTags"
+                           @onFilter="onFilter"
+                           @delete-filter="deleteFilterItem"
+                           @update-selected-filters="updateSelectedFilters" />
+        </div>
+      </div>
+      <div class="action-buttons col-12">
+        <div class="row justify-around">
+          <div class="action-btn remove-all-button col-5"
+               @click="deleteAllFilters">
+            حذف همه
+          </div>
+          <div class="action-btn register-button col-5"
+               @click="showFilters = false">
+            اعمال فیلتر
+          </div>
+        </div>
+      </div>
+    </div>
+  </q-dialog>
 </template>
 
 <script>
@@ -171,6 +218,7 @@ export default {
 
   data() {
     return {
+      showFilters: false,
       treeKey: 0,
       searchInput: '',
       searchSelector: {
@@ -309,6 +357,13 @@ export default {
     this.setupTreeModal()
   },
   methods: {
+    updateSelectedFilters(key, value) {
+      this.$refs.filter.changeFilterData(key, value)
+    },
+    deleteAllFilters() {
+      this.$refs.filter.deleteAllFilters()
+      this.$refs.filter2.deleteAllFilters()
+    },
     showLoading() {
       this.$q.loading.show()
     },
@@ -391,7 +446,6 @@ export default {
       this.$apiGateway.question.getLevels()
         .then(options => {
           this.filterQuestions.level_type = options
-          this.addTypeToFilter('level_type')
         })
         .catch()
     },
@@ -401,8 +455,13 @@ export default {
     goToNextStep() {
       this.$emit('nextTab')
     },
+    SyncTreeSelectedNodesWithFilters(filterData) {
+      this.selectedNodes = filterData.tags
+      this.selectedNodesIds = this.selectedNodes.map(node => node.id)
+    },
     onFilter(filterData) {
       // this.$emit('onFilter', filterData)
+      this.SyncTreeSelectedNodesWithFilters(filterData)
       this.filterData = this.getFiltersForRequest(filterData)
       this.getQuestionData(1, this.filterData)
     },
@@ -520,11 +579,6 @@ export default {
           })
         })
     },
-    addTypeToFilter(filter) {
-      this.filterQuestions[filter].forEach(item => {
-        item.type = filter
-      })
-    },
     selectAllQuestions() {
       this.selectedQuestions = []
       this.questions.list.forEach(question => {
@@ -611,6 +665,58 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dialog-container {
+
+  .dialog-filter {
+    //display: flex;
+    //flex-direction: column;
+    background-color: #E5E5E5;
+    height: 100%;
+    .header-buttons {
+      align-items: center;
+      margin-bottom: 31px;
+      .title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 25px;
+        color: #3F456F;
+      }
+    }
+    .action-buttons {
+      align-self: flex-end;
+      .action-btn {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        height: 40px;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 22px;
+        text-align: center;
+        letter-spacing: -0.03em;
+        cursor: pointer;
+        z-index: 2;
+
+        &.remove-all-button {
+          border: 1px solid #E86562;
+          background: #F4F5F6;
+          color: #E86562;
+          //margin-right: 30px;
+        }
+
+        &.register-button {
+          background: #9690E4;
+          color: #FFFFFF;
+        }
+      }
+    }
+  }
+}
+
 .filter-card-container {
   padding-bottom: 24px;
   @media only screen and (max-width: 1439px) {
@@ -701,6 +807,17 @@ export default {
         min-height: 40px;
       }
 
+      .filter-btn {
+        display: none;
+        background-color: white;
+        @media only screen and (max-width: 599px) {
+          margin-right: 8px;
+          width: 40px;
+          height: 40px;
+          display: block;
+        }
+        }
+
       .filter-input {
         width: 160px;
         @media only screen and (max-width: 1023px) {
@@ -708,6 +825,7 @@ export default {
         }
         @media only screen and (max-width: 599px) {
           width: 100%;
+          margin-left: 8px;
           padding-top: 16px;
         }
       }
