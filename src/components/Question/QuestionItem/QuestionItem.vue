@@ -70,7 +70,7 @@
 
       <div
         v-if="listConfig.questionSource || question.loading "
-        class="question-source col-xl-3 col-sm-4 col-xs-6"
+        class="question-source col-xl-3 col-sm-4 col-xs-12"
       >
         <div
           v-if="question.loading"
@@ -160,35 +160,8 @@
           </div>
         </div>
       </div>
-      <div
-        v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-        class="question-tags ellipsis col-sm-6 col-xs-10"
-      >
-        <div v-for="i in 3"
-             :key="i">
-          <q-skeleton
-            v-if="question.loading"
-            class="info-title q-mx-sm"
-            type="text"
-            width="80px"
-          />
-        </div>
-        <div
-          v-for="(item, index) in question.tags.list"
-          :key="index"
-          class="question-tag"
-        >
-          <div v-for="(ancestor,ancestorIndex) in item.ancestors"
-               :key="ancestorIndex"
-               class="ancestors flex flex-center">
-            <div v-if="ancestorIndex !== 0"
-                 class="tag-title ellipsis">{{ ancestor.title }}</div>
-            <div v-if="ancestorIndex !== 0"
-                 class="tag-circle" />
-          </div>
-          <div class="tag-title ellipsis">{{ item.title }}</div>
-        </div>
-      </div>
+      <question-tags :question="question"
+                     :list-config="listConfig" />
     </q-card-section>
 
     <q-card-section
@@ -269,9 +242,13 @@
                  class="answer-video flex items-center justify-center"
                  :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
             >
-              <content-video-player :content="content"
+              <content-video-player v-if="content.hasVideoSource()"
+                                    :content="content"
                                     :timePoint="questionTimePoint"
                                     :nextTimePoint="nextTimePoint" />
+              <div v-else>
+                ویدیویی وجود ندارد!
+              </div>
             </div>
 
             <div class="answer-video-title">
@@ -458,13 +435,15 @@ import { Question } from 'src/models/Question.js'
 import API_ADDRESS from 'src/api/Addresses.js'
 import { Content } from 'src/models/Content.js'
 import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
+import QuestionTags from 'components/CommonComponents/Exam/Create/QuestionTags/QuestionTags'
 
 export default {
   name: 'QuestionItem',
   components: {
     VueKatex,
     question,
-    ContentVideoPlayer
+    ContentVideoPlayer,
+    QuestionTags
   },
   props: {
     questionsLength: {
@@ -900,7 +879,7 @@ export default {
       min-height: 36px;
 
       @media only screen and (max-width: 599px) {
-        order: 2;
+        //order: 2;
       }
       .source-content,
       .source-skeleton {
