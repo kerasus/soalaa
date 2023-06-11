@@ -172,13 +172,7 @@
       >
         <q-option-group
           v-model="selectedReportType"
-          type="checkbox"
-          :options="filterQuestions.report_type.map(option => {
-            return {
-              label: option.value,
-              value: option
-            }
-          })"
+          :options="singleModeFilterOptions('report_type', 'value')"
           @update:model-value="onChangeReportTypes"
         />
         <div v-if="filterQuestions.report_type.length === 0"> هیچ نوع خطایی ایجاد نشده است</div>
@@ -340,13 +334,7 @@
       >
         <q-option-group
           v-model="selectedReportType"
-          type="checkbox"
-          :options="filterQuestions.report_type.map(option => {
-            return {
-              label: option.value,
-              value: option
-            }
-          })"
+          :options="singleModeFilterOptions('question_report_type', 'value')"
           @update:model-value="onChangeReportTypes"
         />
         <div v-if="filterQuestions.report_type.length === 0"> هیچ نوع خطایی ایجاد نشده است</div>
@@ -454,7 +442,7 @@ export default {
       selectedMajors: [],
       selectedLevels: [],
       type_id: {},
-      selectedReportType: [],
+      selectedReportType: {},
       report_status: {},
       selectedTags: [],
       selectedStatuses: [],
@@ -466,9 +454,9 @@ export default {
         level_type: [],
         years: [],
         type_id: '',
-        report_type: [],
+        report_type: '',
         statuses: [],
-        question_report_type: [],
+        question_report_type: '',
         report_status: '',
         tags_with_childrens: 1
       }
@@ -594,6 +582,7 @@ export default {
       this.changeFilterData('type_id', value)
     },
     onChangeReportTypes (value) {
+      console.log(value)
       this.changeFilterData('question_report_type', value)
     },
     onChangeErrorStatus(value) {
@@ -634,7 +623,7 @@ export default {
       this.filtersData.level_type.splice(0, this.filtersData.level_type.length)
       this.filtersData.years.splice(0, this.filtersData.years.length)
       this.filtersData.majors.splice(0, this.filtersData.majors.length)
-      this.filtersData.question_report_type.splice(0, this.filtersData.question_report_type.length)
+      this.filtersData.question_report_type = ''
       this.filtersData.type_id = ''
       this.filtersData.report_status = ''
       this.filtersData.statuses.splice(0, this.filtersData.statuses.length)
