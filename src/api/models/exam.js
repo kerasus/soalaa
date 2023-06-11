@@ -2,6 +2,7 @@ import APIRepository from '../classes/APIRepository'
 import { appApiInstance } from 'src/boot/axios'
 import { Exam, ExamList } from 'src/models/Exam.js'
 import { QuestionList } from 'src/models/Question'
+import { UserExamData } from 'src/models/UserExamData'
 
 const APIAdresses = {
   exportExcel: '/exam?excel_export=1',
@@ -196,7 +197,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.getAnswerOfUserWithCorrect(data),
       resolveCallback: (response) => {
-        return response
+        return new Exam(response.data.data.exam)
       },
       rejectCallback: (error) => {
         return error
@@ -210,7 +211,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.report.adminGetReport,
       resolveCallback: (response) => {
-        return response
+        return response.data.data // String (report)
       },
       rejectCallback: (error) => {
         return error
@@ -225,7 +226,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.report.getReport(userExamId),
       resolveCallback: (response) => {
-        return response
+        return response.data.data // String (report)
       },
       rejectCallback: (error) => {
         return error
@@ -239,7 +240,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.user.reportType,
       resolveCallback: (response) => {
-        return response.data.data
+        return response.data.data // Report Type List
       },
       rejectCallback: (error) => {
         return error
@@ -255,7 +256,7 @@ export default class ExamAPI extends APIRepository {
       cacheKey: this.CacheList.user.report(data.examId),
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data // String
+        return response.data.data // String Message
       },
       rejectCallback: (error) => {
         return error
@@ -272,7 +273,19 @@ export default class ExamAPI extends APIRepository {
       cacheKey: this.CacheList.user.examInfo(data.examId),
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data // Exam Info
+        // return Exam Info
+        return {
+          title: response.data?.data?.title,
+          temp: {
+            grade: {
+              title: response.data?.data?.temp?.grade?.title
+            },
+            major: {
+              title: response.data?.data?.temp?.major?.title
+            }
+          },
+          n_questions: response.data?.data?.n_questions
+        }
       },
       rejectCallback: (error) => {
         return error
@@ -301,10 +314,10 @@ export default class ExamAPI extends APIRepository {
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.getAllAnswerOfUser(userExamId),
-      cacheKey: this.CacheList.user.getAllAnswerOfUser(userExamId),
+      cacheKey: this.CacheList.getAllAnswerOfUser(userExamId),
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response
+        return new UserExamData(response.data.data)
       },
       rejectCallback: (error) => {
         return error
@@ -320,7 +333,7 @@ export default class ExamAPI extends APIRepository {
       cacheKey: this.CacheList.user.examUserAfterExam(userExamId),
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response
+        return new UserExamData(response.data.data)
       },
       rejectCallback: (error) => {
         return error
@@ -334,7 +347,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: data.personal ? this.APIAdresses.participate.personal(data.examId) : this.APIAdresses.participate.sample(data.examId),
       resolveCallback: (response) => {
-        return response.data.data?.redirect_url
+        return new UserExamData(response.data.data)
       },
       rejectCallback: (error) => {
         return error
@@ -364,7 +377,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.generateExamFile(data.examId, data.withAnswer),
       resolveCallback: (response) => {
-        return response // String
+        return response.data // String Message "done"
       },
       rejectCallback: (error) => {
         return error
@@ -378,7 +391,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.sendAnswers,
       resolveCallback: (response) => {
-        return response // String
+        return response.data // String Massage
       },
       rejectCallback: (error) => {
         return error
@@ -513,7 +526,7 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.konkurTakhminRotbe(data.examId),
       resolveCallback: (response) => {
-        return response.data.ranks // String
+        return response.data.ranks // list of { title,rank }
       },
       rejectCallback: (error) => {
         return error
@@ -528,7 +541,11 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.takhminRotbe,
       resolveCallback: (response) => {
-        return response.data // object that contains main&sub_category&Zirgorooh
+        return {
+          main: response.data.main,
+          sub_category: response.data.sub_category,
+          zirgorooh: response.data.zirgorooh
+        }
       },
       rejectCallback: (error) => {
         return error
