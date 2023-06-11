@@ -204,7 +204,7 @@ export default class QuestionAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.detach(data.questionId),
       resolveCallback: (response) => {
-        return response.data
+        return response.data // String Message
       },
       rejectCallback: (error) => {
         return error
