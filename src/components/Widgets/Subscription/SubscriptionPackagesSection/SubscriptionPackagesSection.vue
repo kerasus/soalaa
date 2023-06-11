@@ -45,7 +45,6 @@
               <q-btn class="package-item-action-btn"
                      label="شروع کنید"
                      unelevated
-                     disable
                      :loading="subscribeLoading"
                      @click="subscribe(item.id)"
               />
