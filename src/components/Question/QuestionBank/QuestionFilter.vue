@@ -571,6 +571,9 @@ export default {
       this.filtersData[key] = value
       this.updateSelectedFiltersObject(key)
       this.onUpdateFilterData()
+      if (this.mobileMode) {
+        this.$emit('updateSelectedFilters', key, value)
+      }
     },
     onChangeReference (value) {
       this.changeFilterData('reference', value)

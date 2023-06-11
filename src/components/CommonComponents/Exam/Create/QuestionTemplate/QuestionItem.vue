@@ -3,7 +3,7 @@
     class="question-card custom-card"
     :class="{ 'selected': ( selected || question.selected) && !finalApprovalMode }"
   >
-    <q-resize-observer @resize="onResize" />
+    <!--    <q-resize-observer @resize="onResize" />-->
     <q-card-section class="question-card-header items-center row">
       <div class="question-info col-xl-9 col-sm-8 col-xs-12">
         <div
@@ -135,35 +135,8 @@
           </div>
         </div>
       </div>
-      <div
-        v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-        class="question-tags ellipsis col-sm-12 col-xs-12"
-      >
-        <div v-for="i in 3"
-             :key="i">
-          <q-skeleton
-            v-if="question.loading"
-            class="info-title q-mx-sm"
-            type="text"
-            width="80px"
-          />
-        </div>
-        <div
-          v-for="(item, index) in question.tags.list"
-          :key="index"
-          class="question-tag"
-        >
-          <div v-for="(ancestor,ancestorIndex) in item.ancestors"
-               :key="ancestorIndex"
-               class="ancestors flex flex-center">
-            <div v-if="ancestorIndex !== 0"
-                 class="tag-title ellipsis">{{ ancestor.title }}</div>
-            <div v-if="ancestorIndex !== 0"
-                 class="tag-circle" />
-          </div>
-          <div class="tag-title ellipsis">{{ item.title }}</div>
-        </div>
-      </div>
+      <question-tags :question="question"
+                     :list-config="listConfig" />
     </q-card-section>
 
     <q-card-section
@@ -396,13 +369,15 @@ import API_ADDRESS from 'src/api/Addresses'
 import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import { Content } from 'src/models/Content.js'
 import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
+import QuestionTags from 'components/CommonComponents/Exam/Create/QuestionTags/QuestionTags'
 
 export default {
   name: 'QuestionItem',
   components: {
     VueKatex,
     question,
-    ContentVideoPlayer
+    ContentVideoPlayer,
+    QuestionTags
     // VideoPlayer
   },
   props: {
@@ -848,53 +823,6 @@ export default {
             border-radius: 50%;
             background: #9690E4;
           }
-        }
-      }
-    }
-  }
-  .question-tags {
-    display: flex;
-    flex-direction: column;
-    margin-top: 16px;
-
-    @media only screen and (max-width: 1439px) {
-      margin-top: 20px;
-    }
-
-    @media screen and (max-width: 599px) {
-      flex-direction: column;
-      margin-top: 0;
-    }
-
-    .question-tag {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 12px;
-      line-height: 19px;
-      color: #434765;
-
-      .tag-title{
-        @media screen and (max-width: 599px){
-          order: 2;
-        }
-        div{
-          max-width: 99px;
-        }
-      }
-
-      .tag-circle {
-        border-radius: 50%;
-        margin: 0 6px;
-        width: 6px;
-        height: 6px;
-        background: #6D708B;
-        opacity: 0.3;
-        @media screen and (max-width: 599px){
-          order: 1;
-
         }
       }
     }

@@ -608,6 +608,10 @@ export default {
     background: transparent;
     padding: 30px 0 0 0;
 
+    .scroll {
+      overflow-x: hidden;
+    }
+
     .q-tab-panel {
       padding: 0;
     }
