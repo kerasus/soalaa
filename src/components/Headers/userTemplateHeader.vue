@@ -305,7 +305,7 @@
 <script>
 import { copyToClipboard } from 'quasar'
 import { mixinPageBuilder } from 'src/mixin/Mixins.js'
-import UserLayoutHeader from 'src/mixin/UserLayoutHeader'
+import UserLayoutHeader from 'src/mixin/UserLayoutHeader.js'
 // import { mapGetters, mapMutations } from 'vuex'
 
 export default {
