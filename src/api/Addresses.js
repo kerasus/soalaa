@@ -275,8 +275,8 @@ const API_ADDRESS = {
           singleMode: false
         },
         {
-          key: 'question_report_type',
-          singleMode: false
+          key: 'report_type',
+          singleMode: true
         },
         {
           key: 'sort_by',
