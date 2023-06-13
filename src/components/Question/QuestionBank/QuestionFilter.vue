@@ -582,7 +582,6 @@ export default {
       this.changeFilterData('type_id', value)
     },
     onChangeReportTypes (value) {
-      console.log(value)
       this.changeFilterData('question_report_type', value)
     },
     onChangeErrorStatus(value) {
