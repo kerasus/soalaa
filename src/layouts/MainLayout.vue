@@ -68,8 +68,8 @@
         <q-dialog v-model="loginDialog">
           <auth />
         </q-dialog>
-        <router :include="keepAliveComponents" />
-        <floating-action-button v-if="user.hasPermission('examStore') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams' || $route.name === 'Public.Product.Show')" />
+        <Router :include="keepAliveComponents" />
+        <floating-action-button v-if="user.hasPermission('editeSoalaSiteSetting') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams' || $route.name === 'Public.Product.Show')" />
       </div>
     </template>
     <template #footer>
@@ -81,11 +81,11 @@
 <script>
 import { User } from 'src/models/User.js'
 import { defineAsyncComponent } from 'vue'
-import MainFooter from 'components/Layout/Footer/main.vue'
-import KeepAliveComponents from 'assets/js/KeepAliveComponents.js'
-import QuasarTemplateBuilder from 'quasar-template-builder/src/quasar-template-builder.vue'
 import Router from 'src/router/Router.vue'
-import FloatingActionButton from 'components/Template/FloatingActionButton/FloatingActionButton.vue'
+import MainFooter from 'src/components/Layout/Footer/main.vue'
+import KeepAliveComponents from 'src/assets/js/KeepAliveComponents.js'
+import QuasarTemplateBuilder from 'quasar-template-builder/src/quasar-template-builder.vue'
+import FloatingActionButton from 'src/components/Template/FloatingActionButton/FloatingActionButton.vue'
 
 // import templateHeader from 'components/Headers/templateHeader'
 // import onlineQuizTemplateHeader from 'components/Headers/onlineQuizTemplateHeader'
