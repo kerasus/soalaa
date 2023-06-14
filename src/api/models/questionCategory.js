@@ -1,4 +1,4 @@
-import { QuestCategory } from 'src/models/QuestCategory'
+import { QuestCategory, QuestCategoryList } from 'src/models/QuestCategory'
 import APIRepository from '../classes/APIRepository'
 import { appApiInstance } from 'src/boot/axios'
 
@@ -24,10 +24,10 @@ export default class QuestionCategoryAPI extends APIRepository {
       cacheKey: this.CacheList.base,
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return new QuestCategory(response.data.data)
+        return new QuestCategoryList(response.data.data)
       },
       rejectCallback: () => {
-        return new QuestCategory()
+        return new QuestCategoryList()
       }
     })
   }

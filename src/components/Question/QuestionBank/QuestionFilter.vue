@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!mobileMode">
     <q-card class="custom-card q-pa-none">
       <div class="filter-card-container">
         <div class="filter-header">
@@ -32,6 +32,134 @@
         </div>
       </div>
     </q-card>
+    <div class="filter-options-section filter-options-desktop">
+      <question-filter-expansion header-title="درس و مبحث">
+        <q-checkbox v-if="availableSearchSingleNode"
+                    v-model="searchSingleNode"
+                    class="q-ml-md"
+                    right-label
+                    label="جستجوی تک گره"
+                    @update:model-value="onSearchSingleNode" />
+        <tree-component ref="tree"
+                        :key="treeKey"
+                        tick-strategy="strict"
+                        :get-node-by-id="getNodeById"
+                        @ticked="tickedData"
+                        @lazy-loaded="getExpandedTree" />
+      </question-filter-expansion>
+      <!--      header-title="مرجع"-->
+      <question-filter-expansion header-title="طراح سوال"
+                                 :loading="localLoadings.optionsLoading">
+        <q-option-group v-model="selectedReference"
+                        type="checkbox"
+                        :options="filterQuestions.reference_type.map(option => {
+                          return {
+                            label: option.value,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeReference" />
+        <div v-if="filterQuestions.reference_type.length === 0"> هیچ مرجعی ایجاد نشده است</div>
+      </question-filter-expansion>
+
+      <question-filter-expansion header-title="سال انتشار"
+                                 :loading="localLoadings.optionsLoading">
+        <q-option-group v-model="selectedYears"
+                        type="checkbox"
+                        :options="filterQuestions.year_type.map(option => {
+                          return {
+                            label: option.value,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeYears" />
+        <div v-if="filterQuestions.year_type.length === 0"> هیچ سال انتشاری ایجاد نشده است</div>
+      </question-filter-expansion>
+
+      <question-filter-expansion v-if="showMajorList"
+                                 header-title="رشته تحصیلی"
+                                 :loading="localLoadings.optionsLoading">
+        <q-option-group v-model="selectedMajors"
+                        type="checkbox"
+                        :options="filterQuestions.major_type.map(option => {
+                          return {
+                            label: option.value,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeMajors" />
+        <div v-if="filterQuestions.major_type.length === 0"> هیچ رشته تحصیلی ایجاد نشده است</div>
+
+      </question-filter-expansion>
+
+      <question-filter-expansion header-title="درجه سختی"
+                                 :loading="localLoadings.levelTypeLoading">
+        <q-option-group v-model="selectedLevels"
+                        type="checkbox"
+                        :options="filterQuestions.level_type.map(option => {
+                          return {
+                            label: option.trans,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeLevels" />
+        <div v-if="filterQuestions.level_type.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
+
+      </question-filter-expansion>
+
+      <question-filter-expansion v-if="filterQuestions.statuses"
+                                 header-title="وضعیت سوال"
+                                 :loading="localLoadings.statusLoading">
+        <q-option-group v-model="selectedStatuses"
+                        type="checkbox"
+                        :options="filterQuestions.statuses.map(option => {
+                          return {
+                            label: option.display_title,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeStatuses" />
+        <div v-if="filterQuestions.statuses.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
+
+      </question-filter-expansion>
+
+      <question-filter-expansion v-if="filterQuestions.types"
+                                 header-title="نوع سوال"
+                                 :loading="localLoadings.optionsLoading">
+        <q-option-group v-model="type_id"
+                        :options="singleModeFilterOptions('types', 'value')"
+                        @update:model-value="onChangeTypes" />
+        <div v-if="filterQuestions.types.length === 0"> هیچ نوع سوالی ایجاد نشده است</div>
+
+      </question-filter-expansion>
+
+      <question-filter-expansion
+        v-if="filterQuestions.report_type"
+        header-title="نوع خطا"
+        :loading="localLoadings.optionsLoading"
+      >
+        <q-option-group
+          v-model="selectedReportType"
+          :options="singleModeFilterOptions('report_type', 'value')"
+          @update:model-value="onChangeReportTypes"
+        />
+        <div v-if="filterQuestions.report_type.length === 0"> هیچ نوع خطایی ایجاد نشده است</div>
+
+      </question-filter-expansion>
+
+      <question-filter-expansion v-if="filterQuestions.report_status"
+                                 header-title="وضعیت خطا"
+                                 :loading="localLoadings.reportStatusLoading">
+        <q-option-group v-model="report_status"
+                        :options="singleModeFilterOptions('report_status', 'description')"
+                        @update:model-value="onChangeErrorStatus" />
+        <div v-if="filterQuestions.report_status.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
+
+      </question-filter-expansion>
+
+    </div>
+  </div>
+  <div v-else>
     <div class="filter-options-section">
       <question-filter-expansion header-title="درس و مبحث">
         <q-checkbox v-if="availableSearchSingleNode"
@@ -133,18 +261,16 @@
 
       </question-filter-expansion>
 
-      <question-filter-expansion v-if="filterQuestions.report_type"
-                                 header-title="نوع خطا"
-                                 :loading="localLoadings.optionsLoading">
-        <q-option-group v-model="selectedReportType"
-                        type="checkbox"
-                        :options="filterQuestions.report_type.map(option => {
-                          return {
-                            label: option.value,
-                            value: option
-                          }
-                        })"
-                        @update:model-value="onChangeReportTypes" />
+      <question-filter-expansion
+        v-if="filterQuestions.report_type"
+        header-title="نوع خطا"
+        :loading="localLoadings.optionsLoading"
+      >
+        <q-option-group
+          v-model="selectedReportType"
+          :options="singleModeFilterOptions('question_report_type', 'value')"
+          @update:model-value="onChangeReportTypes"
+        />
         <div v-if="filterQuestions.report_type.length === 0"> هیچ نوع خطایی ایجاد نشده است</div>
 
       </question-filter-expansion>
@@ -173,6 +299,10 @@ export default {
   components: { QuestionFilterExpansion, TreeComponent },
   mixins: [mixinTree],
   props: {
+    mobileMode: {
+      type: Boolean,
+      default: false
+    },
     loadings: {
       type: Object,
       default() {
@@ -242,7 +372,7 @@ export default {
       selectedMajors: [],
       selectedLevels: [],
       type_id: {},
-      selectedReportType: [],
+      selectedReportType: {},
       report_status: {},
       selectedTags: [],
       selectedStatuses: [],
@@ -254,9 +384,9 @@ export default {
         level_type: [],
         years: [],
         type_id: '',
-        report_type: [],
+        report_type: '',
         statuses: [],
-        question_report_type: [],
+        question_report_type: '',
         report_status: '',
         tags_with_childrens: 1
       }
@@ -377,6 +507,9 @@ export default {
       this.filtersData[key] = value
       this.updateSelectedFiltersObject(key)
       this.onUpdateFilterData()
+      if (this.mobileMode) {
+        this.$emit('updateSelectedFilters', key, value)
+      }
     },
     onChangeReference (value) {
       this.changeFilterData('reference', value)
@@ -415,7 +548,7 @@ export default {
         if (filterObj.type === 'level_type') {
           index = this.filtersData[filterObj.type].findIndex(filter => filter.key === filterObj.value.key)
         } else if (filterObj.type === 'tags') {
-          this.setTickedMode('tree', filterObj.value.id, false)
+          index = this.selectedFilters.findIndex(filter => filter.type === 'tags' && filter.value.id === filterObj.value.id)
         } else {
           index = this.filtersData[filterObj.type].findIndex(filter => filter.id === filterObj.value.id)
         }
@@ -437,7 +570,7 @@ export default {
       this.filtersData.level_type.splice(0, this.filtersData.level_type.length)
       this.filtersData.years.splice(0, this.filtersData.years.length)
       this.filtersData.majors.splice(0, this.filtersData.majors.length)
-      this.filtersData.question_report_type.splice(0, this.filtersData.question_report_type.length)
+      this.filtersData.question_report_type = ''
       this.filtersData.type_id = ''
       this.filtersData.report_status = ''
       this.filtersData.statuses.splice(0, this.filtersData.statuses.length)
@@ -543,7 +676,7 @@ export default {
   .filter-card-container {
     padding: 20px 16px !important;
   }
-  .filter-options-section {
+  .filter-options-desktop {
     display: none;
   }
 }

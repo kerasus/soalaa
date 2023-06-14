@@ -6,16 +6,24 @@
       <template v-slot:header>
         <q-card-section class="general-info-expansion-header">
           <div class="general-info-buttons">
-            <div class="general-info-button back-button"
-                 @click="goToLastStep">
-              بازگشت
+            <div class="filter">
+              <q-btn icon="isax:setting-4"
+                     flat
+                     label="فیلتر"
+                     @click="showFiltersOnMobile()" />
             </div>
-            <div class="general-info-button next-button"
-                 @click="goToNextStep">
-              مرحله بعد
+            <div class="row">
+              <div class="general-info-button back-button"
+                   @click="goToLastStep">
+                بازگشت
+              </div>
+              <div class="general-info-button next-button"
+                   @click="goToNextStep">
+                مرحله بعد
 
-              <q-icon class="next-button-icon"
-                      name="isax:arrow-left" />
+                <q-icon class="next-button-icon"
+                        name="isax:arrow-left" />
+              </div>
             </div>
           </div>
 
@@ -167,7 +175,7 @@
   </q-page-sticky>
 
   <q-dialog v-model="ToolbarDialog"
-            class="dialogueCard">
+            class="dialogueCard full-height">
     <q-card class="dialogueCardContainer">
       <div v-if="!finalApprovalMode"
            class="dialogHeader">
@@ -281,6 +289,10 @@ export default {
   components: { highcharts: Chart },
 
   props: {
+    showFilters: {
+      type: Boolean,
+      default: false
+    },
     examInformation: {
       type: Object,
       default: () => {
@@ -433,6 +445,9 @@ export default {
   },
 
   methods: {
+    showFiltersOnMobile() {
+      this.$emit('update:showFilters', true)
+    },
     goToLastStep () {
       this.$emit('lastTab')
     },
@@ -510,9 +525,16 @@ export default {
       display: flex;
       align-items: center;
 
+      .filter {
+        display: none;
+      }
       @media only screen and (max-width: 1023px) {
-        justify-content: left;
+        justify-content: space-between;
         margin-right: -68px;
+
+        .filter {
+          display: block;
+        }
       }
 
       .general-info-button {
@@ -578,9 +600,9 @@ export default {
 
         .check-all-checkbox {
           &:deep(.q-checkbox__bg) {
-            background: #FFFFFF;
-            border: 1px solid #6D708B;
-            border-radius: 5px;
+              background: #FFFFFF;
+              border: 1px solid #6D708B;
+              border-radius: 5px;
           }
 
           &:deep(.q-checkbox__svg) {
@@ -1175,10 +1197,13 @@ export default {
           margin-right: 50px;
 
           .check-all-checkbox {
-            &:deep(.q-checkbox__bg) {
-              background: #FFFFFF;
-              border: 1px solid #6D708B;
-              border-radius: 5px;
+
+            &:deep(.q-checkbox__inner--falsy) {
+              .q-checkbox__bg{
+                background: #FFFFFF;
+                border: 1px solid #6D708B;
+                border-radius: 5px;
+              }
             }
 
             &:deep(.q-checkbox__label) {

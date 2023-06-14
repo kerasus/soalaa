@@ -212,4 +212,18 @@ export default class QuestionAPI extends APIRepository {
       data
     })
   }
+
+  getLevels(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.levels,
+      resolveCallback: (response) => {
+        return response.data.data // List of Options Objects [{key,Value}]
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
 }

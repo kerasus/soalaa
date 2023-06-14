@@ -261,7 +261,6 @@
 
 <script>
 // import tableComponent from 'src/components/landing/table'
-import API_ADDRESS from 'src/api/Addresses.js'
 export default {
   name: 'submitTable',
   components: {
@@ -1528,7 +1527,7 @@ export default {
     },
 
     callProductApi() {
-      return this.$alaaApiInstance.get(API_ADDRESS.product.landing.sea.all)
+      return this.$apiGateway.product.landingAllProducts()
     },
 
     updateActiveTab(exam) {
