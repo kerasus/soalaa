@@ -101,7 +101,7 @@ export default {
           textColor: 'black',
           label: 'نوع آزمون',
           disable: true,
-          options: [{ label: 'عادی', value: '6225f4828044517f52500c02' }, { label: 'جامع', value: 'test' }]
+          options: [{ label: 'عادی', value: '6225f4828044517f52500c02' }, { label: 'جامع(به زودی)', value: 'test' }]
         },
         {
           type: 'input',
@@ -339,6 +339,9 @@ export default {
 .exam-info-component {
   overflow: hidden;
   .exam-info-form {
+    &:deep(.q-btn-group) {
+      width: 190px;
+    }
     // &:deep(.q-field__native.q-placeholder) {
     //   color: #6D708B;
     // }
