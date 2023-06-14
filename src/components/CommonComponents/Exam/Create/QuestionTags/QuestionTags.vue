@@ -42,7 +42,7 @@ export default {
   }
 
   @media screen and (max-width: 599px) {
-    flex-direction: column;
+    //flex-direction: column;
     margin-top: 0;
   }
 }
