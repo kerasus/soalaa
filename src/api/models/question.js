@@ -198,6 +198,21 @@ export default class QuestionAPI extends APIRepository {
     })
   }
 
+  detach(data) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.detach(data.questionId),
+      resolveCallback: (response) => {
+        return response.data // String Message
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data
+    })
+  }
+
   update(data) {
     return this.sendRequest({
       apiMethod: 'put',
@@ -213,6 +228,21 @@ export default class QuestionAPI extends APIRepository {
     })
   }
 
+  delete(data) {
+    return this.sendRequest({
+      apiMethod: 'delete',
+      api: this.api,
+      request: this.APIAdresses.update(data.questionId),
+      resolveCallback: (response) => {
+        return response.data /// String
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
   getLevels(data = {}, cache) {
     return this.sendRequest({
       apiMethod: 'get',
@@ -220,6 +250,74 @@ export default class QuestionAPI extends APIRepository {
       request: this.APIAdresses.levels,
       resolveCallback: (response) => {
         return response.data.data // List of Options Objects [{key,Value}]
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getIndexMonta(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.indexMonta,
+      resolveCallback: (response) => {
+        return {
+          questionList: new QuestionList(response.data.data),
+          meta: response.data.mata,
+          links: response.data.links
+        }
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data
+    })
+  }
+
+  groupAttach(data) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.groupAttach,
+      resolveCallback: (response) => {
+        return new Question(response.data.data)
+      },
+      rejectCallback: () => {
+        return new Question()
+      },
+      data
+    })
+  }
+
+  confirm(questionId, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.confirm(questionId),
+      resolveCallback: (response) => {
+        return {
+          confirmed: response.data.data.confirmed,
+          confirmers: response.data.data.confirmers
+        }
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  unconfirm(questionId, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.unconfirm(questionId),
+      resolveCallback: (response) => {
+        return {
+          confirmed: response.data.data.confirmed,
+          confirmers: response.data.data.confirmers
+        }
       },
       rejectCallback: (error) => {
         return error
