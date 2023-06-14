@@ -2,8 +2,7 @@
   <option-panel-tabs v-model:options="localOptions">
     <template #main-tab>
       <div class="option-panel-container">
-        <div
-          class="row">
+        <div class="row">
           <div class="col-md-12">
             <q-editor v-model="localOptions.text"
                       min-height="10rem"
@@ -19,8 +18,7 @@
                         ['bold', 'italic', 'strike', 'underline'],
                         ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
                         ['viewsource']
-                      ]">
-            </q-editor>
+                      ]" />
           </div>
           <div class="col-md-3">
             <q-select v-model="responsive"

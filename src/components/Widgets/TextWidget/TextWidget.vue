@@ -1,16 +1,22 @@
 <template>
-  <div
-    :style="options.style"
-    :class="options.customClass">
+  <div :style="options.style"
+       :class="options.customClass">
     <span class="text"
-          v-html="options.text">
-    </span>
+          v-html="options.text" />
   </div>
 </template>
 
 <script>
 export default {
   name: 'TextWidget',
+  props: {
+    options: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       fontFamily: '',
@@ -30,14 +36,6 @@ export default {
       xsFontSize: '',
       xsFontWeight: '',
       xsFontStyle: ''
-    }
-  },
-  props: {
-    options: {
-      type: Object,
-      default: () => {
-        return {}
-      }
     }
   },
   watch: {

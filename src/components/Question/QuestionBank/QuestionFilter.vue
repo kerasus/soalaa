@@ -35,42 +35,32 @@
     </q-card>
     <div class="filter-options-section"
          :class="{'filter-options-desktop': !mobileMode}">
-      <question-filter-expansion
-        header-title="درس و مبحث"
-      >
-        <q-checkbox
-          v-if="availableSearchSingleNode"
-          v-model="searchSingleNode"
-          class="q-ml-md"
-          right-label
-          label="جستجوی تک گره"
-          @update:model-value="onSearchSingleNode"
-        />
-        <tree-component
-          ref="tree"
-          :key="treeKey"
-          tick-strategy="strict"
-          :get-node-by-id="getNodeById"
-          @ticked="tickedData"
-          @lazy-loaded="getExpandedTree"
-        />
+      <question-filter-expansion header-title="درس و مبحث">
+        <q-checkbox v-if="availableSearchSingleNode"
+                    v-model="searchSingleNode"
+                    class="q-ml-md"
+                    right-label
+                    label="جستجوی تک گره"
+                    @update:model-value="onSearchSingleNode" />
+        <tree-component ref="tree"
+                        :key="treeKey"
+                        tick-strategy="strict"
+                        :get-node-by-id="getNodeById"
+                        @ticked="tickedData"
+                        @lazy-loaded="getExpandedTree" />
       </question-filter-expansion>
       <!--      header-title="مرجع"-->
-      <question-filter-expansion
-        header-title="مرجع سوال"
-        :loading="localLoadings.optionsLoading"
-      >
-        <q-option-group
-          v-model="selectedReference"
-          type="checkbox"
-          :options="filterQuestions.reference_type.map(option => {
-            return {
-              label: option.value,
-              value: option
-            }
-          })"
-          @update:model-value="onChangeReference"
-        />
+      <question-filter-expansion header-title="مرجع سوال"
+                                 :loading="localLoadings.optionsLoading">
+        <q-option-group v-model="selectedReference"
+                        type="checkbox"
+                        :options="filterQuestions.reference_type.map(option => {
+                          return {
+                            label: option.value,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeReference" />
         <div v-if="filterQuestions.reference_type.length === 0"> هیچ مرجعی ایجاد نشده است</div>
       </question-filter-expansion>
 
@@ -145,16 +135,12 @@
 
       </question-filter-expansion>
 
-      <question-filter-expansion
-        v-if="filterQuestions.report_type"
-        header-title="نوع خطا"
-        :loading="localLoadings.optionsLoading"
-      >
-        <q-option-group
-          v-model="selectedReportType"
-          :options="singleModeFilterOptions('report_type', 'value')"
-          @update:model-value="onChangeReportTypes"
-        />
+      <question-filter-expansion v-if="filterQuestions.report_type"
+                                 header-title="نوع خطا"
+                                 :loading="localLoadings.optionsLoading">
+        <q-option-group v-model="selectedReportType"
+                        :options="singleModeFilterOptions('report_type', 'value')"
+                        @update:model-value="onChangeReportTypes" />
         <div v-if="filterQuestions.report_type.length === 0"> هیچ نوع خطایی ایجاد نشده است</div>
 
       </question-filter-expansion>
