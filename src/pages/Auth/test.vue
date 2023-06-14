@@ -59,13 +59,8 @@ export default {
   },
   mounted () {
     // console.log('debug mounted')
-    this.mounted = true
   },
-  methods: {
-    onResizeEnd(url, width, height) {
-      return `${url.split('?w=')[0]}?w=${width}&h=${height}`
-    }
-  }
+  methods: {}
 }
 </script>
 
