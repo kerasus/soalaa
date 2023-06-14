@@ -82,23 +82,23 @@
               </q-input>
             </q-card-section>
 
-            <!--            <q-card-section class="filter-section q-mb-md">-->
-            <!--              <q-btn icon="isax:setting-4"-->
-            <!--                     class="filter-btn q-mt-md"-->
-            <!--                     flat-->
-            <!--                     @click="showFilters = true" />-->
-            <!--              <q-select-->
-            <!--                v-model="searchSelector"-->
-            <!--                filled-->
-            <!--                dropdown-icon="isax:arrow-down-1"-->
-            <!--                option-value="value"-->
-            <!--                option-label="title"-->
-            <!--                :options="searchInputOptions"-->
-            <!--                class="backGround-gray-input filter-input"-->
-            <!--                @update:model-value="sortByCreatedAt"-->
-            <!--              >-->
-            <!--              </q-select>-->
-            <!--            </q-card-section>-->
+            <q-card-section class="filter-section q-mb-md">
+              <q-btn icon="isax:setting-4"
+                     class="filter-btn q-mt-md"
+                     flat
+                     @click="showFilters = true" />
+              <!--              <q-select-->
+              <!--                v-model="searchSelector"-->
+              <!--                filled-->
+              <!--                dropdown-icon="isax:arrow-down-1"-->
+              <!--                option-value="value"-->
+              <!--                option-label="title"-->
+              <!--                :options="searchInputOptions"-->
+              <!--                class="backGround-gray-input filter-input"-->
+              <!--                @update:model-value="sortByCreatedAt"-->
+              <!--              >-->
+              <!--              </q-select>-->
+            </q-card-section>
           </q-card>
         </div>
         <div class="question-bank-content">
