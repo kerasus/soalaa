@@ -8,12 +8,11 @@
           :key="ancestorIndex"
           class="ancestors">
       <span v-if="ancestorIndex !== 0"
-            class="tag-title">{{ ancestor.title }}</span>
+            class="tag-title ellipsis">{{ ancestor.title }}</span>
       <span v-if="ancestorIndex !== 0"
-            class="tag-circle" />
+            class="tag-circle ellipsis" />
     </span>
     <span>
-      <span class="title-circle" />
       <span class="tag-title">{{ item.title }}</span>
     </span>
   </div>
@@ -57,7 +56,6 @@ export default {
       display: inline-block;
       height: 6px;
       width: 6px;
-      line-height: 60px;
       border-radius: 50%;
       margin: 0 6px;
       background-color: #6D708B;
@@ -67,10 +65,8 @@ export default {
       }
     }
     @media screen and (max-width: 599px){
-      display: flex;
       align-items: center;
       justify-content: center;
-      flex-wrap: wrap;
     }
   }
   .title-circle {
@@ -86,11 +82,6 @@ export default {
     }
   }
 
-  @media screen and (max-width: 599px) {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 
 </style>
