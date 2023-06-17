@@ -448,7 +448,7 @@ export default {
       html2pdf()
         .set({
           image: { type: 'png', quality: 1 },
-          filename: 'Soalaa.pdf',
+          filename: this.examInfo.title,
           html2canvas: {
             dpi: 1200,
             scale: 1
