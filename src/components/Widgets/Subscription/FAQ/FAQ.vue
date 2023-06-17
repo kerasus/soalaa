@@ -49,9 +49,9 @@ export default {
   },
   methods: {
     loadData () {
-      this.$apiGateway.user.subscriptionLanding('questions')
-        .then(questions => {
-          this.info = questions
+      this.$apiGateway.user.subscriptionLanding()
+        .then(landingData => {
+          this.info = landingData.questions
         })
     }
   }

@@ -27,9 +27,9 @@ export default {
   },
   methods: {
     loadData () {
-      this.$apiGateway.user.subscriptionLanding('bank-soala')
-        .then(info => {
-          this.info = info
+      this.$apiGateway.user.subscriptionLanding()
+        .then(landingData => {
+          this.info = landingData['bank-soala']
         })
         .catch(() => {})
     }

@@ -153,13 +153,13 @@ export default class UserAPI extends APIRepository {
   //   })
   // }
 
-  mobileResend(data = {}) {
+  mobileResend(data = {}, cache) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.mobileResend,
       cacheKey: this.CacheList.mobileResend,
-      ...(data.cache && { cache: data.cache }),
+      ...(cache && { cache }),
       resolveCallback: (response) => {
         return {
           code: response
@@ -176,8 +176,6 @@ export default class UserAPI extends APIRepository {
       apiMethod: 'post',
       api: this.api,
       request: this.APIAdresses.mobileVerify,
-      cacheKey: this.CacheList.mobileVerify,
-      ...(data.cache && { cache: data.cache }),
       resolveCallback: (response) => {
         return {
           status: response
@@ -492,7 +490,7 @@ export default class UserAPI extends APIRepository {
     })
   }
 
-  subscriptionLanding(type, cache) {
+  subscriptionLanding(data, cache = { TTL: 1000 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
@@ -500,11 +498,12 @@ export default class UserAPI extends APIRepository {
       cacheKey: this.CacheList.subscriptionLast,
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data[type] // Array of Strings Object (key,val)
+        return response.data.data // Array of Strings Object (key,val)
       },
       rejectCallback: (error) => {
         return error
-      }
+      },
+      ...(data && { data })
     })
   }
 

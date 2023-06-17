@@ -58,7 +58,7 @@ export default class TicketAPI extends APIRepository {
       data: data.data,
       resolveCallback: (response) => {
         return {
-          code: response
+          code: response // String
         }
       },
       rejectCallback: (error) => {
