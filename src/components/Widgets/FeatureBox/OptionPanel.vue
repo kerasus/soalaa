@@ -75,7 +75,7 @@
 import { defineComponent, getCurrentInstance } from 'vue'
 import mixinOptionPanel from 'quasar-ui-q-page-builder/src/mixin/OptionPanel.js'
 import OptionPanelTabs from 'quasar-ui-q-page-builder/src/components/OptionPanelComponents/OptionPanelTabs.vue'
-import lazyImg from 'components/lazyImg'
+import lazyImg from 'src/components/lazyImg.vue'
 
 export default defineComponent({
   name: 'OptionPanel',

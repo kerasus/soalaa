@@ -163,7 +163,6 @@
 <script>
 import { copyToClipboard } from 'quasar'
 import 'src/assets/scss/markdownKatex.scss'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { mixinQuiz } from 'src/mixin/Mixins.js'
 import VueKatex from 'src/components/VueKatex.vue'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
@@ -306,9 +305,9 @@ export default {
     },
     async confirmUser () {
       try {
-        const response = await this.sendConfirmReq()
-        this.source.confirmed = response.data.data.confirmed
-        this.source.confirmers = response.data.data.confirmers
+        const confirmedAndConfirmers = await this.sendConfirmReq()
+        this.source.confirmed = confirmedAndConfirmers.confirmed
+        this.source.confirmers = confirmedAndConfirmers.confirmers
         this.confirmLoading = false
       } catch (e) {
         this.source.confirmed = !this.source.confirmed
@@ -317,9 +316,9 @@ export default {
     },
     async unConfirmUser () {
       try {
-        const response = await this.sendUnConfirmReq()
-        this.source.confirmed = response.data.data.confirmed
-        this.source.confirmers = response.data.data.confirmers
+        const confirmedAndConfirmers = await this.sendUnConfirmReq()
+        this.source.confirmed = confirmedAndConfirmers.confirmed
+        this.source.confirmers = confirmedAndConfirmers.confirmers
         this.confirmLoading = false
       } catch (e) {
         this.source.confirmed = !this.source.confirmed
@@ -327,10 +326,10 @@ export default {
       }
     },
     sendConfirmReq () {
-      return this.$axios.get(API_ADDRESS.question.confirm(this.source.id))
+      return this.$apiGateway.question.confirm(this.source.id)
     },
     sendUnConfirmReq () {
-      return this.$axios.get(API_ADDRESS.question.unconfirm(this.source.id))
+      return this.$apiGateway.question.unconfirm(this.source.id)
     },
     copyIdToClipboard (sourceId) {
       copyToClipboard(sourceId)
@@ -393,8 +392,11 @@ export default {
       })
     },
     detachQuestionReq () {
-      return this.$axios.post(API_ADDRESS.question.detach(this.source.id), {
-        exams: [this.examId]
+      return this.$apiGateway.question.detach({
+        questionId: this.source.id,
+        data: {
+          exams: [this.examId]
+        }
       })
     },
     closeConfirmModal () {
@@ -415,8 +417,11 @@ export default {
             this.closeConfirmModal()
             return
           }
-          this.$axios.delete(API_ADDRESS.question.delete(this.source.id), {
-            exams: [this.examId]
+          this.$apiGateway.question.delete({
+            questionId: this.source.id,
+            data: {
+              exams: [this.examId]
+            }
           })
             .then(() => {
               this.closeConfirmModal()

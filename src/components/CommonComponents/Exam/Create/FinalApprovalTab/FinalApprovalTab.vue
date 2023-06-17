@@ -317,7 +317,7 @@ export default {
     setReportOptions() {
       APIGateway.option.userIndex({ type: 'question_report_type' })
         .then((reportTypeList) => {
-          this.reportTypeList = reportTypeList
+          this.reportTypeList = reportTypeList.list
           this.questionItemContentKey++
         })
         .catch(() => {

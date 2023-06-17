@@ -53,7 +53,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Question } from 'src/models/Question.js'
 import { TypeList } from 'src/models/QuestionType.js'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
@@ -104,7 +103,7 @@ export default {
       this.$emit('panelClicked')
     },
     getQuestionType() {
-      return this.$axios.get(API_ADDRESS.option.base + '?type=question_type')
+      return this.$apiGateway.option.getOptions('question_type')
     },
     getCurrentRoute (componentName) {
       const currentQuestionMode = this.getCurrentQuestionMode()

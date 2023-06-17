@@ -8,7 +8,7 @@
 <script>
 import mixinTree from 'src/mixin/Tree.js'
 import { Exam } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
 
 export default {
@@ -27,7 +27,7 @@ export default {
     return {
       model: 'one',
       expanded: true,
-      api: API_ADDRESS.exam.base(),
+      api: APIGateway.exam.APIAdresses.base(),
       entityIdKeyInResponse: 'data.id',
       showRouteParamKey: 'id',
       showRouteName: 'Admin.Exam.Show',
@@ -278,9 +278,9 @@ export default {
       this.loadMajorList()
     },
     getExamTypeList () {
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
-          this.typeOptions = response.data.data.filter(data => data.type === 'exam_type')
+      this.$apiGateway.option.getFilterOptions()
+        .then((options) => {
+          this.typeOptions = options.filter(data => data.type === 'exam_type')
           this.inputs.forEach(input => {
             if (input.type === 'formBuilder') {
               input.value.forEach(item => {
@@ -314,7 +314,9 @@ export default {
       })
     },
     loadMajorList () {
-      this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
+      this.$apiGateway.option.getOptions({
+        type: 'major_type'
+      })
         .then((response) => {
           this.majorList = response.data.data
           this.inputs.forEach(input => {

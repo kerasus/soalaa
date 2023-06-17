@@ -9,8 +9,6 @@
   </div>
 </template>
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
-
 export default {
   name: 'SubscriptionBanner',
   props: {
@@ -29,10 +27,11 @@ export default {
   },
   methods: {
     loadData () {
-      this.$axios.get(API_ADDRESS.subscription.landing)
-        .then(res => {
-          this.info = res.data.data['bank-soala']
+      this.$apiGateway.user.subscriptionLanding('bank-soala')
+        .then(info => {
+          this.info = info
         })
+        .catch(() => {})
     }
   }
 }

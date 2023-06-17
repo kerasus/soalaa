@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     loadData () {
-      this.$apiGateway.user.subscriptionLanding()
+      this.$apiGateway.user.subscriptionLanding('questions')
         .then(questions => {
           this.info = questions
         })

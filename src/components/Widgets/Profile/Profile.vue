@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
 import { User } from 'src/models/User.js'
 import { APIGateway } from 'src/api/APIGateway.js'
@@ -219,7 +218,10 @@ export default defineComponent({
       const formData = this.$refs.EntityCrudFormBuilder.getFormData()
 
       // console.log('formData', formData)
-      this.$alaaApiInstance.put(API_ADDRESS.user.edit(this.user.id), formData)
+      this.$apiGateway.user.edit({
+        userId: this.user.id,
+        data: formData
+      })
         .then(() => {
           this.loading = false
         })

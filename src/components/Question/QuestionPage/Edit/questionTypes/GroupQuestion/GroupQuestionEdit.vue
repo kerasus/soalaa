@@ -76,7 +76,6 @@
 
 <script>
 import { ExamList } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Question } from 'src/models/Question.js'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
 import { QuestionStatusList } from 'src/models/QuestionStatus.js'
@@ -142,12 +141,12 @@ export default {
   methods: {
     attachQuestionGroup () {
       this.groupAttachLoading = true
-      this.$axios.post(API_ADDRESS.question.groupAttach, {
+      this.$apiGateway.question.groupAttach({
         group_question_id: this.question.id,
         questions: this.question.group.map(item => item.id)
       })
-        .then((response) => {
-          const question = new Question(response.data.data)
+        .then((resQuestion) => {
+          const question = new Question(resQuestion)
           this.question.group = question.group
           this.$q.notify({
             message: 'ثبت با موفقیت انجام شد',

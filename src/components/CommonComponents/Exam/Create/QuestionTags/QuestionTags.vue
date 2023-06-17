@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import tagsComponent from 'components/CommonComponents/Exam/Create/QuestionTags/components/tagsComponent'
+import tagsComponent from 'components/CommonComponents/Exam/Create/QuestionTags/components/tagsComponent.vue'
 
 export default {
   name: 'QuestionTags',
