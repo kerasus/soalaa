@@ -316,7 +316,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import PdfPage from 'src/components/Utils/PDF/PDFPage.vue'
 import PDFContainer from 'src/components/Utils/PDF/PDFContainer.vue'
 // import VuePdfEmbed from 'vue-pdf-embed'
@@ -410,14 +409,16 @@ export default {
     },
     getExamInfo () {
       this.loading = true
-      this.$axios.get(API_ADDRESS.exam.user.examInfo(this.$route.params.examId))
-        .then((response) => {
-          this.examInfo.title = response.data.data.title
-          this.examInfo.gradeTitle = response.data.data.temp.grade.title
-          if (response.data.data.temp.major) {
-            this.examInfo.majorTitle = response.data.data.temp.major.value
+      this.$apiGateway.exam.userExamInfo({
+        examId: this.$route.params.examId
+      })
+        .then((examInfo) => {
+          this.examInfo.title = examInfo.title
+          this.examInfo.gradeTitle = examInfo.temp.grade.title
+          if (examInfo.temp.major) {
+            this.examInfo.majorTitle = examInfo.temp.major.title
           }
-          this.examInfo.n_questions = response.data.data.n_questions
+          this.examInfo.n_questions = examInfo.n_questions
           this.loading = false
         })
         .catch(() => {
@@ -427,9 +428,12 @@ export default {
     requestPdf() {
       this.loading = true
       this.pdfSrc = ''
-      this.$axios.post(API_ADDRESS.exam.user.questionsWithAnswer(this.$route.params.examId), this.pdfConfig)
-        .then((response) => {
-          this.questions = response.data.data
+      this.$apiGateway.exam.userQuestionsWithAnswer({
+        examId: this.$route.params.examId,
+        data: this.pdfConfig
+      })
+        .then((questionList) => {
+          this.questions = questionList.list
           this.doesHaveQuestion = true
           this.loading = false
         }).catch(() => {

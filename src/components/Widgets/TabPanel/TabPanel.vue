@@ -73,8 +73,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
-
 export default {
   name: 'TabPanel',
   props: {
@@ -132,8 +130,8 @@ export default {
     async initPageData() {
       this.loading = true
       try {
-        const response = await this.$axios.get(API_ADDRESS.homePage.base)
-        this.tabs = response.data.data.tabs
+        const response = await this.$apiGateway.pages.getHomepageData()
+        this.tabs = response.tabs
         this.loading = false
       } catch (e) {
         this.loading = false

@@ -94,7 +94,7 @@
 
 <script>
 import { EntityEdit } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Edit',
@@ -103,7 +103,7 @@ export default {
     return {
       entityEdit: Date.now(),
       detachCategoryLoading: false,
-      api: API_ADDRESS.exam.base(),
+      api: APIGateway.exam.APIAdresses.base(),
       entityIdKey: 'data.id',
       entityParamKey: 'data.id',
       showRouteName: 'Admin.Exam.Show',
@@ -189,10 +189,10 @@ export default {
     },
     getCategoryList() {
       this.detachCategoryLoading = true
-      this.$axios.get(API_ADDRESS.questionCategory.base)
-        .then((response) => {
+      this.$apiGateway.option.getFilterOptions()
+        .then((options) => {
           this.detachCategoryLoading = false
-          this.categoryOptions = response.data.data
+          this.categoryOptions = options
         })
         .catch(() => {
           this.detachCategoryLoading = false
@@ -207,10 +207,10 @@ export default {
     },
     getOptions () {
       this.detachCategoryLoading = true
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
-          const options = response.data.data.filter(data => data.type === 'exam_type')
-          this.setExamTypeOptions(options)
+      this.$apiGateway.option.getFilterOptions()
+        .then((options) => {
+          const optionsList = options.filter(data => data.type === 'exam_type')
+          this.setExamTypeOptions(optionsList)
           this.addBreadcrumb()
           this.detachCategoryLoading = false
         })
@@ -220,7 +220,10 @@ export default {
     },
     deleteCategory (id) {
       this.detachCategoryLoading = true
-      this.$axios.delete(API_ADDRESS.exam.detachCategory(this.$route.params.id, id))
+      this.$apiGateway.exam.detachCategory({
+        examId: this.$route.params.id,
+        categoryId: id
+      })
         .then(() => {
           this.entityEdit = Date.now()
           this.getCategoryList()
@@ -241,7 +244,12 @@ export default {
       }
 
       this.detachCategoryLoading = true
-      this.$axios.post(API_ADDRESS.exam.attachCategories(this.$route.params.id), { categories: [this.category] })
+      this.$apiGateway.exam.attachCategories({
+        examId: this.$route.params.id,
+        data: {
+          categories: [this.category]
+        }
+      })
         .then(() => {
           this.inputs[this.examCategoriesIndex].value = this.inputs[this.examCategoriesIndex].value.concat(this.category)
           this.category = { title: '', id: '', order: 0, time: 0 }

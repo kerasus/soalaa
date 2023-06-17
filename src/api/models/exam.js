@@ -1,6 +1,7 @@
 import APIRepository from '../classes/APIRepository'
 import { appApiInstance } from 'src/boot/axios'
 import { Exam, ExamList } from 'src/models/Exam.js'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 import { QuestionList } from 'src/models/Question'
 import { UserExamData } from 'src/models/UserExamData'
 
@@ -119,6 +120,14 @@ const APIAdresses = {
     pdf: (examId) => `/exam/user/pdf/${examId}`,
     examInfo: (examId) => '/exam/user/' + examId,
     questionsWithAnswer: (examId) => `/exam-question/user/attach/show/${examId}`
+  },
+  subGroups: {
+    base (examId) {
+      return '/exam-question/zirgorooh/' + examId
+    },
+    all () {
+      return '/option?with_pagination=0&type=zirgorooh_type'
+    }
   }
 }
 
@@ -126,6 +135,7 @@ export default class ExamAPI extends APIRepository {
   constructor() {
     super('exam', appApiInstance, '', '', APIAdresses)
     this.CacheList = {
+      base: (pageNumber) => this.name + this.APIAdresses.base(pageNumber),
       showExam: (examId) => this.name + this.APIAdresses.showExam(examId),
       getAllAnswerOfUser: (examId) => this.name + this.APIAdresses.getAllAnswerOfUser(examId),
       examUserAfterExam: (examId) => this.name + this.APIAdresses.examUserAfterExam(examId),
@@ -144,7 +154,7 @@ export default class ExamAPI extends APIRepository {
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.userExamList.base,
-      cacheKey: this.CacheList.userExamList.base,
+      cacheKey: this.CacheList.userExamList,
       ...(cache && { cache }),
       resolveCallback: (response) => {
         return {
@@ -505,6 +515,22 @@ export default class ExamAPI extends APIRepository {
     })
   }
 
+  getBase(examId, cache = { TTL: 100 }) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.base(examId),
+      cacheKey: this.CacheList.base(examId),
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return new ExamList(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
   updateReportOptions(data = {}) {
     return this.sendRequest({
       apiMethod: 'post',
@@ -579,6 +605,179 @@ export default class ExamAPI extends APIRepository {
       ...(cache && { cache }),
       resolveCallback: (response) => {
         return response.data // file list
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  examBookletUpload(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.examBookletUpload(data.examId),
+      resolveCallback: (response) => {
+        return response.data.data.url // String URL
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  getSubCategoriesWithPermissions(examId) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.getSubCategoriesWithPermissions(examId),
+      resolveCallback: (response) => {
+        return new QuestCategoryList(response.data.data, {
+          meta: response.data.meta,
+          links: response.data.links
+        })
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getSubGroup(examId) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.subGroups.base(examId),
+      resolveCallback: (response) => {
+        return response.data.data // String subGroups List
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  createSubGroup(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.subGroups.base(data.examId),
+      resolveCallback: (response) => {
+        return response.data.data // String subGroups List
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: this.getNormalizedSendData({
+        zirgorooh: null // string List
+      }, data.data)
+    })
+  }
+
+  getAllSubGroup(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.subGroups.all,
+      resolveCallback: (response) => {
+        return response.data.data // All subGroups List
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getAnalysisVideo(examId) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.getAnalysisVideo(examId),
+      resolveCallback: (response) => {
+        return new ExamList(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  analysisVideo(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.analysisVideo,
+      resolveCallback: (response) => {
+        return response.data // String Message
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: this.getNormalizedSendData({
+        video: '', // Video Address
+        sub_category_id: '', // Number
+        exams: [] // exam list
+      }, data)
+    })
+  }
+
+  examQuestion(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.examQuestion(data.examId, data.page),
+      resolveCallback: (response) => {
+        return new QuestionList(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: this.getNormalizedSendData({
+        video: '', // Video Address
+        sub_category_id: '', // Number
+        exams: [] // exam list
+      }, data.data)
+    })
+  }
+
+  copyCoefficient(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'put',
+      api: this.api,
+      request: this.APIAdresses.copyCoefficient,
+      resolveCallback: (response) => {
+        return response.data // String Message
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data
+    })
+  }
+
+  attachCategories(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.attachCategories(data.examId),
+      resolveCallback: (response) => {
+        return response.data // String Message
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  detachCategory(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'delete',
+      api: this.api,
+      request: this.APIAdresses.detachCategory(data.examId, data.categoryId),
+      resolveCallback: (response) => {
+        return response.data // String Message
       },
       rejectCallback: (error) => {
         return error

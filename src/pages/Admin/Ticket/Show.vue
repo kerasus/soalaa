@@ -145,9 +145,8 @@
 
 <script>
 import { EntityEdit } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 import Drawer from 'src/components/CustomDrawer.vue'
-import { CartItemList } from 'src/models/CartItem.js'
 import { mixinDateOptions } from 'src/mixin/Mixins.js'
 import LogList from 'src/components/Ticket/LogList.vue'
 import Messages from 'src/components/Ticket/Messages.vue'
@@ -173,7 +172,7 @@ export default {
       userId: null,
       userMessageArray: [],
       expanded: true,
-      api: API_ADDRESS.ticket.show.base,
+      api: APIGateway.ticket.APIAdresses.show,
       entityIdKey: 'id',
       entityParamKey: 'id',
       indexRouteName: 'Admin.Ticket.Index',
@@ -459,9 +458,9 @@ export default {
     },
     postMessage (formData) {
       this.sendLoading = true
-      this.$alaaApiInstance.post(API_ADDRESS.ticket.show.ticketMessage, formData)
-        .then(res => {
-          this.userMessageArray.unshift(res.data.data.ticketMessage)
+      this.$apiGateway.ticket.sendTicketMessage(formData)
+        .then(ticketMessage => {
+          this.userMessageArray.unshift(ticketMessage)
           this.$refs.SendMessageInput.clearMessage()
           this.$q.notify({
             message: 'پیام شما با موفقیت ثبت شد',
@@ -475,15 +474,18 @@ export default {
         })
     },
     saveChanges () {
-      this.$alaaApiInstance.put(API_ADDRESS.ticket.show.base + '/' + this.searchForInputVal('id'), {
-        department_id: this.searchForInputVal('department'),
-        id: this.searchForInputVal('id'),
-        priority_id: this.searchForInputVal('priority-id'),
-        status_id: this.searchForInputVal('status'),
-        title: this.searchForInputVal('title'),
-        user_id: this.searchForInputVal('userId')
+      this.$apiGateway.ticket.updateTicket({
+        ticketId: this.searchForInputVal('id'),
+        data: {
+          department_id: this.searchForInputVal('department'),
+          id: this.searchForInputVal('id'),
+          priority_id: this.searchForInputVal('priority-id'),
+          status_id: this.searchForInputVal('status'),
+          title: this.searchForInputVal('title'),
+          user_id: this.searchForInputVal('userId')
+        }
       })
-        .then((res) => {
+        .then(() => {
           this.$q.notify({
             message: 'تغییرات با موفقیت اعمال شد.',
             type: 'positive'
@@ -498,12 +500,13 @@ export default {
     openShopLogList () {
       this.orderDrawer = this.orderDrawer === false
       this.orderLoading = true
-      this.$axios.get(API_ADDRESS.user.orders(this.userId)).then(
-        response => {
-          this.userOrderData = new CartItemList(response.data.data)
-          this.orderLoading = false
-        }
-      )
+      this.$apiGateway.user.ordersById({ userId: this.userId })
+        .then(
+          cartItemList => {
+            this.userOrderData = cartItemList
+            this.orderLoading = false
+          }
+        )
     },
     checkLoadInputData () {
       this.userMessageArray = this.searchForInputVal('messages')
@@ -517,10 +520,10 @@ export default {
       this.logDrawer = this.logDrawer === false
     },
     sendTicketStatusNotice (ticketId) {
-      this.$alaaApiInstance.post(API_ADDRESS.ticket.show.statusNotice(ticketId))
-        .then((res) => {
+      this.$apiGateway.ticket.sendTicketStatusNotice(ticketId)
+        .then((message) => {
           this.$q.notify({
-            message: res.data.message,
+            message,
             type: 'positive'
           })
         })

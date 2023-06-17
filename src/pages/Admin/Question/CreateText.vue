@@ -44,7 +44,6 @@ import CommentBox from 'src/components/Question/QuestionPage/StatusChange.vue'
 import Navbar from 'src/components/Question/QuestionPage/Create/textMode/Navbar.vue'
 import AttachExam from 'src/components/Question/QuestionPage/AttachExam/AttachExam.vue'
 import QuestionIdentifier from 'src/components/Question/QuestionPage/QuestionIdentifier.vue'
-// import API_ADDRESS from 'src/api/Addresses.js'
 
 export default {
   name: 'CreateText',

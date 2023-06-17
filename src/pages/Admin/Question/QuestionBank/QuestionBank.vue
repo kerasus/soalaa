@@ -98,7 +98,6 @@
 
 <script>
 import { Exam } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { APIGateway } from 'src/api/APIGateway.js'
 import { Question, QuestionList } from 'src/models/Question.js'
 import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
@@ -271,7 +270,9 @@ export default {
       }
     },
     deleteQuestionReq (questionId) {
-      return this.$axios.delete(API_ADDRESS.question.delete(questionId))
+      return this.$apiGateway.question.delete({
+        questionId
+      })
     },
     closeConfirmModal () {
       this.$store.commit('AppLayout/showConfirmDialog', {
@@ -348,10 +349,10 @@ export default {
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
-      this.$axios.get(API_ADDRESS.question.index(filters, page, true))
-        .then((response) => {
-          this.questions = new QuestionList(response.data.data)
-          this.paginationMeta = response.data.meta
+      this.$apiGateway.question.getIndex(filters, page, true)
+        .then((questionListAndMeta) => {
+          this.questions = new QuestionList(questionListAndMeta.QuestionList)
+          this.paginationMeta = questionListAndMeta.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
           this.showSearchResultReport = true

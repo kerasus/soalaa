@@ -12,6 +12,7 @@ export default class UserAPI extends APIRepository {
     super('user', appApiInstance, '/user', new User())
     this.APIAdresses = {
       base: '/user',
+      edit: (userId) => '/user/' + userId,
       favored: '/user/favored',
       purchasedProducts: '/user/products',
       bankAccounts: '/bank-accounts',
@@ -36,7 +37,8 @@ export default class UserAPI extends APIRepository {
         last: '/subscribe/user/last',
         register: (userId) => `/subscribe/user/${userId}`
       },
-      statistics: '/user/dashboard/statistics'
+      statistics: '/user/dashboard/statistics',
+      updatePhoto: '/user/avatar'
     }
     this.CacheList = {
       base: this.name + this.APIAdresses.base,
@@ -106,6 +108,36 @@ export default class UserAPI extends APIRepository {
     })
   }
 
+  edit(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'put',
+      api: this.api,
+      request: this.APIAdresses.edit(data.userId),
+      data: data.data,
+      resolveCallback: (response) => {
+        return new User(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  updatePhoto(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'put',
+      api: this.api,
+      request: this.APIAdresses.updatePhoto,
+      data: data.data,
+      resolveCallback: (response) => {
+        return response.data // String
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
   // getBankAccounts() {
   //   return this.sendRequest({
   //     apiMethod: 'get',
@@ -121,13 +153,13 @@ export default class UserAPI extends APIRepository {
   //   })
   // }
 
-  mobileResend(data = {}) {
+  mobileResend(data = {}, cache) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.mobileResend,
       cacheKey: this.CacheList.mobileResend,
-      ...(data.cache && { cache: data.cache }),
+      ...(cache && { cache }),
       resolveCallback: (response) => {
         return {
           code: response
@@ -144,8 +176,6 @@ export default class UserAPI extends APIRepository {
       apiMethod: 'post',
       api: this.api,
       request: this.APIAdresses.mobileVerify,
-      cacheKey: this.CacheList.mobileVerify,
-      ...(data.cache && { cache: data.cache }),
       resolveCallback: (response) => {
         return {
           status: response
@@ -160,13 +190,13 @@ export default class UserAPI extends APIRepository {
     })
   }
 
-  ordersById(data = {}) {
+  ordersById(data = {}, cache) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
-      request: this.APIAdresses.ordersById(data.data.userId),
-      cacheKey: this.CacheList.ordersById(data.data.userId),
-      ...(data.cache && { cache: data.cache }),
+      request: this.APIAdresses.ordersById(data.userId),
+      cacheKey: this.CacheList.ordersById(data.userId),
+      ...(cache && { cache }),
       resolveCallback: (response) => {
         return {
           cartItemList: new CartItemList(response.data.data)
@@ -409,7 +439,10 @@ export default class UserAPI extends APIRepository {
         mobile: '' // String
       }, data),
       resolveCallback: (response) => {
-        return response.data.message
+        return {
+          message: response.data.message,
+          code: response.data.code ? response.data.code : null
+        }
       },
       rejectCallback: (error) => {
         return error
@@ -423,6 +456,7 @@ export default class UserAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.verifyMoshavereh,
       data: this.getNormalizedSendData({
+        mobile: '', // String
         code: '' // String
       }, data),
       resolveCallback: (response) => {
@@ -456,7 +490,7 @@ export default class UserAPI extends APIRepository {
     })
   }
 
-  subscriptionLanding(data = {}, cache) {
+  subscriptionLanding(data, cache = { TTL: 1000 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
@@ -464,11 +498,12 @@ export default class UserAPI extends APIRepository {
       cacheKey: this.CacheList.subscriptionLast,
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data.questions // Array of Strings Object (key,val)
+        return response.data.data // Array of Strings Object (key,val)
       },
       rejectCallback: (error) => {
         return error
-      }
+      },
+      ...(data && { data })
     })
   }
 

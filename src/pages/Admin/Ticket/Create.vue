@@ -41,7 +41,7 @@
 
 <script>
 import { EntityCreate } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 import SendMessageInput from 'src/components/Ticket/SendMessageInput.vue'
 
 export default {
@@ -55,7 +55,7 @@ export default {
       sendLoading: null,
       showDialog: true,
       expanded: true,
-      api: API_ADDRESS.ticket.create.base,
+      api: APIGateway.ticket.APIAdresses.create,
       entityIdKeyInResponse: 'id',
       showRouteParamKey: 'id',
       showRouteName: 'Admin.Ticket.Show',

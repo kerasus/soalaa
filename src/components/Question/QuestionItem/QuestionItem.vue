@@ -648,9 +648,9 @@ export default {
         return
       }
       this.contentLoading = true
-      APIGateway.content.show(this.question.content_id)
+      this.$apiGateway.content.show(this.question.content_id)
         .then(content => {
-          this.content = content
+          this.content = new Content(content)
           this.getTimePoints()
           this.contentLoading = false
         })

@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 export default {
   name: 'Test',
   components: {},
@@ -34,9 +33,6 @@ export default {
     }
   },
   computed: {
-    test1 () {
-      return API_ADDRESS.question.uploadImage('dfbdgbdgbgfnhfn')
-    },
     test2 () {
       return 'Bearer ' + this.$store.getters['Auth/accessToken']
     }

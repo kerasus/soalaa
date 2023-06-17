@@ -42,7 +42,6 @@
 
 <script>
 import { copyToClipboard } from 'quasar'
-import API_ADDRESS from 'src/api/Addresses.js'
 import Upload from 'src/pages/Admin/exam/Upload.vue'
 import EditExamReport from 'src/pages/Admin/exam/editExamReport.vue'
 import EditCoefficients from 'src/pages/Admin/exam/editCoefficients.vue'
@@ -70,7 +69,7 @@ export default {
       this.generateJsonFileLoading = true
       const that = this
       this.$store.dispatch('loading/linearLoading', true)
-      this.$axios.post(API_ADDRESS.exam.generateExamFile(id, withAnswer))
+      this.$apiGateway.exam.generateExamFile(id, withAnswer)
         .then(() => {
           that.$q.notify({
             type: 'positive',

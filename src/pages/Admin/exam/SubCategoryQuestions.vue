@@ -99,7 +99,6 @@
 <script>
 import { copyToClipboard } from 'quasar'
 import { Exam } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { QuestionList } from 'src/models/Question.js'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
 import Question from 'src/components/QuizEditor/Question.vue'
@@ -206,9 +205,9 @@ export default {
     },
     async confirmUser (question) {
       try {
-        const response = await this.sendConfirmReq(question)
-        question.confirmed = response.data.data.confirmed
-        question.confirmers = response.data.data.confirmers
+        const confirmedAndConfirmers = await this.sendConfirmReq(question)
+        question.confirmed = confirmedAndConfirmers.confirmed
+        question.confirmers = confirmedAndConfirmers.confirmers
         this.confirmLoading = false
       } catch (e) {
         question.confirmed = !question.confirmed
@@ -217,9 +216,9 @@ export default {
     },
     async unConfirmUser (question) {
       try {
-        const response = await this.sendUnConfirmReq(question)
-        question.confirmed = response.data.data.confirmed
-        question.confirmers = response.data.data.confirmers
+        const confirmedAndConfirmers = await this.sendUnConfirmReq(question)
+        question.confirmed = confirmedAndConfirmers.confirmed
+        question.confirmers = confirmedAndConfirmers.confirmers
         this.confirmLoading = false
       } catch (e) {
         question.confirmed = !question.confirmed
@@ -227,10 +226,10 @@ export default {
       }
     },
     sendUnConfirmReq (question) {
-      return this.$axios.get(API_ADDRESS.question.unconfirm(question.id))
+      return this.$apiGateway.question.unconfirm(question.id)
     },
     sendConfirmReq (question) {
-      return this.$axios.get(API_ADDRESS.question.confirm(question.id))
+      return this.$apiGateway.question.confirm(question.id)
     },
     paginateToQuestion () {
       if (this.paginationMeta.per_page === 0) {
@@ -297,27 +296,31 @@ export default {
       }
     },
     getQuizDataAndSubCategories (pageNumber) {
-      return this.$axios.post(API_ADDRESS.exam.examQuestion(this.examId, pageNumber), {
-        sub_categories: [this.$route.params.subcategory_id]
+      return this.$apiGateway.exam.examQuestion({
+        examId: this.examId,
+        pageNumber,
+        data: {
+          sub_categories: [this.$route.params.subcategory_id]
+        }
       })
     },
     loadSubCategories (quizResponse, reload, callback) {
       const that = this
-      this.$axios.get(API_ADDRESS.questionSubcategory.base)
-        .then((response) => {
+      this.$apiGateway.questionSubcategory.get()
+        .then((questSubCategoryList) => {
           if (reload) {
             that.$q.notify({
               message: 'اطلاعات بروزرسانی شد.',
               type: 'positive'
             })
           }
-          that.quizData.sub_categories = new QuestSubcategoryList(response.data.data)
+          that.quizData.sub_categories = new QuestSubcategoryList(questSubCategoryList)
           const questions = quizResponse.data.data
           that.sortQuestions(questions)
           that.quizData.questions = new QuestionList(questions)
           this.questionListKey = Date.now()
           if (typeof callback === 'function') {
-            callback(response)
+            callback(questSubCategoryList)
           }
         })
     },
@@ -415,7 +418,9 @@ export default {
       })
     },
     deleteQuestionReq (questionId) {
-      return this.$axios.delete(API_ADDRESS.question.delete(questionId))
+      return this.$apiGateway.question.delete({
+        questionId
+      })
     },
     detachQuestion (question) {
       this.$store.dispatch('AppLayout/showConfirmDialog', {
@@ -446,11 +451,14 @@ export default {
       })
     },
     detachQuestionReq (questionId) {
-      return this.$axios.post(API_ADDRESS.question.detach(questionId), {
-        detaches: [{
-          exam_id: this.examId,
-          sub_category_id: this.$route.params.subcategory_id
-        }]
+      return this.$apiGateway.question.detach({
+        questionId,
+        data: {
+          exams: [{
+            exam_id: this.examId,
+            sub_category_id: this.$route.params.subcategory_id
+          }]
+        }
       })
     },
     closeConfirmModal () {

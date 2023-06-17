@@ -1,15 +1,18 @@
-import { QuestCategory, QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestSubcategory, QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 import APIRepository from '../classes/APIRepository.js'
 import { appApiInstance } from 'src/boot/axios.js'
 
 const APIAdresses = {
-  base: '/category',
-  update: (id) => '/category/' + id
+  base: '/sub-category',
+  update (id) {
+    return '/sub-category/' + id
+  },
+  updateOrder: '/exam-question/update/order/sub-category'
 }
 
-export default class QuestionCategoryAPI extends APIRepository {
+export default class QuestionSubCategoryAPI extends APIRepository {
   constructor() {
-    super('QuestionCategory', appApiInstance, '/category', new QuestCategory(), APIAdresses)
+    super('QuestionCategory', appApiInstance, '/category', new QuestSubcategory(), APIAdresses)
     this.CacheList = {
       base: this.name + this.APIAdresses.base,
       update: (id) => this.name + this.APIAdresses.update(id)
@@ -24,10 +27,10 @@ export default class QuestionCategoryAPI extends APIRepository {
       cacheKey: this.CacheList.base,
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return new QuestCategoryList(response.data.data)
+        return new QuestSubcategoryList(response.data.data)
       },
       rejectCallback: () => {
-        return new QuestCategoryList()
+        return new QuestSubcategoryList()
       }
     })
   }
@@ -38,10 +41,10 @@ export default class QuestionCategoryAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.base,
       resolveCallback: (response) => {
-        return new QuestCategory(response.data.data)
+        return new QuestSubcategory(response.data.data)
       },
       rejectCallback: () => {
-        return new QuestCategory()
+        return new QuestSubcategory()
       },
       data
     })
@@ -53,10 +56,25 @@ export default class QuestionCategoryAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.update(data.id),
       resolveCallback: (response) => {
-        return new QuestCategory(response.data.data)
+        return new QuestSubcategory(response.data.data)
       },
       rejectCallback: () => {
-        return new QuestCategory()
+        return new QuestSubcategory()
+      },
+      data
+    })
+  }
+
+  updateOrder(data) {
+    return this.sendRequest({
+      apiMethod: 'put',
+      api: this.api,
+      request: this.APIAdresses.updateOrder,
+      resolveCallback: (response) => {
+        return response.data // String
+      },
+      rejectCallback: (error) => {
+        return error
       },
       data
     })

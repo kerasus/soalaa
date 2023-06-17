@@ -143,7 +143,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { QuestionList } from 'src/models/Question.js'
 import { QuestionStatusList } from 'src/models/QuestionStatus.js'
 
@@ -165,10 +164,11 @@ export default {
   methods: {
     getNavBarItems () {
       const that = this
-      this.$axios.get(API_ADDRESS.question.status.base).then(response => {
-        that.questionStatusList = new QuestionStatusList(response.data.data)
-        that.filter()
-      })
+      this.$apiGateway.question.getQuestionStatuses()
+        .then(questionStatusList => {
+          that.questionStatusList = new QuestionStatusList(questionStatusList)
+          that.filter()
+        })
     },
     filter (itemId, page) {
       if (itemId) {
@@ -178,11 +178,11 @@ export default {
       // that.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: 'کمی صبر کنید...' })
       that.$store.dispatch('loading/overlayLoading', true)
       const statusesId = (!itemId) ? [] : [itemId]
-      this.$axios.get(API_ADDRESS.question.index(statusesId, page))
-        .then(response => {
-          that.questions = new QuestionList(response.data.data)
-          that.page = response.data.meta.current_page
-          that.pageCount = Math.ceil(response.data.meta.total / response.data.meta.per_page)
+      this.$apiGateway.question.getIndex(statusesId, page)
+        .then(questionListAndMeta => {
+          that.questions = new QuestionList(questionListAndMeta.QuestionList)
+          that.page = questionListAndMeta.meta.current_page
+          that.pageCount = Math.ceil(questionListAndMeta.meta.total / questionListAndMeta.meta.per_page)
           that.$store.dispatch('loading/overlayLoading', false)
           // that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
         }).catch(e => {

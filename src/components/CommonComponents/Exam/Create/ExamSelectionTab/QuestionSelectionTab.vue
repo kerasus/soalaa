@@ -439,7 +439,7 @@ export default {
       this.treeModalValue = !this.treeModalValue
     },
     getReportOptions() {
-      this.apiGateway.exam.userReportType()
+      this.$apiGateway.exam.userReportType()
         .then((reportTypeList) => {
           this.reportTypeList = reportTypeList
         })
@@ -569,9 +569,9 @@ export default {
         })
     },
     getFilterOptions() {
-      this.$apiGateway.option.userIndex
-        .then((options) => {
-          options.forEach(option => {
+      this.$apiGateway.option.userIndex()
+        .then((optionList) => {
+          optionList.list.forEach(option => {
             if (option.type === 'reference_type') {
               this.filterQuestions.reference_type.push(option)
             } else if (option.type === 'year_type') {
