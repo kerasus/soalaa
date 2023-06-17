@@ -1,43 +1,45 @@
 <template>
   <div class="type-section">
-    <q-btn unelevated
-           color="primary"
-           :loading="btnLoading"
-           label="اصلاح فرمول سوال"
-           class="default-detail-btn"
-           @click="setModifiedValue(true)" />
-    <!--    <vue-tiptap-katex ref="tiptap"-->
-    <!--                      :loading="loading"-->
-    <!--                      :options="{-->
-    <!--                        bubbleMenu: false,-->
-    <!--                        floatingMenu: false,-->
-    <!--                        poem: true,-->
-    <!--                        reading: true,-->
-    <!--                        persianKeyboard: true,-->
-    <!--                        uploadServer: {-->
-    <!--                          url: getQuestionUploadURL,-->
-    <!--                          headers: {-->
-    <!--                            Authorization: getAuthorizationCode-->
-    <!--                          }-->
-    <!--                        },-->
-    <!--                        persianKeyboard: true,-->
-    <!--                        mathliveOptions: {-->
-    <!--                          locale: 'fa',-->
-    <!--                        }-->
-    <!--                      }"-->
-    <!--                      @update:modelValue="updateValue" />-->
+    <q-no-ssr>
+      <q-btn unelevated
+             color="primary"
+             :loading="btnLoading"
+             label="اصلاح فرمول سوال"
+             class="default-detail-btn"
+             @click="setModifiedValue(true)" />
+      <vue-tiptap-katex ref="tiptap"
+                        :loading="loading"
+                        :options="{
+                          bubbleMenu: false,
+                          floatingMenu: false,
+                          poem: true,
+                          reading: true,
+                          persianKeyboard: true,
+                          uploadServer: {
+                            url: getQuestionUploadURL,
+                            headers: {
+                              Authorization: getAuthorizationCode
+                            }
+                          },
+                          persianKeyboard: true,
+                          mathliveOptions: {
+                            locale: 'fa',
+                          }
+                        }"
+                        @update:modelValue="updateValue" />
+    </q-no-ssr>
   </div>
 </template>
 
 <script>
 import { Question } from 'src/models/Question.js'
-// import VueTiptapKatex from 'vue3-tiptap-katex/src/vue3-tiptap-katex.vue'
-import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap.js'
+import { VueTiptapKatex } from 'vue3-tiptap-katex'
+import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap.mjs'
 
 export default {
   name: 'QuestionField',
   components: {
-    // VueTiptapKatex
+    VueTiptapKatex
   },
   inject: {
     question: {

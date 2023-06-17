@@ -58,8 +58,7 @@
                         ['bold', 'italic', 'strike', 'underline'],
                         ['quote', 'unordered', 'ordered'],
                         ['viewsource']
-                      ]">
-            </q-editor>
+                      ]" />
           </div>
           <div class="col-md-12">
             <q-input v-model="localOptions.data.image.link"
