@@ -33,7 +33,6 @@
 </template>
 
 <script>
-// import API_ADDRESS from 'src/api/Addresses'
 import { initDragElement, initResizeElement } from 'src/assets/js/DragAndResize.js'
 
 export default {

@@ -254,12 +254,11 @@ export default {
   methods: {
     getUserFormData () {
       this.showLoading()
-      this.$alaaApiInstance.get(API_ADDRESS.user.formData)
-        .then((resp) => {
-          // console.log('getUserFormData res :', resp)
-          this.genders = resp.data.data.genders
-          this.provinces = resp.data.data.provinces
-          this.cities = resp.data.data.cities
+      this.$apiGateway.user.formData()
+        .then((formData) => {
+          this.genders = formData.genders
+          this.provinces = formData.provinces
+          this.cities = formData.cities
           this.hideLoading()
         })
         .catch(() => {
@@ -276,7 +275,6 @@ export default {
       this.showLoading()
       try {
         const response = await this.getRankData()
-        // console.log('response :', response)
         this.hideLoading()
         if (response.data.data) {
           this.results = this.results.concat(response.data.data)

@@ -15,7 +15,7 @@
         <!--            {{options.data.title}}-->
         <!--          </div>-->
         <div>
-          <span v-html="options.data.editor"></span>
+          <span v-html="options.data.editor" />
         </div>
         <!--          <div v-for="(item, index) in options.data.value"-->
         <!--               :key="index"-->
@@ -28,21 +28,19 @@
       </div>
       <div v-if="options.data.button?.url"
            class="more-details text-right">
-        <q-btn
-          unelevated
-          :href="options.data.button?.url"
-          :style="{background: options.data.button.bgColor, color: options.data.button.textColor}"
-          class="btn q-ma-none"
-          padding="7px 15px 7px 15px"
-          icon-right="west"
-          :label="options.data.button?.text" />
+        <q-btn unelevated
+               :href="options.data.button?.url"
+               :style="{background: options.data.button.bgColor, color: options.data.button.textColor}"
+               class="btn q-ma-none"
+               padding="7px 15px 7px 15px"
+               icon-right="west"
+               :label="options.data.button?.text" />
       </div>
     </div>
     <div class="img-box">
       <a :href="options.data.image?.url">
-        <q-img
-          class="img"
-          :src="options.data.image?.link" />
+        <q-img class="img"
+               :src="options.data.image?.link" />
       </a>
     </div>
   </div>
@@ -53,16 +51,21 @@ import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'FeatureBox',
+  props: {
+    options: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data: () => ({
     editor: '',
     titleColor: null,
     loading: false,
     featureData: []
   }),
-  props: {
-    options: {
-      type: Object,
-      default: () => {}
+  computed: {
+    pageBuilderEditable () {
+      return this.$store.getters['AppLayout/pageBuilderEditable']
     }
   },
   watch: {
@@ -76,11 +79,6 @@ export default {
   created() {
     // this.initPageData()
     this.titleColor = this.options.titleColor
-  },
-  computed: {
-    pageBuilderEditable () {
-      return this.$store.getters['AppLayout/pageBuilderEditable']
-    }
   },
   methods: {
     async initPageData() {

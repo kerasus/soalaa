@@ -331,7 +331,7 @@ export default {
     },
     getOptions () {
       this.$store.dispatch('loading/linearLoading', true)
-      this.$apiGateway.wxam.getFilterOptions()
+      this.$apiGateway.exam.getFilterOptions()
         .then((options) => {
           this.$store.dispatch('loading/linearLoading', false)
           this.options = options.filter(data => data.type === 'exam_type')

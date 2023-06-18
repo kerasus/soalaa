@@ -52,14 +52,14 @@
 
 <script>
 import { EntityIndex } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Index',
   components: { EntityIndex },
   data () {
     return {
-      api: API_ADDRESS.ticket.index.base,
+      api: APIGateway.ticket.APIAdresses.index,
       tableKeys: {
         data: 'data',
         total: 'meta.total',
@@ -258,7 +258,7 @@ export default {
             label: 'ثبت محصول'
           },
           indexConfig: {
-            apiAddress: API_ADDRESS.product.index.base,
+            apiAddress: APIGateway.product.APIAdresses.index,
             tableTitle: 'لیست محصولات',
             showTableItemsRouteName: 'Admin.Product.Show',
             tableKeys: {

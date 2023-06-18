@@ -1,6 +1,7 @@
 <template>
-  <div v-if="!mobileMode">
-    <q-card class="custom-card q-pa-none">
+  <div>
+    <q-card v-if="!mobileMode"
+            class="custom-card q-pa-none">
       <div class="filter-card-container">
         <div class="filter-header">
           <q-card-section class="header-title-container q-pa-none">
@@ -32,7 +33,8 @@
         </div>
       </div>
     </q-card>
-    <div class="filter-options-section filter-options-desktop">
+    <div class="filter-options-section"
+         :class="{'filter-options-desktop': !mobileMode}">
       <question-filter-expansion header-title="درس و مبحث">
         <q-checkbox v-if="availableSearchSingleNode"
                     v-model="searchSingleNode"
@@ -48,7 +50,7 @@
                         @lazy-loaded="getExpandedTree" />
       </question-filter-expansion>
       <!--      header-title="مرجع"-->
-      <question-filter-expansion header-title="طراح سوال"
+      <question-filter-expansion header-title="مرجع سوال"
                                  :loading="localLoadings.optionsLoading">
         <q-option-group v-model="selectedReference"
                         type="checkbox"
@@ -133,144 +135,12 @@
 
       </question-filter-expansion>
 
-      <question-filter-expansion
-        v-if="filterQuestions.report_type"
-        header-title="نوع خطا"
-        :loading="localLoadings.optionsLoading"
-      >
-        <q-option-group
-          v-model="selectedReportType"
-          :options="singleModeFilterOptions('report_type', 'value')"
-          @update:model-value="onChangeReportTypes"
-        />
-        <div v-if="filterQuestions.report_type.length === 0"> هیچ نوع خطایی ایجاد نشده است</div>
-
-      </question-filter-expansion>
-
-      <question-filter-expansion v-if="filterQuestions.report_status"
-                                 header-title="وضعیت خطا"
-                                 :loading="localLoadings.reportStatusLoading">
-        <q-option-group v-model="report_status"
-                        :options="singleModeFilterOptions('report_status', 'description')"
-                        @update:model-value="onChangeErrorStatus" />
-        <div v-if="filterQuestions.report_status.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
-
-      </question-filter-expansion>
-
-    </div>
-  </div>
-  <div v-else>
-    <div class="filter-options-section">
-      <question-filter-expansion header-title="درس و مبحث">
-        <q-checkbox v-if="availableSearchSingleNode"
-                    v-model="searchSingleNode"
-                    class="q-ml-md"
-                    right-label
-                    label="جستجوی تک گره"
-                    @update:model-value="onSearchSingleNode" />
-        <tree-component ref="tree"
-                        :key="treeKey"
-                        tick-strategy="strict"
-                        :get-node-by-id="getNodeById"
-                        @ticked="tickedData"
-                        @lazy-loaded="getExpandedTree" />
-      </question-filter-expansion>
-      <!--      header-title="مرجع"-->
-      <question-filter-expansion header-title="طراح سوال"
+      <question-filter-expansion v-if="filterQuestions.report_type"
+                                 header-title="نوع خطا"
                                  :loading="localLoadings.optionsLoading">
-        <q-option-group v-model="selectedReference"
-                        type="checkbox"
-                        :options="filterQuestions.reference_type.map(option => {
-                          return {
-                            label: option.value,
-                            value: option
-                          }
-                        })"
-                        @update:model-value="onChangeReference" />
-        <div v-if="filterQuestions.reference_type.length === 0"> هیچ مرجعی ایجاد نشده است</div>
-      </question-filter-expansion>
-
-      <question-filter-expansion header-title="سال انتشار"
-                                 :loading="localLoadings.optionsLoading">
-        <q-option-group v-model="selectedYears"
-                        type="checkbox"
-                        :options="filterQuestions.year_type.map(option => {
-                          return {
-                            label: option.value,
-                            value: option
-                          }
-                        })"
-                        @update:model-value="onChangeYears" />
-        <div v-if="filterQuestions.year_type.length === 0"> هیچ سال انتشاری ایجاد نشده است</div>
-      </question-filter-expansion>
-
-      <question-filter-expansion v-if="showMajorList"
-                                 header-title="رشته تحصیلی"
-                                 :loading="localLoadings.optionsLoading">
-        <q-option-group v-model="selectedMajors"
-                        type="checkbox"
-                        :options="filterQuestions.major_type.map(option => {
-                          return {
-                            label: option.value,
-                            value: option
-                          }
-                        })"
-                        @update:model-value="onChangeMajors" />
-        <div v-if="filterQuestions.major_type.length === 0"> هیچ رشته تحصیلی ایجاد نشده است</div>
-
-      </question-filter-expansion>
-
-      <question-filter-expansion header-title="درجه سختی"
-                                 :loading="localLoadings.levelTypeLoading">
-        <q-option-group v-model="selectedLevels"
-                        type="checkbox"
-                        :options="filterQuestions.level_type.map(option => {
-                          return {
-                            label: option.trans,
-                            value: option
-                          }
-                        })"
-                        @update:model-value="onChangeLevels" />
-        <div v-if="filterQuestions.level_type.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
-
-      </question-filter-expansion>
-
-      <question-filter-expansion v-if="filterQuestions.statuses"
-                                 header-title="وضعیت سوال"
-                                 :loading="localLoadings.statusLoading">
-        <q-option-group v-model="selectedStatuses"
-                        type="checkbox"
-                        :options="filterQuestions.statuses.map(option => {
-                          return {
-                            label: option.display_title,
-                            value: option
-                          }
-                        })"
-                        @update:model-value="onChangeStatuses" />
-        <div v-if="filterQuestions.statuses.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
-
-      </question-filter-expansion>
-
-      <question-filter-expansion v-if="filterQuestions.types"
-                                 header-title="نوع سوال"
-                                 :loading="localLoadings.optionsLoading">
-        <q-option-group v-model="type_id"
-                        :options="singleModeFilterOptions('types', 'value')"
-                        @update:model-value="onChangeTypes" />
-        <div v-if="filterQuestions.types.length === 0"> هیچ نوع سوالی ایجاد نشده است</div>
-
-      </question-filter-expansion>
-
-      <question-filter-expansion
-        v-if="filterQuestions.report_type"
-        header-title="نوع خطا"
-        :loading="localLoadings.optionsLoading"
-      >
-        <q-option-group
-          v-model="selectedReportType"
-          :options="singleModeFilterOptions('question_report_type', 'value')"
-          @update:model-value="onChangeReportTypes"
-        />
+        <q-option-group v-model="selectedReportType"
+                        :options="singleModeFilterOptions('report_type', 'value')"
+                        @update:model-value="onChangeReportTypes" />
         <div v-if="filterQuestions.report_type.length === 0"> هیچ نوع خطایی ایجاد نشده است</div>
 
       </question-filter-expansion>

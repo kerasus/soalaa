@@ -194,7 +194,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Exam, ExamList } from 'src/models/Exam.js'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
@@ -265,9 +264,11 @@ export default {
         return
       }
       this.sourceExamInfoForCopyCoefficient.loading = true
-      this.$axios.get(API_ADDRESS.exam.showExam(this.sourceExamInfoForCopyCoefficient.id))
-        .then((response) => {
-          this.sourceExamInfoForCopyCoefficient = new Exam(response.data.data)
+      this.$apiGateway.exam.showExam({
+        examId: this.sourceExamInfoForCopyCoefficient.id
+      })
+        .then((exam) => {
+          this.sourceExamInfoForCopyCoefficient = new Exam(exam)
           this.sourceExamInfoForCopyCoefficient.loading = false
         })
         .catch(() => {
@@ -276,9 +277,9 @@ export default {
     },
     getExamDateTime () {
       this.loading = true
-      this.$axios.get(API_ADDRESS.exam.base())
-        .then((response) => {
-          const examList = new ExamList(response.data.data)
+      this.$apiGateway.exam.getBase()
+        .then((resExamList) => {
+          const examList = new ExamList(resExamList)
           const examInfo = new Exam(examList.list.find(exam => exam.id === this.examId))
           this.examTitle = examInfo.title
           this.startDate = examInfo.shamsiDate('start_at').dateTime
@@ -290,7 +291,7 @@ export default {
         return
       }
       this.sourceExamInfoForCopyCoefficient.loading = true
-      this.$axios.put(API_ADDRESS.exam.copyCoefficient, {
+      this.$apiGateway.exam.copyCoefficient({
         source_exam_id: this.sourceExamInfoForCopyCoefficient.id,
         destination_exam_id: this.$route.params.exam_id
       })
@@ -304,9 +305,9 @@ export default {
         })
     },
     getCategories () {
-      this.$axios.get(API_ADDRESS.questionCategory.base)
-        .then((response) => {
-          this.categoryList = new QuestCategoryList(response.data.data)
+      this.$apiGateway.questionCategory.get()
+        .then((questionCategoryList) => {
+          this.categoryList = new QuestCategoryList(questionCategoryList)
         })
     },
     getSubCategoryList () {
@@ -316,17 +317,19 @@ export default {
         })
     },
     existedSubGroup () {
-      this.$axios.get(API_ADDRESS.subGroups.base(this.examId))
-        .then((response) => {
-          this.subGroups = response.data.data
+      this.$apiGateway.exam.getSubGroup(this.examId)
+        .then((subGroups) => {
+          this.subGroups = subGroups
         })
+        .catch(() => {})
     },
     getAllSubGroup () {
-      this.$axios.get(API_ADDRESS.subGroups.all())
-        .then((response) => {
-          this.allSubGroups = response.data.data
+      this.$apiGateway.exam.getAllSubGroup()
+        .then((allSubGroups) => {
+          this.allSubGroups = allSubGroups
           this.loading = false
         })
+        .catch(() => {})
     },
     addSubgroup () {
       this.selectedSubGroup = this.allSubGroups.find(item => item.id === this.selectedSubgroup)
@@ -360,17 +363,21 @@ export default {
           subCategory.subcategory_id = subCategory.sub_category_id
         })
       })
-      this.$axios.post(API_ADDRESS.subGroups.base(that.examId), {
-        zirgorooh: this.subGroups
+      this.$apiGateway.exam.createSubGroup({
+        examId: that.examId,
+        data: {
+          zirgorooh: this.subGroups
+        }
       })
-        .then((response) => {
-          that.subGroups = response.data.data
+        .then((subGroups) => {
+          that.subGroups = subGroups
           this.$q.notify({
             message: 'اطلاعات ثبت شد.',
             group: 'notifs',
             type: 'positive'
           })
         })
+        .catch(() => {})
     }
   }
 }

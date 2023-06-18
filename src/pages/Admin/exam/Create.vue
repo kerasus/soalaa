@@ -111,7 +111,7 @@
 
 <script>
 import { EntityCreate } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Create',
@@ -119,7 +119,7 @@ export default {
   data () {
     return {
       expanded: true,
-      api: API_ADDRESS.exam.base(),
+      api: APIGateway.exam.APIAdresses.base(),
       entityIdKeyInResponse: 'data.id',
       showRouteParamKey: 'id',
       showRouteName: 'Admin.Exam.Show',
@@ -183,9 +183,9 @@ export default {
   },
   methods: {
     getType () {
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
-          this.typeOptions = response.data.data.filter(data => data.type === 'exam_type')
+      this.$apiGateway.option.getFilterOptions()
+        .then((options) => {
+          this.typeOptions = options.filter(data => data.type === 'exam_type')
           this.inputs.forEach(input => {
             if (input.name === 'type_id') {
               this.typeOptions.forEach(type => {
@@ -197,9 +197,9 @@ export default {
         .catch(() => {})
     },
     getCategories() {
-      this.$axios.get(API_ADDRESS.questionCategory.base)
-        .then((response) => {
-          this.categoryOptions = response.data.data
+      this.$apiGateway.questionCategory.get()
+        .then((questionCategory) => {
+          this.categoryOptions = questionCategory.list
         })
         .catch(() => {})
     },

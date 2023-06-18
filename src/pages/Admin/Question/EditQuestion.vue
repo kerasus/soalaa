@@ -103,7 +103,6 @@ import moment from 'moment-jalaali'
 import mixinTree from 'src/mixin/Tree.js'
 import { EntityIndex } from 'quasar-crud'
 import { ExamList } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Question } from 'src/models/Question.js'
 import { computed, defineAsyncComponent } from 'vue'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
@@ -220,7 +219,6 @@ export default {
     }
   },
   created () {
-    this.logIndexApi = API_ADDRESS.question.reportLog(this.$route.params.question_id)
     this.getQuestionReportStatuses()
     this.enableLoading()
     this.getQuestionTypeForTypeId(this.question)
@@ -239,9 +237,12 @@ export default {
   methods: {
     updateQuestionReportStatus (reportId, newStatus) {
       this.questionReportStatusesLoading = true
-      this.$axios.put(this.logIndexApi, {
-        id: reportId,
-        status: newStatus
+      this.$apiGateway.question.editReportLog({
+        questionId: this.$route.params.question_id,
+        data: {
+          id: reportId,
+          status: newStatus
+        }
       })
         .then(() => {
           this.questionReportStatusesLoading = false
@@ -257,10 +258,10 @@ export default {
     },
     getQuestionReportStatuses() {
       this.questionReportStatusesLoading = true
-      this.$axios.get(API_ADDRESS.question.reportStatuses)
-        .then(response => {
+      this.$apiGateway.question.reportStatuses()
+        .then(reportStatuses => {
           this.questionReportStatusesLoading = false
-          this.questionReportStatuses = response.data.data
+          this.questionReportStatuses = reportStatuses
         })
         .catch(() => {
           this.questionReportStatusesLoading = false
@@ -276,14 +277,17 @@ export default {
       this.imgFloatMode = !this.imgFloatMode
     },
     deleteImage (image) {
-      this.$axios.delete(API_ADDRESS.question.photo(image.type, this.question.id), {
+      this.$apiGateway.question.deletePhoto({
+        type: image.type,
+        questionId: this.question.id,
         data: {
           url: image.src
         }
-      }).then(response => {
-        this.question = new Question(response.data.data)
-        this.question.type_id = response.data.data.type?.id
       })
+        .then(question => {
+          this.question = new Question(question)
+          this.question.type_id = question.type?.id
+        })
     },
     chosenComponent () {
       const cName = this.question.type.componentName
@@ -359,7 +363,9 @@ export default {
       })
     },
     deleteQuestionReq (questionId) {
-      return this.$axios.delete(API_ADDRESS.question.delete(questionId))
+      return this.$apiGateway.question.delete({
+        questionId
+      })
     },
     closeConfirmModal () {
       this.$store.commit('AppLayout/showConfirmDialog', {

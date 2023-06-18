@@ -154,7 +154,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 // import Assistant from 'src/plugins/assistant'
 export default {
   name: 'TakhminRotbe',
@@ -367,14 +366,14 @@ export default {
           sub_category_id: keys[i]
         })
       }
-      this.$axios.post(API_ADDRESS.exam.takhminRotbe, {
+      this.$apigateway.exam.takhminRotbe({
         exam_user_id: that.takhminReport.exam_user.id,
         percents: sentPercents
       })
-        .then(response => {
-          that.takhminReport.main = response.data.main
-          that.takhminReport.sub_category = response.data.sub_category
-          that.takhminReport.zirgorooh = response.data.zirgorooh
+        .then(takhmin => {
+          that.takhminReport.main = takhmin.main
+          that.takhminReport.sub_category = takhmin.sub_category
+          that.takhminReport.zirgorooh = takhmin.zirgorooh
         })
     }
   }

@@ -64,23 +64,23 @@
               </q-input>
             </q-card-section>
 
-            <!--            <q-card-section class="filter-section q-mb-md">-->
-            <!--              <q-btn icon="isax:setting-4"-->
-            <!--                     class="filter-btn q-mt-md"-->
-            <!--                     flat-->
-            <!--                     @click="showFilters = true" />-->
-            <!--              <q-select-->
-            <!--                v-model="searchSelector"-->
-            <!--                filled-->
-            <!--                dropdown-icon="isax:arrow-down-1"-->
-            <!--                option-value="value"-->
-            <!--                option-label="title"-->
-            <!--                :options="searchInputOptions"-->
-            <!--                class="backGround-gray-input filter-input"-->
-            <!--                @update:model-value="sortByCreatedAt"-->
-            <!--              >-->
-            <!--              </q-select>-->
-            <!--            </q-card-section>-->
+            <q-card-section class="filter-section q-mb-md">
+              <q-btn icon="isax:setting-4"
+                     class="filter-btn q-mt-md"
+                     flat
+                     @click="showFilters = true" />
+              <!--              <q-select-->
+              <!--                v-model="searchSelector"-->
+              <!--                filled-->
+              <!--                dropdown-icon="isax:arrow-down-1"-->
+              <!--                option-value="value"-->
+              <!--                option-label="title"-->
+              <!--                :options="searchInputOptions"-->
+              <!--                class="backGround-gray-input filter-input"-->
+              <!--                @update:model-value="sortByCreatedAt"-->
+              <!--              >-->
+              <!--              </q-select>-->
+            </q-card-section>
           </q-card>
         </div>
         <div class="question-bank-content">
@@ -439,7 +439,7 @@ export default {
       this.treeModalValue = !this.treeModalValue
     },
     getReportOptions() {
-      this.apiGateway.exam.userReportType()
+      this.$apiGateway.exam.userReportType()
         .then((reportTypeList) => {
           this.reportTypeList = reportTypeList
         })
@@ -529,7 +529,7 @@ export default {
     getFiltersForRequest(filterData) {
       return {
         tags: filterData.tags.map(item => item.id),
-        level: filterData.level_type.map(item => item.value),
+        level: filterData.level_type.map(item => item.key),
         years: filterData.years.map(item => item.id),
         majors: filterData.majors.map(item => item.id),
         reference: filterData.reference.map(item => item.id),
@@ -569,9 +569,9 @@ export default {
         })
     },
     getFilterOptions() {
-      this.$apiGateway.option.userIndex
-        .then((options) => {
-          options.forEach(option => {
+      this.$apiGateway.option.userIndex()
+        .then((optionList) => {
+          optionList.list.forEach(option => {
             if (option.type === 'reference_type') {
               this.filterQuestions.reference_type.push(option)
             } else if (option.type === 'year_type') {

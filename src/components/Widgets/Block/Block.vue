@@ -80,7 +80,6 @@
 
 <script>
 import { Block } from 'src/models/Block.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { mixinWidget } from 'src/mixin/Mixins.js'
 import Slider from 'components/Widgets/Slider/Slider.vue'
 import SetItem from 'components/Widgets/SetItem/SetItem.vue'
@@ -167,15 +166,15 @@ export default {
     },
     getApiRequest() {
       if (this.localOptions.apiName === 'home') {
-        return this.$alaaApiInstance.get(API_ADDRESS.block.home)
+        return this.$apiGateway.pages.home
         // return this.$apiGateway.pages.home()
       }
       if (this.localOptions.apiName === 'shop') {
-        return this.$alaaApiInstance.get(API_ADDRESS.block.shop)
+        return this.$apiGateway.pages.shop
         // return this.$apiGateway.pages.shop()
       }
       if (this.localOptions.apiName === 'content') {
-        return this.$alaaApiInstance.get(API_ADDRESS.content.relatedProducts(this.$route.params.id))
+        return this.$apiGateway.content.relatedProducts(this.$route.params.id)
         // return this.$apiGateway.content.relatedProducts(this.$route.params.id)
       }
       return Promise.reject('wrong api name')

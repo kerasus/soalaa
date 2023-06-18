@@ -90,7 +90,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { mixinGetQuizData } from 'src/mixin/Mixins.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 
@@ -121,23 +120,20 @@ export default {
       }
     },
     getCurrentVideos () {
-      this.$axios.get(API_ADDRESS.exam.getAnalysisVideo(this.$route.params.examId))
-        .then(response => {
+      this.$apiGateway.exam.getAnalysisVideo(this.$route.params.examId)
+        .then(examList => {
           this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
-          response.data.data.forEach(item => {
-          })
-          if (response.data.data.find(item => item.sub_category.id === this.selectedSubCategory.id).videos) {
-            this.videos = response.data.data.find(item => item.sub_category.id === this.selectedSubCategory.id).videos
+          if (examList.list.find(item => item.sub_category.id === this.selectedSubCategory.id).videos) {
+            this.videos = examList.list.find(item => item.sub_category.id === this.selectedSubCategory.id).videos
           }
         })
     },
     saveVideos () {
-      this.$axios.post(API_ADDRESS.exam.analysisVideo,
-        {
-          video: this.videos,
-          sub_category_id: this.selectedSubCategory.id,
-          exams: [{ exam_id: this.$route.params.examId }]
-        })
+      this.$apiGateway.exam.analysisVideo({
+        video: this.videos,
+        sub_category_id: this.selectedSubCategory.id,
+        exams: [{ exam_id: this.$route.params.examId }]
+      })
         .then(() => {
           this.$q.notify({
             message: 'اطلاعات ثبت شد.',

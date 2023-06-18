@@ -37,9 +37,9 @@
                 <q-tab name="result"
                        label="کارنامه" />
                 <q-tab name="rank"
-                       label="تخمین رتبه"></q-tab>
+                       label="تخمین رتبه" />
                 <q-tab name="newRank"
-                       label="تخمین رتبه بر اساس کنکور"></q-tab>
+                       label="تخمین رتبه بر اساس کنکور" />
                 <q-tab name="lessons"
                        label="ریزدرس ها" />
                 <q-tab name="KeyAnswers"

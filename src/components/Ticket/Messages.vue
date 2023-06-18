@@ -103,7 +103,6 @@
   </q-card>
 </template>
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { mixinDateOptions } from 'src/mixin/Mixins.js'
 import AvWaveform from 'vue-audio-visual/src/components/AvWaveform'
 
@@ -169,12 +168,15 @@ export default {
       this.showVoicePlayerIsPlaying = false
     },
     sendReport () {
-      this.$alaaApiInstance.post(API_ADDRESS.ticket.show.reportMessage(this.data.user.id), {
-        report_description: this.userReportDescription
+      this.$apiGateway.ticket.reportMessage({
+        ticketId: this.data.user.id,
+        data: {
+          report_description: this.userReportDescription
+        }
       })
-        .then((res) => {
+        .then((message) => {
           this.$q.notify({
-            message: res.data.message,
+            message,
             type: 'positive'
           })
         })

@@ -96,7 +96,6 @@
 
 <script>
 import { User } from 'src/models/User.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import UserPanelBaseMenu from 'src/layouts/UserPanelLayouts/UserPanelBaseMenu.vue'
 import UserPanelSideDrawer from 'src/layouts/UserPanelLayouts/UserPanelSideDrawer.vue'
 
@@ -153,9 +152,13 @@ export default {
     confirmUpdate() {
       const fd = new FormData()
       fd.append('photo', this.file)
-      this.$alaaApiInstance.put(API_ADDRESS.user.updatePhoto(), fd).then((d) => {
-        this.controls = false
+      this.$apiGateway.user.updatePhoto({
+        data: fd
       })
+        .then((d) => {
+          this.controls = false
+        })
+        .catch(() => {})
     }
   }
 }

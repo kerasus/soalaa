@@ -231,7 +231,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { mixinDateOptions } from 'src/mixin/Mixins.js'
 
 export default {
@@ -288,16 +287,14 @@ export default {
       this.batchExtendPostRequest()
     },
     batchExtendPostRequest () {
-      this.$alaaApiInstance.post(API_ADDRESS.ticket.show.batchExtend, {
+      this.$apiGateway.ticket.batchExtend({
         orderproducts: this.extendProductArray
       })
-        .then((res) => {
+        .then(() => {
           this.extendProductArray = []
-          // console.log(res)
         })
-        .catch((e) => {
+        .catch(() => {
           this.extendProductArray = []
-          // console.log(e)
         })
     }
   }

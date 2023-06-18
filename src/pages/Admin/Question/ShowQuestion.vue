@@ -72,7 +72,6 @@ import LogListComponent from 'src/components/QuestionBank/EditQuestion/Log/LogLi
 import AttachExam from 'src/components/Question/QuestionPage/AttachExam/AttachExam.vue'
 import QuestionIdentifier from 'src/components/Question/QuestionPage/QuestionIdentifier.vue'
 // import QuestionDetails from 'src/components/Question/QuestionPage/Create/textMode/QuestionDetails'
-// import API_ADDRESS from 'src/api/Addresses.js'
 
 export default {
   name: 'ShowQuestion',

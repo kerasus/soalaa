@@ -454,21 +454,6 @@ export default defineComponent({
         }
       })
     },
-    // getExams () {
-    //   const that = this
-    //   this.loadingList = true
-    //   // this.user.getUserExams()
-    //   this.$axios.get(API_ADDRESS.exam.userExamsList)
-    //     .then((response) => {
-    //       this.user.exams = new ExamList(response.data.data.exams)
-    //       this.user.exams.loading = false
-    //       this.exams = new ExamList(response.data.data.exams)
-    //       this.loadingList = false
-    //     })
-    //     .catch(() => {
-    //       that.loadingList = false
-    //     })
-    // },
     registerExam (exam) {
       this.$apiGateway.exam.registerExam({ exam_id: exam.id })
         .then((redirectUrl) => {

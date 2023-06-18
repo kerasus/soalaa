@@ -70,10 +70,10 @@
 
 <script>
 import { Product } from 'src/models/Product.js'
-import { mixinWidget, mixinPrefetchServerData } from 'src/mixin/Mixins.js'
 import { APIGateway } from 'src/api/APIGateway.js'
-import Bookmark from 'components/Bookmark.vue'
+import Bookmark from 'src/components/Bookmark.vue'
 import ShareNetwork from 'src/components/ShareNetwork.vue'
+import { mixinWidget, mixinPrefetchServerData } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'ProductInfoShow',
@@ -108,25 +108,25 @@ export default {
       information: [
         {
           key: 'teacher',
-          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-teacher.png\n',
+          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-teacher.png',
           title: 'مدرس',
           value: []
         },
         {
           key: 'production_year',
-          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-calendar.png\n',
+          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-calendar.png',
           title: 'سال تولید',
           value: []
         },
         {
           key: 'major',
-          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-book.png\n',
+          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-book.png',
           title: 'رشته',
           value: []
         },
         {
           key: 'shipping_method',
-          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-document-download.png\n',
+          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-document-download.png',
           title: 'مدل دریافت',
           value: []
         }
@@ -172,7 +172,7 @@ export default {
       } else {
         this.information.splice(0, 0, {
           key: 'teacher',
-          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-teacher.png\n',
+          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-teacher.png',
           title: 'مدرس',
           value: this.product.attributes.info.teacher
         })
@@ -184,7 +184,7 @@ export default {
       } else {
         this.information.splice(2, 0, {
           key: 'major',
-          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-book.png\n',
+          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-book.png',
           title: 'رشته',
           value: this.product.attributes.info.major
         })
@@ -196,7 +196,7 @@ export default {
       } else {
         this.information.splice(1, 0, {
           key: 'production_year',
-          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-calendar.png\n',
+          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-calendar.png',
           title: 'سال تولید',
           value: this.product.attributes.info.production_year
         })
@@ -208,7 +208,7 @@ export default {
       } else {
         this.information.splice(3, 0, {
           key: 'shipping_method',
-          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-document-download.png\n',
+          src: 'https://nodes.alaatv.com/upload/landing/28/modal/landing-taftan-modal-document-download.png',
           title: 'مدل دریافت',
           value: this.product.attributes.info.shipping_method
         })

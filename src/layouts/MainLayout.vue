@@ -68,7 +68,7 @@
         <q-dialog v-model="loginDialog">
           <auth />
         </q-dialog>
-        <Router :include="keepAliveComponents" />
+        <router :include="keepAliveComponents" />
         <floating-action-button v-if="user.hasPermission('editeSoalaSiteSetting') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams' || $route.name === 'Public.Product.Show')" />
       </div>
     </template>

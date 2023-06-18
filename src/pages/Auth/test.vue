@@ -1,13 +1,13 @@
 <template>
-  <h5>THIS COMPONENT IS JUST FOR TEST</h5>
+  <div>
+    THIS COMPONENT IS JUST FOR TEST
+  </div>
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
-
 export default {
   name: 'Test',
-  components: { },
+  components: {},
   mixins: [],
   beforeRouteEnter () {
     // console.log('debug beforeRouteEnter')
@@ -33,9 +33,6 @@ export default {
     }
   },
   computed: {
-    test1 () {
-      return API_ADDRESS.question.uploadImage('dfbdgbdgbgfnhfn')
-    },
     test2 () {
       return 'Bearer ' + this.$store.getters['Auth/accessToken']
     }
