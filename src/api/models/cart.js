@@ -12,7 +12,8 @@ export default class CartAPI extends APIRepository {
       discountRemove: '/order/RemoveCoupon',
       reviewCart: '/checkout/review',
       getPaymentRedirectEncryptedLink: '/getPaymentRedirectEncryptedLink?seller=' + this.seller,
-      removeFromCart: (id) => '/orderproduct/' + id
+      removeFromCart: (id) => '/orderproduct/' + id,
+      orderWithTransaction: (orderId) => '/orderWithTransaction/' + orderId
     }
     this.CacheList = {
       addToCart: this.name + this.APIAdresses.addToCart,
@@ -20,7 +21,8 @@ export default class CartAPI extends APIRepository {
       discountRemove: this.name + this.APIAdresses.discountRemove,
       getPaymentRedirectEncryptedLink: this.name + this.APIAdresses.getPaymentRedirectEncryptedLink,
       reviewCart: this.name + this.APIAdresses.reviewCart,
-      removeFromCart: id => this.name + this.APIAdresses.removeFromCart(id)
+      removeFromCart: id => this.name + this.APIAdresses.removeFromCart(id),
+      orderWithTransaction: id => this.name + this.APIAdresses.orderWithTransaction(id)
     }
   }
 
@@ -86,7 +88,7 @@ export default class CartAPI extends APIRepository {
     })
   }
 
-  reviewCart(cartItems = [], cache = { TTL: 100 }) {
+  reviewCart(cartItems = [], cache = { TTL: 1000 }) {
     const queryParams = {}
     queryParams.seller = this.seller
     cartItems.forEach((cartItem, cartItemIndex) => {
@@ -113,7 +115,7 @@ export default class CartAPI extends APIRepository {
     })
   }
 
-  getPaymentRedirectEncryptedLink(data = {}, cache = { TTL: 100 }) {
+  getPaymentRedirectEncryptedLink(data = {}, cache = { TTL: 1000 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
@@ -122,6 +124,22 @@ export default class CartAPI extends APIRepository {
       ...(cache !== undefined && { cache }),
       resolveCallback: (response) => {
         return response.data.data.url
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getOrderWithTransaction(data = {}, cache = { TTL: 1000 }) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.orderWithTransaction(data.id),
+      cacheKey: this.CacheList.orderWithTransaction(data.id),
+      ...(cache !== undefined && { cache }),
+      resolveCallback: (response) => {
+        return response.data.data.paymentstatus // Object
       },
       rejectCallback: (error) => {
         return error

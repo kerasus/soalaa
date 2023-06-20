@@ -207,8 +207,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
-
 export default {
   name: 'results',
   components: {
@@ -274,18 +272,18 @@ export default {
     async loadRankData (index, done) {
       this.showLoading()
       try {
-        const response = await this.getRankData()
+        const examReportWithMetaLink = await this.getRankData()
         this.hideLoading()
-        if (response.data.data) {
-          this.results = this.results.concat(response.data.data)
+        if (examReportWithMetaLink.examReport) {
+          this.results = this.results.concat(examReportWithMetaLink.examReport)
         }
-        if (typeof response.data.links === 'undefined' || response.data.links.next === null) {
+        if (typeof examReportWithMetaLink.links === 'undefined' || examReportWithMetaLink.links.next === null) {
           this.nextPage = ''
           done(true)
           this.noData = true
           return
         }
-        this.nextPage = response.data.links.next.replace(response.data.meta.path, '')
+        this.nextPage = examReportWithMetaLink.links.next.replace(examReportWithMetaLink.meta.path, '')
         done()
       } catch (error) {
         this.hideLoading()
@@ -294,19 +292,25 @@ export default {
 
     getRankData () {
       const params = this.getParams()
-      return this.$axios.get(API_ADDRESS.exam.examReportIndex('participants') + this.nextPage, { params })
+      return this.$apiGateway.exam.examReportIndex({
+        type: 'participants',
+        next: this.nextPage,
+        params
+      })
     },
 
     getLessonResultData () {
       if (!this.lessonsResults.length) {
-        this.$axios.get(API_ADDRESS.exam.examReportIndex('lessons'), {
+        this.$apiGateway.exam.examReportIndex({
+          type: 'lessons',
+          next: '',
           params: {
             exam_id: this.$route.params.id
           }
         })
-          .then((response) => {
-            if (response.data.data) {
-              this.lessonsResults = response.data.data
+          .then((examReportWithMetaLink) => {
+            if (examReportWithMetaLink) {
+              this.lessonsResults = examReportWithMetaLink
             }
           })
       }
@@ -336,11 +340,13 @@ export default {
         message: 'فایل Excel در حال تولید است.',
         position: 'center'
       })
-      this.$axios.get(API_ADDRESS.exam.examReportIndex('participants'), {
+      this.$apiGateway.exam.examReportIndex({
+        type: 'participants',
+        next: '',
         params
       })
-        .then(response => {
-          that.file_url = response.data.data.export_file_url
+        .then(examReportWithMetaLink => {
+          that.file_url = examReportWithMetaLink.examReport.export_file_url
           that.fileLoading = false
         })
     },

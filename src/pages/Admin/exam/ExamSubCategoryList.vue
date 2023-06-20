@@ -178,10 +178,10 @@ export default {
       })
     },
     async setExam () {
-      const res = await this.getExamData(this.examId)
-      if (res.data.data) {
-        this.exam = new Exam(res.data.data)
-        this.examTitle = res.data.data.title
+      const exam = await this.getExamData(this.examId)
+      if (exam) {
+        this.exam = exam
+        this.examTitle = exam.title
       }
     },
     async loadLessons () {

@@ -54,7 +54,7 @@ export default defineComponent({
       this.startTill = moment(`${this.calendarYear}/${this.calendarDate.jMonth() + 1}/${this.dayNum}`, 'jYYYY/jM/jD').format('YYYY-M-D')
       this.$apiGateway.exam.userExamList({ start_at_from: this.startFrom, start_at_till: this.startTill })
         .then((res) => {
-          this.exam = res.examList
+          this.exam = res.examList.list
           this.exam.forEach(element => {
             if (element.start_at.substring(0, 10) === moment().format('YYYY-MM-DD')) {
               const timeToExam = moment(element.finish_at, 'YYYY-MM-DD HH:mm:ss').diff(moment(element.start_at, 'YYYY-MM-DD HH:mm:ss'))

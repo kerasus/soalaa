@@ -47,8 +47,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-
 export default {
   name: 'FeatureBox',
   props: {
@@ -84,8 +82,8 @@ export default {
     async initPageData() {
       this.loading = true
       try {
-        const response = await this.$axios(API_ADDRESS.homePage.base)
-        this.featureData = response.data.data[this.options.responseKey]
+        const homepageData = await this.$apiGateway.getHomepageData()
+        this.featureData = homepageData[this.options.responseKey]
         this.loading = false
       } catch (e) {
         this.loading = false

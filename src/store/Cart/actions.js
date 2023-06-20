@@ -93,38 +93,6 @@ export function reviewCart(context) {
         reject(error)
       })
   })
-  // return new Promise((resolve, reject) => {
-  //   axios
-  //     .get(API_ADDRESS.cart.review, {
-  //       params: {
-  //         seller: 1,
-  //         cartItems
-  //       },
-  //       paramsSerializer: {
-  //         encode: parse,
-  //         serialize: params => {
-  //           const q = new URLSearchParams()
-  //           q.set('seller', params.seller)
-  //           for (let item = 0; item < params.cartItems.length; item++) {
-  //             q.set(`cartItems[${item}][product_id]`, params.cartItems[item].product_id)
-  //             for (let product = 0; product < params.cartItems[item].products.length; product++) {
-  //               q.set(`cartItems[${item}][products][${product}]`, params.cartItems[item].products[product].id)
-  //             }
-  //           }
-  //           return q
-  //         }
-  //       }
-  //     })
-  //     .then((response) => {
-  //       if (isUserLogin) {
-  //         context.commit('updateCart', new Cart())
-  //       }
-  //       return resolve(response)
-  //     })
-  //     .catch((error) => {
-  //       reject(error)
-  //     })
-  // })
 }
 
 export function paymentCheckout(context) {

@@ -148,7 +148,6 @@
 import Time from 'src/plugins/time.js'
 import { User } from 'src/models/User.js'
 import Verify from 'src/pages/Auth/Verify.vue'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { mixinAuth } from 'src/mixin/Mixins.js'
 
 export default {
@@ -306,11 +305,11 @@ export default {
       const that = this
       this.user.loading = true
       // this.user.getUserData()
-      this.$axios.get(API_ADDRESS.user.show_user)
-        .then((response) => {
+      this.$apiGateway.user.showUser()
+        .then((user) => {
           this.user.loading = false
           that.getUserFormData()
-          that.$store.commit('Auth/updateUser', response.data.data)
+          that.$store.commit('Auth/updateUser', user)
           this.canRedirect()
         })
       // .catch(e => {
@@ -352,14 +351,14 @@ export default {
     getUserFormData () {
       // console.log('get user form data run ')
       this.user.loading = true
-      this.$axios.get(API_ADDRESS.user.formData)
-        .then((resp) => {
+      this.$apiGateway.user.formData()
+        .then((formData) => {
           // console.log('getUserFormData reeeeeeeesult :', resp)
-          this.genders = resp.data.data.genders
-          this.grades = resp.data.data.grades
-          this.majors = resp.data.data.majors
-          this.provinces = resp.data.data.provinces
-          this.cities = resp.data.data.cities
+          this.genders = formData.genders
+          this.grades = formData.grades
+          this.majors = formData.majors
+          this.provinces = formData.provinces
+          this.cities = formData.cities
           this.user.loading = false
           // this.loadSomeData()
           // console.log(this.user)

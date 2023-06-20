@@ -12,7 +12,7 @@ const APIAdresses = {
 
 export default class QuestionSubCategoryAPI extends APIRepository {
   constructor() {
-    super('QuestionCategory', appApiInstance, '/category', new QuestSubcategory(), APIAdresses)
+    super('QuestionSubCategory', appApiInstance, '/sub-category', new QuestSubcategory(), APIAdresses)
     this.CacheList = {
       base: this.name + this.APIAdresses.base,
       update: (id) => this.name + this.APIAdresses.update(id)
