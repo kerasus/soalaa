@@ -625,7 +625,6 @@ export default {
       }
       try {
         await APIGateway.exam.userReport({ questionId: this.question.id, params })
-        // await this.$axios.post(API_ADDRESS.exam.user.report(this.question.id), params)
         this.$q.notify({
           type: 'positive',
           message: 'گزازش با موفقیت ثبت شد.'

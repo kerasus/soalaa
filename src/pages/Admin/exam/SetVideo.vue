@@ -114,9 +114,9 @@ export default {
   },
   methods: {
     async getQuizTitle () {
-      const res = await this.getQuizData(this.$route.params.examId)
-      if (res.data.data) {
-        this.quizTitle = res.data.data.title
+      const exam = await this.getQuizData(this.$route.params.examId)
+      if (exam) {
+        this.quizTitle = exam.title
       }
     },
     getCurrentVideos () {

@@ -1,8 +1,7 @@
-// import SetAPI from 'src/api/models/set.js'
+import SetAPI from 'src/api/models/set.js'
 import CartAPI from 'src/api/models/cart.js'
 import AuthAPI from 'src/api/models/Auth.js'
 import ProfileAPI from 'src/api/models/profile.js'
-// import UserAPI from 'src/api/models/user.js'
 import TreeAPI from 'src/api/models/tree.js'
 import UserAPI from 'src/api/models/user.js'
 // import TreeAPI from 'src/api/models/tree.js'
@@ -27,11 +26,11 @@ import ExamAPI from 'src/api/models/exam.js'
 import QuestionCategoryAPI from 'src/api/models/questionCategory.js'
 import QuestionAPI from 'src/api/models/question.js'
 import OptionAPI from 'src/api/models/option.js'
-import QuestionSubCategoryAPI from 'src/api/models/questionSubCategory'
+import QuestionSubCategoryAPI from 'src/api/models/questionSubCategory.js'
 
 /* Exporting the APIGateway object. */
 export const APIGateway = {
-  // set: new SetAPI(),
+  set: new SetAPI(),
   auth: new AuthAPI(),
   user: new UserAPI(),
   cart: new CartAPI(),
@@ -60,5 +59,4 @@ export const APIGateway = {
   questionSubcategory: new QuestionSubCategoryAPI(),
   question: new QuestionAPI(),
   option: new OptionAPI()
-
 }

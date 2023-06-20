@@ -73,7 +73,6 @@
 <script>
 import { computed } from 'vue'
 import { Exam } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import Steps from 'src/pages/Admin/exam/Create/Steps.vue'
 import CreateExamPage from 'src/pages/Admin/exam/Create/CreateExamPage.vue'
 import FinalExamApproval from 'src/pages/Admin/exam/Create/FinalExamApproval.vue'
@@ -168,7 +167,7 @@ export default {
     },
     createExam () {
       return new Promise((resolve, reject) => {
-        this.$axios.post(API_ADDRESS.exam.base())
+        this.$apiGateway.exam.postBase()
           .then(response => {
             resolve(response)
           })

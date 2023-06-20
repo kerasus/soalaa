@@ -34,8 +34,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
-
 export default {
   name: 'ThankYouPage',
   data() {
@@ -53,9 +51,9 @@ export default {
   },
   methods: {
     onLoadPage () {
-      this.$alaaApiInstance.get(API_ADDRESS.cart.orderWithTransaction(this.orderId))
-        .then((response) => {
-          const paymentStatus = response.data.data.paymentstatus
+      this.$apiGateway.cart.getOrderWithTransaction({ orderId: this.orderId })
+        .then((paymentstatus) => {
+          const paymentStatus = paymentstatus
 
           if (paymentStatus.id === 3) {
             this.hasPaid = true

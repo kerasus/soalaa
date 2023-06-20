@@ -2,44 +2,43 @@ import { appApiInstance, alaaApiInstance } from 'src/boot/axios.js'
 import { User } from 'src/models/User.js'
 import { ProductList } from 'src/models/Product.js'
 import { CartItemList } from 'src/models/CartItem.js'
-import APIRepository from '../classes/APIRepository'
-// import { FavoredList } from 'src/models/Favored'
-// import { BankAccountsList } from 'src/models/BankAccounts'
-// import { EventResult } from 'src/models/EventResult'
+import APIRepository from '../classes/APIRepository.js'
+
+const APIAdresses = {
+  base: '/user',
+  edit: (userId) => '/user/' + userId,
+  favored: '/user/favored',
+  purchasedProducts: '/user/products',
+  bankAccounts: '/bank-accounts',
+  mobileResend: '/mobile/resend',
+  mobileVerify: '/mobile/verify',
+  ordersById: (id) => '/user/' + id + '/orders',
+  getOrders: '/orders',
+  orderStatus: '/payment/status',
+  formData: '/megaroute/getUserFormData',
+  showUser: '/getUserFor3a',
+  eventResult: '/event-result',
+  createEventResult: '/event-result/create',
+  baseAdmin: '/admin/user',
+  nationalCard: '/national-card-photo',
+  resendGuest: '/mobile/resendGuest',
+  getUserRoleAndPermission: '/getUserRoleAndPermission',
+  verifyMoshavereh: '/mobile/verifyMoshavereh',
+  newsletter: '/newsletter',
+  subscription: {
+    landing: '/subscribe/landing',
+    list: '/subscribe/user',
+    last: '/subscribe/user/last',
+    register: (userId) => `/subscribe/user/${userId}`
+  },
+  statistics: '/user/dashboard/statistics',
+  updatePhoto: '/user/avatar',
+  feature: '/user/feature'
+}
 
 export default class UserAPI extends APIRepository {
   constructor() {
-    super('user', appApiInstance, '/user', new User())
-    this.APIAdresses = {
-      base: '/user',
-      edit: (userId) => '/user/' + userId,
-      favored: '/user/favored',
-      purchasedProducts: '/user/products',
-      bankAccounts: '/bank-accounts',
-      mobileResend: '/mobile/resend',
-      mobileVerify: '/mobile/verify',
-      ordersById: (id) => '/user/' + id + '/orders',
-      getOrders: '/orders',
-      orderStatus: '/payment/status',
-      formData: '/megaroute/getUserFormData',
-      showUser: '/getUserFor3a',
-      eventResult: '/event-result',
-      createEventResult: '/event-result/create',
-      baseAdmin: '/admin/user',
-      nationalCard: '/national-card-photo',
-      resendGuest: '/mobile/resendGuest',
-      getUserRoleAndPermission: '/getUserRoleAndPermission',
-      verifyMoshavereh: '/mobile/verifyMoshavereh',
-      newsletter: '/newsletter',
-      subscription: {
-        landing: '/subscribe/landing',
-        list: '/subscribe/user',
-        last: '/subscribe/user/last',
-        register: (userId) => `/subscribe/user/${userId}`
-      },
-      statistics: '/user/dashboard/statistics',
-      updatePhoto: '/user/avatar'
-    }
+    super('user', appApiInstance, '/user', new User(), APIAdresses)
     this.CacheList = {
       base: this.name + this.APIAdresses.base,
       purchasedProducts: this.name + this.APIAdresses.purchasedProducts,
@@ -61,7 +60,8 @@ export default class UserAPI extends APIRepository {
       subscriptionList: this.name + this.APIAdresses.subscription.list,
       subscriptionLast: this.name + this.APIAdresses.subscription.last,
       subscriptionRegister: (userId) => this.name + this.APIAdresses.subscription.register(userId),
-      statistics: this.name + this.APIAdresses.statistics
+      statistics: this.name + this.APIAdresses.statistics,
+      feature: this.name + this.APIAdresses.feature
     }
     this.restUrl = (id) => this.APIAdresses.base + '/' + id
     /* Setting the callback functions for the CRUD operations. */
@@ -208,13 +208,13 @@ export default class UserAPI extends APIRepository {
     })
   }
 
-  getOrders(data = {}) {
+  getOrders(data = {}, cache = { TTL: 1000 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.getOrders,
       cacheKey: this.CacheList.getOrders,
-      ...(data.cache && { cache: data.cache }),
+      ...(cache && { cache }),
       resolveCallback: (response) => {
         return response
       },
@@ -240,13 +240,13 @@ export default class UserAPI extends APIRepository {
     })
   }
 
-  formData(data = {}) {
+  formData(data = {}, cache = { TTL: 1000 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.formData,
       cacheKey: this.CacheList.formData,
-      ...(data.cache && { cache: data.cache }),
+      ...(cache && { cache }),
       resolveCallback: (response) => {
         return {
           genders: response.data.data.genders,
@@ -294,7 +294,7 @@ export default class UserAPI extends APIRepository {
   //   })
   // }
 
-  createEventResult(data = {}, cache = 100) {
+  createEventResult(data = {}, cache = 1000) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
@@ -352,7 +352,7 @@ export default class UserAPI extends APIRepository {
     })
   }
 
-  getPurchasedProducts(data = {}, cache = { TTL: 100 }) {
+  getPurchasedProducts(data = {}, cache = { TTL: 1000 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
@@ -383,7 +383,7 @@ export default class UserAPI extends APIRepository {
     })
   }
 
-  getUserRoleAndPermission(data = {}, cache = { TTL: 100 }) {
+  getUserRoleAndPermission(data = {}, cache = { TTL: 1000 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
@@ -487,6 +487,23 @@ export default class UserAPI extends APIRepository {
       rejectCallback: (error) => {
         return error
       }
+    })
+  }
+
+  getFeature(data, cache = { TTL: 1000 }) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.feature,
+      cacheKey: this.CacheList.feature,
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return response.data.data // Boolean
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      ...(data && { data })
     })
   }
 

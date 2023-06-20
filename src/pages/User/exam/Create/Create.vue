@@ -166,7 +166,6 @@
 import { computed } from 'vue'
 import { Exam } from 'src/models/Exam.js'
 import mixinTree from 'src/mixin/Tree.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import Steps from 'src/pages/Admin/exam/Create/Steps.vue'
 import ExamInfoTab from 'src/components/CommonComponents/Exam/Create/ExamInfoTab/ExamInfoTab.vue'
 import FinalApprovalTab from 'src/components/CommonComponents/Exam/Create/FinalApprovalTab/FinalApprovalTab.vue'
@@ -231,8 +230,8 @@ export default {
   },
   created() {
     this.draftExam.loading = true
-    this.checkSubscription().then((res) => {
-      if (res.data.data) {
+    this.checkSubscription().then((hasFeature) => {
+      if (hasFeature) {
         this.subscribed = true
         this.getData()
       } else {
@@ -254,9 +253,9 @@ export default {
       this.getOptions()
         .then(() => {
           this.getDraftExam()
-            .then(response => {
-              if (response.data?.data) {
-                this.loadDraftExam(response.data.data)
+            .then(draftExam => {
+              if (draftExam) {
+                this.loadDraftExam(draftExam)
                 this.continueWithOldDraftExamConfirmationDialog = true
               } else {
                 this.loadDraftExam()
@@ -268,7 +267,7 @@ export default {
         })
     },
     getDraftExam() {
-      return this.$axios.get(API_ADDRESS.exam.user.draft())
+      return this.$apiGateway.exam.getUserDraft()
     },
     getOptions() {
       return Promise.all([
@@ -277,7 +276,7 @@ export default {
       ])
     },
     checkSubscription() {
-      return this.$axios.get(API_ADDRESS.user.feature('exam'))
+      return this.$apiGateway.user.getFeature({ feature: 'exam' })
     },
     getGradesList() {
       return new Promise((resolve, reject) => {
@@ -292,10 +291,10 @@ export default {
     },
     loadMajorList() {
       return new Promise((resolve, reject) => {
-        this.$axios.get(API_ADDRESS.option.user('major_type'))
-          .then((response) => {
-            this.majorList = response.data.data
-            resolve(response)
+        this.$apiGateway.option.getUserOptions('major_type')
+          .then((options) => {
+            this.majorList = options
+            resolve(options)
           }).catch(() => {
             reject()
           })
@@ -314,10 +313,10 @@ export default {
         return
       }
       this.draftExam.loading = true
-      return this.$axios.get(API_ADDRESS.tree.treeBox, { params: { grids: draftExamTempTags } })
-        .then((response) => {
+      return this.$apiGateway.tree.getTreeBox({ grids: draftExamTempTags })
+        .then((tags) => {
           this.draftExam.temp.tags = []
-          this.draftExam.temp.tags.push(...response.data.data)
+          this.draftExam.temp.tags.push(...tags)
           this.draftExam.loading = false
         })
         .catch(() => {
@@ -329,14 +328,15 @@ export default {
       this.continueWithOldDraftExamConfirmationDialog = false
     },
     clearDraftExam() {
-      this.$axios.delete(API_ADDRESS.exam.user.draft()).then((res) => {
-        this.draftExam = new Exam()
-        this.goToFirstStep()
-        this.continueWithOldDraftExamConfirmationDialog = false
-        this.showMessagesInNotify(['آزمون قبلی شما با موفقیت پاک شد'], 'positive')
-      }).catch(() => {
-        this.showMessagesInNotify(['مشکلی رخ داده است'])
-      })
+      this.$apiGateway.exam.deleteUserDraft()
+        .then((res) => {
+          this.draftExam = new Exam()
+          this.goToFirstStep()
+          this.continueWithOldDraftExamConfirmationDialog = false
+          this.showMessagesInNotify(['آزمون قبلی شما با موفقیت پاک شد'], 'positive')
+        }).catch(() => {
+          this.showMessagesInNotify(['مشکلی رخ داده است'])
+        })
     },
     onSecondTabUpdate() {
       this.updateExam('chooseQuestion')
@@ -391,7 +391,7 @@ export default {
       const hasOldDraftExam = !!this.draftExam.id
       if (oldTabIndex === 0 && hasOldDraftExam) {
         this.updateExam(newStep)
-          .then(response => {
+          .then(exam => {
             this.draftExam.loading = false
             this.currentTab = newStep
             this.oldTab = newStep
@@ -401,8 +401,8 @@ export default {
           })
       } else if (oldTabIndex === 0 && !hasOldDraftExam) {
         this.createExam()
-          .then(response => {
-            this.loadDraftExam(response.data.data)
+          .then(exam => {
+            this.loadDraftExam(exam)
             this.draftExam.loading = false
             this.currentTab = newStep
             this.oldTab = newStep
@@ -412,7 +412,7 @@ export default {
           })
       } else if (oldTabIndex < currentTabIndex) {
         this.updateExam(newStep)
-          .then(response => {
+          .then(exam => {
             this.draftExam.loading = false
             this.currentTab = newStep
             this.oldTab = newStep
@@ -429,8 +429,7 @@ export default {
     },
     createExam() {
       this.draftExam.loading = true
-      // return this.$axios.post(API_ADDRESS.exam.user.draftExam.create, this.draftExam.loadApiResource())
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.create, {
+      return this.$apiGateway.exam.userDraftExamCreate({
         title: this.draftExam.title,
         temp: {
           major: this.draftExam.temp.major,
@@ -440,15 +439,18 @@ export default {
       })
     },
     updateExam(newStep) {
-      return this.$axios.put(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), {
-        enable: this.draftExam.enable,
-        title: this.draftExam.title,
-        temp: {
-          major: this.draftExam.temp.major,
-          lesson: this.draftExam.temp.lesson,
-          grade: this.draftExam.temp.grade,
-          tags: this.getDraftExamTags(this.draftExam.temp.tags),
-          level: newStep === 'createPage' ? 1 : newStep === 'chooseQuestion' ? 2 : 3
+      return this.$apiGateway.exam.userDraftExamUpdate({
+        examId: this.draftExam.id,
+        data: {
+          enable: this.draftExam.enable,
+          title: this.draftExam.title,
+          temp: {
+            major: this.draftExam.temp.major,
+            lesson: this.draftExam.temp.lesson,
+            grade: this.draftExam.temp.grade,
+            tags: this.getDraftExamTags(this.draftExam.temp.tags),
+            level: newStep === 'createPage' ? 1 : newStep === 'chooseQuestion' ? 2 : 3
+          }
         }
       })
     },
@@ -470,10 +472,10 @@ export default {
     },
     loadAttachedQuestions() {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.getAttachedQuestions(this.draftExam.id))
-        .then((response) => {
+      return this.$apiGateway.exam.userDraftExamGetAttachedQuestions(this.draftExam.id)
+        .then((questionList) => {
           this.draftExam.questions.clear()
-          this.draftExam.questions.add(...response.data.data)
+          this.draftExam.questions.add(...questionList.list)
           this.draftExam.loading = false
         })
         .catch(() => {
@@ -483,13 +485,16 @@ export default {
     bulkAttachQuestionsOfDraftExam(questions) {
       this.draftExam.loading = true
       let lastOrder = this.draftExam.questions.list.length
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.bulkAttachQuestions(this.draftExam.id), {
-        questions: questions.map(question => {
-          return {
-            question_id: question.id,
-            order: ++lastOrder
-          }
-        })
+      return this.$apiGateway.exam.userDraftExamBulkAttachQuestions({
+        examId: this.draftExam.id,
+        data: {
+          questions: questions.map(question => {
+            return {
+              question_id: question.id,
+              order: ++lastOrder
+            }
+          })
+        }
       })
         .then(() => {
           this.loadAttachedQuestions()
@@ -500,12 +505,15 @@ export default {
     },
     bulkDetachQuestionsOfDraftExam(questions) {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.bulkDetachQuestions(this.draftExam.id), {
-        detaches: questions.map(question => {
-          return {
-            question_id: question.id
-          }
-        })
+      return this.$apiGateway.exam.userDraftExamBulkDetachQuestions({
+        examId: this.draftExam.id,
+        data: {
+          detaches: questions.map(question => {
+            return {
+              question_id: question.id
+            }
+          })
+        }
       })
         .then(() => {
           this.loadAttachedQuestions()
@@ -516,13 +524,16 @@ export default {
     },
     replaceQuestionsOfDraftExam(questions) {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.replaceQuestions(this.draftExam.id), {
-        questions: questions.map(question => {
-          return {
-            question_id: question.id,
-            order: question.order
-          }
-        })
+      return this.$apiGateway.exam.userDraftExamBulkReplaceQuestions({
+        examId: this.draftExam.id,
+        data: {
+          questions: questions.map(question => {
+            return {
+              question_id: question.id,
+              order: question.order
+            }
+          })
+        }
       })
         .then(() => {
           this.loadAttachedQuestions()

@@ -206,7 +206,6 @@ import moment from 'moment-jalaali'
 import { EntityIndex } from 'quasar-crud'
 import { User } from 'src/models/User.js'
 import { Order } from 'src/models/Order.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { FormBuilder } from 'quasar-form-builder'
 import ActionBtn from 'src/pages/User/MyOrders/actionBtn.vue'
 import OrderDetailsCard from 'src/components/MyOrders/OrderDetailsCard.vue'
@@ -306,7 +305,7 @@ export default {
       return this.getInput('filterInputs', 'till').value
     },
     getEntityApi() {
-      return API_ADDRESS.user.orders.userOrders
+      return this.$apiGateway.user.APIAdresses.getOrders
     },
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']

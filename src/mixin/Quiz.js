@@ -1,7 +1,6 @@
 import process from 'process'
 import Time from 'src/plugins/time.js'
 import { Exam } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import Assistant from 'src/plugins/assistant.js'
 import ExamData from 'src/assets/js/ExamData.js'
 import SocketConnection from 'src/plugins/socket.js'
@@ -592,11 +591,6 @@ const mixinQuiz = {
 
       return this.$apiGateway.exam.sendAnswers({ exam_user_id: userExamId, finish: finishExam, questions })
     },
-    syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime (userExamId, finishExam) {
-      const questions = this.getUserAnswers(userExamId)
-
-      return this.$axios.post(API_ADDRESS.exam.sendAnswersAfterExam, { exam_user_id: userExamId, finish: finishExam, questions })
-    },
     isLtrString (string) {
       if (!string) {
         return false
@@ -813,15 +807,15 @@ const mixinQuiz = {
 
     getExamUserData (examId) {
       return new Promise((resolve, reject) => {
-        this.$axios.post(API_ADDRESS.exam.examUser, { examId })
-          .then((response) => {
+        this.$apiGateway.exam.getExamUser({ examId })
+          .then((exam) => {
             const userExamForParticipate = new Exam()
-            userExamForParticipate.id = Assistant.getId(response.data.data.exam_id)
-            userExamForParticipate.user_exam_id = Assistant.getId(response.data.data.id)
-            userExamForParticipate.created_at = response.data.data.created_at
-            userExamForParticipate.questions_file_url = response.data.data.questions_file_url
-            userExamForParticipate.categories = new QuestCategoryList(response.data.data.categories)
-            userExamForParticipate.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
+            userExamForParticipate.id = Assistant.getId(exam.exam_id)
+            userExamForParticipate.user_exam_id = Assistant.getId(exam.id)
+            userExamForParticipate.created_at = exam.created_at
+            userExamForParticipate.questions_file_url = exam.questions_file_url
+            userExamForParticipate.categories = new QuestCategoryList(exam.categories)
+            userExamForParticipate.sub_categories = new QuestSubcategoryList(exam.sub_categories)
             resolve(userExamForParticipate)
           })
           .catch((error) => {

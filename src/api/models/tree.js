@@ -4,6 +4,7 @@ import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
 
 const APIAdresses = {
   base: '/forrest/tree',
+  treeBox: '/forrest/tree/box',
   getMultiType: (types) => {
     let treeAddress = '/forrest/tree?'
     types.forEach(element => {
@@ -31,6 +32,7 @@ export default class TreeAPI extends APIRepository {
     super('tree', appApiInstance, '', '', APIAdresses)
     this.CacheList = {
       base: this.name + this.APIAdresses.base,
+      treeBox: this.name + this.APIAdresses.treeBox,
       getMultiType: types => this.name + this.APIAdresses.getMultiType(types),
       getGradesList: this.name + this.APIAdresses.getGradesList,
       getNodeById: nodeId => this.name + this.APIAdresses.getNodeById(nodeId),
@@ -167,6 +169,23 @@ export default class TreeAPI extends APIRepository {
       rejectCallback: (error) => {
         return error
       }
+    })
+  }
+
+  getTreeBox(data = {}, cache = { TTL: 1000 }) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.treeBox,
+      cacheKey: this.CacheList.treeBox,
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return response.data.data // List of Tags
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      ...(data && { data })
     })
   }
 }
