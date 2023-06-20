@@ -455,6 +455,7 @@ export default {
         questionRate: true,
         questionComment: true,
         descriptiveAnswer: true,
+        questionAnswerExpanded: true,
         menu: {
           show: true,
           items: {
@@ -640,6 +641,7 @@ export default {
       }
     },
     toggleContent() {
+      this.descriptiveAnswerExpanded = !this.descriptiveAnswerExpanded
       this.listConfig.questionAnswerExpanded = !this.listConfig.questionAnswerExpanded
       if (this.listConfig.questionAnswerExpanded) {
         this.getQuestionContent()
