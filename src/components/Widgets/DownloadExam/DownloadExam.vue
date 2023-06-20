@@ -186,7 +186,8 @@
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="generatePDF('questionPdf')" />
+                         @click="downloadPDF('questionPdf')"
+                  />
                 </div>
               </div>
             </div>
@@ -233,7 +234,8 @@
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="generatePDF('descriptiveAnswerPdf')" />
+                         @click="downloadPDF('descriptiveAnswerPdf')"
+                  />
                 </div>
               </div>
             </div>
@@ -281,7 +283,8 @@
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="generatePDF('keyAnswerPdf')" />
+                         @click="downloadPDF('keyAnswerPdf')"
+                  />
                 </div>
               </div>
             </div>
@@ -344,6 +347,7 @@ export default {
   data: () => ({
     tab: 'questions',
     questionPagesCount: 0,
+    reportUsedPdfLoading: false,
     downloadLoading: false,
     pageCount: 0,
     page: 1,
@@ -440,31 +444,60 @@ export default {
           this.loading = false
         })
     },
-    replacePdf() {
-      this.pdfSrc = 'https://nodes.alaatv.com/media/c/pamphlet/1210/jalase1moshavere.pdf'
+    canGeneratePDF () {
+
+    },
+    reportUsedPdf () {
+      return new Promise((resolve, reject) => {
+        this.reportUsedPdfLoading = true
+        this.$axios.get(API_ADDRESS.exam.user.pdf(this.$route.params.examId))
+          .then(() => {
+            this.reportUsedPdfLoading = false
+            resolve()
+          })
+          .catch(() => {
+            this.reportUsedPdfLoading = false
+            reject()
+          })
+      })
+    },
+    downloadPDF (ref) {
+      if (ref === 'questionPdf') {
+        this.downloadLoading = true
+        this.reportUsedPdf()
+          .then(() => {
+            this.generatePDF(ref)
+          })
+          .catch(() => {
+            this.downloadLoading = false
+          })
+      } else {
+        this.generatePDF(ref)
+      }
     },
     generatePDF (ref) {
       this.downloadLoading = true
-      html2pdf()
-        .set({
-          image: { type: 'png', quality: 1 },
-          filename: this.examInfo.title,
-          html2canvas: {
-            dpi: 1200,
-            scale: 1
-          }
-        })
-        .from(this.$refs[ref])
-        .save()
-        .thenExternal(() => {
-          setTimeout(() => {
+      setTimeout(() => {
+        html2pdf()
+          .set({
+            image: { type: 'png', quality: 1 },
+            filename: this.examInfo.title,
+            html2canvas: {
+              dpi: 1200,
+              scale: 1
+            }
+          })
+          .from(this.$refs[ref])
+          .save()
+          .thenExternal(() => {
             this.downloadLoading = false
-          }, 5000)
-        })
+          })
+      }, 100)
     }
   }
 }
 </script>
+
 <style>
 @media print {
   /* * {
@@ -486,6 +519,7 @@ export default {
   }
 }
 </style>
+
 <style scoped lang="scss">
 .download-exam {
   :deep(.q-col-gutter-y-sm) {
