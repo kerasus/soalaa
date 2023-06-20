@@ -1,22 +1,24 @@
 <template>
   <div v-if="countDown !== 0"
-       class="next-exam">
-    <div class="title">
-      <div class="base-title">تا آزمون بعدی</div>
-      <div class="exam ellipsis"> ( آزمون پنجم - پایه یازدهم رشته انسانی )</div>
+       className="next-exam">
+    <div className="title">
+      <div className="base-title">تا آزمون بعدی</div>
+      <div className="exam ellipsis">{{ exam[0].title }}</div>
     </div>
-    <div class="time-section">
-      <div class="time">{{ Math.floor(countDown/3600) + ':' + Math.floor((countDown%3600)/60) + ':' + (countDown%3600)%60}}</div>
-      <div class="remaining">
-        <span class="hidden">روز</span>
+    <div className="time-section">
+      <div className="time">
+        {{ Math.floor(countDown / 3600) + ':' + Math.floor((countDown % 3600) / 60) + ':' + (countDown % 3600) % 60 }}
+      </div>
+      <div className="remaining">
+        <span className="hidden">روز</span>
         مانده
       </div>
     </div>
   </div>
   <div v-else
-       class="next-exam">
-    <div class="title">
-      <div class="base-title">
+       className="next-exam">
+    <div className="title">
+      <div className="base-title">
         در حال حاضر آزمونی وجود ندارد
       </div>
     </div>
@@ -48,17 +50,21 @@ export default {
       this.dayNum = moment.jDaysInMonth(this.calendarYear, this.calendarDate.jMonth())
       this.startFrom = moment(`${this.calendarYear}/${this.calendarDate.jMonth() + 1}/${moment().startOf('jMonth').jDate()}`, 'jYYYY/jM/jD').format('YYYY-M-D')
       this.startTill = moment(`${this.calendarYear}/${this.calendarDate.jMonth() + 1}/${this.dayNum}`, 'jYYYY/jM/jD').format('YYYY-M-D')
-      this.$axios.get(API_ADDRESS.exam.userExamList.base(), { params: { start_at_from: this.startFrom, start_at_till: this.startTill } }).then((res) => {
+      this.$axios.get(API_ADDRESS.exam.userExamList.base(), {
+        params: {
+          start_at_from: this.startFrom,
+          start_at_till: this.startTill
+        }
+      }).then((res) => {
         this.exam = res.data.data
         this.exam.forEach(element => {
           if (element.start_at.substring(0, 10) === moment().format('YYYY-MM-DD')) {
-            const timeToExam = moment(element.finish_at, 'YYYY-MM-DD HH:mm:ss').diff(moment(element.start_at, 'YYYY-MM-DD HH:mm:ss'))
-            if (this.lastExam === null) {
+            const timeToExam = moment(element.start_at, 'YYYY-MM-DD HH:mm:ss').diff(moment(new Date()))
+            if (timeToExam > 0) {
               this.lastExam = element.start_at
               this.countDown = timeToExam / 1000
-            } else if (moment(element.start_at, 'YYYY-MM-DD HH:mm:ss').diff(moment(this.lastExam, 'YYYY-MM-DD HH:mm:ss')) > 0) {
-              this.lastExam = element.start_at
-              this.countDown = timeToExam / 1000
+            } else {
+              this.countDown = 0
             }
           }
         })
@@ -110,9 +116,11 @@ export default {
     min-height: 70px;
     justify-content: center;
   }
+
   .title {
     display: flex;
     align-items: center;
+
     .base-title {
       font-weight: 600;
       font-size: 20px;
@@ -132,24 +140,28 @@ export default {
         justify-content: center;
       }
     }
+
     .exam {
       @media screen and (max-width: 1439px) {
         font-size: 14px;
         line-height: 22px;
       }
-      @media screen and (max-width: 1023px) {}
+      @media screen and (max-width: 1023px) {
+      }
       @media screen and (max-width: 599px) {
         font-size: 12px;
         line-height: 19px;
       }
     }
   }
+
   .time-section {
     display: flex;
     align-items: center;
     @media screen and (max-width: 599px) {
       align-self: flex-end;
     }
+
     .time {
       margin-right: 4px;
       font-weight: 700;
@@ -164,6 +176,7 @@ export default {
         line-height: 25px;
       }
     }
+
     .remaining {
       font-size: 18px;
       line-height: 28px;
