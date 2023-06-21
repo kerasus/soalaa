@@ -394,6 +394,9 @@ export default {
       this.currentTab = nextStep
     },
     onChangeTab(newStep) {
+      if (!this.subscribed) {
+        return
+      }
       const stepValidation = this.$refs[`${this.oldTab}`].isValid()
       const currentTabIndex = this.getTabIndex(this.currentTab)
       const oldTabIndex = this.getTabIndex(this.oldTab)

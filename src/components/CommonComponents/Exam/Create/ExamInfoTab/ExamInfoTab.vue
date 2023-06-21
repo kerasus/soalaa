@@ -341,6 +341,9 @@ export default {
   .exam-info-form {
     &:deep(.q-btn-group) {
       width: 190px;
+      .q-btn {
+        width: 100px;
+      }
     }
     // &:deep(.q-field__native.q-placeholder) {
     //   color: #6D708B;
