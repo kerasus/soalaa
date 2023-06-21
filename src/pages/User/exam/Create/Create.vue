@@ -394,6 +394,9 @@ export default {
       this.currentTab = nextStep
     },
     onChangeTab(newStep) {
+      if (!this.subscribed) {
+        return
+      }
       const stepValidation = this.$refs[`${this.oldTab}`].isValid()
       const currentTabIndex = this.getTabIndex(this.currentTab)
       const oldTabIndex = this.getTabIndex(this.oldTab)
@@ -607,6 +610,10 @@ export default {
   &:deep(.q-tab-panels) {
     background: transparent;
     padding: 30px 0 0 0;
+
+    .scroll {
+      overflow-x: hidden;
+    }
 
     .q-tab-panel {
       padding: 0;

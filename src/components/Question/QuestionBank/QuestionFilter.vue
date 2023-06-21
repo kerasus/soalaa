@@ -1,6 +1,7 @@
 <template>
   <div>
-    <q-card class="custom-card q-pa-none">
+    <q-card v-if="!mobileMode"
+            class="custom-card q-pa-none">
       <div class="filter-card-container">
         <div class="filter-header">
           <q-card-section class="header-title-container q-pa-none">
@@ -34,7 +35,8 @@
         </div>
       </div>
     </q-card>
-    <div class="filter-options-section">
+    <div class="filter-options-section"
+         :class="{'filter-options-desktop': !mobileMode}">
       <question-filter-expansion
         header-title="درس و مبحث"
       >
@@ -57,7 +59,7 @@
       </question-filter-expansion>
       <!--      header-title="مرجع"-->
       <question-filter-expansion
-        header-title="طراح سوال"
+        header-title="مرجع سوال"
         :loading="localLoadings.optionsLoading"
       >
         <q-option-group
@@ -172,13 +174,7 @@
       >
         <q-option-group
           v-model="selectedReportType"
-          type="checkbox"
-          :options="filterQuestions.report_type.map(option => {
-            return {
-              label: option.value,
-              value: option
-            }
-          })"
+          :options="singleModeFilterOptions('report_type', 'value')"
           @update:model-value="onChangeReportTypes"
         />
         <div v-if="filterQuestions.report_type.length === 0"> هیچ نوع خطایی ایجاد نشده است</div>
@@ -213,6 +209,10 @@ export default {
   components: { QuestionFilterExpansion, TreeComponent },
   mixins: [mixinTree],
   props: {
+    mobileMode: {
+      type: Boolean,
+      default: false
+    },
     loadings: {
       type: Object,
       default() {
@@ -282,7 +282,7 @@ export default {
       selectedMajors: [],
       selectedLevels: [],
       type_id: {},
-      selectedReportType: [],
+      selectedReportType: {},
       report_status: {},
       selectedTags: [],
       selectedStatuses: [],
@@ -294,9 +294,9 @@ export default {
         level_type: [],
         years: [],
         type_id: '',
-        report_type: [],
+        report_type: '',
         statuses: [],
-        question_report_type: [],
+        question_report_type: '',
         report_status: '',
         tags_with_childrens: 1
       }
@@ -399,6 +399,9 @@ export default {
       this.filtersData[key] = value
       this.updateSelectedFiltersObject(key)
       this.onUpdateFilterData()
+      if (this.mobileMode) {
+        this.$emit('updateSelectedFilters', key, value)
+      }
     },
     onChangeReference (value) {
       this.changeFilterData('reference', value)
@@ -459,7 +462,7 @@ export default {
       this.filtersData.level_type.splice(0, this.filtersData.level_type.length)
       this.filtersData.years.splice(0, this.filtersData.years.length)
       this.filtersData.majors.splice(0, this.filtersData.majors.length)
-      this.filtersData.question_report_type.splice(0, this.filtersData.question_report_type.length)
+      this.filtersData.question_report_type = ''
       this.filtersData.type_id = ''
       this.filtersData.report_status = ''
       this.filtersData.statuses.splice(0, this.filtersData.statuses.length)
@@ -565,7 +568,7 @@ export default {
   .filter-card-container {
     padding: 20px 16px !important;
   }
-  .filter-options-section {
+  .filter-options-desktop {
     display: none;
   }
 }
