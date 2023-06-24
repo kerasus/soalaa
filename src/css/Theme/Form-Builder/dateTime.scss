@@ -77,7 +77,7 @@
           padding-left: 8px;
           .q-field__native {
             &.q-placeholder {
-              background: white;
+              //background: white;
               border-radius: 8px;
               direction: ltr;
               text-align: left;
@@ -91,6 +91,15 @@
         }
         .q-field__label {
           margin: -15px 8px;
+        }
+      }
+    }
+  }
+  .form-calender:not(.q-field--filled) {
+    .q-field__inner {
+      .q-field__control {
+        .q-placeholder {
+          background: white;
         }
       }
     }
