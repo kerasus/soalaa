@@ -34,7 +34,7 @@
 <script>
 import { Question } from 'src/models/Question.js'
 import { VueTiptapKatex } from 'vue3-tiptap-katex'
-import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap.mjs'
+import { MixinConvertToTiptap } from 'vue-tiptap-katex-core'
 
 export default {
   name: 'QuestionField',
@@ -180,7 +180,7 @@ export default {
       })
     },
     removeFirstAndLastBracket(input) {
-      const regexPatternForFormula = mixinConvertToTiptap.methods.getRegexPatternForFormula()
+      const regexPatternForFormula = MixinConvertToTiptap.methods.getRegexPatternForFormula()
       const regex = /\\\[.*\\]/gms
       let string = input
       string = string.replace(regexPatternForFormula, (match) => {
