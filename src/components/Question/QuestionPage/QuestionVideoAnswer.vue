@@ -86,7 +86,7 @@ export default {
     onUpdateValue() {
       this.$emit('updateValue', {
         content_id: this.content.id,
-        time_point_id: this.timePoint.id
+        time_point_id: this.timePoint?.id
       })
     },
     getContent(contentId) {
@@ -94,8 +94,10 @@ export default {
       this.$apiGateway.content.show(contentId)
         .then(content => {
           this.content = new Content(content)
-          this.timePointOptions = this.content.timepoints.list
-          this.timePoint = this.content.timepoints.list.find(x => x.id === this.timePointId)
+          if (this.content.timepoints && this.content.timepoints.list.length > 0) {
+            this.timePointOptions = this.content.timepoints.list
+            this.timePoint = this.content.timepoints.list.find(x => x.id === this.timePointId)
+          }
           this.loading = false
         })
         .catch(() => {

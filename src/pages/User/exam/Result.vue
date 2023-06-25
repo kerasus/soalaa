@@ -45,9 +45,7 @@
                 <q-tab name="KeyAnswers"
                        label="پاسخبرگ کلیدی" />
                 <q-tab name="descriptiveAnswers"
-                       label="پاسخ نامه تشریحی" />
-                <q-tab name="videos"
-                       label="تحلیل ویدیویی" />
+                       label="پاسخ تشریحی و ویدویی"></q-tab>
               </q-tabs>
             </div>
           </div>
@@ -137,10 +135,6 @@
               </q-virtual-scroll>
             </div>
           </q-tab-panel>
-          <q-tab-panel name="videos"
-                       class="video-tab">
-            <tabs-of-lessons :report="report" />
-          </q-tab-panel>
         </q-tab-panels>
       </div>
     </div>
@@ -148,7 +142,10 @@
 </template>
 
 <script>
+import { AlaaSet } from 'src/models/AlaaSet.js'
 import ExamData from 'src/assets/js/ExamData.js'
+import Assistant from 'src/plugins/assistant.js'
+import { AlaaContent } from 'src/models/AlaaContent.js'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info.vue'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe.vue'
@@ -157,11 +154,19 @@ import QuestionItem from 'src/components/OnlineQuiz/Quiz/question/questionField.
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet.vue'
 import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult.vue'
 import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult.vue'
-import TabsOfLessons from 'src/components/OnlineQuiz/Quiz/videoPlayerSection/tabsOfLessons.vue'
+
 
 export default {
   name: 'Result',
-  components: { NewTakhminRotbe, TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult, QuestionItem },
+  components: {
+    Info,
+    BubbleSheet,
+    TakhminRotbe,
+    QuestionItem,
+    PersonalResult,
+    NewTakhminRotbe,
+    StatisticResult
+  },
   mixins: [
     mixinAuth,
     mixinQuiz
