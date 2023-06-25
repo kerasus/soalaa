@@ -22,7 +22,7 @@ const AjaxResponseMessages = (function () {
   }
 
   function isCustomMessage (statusCode) {
-    return !!(messageMap[statusCode.toString()])
+    return statusCode && !!(messageMap[statusCode.toString()])
   }
 
   function getMessage (statusCode) {

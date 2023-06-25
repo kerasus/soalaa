@@ -12,7 +12,6 @@
     background: #f6f7f9;
     border-radius: 8px;
     .q-field__control{
-      background-color : #fffefe;
       border-radius: $radius-10 ;
       color: var(--primary-1);
       height: 40px;
@@ -26,7 +25,7 @@
       .q-field__append{
         height: 40px;
         .q-icon{
-          color: #00000000;
+          //color: #00000000;
           font-size: 20px;
           padding: 7px;
         }
@@ -95,6 +94,14 @@
       &:focus {
         color: black;
       }
+    }
+  }
+}
+
+.q-field:not(.q-field--filled) {
+  .q-field__inner {
+    .q-field__control {
+      background-color : #fffefe;
     }
   }
 }
