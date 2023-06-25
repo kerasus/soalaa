@@ -186,8 +186,7 @@
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="downloadPDF('questionPdf')"
-                  />
+                         @click="downloadPDF('questionPdf')" />
                 </div>
               </div>
             </div>
@@ -234,8 +233,7 @@
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="downloadPDF('descriptiveAnswerPdf')"
-                  />
+                         @click="downloadPDF('descriptiveAnswerPdf')" />
                 </div>
               </div>
             </div>
@@ -283,8 +281,7 @@
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="downloadPDF('keyAnswerPdf')"
-                  />
+                         @click="downloadPDF('keyAnswerPdf')" />
                 </div>
               </div>
             </div>
@@ -319,6 +316,7 @@
 </template>
 
 <script>
+import API_ADDRESS from 'src/api/Addresses.js'
 import PdfPage from 'src/components/Utils/PDF/PDFPage.vue'
 import PDFContainer from 'src/components/Utils/PDF/PDFContainer.vue'
 // import VuePdfEmbed from 'vue-pdf-embed'
