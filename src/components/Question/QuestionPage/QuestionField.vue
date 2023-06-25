@@ -1,34 +1,30 @@
 <template>
   <div class="type-section">
-    <q-btn
-      unelevated
-      color="primary"
-      :loading="btnLoading"
-      label="اصلاح فرمول سوال"
-      class="default-detail-btn"
-      @click="setModifiedValue(true)"
-    />
-    <vue-tiptap-katex
-      ref="tiptap"
-      :loading="loading"
-      :options="{
-        bubbleMenu: false,
-        floatingMenu: false,
-        poem: true,
-        reading: true,
-        persianKeyboard: true,
-        uploadServer: {
-          url: getQuestionUploadURL,
-          headers: {
-            Authorization: getAuthorizationCode
-          }
-        },
-        mathliveOptions: {
-          locale: 'fa',
-        }
-      }"
-      @update:modelValue="updateValue"
-    />
+    <q-btn unelevated
+           color="primary"
+           :loading="btnLoading"
+           label="اصلاح فرمول سوال"
+           class="default-detail-btn"
+           @click="setModifiedValue(true)" />
+    <vue-tiptap-katex ref="tiptap"
+                      :loading="loading"
+                      :options="{
+                        bubbleMenu: false,
+                        floatingMenu: false,
+                        poem: true,
+                        reading: true,
+                        persianKeyboard: true,
+                        uploadServer: {
+                          url: getQuestionUploadURL,
+                          headers: {
+                            Authorization: getAuthorizationCode
+                          }
+                        },
+                        mathliveOptions: {
+                          locale: 'fa',
+                        }
+                      }"
+                      @update:modelValue="updateValue" />
   </div>
 </template>
 

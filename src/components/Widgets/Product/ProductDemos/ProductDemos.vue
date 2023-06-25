@@ -5,8 +5,8 @@
     <div v-if="contents.list && contents.list.length > 0"
          class="demos-container col-md-12 q-mt-md">
       <p class="section-title">نمونه فیلم ها</p>
-      <div v-dragscroll
-           class="contents-block">
+      <!--      v-dragscroll-->
+      <div class="contents-block">
         <div v-for="content in contents.list"
              :key="content.id">
           <content-item class="q-mr-md"
@@ -17,8 +17,8 @@
     <div v-if="pamphlets && pamphlets.length > 0"
          class="demos-container col-md-12 q-mt-md">
       <p class="section-title">نمونه جزوه ها</p>
-      <div v-dragscroll
-           class="contents-block">
+      <!--      v-dragscroll-->
+      <div class="contents-block">
         <div v-for="pamphlet in pamphlets"
              :key="pamphlet.id"
              class="pamphlet-image">
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { dragscroll } from 'vue-dragscroll'
+// import { dragscroll } from 'vue-dragscroll'
 import { Product } from 'src/models/Product.js'
 import { mixinPrefetchServerData, mixinWidget } from 'src/mixin/Mixins.js'
 import { APIGateway } from 'src/api/APIGateway.js'
@@ -43,7 +43,7 @@ export default {
     ContentItem
   },
   directives: {
-    dragscroll
+    // dragscroll
   },
   mixins: [mixinWidget, mixinPrefetchServerData],
   props: {

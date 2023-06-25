@@ -92,14 +92,12 @@
           </q-item-section>
         </q-item>
       </q-list>
-      <q-btn
-        flat
-        role="presentation"
-        class="see-answer-button no-padding"
-        :label="descriptiveAnswerExpanded ? '' : ''"
-        :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-        @click="toggleContent"
-      >
+      <q-btn flat
+             role="presentation"
+             class="see-answer-button no-padding"
+             :label="descriptiveAnswerExpanded ? '' : ''"
+             :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
+             @click="toggleContent">
         <span v-if="descriptiveAnswerExpanded">
           پاسخ تشریحی
         <!--            بستن پاسخ تشریحی-->
@@ -113,33 +111,24 @@
       </q-btn>
       <div v-if="source.descriptive_answer"
            class="answer-section">
-        <q-expansion-item
-          v-model="descriptiveAnswerExpanded"
-          header-class="hideExpansionHeader"
-        >
+        <q-expansion-item v-model="descriptiveAnswerExpanded"
+                          header-class="hideExpansionHeader">
           <div class="description-answer-body">
-            <div class="description-answer"
-            >
-              <div
-                v-if="source.choices.getSelected()"
-                class="question-answer-choice"
-              >
+            <div class="description-answer">
+              <div v-if="source.choices.getSelected()"
+                   class="question-answer-choice">
                 گزینه
                 {{ source.choices.getSelected().getNumberTitle() }}
               </div>
 
-              <div
-                v-if="source.descriptive_answer"
-                class="question-answer-description"
-              >
+              <div v-if="source.descriptive_answer"
+                   class="question-answer-description">
                 <vue-katex :input="source.descriptive_answer? source.descriptive_answer :'پاسخ تشریحی ندارد.'" />
               </div>
             </div>
 
-            <div class="description-answer-video"
-            >
-              <div class="answer-video flex items-center justify-center"
-              >
+            <div class="description-answer-video">
+              <div class="answer-video flex items-center justify-center">
                 <content-video-player v-if="content.hasVideoSource()"
                                       :content="content"
                                       :timePoint="questionTimePoint"
