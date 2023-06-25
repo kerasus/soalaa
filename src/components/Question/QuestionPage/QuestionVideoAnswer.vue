@@ -87,7 +87,7 @@ export default {
     onUpdateValue() {
       this.$emit('updateValue', {
         content_id: this.content.id,
-        time_point_id: this.timePoint.id
+        time_point_id: this.timePoint?.id
       })
     },
     getContent(contentId) {
@@ -95,8 +95,10 @@ export default {
       this.$axios.get(API_ADDRESS.content.get(contentId))
         .then(res => {
           this.content = new Content(res.data.data)
-          this.timePointOptions = this.content.timepoints.list
-          this.timePoint = this.content.timepoints.list.find(x => x.id === this.timePointId)
+          if (this.content.timepoints && this.content.timepoints.list.length > 0) {
+            this.timePointOptions = this.content.timepoints.list
+            this.timePoint = this.content.timepoints.list.find(x => x.id === this.timePointId)
+          }
           this.loading = false
         })
         .catch(() => {
