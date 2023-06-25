@@ -7,7 +7,8 @@
           <div class="search-bar">
             <q-input v-model="searchInExams"
                      type="search"
-                     label="جست و جو در آزمون ها">
+                     label="جست و جو در آزمون ها"
+                     @keydown.enter.prevent="setFilter">
               <template v-slot:append>
                 <q-icon name="isax:search-normal-1"
                         icon="search"
