@@ -126,9 +126,10 @@
                           class="question-field"
                           dense>
                     <q-item-section>
-                      <question-item :source="item"
-                                     :questions-column="$refs.questionsColumn"
-                                     :show-with-answer="true" />
+                      <question-item
+                        :key="item.id"
+                        :question="item"
+                        :report-options="reportTypeList" />
                     </q-item-section>
                   </q-item>
                 </template>
@@ -142,7 +143,11 @@
 </template>
 
 <script>
+import API_ADDRESS from 'src/api/Addresses.js'
+import { AlaaSet } from 'src/models/AlaaSet.js'
+import Assistant from 'src/plugins/assistant.js'
 import ExamData from 'src/assets/js/ExamData.js'
+import { AlaaContent } from 'src/models/AlaaContent.js'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info.vue'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe.vue'
@@ -177,11 +182,13 @@ export default {
     tab2: null,
     questions: [],
     innerTab: 'innerMails',
-    splitterModel: 20
+    splitterModel: 20,
+    reportTypeList: []
   }),
   mounted () {
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
+    this.getReportOptions()
     this.getUserData()
     this.getExamData()
   },
@@ -269,6 +276,38 @@ export default {
         item.percent = parseFloat(item.percent).toFixed(1)
         item.taraaz = parseFloat(item.taraaz).toFixed(0)
       })
+    },
+    getContent (contentId, subCategoryIndex) {
+      const that = this
+      this.$axios.get(API_ADDRESS.content.base + '/' + contentId)
+        .then((response) => {
+          that.currentVideo = response.data.data
+          that.initVideoJs(that.currentVideo.file.video, subCategoryIndex)
+        })
+        .catch((error) => {
+          Assistant.reportErrors(error)
+          that.currentVideo = null
+        })
+    },
+    getAlaaSet (setId, subCategoryIndex) {
+      const that = this
+      this.alaaSet.loading = true
+      this.alaaSet.show(setId)
+        .then((response) => {
+          that.alaaSet.loading = false
+          that.alaaSet = new AlaaSet(response.data.data)
+          that.alaaVideos = that.alaaSet.contents.getVideos()
+          that.getContent(that.alaaVideos[0].id, subCategoryIndex)
+        })
+        .catch(() => {
+          that.alaaSet.loading = false
+        })
+    },
+    getReportOptions() {
+      this.$axios.get(API_ADDRESS.exam.user.reportType)
+        .then((response) => {
+          this.reportTypeList = response.data.data
+        })
     }
   }
 }

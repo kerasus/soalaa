@@ -337,11 +337,11 @@ export default {
       }
     },
     getQuestionContent() {
-      if (!this.question.content_id) {
+      if (!this.source.content_id) {
         return
       }
       this.contentLoading = true
-      this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
+      this.$axios.get(API_ADDRESS.content.get(this.source.content_id))
         .then(res => {
           this.content = new Content(res.data.data)
           this.getTimePoints()
