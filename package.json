@@ -22,7 +22,7 @@
     "core-js": "^3.26.1",
     "cropperjs": "^1.5.13",
     "crud": "^0.0.28",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.0",
     "eslint-plugin-n": "^15.6.0",
     "filepond": "^4.30.4",
     "filepond-plugin-image-preview": "^4.6.11",
