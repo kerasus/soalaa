@@ -59,9 +59,7 @@
                 <q-tab name="KeyAnswers"
                        label="پاسخبرگ کلیدی"></q-tab>
                 <q-tab name="descriptiveAnswers"
-                       label="پاسخ نامه تشریحی"></q-tab>
-                <q-tab name="videos"
-                       label="تحلیل ویدیویی"></q-tab>
+                       label="پاسخ تشریحی و ویدویی"></q-tab>
               </q-tabs>
             </div>
           </div>
@@ -163,19 +161,14 @@
                   >
                     <q-item-section>
                       <question-item
-                        :source="item"
-                        :questions-column="$refs.questionsColumn"
-                        :show-with-answer="true"
-                      />
+                        :key="item.id"
+                        :question="item"
+                        :report-options="reportTypeList" />
                     </q-item-section>
                   </q-item>
                 </template>
               </q-virtual-scroll>
             </div>
-          </q-tab-panel>
-          <q-tab-panel name="videos"
-                       class="video-tab">
-            <tabs-of-lessons :report="report" />
           </q-tab-panel>
         </q-tab-panels>
       </div>
@@ -184,7 +177,7 @@
 </template>
 
 <script>
-import QuestionItem from 'src/components/OnlineQuiz/Quiz/question/questionField'
+import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info'
 import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
@@ -195,13 +188,12 @@ import { AlaaContent } from 'src/models/AlaaContent'
 import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe'
 import ExamData from 'src/assets/js/ExamData'
-import TabsOfLessons from 'components/OnlineQuiz/Quiz/videoPlayerSection/tabsOfLessons'
 import API_ADDRESS from 'src/api/Addresses'
 import NewTakhminRotbe from 'components/OnlineQuiz/Quiz/NewTakhminRotbe'
 
 export default {
   name: 'Result',
-  components: { NewTakhminRotbe, TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult, QuestionItem },
+  components: { NewTakhminRotbe, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult, QuestionItem },
   mixins: [
     mixinAuth,
     mixinQuiz
@@ -218,12 +210,14 @@ export default {
     tab2: null,
     questions: [],
     innerTab: 'innerMails',
-    splitterModel: 20
+    splitterModel: 20,
+    reportTypeList: []
   }),
   created () {
     // console.log('report.exams_booklet', this.report.exams_booklet)
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
+    this.getReportOptions()
     this.getUserData()
     this.getExamData()
   },
@@ -336,6 +330,12 @@ export default {
         })
         .catch(() => {
           that.alaaSet.loading = false
+        })
+    },
+    getReportOptions() {
+      this.$axios.get(API_ADDRESS.exam.user.reportType)
+        .then((response) => {
+          this.reportTypeList = response.data.data
         })
     }
   }

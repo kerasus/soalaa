@@ -1,14 +1,14 @@
 <template>
   <div class="exam-list-container">
-    <div v-if="exams.list.length > 0"
-         class="quiz-list-container">
+    <div class="quiz-list-container">
       <div class="row q-pt-md">
         <div :class="quizType === 'myExam' ? 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6' : 'col-xs-10 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
 
           <div class="search-bar">
             <q-input v-model="searchInExams"
                      type="search"
-                     label="جست و جو در آزمون ها">
+                     label="جست و جو در آزمون ها"
+                     @keydown.enter.prevent="setFilter">
               <template v-slot:append>
                 <q-icon name="isax:search-normal-1"
                         icon="search"
@@ -67,7 +67,8 @@
           />
         </div>
       </div>
-      <div class="quiz-list-wrapper">
+      <div v-if="exams.list.length > 0"
+           class="quiz-list-wrapper">
         <q-list class="quiz-list">
           <q-item class="quiz-list-item header">
             <q-item-section>
@@ -193,6 +194,34 @@
           </q-item>
         </q-list>
       </div>
+      <div v-else
+           class="row">
+        <div class="col-12 flex column flex-center">
+          <img class="no-item"
+               src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_azmuns.png"
+               alt="no-item">
+          <div v-if="personal"
+               class="no-item-title">
+            آزمونی ساخته نشده است
+          </div>
+          <div v-if="!personal"
+               class="no-item-title">
+            آزمونی وجود ندارد
+          </div>
+          <q-btn v-if="!personal"
+                 class="new-link"
+                 flat
+                 unelevated
+                 label="ثبت نام در آزمون"
+                 @click="gotoSubscription" />
+          <q-btn v-if="personal"
+                 class="new-link"
+                 flat
+                 unelevated
+                 label="ساخت آزمون جدید"
+                 @click="gotoCreateExam" />
+        </div>
+      </div>
       <div class="row text-center justify-center pagination-box">
         <q-pagination
           v-if="pageCount > 1"
@@ -205,34 +234,6 @@
           icon-last="chevron_left"
           @update:model-value="onChangePage"
         />
-      </div>
-    </div>
-    <div v-else
-         class="row">
-      <div class="col-12 flex column flex-center">
-        <img class="no-item"
-             src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/empty_azmuns.png"
-             alt="no-item">
-        <div v-if="personal"
-             class="no-item-title">
-          آزمونی ساخته نشده است
-        </div>
-        <div v-if="!personal"
-             class="no-item-title">
-          آزمونی وجود ندارد
-        </div>
-        <q-btn v-if="!personal"
-               class="new-link"
-               flat
-               unelevated
-               label="ثبت نام در آزمون"
-               @click="gotoSubscription" />
-        <q-btn v-if="personal"
-               class="new-link"
-               flat
-               unelevated
-               label="ساخت آزمون جدید"
-               @click="gotoCreateExam" />
       </div>
     </div>
   </div>
