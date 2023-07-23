@@ -4,7 +4,7 @@
       <div
         name="question-choice-number"
         class="question-choice-number"
-        :class="[choice.answer ? 'correct-answer' : 'wrong-answer', isLtr ? 'ltr-margin' : 'rtl-margin']"
+        :class="[choice.answer && showCorrectAnswer ? 'correct-answer' : 'wrong-answer', isLtr ? 'ltr-margin' : 'rtl-margin']"
       >
         {{ choice.number }}
       </div>
@@ -27,6 +27,10 @@ export default {
     VueKatex
   },
   props: {
+    showCorrectAnswer: {
+      type: Boolean,
+      default: true
+    },
     choice: {
       types: '',
       default: ''
