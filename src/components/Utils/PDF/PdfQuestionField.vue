@@ -18,7 +18,8 @@
       <q-list v-if="displayChoices"
               class="choices-box row">
         <q-item v-for="(choice, index) in question.choices"
-                :key="choice.id"
+                :ref="'choiceId' + choice.id"
+                :key="'choiceId' + choice.id"
                 class="choices"
                 :class="choiceClass"
                 :style="{marginBottom: betweenChoices + 'mm'}">
@@ -166,19 +167,21 @@ export default {
       return this.$store.getters['AppLayout/windowSize']
     },
     choiceClass () {
-      const question = this.question
-      const largestChoice = this.getLargestChoice(question.choices)
-      const largestChoiceWidth = 2128 / largestChoice
-      if (largestChoiceWidth < 24) {
-        return 'col-md-12'
-      }
-      if (largestChoiceWidth < 70) {
-        return 'col-md-6'
-      }
-      if (largestChoiceWidth < 96) {
-        return 'col-md-3'
-      }
-      return 'col-md-3'
+      // const question = this.question
+      // const largestChoice = this.getLargestChoice(question.choices)
+      // const largestChoiceWidth = 2128 / largestChoice
+      // if (largestChoiceWidth < 24) {
+      //   return 'col-md-12'
+      // }
+      // if (largestChoiceWidth < 70) {
+      //   return 'col-md-6'
+      // }
+      // if (largestChoiceWidth < 96) {
+      //   return 'col-md-3'
+      // }
+      // return 'col-md-3'
+
+      return 'col-12'
     },
     questionFieldHeight() {
       return this.$refs.questionField.clientHeight
@@ -186,11 +189,28 @@ export default {
   },
   watch: {
     questionLoaded () {
+      this.checkChoiceColums()
       this.$emit('questionLoaded')
       this.$emit('update:height', this.$refs.questionField.clientHeight)
     }
   },
   methods: {
+    checkChoiceColums () {
+      const choicesBoxWidth = this.$refs.choicesBox.$el.clientWidth
+      let maxWidth = 0
+      this.question.choices.forEach((item) => {
+        const choiceEl = this.$refs['choiceId' + item.id][0].$el
+        const choiceWidth = choiceEl.clientWidth
+        if (maxWidth < (choiceWidth / choicesBoxWidth)) {
+          maxWidth = (choiceWidth / choicesBoxWidth)
+        }
+      })
+      const choiceWidth = maxWidth < 0.25 ? '25%' : (maxWidth < 0.5 ? '50%' : '100%')
+      console.log('choiceWidth', choiceWidth)
+      this.question.choices.forEach((item) => {
+        this.$refs['choiceId' + item.id][0].$el.style.width = choiceWidth
+      })
+    },
     onStatementLoaded () {
       this.statementLoaded = true
     },
@@ -288,11 +308,14 @@ export default {
       }
     }
     .choices-box{
+      display: flex;
+      flex-wrap: wrap;
       .choices {
         display: flex;
         flex-direction: row;
         padding: 0 16px;
         min-height: 24px;
+        width: max-content;
 
         .choice{
           display: flex;

@@ -64,11 +64,11 @@
               </q-input>
             </q-card-section>
 
-            <q-card-section class="filter-section q-mb-md">
-              <q-btn icon="isax:setting-4"
-                     class="filter-btn q-mt-md"
-                     flat
-                     @click="showFilters = true" />
+              <q-card-section class="filter-section q-mb-md">
+                <q-btn icon="isax:setting-4"
+                       class="filter-btn q-mt-md"
+                       flat
+                       @click="showFilters = true" />
               <!--              <q-select-->
               <!--                v-model="searchSelector"-->
               <!--                filled-->
@@ -80,9 +80,11 @@
               <!--                @update:model-value="sortByCreatedAt"-->
               <!--              >-->
               <!--              </q-select>-->
-            </q-card-section>
-          </q-card>
-        </div>
+              </q-card-section>
+            </q-card>
+          </div>
+        </sticky-both-sides>
+
         <div class="question-bank-content">
           <question-item v-if="questions.loading"
                          :question="loadingQuestion" />
@@ -722,6 +724,7 @@ export default {
 
 .filter-card-container {
   padding-bottom: 24px;
+  background: #F4F6F9;
   @media only screen and (max-width: 1439px) {
     padding-bottom: 20px;
   }
@@ -852,8 +855,14 @@ export default {
       margin-left: 0;
     }
 
+    .sticky-component {
+      position: relative;
+      z-index: 9;
+    }
+
     .question-bank-toolbar {
       padding-bottom: 24px;
+      background: #F4F6F9;
       @media only screen and (max-width: 600px) {
         padding-bottom: 0;
       }
