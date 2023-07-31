@@ -13,7 +13,7 @@ import katex from 'katex'
 import 'katex/dist/katex.css'
 import 'src/Utils/katex-persian-renderer/katex-persian-fonts/index.css'
 import addPersianTo from 'src/Utils/katex-persian-renderer/src/index.mjs'
-import { MixinConvertToTiptap } from 'vue-tiptap-katex-core'
+import { MixinsConvertToTiptap } from 'vue-tiptap-katex-core'
 import allMetrics from 'src/Utils/katex-persian-renderer/katex-persian-fonts/YekanBakhFontMetrics.json'
 
 addPersianTo(katex, {
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     removeFirstAndLastBracket(input) {
-      const regexPatternForFormula = MixinConvertToTiptap.methods.getRegexPatternForFormula()
+      const regexPatternForFormula = MixinsConvertToTiptap.methods.getRegexPatternForFormula()
       const regex = /\\\[.*\\]/gms
       let string = input
       string = string.replace(regexPatternForFormula, (match) => {
@@ -110,8 +110,8 @@ export default {
       trust: true
     }) {
       let string = input
-      string = MixinConvertToTiptap.methods.convertToTiptap(string)
-      const regex = MixinConvertToTiptap.methods.getRegexPatternForFormula()
+      string = MixinsConvertToTiptap.methods.convertToTiptap(string)
+      const regex = MixinsConvertToTiptap.methods.getRegexPatternForFormula()
       string = string.replace(regex, (match) => {
         let finalMatch
         if (match.includes('$')) {
@@ -120,7 +120,7 @@ export default {
           finalMatch = match.slice(2, -2)
         }
         if (finalMatch) {
-          finalMatch = MixinConvertToTiptap.methods.replaceKatexSigns(finalMatch)
+          finalMatch = MixinsConvertToTiptap.methods.replaceKatexSigns(finalMatch)
         }
         return katex.renderToString(finalMatch, katexConfig)
       })

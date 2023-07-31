@@ -64,11 +64,11 @@
               </q-input>
             </q-card-section>
 
-              <q-card-section class="filter-section q-mb-md">
-                <q-btn icon="isax:setting-4"
-                       class="filter-btn q-mt-md"
-                       flat
-                       @click="showFilters = true" />
+            <q-card-section class="filter-section q-mb-md">
+              <q-btn icon="isax:setting-4"
+                     class="filter-btn q-mt-md"
+                     flat
+                     @click="showFilters = true" />
               <!--              <q-select-->
               <!--                v-model="searchSelector"-->
               <!--                filled-->
@@ -80,10 +80,11 @@
               <!--                @update:model-value="sortByCreatedAt"-->
               <!--              >-->
               <!--              </q-select>-->
-              </q-card-section>
-            </q-card>
-          </div>
-        </sticky-both-sides>
+            </q-card-section>
+          </q-card>
+        </div>
+
+        <!--        </sticky-both-sides>-->
 
         <div class="question-bank-content">
           <question-item v-if="questions.loading"

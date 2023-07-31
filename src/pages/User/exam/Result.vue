@@ -126,10 +126,9 @@
                           class="question-field"
                           dense>
                     <q-item-section>
-                      <question-item
-                        :key="item.id"
-                        :question="item"
-                        :report-options="reportTypeList" />
+                      <question-item :key="item.id"
+                                     :question="item"
+                                     :report-options="reportTypeList" />
                     </q-item-section>
                   </q-item>
                 </template>
@@ -147,7 +146,6 @@ import API_ADDRESS from 'src/api/Addresses.js'
 import { AlaaSet } from 'src/models/AlaaSet.js'
 import Assistant from 'src/plugins/assistant.js'
 import ExamData from 'src/assets/js/ExamData.js'
-import { AlaaContent } from 'src/models/AlaaContent.js'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info.vue'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe.vue'

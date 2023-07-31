@@ -34,22 +34,18 @@
         </div>
       </template>
 
-      <div
-        v-else-if="question.choices.list"
-        class="multiple-choices"
-      >
-        <multiple-choices-template
-          v-for="(choice , index) in question.choices.list"
-          id="test"
-          ref="questionChoice"
-          :key="index"
-          :show-correct-answer="false"
-          class=" col-lg-3 col-md-3 col-sm-12"
-          :class="questionCol"
-          :isLtr="isLtrQuestion()"
-          :dir="isLtrQuestion()? 'ltr':''"
-          :choice="choice"
-        />
+      <div v-else-if="question.choices.list"
+           class="multiple-choices">
+        <multiple-choices-template v-for="(choice , index) in question.choices.list"
+                                   id="test"
+                                   ref="questionChoice"
+                                   :key="index"
+                                   :show-correct-answer="false"
+                                   class=" col-lg-3 col-md-3 col-sm-12"
+                                   :class="questionCol"
+                                   :isLtr="isLtrQuestion()"
+                                   :dir="isLtrQuestion()? 'ltr':''"
+                                   :choice="choice" />
       </div>
 
       <div v-else-if="question.answer_photos?.length>0">

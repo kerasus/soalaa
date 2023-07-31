@@ -1,11 +1,9 @@
 <template>
   <div class="choice-box">
     <div class="choice-number-box">
-      <div
-        name="question-choice-number"
-        class="question-choice-number"
-        :class="[choice.answer && showCorrectAnswer ? 'correct-answer' : 'wrong-answer', isLtr ? 'ltr-margin' : 'rtl-margin']"
-      >
+      <div name="question-choice-number"
+           class="question-choice-number"
+           :class="[choice.answer && showCorrectAnswer ? 'correct-answer' : 'wrong-answer', isLtr ? 'ltr-margin' : 'rtl-margin']">
         {{ choice.number }}
       </div>
     </div>
