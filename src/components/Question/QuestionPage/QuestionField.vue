@@ -30,7 +30,7 @@
 
 <script>
 import { Question } from 'src/models/Question.js'
-import { VueTiptapKatex } from 'vue3-tiptap-katex'
+import VueTiptapKatex from 'vue3-tiptap-katex'
 import { MixinsConvertToTiptap } from 'vue-tiptap-katex-core'
 
 export default {
