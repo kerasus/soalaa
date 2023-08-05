@@ -30,8 +30,24 @@
 
 <script>
 import { Question } from 'src/models/Question.js'
-import VueTiptapKatex from 'vue3-tiptap-katex'
-import { MixinConvertToTiptap } from 'vue-tiptap-katex-core'
+// import VueTiptapKatex from 'vue3-tiptap-katex'
+// import { MixinConvertToTiptap } from 'vue-tiptap-katex-core'
+
+let VueTiptapKatex
+if (typeof window !== 'undefined') {
+  import('vue3-tiptap-katex')
+    .then((vue3TiptapKatex) => {
+      VueTiptapKatex = vue3TiptapKatex.default
+    })
+}
+
+let MixinConvertToTiptap
+if (typeof window !== 'undefined') {
+  import('vue-tiptap-katex-core')
+    .then((vueTiptapKatexCore) => {
+      MixinConvertToTiptap = vueTiptapKatexCore.default.MixinConvertToTiptap
+    })
+}
 
 export default {
   name: 'QuestionField',

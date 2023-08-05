@@ -153,10 +153,10 @@
         <div class="description-answer-body">
           <div class="description-answer"
                :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}">
-            <div v-if="this.question.choices.getSelected()"
+            <div v-if="question.choices.getSelected()"
                  class="question-answer-choice">
               گزینه
-              {{ this.question.choices.getSelected().getNumberTitle() }}
+              {{ question.choices.getSelected().getNumberTitle() }}
             </div>
 
             <div v-if="question.descriptive_answer"
@@ -336,11 +336,11 @@
 import { Content } from 'src/models/Content.js'
 import { Question } from 'src/models/Question.js'
 import VueKatex from 'src/components/VueKatex.vue'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import question from 'src/components/Question/QuestionItem/Question.vue'
 import QuestionTags from 'src/components/CommonComponents/Exam/Create/QuestionTags/QuestionTags.vue'
-import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'QuestionItem',

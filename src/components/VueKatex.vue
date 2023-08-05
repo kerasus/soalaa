@@ -11,10 +11,18 @@
 <script>
 import katex from 'katex'
 import 'katex/dist/katex.css'
+// import { MixinConvertToTiptap } from 'vue-tiptap-katex-core'
 import 'src/Utils/katex-persian-renderer/katex-persian-fonts/index.css'
 import addPersianTo from 'src/Utils/katex-persian-renderer/src/index.mjs'
-import { MixinConvertToTiptap } from 'vue-tiptap-katex-core'
 import allMetrics from 'src/Utils/katex-persian-renderer/katex-persian-fonts/YekanBakhFontMetrics.json'
+
+let MixinConvertToTiptap
+if (typeof window !== 'undefined') {
+  import('vue-tiptap-katex-core')
+    .then((vueTiptapKatexCore) => {
+      MixinConvertToTiptap = vueTiptapKatexCore.MixinConvertToTiptap
+    })
+}
 
 addPersianTo(katex, {
   fontName: 'YekanBakh',
