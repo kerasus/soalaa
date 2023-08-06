@@ -60,6 +60,9 @@
               @deselectAllQuestions="deleteAllQuestions"
               @selectAllQuestions="selectAllQuestions"
             />
+            <q-linear-progress v-if="selectionLoading"
+                               query
+                               color="primary" />
           </div>
           <div class="col-12 filter-card-container">
             <q-card
@@ -310,6 +313,7 @@ export default {
       selectedQuestions: [],
       questionId: [],
       loadingQuestion: new Question(),
+      selectionLoading: false,
       questions: new QuestionList(),
       disablePagination: false,
       paginationMeta: {
@@ -408,10 +412,10 @@ export default {
       this.$refs.filter2.deleteAllFilters()
     },
     showLoading() {
-      this.$q.loading.show()
+      this.selectionLoading = true
     },
     hideLoading() {
-      this.$q.loading.hide()
+      this.selectionLoading = false
     },
     getSelectedOfQuestion(question) {
       return !!(this.providedExam.questions.list.find(item => item.id === question.id))
