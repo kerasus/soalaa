@@ -117,7 +117,7 @@ export default {
           responseKey: 'data.question_type',
           label: 'نوع سوالات',
           placeholder: ' ',
-          value: 'کنکور',
+          value: 'تستی - 4 گزینه ای',
           options: [],
           behavior: 'menu',
           disable: true,
