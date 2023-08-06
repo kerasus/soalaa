@@ -5,7 +5,7 @@ const actions = {
     context.commit('loading', value)
   },
   overlayLoading: (context, value) => {
-    if (value.message.length > 0) {
+    if (value.message && value.message.length > 0) {
       context.commit('overlay', value)
       return Loading.show({ message: value.message })
     } else {
