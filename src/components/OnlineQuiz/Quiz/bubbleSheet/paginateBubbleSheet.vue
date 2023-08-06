@@ -59,8 +59,8 @@
 <script>
 import { ref } from 'vue'
 import moment from 'moment-jalaali'
-import { QuestionList } from 'src/models/Question'
-import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
+import { QuestionList } from 'src/models/Question.js'
+import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'PaginateBubbleSheet',
@@ -135,7 +135,7 @@ export default {
       const bubbleGroupHeight = 182
       const width = this.bubbleSheetDimensions.x - boxXPadding
       const horizontalGroupAmounts = Math.ceil(width / bubbleGroupWidth)
-      const verticalGroupCount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
+      const verticalGroupCount = Math.ceil(this.questionsInGroups.filter(item => item.length > 0).length / horizontalGroupAmounts)
       this.overlay = false
       return (verticalGroupCount * bubbleGroupHeight) + boxYPadding
     },
