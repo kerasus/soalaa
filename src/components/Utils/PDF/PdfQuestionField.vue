@@ -221,7 +221,6 @@ export default {
         }
       })
       const choiceWidth = maxWidth < 0.25 ? '25%' : (maxWidth < 0.5 ? '50%' : '100%')
-      console.log('choiceWidth', choiceWidth)
       this.question.choices.forEach((item) => {
         this.$refs['choiceId' + item.id][0].$el.style.width = choiceWidth
       })
