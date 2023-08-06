@@ -190,9 +190,9 @@
 </template>
 
 <script>
+import ExamData from 'src/assets/js/ExamData.js'
+import mbtiData from 'src/assets/js/MBTI_Bartle_Data.js'
 import { mixinDrawer, mixinQuiz } from 'src/mixin/Mixins'
-import mbtiData from 'src/assets/js/MBTI_Bartle_Data'
-import ExamData from 'src/assets/js/ExamData'
 
 export default {
   name: 'MBTIBartle',
@@ -315,7 +315,7 @@ export default {
     this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
-    this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+    // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
 
     // const quizId = this.$route.params.exam_id
     // if (!this.userQuizListData || !this.userQuizListData[quizId] || !this.currentExamQuestions) {
@@ -360,9 +360,10 @@ export default {
           })
         })
         this.generateAnswer(questions)
+        // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
       })
       .catch(() => {
-        that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+        // that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         that.goToExamList()
         // that.$notify({
         //   group: 'notifs',
@@ -384,7 +385,7 @@ export default {
       finalAnswer.charBg = this.getMbtiBg(finalAnswer.type)
       finalAnswer.bartle = this.getBartleResults(answer)
       this.result = finalAnswer
-      this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+      // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
 
       this.$store.commit('Exam/setPsychometricAnswer', finalAnswer)
     },

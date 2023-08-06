@@ -103,6 +103,13 @@
             </q-item-label>
           </q-item-section>
         </q-item>
+        <q-item :to="{name: 'User.Exam.List'}">
+          <q-item-section>
+            <q-item-label>
+              لیست آزمون ها
+            </q-item-label>
+          </q-item-section>
+        </q-item>
         <q-item v-close-popup
                 clickable
                 @click="logOut">
