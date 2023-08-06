@@ -188,6 +188,7 @@
                 <div class="action-btn">
                   <q-btn unelevated
                          class="btn cancel"
+                         :to="{name:'User.Exam.List'}"
                          label="انصراف"></q-btn>
                   <q-btn unelevated
                          :disable="downloadLoading"
@@ -237,6 +238,7 @@
                 <div class="action-btn">
                   <q-btn unelevated
                          class="btn cancel"
+                         :to="{name:'User.Exam.List'}"
                          label="انصراف"></q-btn>
                   <q-btn unelevated
                          :disable="downloadLoading"
@@ -287,6 +289,7 @@
                 <div class="action-btn">
                   <q-btn unelevated
                          class="btn cancel"
+                         :to="{name:'User.Exam.List'}"
                          label="انصراف"></q-btn>
                   <q-btn unelevated
                          :disable="downloadLoading"
