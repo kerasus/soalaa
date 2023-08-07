@@ -78,6 +78,7 @@ const allEntityCrudRouteObjects = [
 const routes = [
   {
     path: '/',
+    name: 'Home',
     component: () => import('layouts/MainLayout.vue'),
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     layoutConfig: {
