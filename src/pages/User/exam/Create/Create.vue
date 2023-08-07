@@ -791,15 +791,14 @@ export default {
 
 .draft-dialog {
   width: 348px;
-  height: 343px;
+  //height: 343px;
   background: #FFFFFF;
   border-radius: 18px;
   position: relative;
 
   .close-btn {
-    position: absolute;
     top: 12px;
-    right: 12px;
+    left: 290px;
     color: #6D708B;
   }
 

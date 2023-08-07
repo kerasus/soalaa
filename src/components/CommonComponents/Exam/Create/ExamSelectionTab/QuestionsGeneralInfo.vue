@@ -1038,11 +1038,14 @@ export default {
           }
         }
       }
-
-      .dialogHighchart {
-
-      }
     }
+  }
+}
+
+:deep(.question-level-chart) {
+  .title-1,
+  .title-2 {
+    font-family: yekanbakh, "Arial", "-apple-system", "Helvetica Neue", Helvetica, sans-serif;
   }
 }
 

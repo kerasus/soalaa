@@ -3,6 +3,7 @@
     <q-card class="custom-card q-pa-none">
       <q-card-section class="q-pa-none">
         <q-expansion-item
+          group="somegroup"
           expand-icon="isax:arrow-down-1"
         >
           <template v-slot:header>
@@ -53,6 +54,9 @@ export default {
   computed: {
   },
   methods: {
+    closeExpansion() {
+
+    }
   }
 }
 </script>

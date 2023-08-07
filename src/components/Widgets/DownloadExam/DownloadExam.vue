@@ -188,6 +188,7 @@
                 <div class="action-btn">
                   <q-btn unelevated
                          class="btn cancel"
+                         :to="{name:'User.Exam.List'}"
                          label="انصراف"></q-btn>
                   <q-btn unelevated
                          :disable="downloadLoading"
@@ -237,6 +238,7 @@
                 <div class="action-btn">
                   <q-btn unelevated
                          class="btn cancel"
+                         :to="{name:'User.Exam.List'}"
                          label="انصراف"></q-btn>
                   <q-btn unelevated
                          :disable="downloadLoading"
@@ -287,6 +289,7 @@
                 <div class="action-btn">
                   <q-btn unelevated
                          class="btn cancel"
+                         :to="{name:'User.Exam.List'}"
                          label="انصراف"></q-btn>
                   <q-btn unelevated
                          :disable="downloadLoading"
@@ -462,30 +465,39 @@ export default {
       })
     },
     downloadPDF (ref) {
-      if (ref === 'questionPdf') {
-        this.downloadLoading = true
-        this.reportUsedPdf()
-          .then(() => {
-            this.generatePDF(ref)
-          })
-          .catch(() => {
-            this.downloadLoading = false
-          })
-      } else {
-        this.generatePDF(ref)
-      }
+      this.generatePDF(ref)
+
+      // if (ref === 'questionPdf') {
+      //   this.downloadLoading = true
+      //   this.reportUsedPdf()
+      //     .then(() => {
+      //       this.generatePDF(ref)
+      //     })
+      //     .catch(() => {
+      //       this.downloadLoading = false
+      //     })
+      // } else {
+      //   this.generatePDF(ref)
+      // }
     },
     generatePDF (ref) {
       this.downloadLoading = true
       setTimeout(() => {
         html2pdf()
           .set({
-            image: { type: 'png', quality: 1 },
+            margin: [0, 0, 0, 0],
+            image: {
+              type: 'jpeg',
+              quality: 0.6
+            },
             filename: this.examInfo.title,
             html2canvas: {
-              dpi: 1200,
-              scale: 1
-            }
+              dpi: 1,
+              scale: 2.5,
+              letterRendering: true,
+              useCORS: true
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
           })
           .from(this.$refs[ref])
           .save()

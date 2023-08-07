@@ -89,7 +89,8 @@
               delay-time="0"
             />
           </q-tab-panel>
-          <q-tab-panel name="descriptiveAnswers">
+          <q-tab-panel name="descriptiveAnswers"
+                       class="descriptiveAnswers-tab-panel">
             <q-card flat>
               <p class="tab-title pt-5 pr-5">
                 دانلود پاسخنامه تشریحی
@@ -163,6 +164,8 @@
                       <question-item
                         :key="item.id"
                         :question="item"
+                        :page-strategy="'lesson-detail'"
+                        :show-question-number="true"
                         :report-options="reportTypeList" />
                     </q-item-section>
                   </q-item>
@@ -343,9 +346,11 @@ export default {
 </script>
 
 <style lang="scss">
+
 .exam-results {
   margin-top: 16px;
   padding: 12px;
+
   .default-col-padding{
     padding: 12px 0px;
   }
@@ -457,7 +462,7 @@ export default {
 }
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
 .theme--light.v-tabs-items {
   background-color: transparent;
 }
@@ -480,8 +485,14 @@ export default {
 }
 
 .questionsList {
+  background: #F4F6F9;
   max-height: 100vh;
   height: 100vh;
   min-height: 100vh;
+  padding-top: 40px;
+
+  .question-field {
+    background: #F4F6F9;
+  }
 }
 </style>
