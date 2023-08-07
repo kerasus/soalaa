@@ -964,7 +964,7 @@ export default {
     .question-icon-box{
       height: var(--katexLineHeight);
       display: flex;
-      align-items: center;
+      align-items: flex-start;
     }
 
     .question-icon {

@@ -196,6 +196,9 @@ export default {
   },
   methods: {
     checkChoiceColums () {
+      if (!this.$refs.choicesBox) {
+        return
+      }
       const choicesBoxWidth = this.$refs.choicesBox.$el.clientWidth
       let maxWidth = 0
       this.question.choices.forEach((item) => {

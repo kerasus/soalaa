@@ -125,7 +125,7 @@ export default {
       const bubbleGroupHeight = 182
       const width = this.bubbleSheetDimensions.x - boxXPadding
       const horizontalGroupAmounts = Math.ceil(width / bubbleGroupWidth)
-      const verticalGroupCount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
+      const verticalGroupCount = Math.ceil(this.questionsInGroups.filter(item => item.length > 0).length / horizontalGroupAmounts)
       this.overlay = false
       return (verticalGroupCount * bubbleGroupHeight) + boxYPadding
     },
