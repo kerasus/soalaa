@@ -17,7 +17,8 @@
           1
         </q-badge>
       </q-btn>
-      <content-selection-dialog :dialog="dialog"
+      <content-selection-dialog v-if="dialog"
+                                :dialog="dialog"
                                 :content="content"
                                 @toggle-dialog="toggleVideoAnswerDialog"
                                 @update-value="updateContent($event)" />
@@ -40,9 +41,9 @@
 </template>
 
 <script>
-import { APIGateway } from 'src/api/APIGateway'
 import { Content } from 'src/models/Content.js'
-import ContentSelectionDialog from 'components/Question/QuestionPage/ContentSelectionDialog.vue'
+import { APIGateway } from 'src/api/APIGateway.js'
+import ContentSelectionDialog from 'src/components/Question/QuestionPage/ContentSelectionDialog.vue'
 
 export default {
   name: 'QuestionVideoAnswer',

@@ -171,6 +171,7 @@ export default class QuestionAPI extends APIRepository {
     this.CacheList = {
       index: (filters, page, isAdmin = false) => this.name + this.APIAdresses.index(filters, page, isAdmin),
       statusBase: this.name + this.APIAdresses.status.base,
+      reportLog: (questionId) => this.name + this.APIAdresses.reportLog(questionId),
       log: {
         base: (questionId) => this.name + this.APIAdresses.log.base(questionId)
       }

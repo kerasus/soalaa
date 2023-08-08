@@ -588,9 +588,9 @@ const routes = [
                 breadcrumbs: { title: 'ویرایش سوال', loading: false },
                 component: () => (import('src/pages/Admin/Question/EditQuestion.vue')),
                 meta: {
-                  middlewares: [
-                    Permissions.hasPermission('questionUpdate')
-                  ]
+                  // middlewares: [
+                  //   Permissions.hasPermission('questionUpdate')
+                  // ]
                 }
               }
             ]

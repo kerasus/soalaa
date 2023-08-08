@@ -9,6 +9,7 @@ import { AttachedExamList } from 'src/models/AttachedExam.js'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
 import { Notify } from 'quasar'
 import mixinTree from 'src/mixin/Tree.js'
+import { APIGateway } from 'src/api/APIGateway'
 const AdminActionOnQuestion = {
   mixins: [mixinTree],
   data () {
@@ -54,7 +55,7 @@ const AdminActionOnQuestion = {
       // this.$store.dispatch('loading/overlayLoading', true)
       // this.$store.dispatch('loading/overlayLoading', false)
       // .loadApiResource()
-      this.$apiGateway.question.create(question)
+      APIGateway.question.create(question)
         .then(questionInstance => {
           // console.log(response.data)
           this.$q.notify({
@@ -72,7 +73,7 @@ const AdminActionOnQuestion = {
     },
     getQuestionById (questionId, question, types) {
       const that = this
-      this.$apiGateway.question.getQuestion({
+      APIGateway.question.getQuestion({
         questionId
       })
         .then(function (questionInstance) {
@@ -90,7 +91,7 @@ const AdminActionOnQuestion = {
         this.question.added_statement_photos.forEach((item, key) => {
           formData.append('files[' + key + ']', item)
         })
-        this.$apiGateway.question.updatePhoto({
+        APIGateway.question.updatePhoto({
           type: 'statement_photo',
           questionId: this.question.id,
           data: formData
@@ -107,7 +108,7 @@ const AdminActionOnQuestion = {
         this.question.added_answer_photos.forEach((item, key) => {
           formData.append('files[' + key + ']', item)
         })
-        this.$apiGateway.question.updatePhoto({
+        APIGateway.question.updatePhoto({
           type: 'answer_photo',
           questionId: this.question.id,
           data: formData
@@ -137,7 +138,7 @@ const AdminActionOnQuestion = {
         subject_tags: this.question.subject_tags.list.map(tag => tag.id),
         major: this.question.major
       }
-      this.$apiGateway.question.update(question)
+      APIGateway.question.update(question)
         .then((exam) => {
           this.$q.notify({
             message: 'ویرایش با موفقیت انجام شد',
@@ -149,7 +150,7 @@ const AdminActionOnQuestion = {
     },
     changeStatus (newStatus) {
       const that = this
-      this.$apiGateway.question.changeQuestionStatus({
+      APIGateway.question.changeQuestionStatus({
         questionId: this.$route.params.question_id,
         data: {
           status_id: newStatus.changeState.id,
@@ -213,7 +214,7 @@ const AdminActionOnQuestion = {
       //   recommended_time: 0,
       //   type_id: question.type_id
       // }
-      this.$apiGateway.question.createQuestion(formData)
+      APIGateway.question.createQuestion(formData)
         .then(question => {
           this.redirectToShowPage(question.id)
         })
@@ -236,7 +237,7 @@ const AdminActionOnQuestion = {
       this.$router.push({ name: 'Admin.Question.Edit', params: { question_id: this.$route.params.question_id } })
     },
     addComment (eventData) {
-      this.$apiGateway.exam.addComment({
+      APIGateway.exam.addComment({
         logId: eventData.logId,
         data: { comment: eventData.text }
       })
@@ -255,7 +256,9 @@ const AdminActionOnQuestion = {
       const that = this
       this.typeIdLoading = true
       try {
-        const optionList = await this.callTypeIdRequest()
+        const optionList = await APIGateway.option.getOptions({
+          type: 'question_type'
+        })
         const types = new TypeList(optionList)
         const optionQuestion = optionList.find(item => (item.value === 'konkur'))
         if (!optionQuestion) {
@@ -278,17 +281,19 @@ const AdminActionOnQuestion = {
         })
       }
     },
-    callTypeIdRequest() {
-      return this.$apiGateway.option.getOptions({
-        type: 'question_type'
-      })
-    },
+    // callTypeIdRequest() {
+    //   return APIGateway.option.getOptions({
+    //     type: 'question_type'
+    //   })
+    // },
     async getQuestionTypeForTypeId (question) {
       this.typeIdLoading = true
       try {
-        const optionList = await this.callTypeIdRequest()
+        const optionList = await APIGateway.option.getOptions({
+          type: 'question_type'
+        })
         const types = new TypeList(optionList)
-        const optionQuestion = optionList.find(item => (item.value === 'konkur'))
+        const optionQuestion = types.list.find(item => (item.value === 'konkur'))
         if (!optionQuestion) {
           return this.$q.notify({
             message: ' API با مشکل مواجه شد!',
@@ -360,7 +365,7 @@ const AdminActionOnQuestion = {
     },
     getLogs (questionId) {
       const that = this
-      this.$apiGateway.question.getActivityLog(questionId)
+      APIGateway.question.getActivityLog(questionId)
         .then(function (logList) {
           that.question.logs = new LogList(logList)
         })
@@ -369,14 +374,14 @@ const AdminActionOnQuestion = {
       const that = this
       // const list = this.questionStatuses.list
       // that.questionStatuses
-      return this.$apiGateway.question.getQuestionStatuses()
+      return APIGateway.question.getQuestionStatuses()
         .then(function (questionStatusList) {
           that.questionStatuses = new QuestionStatusList(questionStatusList)
         })
     },
     loadSubcategories () {
       this.subCategoriesList.loading = true
-      return this.$apiGateway.questionSubcategory.get()
+      return APIGateway.questionSubcategory.get()
         .then((questionSubcategory) => {
           this.subCategoriesList = new QuestSubcategoryList(questionSubcategory)
           this.subCategoriesList.loading = false
@@ -387,7 +392,7 @@ const AdminActionOnQuestion = {
     },
     loadExamList () {
       this.examList.loading = true
-      this.$apiGateway.exam.getBase()
+      APIGateway.exam.getBase()
         .then((examList) => {
           this.examList = new ExamList(examList)
           this.examList.loading = false
@@ -399,7 +404,7 @@ const AdminActionOnQuestion = {
     loadCategories () {
       const that = this
       this.categoryList.loading = true
-      this.$apiGateway.questionCategory.get()
+      APIGateway.questionCategory.get()
         .then((questionCategory) => {
           that.categoryList = new QuestCategoryList(questionCategory)
           that.categoryList.loading = false
@@ -409,7 +414,7 @@ const AdminActionOnQuestion = {
         })
     },
     attachExam (data) {
-      this.$apiGateway.question.attach({
+      APIGateway.question.attach({
         exam_id: data.exam.id,
         sub_category_id: data.sub_category.id,
         ...(this.question.id) && { question_id: this.question.id },
@@ -423,7 +428,7 @@ const AdminActionOnQuestion = {
         })
     },
     detachExam (data) {
-      this.$apiGateway.question.detach({
+      APIGateway.question.detach({
         questionId: this.question.id,
         data: {
           detaches: [data]
@@ -447,36 +452,40 @@ const AdminActionOnQuestion = {
       })
     },
     loadQuestionAuthors () {
-      this.$apiGateway.option.getOptions({
+      APIGateway.option.getOptions({
         type: 'reference_type'
       })
         .then((authorsList) => {
-          this.questionAuthorsList = authorsList
+          this.questionAuthorsList = authorsList.list
         })
+        .catch(() => {})
     },
     loadQuestionTargets () {
-      this.$apiGateway.option.getOptions({
+      APIGateway.option.getOptions({
         type: 'targets_type'
       })
         .then((TargetsList) => {
-          this.questionTargetList = TargetsList
+          this.questionTargetList = TargetsList.list
         })
+        .catch(() => {})
     },
     loadAuthorshipDates () {
-      this.$apiGateway.option.getOptions({
+      APIGateway.option.getOptions({
         type: 'year_type'
       })
         .then((authorshipDates) => {
-          this.authorshipDatesList = authorshipDates
+          this.authorshipDatesList = authorshipDates.list
         })
+        .catch(() => {})
     },
     loadMajorList () {
-      this.$apiGateway.option.getOptions({
+      APIGateway.option.getOptions({
         type: 'major_type'
       })
         .then((majorList) => {
-          this.majorList = majorList
+          this.majorList = majorList.list
         })
+        .catch(() => {})
     },
     getLessonGroupList (item) {
       this.getNode(item.id).then(response => {
@@ -490,7 +499,7 @@ const AdminActionOnQuestion = {
       })
     },
     setTags (allTags) {
-      this.$apiGateway.question.setTags({
+      APIGateway.question.setTags({
         questionId: this.question.id,
         data: allTags
       })

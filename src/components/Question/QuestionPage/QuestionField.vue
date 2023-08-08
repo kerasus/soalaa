@@ -6,53 +6,69 @@
            label="اصلاح فرمول سوال"
            class="default-detail-btn"
            @click="setModifiedValue(true)" />
-    <vue-tiptap-katex ref="tiptap"
-                      :loading="loading"
-                      :options="{
-                        bubbleMenu: false,
-                        floatingMenu: false,
-                        poem: true,
-                        reading: true,
-                        persianKeyboard: true,
-                        uploadServer: {
-                          url: getQuestionUploadURL,
-                          headers: {
-                            Authorization: getAuthorizationCode
+    <q-no-ssr>
+      <vue-tiptap-katex v-if="mounted"
+                        ref="tiptap"
+                        :loading="loading"
+                        :options="{
+                          bubbleMenu: false,
+                          floatingMenu: false,
+                          poem: true,
+                          reading: true,
+                          persianKeyboard: true,
+                          uploadServer: {
+                            url: getQuestionUploadURL,
+                            headers: {
+                              Authorization: getAuthorizationCode
+                            }
+                          },
+                          mathliveOptions: {
+                            locale: 'fa',
                           }
-                        },
-                        mathliveOptions: {
-                          locale: 'fa',
-                        }
-                      }"
-                      @update:modelValue="updateValue" />
+                        }"
+                        @update:modelValue="updateValue" />
+    </q-no-ssr>
   </div>
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question.js'
 // import VueTiptapKatex from 'vue3-tiptap-katex'
 // import { MixinConvertToTiptap } from 'vue-tiptap-katex-core'
 
-let VueTiptapKatex
-if (typeof window !== 'undefined') {
-  import('vue3-tiptap-katex')
-    .then((vue3TiptapKatex) => {
-      VueTiptapKatex = vue3TiptapKatex.default
-    })
-}
+// let VueTiptapKatex
+// if (typeof window !== 'undefined') {
+//   import('vue3-tiptap-katex')
+//     .then((vue3TiptapKatex) => {
+//       VueTiptapKatex = vue3TiptapKatex.VueTiptapKatex
+//     })
+// }
 
 let MixinConvertToTiptap
 if (typeof window !== 'undefined') {
   import('vue-tiptap-katex-core')
     .then((vueTiptapKatexCore) => {
-      MixinConvertToTiptap = vueTiptapKatexCore.default.MixinConvertToTiptap
+      MixinConvertToTiptap = vueTiptapKatexCore.MixinConvertToTiptap
     })
 }
 
 export default {
   name: 'QuestionField',
   components: {
-    VueTiptapKatex
+    // VueTiptapKatex
+    VueTiptapKatex: defineAsyncComponent(() => {
+      if (typeof window !== 'undefined') {
+        return new Promise((resolve) => {
+          import('vue3-tiptap-katex')
+            .then((vue3TiptapKatex) => {
+              resolve(vue3TiptapKatex.VueTiptapKatex)
+            })
+        })
+      } else {
+        return new Promise()
+      }
+    })
   },
   inject: {
     question: {
@@ -72,6 +88,7 @@ export default {
   },
   data() {
     return {
+      mounted: false,
       value: 'What you see is <b>what</b> you get.',
       html: '',
       loading: false,
@@ -88,16 +105,17 @@ export default {
       return 'Bearer ' + this.$store.getters['Auth/accessToken']
     }
   },
-  created() {
+  mounted() {
     this.value = this.editorValue
     this.loading = true
     this.getHtmlValueFromValueProp()
-  },
-  mounted() {
+    this.mounted = true
     this.$nextTick(() => {
-      this.isValueChangeAllowed = true
+      this.setModifiedValue()
+      this.$nextTick(() => {
+        this.isValueChangeAllowed = true
+      })
     })
-    this.setModifiedValue()
   },
   methods: {
     updateValue(value) {

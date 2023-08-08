@@ -146,8 +146,8 @@
 
 <script>
 import { ExamList } from 'src/models/Exam.js'
-import { APIGateway } from 'src/api/APIGateway'
 import { Question } from 'src/models/Question.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
@@ -317,7 +317,7 @@ export default {
   },
   methods: {
     setGradeList () {
-      this.$apiGateway.tree.getGradesList()
+      APIGateway.tree.getGradesList()
         .then((gradeList) => {
           this.gradesList = gradeList
         })
