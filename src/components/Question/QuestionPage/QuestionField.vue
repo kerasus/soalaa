@@ -6,44 +6,32 @@
            label="اصلاح فرمول سوال"
            class="default-detail-btn"
            @click="setModifiedValue(true)" />
-    <q-no-ssr>
-      <vue-tiptap-katex v-if="mounted"
-                        ref="tiptap"
-                        :loading="loading"
-                        :options="{
-                          bubbleMenu: false,
-                          floatingMenu: false,
-                          poem: true,
-                          reading: true,
-                          persianKeyboard: true,
-                          uploadServer: {
-                            url: getQuestionUploadURL,
-                            headers: {
-                              Authorization: getAuthorizationCode
-                            }
-                          },
-                          mathliveOptions: {
-                            locale: 'fa',
+    <vue-tiptap-katex ref="tiptap"
+                      v-model:modelValue="initHtml"
+                      :loading="loading"
+                      :options="{
+                        bubbleMenu: false,
+                        floatingMenu: false,
+                        poem: true,
+                        reading: true,
+                        persianKeyboard: true,
+                        uploadServer: {
+                          url: getQuestionUploadURL,
+                          headers: {
+                            Authorization: getAuthorizationCode
                           }
-                        }"
-                        @update:modelValue="updateValue" />
-    </q-no-ssr>
+                        },
+                        mathliveOptions: {
+                          locale: 'fa',
+                        }
+                      }"
+                      @update:modelValue="updateValue" />
   </div>
 </template>
 
 <script>
 import { defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question.js'
-// import VueTiptapKatex from 'vue3-tiptap-katex'
-// import { MixinConvertToTiptap } from 'vue-tiptap-katex-core'
-
-// let VueTiptapKatex
-// if (typeof window !== 'undefined') {
-//   import('vue3-tiptap-katex')
-//     .then((vue3TiptapKatex) => {
-//       VueTiptapKatex = vue3TiptapKatex.VueTiptapKatex
-//     })
-// }
 
 let MixinConvertToTiptap
 if (typeof window !== 'undefined') {
@@ -57,6 +45,7 @@ export default {
   name: 'QuestionField',
   components: {
     // VueTiptapKatex
+    // VueTiptapKatex: defineAsyncComponent(() => import('vue3-tiptap-katex')),
     VueTiptapKatex: defineAsyncComponent(() => {
       if (typeof window !== 'undefined') {
         return new Promise((resolve) => {
@@ -88,7 +77,7 @@ export default {
   },
   data() {
     return {
-      mounted: false,
+      initHtml: '',
       value: 'What you see is <b>what</b> you get.',
       html: '',
       loading: false,
@@ -107,15 +96,15 @@ export default {
   },
   mounted() {
     this.value = this.editorValue
+    this.initHtml = this.editorValue
     this.loading = true
     this.getHtmlValueFromValueProp()
-    this.mounted = true
     this.$nextTick(() => {
-      this.setModifiedValue()
-      this.$nextTick(() => {
-        this.isValueChangeAllowed = true
-      })
+      setTimeout(() => {
+        this.setModifiedValue()
+      }, 500)
     })
+    this.isValueChangeAllowed = true
   },
   methods: {
     updateValue(value) {
@@ -292,6 +281,7 @@ export default {
 // ToDo: check this styles in scoped style tag
 
 </style>
+
 <style lang="scss">
 /*rtl:ignore*/
 @import "vue-tiptap-katex-core/css/base";
