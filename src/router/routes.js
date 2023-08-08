@@ -576,10 +576,10 @@ const routes = [
                 breadcrumbs: { title: 'مشاهده سوال', loading: false },
                 component: () => (import('src/pages/Admin/Question/ShowQuestion.vue')),
                 meta: {
-                  middlewares: [
-                    Authenticated,
-                    Permissions.hasPermission('questionShow')
-                  ]
+                  // middlewares: [
+                  //   Authenticated,
+                  //   Permissions.hasPermission('questionShow')
+                  // ]
                 }
               },
               {

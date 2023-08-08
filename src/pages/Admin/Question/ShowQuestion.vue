@@ -54,7 +54,6 @@
 </template>
 
 <script>
-/* eslint-disable no-var */
 import mixinTree from 'src/mixin/Tree.js'
 import { ExamList } from 'src/models/Exam.js'
 import { Question } from 'src/models/Question.js'
@@ -109,8 +108,7 @@ export default {
       questionStatuses: new QuestionStatusList(),
       categoryList: new QuestCategoryList(),
       isPanelOpened: false,
-      imgFloatMode: false,
-      totalLoading: false
+      imgFloatMode: false
     }
   },
   computed: {
@@ -127,7 +125,7 @@ export default {
       deep: true
     }
   },
-  created () {
+  mounted () {
     this.enableLoading()
     this.getQuestionTypeForTypeId(this.question)
     this.loadExamList()
@@ -139,11 +137,6 @@ export default {
     this.loadQuestionTargets()
     this.loadAuthorshipDates()
     this.loadMajorList()
-  },
-  mounted () {
-    this.$nextTick(() => {
-      // this.disableLoading()
-    })
   },
   methods: {
     changeImagePAnelMode () {
@@ -205,6 +198,7 @@ export default {
   padding-top: 30px;
 }
 </style>
+
 <style lang="scss">
 // USED IN MANY OTHER COMPONENTS
 .default-questions-card {
