@@ -58,7 +58,6 @@ const mixinPrefetchServerData = {
               Loading.hide()
             })
         } else {
-          // console.trace('item.widgetData', item.widgetData)
           this.prefetchServerDataPromiseThen(item.widgetData)
         }
 

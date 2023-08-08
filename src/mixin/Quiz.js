@@ -67,6 +67,9 @@ const mixinQuiz = {
       // return currentLesson
     },
     currentExamQuestions () {
+      if (typeof window === 'undefined') {
+        return null
+      }
       return window.currentExamQuestions
     }
   },
@@ -232,6 +235,9 @@ const mixinQuiz = {
       this.$router.push({ name: 'User.Exam.List' })
     },
     reloadQuestionFile (questionsFileUrl, viewType, examId) {
+      if (typeof window === 'undefined') {
+        return null
+      }
       if (!Assistant.getId(examId)) {
         return
       }
@@ -324,6 +330,9 @@ const mixinQuiz = {
       return this.$store.getters['Exam/quiz']
     },
     getCurrentExamQuestionIndexes () {
+      if (typeof window === 'undefined') {
+        return []
+      }
       if (window.currentExamQuestionIndexes && window.currentExamQuestionIndexes.length) {
         return window.currentExamQuestionIndexes
       }
@@ -331,10 +340,16 @@ const mixinQuiz = {
       return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
     },
     setCurrentExamQuestions (currentExamQuestions) {
+      if (typeof window === 'undefined') {
+        return null
+      }
       window.currentExamQuestions = currentExamQuestions
       window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
     },
     setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
+      if (typeof window === 'undefined') {
+        return null
+      }
       window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
     },
     sortQuestions (questions) {
@@ -410,6 +425,9 @@ const mixinQuiz = {
       return currentExamQuestionsArray
     },
     getCurrentExamQuestions () {
+      if (typeof window === 'undefined') {
+        return null
+      }
       if (window.currentExamQuestions) {
         return window.currentExamQuestions
       }

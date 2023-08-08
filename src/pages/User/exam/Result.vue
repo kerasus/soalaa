@@ -127,12 +127,11 @@
                           class="question-field"
                           dense>
                     <q-item-section>
-                      <question-item
-                        :key="item.id"
-                        :question="item"
-                        :page-strategy="'lesson-detail'"
-                        :show-question-number="true"
-                        :report-options="reportTypeList" />
+                      <question-item :key="item.id"
+                                     :question="item"
+                                     :page-strategy="'lesson-detail'"
+                                     :show-question-number="true"
+                                     :report-options="reportTypeList" />
                     </q-item-section>
                   </q-item>
                 </template>

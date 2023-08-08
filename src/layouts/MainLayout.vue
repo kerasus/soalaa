@@ -184,6 +184,7 @@ export default {
 <style lang="scss" scoped>
 .scroll {
   height: 100%;
+  background: white;
 }
 
 .main-layout-header {

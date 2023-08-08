@@ -1,9 +1,10 @@
-import APIRepository from '../classes/APIRepository'
-import { appApiInstance } from 'src/boot/axios'
+import { appApiInstance } from 'src/boot/axios.js'
 import { Exam, ExamList } from 'src/models/Exam.js'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import { QuestionList } from 'src/models/Question'
-import { UserExamData } from 'src/models/UserExamData'
+import { QuestionList } from 'src/models/Question.js'
+import APIRepository from '../classes/APIRepository.js'
+import { UserExamData } from 'src/models/UserExamData.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { UserAnswersOfExam } from 'src/models/UserAnswersOfExam.js'
 
 const APIAdresses = {
   exportExcel: '/exam?excel_export=1',
@@ -393,7 +394,7 @@ export default class ExamAPI extends APIRepository {
       cacheKey: this.CacheList.getAllAnswerOfUser(userExamId),
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return new UserExamData(response.data.data)
+        return new UserAnswersOfExam(response.data)
       },
       rejectCallback: (error) => {
         return error

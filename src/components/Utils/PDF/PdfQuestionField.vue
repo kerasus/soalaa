@@ -17,7 +17,7 @@
       </div>
       <q-list v-if="displayChoices"
               class="choices-box row">
-        <q-item v-for="(choice, index) in question.choices"
+        <q-item v-for="(choice, index) in question.choices.list"
                 :ref="'choiceId' + choice.id"
                 :key="'choiceId' + choice.id"
                 class="choices"
@@ -140,7 +140,7 @@ export default {
       return this.question.choices.findIndex(choice => choice.answer) + 1
     },
     allChoiceLoaded () {
-      const notLoadedChoice = this.question.choices.find(choice => !choice.loaded)
+      const notLoadedChoice = this.question.choices.list.find(choice => !choice.loaded)
       return !notLoadedChoice
     },
     questionLoaded () {
