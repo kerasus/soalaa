@@ -1,9 +1,9 @@
-import { appApiInstance } from 'src/boot/axios'
 import { SetList } from 'src/models/Set.js'
-import { Content, ContentList } from 'src/models/Content.js'
+import { appApiInstance } from 'src/boot/axios.js'
 import APIRepository from '../classes/APIRepository.js'
+import { Content, ContentList } from 'src/models/Content.js'
 import { Product, ProductList } from 'src/models/Product.js'
-import { ProductCategoryList } from 'src/models/ProductCategory'
+import { ProductCategoryList } from 'src/models/ProductCategory.js'
 
 const APIAdresses = {
   base: '/product',
@@ -27,7 +27,8 @@ const APIAdresses = {
   gifts: (id) => '/gift-products/' + id,
   sampleContent: (id) => '/product/' + id + '/sample',
   categories: '/product-categories',
-  userLastState: (id) => '/product/' + id + '/toWatch'
+  userLastState: (id) => '/product/' + id + '/toWatch',
+  landingAllProducts: '/product/soalaa/all'
 }
 export default class ProductAPI extends APIRepository {
   constructor() {
@@ -46,7 +47,7 @@ export default class ProductAPI extends APIRepository {
       sampleContent: (id) => this.name + this.APIAdresses.sampleContent(id),
       categories: this.name + this.APIAdresses.categories,
       edit: this.name + this.APIAdresses.edit,
-      landingAllProducts: '/product/soalaa/all'
+      landingAllProducts: this.name + this.APIAdresses.landingAllProducts
     }
     this.restUrl = (id) => this.APIAdresses.base + '/' + id
     /* Setting the callback functions for the CRUD operations. */

@@ -261,6 +261,8 @@
 
 <script>
 // import tableComponent from 'src/components/landing/table'
+import { APIGateway } from 'src/api/APIGateway'
+
 export default {
   name: 'submitTable',
   components: {
@@ -1412,7 +1414,7 @@ export default {
       return this.activeTab.selective
     }
   },
-  created() {
+  mounted () {
     this.initPageData()
   },
   methods: {
@@ -1527,7 +1529,7 @@ export default {
     },
 
     callProductApi() {
-      return this.$apiGateway.product.landingAllProducts()
+      return APIGateway.product.landingAllProducts()
     },
 
     updateActiveTab(exam) {
