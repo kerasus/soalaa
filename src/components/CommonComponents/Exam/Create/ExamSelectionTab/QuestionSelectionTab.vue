@@ -111,6 +111,7 @@
                         :disable="disablePagination"
                         @updateCurrentPage="updatePage" />
           </div>
+        </sticky-both-sides>
       </div>
     </div>
 
@@ -197,7 +198,14 @@ import QuestionsGeneralInfo from 'src/components/CommonComponents/Exam/Create/Ex
 
 export default {
   name: 'QuestionSelectionTab',
-  components: { StickyBothSides, TreeModal, QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
+  components: {
+    StickyBothSides,
+    TreeModal,
+    QuestionsGeneralInfo,
+    QuestionFilter,
+    QuestionItem,
+    pagination
+  },
   mixins: [
     mixinTree
   ],
