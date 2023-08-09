@@ -53,9 +53,12 @@ export default {
             .then((vue3TiptapKatex) => {
               resolve(vue3TiptapKatex.VueTiptapKatex)
             })
+            .catch()
         })
       } else {
-        return new Promise()
+        return new Promise((resolve, reject) => {
+          resolve({})
+        })
       }
     })
   },
@@ -284,7 +287,7 @@ export default {
 
 <style lang="scss">
 /*rtl:ignore*/
-@import "vue-tiptap-katex-core/css/base";
+@import "vue-tiptap-katex-core/css/base.scss";
 @import "src/css/katex-rtl-fix.scss";
 //rtl change bug fix
 [dir="rtl"] .katex {

@@ -15,7 +15,6 @@
 <script>
 import katex from 'katex'
 import 'katex/dist/katex.css'
-// import { MixinConvertToTiptap } from 'vue-tiptap-katex-core'
 import 'src/Utils/katex-persian-renderer/katex-persian-fonts/index.css'
 import addPersianTo from 'src/Utils/katex-persian-renderer/src/index.mjs'
 import allMetrics from 'src/Utils/katex-persian-renderer/katex-persian-fonts/YekanBakhFontMetrics.json'
@@ -215,7 +214,7 @@ export default {
 <style lang="scss">
 /*rtl:ignore*/
 @import "katex/dist/katex.min.css";
-@import "vue-tiptap-katex-core/css/base";
+@import "vue-tiptap-katex-core/css/base.scss";
 @import "src/css/katex-rtl-fix.scss";
 
 .VueKatex {
