@@ -19,11 +19,12 @@ import 'src/Utils/katex-persian-renderer/katex-persian-fonts/index.css'
 import addPersianTo from 'src/Utils/katex-persian-renderer/src/index.mjs'
 import allMetrics from 'src/Utils/katex-persian-renderer/katex-persian-fonts/YekanBakhFontMetrics.json'
 
-let MixinConvertToTiptap
+import * as VueTiptapKatexAssist from 'vue-tiptap-katex-core/assist.js'
+// let VueTiptapKatexAssist
 // if (typeof window !== 'undefined') {
 //   import('vue-tiptap-katex-core')
 //     .then((vueTiptapKatexCore) => {
-//       MixinConvertToTiptap = vueTiptapKatexCore.MixinConvertToTiptap
+//       VueTiptapKatexAssist = vueTiptapKatexCore.Assist
 //     })
 // }
 
@@ -70,7 +71,7 @@ export default {
       return !string.match(persianRegex)
     },
     computedKatex() {
-      if (!MixinConvertToTiptap) {
+      if (!VueTiptapKatexAssist) {
         return this.input
       }
       let string = this.input
@@ -101,7 +102,7 @@ export default {
   },
   methods: {
     removeFirstAndLastBracket(input) {
-      const regexPatternForFormula = MixinConvertToTiptap.methods.getRegexPatternForFormula()
+      const regexPatternForFormula = VueTiptapKatexAssist.getRegexPatternForFormula()
       const regex = /\\\[.*\\]/gms
       let string = input
       string = string.replace(regexPatternForFormula, (match) => {
@@ -128,8 +129,8 @@ export default {
       trust: true
     }) {
       let string = input
-      string = MixinConvertToTiptap.methods.convertToTiptap(string)
-      const regex = MixinConvertToTiptap.methods.getRegexPatternForFormula()
+      string = VueTiptapKatexAssist.convertToTiptap(string)
+      const regex = VueTiptapKatexAssist.getRegexPatternForFormula()
       string = string.replace(regex, (match) => {
         let finalMatch
         if (match.includes('$')) {
@@ -138,7 +139,7 @@ export default {
           finalMatch = match.slice(2, -2)
         }
         if (finalMatch) {
-          finalMatch = MixinConvertToTiptap.methods.replaceKatexSigns(finalMatch)
+          finalMatch = VueTiptapKatexAssist.replaceKatexSigns(finalMatch)
         }
         return katex.renderToString(finalMatch, katexConfig)
       })

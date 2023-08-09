@@ -6,38 +6,38 @@
            label="اصلاح فرمول سوال"
            class="default-detail-btn"
            @click="setModifiedValue(true)" />
-    <!--    <vue-tiptap-katex ref="tiptap"-->
-    <!--                      v-model:modelValue="initHtml"-->
-    <!--                      :loading="loading"-->
-    <!--                      :options="{-->
-    <!--                        bubbleMenu: false,-->
-    <!--                        floatingMenu: false,-->
-    <!--                        poem: true,-->
-    <!--                        reading: true,-->
-    <!--                        persianKeyboard: true,-->
-    <!--                        uploadServer: {-->
-    <!--                          url: getQuestionUploadURL,-->
-    <!--                          headers: {-->
-    <!--                            Authorization: getAuthorizationCode-->
-    <!--                          }-->
-    <!--                        },-->
-    <!--                        mathliveOptions: {-->
-    <!--                          locale: 'fa',-->
-    <!--                        }-->
-    <!--                      }"-->
-    <!--                      @update:modelValue="updateValue" />-->
+    <vue-tiptap-katex ref="tiptap"
+                      v-model:modelValue="initHtml"
+                      :loading="loading"
+                      :options="{
+                        bubbleMenu: false,
+                        floatingMenu: false,
+                        poem: true,
+                        reading: true,
+                        persianKeyboard: true,
+                        uploadServer: {
+                          url: getQuestionUploadURL,
+                          headers: {
+                            Authorization: getAuthorizationCode
+                          }
+                        },
+                        mathliveOptions: {
+                          locale: 'fa',
+                        }
+                      }"
+                      @update:modelValue="updateValue" />
   </div>
 </template>
 
 <script>
-// import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question.js'
 
-let MixinConvertToTiptap
+import * as VueTiptapKatexAssist from 'vue-tiptap-katex-core/assist.js'
 // if (typeof window !== 'undefined') {
 //   import('vue-tiptap-katex-core')
 //     .then((vueTiptapKatexCore) => {
-//       MixinConvertToTiptap = vueTiptapKatexCore.MixinConvertToTiptap
+//       VueTiptapKatexAssist = vueTiptapKatexCore.Assist
 //     })
 // }
 
@@ -46,21 +46,21 @@ export default {
   components: {
     // VueTiptapKatex
     // VueTiptapKatex: defineAsyncComponent(() => import('vue3-tiptap-katex')),
-    // VueTiptapKatex: defineAsyncComponent(() => {
-    //   if (typeof window !== 'undefined') {
-    //     return new Promise((resolve) => {
-    //       import('vue3-tiptap-katex')
-    //         .then((vue3TiptapKatex) => {
-    //           resolve(vue3TiptapKatex.VueTiptapKatex)
-    //         })
-    //         .catch()
-    //     })
-    //   } else {
-    //     return new Promise((resolve, reject) => {
-    //       resolve({})
-    //     })
-    //   }
-    // })
+    VueTiptapKatex: defineAsyncComponent(() => {
+      if (typeof window !== 'undefined') {
+        return new Promise((resolve) => {
+          import('vue3-tiptap-katex')
+            .then((vue3TiptapKatex) => {
+              resolve(vue3TiptapKatex.VueTiptapKatex)
+            })
+            .catch()
+        })
+      } else {
+        return new Promise((resolve, reject) => {
+          resolve({})
+        })
+      }
+    })
   },
   inject: {
     question: {
@@ -203,7 +203,11 @@ export default {
       })
     },
     removeFirstAndLastBracket(input) {
-      const regexPatternForFormula = MixinConvertToTiptap.methods.getRegexPatternForFormula()
+      if (typeof window === 'undefined') {
+        return input
+      }
+      const regexPatternForFormula = VueTiptapKatexAssist.getRegexPatternForFormula()
+      // const regexPatternForFormula = this.getRegexPatternForFormula()
       const regex = /\\\[.*\\]/gms
       let string = input
       string = string.replace(regexPatternForFormula, (match) => {
