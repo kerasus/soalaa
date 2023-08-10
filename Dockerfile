@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build:pwa
 
 
-FROM nginx:1.23.3-alpine as production-build
+FROM nginx:1.24-alpine as production-build
 COPY ./nginx.conf /etc/nginx/nginx.conf
 
 ## Remove default nginx index page
