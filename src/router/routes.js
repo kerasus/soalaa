@@ -61,7 +61,7 @@ const entityCrudRouteConfigs = [
   {
     path: 'QuestionTarget',
     baseRouteName: 'Admin.QuestionTarget',
-    componentPath: 'pages/Admin/QuestionTarget',
+    componentPath: 'pages/Admin/QuestionTarget.vue',
     breadcrumbs: { title: 'اهداف سوال' },
     permissions: ['optionIndex', 'optionStore', 'optionShow', 'optionUpdate']
 
@@ -81,7 +81,8 @@ const allEntityCrudRouteObjects = [
 const routes = [
   {
     path: '/',
-    component: () => import('src/layouts/MainLayout.vue'),
+    name: 'Home',
+    component: () => import('layouts/MainLayout.vue'),
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     layoutConfig: {
       layoutHeaderVisible: true,
