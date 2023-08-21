@@ -21,16 +21,14 @@
       </div>
       <div class="nav-item-box flex xs-hide">
         <div class="nav-item"
-             @click="onClickRegisterBtn"
-        >
+             @click="onClickRegisterBtn">
           <a href="https://alaatv.com"
              target="_blank">
             مدرسه آلاء
           </a>
         </div>
         <div class="nav-item middle"
-             @click="onClickConditionsBtn"
-        >
+             @click="onClickConditionsBtn">
           <router-link :to="{name: 'Home'}">
             ورود به سوالا
           </router-link>
