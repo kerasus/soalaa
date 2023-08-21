@@ -41,7 +41,7 @@
     "highcharts": "^10.3.2",
     "highcharts-vue": "^1.4.0",
     "html2pdf.js": "^0.10.1",
-    "js-abstract-model": "^0.1.32",
+    "js-abstract-model": "^0.1.33",
     "katex": "^0.16.7",
     "moment": "^2.29.4",
     "moment-jalaali": "^0.10.0",
