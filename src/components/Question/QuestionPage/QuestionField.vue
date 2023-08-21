@@ -6,39 +6,36 @@
            label="اصلاح فرمول سوال"
            class="default-detail-btn"
            @click="setModifiedValue(true)" />
-    <vue-tiptap-katex ref="tiptap"
-                      v-model:modelValue="initHtml"
-                      :loading="loading"
-                      :options="{
-                        bubbleMenu: false,
-                        floatingMenu: false,
-                        poem: true,
-                        reading: true,
-                        persianKeyboard: true,
-                        uploadServer: {
-                          url: getQuestionUploadURL,
-                          headers: {
-                            Authorization: getAuthorizationCode
-                          }
-                        },
-                        mathliveOptions: {
-                          locale: 'fa',
-                        }
-                      }"
-                      @update:modelValue="updateValue" />
+    <component :is="editorComponent"
+               ref="tiptap"
+               v-model:modelValue="initHtml"
+               :loading="loading"
+               :options="{
+                 bubbleMenu: false,
+                 floatingMenu: false,
+                 poem: true,
+                 reading: true,
+                 persianKeyboard: true,
+                 uploadServer: {
+                   url: getQuestionUploadURL,
+                   headers: {
+                     Authorization: getAuthorizationCode
+                   }
+                 },
+                 mathliveOptions: {
+                   locale: 'fa',
+                 }
+               }"
+               @update:modelValue="updateValue" />
   </div>
 </template>
 
 <script>
 import { Question } from 'src/models/Question.js'
-import VueTiptapKatex from 'vue3-tiptap-katex'
 import * as VueTiptapKatexAssist from 'vue-tiptap-katex-core/assist.js'
 
 export default {
   name: 'QuestionField',
-  components: {
-    VueTiptapKatex: VueTiptapKatex.VueTiptapKatexNoSsr
-  },
   inject: {
     question: {
       from: 'providedQuestion', // this is optional if using the same key for injection
@@ -57,6 +54,7 @@ export default {
   },
   data() {
     return {
+      editorComponent: null,
       initHtml: '',
       value: 'What you see is <b>what</b> you get.',
       html: '',
@@ -78,6 +76,13 @@ export default {
     this.value = this.editorValue
     this.initHtml = this.editorValue
     this.loading = true
+
+    import('vue3-tiptap-katex')
+      .then((vue3TiptapKatex) => {
+        this.editorComponent = vue3TiptapKatex.VueTiptapKatexNoSsr
+      })
+      .catch()
+
     this.getHtmlValueFromValueProp()
     this.$nextTick(() => {
       setTimeout(() => {
