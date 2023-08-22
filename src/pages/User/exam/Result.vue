@@ -35,17 +35,17 @@
                       align="justify"
                       class="result-tabs">
                 <q-tab name="result"
-                       label="کارنامه"></q-tab>
+                       label="کارنامه" />
                 <q-tab name="rank"
-                       label="تخمین رتبه"></q-tab>
+                       label="تخمین رتبه" />
                 <q-tab name="newRank"
-                       label="تخمین رتبه بر اساس کنکور"></q-tab>
+                       label="تخمین رتبه بر اساس کنکور" />
                 <q-tab name="lessons"
-                       label="ریزدرس ها"></q-tab>
+                       label="ریزدرس ها" />
                 <q-tab name="KeyAnswers"
-                       label="پاسخبرگ کلیدی"></q-tab>
+                       label="پاسخبرگ کلیدی" />
                 <q-tab name="descriptiveAnswers"
-                       label="پاسخ تشریحی و ویدویی"></q-tab>
+                       label="پاسخ تشریحی و ویدویی" />
               </q-tabs>
             </div>
           </div>
@@ -58,7 +58,7 @@
                       animated
                       swipeable>
           <q-tab-panel name="result">
-            <PersonalResult :report="report" />
+            <personal-result :report="report" />
           </q-tab-panel>
           <q-tab-panel name="newRank">
             <new-takhmin-rotbe :report="report" />
@@ -67,13 +67,11 @@
             <takhmin-rotbe :report="report" />
           </q-tab-panel>
           <q-tab-panel name="lessons">
-            <StatisticResult :report="report" />
+            <statistic-result :report="report" />
           </q-tab-panel>
           <q-tab-panel name="KeyAnswers">
-            <BubbleSheet
-              :info="{ type: 'pasokh-nameh' }"
-              delay-time="0"
-            />
+            <bubble-sheet :info="{ type: 'pasokh-nameh' }"
+                          delay-time="0" />
           </q-tab-panel>
           <q-tab-panel name="descriptiveAnswers"
                        class="descriptiveAnswers-tab-panel">
@@ -84,48 +82,34 @@
                   دانلود پاسخنامه تشریحی
                 </p>
                 <div v-if="report">
-                  <div
-                    v-for="(item, index) in report.exams_booklet"
-                    :key="index"
-                    class="row download-row"
-                  >
-                    <div
-                      class="col col-12 col-sm-6"
-                    >
-                      <div
-                        v-if="item.descriptive_answers_url"
-                        class="download-box"
-                      >
+                  <div v-for="(item, index) in report.exams_booklet"
+                       :key="index"
+                       class="row download-row">
+                    <div class="col col-12 col-sm-6">
+                      <div v-if="item.descriptive_answers_url"
+                           class="download-box">
                         <p class="download-title">
                           دانلود پاسخنامه تشریحی {{
                             item.title
                           }}
                         </p>
-                        <q-btn
-                          outline
-                          :href="item.descriptive_answers_url"
-                          target="_blank"
-                        >
+                        <q-btn outline
+                               :href="item.descriptive_answers_url"
+                               target="_blank">
                           دانلود فایل PDF
                           <q-icon name="mdi-download" />
                         </q-btn>
                       </div>
                     </div>
-                    <div
-                      class="col col-12 col-sm-6"
-                    >
-                      <div
-                        v-if="item.questions_url"
-                        class="download-box"
-                      >
+                    <div class="col col-12 col-sm-6">
+                      <div v-if="item.questions_url"
+                           class="download-box">
                         <p class="download-title">
                           دانلود سوالات {{ item.title }}
                         </p>
-                        <q-btn
-                          outline
-                          :href="item.questions_url"
-                          target="_blank"
-                        >
+                        <q-btn outline
+                               :href="item.questions_url"
+                               target="_blank">
                           دانلود فایل PDF
                           <q-icon name="mdi-download" />
                         </q-btn>
@@ -136,22 +120,19 @@
               </q-card-section>
             </q-card>
             <div class="questionsList">
-              <q-virtual-scroll
-                ref="scroller"
-                class="konkoor-view-scroll"
-                :items="questions"
-                :virtual-scroll-item-size="450"
-                :virtual-scroll-slice-size="5"
-              >
+              <q-virtual-scroll ref="scroller"
+                                class="konkoor-view-scroll"
+                                :items="questions"
+                                :virtual-scroll-item-size="450"
+                                :virtual-scroll-slice-size="5">
                 <template v-slot="{ item }">
 
-                  <question-item
-                    :key="item.id"
-                    :question="item"
-                    :page-strategy="'lesson-detail'"
-                    :show-question-number="true"
-                    :report-options="reportTypeList"
-                    class="question-field" />
+                  <question-item :key="item.id"
+                                 :question="item"
+                                 :page-strategy="'lesson-detail'"
+                                 :show-question-number="true"
+                                 :report-options="reportTypeList"
+                                 class="question-field" />
 
                 </template>
               </q-virtual-scroll>

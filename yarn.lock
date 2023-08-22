@@ -2045,9 +2045,9 @@
   integrity sha512-YATxVxgRqNH6nHEIsvg6k2Boc1JHI9ZbH5iWFFv/MTkchz3b1ieGDa5T0a9RznNdI0KhVbdbWSN+KWWrQZRxTw==
 
 "@types/node@*", "@types/node@>=12.12.47", "@types/node@>=13.7.0":
-  version "20.5.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.5.1.tgz#178d58ee7e4834152b0e8b4d30cbfab578b9bb30"
-  integrity sha512-4tT2UrL5LBqDwoed9wZ6N3umC4Yhz3W3FloMmiiG4JwmUJWpie0c7lcnUNd4gtMKuDEO4wRVS8B6Xa0uMRsMKg==
+  version "20.5.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.5.2.tgz#02850ed821c8113fd6ed9ae5c744b7f7cd6d6f51"
+  integrity sha512-5j/lXt7unfPOUlrKC34HIaedONleyLtwkKggiD/0uuMfT8gg2EOpg0dz4lCD15Ga7muC+1WzJZAjIB9simWd6Q==
 
 "@types/object.omit@^3.0.0":
   version "3.0.0"
@@ -3180,9 +3180,9 @@ ejs@^3.1.6:
     jake "^10.8.5"
 
 electron-to-chromium@^1.4.477:
-  version "1.4.496"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.496.tgz#a57534b70d2bdee7e1ad7dbd4c91e560cbd08db1"
-  integrity sha512-qeXC3Zbykq44RCrBa4kr8v/dWzYJA8rAwpyh9Qd+NKWoJfjG5vvJqy9XOJ9H4P/lqulZBCgUWAYi+FeK5AuJ8g==
+  version "1.4.498"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.498.tgz#cef35341123f62a35ba7084e439c911d25e0d81b"
+  integrity sha512-4LODxAzKGVy7CJyhhN5mebwe7U2L29P+0G+HUriHnabm0d7LSff8Yn7t+Wq+2/9ze2Fu1dhX7mww090xfv7qXQ==
 
 elementtree@0.1.7:
   version "0.1.7"
@@ -4121,9 +4121,9 @@ fs@^0.0.1-security:
   integrity sha512-3XY9e1pP0CVEUCdj5BmfIZxRBTSDycnbqhIOGec9QYtmVH2fbLpj86CFWkrNOkt/Fvty4KZG5lTglL9j/gJ87w==
 
 fsevents@~2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
-  integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.3.tgz#cac6407785d03675a2a5e1a5305c697b347d90d6"
+  integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
 
 function-bind@^1.1.1:
   version "1.1.1"
@@ -5744,9 +5744,9 @@ prosemirror-trailing-node@^2.0.2:
     escape-string-regexp "^4.0.0"
 
 prosemirror-transform@^1.0.0, prosemirror-transform@^1.1.0, prosemirror-transform@^1.2.1, prosemirror-transform@^1.2.8, prosemirror-transform@^1.3.3, prosemirror-transform@^1.7.0, prosemirror-transform@^1.7.3:
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/prosemirror-transform/-/prosemirror-transform-1.7.4.tgz#ea878c90563f3586064dd5ccf6cabb50b2753fd9"
-  integrity sha512-GO38mvqJ2yeI0BbL5E1CdHcly032Dlfn9nHqlnCHqlNf9e9jZwJixxp6VRtOeDZ1uTDpDIziezMKbA41LpAx3A==
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/prosemirror-transform/-/prosemirror-transform-1.7.5.tgz#c62aac8645bd4f8cf447d6d53dda80abe8489f03"
+  integrity sha512-U/fWB6frEzY7dzwJUo+ir8dU1JEanaI/RwL12Imy9js/527N0v/IRUKewocP1kTq998JNT18IGtThaDLwLOBxQ==
   dependencies:
     prosemirror-model "^1.0.0"
 
@@ -5779,9 +5779,9 @@ protobufjs@^6.11.3:
     long "^4.0.0"
 
 protobufjs@^7.2.4:
-  version "7.2.4"
-  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-7.2.4.tgz#3fc1ec0cdc89dd91aef9ba6037ba07408485c3ae"
-  integrity sha512-AT+RJgD2sH8phPmCf7OUZR8xGdcJRga4+1cOaXJ64hvcSkVhNcRHOwIxUatPH15+nj59WAGTDv3LSGZPEQbJaQ==
+  version "7.2.5"
+  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-7.2.5.tgz#45d5c57387a6d29a17aab6846dcc283f9b8e7f2d"
+  integrity sha512-gGXRSXvxQ7UiPgfw8gevrfRWcTlSbOFg+p/N+JVJEK5VhueL2miT6qTymqAmjr1Q5WbOCyJbyrk6JfWKwlFn6A==
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"
@@ -5829,22 +5829,22 @@ quasar-app-extension-q-page-builder@^0.1.54:
     quasar-ui-q-page-builder "^0.1.57"
 
 quasar-crud@^0.3.42:
-  version "0.3.45"
-  resolved "https://registry.yarnpkg.com/quasar-crud/-/quasar-crud-0.3.45.tgz#636bb8f6a20a53d37b2fc0cc48ed3c69d21223ea"
-  integrity sha512-ECSGAmnz3K0frgFmdY1soCKErKs9WW4+TJt+7up7+0msuv8bf9vtyWjPK8ii/hW4tvu5mDsun47ZDhf8HP6JVA==
+  version "0.3.49"
+  resolved "https://registry.yarnpkg.com/quasar-crud/-/quasar-crud-0.3.49.tgz#161eca24536689651319d054bff6a90ea265f166"
+  integrity sha512-CCAL1bN6zE+NWPWm7k91LWk8Khvzo6FHZ81D1jTpVLOrPZ16I1YiTe/c/0weWxfoCYZ/8m1KrssNHPYnWxHrCQ==
   dependencies:
     "@quasar/extras" "^1.16.5"
     axios "^1.4.0"
     moment-jalaali "^0.10.0"
     quasar "^2.12.2"
-    quasar-form-builder "^0.1.108"
+    quasar-form-builder "^0.1.110"
     shvl "^3.0.0"
     vue "^3.2.47"
 
-quasar-form-builder@^0.1.107, quasar-form-builder@^0.1.108:
-  version "0.1.108"
-  resolved "https://registry.yarnpkg.com/quasar-form-builder/-/quasar-form-builder-0.1.108.tgz#47c1e5a6bd5b1f6bf9e4806487ec9f435a44e68c"
-  integrity sha512-vnVKFXQpuwLmm5aeRE9fEOgugwqcRPzdZDoR40cjE/Hh0WzPQL+mFnFYiRgAGqIiIR6bt3i/6vZNZHYZpjlLxA==
+quasar-form-builder@^0.1.107, quasar-form-builder@^0.1.110:
+  version "0.1.110"
+  resolved "https://registry.yarnpkg.com/quasar-form-builder/-/quasar-form-builder-0.1.110.tgz#cdc1baf57bf9567387803d44ea4ff5a1acdda024"
+  integrity sha512-7Q8FZFgXu7FlV9Gqf06+efLEl3OptHcG6cC6Sps97GJ8/q3/1NcTFu8PEoQKQkBWDA4ZSaz+9fv2aRJLvWM8lA==
   dependencies:
     "@quasar/extras" "^1.16.5"
     core-js "^3.31.1"
