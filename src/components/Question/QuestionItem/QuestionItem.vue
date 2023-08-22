@@ -937,10 +937,10 @@ export default {
         width: 34px;
         height: var(--katexLineHeight);
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         @media only screen and (max-width: 1023px) {
           width: 26px;
-          left: -30px;
+          left: -16px;
         }
       }
 
