@@ -35,17 +35,17 @@
                       align="justify"
                       class="result-tabs">
                 <q-tab name="result"
-                       label="کارنامه" />
+                       label="کارنامه"></q-tab>
                 <q-tab name="rank"
-                       label="تخمین رتبه" />
+                       label="تخمین رتبه"></q-tab>
                 <q-tab name="newRank"
-                       label="تخمین رتبه بر اساس کنکور" />
+                       label="تخمین رتبه بر اساس کنکور"></q-tab>
                 <q-tab name="lessons"
-                       label="ریزدرس ها" />
+                       label="ریزدرس ها"></q-tab>
                 <q-tab name="KeyAnswers"
-                       label="پاسخبرگ کلیدی" />
+                       label="پاسخبرگ کلیدی"></q-tab>
                 <q-tab name="descriptiveAnswers"
-                       label="پاسخ تشریحی و ویدویی" />
+                       label="پاسخ تشریحی و ویدویی"></q-tab>
               </q-tabs>
             </div>
           </div>
@@ -58,82 +58,101 @@
                       animated
                       swipeable>
           <q-tab-panel name="result">
-            <personal-result :report="report" />
-          </q-tab-panel>
-          <q-tab-panel name="rank">
-            <takhmin-rotbe :report="report" />
+            <PersonalResult :report="report" />
           </q-tab-panel>
           <q-tab-panel name="newRank">
             <new-takhmin-rotbe :report="report" />
           </q-tab-panel>
+          <q-tab-panel name="rank">
+            <takhmin-rotbe :report="report" />
+          </q-tab-panel>
           <q-tab-panel name="lessons">
-            <statistic-result :report="report" />
+            <StatisticResult :report="report" />
           </q-tab-panel>
           <q-tab-panel name="KeyAnswers">
-            <bubble-sheet :info="{ type: 'pasokh-nameh' }"
-                          delay-time="0" />
+            <BubbleSheet
+              :info="{ type: 'pasokh-nameh' }"
+              delay-time="0"
+            />
           </q-tab-panel>
           <q-tab-panel name="descriptiveAnswers"
                        class="descriptiveAnswers-tab-panel">
-            <q-card flat>
-              <p class="tab-title pt-5 pr-5">
-                دانلود پاسخنامه تشریحی
-              </p>
-              <div v-if="report">
-                <div v-for="(item, index) in report.exams_booklet"
-                     :key="index"
-                     class="row download-row">
-                  <div class="col col-12 col-sm-6">
-                    <div v-if="item.descriptive_answers_url"
-                         class="download-box">
-                      <p class="download-title">
-                        دانلود پاسخنامه تشریحی {{
-                          item.title
-                        }}
-                      </p>
-                      <q-btn outline
-                             :href="item.descriptive_answers_url"
-                             target="_blank">
-                        دانلود فایل PDF
-                        <q-icon name="mdi-download" />
-                      </q-btn>
+            <q-card flat
+                    class="q-mb-md">
+              <q-card-section>
+                <p class="tab-title pt-5 pr-5">
+                  دانلود پاسخنامه تشریحی
+                </p>
+                <div v-if="report">
+                  <div
+                    v-for="(item, index) in report.exams_booklet"
+                    :key="index"
+                    class="row download-row"
+                  >
+                    <div
+                      class="col col-12 col-sm-6"
+                    >
+                      <div
+                        v-if="item.descriptive_answers_url"
+                        class="download-box"
+                      >
+                        <p class="download-title">
+                          دانلود پاسخنامه تشریحی {{
+                            item.title
+                          }}
+                        </p>
+                        <q-btn
+                          outline
+                          :href="item.descriptive_answers_url"
+                          target="_blank"
+                        >
+                          دانلود فایل PDF
+                          <q-icon name="mdi-download" />
+                        </q-btn>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col col-12 col-sm-6">
-                    <div v-if="item.questions_url"
-                         class="download-box">
-                      <p class="download-title">
-                        دانلود سوالات {{ item.title }}
-                      </p>
-                      <q-btn outline
-                             :href="item.questions_url"
-                             target="_blank">
-                        دانلود فایل PDF
-                        <q-icon name="mdi-download" />
-                      </q-btn>
+                    <div
+                      class="col col-12 col-sm-6"
+                    >
+                      <div
+                        v-if="item.questions_url"
+                        class="download-box"
+                      >
+                        <p class="download-title">
+                          دانلود سوالات {{ item.title }}
+                        </p>
+                        <q-btn
+                          outline
+                          :href="item.questions_url"
+                          target="_blank"
+                        >
+                          دانلود فایل PDF
+                          <q-icon name="mdi-download" />
+                        </q-btn>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </q-card-section>
             </q-card>
             <div class="questionsList">
-              <q-virtual-scroll ref="scroller"
-                                class="konkoor-view-scroll"
-                                :items="questions"
-                                :virtual-scroll-item-size="450"
-                                :virtual-scroll-slice-size="5">
-                <template v-slot="{ item, index }">
-                  <q-item :key="index"
-                          class="question-field"
-                          dense>
-                    <q-item-section>
-                      <question-item :key="item.id"
-                                     :question="item"
-                                     :page-strategy="'lesson-detail'"
-                                     :show-question-number="true"
-                                     :report-options="reportTypeList" />
-                    </q-item-section>
-                  </q-item>
+              <q-virtual-scroll
+                ref="scroller"
+                class="konkoor-view-scroll"
+                :items="questions"
+                :virtual-scroll-item-size="450"
+                :virtual-scroll-slice-size="5"
+              >
+                <template v-slot="{ item }">
+
+                  <question-item
+                    :key="item.id"
+                    :question="item"
+                    :page-strategy="'lesson-detail'"
+                    :show-question-number="true"
+                    :report-options="reportTypeList"
+                    class="question-field" />
+
                 </template>
               </q-virtual-scroll>
             </div>
@@ -356,6 +375,18 @@ export default {
       }
     }
   }
+
+  .q-tab-panels {
+    .q-panel {
+      height: max-content;
+      background: #F4F6F9;
+      .q-tab-panel {
+        @media only screen and (max-width: 1024px) {
+          padding: 0;
+        }
+      }
+    }
+  }
 }
 
 @media only screen and (min-width: 960px) {
@@ -460,8 +491,11 @@ export default {
   min-height: 100vh;
   padding-top: 40px;
 
-  .question-field {
+  :deep(.konkoor-view-scroll ) {
     background: #F4F6F9;
+    .question-card {
+      margin-bottom: 16px;
+    }
   }
 }
 </style>
