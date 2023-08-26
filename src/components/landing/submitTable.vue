@@ -1423,9 +1423,6 @@ export default {
         return (this.selectedMajor ? item.major_id === this.selectedMajor : true) && (this.selectedGrade ? item.grade_id === this.selectedGrade : true)
       })[0]
 
-      console.log('this.activeTab', this.activeTab)
-      console.log('gg', gg)
-
       return gg
     },
     currentMajors() {
