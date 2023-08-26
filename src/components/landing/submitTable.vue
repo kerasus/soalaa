@@ -99,7 +99,7 @@
               <td class="number custom-border"
                   :class="{'number-selective': selectiveRegister}">{{ index + 1}}</td>
               <td class="date custom-border"
-                  :class="{'date-selective': selectiveRegister}">{{ item.attributes.info.examDate[0] }}</td>
+                  :class="{'date-selective': selectiveRegister}">{{ item.attributes?.info?.examDate ? item.attributes.info.examDate[0] : ' - ' }}</td>
               <td class="title custom-border"
                   :class="{ 'title-selective-mod': selectiveRegister}"
               >{{ item.short_title }}</td>
@@ -1400,7 +1400,15 @@ export default {
   },
   computed: {
     singlePriceOnPackMode() {
+      if (!this.currentBundle.exams) {
+        return 0
+      }
       const price = Math.round((this.currentBundle.packFinalPrices) / (this.currentBundle.exams.length))
+
+      if (isNaN(price)) {
+        return 0
+      }
+
       return price.toLocaleString()
     },
     finalPriceInSingleMode() {
@@ -1409,11 +1417,16 @@ export default {
     },
     currentBundle() {
       // return this.activeTab.productBandles.filter(item => (this.selectedMajor ? item.major_id === this.selectedMajor : true) && (this.selectedGrade ? item.grade_id === this.selectedGrade : true))[0]
-      return this.activeTab.productBandles.filter(item => {
+      const gg = this.activeTab.productBandles.filter(item => {
         // console.log('item.major_id', item.major_id, '-', this.selectedMajor)
         // console.log('item.grade_id', item.grade_id, '-', this.selectedGrade)
         return (this.selectedMajor ? item.major_id === this.selectedMajor : true) && (this.selectedGrade ? item.grade_id === this.selectedGrade : true)
       })[0]
+
+      console.log('this.activeTab', this.activeTab)
+      console.log('gg', gg)
+
+      return gg
     },
     currentMajors() {
       return this.activeTab.majors
