@@ -92,7 +92,7 @@
               <td class="number custom-border"
                   :class="{'number-selective': selectiveRegister}">{{ index + 1}}</td>
               <td class="date custom-border"
-                  :class="{'date-selective': selectiveRegister}">{{ item.attributes.info.examDate[0] }}</td>
+                  :class="{'date-selective': selectiveRegister}">{{ item.attributes?.info?.examDate ? item.attributes.info.examDate[0] : ' - ' }}</td>
               <td class="title custom-border"
                   :class="{ 'title-selective-mod': selectiveRegister}">{{ item.short_title }}</td>
               <td v-if="selectiveRegister"
@@ -1383,7 +1383,15 @@ export default {
   }),
   computed: {
     singlePriceOnPackMode() {
+      if (!this.currentBundle.exams) {
+        return 0
+      }
       const price = Math.round((this.currentBundle.packFinalPrices) / (this.currentBundle.exams.length))
+
+      if (isNaN(price)) {
+        return 0
+      }
+
       return price.toLocaleString()
     },
     finalPriceInSingleMode() {
