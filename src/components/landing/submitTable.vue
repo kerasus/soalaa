@@ -1417,13 +1417,11 @@ export default {
     },
     currentBundle() {
       // return this.activeTab.productBandles.filter(item => (this.selectedMajor ? item.major_id === this.selectedMajor : true) && (this.selectedGrade ? item.grade_id === this.selectedGrade : true))[0]
-      const gg = this.activeTab.productBandles.filter(item => {
+      return this.activeTab.productBandles.filter(item => {
         // console.log('item.major_id', item.major_id, '-', this.selectedMajor)
         // console.log('item.grade_id', item.grade_id, '-', this.selectedGrade)
         return (this.selectedMajor ? item.major_id === this.selectedMajor : true) && (this.selectedGrade ? item.grade_id === this.selectedGrade : true)
       })[0]
-
-      return gg
     },
     currentMajors() {
       return this.activeTab.majors
