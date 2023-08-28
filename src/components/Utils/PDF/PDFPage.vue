@@ -1,5 +1,6 @@
 <template>
-  <div class="page-wrapper">
+  <div class="page-wrapper"
+       :class="{'is3a': is3a}">
     <div class="page-header">
       <div class="logo" />
       <div class="info">
@@ -71,6 +72,10 @@ export default defineComponent({
       type: String,
       default: ''
     },
+    is3a: {
+      type: Boolean,
+      default: false
+    },
     grade: {
       type: String,
       default: ''
@@ -115,6 +120,7 @@ export default defineComponent({
   }
 })
 </script>
+
 <style>
 @media print {
   .page-wrapper{
@@ -122,6 +128,7 @@ export default defineComponent({
   }
 }
 </style>
+
 <style lang="scss" scoped>
 .page-wrapper {
   width: 794px;
@@ -131,6 +138,10 @@ export default defineComponent({
   background-size: cover;
   margin: auto;
 
+  &.is3a {
+    background: url(../../../../public/img/PdfBackground-3a-empty.jpg) no-repeat;
+    background-size: cover;
+  }
   .page-header {
     position: relative;
     width: 100%;
