@@ -3,8 +3,7 @@
     <div v-if="pageChunks.length === 0"
          :key="prepareQuestionSection"
          class="prepare-question-section"
-         :style="{ width: pageSize.w + 'px', paddingRight:parseInt(pdfConfig.rightMargin)+'mm', paddingLeft: parseInt(pdfConfig.leftMargin)+'mm' }"
-    >
+         :style="{ width: pageSize.w + 'px', paddingRight:parseInt(pdfConfig.rightMargin)+'mm', paddingLeft: parseInt(pdfConfig.leftMargin)+'mm' }">
       <!--      :style="{ width: pageSize.w + 'mm', paddingRight:parseInt(pdfConfig.rightMargin)+'mm', paddingLeft: parseInt(pdfConfig.leftMargin)+'mm' }"-->
       <pdf-question-field v-for="(question, questionIndex) in localQuestions"
                           :key="'question-item-'+question.id"
@@ -18,8 +17,7 @@
                           :questionAndChoices="pdfConfig.questionAndChoices"
                           :betweenChoices="pdfConfig.betweenChoices"
                           @questionLoaded="onQuestionLoaded(localQuestions[questionIndex])"
-                          @update:height="updateQuestionHeight($event, localQuestions[questionIndex])"
-      />
+                          @update:height="updateQuestionHeight($event, localQuestions[questionIndex])" />
     </div>
     <div v-else>
       <div v-if="mode === 'questionsNoAnswer'"
@@ -46,8 +44,7 @@
                                   display-choices
                                   display-statement
                                   :display-descriptive-answer="false"
-                                  @update:height="updateQuestionHeight($event, pageQuestion)"
-              />
+                                  @update:height="updateQuestionHeight($event, pageQuestion)" />
             </div>
           </template>
         </pdf-page>
@@ -77,8 +74,7 @@
                                   :questionAndChoices="pdfConfig.questionAndChoices"
                                   :betweenChoices="pdfConfig.betweenChoices"
                                   display-descriptive-answer
-                                  @update:height="updateQuestionHeight($event, pageQuestion)"
-              />
+                                  @update:height="updateQuestionHeight($event, pageQuestion)" />
             </div>
           </template>
         </pdf-page>
@@ -165,9 +161,6 @@ export default {
       questionLoadFlag: false
     }
   },
-  created() {
-    this.localQuestions = JSON.parse(JSON.stringify(this.questions))
-  },
   computed: {
     allQuestionHeightCalculated () {
       const hasNotHeight = this.localQuestions.find(question => !question.height)
@@ -196,6 +189,9 @@ export default {
         this.createPageChunks(this.pageSize.h)
       })
     }
+  },
+  created() {
+    this.localQuestions = JSON.parse(JSON.stringify(this.questions))
   },
   beforeMount() {
     this.pageChunks = []

@@ -17,8 +17,7 @@
       </div>
       <q-list v-if="displayChoices"
               ref="choicesBox"
-              class="choices-box"
-      >
+              class="choices-box">
         <q-item v-for="(choice, index) in questionChoices"
                 :ref="'choice-item-id' + choice.id"
                 :key="'choice-item-id' + choice.id"
