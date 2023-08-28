@@ -61,8 +61,7 @@
             <q-input v-model="pdfConfig.rightMargin"
                      filled
                      class="side-input"
-                     prefix=" mm | "
-            >
+                     prefix=" mm | ">
               <template v-slot:before>
                 راست
               </template>
@@ -70,8 +69,7 @@
             <q-input v-model="pdfConfig.leftMargin"
                      filled
                      class="side-input"
-                     prefix=" mm | "
-            >
+                     prefix=" mm | ">
               <template v-slot:before>
                 چـــــپ
               </template>
@@ -83,8 +81,7 @@
           <q-input v-model="pdfConfig.questionAndChoices"
                    type="number"
                    filled
-                   prefix=" mm | "
-          />
+                   prefix=" mm | " />
 
           <div class="sub-sub-title">
             فاصله بین گزینه ها
@@ -92,8 +89,7 @@
           <q-input v-model="pdfConfig.betweenChoices"
                    type="number"
                    filled
-                   prefix=" mm | "
-          />
+                   prefix=" mm | " />
 
           <div class="sub-sub-title">
             فاصله بین سوالات
@@ -101,8 +97,7 @@
           <q-input v-model="pdfConfig.spaceBetweenQuestion"
                    type="number"
                    filled
-                   prefix=" mm | "
-          />
+                   prefix=" mm | " />
 
         </div>
         <q-separator class="separator-margin" />
@@ -138,15 +133,13 @@
           </div>
           <q-input v-model="pdfConfig.paginateStart"
                    type="number"
-                   filled
-          />
+                   filled />
         </div>
 
-        <q-btn
-          unelevated
-          color="primary"
-          class="submit-btn full-width"
-          @click="requestPdf">
+        <q-btn unelevated
+               color="primary"
+               class="submit-btn full-width"
+               @click="requestPdf">
           <span class="btn-label">
             اعمال
           </span>
@@ -159,8 +152,7 @@
                 class="tabs-box"
                 active-color="secondary"
                 align="left"
-                @update:model-value="onChangeTabpage"
-        >
+                @update:model-value="onChangeTabpage">
           <q-tab name="questions"
                  label="سوالات" />
           <q-tab name="descriptiveAnswer"
@@ -189,15 +181,14 @@
                   <q-btn unelevated
                          class="btn cancel"
                          :to="{name:'User.Exam.List'}"
-                         label="انصراف"></q-btn>
+                         label="انصراف" />
                   <q-btn unelevated
                          :disable="downloadLoading"
                          :loading="downloadLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="downloadPDF('questionPdf')"
-                  />
+                         @click="downloadPDF('questionPdf')" />
                 </div>
               </div>
             </div>
@@ -218,8 +209,7 @@
                                :exam="examInfo"
                                :questions="questions"
                                :pdfConfig="pdfConfig"
-                               @loaded="onQuestionsLoaded"
-              />
+                               @loaded="onQuestionsLoaded" />
             </div>
           </q-tab-panel>
           <q-tab-panel class="tab-panel-style"
@@ -240,15 +230,14 @@
                   <q-btn unelevated
                          class="btn cancel"
                          :to="{name:'User.Exam.List'}"
-                         label="انصراف"></q-btn>
+                         label="انصراف" />
                   <q-btn unelevated
                          :disable="downloadLoading"
                          :loading="downloadLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="downloadPDF('descriptiveAnswerPdf')"
-                  />
+                         @click="downloadPDF('descriptiveAnswerPdf')" />
                 </div>
               </div>
             </div>
@@ -270,8 +259,7 @@
                                :questions="questions"
                                :pdfConfig="pdfConfig"
                                :mode="'onlyDescriptiveAnswers'"
-                               @loaded="onDescriptiveAnswersLoaded"
-              />
+                               @loaded="onDescriptiveAnswersLoaded" />
             </div>
           </q-tab-panel>
           <q-tab-panel class="tab-panel-style"
@@ -292,15 +280,14 @@
                   <q-btn unelevated
                          class="btn cancel"
                          :to="{name:'User.Exam.List'}"
-                         label="انصراف"></q-btn>
+                         label="انصراف" />
                   <q-btn unelevated
                          :disable="downloadLoading"
                          :loading="downloadLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="downloadPDF('keyAnswerPdf')"
-                  />
+                         @click="downloadPDF('keyAnswerPdf')" />
                 </div>
               </div>
             </div>
@@ -310,15 +297,13 @@
                         :grade="examInfo.gradeTitle"
                         :major="examInfo.majorTitle"
                         :page="1"
-                        is3a
-              >
+                        is3a>
                 <template v-slot:body>
                   <paginate-bubble-sheet :questions="questions"
                                          :info="{
                                            type: 'pasokh-nameh'
                                          }"
-                                         @loaded="onQuestionsLoaded"
-                  />
+                                         @loaded="onQuestionsLoaded" />
                 </template>
               </pdf-page>
             </div>
@@ -331,8 +316,7 @@
                       icon-first="isax:arrow-right-4"
                       icon-next="isax:arrow-right"
                       icon-last="isax:arrow-left"
-                      @update:model-value="onChangePage"
-        />
+                      @update:model-value="onChangePage" />
       </div>
     </div>
   </div>
@@ -512,16 +496,16 @@ export default {
           .thenExternal(() => {
             this.downloadLoading = false
           })
-          .catchExternal((error) => {
-            console.log('error', error)
+          .catchExternal(() => {
+            // console.log('error', error)
             this.downloadLoading = false
           })
-          .error((error) => {
-            console.log('error', error)
+          .error(() => {
+            // console.log('error', error)
             this.downloadLoading = false
           })
           .thenCore(() => {
-            console.log('thenCore')
+            // console.log('thenCore')
             this.downloadLoading = false
           })
       }, 100)
