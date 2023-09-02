@@ -24,6 +24,7 @@
            class="questionsNoAnswer-mode">
         <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
                   :key="pageIndex"
+                  :ref="'pafPage' + pageIndex"
                   :is3a="is3a"
                   :title="exam.title"
                   :grade="exam.gradeTitle"
@@ -54,6 +55,7 @@
            class="onlyDescriptiveAnswers-mode">
         <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
                   :key="pageIndex"
+                  :ref="'pafPage' + pageIndex"
                   :is3a="is3a"
                   :title="exam.title"
                   :grade="exam.gradeTitle"
@@ -146,7 +148,7 @@ export default {
       default: false
     }
   },
-  emits: ['loaded'],
+  emits: ['loaded', 'update:pages'],
   data () {
     return {
       loading: false,
@@ -239,8 +241,16 @@ export default {
 
       this.pageChunks = pages
       this.$nextTick(() => {
+        this.updatePages(this.pageChunks)
         this.$emit('loaded', this.pageChunks)
       })
+    },
+    updatePages (pageChunks) {
+      const pagesArray = []
+      pageChunks.forEach((page, pageIndex) => {
+        pagesArray.push(this.$refs['pafPage' + pageIndex][0].$el)
+      })
+      this.$emit('update:pages', pagesArray)
     },
     onQuestionLoaded (question) {
       question.loaded = true
@@ -267,6 +277,7 @@ export default {
   }
 }
 </style>
+
 <style>
 @media print {
   .page-break {

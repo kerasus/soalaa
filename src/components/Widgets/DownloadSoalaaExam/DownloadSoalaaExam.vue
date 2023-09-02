@@ -181,19 +181,30 @@
                   <q-btn unelevated
                          class="btn cancel"
                          :to="{name:'User.Exam.List'}"
+                         :loading="loading"
                          label="انصراف" />
                   <q-btn unelevated
-                         :disable="downloadLoading"
-                         :loading="downloadLoading"
+                         :disable="downloadQuestionPagesLoading"
+                         :loading="downloadQuestionPagesLoading || loading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="downloadPDF('questionPdf')" />
+                         @click="downloadQuestionPages" />
                 </div>
               </div>
             </div>
             <div ref="questionPdf"
                  class="pdf-container">
+              <q-linear-progress v-if="downloadQuestionPagesLoading"
+                                 size="25px"
+                                 :value="downloadQuestionPagesProgress"
+                                 color="primary">
+                <div class="absolute-full flex flex-center">
+                  <q-badge color="white"
+                           text-color="primary"
+                           :label="Math.floor(downloadQuestionPagesProgress * 100) + '%'" />
+                </div>
+              </q-linear-progress>
               <div v-if="loading"
                    class="loading">
                 <q-skeleton height="900px"
@@ -205,6 +216,7 @@
                             class="pdf-skeleton" />
               </div>
               <p-d-f-container v-else
+                               v-model:pages="questionPages"
                                is3a
                                :exam="examInfo"
                                :questions="questions"
@@ -229,20 +241,31 @@
                 <div class="action-btn">
                   <q-btn unelevated
                          class="btn cancel"
+                         :loading="loading"
                          :to="{name:'User.Exam.List'}"
                          label="انصراف" />
                   <q-btn unelevated
-                         :disable="downloadLoading"
-                         :loading="downloadLoading"
+                         :disable="downloadDescriptiveAnswerLoading"
+                         :loading="downloadDescriptiveAnswerLoading || loading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="downloadPDF('descriptiveAnswerPdf')" />
+                         @click="downloadDescriptiveAnswerPages" />
                 </div>
               </div>
             </div>
             <div ref="descriptiveAnswerPdf"
                  class="pdf-container">
+              <q-linear-progress v-if="downloadDescriptiveAnswerLoading"
+                                 size="25px"
+                                 :value="downloadDescriptiveAnswerPagesProgress"
+                                 color="primary">
+                <div class="absolute-full flex flex-center">
+                  <q-badge color="white"
+                           text-color="primary"
+                           :label="Math.floor(downloadDescriptiveAnswerPagesProgress * 100) + '%'" />
+                </div>
+              </q-linear-progress>
               <div v-if="loading"
                    class="loading">
                 <q-skeleton height="900px"
@@ -254,6 +277,7 @@
                             class="pdf-skeleton" />
               </div>
               <p-d-f-container v-else
+                               v-model:pages="descriptiveAnswerPages"
                                is3a
                                :exam="examInfo"
                                :questions="questions"
@@ -282,12 +306,12 @@
                          :to="{name:'User.Exam.List'}"
                          label="انصراف" />
                   <q-btn unelevated
-                         :disable="downloadLoading"
-                         :loading="downloadLoading"
+                         :disable="downloadKeyAnswerPdfLoading"
+                         :loading="downloadKeyAnswerPdfLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="downloadPDF('keyAnswerPdf')" />
+                         @click="downloadKeyAnswerPdf" />
                 </div>
               </div>
             </div>
@@ -323,15 +347,25 @@
 </template>
 
 <script>
+import 'src/Utils/PrintElements/print.css'
 import API_ADDRESS from 'src/api/Addresses.js'
+import ExamData from 'src/assets/js/ExamData.js'
 import PdfPage from 'src/components/Utils/PDF/PDFPage.vue'
 import PDFContainer from 'src/components/Utils/PDF/PDFContainer.vue'
-// import VuePdfEmbed from 'vue-pdf-embed'
-import html2pdf from 'html2pdf.js'
-// import html2canvas from 'html2canvas'
-import 'src/Utils/PrintElements/print.css'
 import PaginateBubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/paginateBubbleSheet.vue'
-import ExamData from 'assets/js/ExamData.js'
+
+// import VuePdfEmbed from 'vue-pdf-embed'
+// import html2canvas from 'html2canvas'
+
+// import html2pdf from 'html2pdf.js'
+let html2pdf
+if (typeof window !== 'undefined') {
+  import('html2pdf.js')
+    .then((html2pdfLib) => {
+      html2pdf = html2pdfLib.default
+    })
+}
+
 export default {
   name: 'DownloadExam',
   components: {
@@ -342,6 +376,13 @@ export default {
   },
   data: () => ({
     tab: 'questions',
+    questionPages: [],
+    downloadKeyAnswerPdfLoading: false,
+    downloadQuestionPagesProgress: 0,
+    downloadQuestionPagesLoading: false,
+    descriptiveAnswerPages: [],
+    downloadDescriptiveAnswerLoading: false,
+    downloadDescriptiveAnswerPagesProgress: 0,
     questionPagesCount: 0,
     descriptiveAnswerPagesCount: 0,
     downloadLoading: false,
@@ -466,49 +507,90 @@ export default {
           })
         })
     },
-    downloadPDF (ref) {
-      this.generatePDF(ref)
+    downloadKeyAnswerPdf () {
+      this.download([this.$refs.keyAnswerPdf], this.downloadKeyAnswerPdfLoading)
+      this.downloadKeyAnswerPdfLoading = true
+      this.downloadPdfPages([this.$refs.keyAnswerPdf], () => {})
+        .then(() => {
+          this.downloadKeyAnswerPdfLoading = false
+        })
+        .catch(() => {
+          this.downloadKeyAnswerPdfLoading = false
+        })
     },
-    generatePDF (ref) {
-      // https://github.com/eKoopmans/html2pdf.js/issues/19#issuecomment-370983915
-      // https://github.com/eKoopmans/html2pdf.js/issues/19#issuecomment-608598010
-
-      this.downloadLoading = true
-      setTimeout(() => {
-        html2pdf()
-          .set({
-            margin: [0, 0, 0, 0],
-            image: {
-              type: 'jpeg',
-              quality: 0.6
-            },
-            filename: this.examInfo.title,
-            html2canvas: {
-              dpi: 1,
-              scale: 2.5,
-              letterRendering: true,
-              useCORS: true
-            },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    downloadQuestionPages () {
+      this.downloadQuestionPagesLoading = true
+      const totalPages = this.questionPages.length
+      this.downloadPdfPages(this.questionPages, (page, pageIndex) => {
+        this.downloadQuestionPagesProgress = ((pageIndex + 1) / totalPages)
+      })
+        .then(() => {
+          this.downloadQuestionPagesLoading = false
+        })
+        .catch(() => {
+          this.downloadQuestionPagesLoading = false
+        })
+    },
+    downloadDescriptiveAnswerPages () {
+      this.downloadDescriptiveAnswerLoading = true
+      const totalPages = this.descriptiveAnswerPages.length
+      this.downloadPdfPages(this.descriptiveAnswerPages, (page, pageIndex) => {
+        this.downloadDescriptiveAnswerPagesProgress = ((pageIndex + 1) / totalPages)
+      })
+        .then(() => {
+          this.downloadDescriptiveAnswerLoading = false
+        })
+        .catch(() => {
+          this.downloadDescriptiveAnswerLoading = false
+        })
+    },
+    downloadPdfPages (pages, progressCallback) {
+      return new Promise((resolve, reject) => {
+        const html2pdfConfig = {
+          margin: [0, 0, 0, 0],
+          image: {
+            type: 'jpeg',
+            quality: 0.6
+          },
+          filename: this.examInfo.title,
+          html2canvas: {
+            dpi: 1,
+            scale: 2.5,
+            letterRendering: true,
+            useCORS: true
+          },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        }
+        let worker = html2pdf()
+          .set(html2pdfConfig)
+          .from(pages[0])
+          .toPdf()
+        pages.slice(1)
+          .forEach(function (page, pageIndex) {
+            worker = worker.get('pdf')
+              .then(function (pdf) {
+                pdf.addPage()
+                progressCallback(page, pageIndex)
+              })
+              .from(page)
+              .toContainer()
+              .toCanvas()
+              .toPdf()
           })
-          .from(this.$refs[ref])
-          .save()
+        worker = worker.save()
           .thenExternal(() => {
-            this.downloadLoading = false
+            resolve()
           })
-          .catchExternal(() => {
-            // console.log('error', error)
-            this.downloadLoading = false
+          .catchExternal((error) => {
+            reject(error)
           })
-          .error(() => {
-            // console.log('error', error)
-            this.downloadLoading = false
+          .error((error) => {
+            reject(error)
           })
-          .thenCore(() => {
-            // console.log('thenCore')
-            this.downloadLoading = false
+          .thenCore((error) => {
+            reject(error)
           })
-      }, 100)
+      })
     }
   }
 }
