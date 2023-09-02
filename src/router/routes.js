@@ -316,7 +316,7 @@ const routes = [
               {
                 name: 'User.Exam.Download',
                 path: '',
-                component: () => import('pages/User/exam/Download/Download')
+                component: () => import('pages/User/exam/Download/Download.vue')
               },
               {
                 name: 'User.SoalaaExam.Download',
