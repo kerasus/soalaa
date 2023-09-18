@@ -628,7 +628,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh12%28konkur%29/12R.pdf',
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_davazdahom_riyazi.pdf',
             exams: []
           },
           {
@@ -641,7 +641,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh12%28konkur%29/12T.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_davazdahom_tajrobi.pdf'
           },
           {
             major_id: 'انسانی',
@@ -653,7 +653,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh12%28konkur%29/12E.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_davazdahom_ensani.pdf'
           }
         ],
         selective: false
@@ -940,7 +940,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/11R.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_yazdahom_riyazi.pdf'
           },
           {
             major_id: 'ریاضی',
@@ -952,7 +952,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/10R.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_dahom_riyazi.pdf'
           },
           {
             major_id: 'انسانی',
@@ -964,7 +964,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/10E.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_dahom_ehsani.pdf'
           },
           {
             major_id: 'تجربی',
@@ -976,7 +976,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/10T.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_dahom_tajrobi.pdf'
           },
           {
             major_id: 'انسانی',
@@ -988,7 +988,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/11E.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_yazdahom_ensani.pdf'
           },
           {
             major_id: 'تجربی',
@@ -1000,7 +1000,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/11T.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_yazdahom_tajrobi.pdf'
           }
         ]
       },
@@ -1149,42 +1149,43 @@ export default {
           }
         ],
         selective: false,
-        productBandles: [{
-          major_id: 'عمومی',
-          grade_id: 'هفتم',
-          id: '',
-          packUnitPrices: '',
-          packFinalPrices: '',
-          packBasePrices: '',
-          singleUnitPrices: '',
-          singleFinalPrices: '',
-          selectedProductIds: [],
-          pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/7P.pdf'
-        },
-        {
-          major_id: 'عمومی',
-          grade_id: 'نهم',
-          id: '',
-          packUnitPrices: '',
-          packFinalPrices: '',
-          packBasePrices: '',
-          singleUnitPrices: '',
-          singleFinalPrices: '',
-          selectedProductIds: [],
-          pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/9P.pdf'
-        },
-        {
-          major_id: 'عمومی',
-          grade_id: 'هشتم',
-          id: '',
-          packUnitPrices: '',
-          packFinalPrices: '',
-          packBasePrices: '',
-          singleUnitPrices: '',
-          singleFinalPrices: '',
-          selectedProductIds: [],
-          pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/8P.pdf'
-        }
+        productBandles: [
+          {
+            major_id: 'عمومی',
+            grade_id: 'هفتم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/7P.pdf'
+          },
+          {
+            major_id: 'عمومی',
+            grade_id: 'نهم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/9P.pdf'
+          },
+          {
+            major_id: 'عمومی',
+            grade_id: 'هشتم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/8P.pdf'
+          }
         ]
       },
       {
@@ -1374,7 +1375,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/tizhoushan/6Z.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_tizhooshan_sheshom.pdf'
           },
           {
             major_id: 'عمومی',
@@ -1386,8 +1387,9 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/tizhoushan/9Z.pdf'
-          }]
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_tizhooshan_nohom.pdf'
+          }
+        ]
       }
     ],
     selectedProductId: {
