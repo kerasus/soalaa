@@ -512,16 +512,13 @@ export default {
           .thenExternal(() => {
             this.downloadLoading = false
           })
-          .catchExternal((error) => {
-            console.log('error', error)
+          .catchExternal(() => {
             this.downloadLoading = false
           })
-          .error((error) => {
-            console.log('error', error)
+          .error(() => {
             this.downloadLoading = false
           })
           .thenCore(() => {
-            console.log('thenCore')
             this.downloadLoading = false
           })
       }, 100)

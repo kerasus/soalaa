@@ -1405,7 +1405,7 @@ export default {
       if (!this.currentBundle.exams) {
         return 0
       }
-      const price = Math.round((this.currentBundle.packFinalPrices) / (this.currentBundle.exams.length))
+      const price = Math.round((this.currentBundle.packBasePrices) / (this.currentBundle.exams.length))
 
       if (isNaN(price)) {
         return 0
