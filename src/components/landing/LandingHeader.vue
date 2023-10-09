@@ -2,13 +2,12 @@
   <div class="landing-header column items-center">
     <div class="introduction ">
       <div class="title-style">
-        تو این آزمون ۲ تا رقیب داری؛
+        16 مرحله آزمون آنلاین
         <br>
-        خودت و کل کنکوریای ۱۴۰۱
+        برای موفقیت در کنکور 1403
       </div>
       <div class="body-style">
-        همه رتبه برتر ها، تو هر آزمون، ابتدا خودشونو با خودشون میسنجن؛ و میدونن هیچ آزمونی به اندازه کنکور مخاطب نداره
-        پس درگیر جامعه آماری نمیشن. سه‌آ کامل آنالیزت میکنه و بعد با جامعه آماری کنکور سال پیش، مقایسه‌ت میکنه.
+        آزمون آزمایشی آنلاین سه آ با همکاری برترین طراحان تست، همراه با برنامه مطالعاتی، تحلیل ویدیویی، تخمین رتبه و کارنامه دقیق؛ برای موفقیت شما در 2 مرحله آزمون سراسری 1403.
       </div>
       <q-btn unelevated
              class="submit-btn"
@@ -16,22 +15,22 @@
              @click="onClickRegisterBtn"
       />
     </div>
-    <div class="video-box flex items-center justify-center">
-      <video-player
-        :sources="videosSrc"
-        poster="https://nodes.alaatv.com/upload/vast/videos/3A_LANDING/video%20tubmail.jpg?w=350&h=196" />
-    </div>
+    <!--    <div class="video-box flex items-center justify-center">-->
+    <!--      <video-player-->
+    <!--        :sources="videosSrc"-->
+    <!--        poster="https://nodes.alaatv.com/upload/vast/videos/3A_LANDING/video%20tubmail.jpg?w=350&h=196" />-->
+    <!--    </div>-->
   </div>
 </template>
 
 <script>
 import { PlayerSourceList } from 'src/models/PlayerSource'
-import VideoPlayer from 'components/VideoPlayer'
+// import VideoPlayer from 'components/VideoPlayer'
 
 export default {
   name: 'LandingHeader',
   components: {
-    VideoPlayer
+    // VideoPlayer
   },
   data: () => ({
     videosSrc: new PlayerSourceList([
@@ -69,7 +68,7 @@ export default {
       font-style: normal;
       font-weight: 900;
       font-size: 38px;
-      line-height: 42px;
+      line-height: 50px;
       color: #232323;
       margin-bottom: 20px;
     }

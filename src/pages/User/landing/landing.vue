@@ -6,9 +6,9 @@
              @onClickUserExamListBtn="goToUserExamList"
     />
     <landing-header @onClickRegisterBtn="scrollToExamsTable" />
-    <why class="landing-width" />
-    <banner
-      class="landing-width" />
+    <!--    <why class="landing-width" />-->
+    <!--    <banner-->
+    <!--      class="landing-width" />-->
     <features class="landing-width" />
     <submit-table ref="SubmitTable"
                   class="landing-width" />
@@ -23,10 +23,10 @@
 <script>
 import NavBar from 'src/components/landing/NavBar'
 import LandingHeader from 'src/components/landing/LandingHeader'
-import why from 'src/components/landing/why3A'
+// import why from 'src/components/landing/why3A'
 import features from 'src/components/landing/3aFeatures'
 import examRules from 'components/landing/examRules'
-import banner from 'components/landing/banner'
+// import banner from 'components/landing/banner'
 import submitTable from 'components/landing/submitTable'
 import faq from 'components/landing/faq'
 import LandingFooter from 'components/landing/3a-exams/LandingFooter'
@@ -36,12 +36,12 @@ export default {
   name: 'landing',
   components: {
     LandingHeader,
-    why,
+    // why,
     features,
     NavBar,
     submitTable,
     examRules,
-    banner,
+    // banner,
     LandingFooter,
     faq
   },

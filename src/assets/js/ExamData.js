@@ -318,20 +318,20 @@ class ExamData {
       if (!examId) {
         examId = that.exam.id
       }
-      this.$axios.get(API_ADDRESS.exam.examUserAfterExam + '?exam_id=' + examId)
+      this.$axios.get(API_ADDRESS.exam.showExam(examId))
         .then(response => {
-          that.exam = new Exam()
+          // that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
-          that.exam.id = Assistant.getId(response.data.data.exam_id)
-          that.exam.title = Assistant.getId(response.data.data.exam_title)
-          that.exam.user_exam_id = Assistant.getId(response.data.data.id)
+          that.exam.id = Assistant.getId(response.data.data.id)
+          that.exam.title = Assistant.getId(response.data.data.title)
+          // that.exam.user_exam_id = Assistant.getId(response.data.data.user_exam_id)
           that.exam.created_at = response.data.data.created_at
-          that.exam.accept_at = response.data.data.accept_at
-          that.exam.questions_file_url = response.data.data.questions_file_url
+          // that.exam.accept_at = response.data.data.accept_at
+          // that.exam.questions_file_url = response.data.data.questions_file_url
           that.exam.categories = new QuestCategoryList(response.data.data.categories)
           that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
           that.exam.holding_config = response.data.data.holding_config
-          that.userExamData = response.data
+          // that.userExamData = response.data
           resolve({
             data: response,
             type: 'resolve'

@@ -346,6 +346,12 @@ export default defineComponent({
           background: '#FFB74D',
           action: () => this.goToResult(exam)
         })
+        examActions.push({
+          title: 'دانلود سوالات',
+          icon: 'isax:receipt-item',
+          background: '#FFB74D',
+          action: () => this.goToDownloadExam(exam)
+        })
       }
       if (exam.exam_actions.can_submit_answer) {
         examActions.push({
@@ -422,6 +428,9 @@ export default defineComponent({
         routeName = 'mbtiBartle.result'
       }
       this.$router.push({ name: routeName, params: { user_exam_id: exam.user_exam_id, exam_id: exam.id } })
+    },
+    goToDownloadExam (exam) {
+      this.$router.push({ name: 'User.SoalaaExam.Download', params: { user_exam_id: exam.user_exam_id, examId: exam.id } })
     },
     getParticipateExamPageRoute (retake, personal) {
       if (retake) {
