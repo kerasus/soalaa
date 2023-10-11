@@ -67,7 +67,7 @@
               v-html="currentQuestion.statement"
             />
             <div
-              v-if="currentQuestion"
+              v-if="currentQuestion && currentQuestion.choices.list[0]"
               class="choices"
               :class="{
                 agree: stringMeanThumbUpOrDown(currentQuestion.choices.list[0].title) === 'ThumbUp',

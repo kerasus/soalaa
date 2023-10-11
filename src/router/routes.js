@@ -78,6 +78,7 @@ const allEntityCrudRouteObjects = [
 const routes = [
   {
     path: '/',
+    name: 'Home',
     component: () => import('layouts/MainLayout.vue'),
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     layoutConfig: {
@@ -310,6 +311,11 @@ const routes = [
                 name: 'User.Exam.Download',
                 path: '',
                 component: () => import('pages/User/exam/Download/Download')
+              },
+              {
+                name: 'User.SoalaaExam.Download',
+                path: ':user_exam_id',
+                component: () => import('src/pages/User/exam/Download/SoalaaExamDownload.vue')
               }
             ]
           },

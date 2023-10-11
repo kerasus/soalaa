@@ -99,7 +99,7 @@
               <td class="number custom-border"
                   :class="{'number-selective': selectiveRegister}">{{ index + 1}}</td>
               <td class="date custom-border"
-                  :class="{'date-selective': selectiveRegister}">{{ item.attributes.info.examDate[0] }}</td>
+                  :class="{'date-selective': selectiveRegister}">{{ item.attributes?.info?.examDate ? item.attributes.info.examDate[0] : ' - ' }}</td>
               <td class="title custom-border"
                   :class="{ 'title-selective-mod': selectiveRegister}"
               >{{ item.short_title }}</td>
@@ -186,7 +186,7 @@
               <div class="price-box">
                 <div>
                   <span class="single-price">
-                    قیمت تک مرحله
+                    هر مرحله آزمون
                   </span>
                   <br>
                   <span class="price">{{currentBundle?.singleUnitPrices.toLocaleString()}}</span>
@@ -195,7 +195,7 @@
               </div>
               <div class="submit-box single-mode">
                 <div class="exam-price">
-                  قیمت آزمون کامل
+                  کل مراحل آزمون
                 </div>
                 <div class="final-price-box">
                   <span>{{ finalPriceInSingleMode }}</span>
@@ -217,7 +217,7 @@
               <div class="price-box">
                 <div>
                   <span class="single-price">
-                    قیمت تک مرحله
+                    هر مرحله آزمون
                   </span>
                   <br>
                   <span class="price">{{ singlePriceOnPackMode }} </span>
@@ -226,7 +226,7 @@
               </div>
               <div class="submit-box">
                 <div class="exam-price">
-                  قیمت آزمون کامل
+                  کل مراحل آزمون
                 </div>
                 <div class="exam-price-box">
                   <span class="discount-tag"> تخفیف٪</span>
@@ -293,8 +293,8 @@ export default {
     tabPages: [
       {
         id: 0,
-        title: 'آزمون سه‌آ ویژه کنکور 1402',
-        description: ' سه آ برای کنکوری ها شامل 10 مرحله آزمون جزئی و جامع است که برای داوطلب کنکور تعداد بسیار متناسبی است. با پیشروی طبق برنامه آزمون های سه آ، هر یک از مطالب پایه و دوازدهم حداقل دوبار در آزمون های جزئی تکرار می شوند. برنامه ریزی دقیق، سوالات استاندارد، کارنامه آنی و حل ویدیویی مهم ترین ویژگی های آزمون های سه آ است. در جدول پایین "(ج)" و "(ب)" به ترتیب نمایش اختصاری کلمه "جمع بندی" و "بخشی از" می‌باشد. <span style="color: red;">آلایی هایی که در "راه ابریشم پرو" چه پک های کامل و چه تک درس ثبت نام نموده‌اند، کل مراحل آزمون های ‌سه‌آ ویژه کنکور 1402 را هدیه گرفته و نیاز به ثبت نام ندارد.</span>',
+        title: 'آزمون کنکوری های 1403',
+        description: '۱۶ مرحله آزمون آزمایشی آنلاین سه آ به همراه برنامه مطالعاتی جامع و دقیق برای پیشروی و جمع بندی طراحی شده و یک سال مطالعه حرفه ای شما رو کامل پوشش می دهد تا برای هر دو مرحله آزمون سراسری 1403 آمادگی کامل داشته باشید. در جدول پایین "(ج)" و "(ب)" به ترتیب نمایش اختصاری کلمه "جمع بندی" و "بخشی از" می‌باشد.',
         majors: ['ریاضی', 'تجربی', 'انسانی'],
         grades: ['دوازدهم'],
         exams: [
@@ -628,7 +628,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh12%28konkur%29/12R.pdf',
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_davazdahom_riyazi.pdf',
             exams: []
           },
           {
@@ -641,7 +641,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh12%28konkur%29/12T.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_davazdahom_tajrobi.pdf'
           },
           {
             major_id: 'انسانی',
@@ -653,15 +653,15 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh12%28konkur%29/12E.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_davazdahom_ensani.pdf'
           }
         ],
-        selective: true
+        selective: false
       },
       {
         id: 1,
-        title: 'آزمون سه‌آ ویژه دهم و یازدهم',
-        description: ' دانش آموزان پایه دهم و یازدهم برای آشنایی هرچه بیشتر با فضای آزمون های تستی و کنکور لازم است میزان توانایی خود را در آزمون های تستی بسنجند. آزمون های سه آ در این پایه ها در زمان هایی قرارداده شده است که با برنامه آزمون های تشریحی و نهایی بیشترین مطابقت را داشته باشد.',
+        title: 'آزمون دهم و یازدهم (رایگان)',
+        description: ' دانش آموزان پایه دهم و یازدهم برای موفقیت با تضمین بالا در کنکور سال آینده خود لازم است میزان توانایی خود را در آزمون های تستی بسنجند. به همین علت آلاء چند مرحله آزمون آزمایشی سه آ ویژه دانش آموزان دهم و یازدهم درنظر گرفته که علاوه بر برنامه مطالعاتی تشریحی خود، با فضای آزمون تستی هم به خوبی آشنا شوند.',
 
         majors: ['ریاضی', 'تجربی', 'انسانی'],
         grades: ['دهم', 'یازدهم'],
@@ -940,7 +940,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/11R.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_yazdahom_riyazi.pdf'
           },
           {
             major_id: 'ریاضی',
@@ -952,7 +952,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/10R.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_dahom_riyazi.pdf'
           },
           {
             major_id: 'انسانی',
@@ -964,7 +964,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/10E.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_dahom_ehsani.pdf'
           },
           {
             major_id: 'تجربی',
@@ -976,7 +976,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/10T.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_dahom_tajrobi.pdf'
           },
           {
             major_id: 'انسانی',
@@ -988,7 +988,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/11E.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_yazdahom_ensani.pdf'
           },
           {
             major_id: 'تجربی',
@@ -1000,17 +1000,17 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh1011/11T.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_yazdahom_tajrobi.pdf'
           }
         ]
       },
       {
         id: 2,
-        description: 'دانش آموزان پایه هفتم،‌هشتم و نهم برای آشنایی هرچه بیشتر با فضای آزمون های تستی و کنکور لازم است میزان توانایی خود را در آزمون های تستی بسنجند. آزمون های سه آ در این پایه ها در زمان هایی قرارداده شده است که با برنامه آزمون های تشریحی بیشترین مطابقت را داشته باشد',
+        description: 'دانش آموزان مقطع متوسطه اول برای موفقیت با تضمین بالا در آزمون های پیش رو خود و کنکورشان در سال های بعد، لازم است میزان توانایی خود را در آزمون های تستی بسنجند. به همین علت آلاء چند مرحله آزمون آزمایشی سه آ ویژه دانش آموزان هفتم، هشتم و نهم در نظر گرفته که علاوه بر برنامه مطالعاتی تشریحی خود، با فضای آزمون تستی هم به خوبی آشنا شوند.',
         majors: ['عمومی'],
         grades: ['نهم', 'هشتم', 'هفتم'],
         submitMode: 'pack',
-        title: 'آزمون سه‌آ ویژه هفتم، هشتم و نهم',
+        title: 'آزمون متوسطه اول (رایگان)',
         exams: [
           {
             id: 0,
@@ -1149,42 +1149,43 @@ export default {
           }
         ],
         selective: false,
-        productBandles: [{
-          major_id: 'عمومی',
-          grade_id: 'هفتم',
-          id: '',
-          packUnitPrices: '',
-          packFinalPrices: '',
-          packBasePrices: '',
-          singleUnitPrices: '',
-          singleFinalPrices: '',
-          selectedProductIds: [],
-          pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/7P.pdf'
-        },
-        {
-          major_id: 'عمومی',
-          grade_id: 'نهم',
-          id: '',
-          packUnitPrices: '',
-          packFinalPrices: '',
-          packBasePrices: '',
-          singleUnitPrices: '',
-          singleFinalPrices: '',
-          selectedProductIds: [],
-          pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/9P.pdf'
-        },
-        {
-          major_id: 'عمومی',
-          grade_id: 'هشتم',
-          id: '',
-          packUnitPrices: '',
-          packFinalPrices: '',
-          packBasePrices: '',
-          singleUnitPrices: '',
-          singleFinalPrices: '',
-          selectedProductIds: [],
-          pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/8P.pdf'
-        }
+        productBandles: [
+          {
+            major_id: 'عمومی',
+            grade_id: 'هفتم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/7P.pdf'
+          },
+          {
+            major_id: 'عمومی',
+            grade_id: 'نهم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/9P.pdf'
+          },
+          {
+            major_id: 'عمومی',
+            grade_id: 'هشتم',
+            id: '',
+            packUnitPrices: '',
+            packFinalPrices: '',
+            packBasePrices: '',
+            singleUnitPrices: '',
+            singleFinalPrices: '',
+            selectedProductIds: [],
+            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/payeh789/8P.pdf'
+          }
         ]
       },
       {
@@ -1202,7 +1203,7 @@ export default {
         majors: ['عمومی'],
         grades: ['نهم - تیزهوشان', 'ششم - تیزهوشان'],
         submitMode: 'pack',
-        title: 'آزمون سه‌آ ویژه قبولی تیزهوشان',
+        title: 'آزمون قبولی تیزهوشان',
 
         exams: [
           {
@@ -1362,7 +1363,7 @@ export default {
             }
           }
         ],
-        selective: true,
+        selective: false,
         productBandles: [
           {
             major_id: 'عمومی',
@@ -1374,7 +1375,7 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/tizhoushan/6Z.pdf'
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_tizhooshan_sheshom.pdf'
           },
           {
             major_id: 'عمومی',
@@ -1386,8 +1387,9 @@ export default {
             singleUnitPrices: '',
             singleFinalPrices: '',
             selectedProductIds: [],
-            pdfLink: 'https://cdn.alaatv.com/upload/vast/videos/3A_LANDING/3A-plans/tizhoushan/9Z.pdf'
-          }]
+            pdfLink: 'https://nodes.alaatv.com/aaa/pdf/1402_plan_tizhooshan_nohom.pdf'
+          }
+        ]
       }
     ],
     selectedProductId: {
@@ -1400,7 +1402,15 @@ export default {
   },
   computed: {
     singlePriceOnPackMode() {
-      const price = Math.round((this.currentBundle.packFinalPrices) / (this.currentBundle.exams.length))
+      if (!this.currentBundle.exams) {
+        return 0
+      }
+      const price = Math.round((this.currentBundle.packBasePrices) / (this.currentBundle.exams.length))
+
+      if (isNaN(price)) {
+        return 0
+      }
+
       return price.toLocaleString()
     },
     finalPriceInSingleMode() {
