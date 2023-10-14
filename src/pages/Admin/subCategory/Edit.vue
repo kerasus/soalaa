@@ -14,14 +14,14 @@
 <script>
 import { EntityEdit } from 'quasar-crud'
 // import EntityEdit from 'src/components/Entity/Edit/EntityEdit'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Edit',
   components: { EntityEdit },
   data () {
     return {
-      api: API_ADDRESS.questionSubcategory.base,
+      api: APIGateway.questionSubcategory.APIAdresses.base,
       entityIdKey: 'data.id',
       entityParamKey: 'data.id',
       showRouteName: 'Admin.subCategory.Show',
@@ -38,8 +38,8 @@ export default {
   methods: {
     async loadCategories () {
       const that = this
-      const response = await that.$axios.get(API_ADDRESS.questionCategory.base)
-      that.categories = response.data.data
+      const questionSubCategory = await that.$apiGateway.questionSubCategory.get()
+      that.categories = questionSubCategory
       that.inputs.forEach(item => {
         if (item.name === 'category_id') {
           item.options = that.categories

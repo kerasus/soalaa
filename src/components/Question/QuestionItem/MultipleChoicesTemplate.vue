@@ -51,7 +51,7 @@ export default {
   .choice-number-box{
     height: var(--katexLineHeight);
     display: flex;
-    align-items: center;
+    align-items: flex-start;
   }
   .answer-text {
     &:deep(.html-katex) {

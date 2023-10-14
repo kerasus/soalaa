@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 
 export default {
   name: 'SignupStep',
@@ -56,15 +55,16 @@ export default {
     },
     sendCodeRequest(userInfo) {
       this.setLoading(true)
-      this.$alaaApiInstance.get(API_ADDRESS.user.resendGuest + '?mobile=' + userInfo.mobile)
-      // this.$apiGateway.user.resendGuest(userInfo)
-        .then(response => {
-          const message = response.data.message
-          const code = response.data.data.code
+      this.$apiGateway.user.resendGuest({
+        mobile: userInfo.mobile
+      })
+        .then(messageWithCode => {
+          const message = messageWithCode.message
+          const code = messageWithCode.code
           this.showMessage(message, 'success')
           this.$emit('updateUser', {
             mobile: this.mobile,
-            code: code || null
+            code
           })
           this.$emit('gotoNextStep')
           this.setLoading(false)

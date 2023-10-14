@@ -1,14 +1,9 @@
 import { Model, Collection } from 'js-abstract-model'
-import API_ADDRESS from '../api/Addresses'
 import { CommentList } from '../models/Comment'
 
 class Log extends Model {
   constructor (data) {
     super(data, [
-      {
-        key: 'baseRoute',
-        default: API_ADDRESS.log.base
-      },
       { key: 'id' },
       { key: 'title' },
       { key: 'description' },

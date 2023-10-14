@@ -29,13 +29,14 @@
       <entity-index ref="orderList"
                     v-model:value="inputs"
                     class="orders-list-entity-index"
-                    title="سفارش های من"
                     :api="getEntityApi"
                     :table="table"
                     :table-keys="tableKeys"
                     :default-layout="false"
                     :table-grid-size="$q.screen.lt.md"
-                    :create-route-name="'Admin.Exam.Create'"
+                    :show-reload-button="false"
+                    :show-search-button="false"
+                    :show-expand-button="false"
                     @onPageChanged="onPageChange">
         <template v-slot:before-index-table="">
           <div class="row items-center search-box">
@@ -60,10 +61,7 @@
             </div>
           </div>
           <q-expansion-item v-model="filterExpanded"
-                            icon="perm_identity"
-                            class="expand-filter"
-                            label="Account settings"
-                            caption="John Doe">
+                            class="expand-filter">
             <div class="row filter-items">
               <div class="col-12">
                 <form-builder ref="filterSlot"
@@ -206,7 +204,6 @@ import moment from 'moment-jalaali'
 import { EntityIndex } from 'quasar-crud'
 import { User } from 'src/models/User.js'
 import { Order } from 'src/models/Order.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { FormBuilder } from 'quasar-form-builder'
 import ActionBtn from 'src/pages/User/MyOrders/actionBtn.vue'
 import OrderDetailsCard from 'src/components/MyOrders/OrderDetailsCard.vue'
@@ -306,7 +303,7 @@ export default {
       return this.getInput('filterInputs', 'till').value
     },
     getEntityApi() {
-      return API_ADDRESS.user.orders.userOrders
+      return this.$apiGateway.user.APIAdresses.getOrders
     },
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']
@@ -448,9 +445,9 @@ export default {
       margin-bottom: 20px;
   }
 }
-.expand-filter{
-  &:deep(.q-item-type){
-    display: none;
+:deep(.expand-filter) {
+  .q-item {
+    display: none !important;
   }
   .filter-option{
 

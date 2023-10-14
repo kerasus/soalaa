@@ -1,9 +1,10 @@
 import APIRepository from '../classes/APIRepository'
 import { appApiInstance } from 'src/boot/axios'
-import { TreeNode } from 'src/models/TreeNode.js'
+import { TreeNode, TreeNodeList } from 'src/models/TreeNode.js'
 
 const APIAdresses = {
   base: '/forrest/tree',
+  treeBox: '/forrest/tree/box',
   getMultiType: (types) => {
     let treeAddress = '/forrest/tree?'
     types.forEach(element => {
@@ -31,6 +32,8 @@ export default class TreeAPI extends APIRepository {
     super('tree', appApiInstance, '', '', APIAdresses)
     this.CacheList = {
       base: this.name + this.APIAdresses.base,
+      treeBox: this.name + this.APIAdresses.treeBox,
+      getMultiType: types => this.name + this.APIAdresses.getMultiType(types),
       getGradesList: this.name + this.APIAdresses.getGradesList,
       getNodeById: nodeId => this.name + this.APIAdresses.getNodeById(nodeId),
       getNodeByType: nodeType => this.name + this.APIAdresses.getNodeByType(nodeType),
@@ -39,15 +42,31 @@ export default class TreeAPI extends APIRepository {
     }
   }
 
-  base(data = {}) {
+  base(data = {}, cache) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.base,
       cacheKey: this.CacheList.base,
-      ...(data?.cache && { cache: data.cache }),
+      ...(cache && { cache }),
       resolveCallback: (response) => {
         return new TreeNode(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getMultiType(types, cache = { TTL: 100 }) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.getMultiType(types),
+      cacheKey: this.CacheList.getMultiType(types),
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return new TreeNodeList(response.data.data)
       },
       rejectCallback: (error) => {
         return error
@@ -150,6 +169,23 @@ export default class TreeAPI extends APIRepository {
       rejectCallback: (error) => {
         return error
       }
+    })
+  }
+
+  getTreeBox(data = {}, cache = { TTL: 1000 }) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.treeBox,
+      cacheKey: this.CacheList.treeBox,
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return response.data.data // List of Tags
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      ...(data && { data })
     })
   }
 }

@@ -96,7 +96,6 @@
 
 <script>
 import { Exam } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import VueKatex from 'src/components/VueKatex.vue'
 import { QuestionList } from 'src/models/Question.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
@@ -121,7 +120,7 @@ export default {
   },
   computed: {
     imageUrl () {
-      return API_ADDRESS.question.uploadImage(this.questionId)
+      return this.$apiGateway.question.APIAdresses.uploadImage(this.questionId)
     }
     // tiptapOptions: {
     //   bubbleMenu: false,
@@ -162,9 +161,9 @@ export default {
     },
     loadSubCategories (quizResponse, reload) {
       const that = this
-      this.$axios.get(API_ADDRESS.questionSubcategory.base)
-        .then((response) => {
-          this.subCategoriesList.list = response.data.data
+      this.$apiGateway.questionSubcategory.get()
+        .then((QuestSubcategoryList) => {
+          this.subCategoriesList.list = QuestSubcategoryList.list
           if (reload) {
             this.$notify({
               group: 'notifs',
@@ -174,8 +173,8 @@ export default {
             })
           }
           // that.quiz.sub_categories = new QuestSubcategoryList(response.data)
-          that.quizData.sub_categories = new QuestSubcategoryList(response.data.data)
-          const questions = quizResponse.data.data
+          that.quizData.sub_categories = new QuestSubcategoryList(QuestSubcategoryList)
+          const questions = quizResponse
           that.sortQuestions(questions)
           that.quizData.questions = new QuestionList(questions)
           // that.quiz = new Exam(that.quizData)
@@ -207,12 +206,15 @@ export default {
         })
     },
     loadQuizDataAndSubCategories (reload = false) {
-      this.$axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.quizId), {
-        sub_categories: [this.$route.params.lessonId]
+      this.$apiGateway.exam.examQuestion({
+        examId: this.$route.params.quizId,
+        data: {
+          sub_categories: [this.$route.params.lessonId]
+        }
       })
-        .then((response) => {
-          if (response.data.data.length) {
-            this.loadSubCategories(response, reload)
+        .then((questionList) => {
+          if (questionList.list.length) {
+            this.loadSubCategories(questionList, reload)
           } else {
             this.$router.push({ name: 'onlineQuiz.exams' })
           }
@@ -220,7 +222,6 @@ export default {
     },
     downLoadQuestions () {
       this.loading = true
-      let fileUrl = ''
       const questionsList = this.quizData.questions.list
       const questionsIdList = []
 
@@ -228,11 +229,10 @@ export default {
         questionsIdList.push(question.id)
       })
 
-      this.$axios.post(API_ADDRESS.question.printQuestions, {
+      this.$apiGateway.question.printQuestions({
         questions: questionsIdList
       })
-        .then(response => {
-          fileUrl = response.data.data
+        .then(fileUrl => {
           this.download('questions-list', fileUrl)
           this.loading = false
         }).catch(err => {
@@ -263,7 +263,7 @@ export default {
 
 <style lang="scss">
 /*rtl:ignore*/
-@import "vue-tiptap-katex-core/css/base";
+//@import "vue-tiptap-katex-core/css/base.scss";
 @import "src/css/katex-rtl-fix.scss";
 //rtl change bug fix
 [dir="rtl"] {

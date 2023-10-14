@@ -53,8 +53,8 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Question } from 'src/models/Question.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { TypeList } from 'src/models/QuestionType.js'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
 
@@ -93,18 +93,18 @@ export default {
     this.init()
   },
   methods: {
-    async init() {
-      const response = await this.getQuestionType()
-      this.componentTabs = new TypeList(response.data.data)
-      this.$nextTick(() => {
-        this.qTabLoading = false
-      })
+    init() {
+      APIGateway.option.getOptions({ type: 'question_type' })
+        .then((options) => {
+          this.componentTabs = new TypeList(options.list)
+          this.$nextTick(() => {
+            this.qTabLoading = false
+          })
+        })
+        .catch(() => {})
     },
     panelClicked () {
       this.$emit('panelClicked')
-    },
-    getQuestionType() {
-      return this.$axios.get(API_ADDRESS.option.base + '?type=question_type')
     },
     getCurrentRoute (componentName) {
       const currentQuestionMode = this.getCurrentQuestionMode()

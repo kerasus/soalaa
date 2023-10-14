@@ -143,7 +143,6 @@
 
 <script>
 import { Exam } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 import { mixinAuth, mixinGetQuizData, mixinQuiz } from 'src/mixin/Mixins.js'
@@ -179,28 +178,25 @@ export default {
       })
     },
     async setExam () {
-      const res = await this.getExamData(this.examId)
-      if (res.data.data) {
-        this.exam = new Exam(res.data.data)
-        this.examTitle = res.data.data.title
+      const exam = await this.getExamData(this.examId)
+      if (exam) {
+        this.exam = exam
+        this.examTitle = exam.title
       }
     },
     async loadLessons () {
       this.subcategoryList.loading = true
       try {
-        const response = await this.getLessons()
+        const categoryList = await this.getLessons()
         this.subcategoryList.loading = false
-        this.categoryList = new QuestCategoryList(response.data.data, {
-          meta: response.data.meta,
-          links: response.data.links
-        })
+        this.categoryList = new QuestCategoryList(categoryList)
         this.subcategoryList = this.categoryList.list.find(category => category.id === this.categoryId).sub_categories.list
       } catch (e) {
         this.subcategoryList.loading = false
       }
     },
     getLessons () {
-      return this.$axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.examId))
+      return this.$apiGateway.exam.getSubCategoriesWithPermissions(this.examId)
     },
     redirect (link) {
     },
@@ -230,12 +226,12 @@ export default {
         return
       }
       subcategory.loading = true
-      this.$axios.post(API_ADDRESS.questionSubcategory.updateOrder, {
+      this.$apiGateway.questionSubcategory.updateOrder({
         sub_category_id: subcategory.id,
         order: subcategory.order,
         exam_id: this.examId
       })
-        .then((response) => {
+        .then(() => {
           subcategory.loading = false
         })
         .catch(() => {

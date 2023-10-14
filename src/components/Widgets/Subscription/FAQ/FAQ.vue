@@ -50,8 +50,8 @@ export default {
   methods: {
     loadData () {
       this.$apiGateway.user.subscriptionLanding()
-        .then(questions => {
-          this.info = questions
+        .then(landingData => {
+          this.info = landingData.questions
         })
     }
   }

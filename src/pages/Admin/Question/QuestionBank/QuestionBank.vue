@@ -42,16 +42,19 @@
               </q-input>
             </q-card-section>
 
-            <q-card-section class="filter-section">
-              <q-select v-model="searchSelector"
-                        filled
-                        dropdown-icon="isax:arrow-down-1"
-                        option-value="value"
-                        option-label="title"
-                        :options="searchInputOptions"
-                        class="backGround-gray-input filter-input"
-                        @update:model-value="sortByCreatedAt" />
-            </q-card-section>
+            <!--            <q-card-section class="filter-section">-->
+            <!--              <q-select-->
+            <!--                v-model="searchSelector"-->
+            <!--                filled-->
+            <!--                dropdown-icon="isax:arrow-down-1"-->
+            <!--                option-value="value"-->
+            <!--                option-label="title"-->
+            <!--                :options="searchInputOptions"-->
+            <!--                class="backGround-gray-input filter-input"-->
+            <!--                @update:model-value="sortByCreatedAt"-->
+            <!--              >-->
+            <!--              </q-select>-->
+            <!--            </q-card-section>-->
           </q-card>
         </div>
         <div class="question-bank-content">
@@ -95,7 +98,6 @@
 
 <script>
 import { Exam } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { APIGateway } from 'src/api/APIGateway.js'
 import { Question, QuestionList } from 'src/models/Question.js'
 import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
@@ -194,7 +196,7 @@ export default {
       }
     }
   },
-  created() {
+  mounted () {
     this.getQuestionData()
     this.getFilterOptions()
   },
@@ -268,7 +270,9 @@ export default {
       }
     },
     deleteQuestionReq (questionId) {
-      return this.$axios.delete(API_ADDRESS.question.delete(questionId))
+      return this.$apiGateway.question.delete({
+        questionId
+      })
     },
     closeConfirmModal () {
       this.$store.commit('AppLayout/showConfirmDialog', {
@@ -324,7 +328,7 @@ export default {
         sort_by: (this.searchSelector.value) ? 'created_at' : '',
         sort_type: (filterData.sort_type) ? filterData.sort_type[0] : this.searchSelector.value,
         statuses: filterData.statuses.map(item => item.id),
-        question_report_type: filterData.question_report_type.map(item => item.id),
+        report_type: filterData.question_report_type ? filterData.question_report_type.id : '',
         report_status: (filterData.report_status.title) ? filterData.report_status.title : '',
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
@@ -345,16 +349,15 @@ export default {
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
-      this.$axios.get(API_ADDRESS.question.index(filters, page, true))
-        .then((response) => {
-          this.questions = new QuestionList(response.data.data)
-          this.paginationMeta = response.data.meta
+      this.$apiGateway.question.getIndex(filters, page, true)
+        .then((questionListAndMeta) => {
+          this.questions = new QuestionList(questionListAndMeta.QuestionList)
+          this.paginationMeta = questionListAndMeta.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
           this.showSearchResultReport = true
         })
-        .catch(function (error) {
-          console.error(error)
+        .catch(() => {
           this.loadingQuestion.loading = false
           this.questions.loading = false
         })

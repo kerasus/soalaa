@@ -1,15 +1,15 @@
 import { ExamList } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Question } from 'src/models/Question.js'
 import { QuestionStatusList } from 'src/models/QuestionStatus.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 // eslint-disable-next-line no-unused-vars
-import { QuestionType, TypeList } from 'src/models/QuestionType'
-import { Log, LogList } from 'src/models/Log'
-import { AttachedExamList } from 'src/models/AttachedExam'
-import { QuestCategoryList } from 'src/models/QuestCategory'
+import { QuestionType, TypeList } from 'src/models/QuestionType.js'
+import { Log, LogList } from 'src/models/Log.js'
+import { AttachedExamList } from 'src/models/AttachedExam.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
 import { Notify } from 'quasar'
 import mixinTree from 'src/mixin/Tree.js'
+import { APIGateway } from 'src/api/APIGateway'
 const AdminActionOnQuestion = {
   mixins: [mixinTree],
   data () {
@@ -55,8 +55,8 @@ const AdminActionOnQuestion = {
       // this.$store.dispatch('loading/overlayLoading', true)
       // this.$store.dispatch('loading/overlayLoading', false)
       // .loadApiResource()
-      this.$axios.post(API_ADDRESS.question.create, question)
-        .then(response => {
+      APIGateway.question.create(question)
+        .then(questionInstance => {
           // console.log(response.data)
           this.$q.notify({
             message: 'ثبت با موفقیت انجام شد',
@@ -64,7 +64,7 @@ const AdminActionOnQuestion = {
             icon: 'thumb_up'
           })
           // window.open('Admin.Question.Create', '_blank').focus()
-          this.redirectToShowPage(response.data.data.id)
+          this.redirectToShowPage(questionInstance.id)
           // this.$store.dispatch('loading/overlayLoading', false)
         })
         .catch(er => {
@@ -73,30 +73,11 @@ const AdminActionOnQuestion = {
     },
     getQuestionById (questionId, question, types) {
       const that = this
-      this.$axios.get(API_ADDRESS.question.show(questionId))
-        .then(function (response) {
-          that.question = new Question(response.data.data)
-          // setFAKETagData
-          // that.question.tags.list = [
-          //   {
-          //     title: 'درس 1',
-          //     id: '62833f6f8646a96d49065562',
-          //     ancestors: [
-          //       { id: '6281fb9e2f1bafe99f050334', title: 'درخت دانش' },
-          //       { id: '6281fbeb2f1bafe99f050336', title: 'پایه دوازدهم' },
-          //       { id: '6281fbfd2f1bafe99f050337', title: 'حسابان ۲' }
-          //     ]
-          //   },
-          //   {
-          //     title: 'موضوع فیلان',
-          //     id: '6281fc922f1bafe99f050344',
-          //     ancestors: [
-          //       { id: '6281fb9e2f1bafe99f050334', title: 'درخت دانش' },
-          //       { id: '6281fbeb2f1bafe99f050336', title: 'پایه دوازدهم' },
-          //       { id: '6281fbfd2f1bafe99f050337', title: 'حسابان ۲' }
-          //     ]
-          //   }
-          // ]
+      APIGateway.question.getQuestion({
+        questionId
+      })
+        .then(function (questionInstance) {
+          that.question = new Question(questionInstance)
           that.setQuestionTypeBasedOnId(that.question, types)
           that.disableLoading()
         })
@@ -110,9 +91,13 @@ const AdminActionOnQuestion = {
         this.question.added_statement_photos.forEach((item, key) => {
           formData.append('files[' + key + ']', item)
         })
-        this.$axios.post(API_ADDRESS.question.photo('statement_photo', this.question.id), formData)
-          .then(res => {
-            this.question = new Question(res.data.data)
+        APIGateway.question.updatePhoto({
+          type: 'statement_photo',
+          questionId: this.question.id,
+          data: formData
+        })
+          .then(question => {
+            this.question = new Question(question)
             this.question.added_statement_photos = []
           })
       }
@@ -123,9 +108,13 @@ const AdminActionOnQuestion = {
         this.question.added_answer_photos.forEach((item, key) => {
           formData.append('files[' + key + ']', item)
         })
-        this.$axios.post(API_ADDRESS.question.photo('answer_photo', this.question.id), formData)
-          .then(res => {
-            this.question = new Question(res.data.data)
+        APIGateway.question.updatePhoto({
+          type: 'answer_photo',
+          questionId: this.question.id,
+          data: formData
+        })
+          .then(question => {
+            this.question = new Question(question)
             this.question.added_answer_photos = []
           })
       }
@@ -149,24 +138,27 @@ const AdminActionOnQuestion = {
         subject_tags: this.question.subject_tags.list.map(tag => tag.id),
         major: this.question.major
       }
-      this.$axios.put(API_ADDRESS.question.update(question.id), question)
-        .then((response) => {
+      APIGateway.question.update(question)
+        .then((exam) => {
           this.$q.notify({
             message: 'ویرایش با موفقیت انجام شد',
             color: 'green',
             icon: 'thumb_up'
           })
-          that.redirectToShowPage(response.data.data.id)
+          that.redirectToShowPage(exam.id)
         })
     },
     changeStatus (newStatus) {
       const that = this
-      this.$axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
-        status_id: newStatus.changeState.id,
-        comment: newStatus.commentAdded
+      APIGateway.question.changeQuestionStatus({
+        questionId: this.$route.params.question_id,
+        data: {
+          status_id: newStatus.changeState.id,
+          comment: newStatus.commentAdded
+        }
       })
-        .then((response) => {
-          that.question.status = response.data.data.status
+        .then((question) => {
+          that.question.status = question.status
           that.getLogs(that.question.id)
         })
     },
@@ -222,9 +214,9 @@ const AdminActionOnQuestion = {
       //   recommended_time: 0,
       //   type_id: question.type_id
       // }
-      this.$axios.post(API_ADDRESS.question.create, formData)
-        .then(response => {
-          this.redirectToShowPage(response.data.data.id)
+      APIGateway.question.createQuestion(formData)
+        .then(question => {
+          this.redirectToShowPage(question.id)
         })
     },
     setAllQuestionLoadings () {
@@ -245,13 +237,16 @@ const AdminActionOnQuestion = {
       this.$router.push({ name: 'Admin.Question.Edit', params: { question_id: this.$route.params.question_id } })
     },
     addComment (eventData) {
-      this.$axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
-        .then(response => {
+      APIGateway.exam.addComment({
+        logId: eventData.logId,
+        data: { comment: eventData.text }
+      })
+        .then(log => {
           // iterating over the array to find the log that has changed
           for (let i = 0; i < this.question.logs.list.length; i++) {
             if (this.question.logs.list[i].id === eventData.logId) {
               // setting the new log using Vue.set so that the component notices the change
-              this.question.logs.list[i] = new Log(response.data.data)
+              this.question.logs.list[i] = new Log(log)
               // Vue.set(this.question, 'logs', new LogList(this.question.logs))
             }
           }
@@ -261,9 +256,11 @@ const AdminActionOnQuestion = {
       const that = this
       this.typeIdLoading = true
       try {
-        const response = await this.callTypeIdRequest()
-        const types = new TypeList(response.data.data)
-        const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
+        const optionList = await APIGateway.option.getOptions({
+          type: 'question_type'
+        })
+        const types = new TypeList(optionList)
+        const optionQuestion = optionList.find(item => (item.value === 'konkur'))
         if (!optionQuestion) {
           return this.$q.notify({
             message: ' API با مشکل مواجه شد!',
@@ -284,15 +281,19 @@ const AdminActionOnQuestion = {
         })
       }
     },
-    callTypeIdRequest() {
-      return this.$axios.get(API_ADDRESS.option.base + '?type=question_type')
-    },
+    // callTypeIdRequest() {
+    //   return APIGateway.option.getOptions({
+    //     type: 'question_type'
+    //   })
+    // },
     async getQuestionTypeForTypeId (question) {
       this.typeIdLoading = true
       try {
-        const response = await this.callTypeIdRequest()
-        const types = new TypeList(response.data.data)
-        const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
+        const optionList = await APIGateway.option.getOptions({
+          type: 'question_type'
+        })
+        const types = new TypeList(optionList)
+        const optionQuestion = types.list.find(item => (item.value === 'konkur'))
         if (!optionQuestion) {
           return this.$q.notify({
             message: ' API با مشکل مواجه شد!',
@@ -364,37 +365,25 @@ const AdminActionOnQuestion = {
     },
     getLogs (questionId) {
       const that = this
-      this.$axios.get(API_ADDRESS.question.log.base(questionId))
-        .then(function (response) {
-          that.question.logs = new LogList(response.data.data)
+      APIGateway.question.getActivityLog(questionId)
+        .then(function (logList) {
+          that.question.logs = new LogList(logList)
         })
     },
     getQuestionStatus () {
       const that = this
       // const list = this.questionStatuses.list
       // that.questionStatuses
-      return this.$axios.get(API_ADDRESS.question.status.base)
-        .then(function (response) {
-          that.questionStatuses = new QuestionStatusList(response.data.data)
-        })
-    },
-    loadQuestionData () {
-      const that = this
-      this.question.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
-        .then((response) => {
-          if (response.data.data) {
-            that.question = new Question(response.data.data)
-          }
-        })
-        .catch((er) => {
-          console.error(er)
+      return APIGateway.question.getQuestionStatuses()
+        .then(function (questionStatusList) {
+          that.questionStatuses = new QuestionStatusList(questionStatusList)
         })
     },
     loadSubcategories () {
       this.subCategoriesList.loading = true
-      return this.$axios.get(API_ADDRESS.questionSubcategory.base)
-        .then((response) => {
-          this.subCategoriesList = new QuestSubcategoryList(response.data.data)
+      return APIGateway.questionSubcategory.get()
+        .then((questionSubcategory) => {
+          this.subCategoriesList = new QuestSubcategoryList(questionSubcategory)
           this.subCategoriesList.loading = false
         })
         .catch(() => {
@@ -403,9 +392,9 @@ const AdminActionOnQuestion = {
     },
     loadExamList () {
       this.examList.loading = true
-      this.$axios.get(API_ADDRESS.exam.base())
-        .then((response) => {
-          this.examList = new ExamList(response.data.data)
+      APIGateway.exam.getBase()
+        .then((examList) => {
+          this.examList = new ExamList(examList)
           this.examList.loading = false
         })
         .catch(() => {
@@ -415,9 +404,9 @@ const AdminActionOnQuestion = {
     loadCategories () {
       const that = this
       this.categoryList.loading = true
-      this.$axios.get(API_ADDRESS.questionCategory.base)
-        .then((response) => {
-          that.categoryList = new QuestCategoryList(response.data.data)
+      APIGateway.questionCategory.get()
+        .then((questionCategory) => {
+          that.categoryList = new QuestCategoryList(questionCategory)
           that.categoryList.loading = false
         })
         .catch(() => {
@@ -425,25 +414,28 @@ const AdminActionOnQuestion = {
         })
     },
     attachExam (data) {
-      this.$axios.post(API_ADDRESS.question.attach, {
+      APIGateway.question.attach({
         exam_id: data.exam.id,
         sub_category_id: data.sub_category.id,
         ...(this.question.id) && { question_id: this.question.id },
         order: data.order
       })
-        .then(response => {
-          this.question.exams = new AttachedExamList(response.data.data.exams)
+        .then(attachedExamList => {
+          this.question.exams = new AttachedExamList(attachedExamList)
         })
         .catch((er) => {
           console.error(er)
         })
     },
     detachExam (data) {
-      this.$axios.post(API_ADDRESS.question.detach(this.question.id), {
-        detaches: [data]
+      APIGateway.question.detach({
+        questionId: this.question.id,
+        data: {
+          detaches: [data]
+        }
       })
-        .then(response => {
-          this.question.exams = new AttachedExamList(response.data.data.exams)
+        .then(detachedExamList => {
+          this.question.exams = new AttachedExamList(detachedExamList)
         })
     },
     openCloseImgPanel () {
@@ -460,28 +452,40 @@ const AdminActionOnQuestion = {
       })
     },
     loadQuestionAuthors () {
-      this.$axios.get(API_ADDRESS.option.base + '?type=reference_type')
-        .then((response) => {
-          this.questionAuthorsList = response.data.data
+      APIGateway.option.getOptions({
+        type: 'reference_type'
+      })
+        .then((authorsList) => {
+          this.questionAuthorsList = authorsList.list
         })
+        .catch(() => {})
     },
     loadQuestionTargets () {
-      this.$axios.get(API_ADDRESS.option.base + '?type=targets_type')
-        .then((response) => {
-          this.questionTargetList = response.data.data
+      APIGateway.option.getOptions({
+        type: 'targets_type'
+      })
+        .then((TargetsList) => {
+          this.questionTargetList = TargetsList.list
         })
+        .catch(() => {})
     },
     loadAuthorshipDates () {
-      this.$axios.get(API_ADDRESS.option.base + '?type=year_type')
-        .then((response) => {
-          this.authorshipDatesList = response.data.data
+      APIGateway.option.getOptions({
+        type: 'year_type'
+      })
+        .then((authorshipDates) => {
+          this.authorshipDatesList = authorshipDates.list
         })
+        .catch(() => {})
     },
     loadMajorList () {
-      this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
-        .then((response) => {
-          this.majorList = response.data.data
+      APIGateway.option.getOptions({
+        type: 'major_type'
+      })
+        .then((majorList) => {
+          this.majorList = majorList.list
         })
+        .catch(() => {})
     },
     getLessonGroupList (item) {
       this.getNode(item.id).then(response => {
@@ -495,7 +499,10 @@ const AdminActionOnQuestion = {
       })
     },
     setTags (allTags) {
-      this.$axios.put(API_ADDRESS.tags.setTags(this.question.id), allTags)
+      APIGateway.question.setTags({
+        questionId: this.question.id,
+        data: allTags
+      })
         .then(() => {
         })
     },

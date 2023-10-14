@@ -128,12 +128,12 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Question } from 'src/models/Question.js'
 import { ExamList, Exam } from 'src/models/Exam.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'AttachExam',
@@ -196,7 +196,7 @@ export default {
             label: 'ثبت آزمون'
           },
           indexConfig: {
-            apiAddress: API_ADDRESS.exam.base(),
+            apiAddress: APIGateway.exam.APIAdresses.base(),
             tableTitle: 'لیست آزمون ها',
             tableKeys: {
               data: 'data',

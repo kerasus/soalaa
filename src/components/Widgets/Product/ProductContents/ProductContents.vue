@@ -45,8 +45,8 @@
                     transition-next="scale"
                     class="bg-white text-black text-center tab-panels">
         <q-tab-panel name="videos">
+          <!--          v-dragscroll-->
           <div v-if="videos.length > 0"
-               v-dragscroll
                class="contents-block">
             <block-component class="block"
                              :options="getBlockOptions" />
@@ -58,8 +58,8 @@
         </q-tab-panel>
 
         <q-tab-panel name="pamphlets">
+          <!--          v-dragscroll-->
           <div v-if="pamphlets.length > 0"
-               v-dragscroll
                class="pamphlet-list">
             <div v-for="pamphlet in pamphlets"
                  :key="pamphlet.id"
@@ -123,7 +123,7 @@
 
 <script>
 import { Set } from 'src/models/Set.js'
-import { dragscroll } from 'vue-dragscroll'
+// import { dragscroll } from 'vue-dragscroll'
 import { Product } from 'src/models/Product.js'
 import { mixinPrefetchServerData, mixinWidget } from 'src/mixin/Mixins.js'
 import { ContentList } from 'src/models/Content'
@@ -137,7 +137,7 @@ export default {
     BlockComponent
   },
   directives: {
-    dragscroll
+    // dragscroll
   },
   mixins: [
     mixinPrefetchServerData,

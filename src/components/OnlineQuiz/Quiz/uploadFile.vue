@@ -94,7 +94,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
 
 export default {
@@ -127,9 +126,9 @@ export default {
     },
     getData () {
       this.dataLoading = true
-      this.$axios.get(API_ADDRESS.questionCategory.base)
-        .then(response => {
-          this.questionCategories = new QuestCategoryList(response.data.data)
+      this.$apiGateway.questionCategory.get()
+        .then(questCategoryList => {
+          this.questionCategories = new QuestCategoryList(questCategoryList)
           this.questionCategories.list.forEach(item => {
             item.questionFile = []
             item.answerFile = []
@@ -146,29 +145,33 @@ export default {
         })
     },
     getBookletOptions () {
-      this.$axios.get(API_ADDRESS.option.base + '?type=booklet_type')
-        .then(response => {
-          this.bookletOptions = response.data.data
+      this.$apiGateway.option.getOptions({
+        type: 'booklet_type'
+      })
+        .then(options => {
+          this.bookletOptions = options
           this.getBooklets()
         })
     },
     getBooklets () {
-      this.$axios.get(API_ADDRESS.exam.pdf(this.examId))
-        .then(response => {
+      this.$apiGateway.exam.getExamAnswersFiles(this.examId)
+        .then(fileList => {
           this.questionCategories.list.forEach(category => {
             category.descriptive_answers_booklet = ''
             category.questions_booklet = ''
-            response.data.forEach(file => {
-              if (file.category.id === category.id) {
-                file.booklets.forEach(booklet => {
-                  if (booklet.value === 'descriptive_answers_booklet') {
-                    category.descriptive_answers_booklet = booklet.url
-                  } else if (booklet.value === 'questions_booklet') {
-                    category.questions_booklet = booklet.url
-                  }
-                })
-              }
-            })
+            if (fileList) {
+              fileList.forEach(file => {
+                if (file.category.id === category.id) {
+                  file.booklets.forEach(booklet => {
+                    if (booklet.value === 'descriptive_answers_booklet') {
+                      category.descriptive_answers_booklet = booklet.url
+                    } else if (booklet.value === 'questions_booklet') {
+                      category.questions_booklet = booklet.url
+                    }
+                  })
+                }
+              })
+            }
           })
           this.dataLoading = false
         })
@@ -185,19 +188,18 @@ export default {
       formData.append('category_id', item.id)
       const option = this.bookletOptions.find(option => option.value === bookletType)
       formData.append('booklet_type', option.id)
-      that.$axios.post(API_ADDRESS.exam.examBookletUpload(this.examId), formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      that.$apiGateway.exam.examBookletUpload({
+        examId: this.examId,
+        data: formData
       })
-        .then((res) => {
+        .then((url) => {
           item.loading[group] = false
           that.$q.notify({
             message: 'اطلاعات آزمون شما ثبت شد.',
             type: 'positive',
             position: 'top'
           })
-          item[bookletType] = res.data.data.url
+          item[bookletType] = url
           item[key] = []
         })
         .catch(() => {

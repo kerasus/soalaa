@@ -317,7 +317,7 @@ export default {
     setReportOptions() {
       APIGateway.option.userIndex({ type: 'question_report_type' })
         .then((reportTypeList) => {
-          this.reportTypeList = reportTypeList
+          this.reportTypeList = reportTypeList.list
           this.questionItemContentKey++
         })
         .catch(() => {
@@ -789,6 +789,13 @@ export default {
 
   .question-item-content {
     margin-bottom: 16px;
+  }
+}
+
+:deep(.highcharts-container) {
+  .title-1,
+  .title-2 {
+    font-family: yekanbakh, "Arial", "-apple-system", "Helvetica Neue", Helvetica, sans-serif;
   }
 }
 

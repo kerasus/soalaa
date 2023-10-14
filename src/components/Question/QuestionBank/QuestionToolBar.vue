@@ -27,7 +27,7 @@
                           @click="selectAllQuestions" />
             </div>
             <div class="choices-number">
-              {{ this.numberOfQuestions() }}
+              {{ numberOfQuestions() }}
               <span class="choices-number-title">سوال انتخاب شده</span>
             </div>
           </div>
@@ -149,7 +149,7 @@
           </div>
           <div class="choices-number-container">
             <div class="choices-number">
-              {{ this.numberOfQuestions() }}
+              {{ numberOfQuestions() }}
               <span class="choices-number-title">سوال انتخاب شده</span>
             </div>
           </div>

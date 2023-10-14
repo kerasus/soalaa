@@ -11,7 +11,7 @@
 <script>
 import { EntityCreate } from 'quasar-crud'
 // import EntityCreate from 'src/components/Entity/Create/EntityCreate'
-import API_ADDRESS from 'src/api/Addresses.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 
 export default {
   name: 'Create',
@@ -19,7 +19,7 @@ export default {
   data () {
     return {
       expanded: true,
-      api: API_ADDRESS.questionSubcategory.base,
+      api: APIGateway.questionSubcategory.APIAdresses.base,
       entityIdKeyInResponse: 'id',
       showRouteParamKey: 'id',
       showRouteName: 'Admin.subCategory.Show',
@@ -37,9 +37,9 @@ export default {
   methods: {
     loadCategories () {
       const that = this
-      that.$axios.get(API_ADDRESS.questionCategory.base)
-        .then(function (response) {
-          that.categories = response.data.data
+      that.$apiGateway.questionCategory.get()
+        .then(function (questCategoryList) {
+          that.categories = questCategoryList
           that.inputs[1].options = that.categories
         })
         .catch(function (error) {

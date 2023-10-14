@@ -22,11 +22,16 @@
       <div class="nav-item-box flex xs-hide">
         <div class="nav-item"
              @click="onClickRegisterBtn">
-          آزمون سه‌آ
+          <a href="https://alaatv.com"
+             target="_blank">
+            مدرسه آلاء
+          </a>
         </div>
         <div class="nav-item middle"
              @click="onClickConditionsBtn">
-          شرایط برگزاری آزمون
+          <router-link :to="{name: 'Home'}">
+            ورود به سوالا
+          </router-link>
         </div>
         <div class="nav-item"
              @click="onClickFaqsBtn">
@@ -57,10 +62,10 @@ export default {
       this.$emit('onClickUserExamListBtn')
     },
     onClickRegisterBtn () {
-      this.$emit('onClickRegisterBtn')
+      // this.$emit('onClickRegisterBtn')
     },
     onClickConditionsBtn () {
-      this.$emit('onClickConditionsBtn')
+      // this.$emit('onClickConditionsBtn')
     },
     onClickFaqsBtn () {
       this.$emit('onClickFaqsBtn')
@@ -86,6 +91,10 @@ export default {
       cursor: pointer;
       &.middle{
         margin: 0 46px;
+      }
+      a {
+        text-decoration: none;
+        color: #474747;
       }
     }
   }

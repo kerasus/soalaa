@@ -1,14 +1,13 @@
-// import SetAPI from 'src/api/models/set.js'
+import SetAPI from 'src/api/models/set.js'
 import CartAPI from 'src/api/models/cart.js'
 import AuthAPI from 'src/api/models/Auth.js'
 import ProfileAPI from 'src/api/models/profile.js'
-// import UserAPI from 'src/api/models/user.js'
 import TreeAPI from 'src/api/models/tree.js'
 import UserAPI from 'src/api/models/user.js'
 // import TreeAPI from 'src/api/models/tree.js'
 // import PlanAPI from 'src/api/models/Plan.js'
 // import OrderAPI from 'src/api/models/order.js'
-// import PagesAPI from 'src/api/models/pages.js'
+import PagesAPI from 'src/api/models/pages.js'
 import TicketAPI from 'src/api/models/ticket.js'
 // import CouponAPI from 'src/api/models/coupon.js'
 // import EventsAPI from 'src/api/models/Events.js'
@@ -27,10 +26,11 @@ import ExamAPI from 'src/api/models/exam.js'
 import QuestionCategoryAPI from 'src/api/models/questionCategory.js'
 import QuestionAPI from 'src/api/models/question.js'
 import OptionAPI from 'src/api/models/option.js'
+import QuestionSubCategoryAPI from 'src/api/models/questionSubCategory.js'
 
 /* Exporting the APIGateway object. */
 export const APIGateway = {
-  // set: new SetAPI(),
+  set: new SetAPI(),
   auth: new AuthAPI(),
   user: new UserAPI(),
   cart: new CartAPI(),
@@ -38,7 +38,7 @@ export const APIGateway = {
   tree: new TreeAPI(),
   exam: new ExamAPI(),
   // tree: new TreeAPI(),
-  // pages: new PagesAPI(),
+  pages: new PagesAPI(),
   // plan: new PlanAPI(),
   // order: new OrderAPI(),
   // events: new EventsAPI(),
@@ -56,7 +56,7 @@ export const APIGateway = {
   // liveDescription: new LiveDescriptionAPI(),
   // contentTimepoint: new ContentTimepointAPI(),
   questionCategory: new QuestionCategoryAPI(),
+  questionSubcategory: new QuestionSubCategoryAPI(),
   question: new QuestionAPI(),
   option: new OptionAPI()
-
 }

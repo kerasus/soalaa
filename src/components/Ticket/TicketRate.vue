@@ -21,8 +21,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
-
 export default {
   name: 'TicketRate',
   props: {
@@ -85,14 +83,17 @@ export default {
       if (!this.isSelected(this.selectedId, rateId)) {
         return false
       }
-      this.$alaaApiInstance.post(API_ADDRESS.ticket.ticketRate(this.ticketId), {
-        rate: rateId
+      this.$apiGateway.ticket.ticketRate({
+        ticketId: this.ticketId,
+        data: {
+          rate: rateId
+        }
       })
-        .then((res) => {
+        .then((message) => {
           this.ActiveAndCheckImages(rateId)
           this.selectedId = rateId
           this.$q.notify({
-            message: res.data.message,
+            message,
             type: 'positive'
           })
         })

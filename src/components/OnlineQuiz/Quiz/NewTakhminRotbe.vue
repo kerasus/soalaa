@@ -22,7 +22,7 @@
                         option-value="id"
                         option-label="title"
                         :loading="takhminRotbeLoading"
-                        :options="takhminRotbeExamList"
+                        :options="takhminRotbeExamList.list"
                         label-color="grey-8"
                         label="انتخاب نوع آزمون"
                         emit-value
@@ -96,7 +96,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'NewTakhminRotbe',
   props: {
@@ -181,9 +180,9 @@ export default {
     },
     setTakhminRotbeExamList () {
       this.takhminRotbeLoading = true
-      this.$axios.get(API_ADDRESS.exam.report.takhminRotbeExamList)
-        .then(res => {
-          this.takhminRotbeExamList = res.data.data
+      this.$apiGateway.exam.report.takhminRotbeExamList()
+        .then(examList => {
+          this.takhminRotbeExamList = examList
           this.takhminRotbeLoading = false
         })
         .catch(() => {
@@ -267,11 +266,14 @@ export default {
           subcategoryId: keys[i]
         })
       }
-      this.$axios.post(API_ADDRESS.exam.konkurTakhminRotbe(this.takhminRotbeExam), {
-        percents: sentPercents
+      this.$apiGateway.exam.konkurTakhminRotbe({
+        examId: this.takhminRotbeExam,
+        data: {
+          percents: sentPercents
+        }
       })
-        .then(response => {
-          this.ranks = response.data.ranks
+        .then(ranks => {
+          this.ranks = ranks
         })
     }
   }

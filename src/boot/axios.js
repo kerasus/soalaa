@@ -26,7 +26,7 @@ const AjaxResponseMessages = (function () {
   }
 
   function isCustomMessage (statusCode) {
-    return !!(messageMap[statusCode.toString()])
+    return statusCode && !!(messageMap[statusCode.toString()])
   }
 
   function getMessage (statusCode) {
@@ -86,7 +86,7 @@ const AxiosHooks = (function () {
   }
 
   function deAuthorizeUser (router, store) {
-    store.dispatch('Auth/logOut')
+    store.dispatch('Auth/logOut', { redirectTo: false, clearRedirectTo: false })
     const loginRouteName = 'login'
     const currentRoute = (router?.currentRoute?._value) ? router.currentRoute._value : (router?.history?.current) ? router.history.current : null
     if (currentRoute && currentRoute.name === loginRouteName) {
@@ -144,29 +144,35 @@ const alaaApiInstance = APIInstanceWrapper.createInstance(alaaApi, alaaApiServer
 const appApiInstance = APIInstanceWrapper.createInstance(appApi, appApiServer)
 
 export default boot(({ app, store, router, ssrContext }) => {
+  // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
+  //       so you can easily perform requests against your app's API
+  AxiosHooks.setNotifyInstance(app.config.globalProperties.$q)
+
+  if (appApiInstance.interceptors) {
+    appApiInstance.interceptors.response.use(undefined, async function (error) {
+      return Promise.reject(await AxiosHooks.handleErrors(error, router, store))
+    })
+  }
+
   const cookies = process.env.SERVER
     ? Cookies.parseSSR(ssrContext)
     : Cookies // otherwise we're on client
 
-  const cookiesAccessToken = cookies.get('BearerAccessToken')
+  const allCookies = cookies.getAll()
+  const cookiesAccessTokenInCookies = cookies.get('BearerAccessToken') ? cookies.get('BearerAccessToken') : allCookies.BearerAccessToken
+  // const cookiesAccessTokenInCookies = cookies.get('BearerAccessToken')
+  const accessTokenInLocalStorage = store.getters['Auth/accessToken']
+  const cookiesAccessToken = accessTokenInLocalStorage || cookiesAccessTokenInCookies
 
   if (cookiesAccessToken) {
     const tokenType = 'Bearer'
     store.$accessToken = cookiesAccessToken
-    store.$accessToken = cookiesAccessToken
+    store.commit('Auth/updateAxiosAuthorization', cookiesAccessToken)
     alaaApiInstance.defaults.headers.common.Authorization = tokenType + ' ' + cookiesAccessToken
     appApiInstance.defaults.headers.common.Authorization = tokenType + ' ' + cookiesAccessToken
-  }
-
-  // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
-  //       so you can easily perform requests against your app's API
-
-  AxiosHooks.setNotifyInstance(app.config.globalProperties.$q)
-
-  if (alaaApiInstance.interceptors) {
-    alaaApiInstance.interceptors.response.use(undefined, async function (error) {
-      return await AxiosHooks.handleErrors(error, router, store)
-    })
+  } else {
+    // console.error('axios boot->Auth/logOut')
+    store.dispatch('Auth/logOut')
   }
 
   store.$appApiInstance = appApiInstance

@@ -200,11 +200,6 @@ export default {
       ]
     }
   },
-  created () {
-    // if (this.tableKeys.currentPage) {
-    //   this.api = API_ADDRESS.exam.base(this.tableKeys.currentPage)
-    // }
-  },
   methods: {
     registerExam (examId) {
       return this.$apiGateway.exam.registerExam({ exam_id: examId })

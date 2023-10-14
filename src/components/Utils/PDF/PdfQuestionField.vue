@@ -9,16 +9,18 @@
         <p :id="'question' + question.id"
            class="question-body">
           <vue-katex class="vue-katex"
-                     :input="'<span class='+'number'+'>'+ order +') </span>' + question.statement"
+                     :input="'<span class='+'number'+'>' + question.order +') </span>' + question.statement"
                      base64
                      @loaded="onStatementLoaded" />
         </p>
         <div class="PDF-LINE-BREAK" />
       </div>
       <q-list v-if="displayChoices"
-              class="choices-box row">
-        <q-item v-for="(choice, index) in question.choices"
-                :key="choice.id"
+              ref="choicesBox"
+              class="choices-box">
+        <q-item v-for="(choice, index) in questionChoices"
+                :ref="'choice-item-id' + choice.id"
+                :key="'choice-item-id' + choice.id"
                 class="choices"
                 :class="choiceClass"
                 :style="{marginBottom: betweenChoices + 'mm'}">
@@ -45,7 +47,7 @@
            class="question-body"
            :class="{ ltr: isRtl }">
           <vue-katex class="vue-katex"
-                     :input="getQuestionCompleteAnswerInput(order, question.descriptive_answer)"
+                     :input="getQuestionCompleteAnswerInput(question.order, question.descriptive_answer)"
                      base64
                      @loaded="onDescriptiveAnswerLoaded" />
         </p>
@@ -127,19 +129,19 @@ export default {
     }
   },
   computed: {
+    questionChoices () {
+      return this.question.choices.list ? this.question.choices.list : this.question.choices
+    },
     getQuestionCompleteAnswerInput () {
       return (order, input) => {
         return '<span class=' + 'number-descriptive' + '>' + order + ')' + ' (گزینه ' + this.getQuestionAnswerIndex + ')' + ' </span><br>' + input
       }
     },
-    getQuestionAnswer () {
-      return this.question.choices.filter(choice => choice.answer)
-    },
     getQuestionAnswerIndex () {
-      return this.question.choices.findIndex(choice => choice.answer) + 1
+      return this.questionChoices.findIndex(choice => choice.answer) + 1
     },
     allChoiceLoaded () {
-      const notLoadedChoice = this.question.choices.find(choice => !choice.loaded)
+      const notLoadedChoice = this.questionChoices.find(choice => !choice.loaded)
       return !notLoadedChoice
     },
     questionLoaded () {
@@ -164,33 +166,38 @@ export default {
     },
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']
-    },
-    choiceClass () {
-      const question = this.question
-      const largestChoice = this.getLargestChoice(question.choices)
-      const largestChoiceWidth = 2128 / largestChoice
-      if (largestChoiceWidth < 24) {
-        return 'col-md-12'
-      }
-      if (largestChoiceWidth < 70) {
-        return 'col-md-6'
-      }
-      if (largestChoiceWidth < 96) {
-        return 'col-md-3'
-      }
-      return 'col-md-3'
-    },
-    questionFieldHeight() {
-      return this.$refs.questionField.clientHeight
     }
   },
   watch: {
     questionLoaded () {
-      this.$emit('questionLoaded')
+      if (this.displayChoices) {
+        this.checkChoiceColumns()
+      }
       this.$emit('update:height', this.$refs.questionField.clientHeight)
+      this.$emit('questionLoaded', this.$refs.questionField.clientHeight)
     }
   },
   methods: {
+    checkChoiceColumns () {
+      if (!this.$refs.choicesBox) {
+        return
+      }
+      const choicesBoxWidth = this.$refs.choicesBox.$el.clientWidth
+      let maxWidth = 0
+
+      this.questionChoices.forEach((item) => {
+        // const choiceEl = this.$refs['choice-item-id' + item.id][0].$el
+        const choiceEl = this.$refs['choice-item-id' + item.id][0].$el.getElementsByClassName('choice')[0]
+        const choiceWidth = choiceEl.clientWidth
+        if (maxWidth < (choiceWidth / choicesBoxWidth)) {
+          maxWidth = (choiceWidth / choicesBoxWidth)
+        }
+      })
+      const choiceWidth = maxWidth < 0.25 ? '25%' : (maxWidth < 0.5 ? '50%' : '100%')
+      this.questionChoices.forEach((item) => {
+        this.$refs['choice-item-id' + item.id][0].$el.style.width = choiceWidth
+      })
+    },
     onStatementLoaded () {
       this.statementLoaded = true
     },
@@ -288,15 +295,16 @@ export default {
       }
     }
     .choices-box{
+      display: flex;
+      flex-wrap: wrap;
       .choices {
-        display: flex;
-        flex-direction: row;
+        display: block;
         padding: 0 16px;
         min-height: 24px;
+        width: 100%;
 
         .choice{
-          display: flex;
-          flex-direction: row;
+          width: max-content;
           height: auto;
           cursor: pointer;
           transition: all ease-in-out 0.3s;

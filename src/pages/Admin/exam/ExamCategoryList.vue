@@ -91,7 +91,6 @@
 <script>
 // import ExamSubCategoryList from 'src/pages/Admin/exam/ExamSubCategoryList'
 import { Exam } from 'src/models/Exam.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { mixinGetQuizData } from 'src/mixin/Mixins.js'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
@@ -128,28 +127,25 @@ export default {
       })
     },
     async setExam () {
-      const res = await this.getExamData(this.examId)
-      if (res.data.data) {
-        this.exam = new Exam(res.data.data)
-        this.examTitle = res.data.data.title
+      const exam = await this.getExamData(this.examId)
+      if (exam) {
+        this.exam = exam
+        this.examTitle = exam.title
       }
     },
     async loadLessons () {
       this.categoryList.loading = true
       try {
-        const response = await this.getLessons()
+        const categoryList = await this.getLessons()
         this.categoryList.loading = false
-        this.categoryList = new QuestCategoryList(response.data.data, {
-          meta: response.data.meta,
-          links: response.data.links
-        })
+        this.categoryList = categoryList
       } catch (e) {
         this.categoryList.loading = false
         this.categoryList = new QuestCategoryList()
       }
     },
     getLessons () {
-      return this.$axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.examId))
+      return this.$apiGateway.exam.getSubCategoriesWithPermissions(this.examId)
     },
     goToSubCategoryList (id) {
       this.$router.push({

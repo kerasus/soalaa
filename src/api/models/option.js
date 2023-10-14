@@ -1,9 +1,9 @@
-import { Question, QuestionList } from 'src/models/Question.js'
 import APIRepository from '../classes/APIRepository.js'
 import { appApiInstance } from 'src/boot/axios.js'
-
+import { Option, OptionList } from 'src/models/Option.js'
 const APIAdresses = {
   base: '/option',
+  show: '/option',
   userIndex: '/option/user',
   user(type) { return '/option/user?type=' + type },
   levels: '/question/levels',
@@ -13,7 +13,7 @@ const APIAdresses = {
 
 export default class OptionAPI extends APIRepository {
   constructor() {
-    super('Option', appApiInstance, '/option', new Question(), APIAdresses)
+    super('Option', appApiInstance, '/option', new Option(), APIAdresses)
     this.CacheList = {
       userIndex: this.name + this.APIAdresses.userIndex
     }
@@ -33,7 +33,7 @@ export default class OptionAPI extends APIRepository {
 
       ...(cache && { cache }),
       resolveCallback: (response) => {
-        return response.data.data // Array of Strings
+        return new OptionList(response.data.data)
       },
       rejectCallback: (error) => {
         return error
@@ -47,10 +47,10 @@ export default class OptionAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.base,
       resolveCallback: (response) => {
-        return new QuestionList(response.data.data)
+        return new Option(response.data.data)
       },
       rejectCallback: () => {
-        return new QuestionList()
+        return new Option()
       },
       data
     })
@@ -62,10 +62,10 @@ export default class OptionAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.update(data.id),
       resolveCallback: (response) => {
-        return new QuestionList(response.data.data)
+        return new Option(response.data.data)
       },
       rejectCallback: () => {
-        return new QuestionList()
+        return new Option()
       },
       data
     })
@@ -134,6 +134,23 @@ export default class OptionAPI extends APIRepository {
       request: this.APIAdresses.user(data),
       resolveCallback: (response) => {
         return response.data.data // Array of Strings
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getOptions(data) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.base,
+      data: this.getNormalizedSendData({
+        type: null // String
+      }, data),
+      resolveCallback: (response) => {
+        return new OptionList(response.data.data)
       },
       rejectCallback: (error) => {
         return error

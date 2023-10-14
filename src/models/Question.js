@@ -2,7 +2,6 @@
 import Time from 'src/plugins/time'
 import { ChoiceList } from './Choice.js'
 import { LogList } from '../models/Log.js'
-import API_ADDRESS from '../api/Addresses.js'
 import { Model, Collection } from 'js-abstract-model'
 import { TreeNodeList } from 'src/models/TreeNode.js'
 import { CheckingTimeList } from '../models/CheckingTime.js'
@@ -18,10 +17,6 @@ import { AttachedExamList } from '../models/AttachedExam.js'
 class Question extends Model {
   constructor (data) {
     super(data, [
-      {
-        key: 'baseRoute',
-        default: API_ADDRESS.question.base
-      },
       { key: 'id' },
       { key: 'code' },
       { key: '_id' },

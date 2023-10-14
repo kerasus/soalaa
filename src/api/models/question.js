@@ -1,6 +1,9 @@
 import { Question, QuestionList } from 'src/models/Question.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
 import APIRepository from '../classes/APIRepository.js'
 import { appApiInstance } from 'src/boot/axios.js'
+import { AttachedExamList } from 'src/models/AttachedExam.js'
+import { Log, LogList } from 'src/models/Log.js'
 
 const APIAdresses = {
   photo (type, id) {
@@ -118,6 +121,9 @@ const APIAdresses = {
         pagination = 0
       }
       return '/activity-log?subject_id=' + questionId + '&subject=question&with_pagination=0'
+    },
+    addComment (id) {
+      return '/activity-log/' + id + '/comment'
     }
   },
   base: '/exam-question/attach',
@@ -153,6 +159,9 @@ const APIAdresses = {
   printQuestions: '/question/export',
   report(questionId) {
     return 'question/report/store/' + questionId
+  },
+  setTags (questionId) {
+    return '/id/soalaQestion/' + questionId
   }
 }
 
@@ -160,7 +169,12 @@ export default class QuestionAPI extends APIRepository {
   constructor() {
     super('Question', appApiInstance, '/exam-question', new Question(), APIAdresses)
     this.CacheList = {
-      index: (filters, page, isAdmin = false) => this.name + this.APIAdresses.index(filters, page, isAdmin)
+      index: (filters, page, isAdmin = false) => this.name + this.APIAdresses.index(filters, page, isAdmin),
+      statusBase: this.name + this.APIAdresses.status.base,
+      reportLog: (questionId) => this.name + this.APIAdresses.reportLog(questionId),
+      log: {
+        base: (questionId) => this.name + this.APIAdresses.log.base(questionId)
+      }
     }
   }
 
@@ -198,18 +212,330 @@ export default class QuestionAPI extends APIRepository {
     })
   }
 
+  createQuestion(data) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.create,
+      resolveCallback: (response) => {
+        return new Question(response.data.data)
+      },
+      rejectCallback: () => {
+        return new Question()
+      },
+      data
+    })
+  }
+
+  getQuestion(data) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.show(data.questionId),
+      resolveCallback: (response) => {
+        return new Question(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      ...(data.params && { data: data.params })
+    })
+  }
+
+  detach(data) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.detach(data.questionId),
+      resolveCallback: (response) => {
+        return new AttachedExamList(response.data.data.exams)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  attach(data) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.attach,
+      resolveCallback: (response) => {
+        return new AttachedExamList(response.data.data.exams)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data
+    })
+  }
+
   update(data) {
     return this.sendRequest({
       apiMethod: 'put',
       api: this.api,
       request: this.APIAdresses.update(data.id),
       resolveCallback: (response) => {
-        return new QuestionList(response.data.data)
+        return new Question(response.data.data)
       },
       rejectCallback: () => {
-        return new QuestionList()
+        return new Question()
       },
       data
+    })
+  }
+
+  delete(data) {
+    return this.sendRequest({
+      apiMethod: 'delete',
+      api: this.api,
+      request: this.APIAdresses.update(data.questionId),
+      resolveCallback: (response) => {
+        return response.data /// String
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      ...(data.data && { data: data.data })
+    })
+  }
+
+  getLevels(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.levels,
+      resolveCallback: (response) => {
+        return response.data.data // List of Options Objects [{key,Value}]
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getIndexMonta(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.indexMonta,
+      resolveCallback: (response) => {
+        return {
+          questionList: new QuestionList(response.data.data),
+          meta: response.data.mata,
+          links: response.data.links
+        }
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data
+    })
+  }
+
+  groupAttach(data) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.groupAttach,
+      resolveCallback: (response) => {
+        return new Question(response.data.data)
+      },
+      rejectCallback: () => {
+        return new Question()
+      },
+      data
+    })
+  }
+
+  confirm(questionId, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.confirm(questionId),
+      resolveCallback: (response) => {
+        return {
+          confirmed: response.data.data.confirmed,
+          confirmers: response.data.data.confirmers
+        }
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  unconfirm(questionId, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.unconfirm(questionId),
+      resolveCallback: (response) => {
+        return {
+          confirmed: response.data.data.confirmed,
+          confirmers: response.data.data.confirmers
+        }
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  getQuestionStatuses(data = {}, cache = { TTL: 1000 }) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.status.base,
+      cacheKey: this.CacheList.statusBase,
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return new QuestionStatusList(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      ...(data && { data })
+    })
+  }
+
+  changeQuestionStatus(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.status.changeStatus(data.questionId),
+      resolveCallback: (response) => {
+        return new Question(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  getReportStatuses(data = {}, cache) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.reportStatuses,
+      cacheKey: this.CacheList.reportStatuses,
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return response.data.data // List of String Objects(Status Options)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      ...(data && { data })
+    })
+  }
+
+  editReportLog(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'put',
+      api: this.api,
+      request: this.APIAdresses.reportLog(data.questionId),
+      resolveCallback: (response) => {
+        return response.data // String Message
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      ...(data && { data })
+    })
+  }
+
+  getActivityLog(questionId, cache = { TTL: 1000 }) {
+    return this.sendRequest({
+      apiMethod: 'get',
+      api: this.api,
+      request: this.APIAdresses.log.base(questionId),
+      cacheKey: this.CacheList.log.base(questionId),
+      ...(cache && { cache }),
+      resolveCallback: (response) => {
+        return new LogList(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      }
+    })
+  }
+
+  addComment(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.log.addComment(data.logId),
+      resolveCallback: (response) => {
+        return new Log(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  setTags(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'put',
+      api: this.api,
+      request: this.APIAdresses.setTags(data.questionId),
+      resolveCallback: (response) => {
+        return response.data // String Message
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  printQuestions(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'post',
+      api: this.api,
+      request: this.APIAdresses.printQuestions,
+      resolveCallback: (response) => {
+        return response.data.data // String: file URL
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data
+    })
+  }
+
+  deletePhoto(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'delete',
+      api: this.api,
+      request: this.APIAdresses.photo(data.type, data.questionId),
+      resolveCallback: (response) => {
+        return new Question(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
+    })
+  }
+
+  updatePhoto(data = {}) {
+    return this.sendRequest({
+      apiMethod: 'put',
+      api: this.api,
+      request: this.APIAdresses.photo(data.type, data.questionId),
+      resolveCallback: (response) => {
+        return new Question(response.data.data)
+      },
+      rejectCallback: (error) => {
+        return error
+      },
+      data: data.data
     })
   }
 }

@@ -45,7 +45,6 @@
 
 <script>
 import { User } from 'src/models/User.js'
-import API_ADDRESS from 'src/api/Addresses.js'
 
 export default {
   name: 'Verify',
@@ -78,7 +77,7 @@ export default {
     verifyCode () {
       const that = this
       //  that.modelValue.loading = true
-      this.$alaaApiInstance.post(API_ADDRESS.user.mobile.verify, { code: this.typedCode })
+      this.$apiGateway.mobileVerify({ code: this.typedCode })
         .then(() => {
           // that.user.loading = false
           that.$emit('verified')
@@ -102,10 +101,10 @@ export default {
     sendCode () {
       const that = this
       // this.user.loading = true
-      this.$alaaApiInstance.get(API_ADDRESS.user.mobile.resend)
+      this.$apiGateway.user.mobileResend()
         .then((resp) => {
         //  that.user.loading = false
-          that.code = resp
+          that.code = resp.code
           that.startTimer()
           that.waiting = true
           that.showTimer = true

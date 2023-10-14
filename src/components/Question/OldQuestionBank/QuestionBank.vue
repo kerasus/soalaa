@@ -281,7 +281,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import QuestionCard from 'src/components/Question/OldQuestionBank/QuestionCard.vue'
 
 export default {
@@ -401,23 +400,24 @@ export default {
         this.nextPage = ''
         this.totalFilteredQuestions = '...'
       }
-      this.$axios.get(API_ADDRESS.question.indexMonta + this.nextPage, {
-        params: this.filterQuestions
+      this.$apiGateway.question.getIndexMonta({
+        page: this.nextPage,
+        ...this.filterQuestions
       })
-        .then(response => {
+        .then(questionsWithMeta => {
           this.loading = false
           if (clear) {
-            this.filteredQuestions = response.data.data
+            this.filteredQuestions = questionsWithMeta.questionList.list
           } else {
-            this.filteredQuestions = this.filteredQuestions.concat(response.data.data)
+            this.filteredQuestions = this.filteredQuestions.concat(questionsWithMeta.questionList.list)
           }
-          this.totalFilteredQuestions = response.data.meta.total
-          this.lastPage = response.data.meta.last_page
-          if (typeof response.data.links === 'undefined' || response.data.links.next === null) {
+          this.totalFilteredQuestions = questionsWithMeta.meta.total
+          this.lastPage = questionsWithMeta.meta.last_page
+          if (typeof questionsWithMeta.links === 'undefined' || questionsWithMeta.links.next === null) {
             this.nextPage = ''
             return
           }
-          this.nextPage = response.data.links.next.replace(response.data.meta.path, '')
+          this.nextPage = questionsWithMeta.links.next.replace(questionsWithMeta.meta.path, '')
         })
         .catch(() => {
           this.loading = false

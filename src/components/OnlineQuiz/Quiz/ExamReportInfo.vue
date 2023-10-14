@@ -80,7 +80,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Exam, ExamList } from 'src/models/Exam.js'
 
 export default {
@@ -100,9 +99,9 @@ export default {
     })
     this.examId = this.$route.params.id
     const that = this
-    this.$axios.get(API_ADDRESS.option.base + '?type=exam_type')
-      .then(function (response) {
-        const optionQuestion = response.data.data.find(item => (item.value === 'psychometric'))
+    this.$apiGateway.option.getUserOptions('exam_type')
+      .then(function (options) {
+        const optionQuestion = options.find(item => (item.value === 'psychometric'))
         if (!optionQuestion) {
           return this.$q.notify({
             message: ' API با مشکل مواجه شد!',
@@ -110,7 +109,7 @@ export default {
           })
         }
         that.optionQuestionId = optionQuestion.id
-        const itemstype = response.data.data.filter(data => data.type === 'question_type')
+        const itemstype = options.filter(data => data.type === 'question_type')
         that.items = itemstype
         that.loading = false
       })
@@ -132,9 +131,9 @@ export default {
     getExam (id) {
       this.$store.dispatch('loading/linearLoading', true)
       const that = this
-      this.$axios.get(API_ADDRESS.exam.base() + '/' + id)
-        .then(function (response) {
-          that.exam = new Exam(response.data.data)
+      this.$apiGateway.exam.showExam(id)
+        .then(function (exam) {
+          that.exam = new Exam(exam)
           that.examItem = that.exam
           that.$store.dispatch('loading/linearLoading', false)
           that.examTitle = that.exam.title
@@ -143,7 +142,10 @@ export default {
     },
     save () {
       const that = this
-      this.$axios.post(API_ADDRESS.exam.report.updateReportOptions(this.exam.id), this.exam.report_config)
+      this.$apiGateway.exam.updateReportOptions({
+        examId: this.exam.id,
+        data: this.exam.report_config
+      })
         .then(() => {
           that.$q.notify({
             message: 'اطلاعات آزمون شما ثبت شد.',

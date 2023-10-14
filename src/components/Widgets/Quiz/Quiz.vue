@@ -191,9 +191,9 @@ export default defineComponent({
         start_at_till: this.date,
         page: 1
       })
-        .then((response) => {
-          this.allExamsList = response.ExamList
-          this.pagination.exam = response.meta
+        .then((examListAndMeta) => {
+          this.allExamsList = examListAndMeta.examList
+          this.pagination.exam = examListAndMeta.meta
           this.allExamsList.loading = false
           this.filterData.to = this.date
         })
@@ -217,9 +217,9 @@ export default defineComponent({
         ...(end && { start_at_till: end }),
         ...(page && { page })
       })
-        .then((response) => {
-          this.allExamsList = response.examList
-          this.pagination.exam = response.meta
+        .then((examListAndMeta) => {
+          this.allExamsList = examListAndMeta.examList
+          this.pagination.exam = examListAndMeta.meta
           this.allExamsList.loading = false
           this.examPagination++
         }).catch(() => {
@@ -239,9 +239,9 @@ export default defineComponent({
           }
         }
       )
-        .then((response) => {
-          this.myExams = response.examList
-          this.pagination.myExam = response.meta
+        .then((examListAndMeta) => {
+          this.myExams = examListAndMeta.examList
+          this.pagination.myExam = examListAndMeta.meta
           this.myExams.loading = false
           this.myExamPagination++
         }).catch(() => {

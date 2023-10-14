@@ -155,7 +155,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 // import { axios } from 'src/boot/axios'
 export default {
   name: 'home-page',
@@ -186,9 +185,8 @@ export default {
     async initPageData() {
       this.loading = true
       try {
-        const response = await this.getData(API_ADDRESS.homePage.base)
-        this.pageData = response.data.data
-        // this.pageData = await this.call(API_ADDRESS.homePage.base)
+        const pageData = await this.$apiGateway.pages.getHomepageData()
+        this.pageData = pageData
         this.loading = false
       } catch (e) {
         this.loading = false

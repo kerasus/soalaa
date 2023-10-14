@@ -49,7 +49,7 @@
       </div>
 
       <div v-if="listConfig.questionSource || question.loading "
-           class="question-source col-xl-3 col-sm-4 col-xs-6">
+           class="question-source col-xl-3 col-sm-4 col-xs-12">
         <div v-if="question.loading"
              class="source-skeleton">
           <div class="source-text">
@@ -113,29 +113,8 @@
           </div>
         </div>
       </div>
-      <div v-if="(listConfig.questionInfo && question.tags.list.length > 0) || question.loading "
-           class="question-tags ellipsis col-sm-6 col-xs-10">
-        <div v-for="i in 3"
-             :key="i">
-          <q-skeleton v-if="question.loading"
-                      class="info-title q-mx-sm"
-                      type="text"
-                      width="80px" />
-        </div>
-        <div v-for="(item, index) in question.tags.list"
-             :key="index"
-             class="question-tag">
-          <div v-for="(ancestor,ancestorIndex) in item.ancestors"
-               :key="ancestorIndex"
-               class="ancestors flex flex-center">
-            <div v-if="ancestorIndex !== 0"
-                 class="tag-title ellipsis">{{ ancestor.title }}</div>
-            <div v-if="ancestorIndex !== 0"
-                 class="tag-circle" />
-          </div>
-          <div class="tag-title ellipsis">{{ item.title }}</div>
-        </div>
-      </div>
+      <question-tags :question="question"
+                     :list-config="listConfig" />
     </q-card-section>
 
     <q-card-section class="question-section "
@@ -174,10 +153,10 @@
         <div class="description-answer-body">
           <div class="description-answer"
                :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}">
-            <div v-if="this.question.choices.getSelected()"
+            <div v-if="question.choices.getSelected()"
                  class="question-answer-choice">
               گزینه
-              {{ this.question.choices.getSelected().getNumberTitle() }}
+              {{ question.choices.getSelected().getNumberTitle() }}
             </div>
 
             <div v-if="question.descriptive_answer"
@@ -195,9 +174,13 @@
             <div v-else
                  class="answer-video flex items-center justify-center"
                  :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}">
-              <content-video-player :content="content"
+              <content-video-player v-if="content.hasVideoSource()"
+                                    :content="content"
                                     :timePoint="questionTimePoint"
                                     :nextTimePoint="nextTimePoint" />
+              <div v-else>
+                ویدیویی وجود ندارد!
+              </div>
             </div>
 
             <div class="answer-video-title">
@@ -350,19 +333,21 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Content } from 'src/models/Content.js'
 import { Question } from 'src/models/Question.js'
 import VueKatex from 'src/components/VueKatex.vue'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import question from 'src/components/Question/QuestionItem/Question.vue'
+import QuestionTags from 'src/components/CommonComponents/Exam/Create/QuestionTags/QuestionTags.vue'
 
 export default {
   name: 'QuestionItem',
   components: {
     VueKatex,
     question,
+    QuestionTags,
     ContentVideoPlayer
   },
   props: {
@@ -639,7 +624,7 @@ export default {
         body: this.reportProblemDialog.description
       }
       try {
-        await this.$axios.post(API_ADDRESS.exam.user.report(this.question.id), params)
+        await APIGateway.exam.userReport({ questionId: this.question.id, params })
         this.$q.notify({
           type: 'positive',
           message: 'گزازش با موفقیت ثبت شد.'
@@ -662,9 +647,9 @@ export default {
         return
       }
       this.contentLoading = true
-      this.$alaaApiInstance.get(API_ADDRESS.content.get(this.question.content_id))
-        .then(res => {
-          this.content = new Content(res.data.data)
+      this.$apiGateway.content.show(this.question.content_id)
+        .then(content => {
+          this.content = new Content(content)
           this.getTimePoints()
           this.contentLoading = false
         })
@@ -799,7 +784,7 @@ export default {
       min-height: 36px;
 
       @media only screen and (max-width: 599px) {
-        order: 2;
+        //order: 2;
       }
       .source-content,
       .source-skeleton {
@@ -952,10 +937,10 @@ export default {
         width: 34px;
         height: var(--katexLineHeight);
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         @media only screen and (max-width: 1023px) {
           width: 26px;
-          left: -30px;
+          left: -16px;
         }
       }
 
@@ -979,7 +964,7 @@ export default {
     .question-icon-box{
       height: var(--katexLineHeight);
       display: flex;
-      align-items: center;
+      align-items: flex-start;
     }
 
     .question-icon {

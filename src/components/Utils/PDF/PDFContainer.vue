@@ -1,27 +1,31 @@
 <template>
   <div class="col-md-5 right-side">
     <div v-if="pageChunks.length === 0"
-         :style="{ width: pageSize.w + 'mm', paddingRight:parseInt(pdfConfig.rightMargin)+'mm', paddingLeft: parseInt(pdfConfig.leftMargin)+'mm' }"
-         class="prepare-question-section">
-      <pdf-question-field v-for="question in questions"
+         :key="prepareQuestionSection"
+         class="prepare-question-section"
+         :style="{ width: pageSize.w + 'px', paddingRight:parseInt(pdfConfig.rightMargin)+'mm', paddingLeft: parseInt(pdfConfig.leftMargin)+'mm' }">
+      <!--      :style="{ width: pageSize.w + 'mm', paddingRight:parseInt(pdfConfig.rightMargin)+'mm', paddingLeft: parseInt(pdfConfig.leftMargin)+'mm' }"-->
+      <pdf-question-field v-for="(question, questionIndex) in localQuestions"
                           :key="'question-item-'+question.id"
                           v-model:height="question.height"
                           :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'mm'}"
-                          :question="question"
-                          :order="question.order"
+                          :question="localQuestions[questionIndex]"
+                          :order="localQuestions[questionIndex].order"
                           :display-choices="mode === 'questionsNoAnswer'"
                           :display-statement="mode === 'questionsNoAnswer'"
                           :display-descriptive-answer="mode === 'onlyDescriptiveAnswers'"
                           :questionAndChoices="pdfConfig.questionAndChoices"
                           :betweenChoices="pdfConfig.betweenChoices"
-                          @questionLoaded="onQuestionLoaded(question)"
-                          @update:height="updateQuestionHeight($event, question)" />
+                          @questionLoaded="onQuestionLoaded(localQuestions[questionIndex])"
+                          @update:height="updateQuestionHeight($event, localQuestions[questionIndex])" />
     </div>
     <div v-else>
       <div v-if="mode === 'questionsNoAnswer'"
            class="questionsNoAnswer-mode">
         <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
                   :key="pageIndex"
+                  :ref="'pafPage' + pageIndex"
+                  :is3a="is3a"
                   :title="exam.title"
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
@@ -41,7 +45,7 @@
                                   display-choices
                                   display-statement
                                   :display-descriptive-answer="false"
-                                  @update:height="updateQuestionHeight($event, pageQuestion, pageQuestions.length === pageQuestionIndex + 1)" />
+                                  @update:height="updateQuestionHeight($event, pageQuestion)" />
             </div>
           </template>
         </pdf-page>
@@ -51,6 +55,8 @@
            class="onlyDescriptiveAnswers-mode">
         <pdf-page v-for="(pageQuestions, pageIndex) in pageChunks"
                   :key="pageIndex"
+                  :ref="'pafPage' + pageIndex"
+                  :is3a="is3a"
                   :title="exam.title"
                   :grade="exam.gradeTitle"
                   :major="exam.majorTitle"
@@ -69,7 +75,8 @@
                                   :display-statement="false"
                                   :questionAndChoices="pdfConfig.questionAndChoices"
                                   :betweenChoices="pdfConfig.betweenChoices"
-                                  display-descriptive-answer />
+                                  display-descriptive-answer
+                                  @update:height="updateQuestionHeight($event, pageQuestion)" />
             </div>
           </template>
         </pdf-page>
@@ -118,6 +125,12 @@ export default {
         }
       }
     },
+    pages: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
     questions: {
       type: Array,
       default () {
@@ -129,51 +142,84 @@ export default {
       default () {
         return 'questionsNoAnswer'
       }
+    },
+    is3a: {
+      type: Boolean,
+      default: false
     }
   },
-  emits: ['loaded'],
+  emits: ['loaded', 'update:pages'],
   data () {
     return {
       loading: false,
+      prepareQuestionSection: Date.now(),
+      localQuestions: [],
       pageChunks: [],
+      Key: Date.now(),
       pageSize: {
-        w: 724,
+        w: 720,
         h: 880
       },
       questionLoadFlag: false
     }
   },
   computed: {
+    allQuestionHeightCalculated () {
+      const hasNotHeight = this.localQuestions.find(question => !question.height)
+      return !hasNotHeight
+    },
     allQuestionLoaded () {
-      const notLoaded = this.questions.find(question => !question.loaded)
+      const notLoaded = this.localQuestions.find(question => !question.loaded)
       return !notLoaded
     }
   },
   watch: {
-    allQuestionLoaded () {
+    allQuestionLoaded (newValue) {
+      if (!newValue) {
+        return
+      }
+      if (!this.allQuestionHeightCalculated) {
+        return
+      }
       this.createPageChunks(this.pageSize.h)
+    },
+    allQuestionHeightCalculated (newValue) {
+      if (!newValue) {
+        return
+      }
+      this.$nextTick(() => {
+        this.createPageChunks(this.pageSize.h)
+      })
     }
   },
-  mounted() {
+  created() {
+    this.localQuestions = JSON.parse(JSON.stringify(this.questions))
+  },
+  beforeMount() {
+    this.pageChunks = []
+    this.localQuestions.forEach(question => {
+      question.loaded = false
+    })
+  },
+  mounted () {
     this.loading = true
     if (this.allQuestionLoaded) {
-      this.calcQuestionsHeight()
+      this.$nextTick(() => {
+        this.createPageChunks(this.pageSize.h)
+        this.loading = false
+      })
+    } else {
+      this.$nextTick(() => {
+        this.prepareQuestionSection = Date.now()
+      })
     }
-    this.loading = false
   },
   methods: {
-    calcQuestionsHeight () {
-      this.pageChunks = []
-      this.questions.forEach(question => {
-        question.loaded = false
-      })
-      this.loading = false
-    },
     createPageChunks (pageHeight) {
       let sumHeight = 0
       let pageQuestions = []
       const pages = []
-      this.questions.forEach((question, questionIndex) => {
+      this.localQuestions.forEach((question, questionIndex) => {
         if (pageHeight > (sumHeight + question.height)) {
           sumHeight += question.height
           pageQuestions.push(question)
@@ -192,10 +238,19 @@ export default {
         sumHeight = 0
         pageQuestions = []
       }
+
       this.pageChunks = pages
       this.$nextTick(() => {
+        this.updatePages(this.pageChunks)
         this.$emit('loaded', this.pageChunks)
       })
+    },
+    updatePages (pageChunks) {
+      const pagesArray = []
+      pageChunks.forEach((page, pageIndex) => {
+        pagesArray.push(this.$refs['pafPage' + pageIndex][0].$el)
+      })
+      this.$emit('update:pages', pagesArray)
     },
     onQuestionLoaded (question) {
       question.loaded = true
@@ -222,6 +277,7 @@ export default {
   }
 }
 </style>
+
 <style>
 @media print {
   .page-break {

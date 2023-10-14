@@ -6,39 +6,36 @@
            label="اصلاح فرمول سوال"
            class="default-detail-btn"
            @click="setModifiedValue(true)" />
-    <!--    <vue-tiptap-katex ref="tiptap"-->
-    <!--                      :loading="loading"-->
-    <!--                      :options="{-->
-    <!--                        bubbleMenu: false,-->
-    <!--                        floatingMenu: false,-->
-    <!--                        poem: true,-->
-    <!--                        reading: true,-->
-    <!--                        persianKeyboard: true,-->
-    <!--                        uploadServer: {-->
-    <!--                          url: getQuestionUploadURL,-->
-    <!--                          headers: {-->
-    <!--                            Authorization: getAuthorizationCode-->
-    <!--                          }-->
-    <!--                        },-->
-    <!--                        persianKeyboard: true,-->
-    <!--                        mathliveOptions: {-->
-    <!--                          locale: 'fa',-->
-    <!--                        }-->
-    <!--                      }"-->
-    <!--                      @update:modelValue="updateValue" />-->
+    <component :is="editorComponent"
+               ref="tiptap"
+               v-model:modelValue="initHtml"
+               :loading="loading"
+               :options="{
+                 bubbleMenu: false,
+                 floatingMenu: false,
+                 poem: true,
+                 reading: true,
+                 persianKeyboard: true,
+                 uploadServer: {
+                   url: getQuestionUploadURL,
+                   headers: {
+                     Authorization: getAuthorizationCode
+                   }
+                 },
+                 mathliveOptions: {
+                   locale: 'fa',
+                 }
+               }"
+               @update:modelValue="updateValue" />
   </div>
 </template>
 
 <script>
 import { Question } from 'src/models/Question.js'
-// import VueTiptapKatex from 'vue3-tiptap-katex/src/vue3-tiptap-katex.vue'
-import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap.js'
+import * as VueTiptapKatexAssist from 'vue-tiptap-katex-core/assist.js'
 
 export default {
   name: 'QuestionField',
-  components: {
-    // VueTiptapKatex
-  },
   inject: {
     question: {
       from: 'providedQuestion', // this is optional if using the same key for injection
@@ -57,6 +54,8 @@ export default {
   },
   data() {
     return {
+      editorComponent: null,
+      initHtml: '',
       value: 'What you see is <b>what</b> you get.',
       html: '',
       loading: false,
@@ -73,16 +72,24 @@ export default {
       return 'Bearer ' + this.$store.getters['Auth/accessToken']
     }
   },
-  created() {
+  mounted () {
     this.value = this.editorValue
+    this.initHtml = this.editorValue
     this.loading = true
+
+    import('vue3-tiptap-katex')
+      .then((vue3TiptapKatex) => {
+        this.editorComponent = vue3TiptapKatex.VueTiptapKatexNoSsr
+      })
+      .catch()
+
     this.getHtmlValueFromValueProp()
-  },
-  mounted() {
     this.$nextTick(() => {
-      this.isValueChangeAllowed = true
+      setTimeout(() => {
+        this.setModifiedValue()
+      }, 500)
     })
-    this.setModifiedValue()
+    this.isValueChangeAllowed = true
   },
   methods: {
     updateValue(value) {
@@ -101,7 +108,7 @@ export default {
     setModifiedContent(input, criticalModifyingMode) {
       this.value = this.getModifiedContent(input, criticalModifyingMode)
       this.modifiedContent = this.value
-      this.$refs.tiptap.setContent(this.value)
+      // this.$refs.tiptap.setContent(this.value)
     },
     getContent() {
       return this.$refs.tiptap.getContent()
@@ -178,7 +185,11 @@ export default {
       })
     },
     removeFirstAndLastBracket(input) {
-      const regexPatternForFormula = mixinConvertToTiptap.methods.getRegexPatternForFormula()
+      if (typeof window === 'undefined') {
+        return input
+      }
+      const regexPatternForFormula = VueTiptapKatexAssist.getRegexPatternForFormula()
+      // const regexPatternForFormula = this.getRegexPatternForFormula()
       const regex = /\\\[.*\\]/gms
       let string = input
       string = string.replace(regexPatternForFormula, (match) => {
@@ -259,9 +270,10 @@ export default {
 // ToDo: check this styles in scoped style tag
 
 </style>
+
 <style lang="scss">
 /*rtl:ignore*/
-@import "vue-tiptap-katex-core/css/base";
+@import "vue-tiptap-katex-core/css/base.scss";
 @import "src/css/katex-rtl-fix.scss";
 //rtl change bug fix
 [dir="rtl"] .katex {

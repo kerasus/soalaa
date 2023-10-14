@@ -1,5 +1,5 @@
 import APIRepository from '../classes/APIRepository'
-import { apiV2 } from 'src/boot/axios'
+import { alaaApiInstance } from 'src/boot/axios'
 import { Set } from 'src/models/Set'
 import { ContentList } from 'src/models/Content'
 
@@ -16,7 +16,7 @@ const urlAddress = {
 }
 export default class SetAPI extends APIRepository {
   constructor() {
-    super('set', apiV2, '/set', new Set(), urlAddress)
+    super('set', alaaApiInstance, '/set', new Set(), urlAddress)
     this.CacheList = {
       base: this.name + this.APIAdresses.base,
       show: (id) => this.name + this.APIAdresses.show(id),

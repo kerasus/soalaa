@@ -51,7 +51,7 @@
 
 <script>
 import { EntityIndex } from 'quasar-crud'
-// import API_ADDRESS from "src/api/Addresses";
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Index',
@@ -59,7 +59,7 @@ export default {
   data () {
     return {
       expanded: true,
-      // api: API_ADDRESS.user.base,
+      api: APIGateway.user.APIAdresses.base,
       tableKeys: {
         data: 'results',
         total: 'count',
