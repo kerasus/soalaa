@@ -231,7 +231,10 @@ export default {
           sumHeight += question.height
           pageQuestions.push(question)
         } else {
-          if (this.mode === 'onlyDescriptiveAnswers') {
+          if (pageQuestions.length > 0) {
+            pages.push(pageQuestions)
+            pageQuestions = []
+          } else if (this.mode === 'onlyDescriptiveAnswers') {
             lastQuestion.isExternalAnswer = true
             lastQuestion.chunk = []
             lastQuestion.height = 0
@@ -252,9 +255,6 @@ export default {
             question.descriptive_answer = newAnswer
             pageQuestions.push(question)
             pages.push(pageQuestions)
-          } else if (pageQuestions.length > 0) {
-            pages.push(pageQuestions)
-            pageQuestions = []
           }
           pageQuestions = []
           sumHeight = 0
