@@ -138,7 +138,7 @@ import FutureQuizzesCarousel from 'src/components/Quiz/FutureQuizzesCarousel'
 import QuizList from 'src/components/Quiz/QuizList'
 import API_ADDRESS from 'src/api/Addresses'
 import { ExamList } from 'src/models/Exam'
-import moment from 'moment'
+import moment from 'moment-jalaali'
 import Time from 'src/plugins/time.js'
 
 export default defineComponent({
@@ -265,8 +265,8 @@ export default defineComponent({
     },
     getUpcomingExams () {
       this.upcomingExams.loading = true
-      const today = moment(new Date(Time.now())).format('YYYY-MM-DD')
-      this.$axios.get(API_ADDRESS.exam.userExamList.upcomingExams(today))
+      const tomorrow = moment(new Date(Time.now())).add(1, 'days').format('YYYY-MM-DD')
+      this.$axios.get(API_ADDRESS.exam.userExamList.upcomingExams(tomorrow))
         .then((response) => {
           this.upcomingExams = new ExamList(response.data.data)
           this.upcomingExams.loading = false
