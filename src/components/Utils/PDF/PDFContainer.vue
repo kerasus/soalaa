@@ -236,10 +236,10 @@ export default {
             lastQuestion.chunk = []
             lastQuestion.height = 0
             lastQuestion.descriptive_answer = ''
-            const final = this.findIndex(pageHeight - sumHeight, question)
+            const finalIndex = this.findFinalIndex(pageHeight - sumHeight, question)
             let newAnswer = ''
             question.chunk.forEach((item, index) => {
-              if (index < final) {
+              if (index < finalIndex) {
                 newAnswer += item.answer
               } else {
                 question.height -= Number(item.height)
@@ -248,7 +248,7 @@ export default {
                 lastQuestion.descriptive_answer += item.answer
               }
             })
-            question.chunk.slice(0, final)
+            question.chunk.slice(0, finalIndex)
             question.descriptive_answer = newAnswer
             pageQuestions.push(question)
             pages.push(pageQuestions)
@@ -274,7 +274,7 @@ export default {
         this.$emit('loaded', this.pageChunks)
       })
     },
-    findIndex (remainHeight, question) {
+    findFinalIndex (remainHeight, question) {
       let lastIndex = 0
       question.chunk.forEach((item, index) => {
         remainHeight -= item.height
@@ -296,7 +296,7 @@ export default {
     },
     updateQuestionHeight(event, question, lastIndex) {
       question.height = event.event1
-      if (this.mode === 'onlyDescriptiveAnswers' && question.chunk.length === 0) {
+      if (this.mode === 'onlyDescriptiveAnswers') {
         question.descriptive_answer.match(/<p[^>]*>.*?<\/p>/gs).forEach((answer, index) => {
           question.chunk.push({ answer, height: event.event2.getElementsByTagName('p')[index].dataset.elementHeight })
         })
