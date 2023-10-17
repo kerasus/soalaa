@@ -7,7 +7,8 @@
             <div class="header flex justify-between">
               <div class="title">اطلاعات آزمون</div>
               <div class="disable-all"
-                   @click="deleteAll('info')">غیرفعال کردن همه</div>
+                   @click="deleteAll('info')">غیرفعال کردن همه
+              </div>
             </div>
           </div>
           <div class="col-12">
@@ -54,7 +55,8 @@
           <div class="header flex justify-between">
             <div class="title">فاصله گذاری</div>
             <div class="disable-all"
-                 @click="deleteAll('space')"> حذف همه</div>
+                 @click="deleteAll('space')"> حذف همه
+            </div>
           </div>
           <div class="sub-title">حاشیه اطراف کاغذ</div>
           <div class="l-t flex justify-between">
@@ -105,7 +107,8 @@
           <div class="header flex justify-between">
             <div class="title">شماره گذاری</div>
             <div class="disable-all"
-                 @click="deleteAll('paginate')"> حذف همه</div>
+                 @click="deleteAll('paginate')"> حذف همه
+            </div>
           </div>
           <!-- <div class="sub-title">
             شماره شروع سوالات
@@ -417,7 +420,7 @@ export default {
     // this.getExamInfo()
   },
   methods: {
-    onChangeTabpage () {
+    onChangeTabpage() {
     },
     deleteAll(type) {
       if (type === 'info') {
@@ -435,7 +438,7 @@ export default {
         this.pdfConfig.paginateStart = 0
       }
     },
-    onQuestionsLoaded (pages) {
+    onQuestionsLoaded(pages) {
       if (!pages) {
         this.questionPagesCount = 0
         return
@@ -443,7 +446,7 @@ export default {
       this.questionPagesCount = pages.length
       this.loading = false
     },
-    onDescriptiveAnswersLoaded (pages) {
+    onDescriptiveAnswersLoaded(pages) {
       if (!pages) {
         this.descriptiveAnswerPagesCount = 0
         return
@@ -457,7 +460,7 @@ export default {
     onChangePage(value) {
       // console.log('value :', value)
     },
-    getExamInfo () {
+    getExamInfo() {
       this.loading = true
       this.$axios.get(API_ADDRESS.exam.user.examInfo(this.$route.params.examId))
         .then((response) => {
@@ -484,6 +487,9 @@ export default {
         .run()
         .then(() => {
           this.questions = examData.exam.questions.list
+          this.questions.forEach(item => {
+            item.chunk = []
+          })
           this.examInfo.title = examData.exam.title
           this.examInfo.gradeTitle = examData.exam.grade?.title
           if (examData.exam.grade) {
@@ -507,10 +513,11 @@ export default {
           })
         })
     },
-    downloadKeyAnswerPdf () {
+    downloadKeyAnswerPdf() {
       this.download([this.$refs.keyAnswerPdf], this.downloadKeyAnswerPdfLoading)
       this.downloadKeyAnswerPdfLoading = true
-      this.downloadPdfPages([this.$refs.keyAnswerPdf], () => {})
+      this.downloadPdfPages([this.$refs.keyAnswerPdf], () => {
+      })
         .then(() => {
           this.downloadKeyAnswerPdfLoading = false
         })
@@ -518,7 +525,7 @@ export default {
           this.downloadKeyAnswerPdfLoading = false
         })
     },
-    downloadQuestionPages () {
+    downloadQuestionPages() {
       this.downloadQuestionPagesLoading = true
       const totalPages = this.questionPages.length
       this.downloadPdfPages(this.questionPages, (page, pageIndex) => {
@@ -604,13 +611,16 @@ export default {
   body * {
     visibility: hidden;
   }
+
   #pdf-container, #pdf-container * {
     visibility: visible;
   }
+
   #pdf-container {
     left: 0;
     top: 0;
   }
+
   .page-break {
     clear: both;
     page-break-before: always;
@@ -653,7 +663,7 @@ export default {
   .form {
     padding-right: 15px;
 
-    @media screen and (max-width:600px){
+    @media screen and (max-width: 600px) {
       padding-right: 0;
     }
 
@@ -673,6 +683,7 @@ export default {
         color: #FFFFFF;
       }
     }
+
     .value {
       width: 155px;
       padding: 9px 16px;
@@ -694,6 +705,7 @@ export default {
         min-width: 128px;
       }
     }
+
     .spaces {
       .sub-title {
         font-weight: 400;
@@ -752,13 +764,14 @@ export default {
         margin-top: 20px;
       }
 
-      .radio-btn{
+      .radio-btn {
         .q-radio {
           .q-radio__inner {
             .q-radio__icon-container {
               border-radius: 50%;
               color: white;
               background: var(--3a-Secondary);
+
               i {
                 font-size: 16px;
               }
@@ -781,7 +794,7 @@ export default {
     padding-left: 15px;
     overflow-x: auto;
 
-    @media screen and (max-width:600px){
+    @media screen and (max-width: 600px) {
       padding-left: 0;
     }
 
@@ -827,7 +840,7 @@ export default {
     }
 
     .tab-panel-style {
-     padding: 30px 0 0 0;
+      padding: 30px 0 0 0;
       border-top: 1px solid #E4E8EF;
 
       // .pdf-container{
@@ -846,15 +859,15 @@ export default {
       //   }
       // }
 
-      .pagination-box{
-          margin-top: 30px;
+      .pagination-box {
+        margin-top: 30px;
       }
 
-      .ifa{
+      .ifa {
         height: 500px;
       }
 
-      .question-info{
+      .question-info {
         font-style: normal;
         font-weight: 400;
         font-size: 14px;
@@ -862,49 +875,55 @@ export default {
         text-align: right;
         color: #434765;
         margin-bottom: 5px;
-        .question-count{
+
+        .question-count {
           margin-right: 33px;
         }
       }
 
-      .action-box{
+      .action-box {
         margin-bottom: 25px;
         width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
 
-        @media screen and (max-width:600px){
+        @media screen and (max-width: 600px) {
           flex-direction: column;
           align-items: flex-start;
         }
-        .description{
+
+        .description {
           font-weight: 400;
           font-size: 14px;
           line-height: 22px;
           text-align: right;
           color: #434765;
         }
+
         .action-btn {
-          @media screen and (max-width:600px){
+          @media screen and (max-width: 600px) {
             width: 100%;
           }
 
-          .cancel{
+          .cancel {
             margin-right: 12px;
             background: #F2F5F9;
 
-            @media screen and (max-width:600px){
+            @media screen and (max-width: 600px) {
               margin-right: 0;
               margin-bottom: 10px;
             }
-            :deep(.q-btn__content){
+
+            :deep(.q-btn__content) {
               color: #6D708B;
             }
           }
-          .btn{
+
+          .btn {
             width: 120px;
-            :deep(.q-btn__content){
+
+            :deep(.q-btn__content) {
               font-weight: 600;
               font-size: 14px;
               line-height: 22px;
@@ -916,7 +935,7 @@ export default {
               cursor: not-allowed;
             }
 
-            @media screen and (max-width:600px){
+            @media screen and (max-width: 600px) {
               width: 100%;
             }
           }
