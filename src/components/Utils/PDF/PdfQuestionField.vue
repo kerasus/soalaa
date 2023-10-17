@@ -44,10 +44,11 @@
       <div v-if="displayDescriptiveAnswer"
            class="question-descriptiveAnswer">
         <p :id="'question' + question.id"
+           ref="questionBody"
            class="question-body"
            :class="{ ltr: isRtl }">
           <vue-katex class="vue-katex"
-                     :input="getQuestionCompleteAnswerInput(question.order, question.descriptive_answer)"
+                     :input="getQuestionCompleteAnswerInput(question.order, question.descriptive_answer, question.isExternalAnswer)"
                      base64
                      @loaded="onDescriptiveAnswerLoaded" />
         </p>
@@ -133,7 +134,10 @@ export default {
       return this.question.choices.list ? this.question.choices.list : this.question.choices
     },
     getQuestionCompleteAnswerInput () {
-      return (order, input) => {
+      return (order, input, isExternal) => {
+        if (isExternal) {
+          return input
+        }
         return '<span class=' + 'number-descriptive' + '>' + order + ')' + ' (گزینه ' + this.getQuestionAnswerIndex + ')' + ' </span><br>' + input
       }
     },
@@ -173,7 +177,15 @@ export default {
       if (this.displayChoices) {
         this.checkChoiceColumns()
       }
-      this.$emit('update:height', this.$refs.questionField.clientHeight)
+      if (this.displayDescriptiveAnswer) {
+        this.$refs.questionBody.getElementsByTagName('p').forEach(item => {
+          item.dataset.elementHeight = item.clientHeight + 16
+        })
+      }
+      this.$emit('update:height', {
+        event1: this.$refs.questionField.clientHeight,
+        event2: this.$refs.questionBody
+      })
       this.$emit('questionLoaded', this.$refs.questionField.clientHeight)
     }
   },

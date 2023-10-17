@@ -90,16 +90,20 @@
 import PdfPage from './PDFPage.vue'
 import PdfQuestionField from 'src/components/Utils/PDF/PdfQuestionField.vue'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
+import { Question } from 'src/models/Question'
 // import QuestionField from 'components/Question/QuestionPage/QuestionField'
 
 export default {
   name: 'PDFContainer',
-  components: { PdfQuestionField, PdfPage },
+  components: {
+    PdfQuestionField,
+    PdfPage
+  },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion],
   props: {
     pdfConfig: {
       type: Object,
-      default () {
+      default() {
         return {
           hasTitle: true,
           hasMajor: true,
@@ -116,7 +120,7 @@ export default {
     },
     exam: {
       type: Object,
-      default () {
+      default() {
         return {
           title: '',
           gradeTitle: 'دوازدهم',
@@ -127,19 +131,19 @@ export default {
     },
     pages: {
       type: Array,
-      default () {
+      default() {
         return []
       }
     },
     questions: {
       type: Array,
-      default () {
+      default() {
         return []
       }
     },
     mode: {
       type: String,
-      default () {
+      default() {
         return 'questionsNoAnswer'
       }
     },
@@ -152,6 +156,8 @@ export default {
   data () {
     return {
       loading: false,
+      extraAnswer: [],
+      extraHeight: 0,
       prepareQuestionSection: Date.now(),
       localQuestions: [],
       pageChunks: [],
@@ -164,17 +170,17 @@ export default {
     }
   },
   computed: {
-    allQuestionHeightCalculated () {
+    allQuestionHeightCalculated() {
       const hasNotHeight = this.localQuestions.find(question => !question.height)
       return !hasNotHeight
     },
-    allQuestionLoaded () {
+    allQuestionLoaded() {
       const notLoaded = this.localQuestions.find(question => !question.loaded)
       return !notLoaded
     }
   },
   watch: {
-    allQuestionLoaded (newValue) {
+    allQuestionLoaded(newValue) {
       if (!newValue) {
         return
       }
@@ -183,12 +189,12 @@ export default {
       }
       this.createPageChunks(this.pageSize.h)
     },
-    allQuestionHeightCalculated (newValue) {
+    allQuestionHeightCalculated(newValue) {
       if (!newValue) {
         return
       }
       this.$nextTick(() => {
-        this.createPageChunks(this.pageSize.h)
+        // this.createPageChunks(this.pageSize.h)
       })
     }
   },
@@ -201,7 +207,7 @@ export default {
       question.loaded = false
     })
   },
-  mounted () {
+  mounted() {
     this.loading = true
     if (this.allQuestionLoaded) {
       this.$nextTick(() => {
@@ -215,22 +221,45 @@ export default {
     }
   },
   methods: {
-    createPageChunks (pageHeight) {
+    createPageChunks(pageHeight) {
       let sumHeight = 0
       let pageQuestions = []
       const pages = []
       this.localQuestions.forEach((question, questionIndex) => {
-        if (pageHeight > (sumHeight + question.height)) {
+        const lastQuestion = new Question(question)
+        if (pageHeight >= (sumHeight + question.height)) {
           sumHeight += question.height
           pageQuestions.push(question)
         } else {
-          if (pageQuestions.length > 0) {
+          if (this.mode === 'onlyDescriptiveAnswers') {
+            lastQuestion.isExternalAnswer = true
+            lastQuestion.chunk = []
+            lastQuestion.height = 0
+            lastQuestion.descriptive_answer = ''
+            const final = this.findIndex(pageHeight - sumHeight, question)
+            let newAnswer = ''
+            question.chunk.forEach((item, index) => {
+              if (index < final) {
+                newAnswer += item.answer
+              } else {
+                question.height -= Number(item.height)
+                lastQuestion.chunk.push(item)
+                lastQuestion.height += Number(item.height)
+                lastQuestion.descriptive_answer += item.answer
+              }
+            })
+            question.chunk.slice(0, final)
+            question.descriptive_answer = newAnswer
+            pageQuestions.push(question)
             pages.push(pageQuestions)
+          } else if (pageQuestions.length > 0) {
+            pages.push(pageQuestions)
+            pageQuestions = []
           }
-          sumHeight = 0
           pageQuestions = []
-          sumHeight += question.height
-          pageQuestions.push(question)
+          sumHeight = 0
+          sumHeight += lastQuestion.height
+          pageQuestions.push(lastQuestion)
         }
       })
       if (pageQuestions.length > 0) {
@@ -245,6 +274,16 @@ export default {
         this.$emit('loaded', this.pageChunks)
       })
     },
+    findIndex (remainHeight, question) {
+      let lastIndex = 0
+      question.chunk.forEach((item, index) => {
+        remainHeight -= item.height
+        if (remainHeight > 0) {
+          lastIndex = index
+        }
+      })
+      return lastIndex
+    },
     updatePages (pageChunks) {
       const pagesArray = []
       pageChunks.forEach((page, pageIndex) => {
@@ -256,7 +295,12 @@ export default {
       question.loaded = true
     },
     updateQuestionHeight(event, question, lastIndex) {
-      question.height = event
+      question.height = event.event1
+      if (this.mode === 'onlyDescriptiveAnswers' && question.chunk.length === 0) {
+        question.descriptive_answer.match(/<p[^>]*>.*?<\/p>/gs).forEach((answer, index) => {
+          question.chunk.push({ answer, height: event.event2.getElementsByTagName('p')[index].dataset.elementHeight })
+        })
+      }
       if (lastIndex) {
         this.createPageChunks(this.pageSize.h)
       }
@@ -269,9 +313,11 @@ export default {
 .prepare-question-section {
   margin: auto;
 }
+
 .loading {
   width: 100%;
   z-index: 9999;
+
   .pdf-skeleton {
     border-radius: 15px;
   }
