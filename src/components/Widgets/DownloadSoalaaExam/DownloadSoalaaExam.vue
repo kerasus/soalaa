@@ -598,48 +598,6 @@ export default {
             reject(error)
           })
       })
-    },
-    generatePDF(ref) {
-      // https://github.com/eKoopmans/html2pdf.js/issues/19#issuecomment-370983915
-      // https://github.com/eKoopmans/html2pdf.js/issues/19#issuecomment-608598010
-
-      this.downloadLoading = true
-      setTimeout(() => {
-        html2pdf()
-          .set({
-            margin: [0, 0, 0, 0],
-            image: {
-              type: 'jpeg',
-              quality: 0.6
-            },
-            filename: this.examInfo.title,
-            html2canvas: {
-              dpi: 1,
-              scale: 1,
-              letterRendering: true,
-              useCORS: true
-            },
-            jsPDF: {
-              unit: 'mm',
-              format: 'a4',
-              orientation: 'portrait'
-            }
-          })
-          .from(this.$refs[ref])
-          .save()
-          .thenExternal(() => {
-            this.downloadLoading = false
-          })
-          .catchExternal(() => {
-            this.downloadLoading = false
-          })
-          .error(() => {
-            this.downloadLoading = false
-          })
-          .thenCore(() => {
-            this.downloadLoading = false
-          })
-      }, 100)
     }
   }
 }
