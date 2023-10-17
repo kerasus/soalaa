@@ -232,6 +232,7 @@ export default {
           pageQuestions.push(question)
         } else {
           if (pageQuestions.length > 0) {
+            lastQuestion.height = question.height
             pages.push(pageQuestions)
             pageQuestions = []
           } else if (this.mode === 'onlyDescriptiveAnswers') {
