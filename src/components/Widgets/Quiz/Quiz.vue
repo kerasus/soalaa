@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import moment from 'moment-jalaali'
 import { defineComponent } from 'vue'
 import Time from 'src/plugins/time.js'
 import { ExamList } from 'src/models/Exam.js'
@@ -250,8 +250,8 @@ export default defineComponent({
     },
     getUpcomingExams () {
       this.upcomingExams.loading = true
-      const today = moment(new Date(Time.now())).format('YYYY-MM-DD')
-      this.$apiGateway.exam.upcomingExams(today)
+      const tomorrow = moment(new Date(Time.now())).add(1, 'days').format('YYYY-MM-DD')
+      this.$apiGateway.exam.upcomingExams(tomorrow)
         .then((examList) => {
           this.upcomingExams = examList
           this.upcomingExams.loading = false
