@@ -105,6 +105,7 @@ import Question from 'src/components/QuizEditor/Question.vue'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 import Pagination from 'src/components/Question/QuestionBank/Pagination.vue'
 import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'SubCategoryQuestions',
@@ -274,29 +275,30 @@ export default {
           }
         })
       }
-      try {
-        const response = await this.getQuizDataAndSubCategories(pageNumber)
-        if (response.data.data.length) {
-          this.paginationMeta = response.data.meta
-          // this.paginationKey++
-          this.firstQuestionOrder = response.data.data[0].order
-          this.loadSubCategories(response, reload, callback)
+
+      this.getQuizDataAndSubCategories(pageNumber)
+        .then(({ data, meta }) => {
+          if (data.list.length) {
+            this.paginationMeta = meta
+            // this.paginationKey++
+            this.firstQuestionOrder = data.list[0].order
+            this.loadSubCategories(data, reload, callback)
+            this.pageLoading = false
+          } else {
+            // this.$router.push({ name: 'Admin.Exam.Index' })
+            this.$q.notify({
+              type: 'negative',
+              message: 'دیتای مورد نظر یافت نشد'
+            })
+          }
           this.pageLoading = false
-        } else {
-          // this.$router.push({ name: 'Admin.Exam.Index' })
-          this.$q.notify({
-            type: 'negative',
-            message: 'دیتای مورد نظر یافت نشد'
-          })
-        }
-        this.pageLoading = false
-      } catch (e) {
-        console.error('err ', e)
-        this.pageLoading = false
-      }
+        })
+        .catch(() => {
+          this.pageLoading = false
+        })
     },
     getQuizDataAndSubCategories (pageNumber) {
-      return this.$apiGateway.exam.examQuestion({
+      return APIGateway.exam.examQuestion({
         examId: this.examId,
         pageNumber,
         data: {
@@ -306,7 +308,7 @@ export default {
     },
     loadSubCategories (quizResponse, reload, callback) {
       const that = this
-      this.$apiGateway.questionSubcategory.get()
+      APIGateway.questionSubcategory.get()
         .then((questSubCategoryList) => {
           if (reload) {
             that.$q.notify({
@@ -315,13 +317,16 @@ export default {
             })
           }
           that.quizData.sub_categories = new QuestSubcategoryList(questSubCategoryList)
-          const questions = quizResponse.data.data
+          const questions = quizResponse
           that.sortQuestions(questions)
           that.quizData.questions = new QuestionList(questions)
           this.questionListKey = Date.now()
           if (typeof callback === 'function') {
             callback(questSubCategoryList)
           }
+        })
+        .catch(() => {
+
         })
     },
     scrollTo (questionId, questionNumber) {

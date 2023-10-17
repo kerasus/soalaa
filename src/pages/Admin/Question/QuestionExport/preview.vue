@@ -206,15 +206,15 @@ export default {
         })
     },
     loadQuizDataAndSubCategories (reload = false) {
-      this.$apiGateway.exam.examQuestion({
+      APIGateway.exam.examQuestion({
         examId: this.$route.params.quizId,
         data: {
           sub_categories: [this.$route.params.lessonId]
         }
       })
-        .then((questionList) => {
-          if (questionList.list.length) {
-            this.loadSubCategories(questionList, reload)
+        .then(({ data }) => {
+          if (data.list.length) {
+            this.loadSubCategories(data, reload)
           } else {
             this.$router.push({ name: 'onlineQuiz.exams' })
           }

@@ -885,7 +885,10 @@ export default class ExamAPI extends APIRepository {
       api: this.api,
       request: this.APIAdresses.examQuestion(data.examId, data.page),
       resolveCallback: (response) => {
-        return new QuestionList(response.data.data)
+        return {
+          data: new QuestionList(response.data.data),
+          meta: response.data.meta
+        }
       },
       rejectCallback: (error) => {
         return error
