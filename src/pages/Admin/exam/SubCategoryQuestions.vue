@@ -99,13 +99,13 @@
 <script>
 import { copyToClipboard } from 'quasar'
 import { Exam } from 'src/models/Exam.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { QuestionList } from 'src/models/Question.js'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
 import Question from 'src/components/QuizEditor/Question.vue'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 import Pagination from 'src/components/Question/QuestionBank/Pagination.vue'
 import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
-import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'SubCategoryQuestions',

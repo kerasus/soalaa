@@ -97,6 +97,7 @@
 <script>
 import { Exam } from 'src/models/Exam.js'
 import VueKatex from 'src/components/VueKatex.vue'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { QuestionList } from 'src/models/Question.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 import { mixinAuth, mixinQuiz, mixinDrawer } from 'src/mixin/Mixins.js'
