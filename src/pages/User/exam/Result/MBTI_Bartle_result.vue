@@ -8,8 +8,10 @@
 <!--        <p class="exam-title">-->
 <!--          نتیجه تست شخصیت شناسی MBTI-->
 <!--        </p>-->
-<!--        <div class="char-info"-->
-<!--             :style="{ background: result.charBg }">-->
+<!--        <div-->
+<!--          class="char-info"-->
+<!--          :style="{ background: result.charBg }"-->
+<!--        >-->
 <!--          <div class="container full-height">-->
 <!--            <div class="row">-->
 <!--              <p class="char-type-title-mobile">-->
@@ -18,7 +20,8 @@
 <!--              </p>-->
 <!--            </div>-->
 <!--            <div class="full-height row safari-flex">-->
-<!--              <div class="col-lg-5 col-sm-6 col-12 text-box-order">-->
+<!--              <div class="col-lg-5 col-sm-6 col-12 text-box-order"-->
+<!--              >-->
 <!--                <div class="char-info-text full-height">-->
 <!--                  <p class="char-type-title">-->
 <!--                    {{ mbtiGroup }}-->
@@ -41,12 +44,17 @@
 <!--        </div>-->
 <!--        <div class="container">-->
 <!--          <div class="row justify-center mbti-detail-box-parent"-->
-<!--               dir="ltr">-->
-<!--            <div v-for="(item, index) in result.details"-->
-<!--                 :key="index"-->
-<!--                 class="col-md-6 col-12 mitra"-->
-<!--                 dir="rtl">-->
-<!--              <div class="mbti-detail-box">-->
+<!--               dir="ltr"-->
+<!--          >-->
+<!--            <div-->
+<!--              v-for="(item, index) in result.details"-->
+<!--              :key="index"-->
+<!--              class="col-md-6 col-12 mitra"-->
+<!--              dir="rtl"-->
+<!--            >-->
+<!--              <div-->
+<!--                class="mbti-detail-box"-->
+<!--              >-->
 <!--                <div :class="{ 'variable-box': true, active: item.values[0].percent > 50 }">-->
 <!--                  <div class="variable-label">-->
 <!--                    {{ item.values[0].label }}-->
@@ -66,11 +74,13 @@
 <!--                    {{ item.text }}-->
 <!--                  </p>-->
 <!--                  <div class="progress-bar">-->
-<!--                    <q-linear-progress :value="item.values[0].percent > 50 ? item.values[0].percent/100 :item.values[1].percent/100"-->
-<!--                                       rounded-->
-<!--                                       :reverse="item.values[1].percent > 50"-->
-<!--                                       track-color="white"-->
-<!--                                       size="12px" />-->
+<!--                    <q-linear-progress-->
+<!--                      :value="item.values[0].percent > 50 ? item.values[0].percent/100 :item.values[1].percent/100"-->
+<!--                      rounded-->
+<!--                      :reverse="item.values[1].percent > 50"-->
+<!--                      track-color="white"-->
+<!--                      size="12px"-->
+<!--                    />-->
 <!--                  </div>-->
 <!--                </div>-->
 <!--                <div :class="{ 'variable-box': true, active: item.values[1].percent > 50 }">-->
@@ -95,53 +105,67 @@
 <!--            <div class="banner">-->
 <!--              <q-img :src="mbtiBartleData.mbtiType[result.type].image2" />-->
 <!--            </div>-->
-<!--            <p class="full"-->
-<!--               v-html="mbtiBartleData.mbtiType[result.type].text" />-->
+<!--            <p-->
+<!--              class="full"-->
+<!--              v-html="mbtiBartleData.mbtiType[result.type].text"-->
+<!--            />-->
 <!--          </div>-->
 <!--        </div>-->
 <!--        <p class="exam-title">-->
 <!--          نتیجه تست Bartle-->
 <!--        </p>-->
-<!--        <div v-if="bartleResult[0]"-->
-<!--             class="char-results-bartle">-->
+<!--        <div-->
+<!--          v-if="bartleResult[0]"-->
+<!--          class="char-results-bartle"-->
+<!--        >-->
 <!--          <div class="container q-mb-lg">-->
 <!--            <div class="row main-result justify-center">-->
 <!--              <div class="column items-center">-->
 <!--                <p class="your-type">-->
 <!--                  تیپ شخصیتی شما-->
 <!--                </p>-->
-<!--                <q-circular-progress show-value-->
-<!--                                     reverse-->
-<!--                                     class="mt-4 bartle-item-circle"-->
-<!--                                     :value="bartleResult[0].value"-->
-<!--                                     color="red"-->
-<!--                                     size="240px"-->
-<!--                                     :thickness="0.1"-->
-<!--                                     track-color="grey-4">-->
+<!--                <q-circular-progress-->
+<!--                  show-value-->
+<!--                  reverse-->
+<!--                  class="mt-4 bartle-item-circle"-->
+<!--                  :value="bartleResult[0].value"-->
+<!--                  color="red"-->
+<!--                  size="240px"-->
+<!--                  :thickness="0.1"-->
+<!--                  track-color="grey-4"-->
+<!--                >-->
 <!--                  <div class="inside-bartle-result-circle  q-pa-lg">-->
 <!--                    <q-img :src="bartleResult[0].image" />-->
 <!--                  </div>-->
 <!--                </q-circular-progress>-->
-<!--                <p class="your-type-bartle">-->
+<!--                <p-->
+<!--                  class="your-type-bartle"-->
+<!--                >-->
 <!--                  {{ bartleResult[0].text }} {{ bartleResult[0].value }}%-->
 <!--                </p>-->
 <!--              </div>-->
 <!--            </div>-->
 <!--            <div class="row other-result q-mt-lg ">-->
 <!--              <div class="other-result-circular-progress-box">-->
-<!--                <div v-for="item in 3"-->
-<!--                     :key="item"-->
-<!--                     class="circular-progress-box">-->
-<!--                  <q-circular-progress show-value-->
-<!--                                       reverse-->
-<!--                                       :value="bartleResult[item].value"-->
-<!--                                       color="red"-->
-<!--                                       size="125px"-->
-<!--                                       :thickness="0.1"-->
-<!--                                       track-color="grey-4"-->
-<!--                                       @click="changeSelectedBartleItem(bartleResult[item])">-->
+<!--                <div-->
+<!--                  v-for="item in 3"-->
+<!--                  :key="item"-->
+<!--                  class="circular-progress-box"-->
+<!--                >-->
+<!--                  <q-circular-progress-->
+<!--                    show-value-->
+<!--                    reverse-->
+<!--                    :value="bartleResult[item].value"-->
+<!--                    color="red"-->
+<!--                    size="125px"-->
+<!--                    :thickness="0.1"-->
+<!--                    track-color="grey-4"-->
+<!--                    @click="changeSelectedBartleItem(bartleResult[item])"-->
+<!--                  >-->
 <!--                    <div class="inside-bartle-result-circle q-pa-md q-pa-xs-none">-->
-<!--                      <q-img :src="bartleResult[item].image" />-->
+<!--                      <q-img-->
+<!--                        :src="bartleResult[item].image"-->
+<!--                      />-->
 <!--                    </div>-->
 <!--                  </q-circular-progress>-->
 <!--                  <p class="other-type-bartle">-->
@@ -157,8 +181,10 @@
 <!--            <p class="type-header">-->
 <!--              ویژگی های شخصیت {{ selectedBartleItem.text }}-->
 <!--            </p>-->
-<!--            <p class="full"-->
-<!--               v-html="selectedBartleItem.fullText" />-->
+<!--            <p-->
+<!--              class="full"-->
+<!--              v-html="selectedBartleItem.fullText"-->
+<!--            />-->
 <!--          </div>-->
 <!--        </div>-->
 <!--      </div>-->
@@ -169,7 +195,7 @@
 <script>
 // import ExamData from 'src/assets/js/ExamData.js'
 // import mbtiData from 'src/assets/js/MBTI_Bartle_Data.js'
-// import { mixinDrawer, mixinQuiz } from 'src/mixin/Mixins.js'
+// import { mixinDrawer, mixinQuiz } from 'src/mixin/Mixins'
 //
 // export default {
 //   name: 'MBTIBartle',
@@ -292,7 +318,7 @@
 //     this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
 //     window.currentExamQuestions = null
 //     window.currentExamQuestionIndexes = null
-//     this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+//     // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
 //
 //     // const quizId = this.$route.params.exam_id
 //     // if (!this.userQuizListData || !this.userQuizListData[quizId] || !this.currentExamQuestions) {
@@ -337,9 +363,10 @@
 //           })
 //         })
 //         this.generateAnswer(questions)
+//         // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
 //       })
 //       .catch(() => {
-//         that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+//         // that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
 //         that.goToExamList()
 //         // that.$notify({
 //         //   group: 'notifs',
@@ -361,7 +388,7 @@
 //       finalAnswer.charBg = this.getMbtiBg(finalAnswer.type)
 //       finalAnswer.bartle = this.getBartleResults(answer)
 //       this.result = finalAnswer
-//       this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+//       // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
 //
 //       this.$store.commit('Exam/setPsychometricAnswer', finalAnswer)
 //     },

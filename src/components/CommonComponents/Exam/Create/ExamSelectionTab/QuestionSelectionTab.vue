@@ -34,41 +34,47 @@
 
     <div class="col-md-9 col-xs-12">
       <div class="question-list">
-        <div class="question-bank-toolbar"
-             :hidden="$q.screen.lt.md">
-          <questions-general-info v-model:check-box="checkBox"
-                                  :loading="questionLoading"
-                                  :check-box="checkBox"
-                                  :selectedQuestions="providedExam.questions.list"
-                                  @remove="RemoveChoice"
-                                  @nextTab="goToNextStep"
-                                  @lastTab="goToPrevStep"
-                                  @deselectAllQuestions="deleteAllQuestions"
-                                  @selectAllQuestions="selectAllQuestions" />
-        </div>
-        <div class="col-12 filter-card-container">
-          <q-card class="filter-card"
-                  flat>
-            <q-card-section class="search-section">
-              <q-input v-model="searchInput"
-                       filled
-                       class="bg-white search-input"
-                       placeholder="جستجو در سوالات...">
-                <template v-slot:append>
-                  <q-btn flat
-                         rounded
-                         icon="isax:search-normal-1"
-                         class="search"
-                         @click="filterByStatement" />
-                </template>
-              </q-input>
-            </q-card-section>
+        <sticky-both-sides class="sticky-component"
+                           :topGap="72"
+                           :max-width="1024">
+          <div class="question-bank-toolbar"
+               :hidden="$q.screen.lt.md">
+            <questions-general-info v-model:check-box="checkBox"
+                                    :loading="questionLoading"
+                                    :check-box="checkBox"
+                                    :selectedQuestions="providedExam.questions.list"
+                                    @remove="RemoveChoice"
+                                    @nextTab="goToNextStep"
+                                    @lastTab="goToPrevStep"
+                                    @deselectAllQuestions="deleteAllQuestions"
+                                    @selectAllQuestions="selectAllQuestions" />
+            <q-linear-progress v-if="selectionLoading"
+                               query
+                               color="primary" />
+          </div>
+          <div class="col-12 filter-card-container">
+            <q-card class="filter-card"
+                    flat>
+              <q-card-section class="search-section">
+                <q-input v-model="searchInput"
+                         filled
+                         class="bg-white search-input"
+                         placeholder="جستجو در سوالات...">
+                  <template v-slot:append>
+                    <q-btn flat
+                           rounded
+                           icon="isax:search-normal-1"
+                           class="search"
+                           @click="filterByStatement" />
+                  </template>
+                </q-input>
+              </q-card-section>
 
-            <q-card-section class="filter-section q-mb-md">
-              <q-btn icon="isax:setting-4"
-                     class="filter-btn q-mt-md"
-                     flat
-                     @click="showFilters = true" />
+              <q-card-section class="filter-section q-mb-md">
+                <q-btn icon="isax:setting-4"
+                       class="filter-btn q-mt-md"
+                       flat
+                       @click="showFilters = true" />
               <!--              <q-select-->
               <!--                v-model="searchSelector"-->
               <!--                filled-->
@@ -80,28 +86,32 @@
               <!--                @update:model-value="sortByCreatedAt"-->
               <!--              >-->
               <!--              </q-select>-->
-            </q-card-section>
-          </q-card>
-        </div>
-        <div class="question-bank-content">
-          <question-item v-if="questions.loading"
-                         :question="loadingQuestion" />
-          <template v-else>
-            <question-item v-for="question in questions.list"
-                           :key="question.id"
-                           :question="question"
-                           :selected="isQuestionSelected(question.id)"
-                           :report-options="reportTypeList"
-                           pageStrategy="question-bank"
-                           @checkSelect="onClickedCheckQuestionBtn" />
-          </template>
-        </div>
+              </q-card-section>
+            </q-card>
+          </div>
 
-        <div class="pagination">
-          <pagination :meta="paginationMeta"
-                      :disable="disablePagination"
-                      @updateCurrentPage="updatePage" />
-        </div>
+          <!--        </sticky-both-sides>-->
+
+          <div class="question-bank-content">
+            <question-item v-if="questions.loading"
+                           :question="loadingQuestion" />
+            <template v-else>
+              <question-item v-for="question in questions.list"
+                             :key="question.id"
+                             :question="question"
+                             :selected="isQuestionSelected(question.id)"
+                             :report-options="reportTypeList"
+                             pageStrategy="question-bank"
+                             @checkSelect="onClickedCheckQuestionBtn" />
+            </template>
+          </div>
+
+          <div class="pagination">
+            <pagination :meta="paginationMeta"
+                        :disable="disablePagination"
+                        @updateCurrentPage="updatePage" />
+          </div>
+        </sticky-both-sides>
       </div>
     </div>
 
@@ -188,7 +198,14 @@ import QuestionsGeneralInfo from 'src/components/CommonComponents/Exam/Create/Ex
 
 export default {
   name: 'QuestionSelectionTab',
-  components: { StickyBothSides, TreeModal, QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
+  components: {
+    StickyBothSides,
+    TreeModal,
+    QuestionsGeneralInfo,
+    QuestionFilter,
+    QuestionItem,
+    pagination
+  },
   mixins: [
     mixinTree
   ],
@@ -270,6 +287,7 @@ export default {
       selectedQuestions: [],
       questionId: [],
       loadingQuestion: new Question(),
+      selectionLoading: false,
       questions: new QuestionList(),
       disablePagination: false,
       paginationMeta: {
@@ -368,10 +386,10 @@ export default {
       this.$refs.filter2.deleteAllFilters()
     },
     showLoading() {
-      this.$q.loading.show()
+      this.selectionLoading = true
     },
     hideLoading() {
-      this.$q.loading.hide()
+      this.selectionLoading = false
     },
     getSelectedOfQuestion(question) {
       return !!(this.providedExam.questions.list.find(item => item.id === question.id))
@@ -722,6 +740,7 @@ export default {
 
 .filter-card-container {
   padding-bottom: 24px;
+  background: #F4F6F9;
   @media only screen and (max-width: 1439px) {
     padding-bottom: 20px;
   }
@@ -852,8 +871,14 @@ export default {
       margin-left: 0;
     }
 
+    .sticky-component {
+      position: relative;
+      z-index: 9;
+    }
+
     .question-bank-toolbar {
       padding-bottom: 24px;
+      background: #F4F6F9;
       @media only screen and (max-width: 600px) {
         padding-bottom: 0;
       }

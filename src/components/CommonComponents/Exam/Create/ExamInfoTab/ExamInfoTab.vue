@@ -109,7 +109,7 @@ export default {
           responseKey: 'data.question_type',
           label: 'نوع سوالات',
           placeholder: ' ',
-          value: 'کنکور',
+          value: 'تستی - 4 گزینه ای',
           options: [],
           behavior: 'menu',
           disable: true,
@@ -333,6 +333,9 @@ export default {
   .exam-info-form {
     &:deep(.q-btn-group) {
       width: 190px;
+      .q-btn {
+        width: 100px;
+      }
     }
     // &:deep(.q-field__native.q-placeholder) {
     //   color: #6D708B;

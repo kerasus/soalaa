@@ -56,8 +56,10 @@
           <div class="subscription-status-test-tab-title">
             محدودیت دانلود PDF
           </div>
-          <highcharts class="flex flex-center"
-                      :options="chartOptionsPdf" />
+          <q-no-ssr>
+            <highcharts class="flex flex-center"
+                        :options="chartOptionsPdf" />
+          </q-no-ssr>
           <div class="subscription-status-test-tab-info">
             <span><q-icon name="circle"
                           color="warning"
@@ -210,7 +212,7 @@ export default {
       this.updateChartsOptions()
     }
   },
-  created() {
+  mounted () {
     this.updateChartsOptions()
   },
   methods: {

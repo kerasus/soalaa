@@ -97,6 +97,7 @@
 <script>
 import { Exam } from 'src/models/Exam.js'
 import VueKatex from 'src/components/VueKatex.vue'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { QuestionList } from 'src/models/Question.js'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 import { mixinAuth, mixinQuiz, mixinDrawer } from 'src/mixin/Mixins.js'
@@ -206,15 +207,15 @@ export default {
         })
     },
     loadQuizDataAndSubCategories (reload = false) {
-      this.$apiGateway.exam.examQuestion({
+      APIGateway.exam.examQuestion({
         examId: this.$route.params.quizId,
         data: {
           sub_categories: [this.$route.params.lessonId]
         }
       })
-        .then((questionList) => {
-          if (questionList.list.length) {
-            this.loadSubCategories(questionList, reload)
+        .then(({ data }) => {
+          if (data.list.length) {
+            this.loadSubCategories(data, reload)
           } else {
             this.$router.push({ name: 'onlineQuiz.exams' })
           }
@@ -263,7 +264,7 @@ export default {
 
 <style lang="scss">
 /*rtl:ignore*/
-@import "vue-tiptap-katex-core/css/base";
+//@import "vue-tiptap-katex-core/css/base.scss";
 @import "src/css/katex-rtl-fix.scss";
 //rtl change bug fix
 [dir="rtl"] {

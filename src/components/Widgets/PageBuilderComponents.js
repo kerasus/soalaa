@@ -9,6 +9,7 @@ export default {
   ContentItem: defineAsyncComponent(() => import('src/components/Widgets/ContentItem/ContentItem.vue')),
   Dashboard: defineAsyncComponent(() => import('src/components/Widgets/Dashboard/Dashboard.vue')),
   DownloadExam: defineAsyncComponent(() => import('src/components/Widgets/DownloadExam/DownloadExam.vue')),
+  DownloadSoalaaExam: defineAsyncComponent(() => import('src/components/Widgets/DownloadSoalaaExam/DownloadSoalaaExam.vue')),
   ExpansionPanel: defineAsyncComponent(() => import('src/components/Widgets/ExpansionPanel/ExpansionPanel.vue')),
   FeatureBox: defineAsyncComponent(() => import('src/components/Widgets/FeatureBox/FeatureBox.vue')),
   Footer: defineAsyncComponent(() => import('src/components/Widgets/Footer/Footer.vue')),

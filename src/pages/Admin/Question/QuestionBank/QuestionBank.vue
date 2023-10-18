@@ -196,7 +196,7 @@ export default {
       }
     }
   },
-  created() {
+  mounted () {
     this.getQuestionData()
     this.getFilterOptions()
   },
@@ -357,8 +357,7 @@ export default {
           this.questions.loading = false
           this.showSearchResultReport = true
         })
-        .catch(function (error) {
-          console.error(error)
+        .catch(() => {
           this.loadingQuestion.loading = false
           this.questions.loading = false
         })

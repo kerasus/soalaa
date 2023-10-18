@@ -792,6 +792,13 @@ export default {
   }
 }
 
+:deep(.highcharts-container) {
+  .title-1,
+  .title-2 {
+    font-family: yekanbakh, "Arial", "-apple-system", "Helvetica Neue", Helvetica, sans-serif;
+  }
+}
+
 @media only screen and (max-width: 1919px) {
   .main-container {
     padding-left: 0;

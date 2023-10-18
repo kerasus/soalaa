@@ -1,4 +1,4 @@
-import { auth, Permissions } from './middleware/middleware.js'
+import { Authenticated, Permissions } from './middleware/middleware.js'
 function getEntityCrudRouteObject (path, baseRouteName, componentPath, breadcrumbs, permissions) {
   const AllNeededRoutes = [
     { mode: 'Index', path: '' },
@@ -61,7 +61,7 @@ const entityCrudRouteConfigs = [
   {
     path: 'QuestionTarget',
     baseRouteName: 'Admin.QuestionTarget',
-    componentPath: 'pages/Admin/QuestionTarget',
+    componentPath: 'pages/Admin/QuestionTarget.vue',
     breadcrumbs: { title: 'اهداف سوال' },
     permissions: ['optionIndex', 'optionStore', 'optionShow', 'optionUpdate']
 
@@ -81,7 +81,8 @@ const allEntityCrudRouteObjects = [
 const routes = [
   {
     path: '/',
-    component: () => import('src/layouts/MainLayout.vue'),
+    name: 'Home',
+    component: () => import('layouts/MainLayout.vue'),
     breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     layoutConfig: {
       layoutHeaderVisible: true,
@@ -210,7 +211,7 @@ const routes = [
           layoutLeftSideBarType: 'panel'
         },
         meta: {
-          middlewares: [auth]
+          middlewares: [Authenticated]
         }
       },
       {
@@ -241,7 +242,7 @@ const routes = [
           layoutLeftDrawerOverlay: true
         },
         meta: {
-          middlewares: [auth]
+          middlewares: [Authenticated]
         },
         children: [
           {
@@ -315,7 +316,12 @@ const routes = [
               {
                 name: 'User.Exam.Download',
                 path: '',
-                component: () => import('src/pages/User/exam/Download/Download.vue')
+                component: () => import('pages/User/exam/Download/Download.vue')
+              },
+              {
+                name: 'User.SoalaaExam.Download',
+                path: ':user_exam_id',
+                component: () => import('src/pages/User/exam/Download/SoalaaExamDownload.vue')
               }
             ]
           },
@@ -359,14 +365,14 @@ const routes = [
         component: () => import('src/pages/component.vue'),
         breadcrumbs: { title: 'component' },
         meta: {
-          middlewares: [auth]
+          middlewares: [Authenticated]
         }
       },
       {
         path: 'admin',
         component: () => import('src/layouts/AdminLayout.vue'),
         meta: {
-          middlewares: [auth]
+          middlewares: [Authenticated]
         },
         layoutConfig: {
           layoutHeaderVisible: true,
@@ -381,7 +387,7 @@ const routes = [
             breadcrumbs: { title: 'آزمون', loading: false },
             meta: {
               middlewares: [
-                auth
+                Authenticated
               ]
             },
             children: [
@@ -483,7 +489,7 @@ const routes = [
                 name: 'mbtiBartle.result',
                 component: () => import('src/pages/User/exam/Result/MBTI_Bartle_result.vue'),
                 meta: {
-                  middlewares: [auth]
+                  middlewares: [Authenticated]
                 }
               }
             ]
@@ -494,14 +500,14 @@ const routes = [
             breadcrumbs: { title: 'سوالات', loading: false },
             component: () => import('src/layouts/bareLayout.vue'),
             meta: {
-              middlewares: [auth]
+              middlewares: [Authenticated]
             },
             children: [
               {
                 path: '',
                 name: 'Admin.Question.Bank',
                 component: () => import('src/pages/Admin/Question/QuestionBank/QuestionBank.vue'),
-                meta: { middlewares: [auth] }
+                meta: { middlewares: [Authenticated] }
               },
               {
                 path: 'list',
@@ -509,7 +515,7 @@ const routes = [
                 component: () => (import('src/pages/Admin/Question/QuestionFactory.vue')),
                 meta: {
                   middlewares: [
-                    auth,
+                    Authenticated,
                     Permissions.hasPermission('questionIndex')
                   ]
                 }
@@ -520,7 +526,7 @@ const routes = [
                 component: () => import('src/layouts/QuestionLayouts/CreateQuestionLayout.vue'),
                 meta: {
                   middlewares: [
-                    auth,
+                    Authenticated,
                     Permissions.hasPermission('examquestionAttach')
                   ]
                 },
@@ -576,10 +582,10 @@ const routes = [
                 breadcrumbs: { title: 'مشاهده سوال', loading: false },
                 component: () => (import('src/pages/Admin/Question/ShowQuestion.vue')),
                 meta: {
-                  middlewares: [
-                    auth,
-                    Permissions.hasPermission('questionShow')
-                  ]
+                  // middlewares: [
+                  //   Authenticated,
+                  //   Permissions.hasPermission('questionShow')
+                  // ]
                 }
               },
               {
@@ -588,9 +594,9 @@ const routes = [
                 breadcrumbs: { title: 'ویرایش سوال', loading: false },
                 component: () => (import('src/pages/Admin/Question/EditQuestion.vue')),
                 meta: {
-                  middlewares: [
-                    Permissions.hasPermission('questionUpdate')
-                  ]
+                  // middlewares: [
+                  //   Permissions.hasPermission('questionUpdate')
+                  // ]
                 }
               }
             ]
@@ -600,7 +606,7 @@ const routes = [
             path: 'category',
             component: () => import('src/layouts/bareLayout.vue'),
             meta: {
-              middlewares: [auth]
+              middlewares: [Authenticated]
             },
             children: [
               {
@@ -642,7 +648,7 @@ const routes = [
             path: '/subCategory',
             component: () => import('src/layouts/bareLayout.vue'),
             meta: {
-              middlewares: [auth]
+              middlewares: [Authenticated]
             },
             children: [
               { name: 'Admin.subCategory.Index', path: '', component: () => import('src/pages/Admin/subCategory/Index.vue') },
@@ -671,7 +677,7 @@ const routes = [
             path: 'ticket',
             component: () => import('src/layouts/bareLayout.vue'),
             meta: {
-              middlewares: [auth]
+              middlewares: [Authenticated]
             },
             name: 'Admin.Ticket',
             children: [
@@ -700,7 +706,7 @@ const routes = [
         path: '/onlineQuiz/results/:exam_id/:user_exam_id',
         name: 'user.exam.results',
         component: () => import('src/pages/User/exam/Result.vue'),
-        middleware: [auth]
+        middleware: [Authenticated]
       },
       {
         path: '/onlineQuiz/alaaView/:quizId/:questNumber',
@@ -713,7 +719,7 @@ const routes = [
           layoutLeftSideBarType: 'quiz'
         },
         meta: {
-          middlewares: [auth]
+          middlewares: [Authenticated]
         }
       },
       {
@@ -727,7 +733,7 @@ const routes = [
           layoutLeftSideBarType: 'quiz'
         },
         meta: {
-          middlewares: [auth]
+          middlewares: [Authenticated]
         }
       },
       {
@@ -741,7 +747,7 @@ const routes = [
           layoutLeftSideBarType: 'quiz'
         },
         meta: {
-          middlewares: [auth]
+          middlewares: [Authenticated]
         }
       },
       {
@@ -755,7 +761,7 @@ const routes = [
           layoutLeftSideBarType: 'quiz'
         },
         meta: {
-          middlewares: [auth]
+          middlewares: [Authenticated]
         }
       },
       {
@@ -769,7 +775,7 @@ const routes = [
           layoutLeftSideBarType: 'quiz'
         },
         meta: {
-          middlewares: [auth]
+          middlewares: [Authenticated]
         }
       },
       {
@@ -783,7 +789,7 @@ const routes = [
           layoutLeftSideBarType: 'quiz'
         },
         meta: {
-          middlewares: [auth]
+          middlewares: [Authenticated]
         }
       },
       {
@@ -797,7 +803,7 @@ const routes = [
           layoutLeftSideBarType: 'quiz'
         },
         meta: {
-          middlewares: [auth]
+          middlewares: [Authenticated]
         }
       },
       {
@@ -841,7 +847,7 @@ const routes = [
     name: 'debug',
     component: () => import('src/pages/Auth/test.vue'),
     meta: {
-      middlewares: [auth]
+      middlewares: [Authenticated]
     }
   },
   {
@@ -849,7 +855,7 @@ const routes = [
     name: 'onlineQuiz.mbtiBartle',
     component: () => import('src/pages/User/exam/participate/MBTI_Bartle.vue'),
     meta: {
-      middlewares: [auth]
+      middlewares: [Authenticated]
     }
   },
   {
@@ -857,7 +863,7 @@ const routes = [
     name: 'user-info',
     component: () => import('src/pages/User/UserInfoForm.vue'),
     meta: {
-      middlewares: [auth]
+      middlewares: [Authenticated]
     }
   },
   // Always leave this as last one,

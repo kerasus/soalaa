@@ -146,13 +146,15 @@ export default class OptionAPI extends APIRepository {
       apiMethod: 'get',
       api: this.api,
       request: this.APIAdresses.base,
+      data: this.getNormalizedSendData({
+        type: null // String
+      }, data),
       resolveCallback: (response) => {
-        return response.data.data // Array of Strings
+        return new OptionList(response.data.data)
       },
       rejectCallback: (error) => {
         return error
-      },
-      data
+      }
     })
   }
 }

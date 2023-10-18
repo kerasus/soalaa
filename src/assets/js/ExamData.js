@@ -328,14 +328,14 @@ class ExamData {
           // ToDo: attention on user_exam_id and exam_id
           that.exam.id = Assistant.getId(userExamData.exam_id)
           that.exam.title = Assistant.getId(userExamData.exam_title)
-          that.exam.user_exam_id = Assistant.getId(userExamData.id)
+          // that.exam.user_exam_id = Assistant.getId(userExamData.id)
           that.exam.created_at = userExamData.created_at
-          that.exam.accept_at = userExamData.accept_at
-          that.exam.questions_file_url = userExamData.questions_file_url
+          // that.exam.accept_at = userExamData.accept_at
+          // that.exam.questions_file_url = userExamData.questions_file_url
           that.exam.categories = new QuestCategoryList(userExamData.categories)
           that.exam.sub_categories = new QuestSubcategoryList(userExamData.sub_categories)
           that.exam.holding_config = userExamData.holding_config
-          that.userExamData = userExamData
+          // that.userExamData = userExamData
           resolve({
             data: userExamData,
             type: 'resolve'

@@ -2,7 +2,8 @@
   <div class="filter-options-section">
     <q-card class="custom-card q-pa-none">
       <q-card-section class="q-pa-none">
-        <q-expansion-item expand-icon="isax:arrow-down-1">
+        <q-expansion-item group="somegroup"
+                          expand-icon="isax:arrow-down-1">
           <template v-slot:header>
             <div class="filter-option-container">
               <div class="filter-option-title">
@@ -48,6 +49,9 @@ export default {
   updated () {
   },
   methods: {
+    closeExpansion() {
+
+    }
   }
 }
 </script>

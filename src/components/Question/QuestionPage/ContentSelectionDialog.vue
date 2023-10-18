@@ -136,6 +136,9 @@ export default {
   },
   created() {
     this.$axios.defaults.baseURL = this.$alaaApiInstance.defaults.baseURL
+  },
+  beforeUnmount() {
+    this.$axios.defaults.baseURL = this.$appApiInstance.defaults.baseURL
   }
 }
 </script>

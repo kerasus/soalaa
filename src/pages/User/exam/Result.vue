@@ -45,9 +45,7 @@
                 <q-tab name="KeyAnswers"
                        label="پاسخبرگ کلیدی" />
                 <q-tab name="descriptiveAnswers"
-                       label="پاسخ نامه تشریحی" />
-                <q-tab name="videos"
-                       label="تحلیل ویدیویی" />
+                       label="پاسخ تشریحی و ویدویی" />
               </q-tabs>
             </div>
           </div>
@@ -62,11 +60,11 @@
           <q-tab-panel name="result">
             <personal-result :report="report" />
           </q-tab-panel>
-          <q-tab-panel name="rank">
-            <takhmin-rotbe :report="report" />
-          </q-tab-panel>
           <q-tab-panel name="newRank">
             <new-takhmin-rotbe :report="report" />
+          </q-tab-panel>
+          <q-tab-panel name="rank">
+            <takhmin-rotbe :report="report" />
           </q-tab-panel>
           <q-tab-panel name="lessons">
             <statistic-result :report="report" />
@@ -75,47 +73,51 @@
             <bubble-sheet :info="{ type: 'pasokh-nameh' }"
                           delay-time="0" />
           </q-tab-panel>
-          <q-tab-panel name="descriptiveAnswers">
-            <q-card flat>
-              <p class="tab-title pt-5 pr-5">
-                دانلود پاسخنامه تشریحی
-              </p>
-              <div v-if="report">
-                <div v-for="(item, index) in report.exams_booklet"
-                     :key="index"
-                     class="row download-row">
-                  <div class="col col-12 col-sm-6">
-                    <div v-if="item.descriptive_answers_url"
-                         class="download-box">
-                      <p class="download-title">
-                        دانلود پاسخنامه تشریحی {{
-                          item.title
-                        }}
-                      </p>
-                      <q-btn outline
-                             :href="item.descriptive_answers_url"
-                             target="_blank">
-                        دانلود فایل PDF
-                        <q-icon name="mdi-download" />
-                      </q-btn>
+          <q-tab-panel name="descriptiveAnswers"
+                       class="descriptiveAnswers-tab-panel">
+            <q-card flat
+                    class="q-mb-md">
+              <q-card-section>
+                <p class="tab-title pt-5 pr-5">
+                  دانلود پاسخنامه تشریحی
+                </p>
+                <div v-if="report">
+                  <div v-for="(item, index) in report.exams_booklet"
+                       :key="index"
+                       class="row download-row">
+                    <div class="col col-12 col-sm-6">
+                      <div v-if="item.descriptive_answers_url"
+                           class="download-box">
+                        <p class="download-title">
+                          دانلود پاسخنامه تشریحی {{
+                            item.title
+                          }}
+                        </p>
+                        <q-btn outline
+                               :href="item.descriptive_answers_url"
+                               target="_blank">
+                          دانلود فایل PDF
+                          <q-icon name="mdi-download" />
+                        </q-btn>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col col-12 col-sm-6">
-                    <div v-if="item.questions_url"
-                         class="download-box">
-                      <p class="download-title">
-                        دانلود سوالات {{ item.title }}
-                      </p>
-                      <q-btn outline
-                             :href="item.questions_url"
-                             target="_blank">
-                        دانلود فایل PDF
-                        <q-icon name="mdi-download" />
-                      </q-btn>
+                    <div class="col col-12 col-sm-6">
+                      <div v-if="item.questions_url"
+                           class="download-box">
+                        <p class="download-title">
+                          دانلود سوالات {{ item.title }}
+                        </p>
+                        <q-btn outline
+                               :href="item.questions_url"
+                               target="_blank">
+                          دانلود فایل PDF
+                          <q-icon name="mdi-download" />
+                        </q-btn>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </q-card-section>
             </q-card>
             <div class="questionsList">
               <q-virtual-scroll ref="scroller"
@@ -123,23 +125,18 @@
                                 :items="questions"
                                 :virtual-scroll-item-size="450"
                                 :virtual-scroll-slice-size="5">
-                <template v-slot="{ item, index }">
-                  <q-item :key="index"
-                          class="question-field"
-                          dense>
-                    <q-item-section>
-                      <question-item :source="item"
-                                     :questions-column="$refs.questionsColumn"
-                                     :show-with-answer="true" />
-                    </q-item-section>
-                  </q-item>
+                <template v-slot="{ item }">
+
+                  <question-item :key="item.id"
+                                 :question="item"
+                                 :page-strategy="'lesson-detail'"
+                                 :show-question-number="true"
+                                 :report-options="reportTypeList"
+                                 class="question-field" />
+
                 </template>
               </q-virtual-scroll>
             </div>
-          </q-tab-panel>
-          <q-tab-panel name="videos"
-                       class="video-tab">
-            <tabs-of-lessons :report="report" />
           </q-tab-panel>
         </q-tab-panels>
       </div>
@@ -148,20 +145,30 @@
 </template>
 
 <script>
+import API_ADDRESS from 'src/api/Addresses.js'
+import { AlaaSet } from 'src/models/AlaaSet.js'
+import Assistant from 'src/plugins/assistant.js'
 import ExamData from 'src/assets/js/ExamData.js'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info.vue'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe.vue'
 import NewTakhminRotbe from 'src/components/OnlineQuiz/Quiz/NewTakhminRotbe.vue'
-import QuestionItem from 'src/components/OnlineQuiz/Quiz/question/questionField.vue'
+import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet.vue'
 import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult.vue'
 import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult.vue'
-import TabsOfLessons from 'src/components/OnlineQuiz/Quiz/videoPlayerSection/tabsOfLessons.vue'
 
 export default {
   name: 'Result',
-  components: { NewTakhminRotbe, TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult, QuestionItem },
+  components: {
+    Info,
+    BubbleSheet,
+    TakhminRotbe,
+    QuestionItem,
+    PersonalResult,
+    NewTakhminRotbe,
+    StatisticResult
+  },
   mixins: [
     mixinAuth,
     mixinQuiz
@@ -176,11 +183,13 @@ export default {
     tab2: null,
     questions: [],
     innerTab: 'innerMails',
-    splitterModel: 20
+    splitterModel: 20,
+    reportTypeList: []
   }),
   mounted () {
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
+    this.getReportOptions()
     this.getUserData()
     this.getExamData()
   },
@@ -268,15 +277,49 @@ export default {
         item.percent = parseFloat(item.percent).toFixed(1)
         item.taraaz = parseFloat(item.taraaz).toFixed(0)
       })
+    },
+    getContent (contentId, subCategoryIndex) {
+      const that = this
+      this.$axios.get(API_ADDRESS.content.base + '/' + contentId)
+        .then((response) => {
+          that.currentVideo = response.data.data
+          that.initVideoJs(that.currentVideo.file.video, subCategoryIndex)
+        })
+        .catch((error) => {
+          Assistant.reportErrors(error)
+          that.currentVideo = null
+        })
+    },
+    getAlaaSet (setId, subCategoryIndex) {
+      const that = this
+      this.alaaSet.loading = true
+      this.alaaSet.show(setId)
+        .then((response) => {
+          that.alaaSet.loading = false
+          that.alaaSet = new AlaaSet(response.data.data)
+          that.alaaVideos = that.alaaSet.contents.getVideos()
+          that.getContent(that.alaaVideos[0].id, subCategoryIndex)
+        })
+        .catch(() => {
+          that.alaaSet.loading = false
+        })
+    },
+    getReportOptions() {
+      this.$axios.get(API_ADDRESS.exam.user.reportType)
+        .then((response) => {
+          this.reportTypeList = response.data.data
+        })
     }
   }
 }
 </script>
 
 <style lang="scss">
+
 .exam-results {
   margin-top: 16px;
   padding: 12px;
+
   .default-col-padding{
     padding: 12px 0px;
   }
@@ -310,6 +353,18 @@ export default {
         color: #666;
         padding-top: 10px;
         padding-bottom: 10px;
+      }
+    }
+  }
+
+  .q-tab-panels {
+    .q-panel {
+      height: max-content;
+      background: #F4F6F9;
+      .q-tab-panel {
+        @media only screen and (max-width: 1024px) {
+          padding: 0;
+        }
       }
     }
   }
@@ -388,7 +443,7 @@ export default {
 }
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
 .theme--light.v-tabs-items {
   background-color: transparent;
 }
@@ -411,8 +466,17 @@ export default {
 }
 
 .questionsList {
+  background: #F4F6F9;
   max-height: 100vh;
   height: 100vh;
   min-height: 100vh;
+  padding-top: 40px;
+
+  :deep(.konkoor-view-scroll ) {
+    background: #F4F6F9;
+    .question-card {
+      margin-bottom: 16px;
+    }
+  }
 }
 </style>

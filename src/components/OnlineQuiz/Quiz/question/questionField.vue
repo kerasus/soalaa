@@ -92,11 +92,58 @@
           </q-item-section>
         </q-item>
       </q-list>
-      <div v-if="source.descriptive_answer">
-        <p class="answer-body"
-           :class="{ ltr: isRtl }">
-          <vue-katex :input="'پاسخ تشریحی) ' + source.descriptive_answer" />
-        </p>
+      <q-btn flat
+             role="presentation"
+             class="see-answer-button no-padding"
+             :label="descriptiveAnswerExpanded ? '' : ''"
+             :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
+             @click="toggleContent">
+        <span v-if="descriptiveAnswerExpanded">
+          پاسخ تشریحی
+        <!--            بستن پاسخ تشریحی-->
+        </span>
+        <span v-else>
+          <!--            <span :hidden="$q.screen.lt.sm">نمایش </span>-->
+          <span>
+            پاسخ تشریحی
+          </span>
+        </span>
+      </q-btn>
+      <div v-if="source.descriptive_answer"
+           class="answer-section">
+        <q-expansion-item v-model="descriptiveAnswerExpanded"
+                          header-class="hideExpansionHeader">
+          <div class="description-answer-body">
+            <div class="description-answer">
+              <div v-if="source.choices.getSelected()"
+                   class="question-answer-choice">
+                گزینه
+                {{ source.choices.getSelected().getNumberTitle() }}
+              </div>
+
+              <div v-if="source.descriptive_answer"
+                   class="question-answer-description">
+                <vue-katex :input="source.descriptive_answer? source.descriptive_answer :'پاسخ تشریحی ندارد.'" />
+              </div>
+            </div>
+
+            <div class="description-answer-video">
+              <div class="answer-video flex items-center justify-center">
+                <content-video-player v-if="content.hasVideoSource()"
+                                      :content="content"
+                                      :timePoint="questionTimePoint"
+                                      :nextTimePoint="nextTimePoint" />
+                <div v-else>
+                  ویدیویی وجود ندارد!
+                </div>
+              </div>
+
+              <div class="answer-video-title">
+                پاسخنامه ویدیویی
+              </div>
+            </div>
+          </div>
+        </q-expansion-item>
       </div>
     </div>
   </div>
@@ -104,13 +151,18 @@
 
 <script>
 import 'src/assets/scss/markdownKatex.scss'
+import API_ADDRESS from 'src/api/Addresses.js'
+import { Content } from 'src/models/Content.js'
 import VueKatex from 'src/components/VueKatex.vue'
+import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
+import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'questionField',
   components: {
-    VueKatex
+    VueKatex,
+    ContentVideoPlayer
   },
   mixins: [mixinQuiz, mixinUserActionOnQuestion],
   props: {
@@ -139,7 +191,11 @@ export default {
   data () {
     return {
       isRtl: false,
+      descriptiveAnswerExpanded: false,
       observer: null,
+      content: new Content(),
+      questionTimePoint: new ContentTimePoint(),
+      nextTimePoint: new ContentTimePoint(),
       choiceNumber: {
         0: '1) ',
         1: '2) ',
@@ -273,6 +329,34 @@ export default {
         }
       })
       return largestChoice
+    },
+    toggleContent() {
+      this.descriptiveAnswerExpanded = !this.descriptiveAnswerExpanded
+      if (this.descriptiveAnswerExpanded) {
+        this.getQuestionContent()
+      }
+    },
+    getQuestionContent() {
+      if (!this.source.content_id) {
+        return
+      }
+      this.contentLoading = true
+      this.$axios.get(API_ADDRESS.content.get(this.source.content_id))
+        .then(res => {
+          this.content = new Content(res.data.data)
+          this.getTimePoints()
+          this.contentLoading = false
+        })
+        .catch(() => {
+          this.contentLoading = false
+        })
+    },
+    getTimePoints() {
+      this.questionTimePoint = this.content.timepoints.list.find(x => x.id === this.question.time_point_id)
+      const timePointList = this.content.timepoints.list
+      timePointList.sort((a, b) => (a.time > b.time ? 1 : -1))
+      const timePointIndex = timePointList.findIndex(x => x.id === this.question.time_point_id) + 1
+      this.nextTimePoint = timePointList[timePointIndex]
     }
   }
 }
@@ -343,6 +427,124 @@ export default {
             display: none;
           }
         }
+      }
+    }
+    .answer-section {
+      padding: 0;
+
+      :deep(.hideExpansionHeader) {
+        display: none;
+      }
+
+      .description-answer-body {
+        display: flex;
+
+        margin-bottom: 24px;
+
+        @media only screen and (max-width: 1023px) {
+          margin-bottom: 20px;
+        }
+
+        @media only screen and (max-width: 599px) {
+          margin-bottom: 28px;
+          margin-right: 0;
+          flex-direction: column;
+        }
+
+        .description-answer {
+          padding: 20px 24px;
+          // max-width: 620px;
+          width: 100%;
+          background: #F6F9FF;
+          border-radius: 16px;
+          margin-right: 30px;
+
+          @media only screen and (max-width: 1023px) {
+            padding: 16px;
+            margin-right: 24px;
+          }
+
+          @media only screen and (max-width: 599px) {
+            max-width: 100%;
+            margin-bottom: 20px;
+
+          }
+
+          .question-answer-choice {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 12px;
+            width: 77px;
+            height: 24px;
+            background: #4CAF50;
+            border-radius: 12px;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 22px;
+            letter-spacing: -0.03em;
+            color: #FFFFFF;
+            }
+
+          .question-answer-description {
+
+          }
+        }
+
+        .description-answer-video {
+          .answer-video {
+            width: 316px;
+            height: 176px;
+            background: #f6f9ff;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            .soon{
+              width: 86px;
+              height: 32px;
+              background: #FFB74D;
+              border-radius: 18px;
+              color: white;
+            }
+
+            @media only screen and (max-width: 1439px) {
+              width: 230px;
+              height: 130px;
+            }
+
+            @media only screen and (max-width: 1023px) {
+              width: 238px;
+            }
+
+            @media only screen and (max-width: 599px) {
+              width: 100%;
+              height: 158px;
+            }
+          }
+
+          .answer-video-title {
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 22px;
+            letter-spacing: -0.03em;
+            color: #434765;
+          }
+        }
+
+        &:deep(.q-item__section) {
+          &:deep(.q-expansion-item__toggle-icon--rotated) {
+            display: none !important;
+          }
+        }
+      }
+
+      &:deep(.q-focus-helper) {
+        background: none !important;
+      }
+
+      &:deep(.q-item .q-item__section .q-icon) {
+        display: none;
       }
     }
   }

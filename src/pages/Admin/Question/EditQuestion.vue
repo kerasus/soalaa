@@ -98,12 +98,12 @@
 
 <script>
 // detachUnsavedExam
-/* eslint-disable no-var */
 import moment from 'moment-jalaali'
 import mixinTree from 'src/mixin/Tree.js'
 import { EntityIndex } from 'quasar-crud'
 import { ExamList } from 'src/models/Exam.js'
 import { Question } from 'src/models/Question.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { computed, defineAsyncComponent } from 'vue'
 import { QuestCategoryList } from 'src/models/QuestCategory.js'
 import { QuestionStatusList } from 'src/models/QuestionStatus.js'
@@ -218,7 +218,10 @@ export default {
       deep: true
     }
   },
-  created () {
+  created() {
+    this.logIndexApi = APIGateway.question.APIAdresses.reportLog(this.$route.params.question_id)
+  },
+  mounted () {
     this.getQuestionReportStatuses()
     this.enableLoading()
     this.getQuestionTypeForTypeId(this.question)
@@ -233,7 +236,6 @@ export default {
     this.loadMajorList()
     this.setlogIndexInputsValues()
   },
-  mounted () {},
   methods: {
     updateQuestionReportStatus (reportId, newStatus) {
       this.questionReportStatusesLoading = true
@@ -258,7 +260,7 @@ export default {
     },
     getQuestionReportStatuses() {
       this.questionReportStatusesLoading = true
-      this.$apiGateway.question.reportStatuses()
+      APIGateway.question.getReportStatuses()
         .then(reportStatuses => {
           this.questionReportStatusesLoading = false
           this.questionReportStatuses = reportStatuses
@@ -399,6 +401,7 @@ export default {
   padding-top: 30px;
 }
 </style>
+
 <style lang="scss">
 // USED IN MANY OTHER COMPONENTS
 .default-questions-card {
