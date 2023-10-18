@@ -5866,7 +5866,6 @@ quasar-app-extension-q-page-builder@^0.1.71:
   integrity sha512-4GsPgAQEsPfvzEORC/40Tkcd8XLhtlzhp+3sJaXqT624EeGLG0Ek1F0nG/QNOdzZqZZorc+iI0YukrUPA2YNzQ==
   dependencies:
     quasar-ui-q-page-builder "^0.1.71"
-
 quasar-crud@^0.3.55:
   version "0.3.55"
   resolved "https://registry.yarnpkg.com/quasar-crud/-/quasar-crud-0.3.55.tgz#b6fe74eb8538fe671344622a1fa1cf62d942c8a2"

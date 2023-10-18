@@ -374,6 +374,7 @@ const AdminActionOnQuestion = {
       const that = this
       // const list = this.questionStatuses.list
       // that.questionStatuses
+
       return APIGateway.question.getQuestionStatuses()
         .then(function (questionStatusList) {
           that.questionStatuses = new QuestionStatusList(questionStatusList)
@@ -484,6 +485,7 @@ const AdminActionOnQuestion = {
       })
         .then((majorList) => {
           this.majorList = majorList.list
+
         })
         .catch(() => {})
     },
