@@ -18,7 +18,7 @@ const APIAdresses = {
   userExamsList: '/examAndUser',
   takhminRotbe: '/exam-report/rankSimulator',
   analysisVideo: '/exam-question/attach/sub-category',
-  konkurTakhminRotbe (konkurId) {
+  konkurTakhminRotbe(konkurId) {
     return '/exam-report/rank/' + konkurId
   },
   userExamList: {
@@ -32,16 +32,16 @@ const APIAdresses = {
     }
 
   },
-  getAnalysisVideo (examId) {
+  getAnalysisVideo(examId) {
     return '/exam-question/videos/' + examId
   },
-  examReportIndex (type, next = '') {
+  examReportIndex(type, next = '') {
     return '/exam-report/index/' + type + next
   },
-  pdf (examId) {
+  pdf(examId) {
     return '/exam-question/booklet-file/' + examId
   },
-  base (pageNumber) {
+  base(pageNumber) {
     if (pageNumber) {
       return '/exam?with_pagination=1&page=' + pageNumber
     } else {
@@ -49,27 +49,27 @@ const APIAdresses = {
     }
   },
   // todo : temporary, MUST BE DELETED
-  baseProduction (pageNumber) {
+  baseProduction(pageNumber) {
     if (pageNumber) {
       return '/exam?with_pagination=1&page=' + pageNumber
     } else {
       return '/exam'
     }
   },
-  generateExamFile (examId, withAnswer) {
+  generateExamFile(examId, withAnswer) {
     const baseFileRoute = '/exam-question/file/' + examId
     return withAnswer ? (baseFileRoute + '/with_answer') : baseFileRoute
   },
-  getAnswerOfUser (userExamId) {
+  getAnswerOfUser(userExamId) {
     return '/temp-exam/answer/' + userExamId
   },
-  getAllAnswerOfUser (userExamId) {
+  getAllAnswerOfUser(userExamId) {
     return '/temp-exam/allAnswer/' + userExamId
   },
-  getSubCategoriesWithPermissions (examId) {
+  getSubCategoriesWithPermissions(examId) {
     return '/exam-question/show/sub-categories/' + examId
   },
-  getAnswerOfUserWithCorrect (userExamId) {
+  getAnswerOfUserWithCorrect(userExamId) {
     return '/temp-exam/answer/' + userExamId + '/withCorrect'
   },
   registerExam: '/user/registerExam',
@@ -80,20 +80,20 @@ const APIAdresses = {
     sample: (examId) => '/exam-user/' + examId,
     personal: (examId) => '/exam-user/personal/' + examId
   },
-  examQuestion (quizId, page = 1) {
+  examQuestion(quizId, page = 1) {
     return '/exam-question/attach/show/' + quizId + '?page=' + page
   },
   report: {
-    getReport (userExamId) {
+    getReport(userExamId) {
       return '/exam-report/show?user_exam_id=' + userExamId
     },
     adminGetReport: '/exam-report/show/admin',
     takhminRotbeExamList: '/exam-report/rank',
-    updateReportOptions (examId) {
+    updateReportOptions(examId) {
       return '/exam/config/' + examId
     }
   },
-  examBookletUpload (examId) {
+  examBookletUpload(examId) {
     return '/exam-question/booklet-file/' + examId
   },
   detachCategory: (examId, categoryId) => '/exam/detach/category/' + examId + '/' + categoryId,
@@ -123,10 +123,10 @@ const APIAdresses = {
     questionsWithAnswer: (examId) => `/exam-question/user/attach/show/${examId}`
   },
   subGroups: {
-    base (examId) {
+    base(examId) {
       return '/exam-question/zirgorooh/' + examId
     },
-    all () {
+    all() {
       return '/option?with_pagination=0&type=zirgorooh_type'
     }
   }
@@ -539,7 +539,7 @@ export default class ExamAPI extends APIRepository {
 
   userDraftExamUpdate(data = {}) {
     return this.sendRequest({
-      apiMethod: 'post',
+      apiMethod: 'put',
       api: this.api,
       request: this.APIAdresses.user.draftExam.update(data.examId),
       resolveCallback: (response) => {

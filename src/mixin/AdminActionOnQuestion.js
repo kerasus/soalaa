@@ -12,7 +12,7 @@ import mixinTree from 'src/mixin/Tree.js'
 import { APIGateway } from 'src/api/APIGateway'
 const AdminActionOnQuestion = {
   mixins: [mixinTree],
-  data () {
+  data() {
     return {
       typeIdLoading: false,
       optionQuestionId: '',
@@ -33,7 +33,7 @@ const AdminActionOnQuestion = {
     }
   },
   computed: {
-    loadingState () {
+    loadingState() {
       return !!(this.totalLoading || this.examList.loading || this.subCategoriesList.loading || this.questionStatuses.loading)
     },
     totalLoading() {
@@ -41,14 +41,14 @@ const AdminActionOnQuestion = {
     }
   },
   methods: {
-    getPageReady () {
+    getPageReady() {
       this.getQuestionType(this.question)
       this.loadExamList()
       this.loadCategories()
       this.loadSubcategories()
       this.getQuestionStatus()
     },
-    createQuestion (question) {
+    createQuestion(question) {
       // const that = this
       // Todo : for createImg
       // question.apiResource.sendType = 'form-data'
@@ -71,7 +71,7 @@ const AdminActionOnQuestion = {
           // this.$store.dispatch('loading/overlayLoading', false)
         })
     },
-    getQuestionById (questionId, question, types) {
+    getQuestionById(questionId, question, types) {
       const that = this
       APIGateway.question.getQuestion({
         questionId
@@ -85,7 +85,7 @@ const AdminActionOnQuestion = {
           that.disableLoading()
         })
     },
-    updateStatementPhoto () {
+    updateStatementPhoto() {
       if (this.question.added_statement_photos && this.question.added_statement_photos.length) {
         const formData = new FormData()
         this.question.added_statement_photos.forEach((item, key) => {
@@ -102,7 +102,7 @@ const AdminActionOnQuestion = {
           })
       }
     },
-    updateAnswerPhoto () {
+    updateAnswerPhoto() {
       if (this.question.added_answer_photos && this.question.added_answer_photos.length) {
         const formData = new FormData()
         this.question.added_answer_photos.forEach((item, key) => {
@@ -119,13 +119,13 @@ const AdminActionOnQuestion = {
           })
       }
     },
-    setQuestionIdentifierData () {
+    setQuestionIdentifierData() {
       if (!this.$refs.questionIdentifier) {
         return
       }
       this.$refs.questionIdentifier.getIdentifierData(false)
     },
-    updateQuestion (question) {
+    updateQuestion(question) {
       const that = this
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
       // this.$refs.questionIdentifier.getIdentifierData(false)
@@ -148,7 +148,7 @@ const AdminActionOnQuestion = {
           that.redirectToShowPage(exam.id)
         })
     },
-    changeStatus (newStatus) {
+    changeStatus(newStatus) {
       const that = this
       APIGateway.question.changeQuestionStatus({
         questionId: this.$route.params.question_id,
@@ -162,7 +162,7 @@ const AdminActionOnQuestion = {
           that.getLogs(that.question.id)
         })
     },
-    createQuestionImage (question) {
+    createQuestionImage(question) {
       const formData = new FormData()
       // formData.append('status_id', statusId);
       question.statement_photo.forEach((item, key) => {
@@ -219,24 +219,24 @@ const AdminActionOnQuestion = {
           this.redirectToShowPage(question.id)
         })
     },
-    setAllQuestionLoadings () {
+    setAllQuestionLoadings() {
       this.question.loading = true
       // this.question.type.loading = true
       // Todo : Temp
       // this.question.exams.loading = true
     },
-    disableAllQuestionLoadings () {
+    disableAllQuestionLoadings() {
       this.question.loading = false
     },
-    redirectToShowPage (questionId) {
+    redirectToShowPage(questionId) {
       const routeData = this.$router.resolve({ name: 'Admin.Question.Show', params: { question_id: questionId } })
       window.open(routeData.href, '_blank')
       window.location.reload()
     },
-    redirectToEditPage () {
+    redirectToEditPage() {
       this.$router.push({ name: 'Admin.Question.Edit', params: { question_id: this.$route.params.question_id } })
     },
-    addComment (eventData) {
+    addComment(eventData) {
       APIGateway.exam.addComment({
         logId: eventData.logId,
         data: { comment: eventData.text }
@@ -252,7 +252,7 @@ const AdminActionOnQuestion = {
           }
         })
     },
-    async getQuestionType (question) {
+    async getQuestionType(question) {
       const that = this
       this.typeIdLoading = true
       try {
@@ -286,7 +286,7 @@ const AdminActionOnQuestion = {
     //     type: 'question_type'
     //   })
     // },
-    async getQuestionTypeForTypeId (question) {
+    async getQuestionTypeForTypeId(question) {
       this.typeIdLoading = true
       try {
         const optionList = await APIGateway.option.getOptions({
@@ -310,16 +310,16 @@ const AdminActionOnQuestion = {
         })
       }
     },
-    readRouteFullPath () {
+    readRouteFullPath() {
       return this.$route.fullPath
     },
-    readRouteName () {
+    readRouteName() {
       return this.$route.name
     },
-    doesHaveQuestionMode () {
+    doesHaveQuestionMode() {
       return !!(this.readRouteFullPath().includes('text') || this.readRouteFullPath().includes('image'))
     },
-    getCurrentQuestionType () {
+    getCurrentQuestionType() {
       // const currentRouteName = this.readRouteName()
       const currentRouteFullPath = this.readRouteFullPath()
       let txtToRemove = '/admin/question/create/text/'
@@ -328,17 +328,17 @@ const AdminActionOnQuestion = {
       }
       return currentRouteFullPath.replace(txtToRemove, '')
     },
-    getCurrentQuestionId () {
+    getCurrentQuestionId() {
       return this.$route.params.question_id
     },
-    getCurrentQuestionMode () {
+    getCurrentQuestionMode() {
       if (this.readRouteName().includes('.Text')) {
         return 'Text'
       } else if (this.readRouteName().includes('.Image')) {
         return 'Image'
       }
     },
-    setCurrentQuestionType (question, allTypes) {
+    setCurrentQuestionType(question, allTypes) {
       const currentType = this.getCurrentQuestionType()
       let currentValue = ''
       if (currentType === 'mbti') {
@@ -353,7 +353,7 @@ const AdminActionOnQuestion = {
       question.type = allTypes.list.find(item => (item.value === currentValue))
       question.type_id = question.type.id
     },
-    setQuestionTypeBasedOnId (question, allTypes) {
+    setQuestionTypeBasedOnId(question, allTypes) {
       allTypes.list.forEach((item) => {
         if (item.value === question.type.value) {
           question.type.id = item.id
@@ -363,14 +363,14 @@ const AdminActionOnQuestion = {
       this.getLogs(question.id)
       // console.log('setQuestionTypeBasedOnId question', question)
     },
-    getLogs (questionId) {
+    getLogs(questionId) {
       const that = this
       APIGateway.question.getActivityLog(questionId)
         .then(function (logList) {
           that.question.logs = new LogList(logList)
         })
     },
-    getQuestionStatus () {
+    getQuestionStatus() {
       const that = this
       // const list = this.questionStatuses.list
       // that.questionStatuses
@@ -380,7 +380,7 @@ const AdminActionOnQuestion = {
           that.questionStatuses = new QuestionStatusList(questionStatusList)
         })
     },
-    loadSubcategories () {
+    loadSubcategories() {
       this.subCategoriesList.loading = true
       return APIGateway.questionSubcategory.get()
         .then((questionSubcategory) => {
@@ -391,7 +391,7 @@ const AdminActionOnQuestion = {
           this.subCategoriesList.loading = false
         })
     },
-    loadExamList () {
+    loadExamList() {
       this.examList.loading = true
       APIGateway.exam.getBase()
         .then((examList) => {
@@ -402,7 +402,7 @@ const AdminActionOnQuestion = {
           this.examList.loading = false
         })
     },
-    loadCategories () {
+    loadCategories() {
       const that = this
       this.categoryList.loading = true
       APIGateway.questionCategory.get()
@@ -414,7 +414,7 @@ const AdminActionOnQuestion = {
           that.categoryList.loading = false
         })
     },
-    attachExam (data) {
+    attachExam(data) {
       APIGateway.question.attach({
         exam_id: data.exam.id,
         sub_category_id: data.sub_category.id,
@@ -428,7 +428,7 @@ const AdminActionOnQuestion = {
           console.error(er)
         })
     },
-    detachExam (data) {
+    detachExam(data) {
       APIGateway.question.detach({
         questionId: this.question.id,
         data: {
@@ -439,68 +439,67 @@ const AdminActionOnQuestion = {
           this.question.exams = new AttachedExamList(detachedExamList)
         })
     },
-    openCloseImgPanel () {
+    openCloseImgPanel() {
       this.isPanelOpened = !this.isPanelOpened
       if (!this.isPanelOpened) {
         this.imgFloatMode = false
       }
     },
-    setNodesList () {},
-    getGradesList () {
+    setNodesList() { },
+    getGradesList() {
       // console.log('getGradesList')
       this.getRootNode('test').then(gradesList => {
         this.gradesList = gradesList
       })
     },
-    loadQuestionAuthors () {
+    loadQuestionAuthors() {
       APIGateway.option.getOptions({
         type: 'reference_type'
       })
         .then((authorsList) => {
           this.questionAuthorsList = authorsList.list
         })
-        .catch(() => {})
+        .catch(() => { })
     },
-    loadQuestionTargets () {
+    loadQuestionTargets() {
       APIGateway.option.getOptions({
         type: 'targets_type'
       })
         .then((TargetsList) => {
           this.questionTargetList = TargetsList.list
         })
-        .catch(() => {})
+        .catch(() => { })
     },
-    loadAuthorshipDates () {
+    loadAuthorshipDates() {
       APIGateway.option.getOptions({
         type: 'year_type'
       })
         .then((authorshipDates) => {
           this.authorshipDatesList = authorshipDates.list
         })
-        .catch(() => {})
+        .catch(() => { })
     },
-    loadMajorList () {
+    loadMajorList() {
       APIGateway.option.getOptions({
         type: 'major_type'
       })
         .then((majorList) => {
           this.majorList = majorList.list
-
         })
-        .catch(() => {})
+        .catch(() => { })
     },
-    getLessonGroupList (item) {
+    getLessonGroupList(item) {
       this.getNode(item.id).then(response => {
         this.lessonGroupList = response.data.data.children
       })
     },
-    getLessonsList (item) {
+    getLessonsList(item) {
       this.getNode(item.id).then(response => {
         this.lessonsList = response.data.data.children
         // console.log('getLessonsList', this.lessonsList)
       })
     },
-    setTags (allTags) {
+    setTags(allTags) {
       APIGateway.question.setTags({
         questionId: this.question.id,
         data: allTags
@@ -508,7 +507,7 @@ const AdminActionOnQuestion = {
         .then(() => {
         })
     },
-    setTagsOnCreate (allTags) {
+    setTagsOnCreate(allTags) {
       // this.question.tags = allTags
       if (allTags && allTags.length > 0) {
         Notify.create({

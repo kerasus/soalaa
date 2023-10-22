@@ -116,15 +116,13 @@
     </div>
 
   </div>
-  <div v-if="isTreeLayerConfigReady">
-    <tree-modal ref="questionTreeModal"
-                :key="treeKey"
+  <div>
+    <tree-modal :key="treeKey"
+                ref="questionTreeModal"
                 v-model:dialogValue="treeModalValue"
                 v-model:selected-nodes="selectedNodes"
                 :initial-node="treeModalNodeId"
                 :tree-type="'test'"
-                :no-nodes-label="'لطفا یک درس انتخاب کنید'"
-                exchange-last-layer-only
                 :persistent="!doesExamHaveLesson"
                 :layers-config="treeLayersConfig"
                 @layerSelected="onLessonChanged">
@@ -195,6 +193,7 @@ import pagination from 'src/components/Question/QuestionBank/Pagination.vue'
 import QuestionFilter from 'src/components/Question/QuestionBank/QuestionFilter.vue'
 import QuestionItem from 'src/components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
 import QuestionsGeneralInfo from 'src/components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo.vue'
+import { APIGateway } from 'src/api/APIGateway.js'
 
 export default {
   name: 'QuestionSelectionTab',
@@ -263,13 +262,23 @@ export default {
       groupsList: [],
       treeLayersConfig: [
         {
-          name: 'lesson',
+          name: 'grade',
           selectedValue: new TreeNode(),
           nodeList: [],
+          routeNameToGetNode: APIGateway.tree.getGradesList,
           disable: false,
-          label: 'نام درس',
+          label: 'پایه تحصیلی',
           className: 'col-12'
         }
+        // {
+        //   name: 'lesson',
+        //   selectedValue: new TreeNode(),
+        //   nodeList: [],
+        //   routeNameToGetNode: (layerId) => APIGateway.tree.getNodeById(layerId),
+        //   disable: false,
+        //   label: 'نام درس',
+        //   class: 'col-12'
+        // }
       ],
       examGradeSetValue: '',
       selectedNodesIds: [],
@@ -409,7 +418,7 @@ export default {
       if (this.providedExam.temp.tags && this.providedExam.temp.tags[0]) {
         this.fillAllTagsFromResponse()
       }
-      await this.setupTreeLayer()
+      // await this.setupTreeLayer()
       this.$nextTick(() => {
         this.treeKey++
         this.toggleTreeModal()
@@ -423,21 +432,21 @@ export default {
         }))
           .then(response => {
             this.hideLoading()
-            this.treeModalNodeId = response.data.data.id
-            this.treeModalLessonsList = response.data.data.children
+            this.treeModalNodeId = response.id
+            this.treeModalLessonsList = response.children
             if (this.treeModalLessonsList.length === 0) {
               this.$q.notify({
                 message: 'پایه تحصیلی انتخاب شده درس ندارد',
                 type: 'negative'
               })
             }
-            this.setInitialTreeLayer(this.treeModalLessonsList)
+            // this.setInitialTreeLayer(this.treeModalLessonsList)
             if (this.providedExam.temp.lesson) {
               this.setInitialLesson(this.providedExam.temp.lesson)
             }
             resolve()
           })
-          .catch(() => {
+          .catch((e) => {
             this.hideLoading()
             reject()
           })
