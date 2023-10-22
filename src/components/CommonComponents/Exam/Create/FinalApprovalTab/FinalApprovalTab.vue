@@ -30,6 +30,9 @@
                       <div class=" exam-title">
                         <p class="ellipsis">
                           آزمون {{ exam.id }}
+                          <q-tooltip>
+                            {{ exam.id }}
+                          </q-tooltip>
                         </p>
                       </div>
                     </div>

@@ -222,6 +222,9 @@
               <div class="chip ellipsis">
                 <span class="title">آزمون</span>
                 {{examInformation.id}}
+                <q-tooltip>
+                  {{examInformation.id}}
+                </q-tooltip>
               </div>
             </div>
             <div class="info-item  ">
