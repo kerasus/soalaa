@@ -82,8 +82,10 @@
                   <div>آسان</div>
                 </div>
               </div>
-              <div class="question-highchart col-8 ">
-                <highcharts :options="chartOptions" />
+              <div v-if="isHighchartsReady"
+                   class="question-highchart col-8 ">
+                <component :is="highChartComponentName"
+                           :options="chartOptions" />
               </div>
             </div>
           </div>
@@ -276,8 +278,11 @@
           </div>
         </div>
 
-        <div class="dialogHighchart">
-          <highcharts :options="chartOptions" />
+        <div v-if="isHighchartsReady"
+             class="dialogHighchart">
+          <component :is="highChartComponentName"
+                     :options="chartOptions" />
+
         </div>
       </div>
     </q-card>
@@ -286,20 +291,22 @@
 
 <script>
 import { QuestionList } from 'src/models/Question.js'
-
-let Chart
-if (typeof window !== 'undefined') {
-  import('highcharts-vue')
-    .then((ChartLib) => {
-      Chart = ChartLib.default.Chart
-    })
-}
+import { defineAsyncComponent } from 'vue'
 
 export default {
   name: 'QuestionsGeneralInfo',
-
-  components: { highcharts: Chart },
-
+  components: {
+    HighCharts: defineAsyncComponent(() => {
+      return new Promise((resolve) => {
+        let Chart
+        import('highcharts-vue')
+          .then((ChartLib) => {
+            Chart = ChartLib.Chart
+            resolve(Chart)
+          })
+      })
+    })
+  },
   props: {
     showFilters: {
       type: Boolean,
@@ -355,6 +362,8 @@ export default {
       checkBoxValue: false,
       selectAllCheckbox: false,
       questions: new QuestionList(),
+      isHighchartsReady: false,
+      highChartComponentName: '',
       ToolbarDialog: false,
       questionOrderOptions: ['تصادفی', 'آسان ترین', 'سخت ترین'],
       chartOptions: {
@@ -467,9 +476,14 @@ export default {
       this.numberOfQuestions()
       this.replaceTitle()
     }
+    this.setUpHighChart()
   },
 
   methods: {
+    setUpHighChart () {
+      this.isHighchartsReady = true
+      this.highChartComponentName = 'high-charts'
+    },
     showFiltersOnMobile() {
       this.$emit('update:showFilters', true)
     },

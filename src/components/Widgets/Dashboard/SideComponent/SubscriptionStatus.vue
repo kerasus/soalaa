@@ -38,8 +38,8 @@
             محدودیت ساخت آزمون
           </div>
           <q-no-ssr>
-            <highcharts class="flex flex-center"
-                        :options="chartOptionsExam" />
+            <component :is="highChartComponentName"
+                       :options="chartOptionsExam" />
           </q-no-ssr>
           <div v-if="subscribe.abilities_n.exam !== -1"
                class="subscription-status-test-tab-info">
@@ -57,8 +57,8 @@
             محدودیت دانلود PDF
           </div>
           <q-no-ssr>
-            <highcharts class="flex flex-center"
-                        :options="chartOptionsPdf" />
+            <component :is="highChartComponentName"
+                       :options="chartOptionsPdf" />
           </q-no-ssr>
           <div class="subscription-status-test-tab-info">
             <span><q-icon name="circle"
@@ -75,18 +75,21 @@
 </template>
 
 <script>
-let Chart
-if (typeof window !== 'undefined') {
-  import('highcharts-vue')
-    .then((ChartLib) => {
-      Chart = ChartLib.default.Chart
-    })
-}
+import { defineAsyncComponent } from 'vue'
 
 export default {
   name: 'SubscriptionStatus',
   components: {
-    highcharts: Chart
+    HighCharts: defineAsyncComponent(() => {
+      return new Promise((resolve) => {
+        let Chart
+        import('highcharts-vue')
+          .then((ChartLib) => {
+            Chart = ChartLib.Chart
+            resolve(Chart)
+          })
+      })
+    })
   },
   props: {
     subscribe: {
@@ -97,6 +100,8 @@ export default {
   data() {
     return {
       tab: 'tests',
+      isHighchartsReady: false,
+      highChartComponentName: '',
       chartOptionsExam: {
         chart: {
           height: '150',
@@ -214,8 +219,13 @@ export default {
   },
   mounted () {
     this.updateChartsOptions()
+    this.setUpHighChart()
   },
   methods: {
+    setUpHighChart () {
+      this.isHighchartsReady = true
+      this.highChartComponentName = 'high-charts'
+    },
     updateChartsOptions () {
       this.updateChartOptionsExam()
       this.updateChartOptionsPdf()
