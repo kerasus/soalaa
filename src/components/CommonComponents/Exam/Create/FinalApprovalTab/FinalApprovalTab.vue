@@ -10,12 +10,14 @@
                       class="q-ml-xs" />
           <div v-else
                class="exam-detail-content-wrapper">
-            <div class="exam-detail-content">
+            <div class="order-title">
+              ترتیب سوالات
+            </div>
+            <div class="exam-detail-content order">
               <div class="row">
                 <div class="col-12">
                   <q-select v-model="questionOrder"
-                            :options="questionOrderOptions"
-                            stack-label="ترتیب سوالات" />
+                            :options="questionOrderOptions" />
                 </div>
               </div>
             </div>
@@ -561,12 +563,26 @@ export default {
 
     }
 
+    .order-title {
+      color: #434765;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      margin-bottom: 16px;
+    }
+
     .exam-detail-content {
       margin-bottom: 16px;
       box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       border-radius: 20px;
       background: #FFFFFF;
       padding: 20px 24px 24px 24px;
+
+      &.order {
+        padding: 0;
+      }
+
       @media screen and (max-width: 1023px) {
         padding: 16px 20px 20px 20px;
       }
