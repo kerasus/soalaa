@@ -208,37 +208,46 @@
                     height="400px"
                     class="q-ml-xs" />
         <div v-else
-             class="exam-info">
-          <div class="header ">
-            <div class="header-title"> مشخصات آزمون </div>
-            <div class="chip ellipsis">
-              <span class="title">آزمون</span>
-              {{examInformation.id}}
+             class="exam-info-wrapper">
+          <div class="exam-info">
+            <div class="header">
+              <div class="header-title">ترتیب سوالات</div>
             </div>
+            <q-select v-model="computedOrder"
+                      :options="questionOrderOptions" />
           </div>
-          <div class="info-item  ">
-            <div class="field">نوع آزمون:</div>
-            <div class="value">
-              {{ examInformation.type }}
+          <div class="exam-info">
+            <div class="header ">
+              <div class="header-title"> مشخصات آزمون </div>
+              <div class="chip ellipsis">
+                <span class="title">آزمون</span>
+                {{examInformation.id}}
+              </div>
             </div>
-          </div>
-          <div class="info-item  ">
-            <div class="field">عنوان آزمون: </div>
-            <div class="value">
-              {{ examInformation.title }}
+            <div class="info-item  ">
+              <div class="field">نوع آزمون:</div>
+              <div class="value">
+                {{ examInformation.type }}
+              </div>
             </div>
-          </div>
-          <div class="info-item  ">
-            <div class="field">رشته تحصیلی:</div>
-            <div class="value">
-              {{ examInformation.major}}
-            </div></div>
-          <div class="info-item  ">
-            <div class="field">
-              پایه تحصیلی:
+            <div class="info-item  ">
+              <div class="field">عنوان آزمون: </div>
+              <div class="value">
+                {{ examInformation.title }}
+              </div>
             </div>
-            <div class="value">
-              {{ examInformation.grade }}
+            <div class="info-item  ">
+              <div class="field">رشته تحصیلی:</div>
+              <div class="value">
+                {{ examInformation.major}}
+              </div></div>
+            <div class="info-item  ">
+              <div class="field">
+                پایه تحصیلی:
+              </div>
+              <div class="value">
+                {{ examInformation.grade }}
+              </div>
             </div>
           </div>
         </div>
@@ -322,6 +331,10 @@ export default {
       default () {
         return false
       }
+    },
+    questionOrder: {
+      type: String,
+      default: 'تصادفی'
     }
   },
 
@@ -340,6 +353,7 @@ export default {
       selectAllCheckbox: false,
       questions: new QuestionList(),
       ToolbarDialog: false,
+      questionOrderOptions: ['تصادفی', 'آسان ترین', 'سخت ترین'],
       chartOptions: {
         chart: {
           height: '95',
@@ -416,6 +430,14 @@ export default {
         medium: this.selectedQuestions.filter(question => question.level === '2' || question.level === 2).length,
         easy: this.selectedQuestions.filter(question => question.level === '1' || question.level === 1).length,
         none: this.selectedQuestions.filter(question => question.level === '0' || question.level === 0).length
+      }
+    },
+    computedOrder: {
+      get() {
+        return this.questionOrder
+      },
+      set(value) {
+        this.$emit('reOrderQuestions', value)
       }
     }
   },
