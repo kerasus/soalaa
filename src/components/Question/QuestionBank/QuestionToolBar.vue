@@ -69,8 +69,10 @@
                   <div>آسان</div>
                 </div>
               </div>
-              <div class="question-highchart col-8 ">
-                <highcharts :options="chartOptions" />
+              <div v-if="isHighchartsReady"
+                   class="question-highchart col-8 ">
+                <component :is="highChartComponentName"
+                           :options="chartOptions" />
               </div>
             </div>
           </div>
@@ -198,8 +200,10 @@
             <div>آسان</div>
           </div>
         </div>
-        <div class="dialogHighchart">
-          <highcharts :options="chartOptions" />
+        <div v-if="isHighchartsReady"
+             class="dialogHighchart">
+          <component :is="highChartComponentName"
+                     :options="chartOptions" />
         </div>
       </div>
     </q-card>
@@ -208,18 +212,22 @@
 
 <script>
 import { QuestionList } from 'src/models/Question.js'
-
-let Chart
-if (typeof window !== 'undefined') {
-  import('highcharts-vue')
-    .then((ChartLib) => {
-      Chart = ChartLib.default.Chart
-    })
-}
+import { defineAsyncComponent } from 'vue'
 
 export default {
   name: 'QuestionBankToolBar',
-  components: { highcharts: Chart },
+  components: {
+    HighCharts: defineAsyncComponent(() => {
+      return new Promise((resolve) => {
+        let Chart
+        import('highcharts-vue')
+          .then((ChartLib) => {
+            Chart = ChartLib.Chart
+            resolve(Chart)
+          })
+      })
+    })
+  },
   props: {
     selectedQuestions: {
       type: [Array, QuestionList],
@@ -239,6 +247,8 @@ export default {
       checkbox: this.checkBox,
       questions: new QuestionList(),
       ToolbarDialog: false,
+      isHighchartsReady: false,
+      highChartComponentName: '',
       chartOptions: {
         chart: {
           height: '95',
@@ -325,12 +335,17 @@ export default {
   },
   mounted () {
     this.questions = new QuestionList(this.selectedQuestions)
+    this.setUpHighChart()
   },
   created () {
     this.setDifficultyLevelsChart()
     this.replaceTitle()
   },
   methods: {
+    setUpHighChart () {
+      this.isHighchartsReady = true
+      this.highChartComponentName = 'high-charts'
+    },
     selectAllQuestions () {
       this.$emit('selectAllQuestions')
     },

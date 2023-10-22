@@ -94,10 +94,12 @@
                           <div>آسان</div>
                         </div>
                       </div>
-                      <div class="chart-b col-md-8 col-sm-12">
-                        <chart ref="chart"
-                               class="row justify-center"
-                               :options="chartOptions" />
+                      <div v-if="isHighchartsReady"
+                           class="chart-b col-md-8 col-sm-12">
+                        <component :is="highChartComponentName"
+                                   ref="chart"
+                                   class="row justify-center"
+                                   :options="chartOptions" />
                       </div>
                     </div>
                     <div class="row q-col-gutter-sm action-btn">
@@ -166,6 +168,7 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { Exam } from 'src/models/Exam.js'
 import { APIGateway } from 'src/api/APIGateway.js'
 import { Question, QuestionList } from 'src/models/Question.js'
@@ -173,21 +176,22 @@ import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
 import QuestionItem from 'src/components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
 import QuestionsGeneralInfo from 'src/components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo.vue'
 
-let Chart
-if (typeof window !== 'undefined') {
-  import('highcharts-vue')
-    .then((ChartLib) => {
-      Chart = ChartLib.default.Chart
-    })
-}
-
 export default {
   name: 'FinalApprovalTab',
   components: {
     StickyBothSides,
     QuestionItem,
-    Chart,
-    QuestionsGeneralInfo
+    QuestionsGeneralInfo,
+    HighCharts: defineAsyncComponent(() => {
+      return new Promise((resolve) => {
+        let Chart
+        import('highcharts-vue')
+          .then((ChartLib) => {
+            Chart = ChartLib.Chart
+            resolve(Chart)
+          })
+      })
+    })
   },
   props: {
     exam: {
@@ -208,6 +212,8 @@ export default {
     reportTypeList: [],
     questionItemContentKey: 0,
     questionOrder: 'تصادفی',
+    isHighchartsReady: false,
+    highChartComponentName: '',
     questionOrderOptions: ['تصادفی', 'آسان ترین', 'سخت ترین'],
     chartOptions: {
       chart: {
@@ -348,11 +354,16 @@ export default {
       // this.reIndexEamQuestions(this.exam.questions.list)
     }
     this.setReportOptions()
+    this.setUpHighChart()
   },
   created() {
     this.initPageData()
   },
   methods: {
+    setUpHighChart () {
+      this.isHighchartsReady = true
+      this.highChartComponentName = 'high-charts'
+    },
     reOrderQuestions(order, setOrder = false) {
       if (setOrder) {
         this.questionOrder = order
