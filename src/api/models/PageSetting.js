@@ -15,7 +15,7 @@ export default class PageSettingAPI extends APIRepository {
     }
   }
 
-  index (data, cache = { TTL: 100 }) {
+  index(data, cache = { TTL: 100 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
@@ -43,7 +43,7 @@ export default class PageSettingAPI extends APIRepository {
     })
   }
 
-  create (data) {
+  create(data) {
     data.value = JSON.stringify(data.value)
     return this.sendRequest({
       apiMethod: 'post',
@@ -66,7 +66,7 @@ export default class PageSettingAPI extends APIRepository {
     })
   }
 
-  update (data) {
+  update(data) {
     data.value = JSON.stringify(data.value)
     return this.sendRequest({
       apiMethod: 'put',
@@ -75,7 +75,7 @@ export default class PageSettingAPI extends APIRepository {
       data: this.getNormalizedSendData({
         key: '', // String
         value: '' // String
-      }, data.data),
+      }, data),
       resolveCallback: (response) => {
         const parsedData = JSON.parse(response.data.data.value)
         return {
@@ -89,7 +89,7 @@ export default class PageSettingAPI extends APIRepository {
     })
   }
 
-  get (key, cache = { TTL: 100 }) {
+  get(key, cache = { TTL: 100 }) {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,

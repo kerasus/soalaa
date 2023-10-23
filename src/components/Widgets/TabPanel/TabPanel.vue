@@ -92,7 +92,10 @@ export default {
   },
   computed: {
     isMobile () {
-      return this.$q.screen.lt.md
+      if (typeof window !== 'undefined') {
+        return this.$q.screen.lt.md
+      }
+      return false
     },
     tabPanelRightIcon () {
       if (this.isMobile) {

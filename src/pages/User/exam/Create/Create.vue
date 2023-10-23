@@ -266,7 +266,7 @@ export default {
         .then(() => {
           this.getDraftExam()
             .then(draftExam => {
-              if (draftExam) {
+              if (draftExam.id) {
                 this.loadDraftExam(draftExam)
                 this.continueWithOldDraftExamConfirmationDialog = true
               } else {
