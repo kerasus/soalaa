@@ -42,6 +42,9 @@
                                   :style="{paddingBottom: parseInt(pdfConfig.spaceBetweenQuestion)+'mm'}"
                                   :questionAndChoices="pdfConfig.questionAndChoices"
                                   :betweenChoices="pdfConfig.betweenChoices"
+                                  :showLevel="pdfConfig.hasLevelAnswer"
+                                  :showReference="pdfConfig.hasReferenceQuestion"
+                                  :showYear="pdfConfig.hasYearQuestion"
                                   display-choices
                                   display-statement
                                   :display-descriptive-answer="false"
@@ -75,6 +78,9 @@
                                   :display-statement="false"
                                   :questionAndChoices="pdfConfig.questionAndChoices"
                                   :betweenChoices="pdfConfig.betweenChoices"
+                                  :showLevel="pdfConfig.hasLevelAnswer"
+                                  :showReference="pdfConfig.hasReferenceAnswer"
+                                  :showYear="pdfConfig.hasYearAnswer"
                                   display-descriptive-answer
                                   @update:height="updateQuestionHeight($event, pageQuestion)" />
             </div>
@@ -109,6 +115,12 @@ export default {
           hasMajor: true,
           hasGrade: true,
           hasPaginate: true,
+          hasLevelQuestion: true,
+          hasLevelAnswer: true,
+          hasReferenceQuestion: true,
+          hasReferenceAnswer: true,
+          hasYearQuestion: true,
+          hasYearAnswer: true,
           paginateStart: 1,
           spaceBetweenQuestion: 5,
           rightMargin: 5,
@@ -198,9 +210,6 @@ export default {
       })
     }
   },
-  created() {
-    this.localQuestions = JSON.parse(JSON.stringify(this.questions))
-  },
   beforeMount() {
     this.pageChunks = []
     this.localQuestions.forEach(question => {
@@ -209,6 +218,7 @@ export default {
   },
   mounted() {
     this.loading = true
+    this.localQuestions = JSON.parse(JSON.stringify(this.questions))
     if (this.allQuestionLoaded) {
       this.$nextTick(() => {
         this.createPageChunks(this.pageSize.h)

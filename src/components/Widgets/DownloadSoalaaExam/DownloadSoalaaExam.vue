@@ -41,6 +41,57 @@
               </div>
             </div>
           </div>
+          <div class="col-12 q-mt-sm">
+            <div class="row q-col-gutter-md">
+              <div class="col-12">
+                مرجع / طراح سوال
+              </div>
+              <div class="col-6">
+                <q-checkbox v-model="pdfConfig.hasReferenceQuestion">
+                  پرسشنامه
+                </q-checkbox>
+              </div>
+              <div class="col-6">
+                <q-checkbox v-model="pdfConfig.hasReferenceAnswer">
+                  پاسخنامه
+                </q-checkbox>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 q-mt-sm">
+            <div class="row q-col-gutter-md">
+              <div class="col-12">
+                سال طراحی سوال
+              </div>
+              <div class="col-6">
+                <q-checkbox v-model="pdfConfig.hasYearQuestion">
+                  پرسشنامه
+                </q-checkbox>
+              </div>
+              <div class="col-6">
+                <q-checkbox v-model="pdfConfig.hasYearAnswer">
+                  پاسخنامه
+                </q-checkbox>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 q-mt-sm">
+            <div class="row q-col-gutter-md">
+              <div class="col-12">
+                درجه سختی
+              </div>
+              <div class="col-6">
+                <q-checkbox v-model="pdfConfig.hasLevelQuestion">
+                  پرسشنامه
+                </q-checkbox>
+              </div>
+              <div class="col-6">
+                <q-checkbox v-model="pdfConfig.hasLevelAnswer">
+                  پاسخنامه
+                </q-checkbox>
+              </div>
+            </div>
+          </div>
           <!-- <div class="col-12">
             <q-checkbox v-model="pdfConfig.hasCreator">
               منبع / طراح سوال
@@ -110,13 +161,12 @@
                  @click="deleteAll('paginate')"> حذف همه
             </div>
           </div>
-          <!-- <div class="sub-title">
+          <div class="sub-title">
             شماره شروع سوالات
           </div>
-          <q-input v-model="number"
+          <q-input v-model="pdfConfig.questionStart"
                    type="number"
-                   filled
-          /> -->
+                   filled />
 
           <div class="sub-title">
             صفحه بندی سوالات
@@ -403,8 +453,16 @@ export default {
       hasTitle: true,
       hasMajor: true,
       hasGrade: true,
-      hasPaginate: true,
+      hasPaginateQuestion: true,
+      hasPaginateAnswer: true,
+      hasLevelQuestion: true,
+      hasLevelAnswer: true,
+      hasReferenceQuestion: true,
+      hasReferenceAnswer: true,
+      hasYearQuestion: true,
+      hasYearAnswer: true,
       paginateStart: 1,
+      questionStart: 1,
       spaceBetweenQuestion: 5,
       rightMargin: 5,
       leftMargin: 5,
