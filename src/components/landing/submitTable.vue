@@ -1532,7 +1532,7 @@ export default {
     async getProducts() {
       try {
         const productList = await this.callProductApi()
-        this.adaptData(productList.data.data)
+        this.adaptData(productList.list)
       } catch (e) {
         // console.log(e)
       }
