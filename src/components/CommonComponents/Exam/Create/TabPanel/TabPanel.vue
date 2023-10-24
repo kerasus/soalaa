@@ -203,10 +203,10 @@ export default {
         error = true
         messages.push('رشته آزمون مشخص نشده است.')
       }
-      if (!this.draftExam.temp.grade) {
-        error = true
-        messages.push('پایه آزمون مشخص نشده است.')
-      }
+      // if (!this.draftExam.temp.grade) {
+      //   error = true
+      //   messages.push('پایه آزمون مشخص نشده است.')
+      // }
 
       return { error, messages }
     },
@@ -221,10 +221,10 @@ export default {
         error = true
         messages.push('رشته آزمون مشخص نشده است.')
       }
-      if (!this.draftExam.temp.grade) {
-        error = true
-        messages.push('پایه آزمون مشخص نشده است.')
-      }
+      // if (!this.draftExam.temp.grade) {
+      //   error = true
+      //   messages.push('پایه آزمون مشخص نشده است.')
+      // }
 
       return { error, messages }
     },
@@ -239,10 +239,10 @@ export default {
         error = true
         messages.push('رشته آزمون مشخص نشده است.')
       }
-      if (!this.draftExam.temp.grade) {
-        error = true
-        messages.push('پایه آزمون مشخص نشده است.')
-      }
+      // if (!this.draftExam.temp.grade) {
+      //   error = true
+      //   messages.push('پایه آزمون مشخص نشده است.')
+      // }
 
       return { error, messages }
     },

@@ -10,22 +10,22 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-12 col-md-3 q-pa-sm">
+      <div class="col-12 col-md-4 q-pa-sm">
         <q-skeleton type="QInput"
                     animation="wave" />
       </div>
-      <div class="col-12 col-md-3 q-pa-sm">
+      <div class="col-12 col-md-4 q-pa-sm">
         <q-skeleton type="QInput"
                     animation="wave" />
       </div>
-      <div class="col-12 col-md-3 q-pa-sm">
+      <div class="col-12 col-md-4 q-pa-sm">
         <q-skeleton type="QInput"
                     animation="wave" />
       </div>
-      <div class="col-12 col-md-3 q-pa-sm">
+      <!-- <div class="col-12 col-md-3 q-pa-sm">
         <q-skeleton type="QInput"
                     animation="wave" />
-      </div>
+      </div> -->
     </div>
   </div>
   <div v-else
@@ -101,7 +101,7 @@ export default {
           responseKey: 'data.title',
           label: 'عنوان آزمون',
           placeholder: 'وارد کنید',
-          col: 'col-12 col-md-3 col-sm-6'
+          col: 'col-12 col-md-4 col-sm-6'
         },
         {
           type: 'select',
@@ -113,7 +113,7 @@ export default {
           options: [],
           behavior: 'menu',
           disable: true,
-          col: 'col-12 col-md-3 col-sm-6',
+          col: 'col-12 col-md-4 col-sm-6',
           icon: 'isax:arrow-right-3',
           dropdownIcon: 'isax:arrow-down-1'
         },
@@ -124,21 +124,21 @@ export default {
           label: 'رشته تحصیلی',
           placeholder: 'انتخاب کنید',
           behavior: 'menu',
-          col: 'col-12 col-md-3 col-sm-6',
-          dropdownIcon: 'isax:arrow-down-1',
-          options: []
-        },
-        {
-          type: 'select',
-          name: 'temp.grade',
-          responseKey: 'data.temp.grade',
-          label: 'پایه تحصیلی',
-          placeholder: 'انتخاب کنید',
-          behavior: 'menu',
-          col: 'col-12 col-md-3 col-sm-6',
+          col: 'col-12 col-md-4 col-sm-6',
           dropdownIcon: 'isax:arrow-down-1',
           options: []
         }
+        // {
+        //   type: 'select',
+        //   name: 'temp.grade',
+        //   responseKey: 'data.temp.grade',
+        //   label: 'پایه تحصیلی',
+        //   placeholder: 'انتخاب کنید',
+        //   behavior: 'menu',
+        //   col: 'col-12 col-md-3 col-sm-6',
+        //   dropdownIcon: 'isax:arrow-down-1',
+        //   options: []
+        // }
       ],
       localExam: new Exam(),
       formBuilderCrud: 0,
@@ -274,10 +274,10 @@ export default {
         error = true
         messages.push('رشته آزمون مشخص نشده است.')
       }
-      if (!this.exam.temp.grade) {
-        error = true
-        messages.push('پایه آزمون مشخص نشده است.')
-      }
+      // if (!this.exam.temp.grade) {
+      //   error = true
+      //   messages.push('پایه آزمون مشخص نشده است.')
+      // }
 
       return { error, messages }
     },

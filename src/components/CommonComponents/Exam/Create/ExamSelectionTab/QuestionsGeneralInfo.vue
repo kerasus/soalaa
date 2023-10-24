@@ -82,8 +82,10 @@
                   <div>آسان</div>
                 </div>
               </div>
-              <div class="question-highchart col-8 ">
-                <highcharts :options="chartOptions" />
+              <div v-if="isHighchartsReady"
+                   class="question-highchart col-8 ">
+                <component :is="highChartComponentName"
+                           :options="chartOptions" />
               </div>
             </div>
           </div>
@@ -208,37 +210,49 @@
                     height="400px"
                     class="q-ml-xs" />
         <div v-else
-             class="exam-info">
-          <div class="header ">
-            <div class="header-title"> مشخصات آزمون </div>
-            <div class="chip ellipsis">
-              <span class="title">آزمون</span>
-              {{examInformation.id}}
+             class="exam-info-wrapper">
+          <div class="exam-info">
+            <div class="header">
+              <div class="header-title">ترتیب سوالات</div>
             </div>
+            <q-select v-model="computedOrder"
+                      :options="questionOrderOptions" />
           </div>
-          <div class="info-item  ">
-            <div class="field">نوع آزمون:</div>
-            <div class="value">
-              {{ examInformation.type }}
+          <div class="exam-info">
+            <div class="header ">
+              <div class="header-title"> مشخصات آزمون </div>
+              <div class="chip ellipsis">
+                <span class="title">آزمون</span>
+                {{examInformation.id}}
+                <q-tooltip>
+                  {{examInformation.id}}
+                </q-tooltip>
+              </div>
             </div>
-          </div>
-          <div class="info-item  ">
-            <div class="field">عنوان آزمون: </div>
-            <div class="value">
-              {{ examInformation.title }}
+            <div class="info-item  ">
+              <div class="field">نوع آزمون:</div>
+              <div class="value">
+                {{ examInformation.type }}
+              </div>
             </div>
-          </div>
-          <div class="info-item  ">
-            <div class="field">رشته تحصیلی:</div>
-            <div class="value">
-              {{ examInformation.major}}
-            </div></div>
-          <div class="info-item  ">
-            <div class="field">
-              پایه تحصیلی:
+            <div class="info-item  ">
+              <div class="field">عنوان آزمون: </div>
+              <div class="value">
+                {{ examInformation.title }}
+              </div>
             </div>
-            <div class="value">
-              {{ examInformation.grade }}
+            <div class="info-item  ">
+              <div class="field">رشته تحصیلی:</div>
+              <div class="value">
+                {{ examInformation.major}}
+              </div></div>
+            <div class="info-item  ">
+              <div class="field">
+                پایه تحصیلی:
+              </div>
+              <div class="value">
+                {{ examInformation.grade }}
+              </div>
             </div>
           </div>
         </div>
@@ -264,8 +278,11 @@
           </div>
         </div>
 
-        <div class="dialogHighchart">
-          <highcharts :options="chartOptions" />
+        <div v-if="isHighchartsReady"
+             class="dialogHighchart">
+          <component :is="highChartComponentName"
+                     :options="chartOptions" />
+
         </div>
       </div>
     </q-card>
@@ -274,20 +291,22 @@
 
 <script>
 import { QuestionList } from 'src/models/Question.js'
-
-let Chart
-if (typeof window !== 'undefined') {
-  import('highcharts-vue')
-    .then((ChartLib) => {
-      Chart = ChartLib.default.Chart
-    })
-}
+import { defineAsyncComponent } from 'vue'
 
 export default {
   name: 'QuestionsGeneralInfo',
-
-  components: { highcharts: Chart },
-
+  components: {
+    HighCharts: defineAsyncComponent(() => {
+      return new Promise((resolve) => {
+        let Chart
+        import('highcharts-vue')
+          .then((ChartLib) => {
+            Chart = ChartLib.Chart
+            resolve(Chart)
+          })
+      })
+    })
+  },
   props: {
     showFilters: {
       type: Boolean,
@@ -322,6 +341,10 @@ export default {
       default () {
         return false
       }
+    },
+    questionOrder: {
+      type: String,
+      default: 'تصادفی'
     }
   },
 
@@ -339,7 +362,10 @@ export default {
       checkBoxValue: false,
       selectAllCheckbox: false,
       questions: new QuestionList(),
+      isHighchartsReady: false,
+      highChartComponentName: '',
       ToolbarDialog: false,
+      questionOrderOptions: ['تصادفی', 'آسان ترین', 'سخت ترین'],
       chartOptions: {
         chart: {
           height: '95',
@@ -417,6 +443,14 @@ export default {
         easy: this.selectedQuestions.filter(question => question.level === '1' || question.level === 1).length,
         none: this.selectedQuestions.filter(question => question.level === '0' || question.level === 0).length
       }
+    },
+    computedOrder: {
+      get() {
+        return this.questionOrder
+      },
+      set(value) {
+        this.$emit('reOrderQuestions', value)
+      }
     }
   },
 
@@ -442,9 +476,14 @@ export default {
       this.numberOfQuestions()
       this.replaceTitle()
     }
+    this.setUpHighChart()
   },
 
   methods: {
+    setUpHighChart () {
+      this.isHighchartsReady = true
+      this.highChartComponentName = 'high-charts'
+    },
     showFiltersOnMobile() {
       this.$emit('update:showFilters', true)
     },
