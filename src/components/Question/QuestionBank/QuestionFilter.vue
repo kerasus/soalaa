@@ -257,6 +257,7 @@ export default {
         report_type: '',
         statuses: [],
         question_report_type: '',
+        code: null,
         report_status: '',
         tags_with_childrens: 1
       }
@@ -317,7 +318,7 @@ export default {
           })
         } else if (typeof filterGroup === 'object') {
           filters.push({ value: filterGroup, type: filterType })
-        } else if (typeof filterGroup === 'number' && !filterGroup) {
+        } else if (typeof filterGroup === 'number') {
           filters.push({ value: filterGroup, type: filterType })
         }
       })

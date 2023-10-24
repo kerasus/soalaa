@@ -41,6 +41,21 @@
                 </template>
               </q-input>
             </q-card-section>
+            <q-card-section class="search-with-code-section">
+              <q-input v-model="searchWithCodeInput"
+                       filled
+                       class="bg-white search-input"
+                       type="number"
+                       placeholder="جستجوی سوالات با کد...">
+                <template v-slot:append>
+                  <q-btn flat
+                         rounded
+                         icon="isax:search-normal-1"
+                         class="search"
+                         @click="filterByCode" />
+                </template>
+              </q-input>
+            </q-card-section>
 
             <!--            <q-card-section class="filter-section">-->
             <!--              <q-select-->
@@ -133,6 +148,7 @@ export default {
         statusLoading: false,
         reportStatusLoading: false
       },
+      searchWithCodeInput: null,
       searchInput: '',
       searchSelector: {
         title: 'جدید ترین',
@@ -330,6 +346,7 @@ export default {
         statuses: filterData.statuses.map(item => item.id),
         report_type: filterData.question_report_type ? filterData.question_report_type.id : '',
         report_status: (filterData.report_status.title) ? filterData.report_status.title : '',
+        code: filterData.code ? filterData.code : '',
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
@@ -349,7 +366,7 @@ export default {
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
-      this.$apiGateway.question.getIndex(filters, page, true)
+      APIGateway.question.getIndex({ filters, page, isAdmin: true })
         .then((questionListAndMeta) => {
           this.questions = new QuestionList(questionListAndMeta.QuestionList)
           this.paginationMeta = questionListAndMeta.meta
@@ -425,6 +442,9 @@ export default {
     filterByStatement() {
       this.$refs.filter.changeFilterData('statement', [this.searchInput])
     },
+    filterByCode() {
+      this.$refs.filter.changeFilterData('code', Number(this.searchWithCodeInput))
+    },
     sortByCreatedAt() {
       this.$refs.filter.changeFilterData('sort_type', [this.searchSelector.value])
     },
@@ -475,7 +495,7 @@ export default {
   .filter-card {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    //justify-content: space-between;
     background: #f4f6f9;
 
     @media only screen and (max-width: 600px) {
@@ -503,6 +523,45 @@ export default {
     }
 
     .search-section {
+      .search-input {
+        width: 300px;
+        background-color: white;
+
+        &:deep(.q-field__append) {
+          padding-right: 8px !important;
+
+          .q-icon {
+            color: #6D708B;
+            cursor: pointer;
+          }
+        }
+
+        &:deep(.q-field__control) {
+          background-color: white;
+        }
+
+        //&:deep(.q-field--filled .q-field__inner .q-field__control .q-field__append, .q-field--filled .q-field__inner .q-field__control .q-field__prepend ){
+        //
+        //}
+        @media only screen and (max-width: 1023px) {
+          width: 352px;
+        }
+        @media only screen and (max-width: 599px) {
+          width: 100%;
+        }
+
+        .search {
+          color: #6D708B;
+
+          :deep(.q-field__inner .q-field__control .q-field__append .q-icon) {
+            color: #6D708B;
+          }
+        }
+      }
+    }
+
+    .search-with-code-section {
+      margin-left: 10px;
       .search-input {
         width: 300px;
         background-color: white;
