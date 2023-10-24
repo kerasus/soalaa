@@ -148,7 +148,7 @@ export default {
         statusLoading: false,
         reportStatusLoading: false
       },
-      searchWithCodeInput: '',
+      searchWithCodeInput: null,
       searchInput: '',
       searchSelector: {
         title: 'جدید ترین',
@@ -346,6 +346,7 @@ export default {
         statuses: filterData.statuses.map(item => item.id),
         report_type: filterData.question_report_type ? filterData.question_report_type.id : '',
         report_status: (filterData.report_status.title) ? filterData.report_status.title : '',
+        code: filterData.code ? filterData.code : '',
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
@@ -365,7 +366,7 @@ export default {
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
-      this.$apiGateway.question.getIndex({ filters, page, isAdmin: true })
+      APIGateway.question.getIndex({ filters, page, isAdmin: true })
         .then((questionListAndMeta) => {
           this.questions = new QuestionList(questionListAndMeta.QuestionList)
           this.paginationMeta = questionListAndMeta.meta
@@ -442,7 +443,7 @@ export default {
       this.$refs.filter.changeFilterData('statement', [this.searchInput])
     },
     filterByCode() {
-      this.$refs.filter.changeFilterData('code', [this.searchWithCodeInput])
+      this.$refs.filter.changeFilterData('code', Number(this.searchWithCodeInput))
     },
     sortByCreatedAt() {
       this.$refs.filter.changeFilterData('sort_type', [this.searchSelector.value])

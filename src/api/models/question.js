@@ -41,6 +41,10 @@ const APIAdresses = {
         singleMode: false
       },
       {
+        key: 'code',
+        singleMode: true
+      },
+      {
         key: 'years',
         singleMode: false
       },
