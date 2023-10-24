@@ -62,7 +62,7 @@ export default {
       this.$emit('onClickUserExamListBtn')
     },
     onClickRegisterBtn () {
-      // this.$emit('onClickRegisterBtn')
+      this.$emit('onClickRegisterBtn')
     },
     onClickConditionsBtn () {
       // this.$emit('onClickConditionsBtn')
