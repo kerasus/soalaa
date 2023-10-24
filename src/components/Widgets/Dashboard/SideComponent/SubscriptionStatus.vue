@@ -37,10 +37,10 @@
           <div class="subscription-status-test-tab-title">
             محدودیت ساخت آزمون
           </div>
-          <q-no-ssr>
+          <div v-if="isHighchartsReady">
             <component :is="highChartComponentName"
                        :options="chartOptionsExam" />
-          </q-no-ssr>
+          </div>
           <div v-if="subscribe.abilities_n.exam !== -1"
                class="subscription-status-test-tab-info">
             <span><q-icon name="circle"
@@ -56,10 +56,10 @@
           <div class="subscription-status-test-tab-title">
             محدودیت دانلود PDF
           </div>
-          <q-no-ssr>
+          <div v-if="isHighchartsReady">
             <component :is="highChartComponentName"
                        :options="chartOptionsPdf" />
-          </q-no-ssr>
+          </div>
           <div class="subscription-status-test-tab-info">
             <span><q-icon name="circle"
                           color="warning"

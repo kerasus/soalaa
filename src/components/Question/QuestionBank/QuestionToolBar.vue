@@ -97,7 +97,8 @@
         </q-card-section>
       </q-expansion-item>
     </q-card>
-    <q-page-sticky class="pageSticky lg-hide"
+    <q-page-sticky v-if="isWindowReady"
+                   class="pageSticky lg-hide"
                    position="bottom">
       <div class="shapes flex ">
         <div class="circle">
@@ -249,6 +250,7 @@ export default {
       questions: new QuestionList(),
       ToolbarDialog: false,
       isHighchartsReady: false,
+      isWindowReady: false,
       highChartComponentName: '',
       chartOptions: {
         chart: {
@@ -336,6 +338,7 @@ export default {
   },
   mounted () {
     this.questions = new QuestionList(this.selectedQuestions)
+    this.isWindowReady = true
     this.setUpHighChart()
   },
   created () {
