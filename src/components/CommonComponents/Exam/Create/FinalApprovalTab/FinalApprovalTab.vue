@@ -9,104 +9,124 @@
                       height="400px"
                       class="q-ml-xs" />
           <div v-else
-               class="exam-detail-content">
-            <div class="row q-col-gutter-x-lg">
-              <div class="col-lg-12 col-md-8 col-sm-6">
-                <div class="exam-details row q-col-gutter-x-lg">
-                  <div class="col-12 exam-specifications">
-                    <div class="header-title"> مشخصات آزمون</div>
-                    <div class=" exam-title">
-                      <p class="ellipsis">
-                        آزمون {{ exam.id }}
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-lg-12 col-md-6 col-sm-12">
-                    <div class=" exam-detail-item">
-                      <div class="field">نوع آزمون:</div>
-                      <div class="value">
-                        عادی
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-12 col-md-6 col-sm-12">
-                    <div class="exam-detail-item">
-                      <div class="field">عنوان آزمون:</div>
-                      <div class="value exam-title ellipsis">
-                        {{ exam.title }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-12 col-md-6 col-sm-12">
-                    <div class="exam-detail-item">
-                      <div class="field">رشته تحصیلی:</div>
-                      <div class="value">
-                        {{ examMajor() }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-12 col-md-6 col-sm-12">
-                    <div class="exam-detail-item">
-                      <div class="field">پایه تحصیلی:</div>
-                      <div class="value">
-                        {{ examGrade() }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-12 col-md-4 col-sm-6">
-                <div class="selected-questions">
-                  <div class="title"> سوالات انتخابی</div>
-                  <div class="chart-box row ">
-                    <div class="col-md-4 col-sm-12 type-box">
-                      <div class="chart-titles">
-                        <q-badge class="titles-icon hard"
-                                 rounded />
-                        <div>سخت</div>
-                      </div>
-                      <div class="chart-titles">
-                        <q-badge class="titles-icon medium"
-                                 rounded />
-                        <div>متوسط</div>
-                      </div>
-                      <div class="chart-titles">
-                        <q-badge class="titles-icon easy"
-                                 rounded />
-                        <div>آسان</div>
-                      </div>
-                    </div>
-                    <div class="chart-b col-md-8 col-sm-12">
-                      <chart ref="chart"
-                             class="row justify-center"
-                             :options="chartOptions" />
-                    </div>
-                  </div>
-                  <div class="row q-col-gutter-sm action-btn">
-                    <div class=" confirm-b col-lg-12 col-sm-6">
-                      <q-btn unelevated
-                             color="primary"
-                             :disable="exam.loading"
-                             class="full-width confirm q-mr-xl"
-                             @click="confirmExam">
-                        تایید نهایی
-                        <span :hidden="$q.screen.lt.lg">و ساخت آزمون</span>
-                      </q-btn>
-                    </div>
-                    <div class="previous-b col-lg-12 col-sm-6">
-                      <q-btn unelevated
-                             :disable="exam.loading"
-                             class="full-width q-mr-xl previous"
-                             @click="goToPrevious">
-                        بازگشت
-                      </q-btn>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!--          <q-separator class="q-my-lg" />-->
+               class="exam-detail-content-wrapper">
+            <div class="order-title">
+              ترتیب سوالات
             </div>
-
+            <div class="exam-detail-content order">
+              <div class="row">
+                <div class="col-12">
+                  <q-select v-model="questionOrder"
+                            :options="questionOrderOptions" />
+                </div>
+              </div>
+            </div>
+            <div class="exam-detail-content">
+              <div class="row q-col-gutter-x-lg">
+                <div class="col-lg-12 col-md-8 col-sm-6">
+                  <div class="exam-details row q-col-gutter-x-lg">
+                    <div class="col-12 exam-specifications">
+                      <div class="header-title"> مشخصات آزمون</div>
+                      <div class=" exam-title">
+                        <p class="ellipsis">
+                          آزمون {{ exam.id }}
+                          <q-tooltip>
+                            {{ exam.id }}
+                          </q-tooltip>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-md-6 col-sm-12">
+                      <div class=" exam-detail-item">
+                        <div class="field">نوع آزمون:</div>
+                        <div class="value">
+                          عادی
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-md-6 col-sm-12">
+                      <div class="exam-detail-item">
+                        <div class="field">عنوان آزمون:</div>
+                        <div class="value exam-title ellipsis">
+                          {{ exam.title }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-md-6 col-sm-12">
+                      <div class="exam-detail-item">
+                        <div class="field">رشته تحصیلی:</div>
+                        <div class="value">
+                          {{ examMajor() }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-md-6 col-sm-12">
+                      <div class="exam-detail-item">
+                        <div class="field">پایه تحصیلی:</div>
+                        <div class="value ellipsis">
+                          {{ examGrade() }}
+                          <q-tooltip>
+                            {{ examGrade() }}
+                          </q-tooltip>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-md-4 col-sm-6">
+                  <div class="selected-questions">
+                    <div class="title"> سوالات انتخابی</div>
+                    <div class="chart-box row ">
+                      <div class="col-md-4 col-sm-12 type-box">
+                        <div class="chart-titles">
+                          <q-badge class="titles-icon hard"
+                                   rounded />
+                          <div>سخت</div>
+                        </div>
+                        <div class="chart-titles">
+                          <q-badge class="titles-icon medium"
+                                   rounded />
+                          <div>متوسط</div>
+                        </div>
+                        <div class="chart-titles">
+                          <q-badge class="titles-icon easy"
+                                   rounded />
+                          <div>آسان</div>
+                        </div>
+                      </div>
+                      <div v-if="isHighchartsReady"
+                           class="chart-b col-md-8 col-sm-12">
+                        <component :is="highChartComponentName"
+                                   ref="chart"
+                                   class="row justify-center"
+                                   :options="chartOptions" />
+                      </div>
+                    </div>
+                    <div class="row q-col-gutter-sm action-btn">
+                      <div class=" confirm-b col-lg-12 col-sm-6">
+                        <q-btn unelevated
+                               color="primary"
+                               :disable="exam.loading"
+                               class="full-width confirm q-mr-xl"
+                               @click="confirmExam">
+                          تایید نهایی
+                          <span :hidden="$q.screen.lt.lg">و ساخت آزمون</span>
+                        </q-btn>
+                      </div>
+                      <div class="previous-b col-lg-12 col-sm-6">
+                        <q-btn unelevated
+                               :disable="exam.loading"
+                               class="full-width q-mr-xl previous"
+                               @click="goToPrevious">
+                          بازگشت
+                        </q-btn>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--          <q-separator class="q-my-lg" />-->
+              </div>
+            </div>
           </div>
         </sticky-both-sides>
       </div>
@@ -117,7 +137,7 @@
                          :question="loadingQuestion" />
           <template v-else-if="exam.questions.list.length > 0">
             <q-virtual-scroll ref="scroller"
-                              :items="exam.questions.list"
+                              :items="questions.list"
                               :virtual-scroll-item-size="450"
                               :virtual-scroll-slice-size="5">
               <template v-slot="{ item , index}">
@@ -140,12 +160,15 @@
                             final-approval-mode
                             :selectedQuestions="exam.questions.list"
                             :examInformation="examInfo"
+                            :question-order="questionOrder"
                             @lastTab="goToPrevious"
+                            @reOrderQuestions="reOrderQuestions($event, true)"
                             @nextTab="confirmExam" />
   </div>
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { Exam } from 'src/models/Exam.js'
 import { APIGateway } from 'src/api/APIGateway.js'
 import { Question, QuestionList } from 'src/models/Question.js'
@@ -153,21 +176,22 @@ import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
 import QuestionItem from 'src/components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
 import QuestionsGeneralInfo from 'src/components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo.vue'
 
-let Chart
-if (typeof window !== 'undefined') {
-  import('highcharts-vue')
-    .then((ChartLib) => {
-      Chart = ChartLib.default.Chart
-    })
-}
-
 export default {
   name: 'FinalApprovalTab',
   components: {
     StickyBothSides,
     QuestionItem,
-    Chart,
-    QuestionsGeneralInfo
+    QuestionsGeneralInfo,
+    HighCharts: defineAsyncComponent(() => {
+      return new Promise((resolve) => {
+        let Chart
+        import('highcharts-vue')
+          .then((ChartLib) => {
+            Chart = ChartLib.Chart
+            resolve(Chart)
+          })
+      })
+    })
   },
   props: {
     exam: {
@@ -187,6 +211,10 @@ export default {
   data: () => ({
     reportTypeList: [],
     questionItemContentKey: 0,
+    questionOrder: 'تصادفی',
+    isHighchartsReady: false,
+    highChartComponentName: '',
+    questionOrderOptions: ['تصادفی', 'آسان ترین', 'سخت ترین'],
     chartOptions: {
       chart: {
         height: '150',
@@ -282,9 +310,26 @@ export default {
         medium: this.exam.questions.list.filter(question => parseInt(question.level) === 2).length,
         easy: this.exam.questions.list.filter(question => parseInt(question.level) === 1).length
       }
+    },
+    gradeList() {
+      const grades = []
+      for (let index = 0; index < this.questions.list.length; index++) {
+        for (let tagIndex = 0; tagIndex < this.questions.list[index].tags.list.length; tagIndex++) {
+          const grade = this.questions.list[index].tags.list[tagIndex]?.ancestors[1].title
+          if (grade && grades.filter(g => g === grade).length === 0) {
+            grades.push(grade)
+          }
+        }
+      }
+      return grades
     }
   },
   watch: {
+    questionOrder: {
+      handler(value) {
+        this.reOrderQuestions(value)
+      }
+    },
     'exam.loading': {
       handler() {
         this.loadingQuestion.loading = this.exam.loading
@@ -309,11 +354,54 @@ export default {
       // this.reIndexEamQuestions(this.exam.questions.list)
     }
     this.setReportOptions()
+    this.setUpHighChart()
   },
   created() {
     this.initPageData()
   },
   methods: {
+    setUpHighChart () {
+      this.isHighchartsReady = true
+      this.highChartComponentName = 'high-charts'
+    },
+    reOrderQuestions(order, setOrder = false) {
+      if (setOrder) {
+        this.questionOrder = order
+      }
+      if (order === 'تصادفی') {
+        this.questions.list = this.sortArray(this.questions.list, 'order', 'random')
+      } else if (order === 'آسان ترین') {
+        this.questions.list = this.sortArray(this.questions.list, 'level')
+      } else {
+        this.questions.list = this.sortArray(this.questions.list, 'level', 'descending')
+      }
+      for (let index = 0; index < this.questions.list.length; index++) {
+        this.questions.list[index].order = index + 1
+      }
+      this.$emit('updateOrders', this.questions.list)
+    },
+    sortArray(arr, sortBy, order = 'ascending') {
+      const sortedArray = [...arr]
+
+      if (order === 'random') {
+        return this.shuffleArray(sortedArray)
+      }
+
+      const compareFn = (a, b) => {
+        const comparison = order === 'ascending' ? 1 : -1
+        return a[sortBy] > b[sortBy] ? comparison : a[sortBy] < b[sortBy] ? -comparison : 0
+      }
+
+      return sortedArray.sort(compareFn)
+    },
+    shuffleArray(arr) {
+      const shuffledArray = [...arr]
+      for (let i = shuffledArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]
+      }
+      return shuffledArray
+    },
     setReportOptions() {
       APIGateway.option.userIndex({ type: 'question_report_type' })
         .then((reportTypeList) => {
@@ -350,7 +438,7 @@ export default {
     },
 
     examGrade() {
-      return this.grades.find(item => item.id === this.exam.temp.grade).title
+      return this.gradeList.join('، ')
     },
 
     changeSelectedQuestionOrder(value) {
@@ -489,12 +577,26 @@ export default {
 
     }
 
+    .order-title {
+      color: #434765;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      margin-bottom: 16px;
+    }
+
     .exam-detail-content {
       margin-bottom: 16px;
       box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       border-radius: 20px;
       background: #FFFFFF;
       padding: 20px 24px 24px 24px;
+
+      &.order {
+        padding: 0;
+      }
+
       @media screen and (max-width: 1023px) {
         padding: 16px 20px 20px 20px;
       }
@@ -578,7 +680,9 @@ export default {
         }
 
         .value {
+          width: 100px;
           font-style: normal;
+          text-align: right;
           font-weight: 400;
           font-size: 14px;
           line-height: 22px;

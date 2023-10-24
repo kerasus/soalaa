@@ -189,6 +189,39 @@
           </div>
         </div>
       </q-expansion-item>
+      <q-expansion-item v-model="listConfig.quickEditExpanded"
+                        header-class="hideExpansionHeader">
+        <div class="row q-mb-md">
+          <div class="col-12 q-mb-md">
+            <q-separator />
+          </div>
+          <div class="detail-box col-8">
+            <div class="detail-box-title">تگ موضوعی</div>
+            <div class="input-container flex">
+              <div class="input-box">
+                <q-input v-model="tagsTitles"
+                         dense
+                         disable />
+              </div>
+              <div class="icon-box">
+                <q-btn unelevated
+                       icon="isax:tree"
+                       class="open-modal-btn default-detail-btn"
+                       @click="subjectTagsTreeModal = true" />
+              </div>
+            </div>
+          </div>
+          <div class="col-3 flex justify-start items-center">
+            <q-btn color="primary"
+                   label="ذخیره تگ ها"
+                   @click="saveQuestion" />
+          </div>
+          <tree-modal v-model:dialogValue="subjectTagsTreeModal"
+                      v-model:selected-nodes="selectedTreeTags"
+                      :tree-type="'subject_tags'"
+                      exchange-last-layer-only />
+        </div>
+      </q-expansion-item>
     </q-card-section>
 
     <q-card-section v-if="!question.loading"
@@ -248,6 +281,14 @@
       </div>
 
       <div class="user-action-buttons">
+        <q-btn v-if="listOptions.editQuestion"
+               flat
+               dense
+               label="ویرایش سریع"
+               icon-right="isax:edit"
+               class="edit-button"
+               @click="toggleQuickEdit" />
+
         <q-btn v-if="listConfig.reportProblem"
                flat
                dense
@@ -341,6 +382,7 @@ import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import question from 'src/components/Question/QuestionItem/Question.vue'
 import QuestionTags from 'src/components/CommonComponents/Exam/Create/QuestionTags/QuestionTags.vue'
+import TreeModal from 'components/Question/QuestionPage/TreeModal.vue'
 
 export default {
   name: 'QuestionItem',
@@ -348,7 +390,8 @@ export default {
     VueKatex,
     question,
     QuestionTags,
-    ContentVideoPlayer
+    ContentVideoPlayer,
+    TreeModal
   },
   props: {
     questionsLength: {
@@ -420,6 +463,8 @@ export default {
     return {
       contentLoading: false,
       questionChoiceList: [],
+      subjectTagsTreeModal: false,
+      selectedTreeTags: [],
       confirmQuestion: false,
       questionLevel: 2,
       listConfig: {
@@ -436,6 +481,7 @@ export default {
         questionComment: true,
         descriptiveAnswer: true,
         questionAnswerExpanded: false,
+        quickEditExpanded: false,
         menu: {
           show: true,
           items: {
@@ -496,10 +542,14 @@ export default {
           question_id: this.question.id
         }
       }
+    },
+    tagsTitles() {
+      return this.selectedTreeTags.map(node => node.title)
     }
   },
   created () {
     this.setPageConfig()
+    this.setSelectedTreeTags()
     // console.log('this.question ', this.question)
   },
   mounted () {
@@ -507,6 +557,23 @@ export default {
     // console.log('question :', this.question)
   },
   methods: {
+    saveQuestion () {
+      const question = {
+        id: this.question.id,
+        subject_tags: this.selectedTreeTags.map(tag => tag.id),
+        type_id: this.question.type_id
+      }
+      this.$apiGateway.question.update(question)
+        .then((exam) => {
+          this.$q.notify({
+            message: 'ویرایش با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
+          })
+          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.question.id } })
+        })
+        .catch(() => {})
+    },
     onResize () {
       this.$refs.questionComponent?.setChoiceCol()
     },
@@ -529,6 +596,9 @@ export default {
     },
     setQuestionLevel () {
       this.questionLevel = this.question.level
+    },
+    setSelectedTreeTags () {
+      this.selectedTreeTags = this.question.subject_tags.list
     },
     setPageConfig () {
       this.applyPageStrategy()
@@ -641,6 +711,11 @@ export default {
       if (this.listConfig.questionAnswerExpanded) {
         this.getQuestionContent()
       }
+    },
+    toggleQuickEdit() {
+      console.log(this.listConfig.quickEditExpanded)
+      console.log(!this.listConfig.quickEditExpanded, '-------------')
+      this.listConfig.quickEditExpanded = !this.listConfig.quickEditExpanded
     },
     getQuestionContent() {
       if (!this.question.content_id) {
@@ -1127,6 +1202,33 @@ export default {
     }
   }
 
+  .detail-box {
+    padding-right: 12px #{"/* rtl:ignore */"};
+    padding-left: 12px #{"/* rtl:ignore */"};
+
+    .input-container {
+      .input-box {
+        width: calc( 100% - 52px );
+      }
+
+      .icon-box {
+        width: 40px;
+        height: 40px;
+        background: #FFFFFF;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 12px;
+
+        .question-details-subject-img {
+          height: 24px;
+          max-width: 24px;
+        }
+      }
+    }
+  }
+
   .question-footer-section {
     display: flex;
     justify-content: space-between;
@@ -1172,6 +1274,21 @@ export default {
         flex-direction: column;
       }
 
+      .edit-button {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 19px;
+        color: #6D708B;
+        text-align: center;
+
+        @media only screen and (max-width: 599px) {
+          align-items: flex-end;
+        }
+        &:deep(.q-icon) {
+          font-size: 14px;
+        }
+      }
       .report-button {
         font-style: normal;
         font-weight: 400;
@@ -1288,6 +1405,24 @@ export default {
   .action-box {
     display: flex;
     justify-content: flex-end;
+
+    .edit-button {
+      height: 40px;
+      width: 96px;
+      background: #9690E4;
+      border-radius: 8px;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 22px;
+      letter-spacing: -0.03em;
+      color: #FFFFFF;
+
+      &.cancel {
+        background: #F2F5F9;
+        color: #6D708B;
+      }
+    }
 
     .report-button {
       height: 40px;

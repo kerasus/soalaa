@@ -144,7 +144,7 @@
           <div class="exam-info">
             <div class="exam-title">نام آزمون: {{ draftExam.title }}</div>
             <div class="exam-major">رشته: {{ draftMajor }}</div>
-            <div class="exam-grade">پایه: {{ draftGrade }}</div>
+            <!-- <div class="exam-grade ellipsis">پایه: {{ draftGrade }}</div> -->
           </div>
         </q-card-section>
         <q-card-actions class="flex flex-center">
@@ -215,12 +215,24 @@ export default {
       }
       return major.value
     },
+    gradeList() {
+      const grades = []
+      for (let index = 0; index < this.draftExam.questions.list.length; index++) {
+        for (let tagIndex = 0; tagIndex < this.questions.list[index].tags.list.length; tagIndex++) {
+          const grade = this.questions.list[index].tags.list[tagIndex]?.ancestors[1].title
+          if (grade && grades.filter(g => g === grade).length === 0) {
+            grades.push(grade)
+          }
+        }
+      }
+      return grades
+    },
     draftGrade() {
-      const grade = this.gradesList.find(x => x.id === this.draftExam.temp.grade)
+      const grade = this.gradeList.join('، ')
       if (!grade) {
         return ''
       }
-      return grade.title
+      return grade
     }
   },
   watch: {
@@ -254,7 +266,7 @@ export default {
         .then(() => {
           this.getDraftExam()
             .then(draftExam => {
-              if (draftExam) {
+              if (draftExam.id) {
                 this.loadDraftExam(draftExam)
                 this.continueWithOldDraftExamConfirmationDialog = true
               } else {
@@ -436,7 +448,7 @@ export default {
         title: this.draftExam.title,
         temp: {
           major: this.draftExam.temp.major,
-          grade: this.draftExam.temp.grade,
+          grade: JSON.stringify(this.draftExam.temp.grade),
           level: 2
         }
       })
@@ -450,7 +462,7 @@ export default {
           temp: {
             major: this.draftExam.temp.major,
             lesson: this.draftExam.temp.lesson,
-            grade: this.draftExam.temp.grade,
+            grade: JSON.stringify(this.draftExam.temp.grade),
             tags: this.getDraftExamTags(this.draftExam.temp.tags),
             level: newStep === 'createPage' ? 1 : newStep === 'chooseQuestion' ? 2 : 3
           }
@@ -832,6 +844,7 @@ export default {
     }
 
     .exam-grade {
+      width: 100px;
       font-style: normal;
       font-weight: 400;
       font-size: 12px;
