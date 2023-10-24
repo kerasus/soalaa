@@ -1,5 +1,5 @@
 import { SetList } from 'src/models/Set.js'
-import { appApiInstance } from 'src/boot/axios.js'
+import { appApiInstance, alaaApiInstance } from 'src/boot/axios.js'
 import APIRepository from '../classes/APIRepository.js'
 import { Content, ContentList } from 'src/models/Content.js'
 import { Product, ProductList } from 'src/models/Product.js'
@@ -228,10 +228,10 @@ export default class ProductAPI extends APIRepository {
   landingAllProducts() {
     return this.sendRequest({
       apiMethod: 'get',
-      api: this.api,
+      api: alaaApiInstance,
       request: this.APIAdresses.landingAllProducts,
       resolveCallback: (response) => {
-        return new Content(response.data.data)
+        return new ProductList(response.data.data)
       },
       rejectCallback: (error) => {
         return error

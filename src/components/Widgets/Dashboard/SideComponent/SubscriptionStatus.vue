@@ -253,6 +253,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+:deep(.highcharts-container) {
+  margin: 0 auto;
+}
 .subscription-tabs {
   color: #8A8CA6;
 
