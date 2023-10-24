@@ -1532,10 +1532,9 @@ export default {
     async getProducts() {
       try {
         const productList = await this.callProductApi()
-        console.log(productList)
         this.adaptData(productList.list)
       } catch (e) {
-        console.log(e)
+        // console.log(e)
       }
     },
 
