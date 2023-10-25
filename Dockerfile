@@ -46,8 +46,9 @@ RUN yarn build:ssr
 
 FROM node:16.16.0-alpine
 
-
 COPY --from=prebuild /var/www/app/dist/ssr /var/www/app/dist/ssr
+
+COPY --from=prebuild /var/www/app/node_modules /var/www/app/dist/ssr/node_modules
 
 WORKDIR /var/www/app/dist/ssr
 
