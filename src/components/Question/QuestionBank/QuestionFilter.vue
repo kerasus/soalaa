@@ -362,9 +362,9 @@ export default {
       }
     },
     showTreeModalNode (NodeId) {
-      const nodeToLoadTreeFrom = NodeId ? this.getNode(NodeId) : this.getRootNode('test')
+      // const nodeToLoadTreeFrom = NodeId ? this.getNode(NodeId) : this.getRootNode('test')
       this.treeKey += 1
-      this.showTree('tree', nodeToLoadTreeFrom)
+      this.showTree('tree', this.getRootNode('test'))
         .then(() => {
         })
     },
