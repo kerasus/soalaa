@@ -269,16 +269,16 @@ export default {
           disable: false,
           label: 'پایه تحصیلی',
           className: 'col-12'
+        },
+        {
+          name: 'lesson',
+          selectedValue: new TreeNode(),
+          nodeList: [],
+          routeNameToGetNode: (layerId) => APIGateway.tree.getNodeById(layerId),
+          disable: false,
+          label: 'انتخاب درس',
+          className: 'col-12 q-mt-lg'
         }
-        // {
-        //   name: 'lesson',
-        //   selectedValue: new TreeNode(),
-        //   nodeList: [],
-        //   routeNameToGetNode: (layerId) => APIGateway.tree.getNodeById(layerId),
-        //   disable: false,
-        //   label: 'نام درس',
-        //   class: 'col-12'
-        // }
       ],
       examGradeSetValue: '',
       selectedNodesIds: [],
