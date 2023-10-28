@@ -22,8 +22,8 @@
                     :value="category"
                     label="دفترچه"
                     :options="categoryOptions"
-                    option-value="categoryOptions"
-                    option-label="title"
+                    option-value="id"
+                    option-label="value"
                     emit-value
                     map-options
                     :disable="totalCategory" />
@@ -63,7 +63,7 @@
                       label="دفترچه"
                       :options="categoryOptions"
                       option-value="id"
-                      option-label="title"
+                      option-label="value"
                       emit-value
                       map-options />
             <q-input v-model="category.order"
