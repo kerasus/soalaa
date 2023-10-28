@@ -195,7 +195,7 @@
           <div class="col-12 q-mb-md">
             <q-separator />
           </div>
-          <div class="detail-box col-8">
+          <div class="detail-box col-5">
             <div class="detail-box-title">تگ موضوعی</div>
             <div class="input-container flex">
               <div class="input-box">
@@ -211,11 +211,33 @@
               </div>
             </div>
           </div>
-          <div class="col-3 flex justify-start items-center">
+          <div class="detail-box col-5">
+            <div class="detail-box-title">مبحث</div>
+            <div class="input-container flex">
+              <div class="input-box">
+                <q-input v-model="nodeTagsTitles"
+                         dense
+                         disable />
+              </div>
+              <div class="icon-box">
+                <q-btn unelevated
+                       icon="isax:tree"
+                       class="open-modal-btn default-detail-btn"
+                       @click="dialogValue = true" />
+              </div>
+            </div>
+          </div>
+          <div class="col-2 flex justify-start items-center">
             <q-btn color="primary"
                    label="ذخیره تگ ها"
                    @click="saveQuestion" />
           </div>
+          <tree-modal ref="questionTreeModal"
+                      v-model:dialogValue="dialogValue"
+                      v-model:selected-nodes="selectedNodes"
+                      :tree-type="'test'"
+                      :layers-config="treeLayersConfig"
+                      exchange-last-layer-only />
           <tree-modal v-model:dialogValue="subjectTagsTreeModal"
                       v-model:selected-nodes="selectedTreeTags"
                       :tree-type="'subject_tags'"
@@ -383,7 +405,7 @@ import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import question from 'src/components/Question/QuestionItem/Question.vue'
 import QuestionTags from 'src/components/CommonComponents/Exam/Create/QuestionTags/QuestionTags.vue'
 import TreeModal from 'components/Question/QuestionPage/TreeModal.vue'
-
+import { TreeNode } from 'src/models/TreeNode.js'
 export default {
   name: 'QuestionItem',
   components: {
@@ -464,7 +486,27 @@ export default {
       contentLoading: false,
       questionChoiceList: [],
       subjectTagsTreeModal: false,
+      dialogValue: false,
       selectedTreeTags: [],
+      selectedNodes: [],
+      treeLayersConfig: [
+        {
+          name: 'grade',
+          selectedValue: new TreeNode(),
+          nodeList: [],
+          routeNameToGetNode: APIGateway.tree.APIAdresses.getGradesList,
+          disable: false,
+          label: 'پایه تحصیلی'
+        },
+        {
+          name: 'lesson',
+          selectedValue: new TreeNode(),
+          nodeList: [],
+          routeNameToGetNode: (layerId) => APIGateway.tree.APIAdresses.getNodeById(layerId),
+          disable: false,
+          label: 'نام درس'
+        }
+      ],
       confirmQuestion: false,
       questionLevel: 2,
       listConfig: {
@@ -545,6 +587,9 @@ export default {
     },
     tagsTitles() {
       return this.selectedTreeTags.map(node => node.title)
+    },
+    nodeTagsTitles() {
+      return this.selectedNodes.map(node => node.title)
     }
   },
   created () {
@@ -561,6 +606,7 @@ export default {
       const question = {
         id: this.question.id,
         subject_tags: this.selectedTreeTags.map(tag => tag.id),
+        tags: this.selectedNodes.map(tag => tag.id),
         type_id: this.question.type_id
       }
       this.$apiGateway.question.update(question)
@@ -599,6 +645,7 @@ export default {
     },
     setSelectedTreeTags () {
       this.selectedTreeTags = this.question.subject_tags.list
+      this.selectedNodes = this.question.tags.list
     },
     setPageConfig () {
       this.applyPageStrategy()
@@ -713,8 +760,6 @@ export default {
       }
     },
     toggleQuickEdit() {
-      console.log(this.listConfig.quickEditExpanded)
-      console.log(!this.listConfig.quickEditExpanded, '-------------')
       this.listConfig.quickEditExpanded = !this.listConfig.quickEditExpanded
     },
     getQuestionContent() {

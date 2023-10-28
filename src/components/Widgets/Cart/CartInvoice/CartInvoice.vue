@@ -284,9 +284,9 @@ export default {
       this.transition = true
       this.$store.commit('loading/loading', true)
       this.$store.dispatch('Cart/paymentCheckout')
-        .then((response) => {
-          if (response.data.data.url !== undefined) {
-            window.open(response.data.data.url, '_self')
+        .then((url) => {
+          if (url !== undefined) {
+            window.open(url, '_self')
             this.$store.commit('loading/loading', false)
           } else {
             this.$q.notify({
