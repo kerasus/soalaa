@@ -66,7 +66,7 @@ export default {
   },
   computed: {
     getQuestionUploadURL () {
-      return this.$apiGateway.question.APIAdresses.uploadImage(this.question.id)
+      return this.$apiGateway.question.FullAPIAdresses.uploadImage(this.question.id)
     },
     getAuthorizationCode () {
       return 'Bearer ' + this.$store.getters['Auth/accessToken']
