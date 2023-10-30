@@ -19,7 +19,7 @@
       <q-separator />
       <q-card-section class="flex">
         <div class="row bg-grey-3 add-category-box">
-          <q-select v-model="category.title"
+          <q-select v-model="category.id"
                     class="q-pa-md col-md-4"
                     :value="category"
                     label="دفترچه"
@@ -241,7 +241,6 @@ export default {
       if (this.totalCategory) {
         return
       }
-
       if (this.category.title.id) {
         this.category.id = this.category.title.id
         this.category.title = this.category.title.title
