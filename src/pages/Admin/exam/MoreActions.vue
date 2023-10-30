@@ -69,7 +69,7 @@ export default {
       this.generateJsonFileLoading = true
       const that = this
       this.$store.dispatch('loading/linearLoading', true)
-      this.$apiGateway.exam.generateExamFile(id, withAnswer)
+      this.$apiGateway.exam.generateExamFile({ examId: id, withAnswer })
         .then(() => {
           that.$q.notify({
             type: 'positive',
