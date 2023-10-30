@@ -4,7 +4,7 @@ import { appApiInstance } from 'src/boot/axios.js'
 
 const APIAdresses = {
   base: '/sub-category',
-  update (id) {
+  update(id) {
     return '/sub-category/' + id
   },
   updateOrder: '/exam-question/update/order/sub-category'
@@ -67,7 +67,7 @@ export default class QuestionSubCategoryAPI extends APIRepository {
 
   updateOrder(data) {
     return this.sendRequest({
-      apiMethod: 'put',
+      apiMethod: 'post',
       api: this.api,
       request: this.APIAdresses.updateOrder,
       resolveCallback: (response) => {
