@@ -246,7 +246,7 @@ export default {
       }
     }
   },
-  created () {
+  mounted () {
     this.examId = this.$route.params.id
     this.getData()
   },
@@ -311,9 +311,9 @@ export default {
         })
     },
     getSubCategoryList () {
-      this.$axios.get(this.subCategoriesList.baseRoute)
-        .then((response) => {
-          this.subCategoriesList = new QuestSubcategoryList(response.data.data)
+      this.$apiGateway.questionSubcategory.get()
+        .then((questSubcategoryList) => {
+          this.subCategoriesList = new QuestSubcategoryList(questSubcategoryList)
         })
     },
     existedSubGroup () {

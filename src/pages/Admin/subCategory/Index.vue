@@ -241,7 +241,7 @@ export default {
     },
     setCategoryTitle (id) {
       let title = ''
-      this.categoryResponse.forEach(category => {
+      this.categoryResponse.list.forEach(category => {
         if (category.id === id) {
           title = category.title
         }

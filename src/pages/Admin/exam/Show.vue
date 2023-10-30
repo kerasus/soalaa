@@ -1,6 +1,7 @@
 <template>
   <div>
-    <entity-show v-model:value="inputs"
+    <entity-show v-if="mounted"
+                 v-model:value="inputs"
                  title="اطلاعات آزمون"
                  :api="api"
                  :entity-id-key="entityIdKey"
@@ -48,6 +49,7 @@ export default {
   },
   data () {
     return {
+      mounted: false,
       api: APIGateway.exam.APIAdresses.base(),
       entityIdKey: 'data.id',
       entityParamKey: 'data.id',
@@ -100,6 +102,9 @@ export default {
   },
   created () {
     this.api += '/' + this.$route.params.id
+  },
+  mounted () {
+    this.mounted = true
   },
   methods: {
     onCopyToClipboard (data) {

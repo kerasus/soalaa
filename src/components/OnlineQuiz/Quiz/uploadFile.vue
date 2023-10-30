@@ -143,6 +143,8 @@ export default {
           })
           this.getBookletOptions()
         })
+        .catch(() => {
+        })
     },
     getBookletOptions () {
       this.$apiGateway.option.getOptions({
@@ -151,6 +153,8 @@ export default {
         .then(options => {
           this.bookletOptions = options
           this.getBooklets()
+        })
+        .catch(() => {
         })
     },
     getBooklets () {
@@ -174,6 +178,8 @@ export default {
             }
           })
           this.dataLoading = false
+        })
+        .catch(() => {
         })
     },
     addFiles (files, item, group) {
