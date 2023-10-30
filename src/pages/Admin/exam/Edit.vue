@@ -241,9 +241,7 @@ export default {
       if (this.totalCategory) {
         return
       }
-      console.log('out', this.category)
       if (this.category.title.id) {
-        console.log('inIf: ', this.category)
         this.category.id = this.category.title.id
         this.category.title = this.category.title.title
       }
