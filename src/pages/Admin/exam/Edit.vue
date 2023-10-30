@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="q-mb-lg">
-      <entity-edit :key="entityEdit"
+      <entity-edit v-if="mounted"
+                   :key="entityEdit"
                    v-model:value="inputs"
                    title="ویرایش اطلاعات آزمون"
                    :api="api"
@@ -10,7 +11,8 @@
                    :show-route-name="showRouteName"
                    :before-load-input-data="beforeLoadInputData" />
     </div>
-    <q-card class="category-card">
+    <q-card v-if="mounted"
+            class="category-card">
       <q-card-section>
         <h6 class="category-header q-ma-md">لیست دفترچه ها</h6>
       </q-card-section>
@@ -23,7 +25,7 @@
                     label="دفترچه"
                     :options="categoryOptions"
                     option-value="id"
-                    option-label="value"
+                    option-label="title"
                     emit-value
                     map-options
                     :disable="totalCategory" />
@@ -63,7 +65,7 @@
                       label="دفترچه"
                       :options="categoryOptions"
                       option-value="id"
-                      option-label="value"
+                      option-label="title"
                       emit-value
                       map-options />
             <q-input v-model="category.order"
@@ -94,13 +96,15 @@
 
 <script>
 import { EntityEdit } from 'quasar-crud'
-import { APIGateway } from 'src/api/APIGateway'
+import { APIGateway } from 'src/api/APIGateway.js'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 
 export default {
   name: 'Edit',
   components: { EntityEdit },
   data () {
     return {
+      mounted: false,
       entityEdit: Date.now(),
       detachCategoryLoading: false,
       api: APIGateway.exam.APIAdresses.base(),
@@ -166,13 +170,14 @@ export default {
       // return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 3
     }
   },
-  created () {
+  mounted () {
     this.$store.commit('AppLayout/updateLastBreadcrumb', {
       loading: true
     })
     this.api += '/' + this.$route.params.id
     this.getOptions()
     this.getCategoryList()
+    this.mounted = true
   },
   methods: {
     beforeLoadInputData (response) {
@@ -188,10 +193,10 @@ export default {
     },
     getCategoryList() {
       this.detachCategoryLoading = true
-      this.$apiGateway.option.getFilterOptions()
-        .then((options) => {
+      APIGateway.questionCategory.get()
+        .then((questCategoryList) => {
           this.detachCategoryLoading = false
-          this.categoryOptions = options
+          this.categoryOptions = (new QuestCategoryList(questCategoryList)).list
         })
         .catch(() => {
           this.detachCategoryLoading = false
