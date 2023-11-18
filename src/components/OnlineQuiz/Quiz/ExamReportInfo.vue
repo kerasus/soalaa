@@ -93,7 +93,7 @@ export default {
     examId: null,
     examTitle: null + 'ویرایش'
   }),
-  created () {
+  mounted () {
     this.$store.commit('AppLayout/updateLastBreadcrumb', {
       loading: true
     })
