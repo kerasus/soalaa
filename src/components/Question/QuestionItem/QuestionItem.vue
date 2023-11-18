@@ -606,17 +606,15 @@ export default {
       const question = {
         id: this.question.id,
         subject_tags: this.selectedTreeTags.map(tag => tag.id),
-        tags: this.selectedNodes.map(tag => tag.id),
-        type_id: this.question.type_id
+        tags: this.selectedNodes.map(tag => tag.id)
       }
-      this.$apiGateway.question.update(question)
-        .then((exam) => {
+      APIGateway.question.quickUpdate(question)
+        .then((resQuestion) => {
           this.$q.notify({
             message: 'ویرایش با موفقیت انجام شد',
             color: 'green',
             icon: 'thumb_up'
           })
-          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.question.id } })
         })
         .catch(() => {})
     },

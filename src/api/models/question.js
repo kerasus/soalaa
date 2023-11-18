@@ -6,16 +6,16 @@ import { AttachedExamList } from 'src/models/AttachedExam.js'
 import { Log, LogList } from 'src/models/Log.js'
 
 const APIAdresses = {
-  photo (type, id) {
+  photo(type, id) {
     return '/question/' + type + '/' + id
   },
   indexMonta: '/question/search-monta',
   bank: {
     page: (page) => '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
   },
-  index (filters, page, isAdmin = false) {
+  index(filters, page, isAdmin = false) {
     let newFilter = (filters) ? JSON.parse(JSON.stringify(filters)) : {}
-    function setQueryParams (paramKey, singleMode = false) {
+    function setQueryParams(paramKey, singleMode = false) {
       if (!newFilter) {
         newFilter = {}
       }
@@ -113,20 +113,20 @@ const APIAdresses = {
   groupAttach: '/question/group/attach',
   status: {
     base: '/question/statuses',
-    changeStatus (questionId) {
+    changeStatus(questionId) {
       return '/question/' + questionId + '/status'
     }
   },
   reportStatuses: '/question/report/statuses',
   levels: '/question/levels',
   log: {
-    base (questionId, pagination) {
+    base(questionId, pagination) {
       if (!pagination) {
         pagination = 0
       }
       return '/activity-log?subject_id=' + questionId + '&subject=question&with_pagination=0'
     },
-    addComment (id) {
+    addComment(id) {
       return '/activity-log/' + id + '/comment'
     }
   },
@@ -134,37 +134,38 @@ const APIAdresses = {
   createAndAttach: () => '/attacexam-question/h/',
   create: '/question',
   attachSubCategoryToQuestion: '/exam-question/attach/sub-category',
-  update (questionId) {
+  update(questionId) {
     return '/question/' + questionId
   },
+  quickUpdate: (questionId) => `/question/${questionId}/quick-update`,
   reportLog: (questionId) => '/question/report/' + questionId,
-  show (questionId) {
+  show(questionId) {
     return '/question/' + questionId
   },
   attach: '/exam-question/attach/v2',
-  detach (questionId) {
+  detach(questionId) {
     return '/exam-question/detach/' + questionId
   },
-  delete (questionId) {
+  delete(questionId) {
     return '/question/' + questionId
   },
-  getCurrentQuestion (questionId) {
+  getCurrentQuestion(questionId) {
     return '/question/' + questionId
   },
-  confirm (questionId) {
+  confirm(questionId) {
     return '/question/confirm/' + questionId
   },
-  unconfirm (questionId) {
+  unconfirm(questionId) {
     return '/question/unconfirm/' + questionId
   },
-  uploadImage (questionId) {
+  uploadImage(questionId) {
     return '/question/upload/' + questionId
   },
   printQuestions: '/question/export',
   report(questionId) {
     return 'question/report/store/' + questionId
   },
-  setTags (questionId) {
+  setTags(questionId) {
     return '/id/soalaQestion/' + questionId
   }
 }
@@ -282,6 +283,21 @@ export default class QuestionAPI extends APIRepository {
       apiMethod: 'put',
       api: this.api,
       request: this.APIAdresses.update(data.id),
+      resolveCallback: (response) => {
+        return new Question(response.data.data)
+      },
+      rejectCallback: () => {
+        return new Question()
+      },
+      data
+    })
+  }
+
+  quickUpdate(data) {
+    return this.sendRequest({
+      apiMethod: 'put',
+      api: this.api,
+      request: this.APIAdresses.quickUpdate(data.id),
       resolveCallback: (response) => {
         return new Question(response.data.data)
       },
