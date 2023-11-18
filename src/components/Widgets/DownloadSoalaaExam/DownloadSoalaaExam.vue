@@ -180,6 +180,18 @@
                      :val="false"
                      label="خیر" />
           </div>
+          <div class="sub-title">
+            تم صفحه
+          </div>
+          <div class="radio-btn">
+            <q-radio v-model="pdfConfig.theme"
+                     :val="'theme1'"
+                     label="تم ۱" />
+
+            <q-radio v-model="pdfConfig.theme"
+                     :val="'theme2'"
+                     label="تم ۲" />
+          </div>
 
           <div class="sub-title">
             شماره اولین صفحه سوال
@@ -453,6 +465,7 @@ export default {
       hasTitle: true,
       hasMajor: true,
       hasGrade: true,
+      theme: 'theme1',
       hasPaginateQuestion: true,
       hasPaginateAnswer: true,
       hasLevelQuestion: true,
@@ -626,29 +639,11 @@ export default {
           },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         }
-        function chunkPages(size) {
-          const chunkedPages = []
-          for (let i = 0; i < pages.length; i += size) {
-            let chunkedArr = []
-            const newDiv = document.createElement('div')
-            if (i + size <= pages.length) {
-              chunkedArr = pages.slice(i, i + size)
-            } else {
-              chunkedArr = pages.slice(i)
-            }
-            chunkedArr.forEach(page => {
-              newDiv.appendChild(page.cloneNode(true))
-            })
-            chunkedPages.push(newDiv)
-          }
-          return chunkedPages
-        }
-        const chunkedPages = chunkPages(20)
         let worker = html2pdf()
           .set(html2pdfConfig)
-          .from(chunkedPages[0])
+          .from(pages[0])
           .toPdf()
-        chunkedPages.slice(1)
+        pages.slice(1)
           .forEach(function (page, pageIndex) {
             worker = worker.get('pdf')
               .then(function (pdf) {

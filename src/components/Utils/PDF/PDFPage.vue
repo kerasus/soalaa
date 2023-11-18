@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper"
-       :class="{'is3a': is3a}">
+       :class="{'is3a': pdfConfig.theme === 'theme1'}">
     <div class="page-header">
       <div class="logo" />
       <div class="info">
@@ -108,6 +108,7 @@ export default defineComponent({
           hasMajor: true,
           hasGrade: true,
           hasPaginate: true,
+          theme: 'theme1',
           paginateStart: 1,
           spaceBetweenQuestion: 5,
           rightMargin: 5,
