@@ -10,7 +10,10 @@
 
 require('dotenv').config()
 const { configure } = require('quasar/wrappers')
+const VitePlugin = require('@sentry/vite-plugin')
 const { generateWidgetList } = require('./src/widgetListGetter/index.js')
+
+const sentryVitePlugin = VitePlugin.sentryVitePlugin
 
 module.exports = configure(function (ctx) {
   return {
@@ -186,6 +189,23 @@ module.exports = configure(function (ctx) {
       // viteVuePluginOptions: {},
 
       vitePlugins: [
+        // // Put the Sentry vite plugin after all other plugins
+        sentryVitePlugin({
+          telemetry: false,
+          include: ['./dist'],
+          ignore: ['node_modules', 'quasar.config.js'],
+          org: process.env.SENTRY_ORG,
+          project: process.env.SENTRY_PROJECT,
+          authToken: process.env.SENTRY_AUTH_TOKEN,
+          // configFile: 'entry.properties',
+          // stripPrefix: ['dist/js'],
+          urlSuffix: '.map',
+          validate: true,
+          rewrite: true,
+          attachCommits: true,
+          includeSourceMaps: true
+        })
+
         // ['@intlify/vite-plugin-vue-i18n', {
         //   // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
         //   compositionOnly: false,

@@ -836,7 +836,7 @@ export default class ExamAPI extends APIRepository {
     return this.sendRequest({
       apiMethod: 'get',
       api: this.api,
-      request: this.APIAdresses.subGroups.all,
+      request: this.APIAdresses.subGroups.all(),
       resolveCallback: (response) => {
         return response.data.data // All subGroups List
       },

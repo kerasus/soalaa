@@ -23,6 +23,8 @@
     "@nodeguy/server-date": "^4.0.3",
     "@quasar/app-vite": "^1.6.2",
     "@quasar/extras": "^1.16.7",
+    "@sentry/vite-plugin": "^2.10.1",
+    "@sentry/vue": "^7.80.1",
     "autoprefixer": "^10.4.14",
     "axios": "^1.5.1",
     "cropperjs": "^1.5.13",
@@ -69,14 +71,14 @@
     "vue-upload-component": "^3.1.6",
     "vue3-carousel": "^0.1.46",
     "vue3-otp-input": "^0.4.1",
-    "vue3-tiptap-katex": "^1.1.19",
+    "vue3-tiptap-katex": "^1.1.27",
     "vuex": "^4.1.0",
     "vuex-persistedstate": "^4.1.0",
     "workbox-build": "^6.5.4",
     "workbox-window": "^6.5.4"
   },
   "engines": {
-    "node": "^18 || ^16 || ^14.19",
+    "node": "^20 || ^19 || ^18 || ^16 || ^14.19",
     "npm": ">= 6.13.4",
     "yarn": ">= 1.21.1"
   }

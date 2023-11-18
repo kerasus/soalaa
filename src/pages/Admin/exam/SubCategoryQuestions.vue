@@ -300,7 +300,7 @@ export default {
     getQuizDataAndSubCategories (pageNumber) {
       return APIGateway.exam.examQuestion({
         examId: this.examId,
-        pageNumber,
+        page: pageNumber,
         data: {
           sub_categories: [this.$route.params.subcategory_id]
         }
