@@ -86,7 +86,7 @@
           </q-btn>
           <q-btn flat
                  class="btn-go-to-print-exam"
-                 :to="{ name: 'User.Exam.Download', params: { examId: draftExam.id } }">
+                 :to="{ name: 'User.SoalaaExam.Download', params: { examId: draftExam.id } }">
             دانلود فایل آزمون
           </q-btn>
         </div>

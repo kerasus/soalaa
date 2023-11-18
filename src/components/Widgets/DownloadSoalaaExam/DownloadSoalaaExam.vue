@@ -453,6 +453,7 @@ export default {
       hasTitle: true,
       hasMajor: true,
       hasGrade: true,
+      hasPaginate: true,
       hasPaginateQuestion: true,
       hasPaginateAnswer: true,
       hasLevelQuestion: true,

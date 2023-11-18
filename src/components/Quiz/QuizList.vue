@@ -363,9 +363,9 @@ export default defineComponent({
         examActions.push({
           title: 'دانلود سوالات آزمون',
           disable: true,
-          to: { name: 'User.Exam.Download' },
+          // to: { name: 'User.Exam.Download' },
           icon: 'isax:import',
-          action: () => this.$router.push({ name: 'User.Exam.Download', params: { examId: exam.id } })
+          action: () => this.goToDownloadExam(exam)
         })
       }
       if (exam.holding_status) {
