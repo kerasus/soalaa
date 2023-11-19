@@ -643,7 +643,9 @@ export default {
           }
           return chunkedPages
         }
-        const chunkedPages = chunkPages(20)
+        const chunkedPages = chunkPages(23)
+        // The maximum size for each chunk must be 23. This is because the html2pdf package uses the html2canvas package to convert HTML to canvas,
+        // and this package cannot convert HTML to canvas with a size greater than 23 page.
         let worker = html2pdf()
           .set(html2pdfConfig)
           .from(chunkedPages[0])
