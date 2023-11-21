@@ -35,7 +35,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.6.0",
     "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-vue": "^9.9.0",
+    "eslint-plugin-vue": "^9.18.1",
     "filepond": "^4.30.4",
     "filepond-plugin-image-preview": "^4.6.11",
     "firebase": "^9.21.0",
