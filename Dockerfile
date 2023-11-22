@@ -1,4 +1,4 @@
-FROM node:16.16.0-alpine as prebuild
+FROM node:20.9-alpine AS prebuild
 
 # Set working directory
 WORKDIR /var/www/app
@@ -30,6 +30,9 @@ ARG SENTRY_DSN
 ARG SENTRY_TRACES_SAMPLE_RATE
 ARG SENTRY_REPLAYS_SESSION_SAMPLE_RATE
 ARG SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE
+ARG SENTRY_ORG
+ARG SENTRY_PROJECT
+ARG SENTRY_AUTH_TOKEN
 
 ARG NGINX_PORT=8082
 
@@ -44,7 +47,7 @@ RUN yarn build:ssr
 ##############################################
 
 
-FROM node:16.16.0-alpine
+FROM node:20.9-alpine
 
 COPY --from=prebuild /var/www/app/dist/ssr /var/www/app/dist/ssr
 

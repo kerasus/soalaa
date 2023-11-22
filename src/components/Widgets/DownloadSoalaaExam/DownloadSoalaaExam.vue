@@ -626,11 +626,31 @@ export default {
           },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         }
+        function chunkPages(size) {
+          const chunkedPages = []
+          for (let i = 0; i < pages.length; i += size) {
+            let chunkedArr = []
+            const newDiv = document.createElement('div')
+            if (i + size <= pages.length) {
+              chunkedArr = pages.slice(i, i + size)
+            } else {
+              chunkedArr = pages.slice(i)
+            }
+            chunkedArr.forEach(page => {
+              newDiv.appendChild(page.cloneNode(true))
+            })
+            chunkedPages.push(newDiv)
+          }
+          return chunkedPages
+        }
+        const chunkedPages = chunkPages(23)
+        // The maximum size for each chunk must be 23. This is because the html2pdf package uses the html2canvas package to convert HTML to canvas,
+        // and this package cannot convert HTML to canvas with a size greater than 23 page.
         let worker = html2pdf()
           .set(html2pdfConfig)
-          .from(pages[0])
+          .from(chunkedPages[0])
           .toPdf()
-        pages.slice(1)
+        chunkedPages.slice(1)
           .forEach(function (page, pageIndex) {
             worker = worker.get('pdf')
               .then(function (pdf) {

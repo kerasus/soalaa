@@ -7,7 +7,8 @@
             <div class="header flex justify-between">
               <div class="title">اطلاعات آزمون</div>
               <div class="disable-all"
-                   @click="deleteAll('info')">غیرفعال کردن همه</div>
+                   @click="deleteAll('info')">غیرفعال کردن همه
+              </div>
             </div>
           </div>
           <div class="col-12">
@@ -40,6 +41,57 @@
               </div>
             </div>
           </div>
+          <div class="col-12 q-mt-sm">
+            <div class="row q-col-gutter-md">
+              <div class="col-12">
+                مرجع / طراح سوال
+              </div>
+              <div class="col-6">
+                <q-checkbox v-model="pdfConfig.hasReferenceQuestion">
+                  پرسشنامه
+                </q-checkbox>
+              </div>
+              <div class="col-6">
+                <q-checkbox v-model="pdfConfig.hasReferenceAnswer">
+                  پاسخنامه
+                </q-checkbox>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 q-mt-sm">
+            <div class="row q-col-gutter-md">
+              <div class="col-12">
+                سال طراحی سوال
+              </div>
+              <div class="col-6">
+                <q-checkbox v-model="pdfConfig.hasYearQuestion">
+                  پرسشنامه
+                </q-checkbox>
+              </div>
+              <div class="col-6">
+                <q-checkbox v-model="pdfConfig.hasYearAnswer">
+                  پاسخنامه
+                </q-checkbox>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 q-mt-sm">
+            <div class="row q-col-gutter-md">
+              <div class="col-12">
+                درجه سختی
+              </div>
+              <div class="col-6">
+                <q-checkbox v-model="pdfConfig.hasLevelQuestion">
+                  پرسشنامه
+                </q-checkbox>
+              </div>
+              <div class="col-6">
+                <q-checkbox v-model="pdfConfig.hasLevelAnswer">
+                  پاسخنامه
+                </q-checkbox>
+              </div>
+            </div>
+          </div>
           <!-- <div class="col-12">
             <q-checkbox v-model="pdfConfig.hasCreator">
               منبع / طراح سوال
@@ -54,7 +106,8 @@
           <div class="header flex justify-between">
             <div class="title">فاصله گذاری</div>
             <div class="disable-all"
-                 @click="deleteAll('space')"> حذف همه</div>
+                 @click="deleteAll('space')"> حذف همه
+            </div>
           </div>
           <div class="sub-title">حاشیه اطراف کاغذ</div>
           <div class="l-t flex justify-between">
@@ -105,15 +158,15 @@
           <div class="header flex justify-between">
             <div class="title">شماره گذاری</div>
             <div class="disable-all"
-                 @click="deleteAll('paginate')"> حذف همه</div>
+                 @click="deleteAll('paginate')"> حذف همه
+            </div>
           </div>
-          <!-- <div class="sub-title">
+          <div class="sub-title">
             شماره شروع سوالات
           </div>
-          <q-input v-model="number"
+          <q-input v-model="pdfConfig.questionStart"
                    type="number"
-                   filled
-          /> -->
+                   filled />
 
           <div class="sub-title">
             صفحه بندی سوالات
@@ -152,7 +205,7 @@
                 class="tabs-box"
                 active-color="secondary"
                 align="left"
-                @update:model-value="requestPdf">
+                @update:model-value="onChangeTabpage">
           <q-tab name="questions"
                  label="سوالات" />
           <q-tab name="descriptiveAnswer"
@@ -161,6 +214,7 @@
                  label="پاسخنامه کلیدی" />
         </q-tabs>
         <q-tab-panels v-model="tab"
+                      keep-alive
                       animated>
           <q-tab-panel class="tab-panel-style"
                        name="questions">
@@ -180,19 +234,30 @@
                   <q-btn unelevated
                          class="btn cancel"
                          :to="{name:'User.Exam.List'}"
+                         :loading="loading"
                          label="انصراف" />
                   <q-btn unelevated
-                         :disable="downloadLoading"
-                         :loading="downloadLoading"
+                         :disable="downloadQuestionPagesLoading"
+                         :loading="downloadQuestionPagesLoading || loading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="downloadPDF('questionPdf')" />
+                         @click="downloadQuestionPages" />
                 </div>
               </div>
             </div>
             <div ref="questionPdf"
                  class="pdf-container">
+              <q-linear-progress v-if="downloadQuestionPagesLoading"
+                                 size="25px"
+                                 :value="downloadQuestionPagesProgress"
+                                 color="primary">
+                <div class="absolute-full flex flex-center">
+                  <q-badge color="white"
+                           text-color="primary"
+                           :label="Math.floor(downloadQuestionPagesProgress * 100) + '%'" />
+                </div>
+              </q-linear-progress>
               <div v-if="loading"
                    class="loading">
                 <q-skeleton height="900px"
@@ -204,6 +269,8 @@
                             class="pdf-skeleton" />
               </div>
               <p-d-f-container v-else
+                               v-model:pages="questionPages"
+                               :is3a="$route.params.user_exam_id"
                                :exam="examInfo"
                                :questions="questions"
                                :pdfConfig="pdfConfig"
@@ -218,7 +285,7 @@
                 {{ examInfo.n_questions }}
               </div>
               <div class="pages">
-                تعداد کل صفحات : {{ questionPagesCount }}
+                تعداد کل صفحات : {{ descriptiveAnswerPagesCount }}
               </div>
               <div class="action-box full-width flex justify-between items-end">
                 <div class="description">
@@ -227,20 +294,31 @@
                 <div class="action-btn">
                   <q-btn unelevated
                          class="btn cancel"
+                         :loading="loading"
                          :to="{name:'User.Exam.List'}"
                          label="انصراف" />
                   <q-btn unelevated
-                         :disable="downloadLoading"
-                         :loading="downloadLoading"
+                         :disable="downloadDescriptiveAnswerLoading"
+                         :loading="downloadDescriptiveAnswerLoading || loading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="downloadPDF('descriptiveAnswerPdf')" />
+                         @click="downloadDescriptiveAnswerPages" />
                 </div>
               </div>
             </div>
             <div ref="descriptiveAnswerPdf"
                  class="pdf-container">
+              <q-linear-progress v-if="downloadDescriptiveAnswerLoading"
+                                 size="25px"
+                                 :value="downloadDescriptiveAnswerPagesProgress"
+                                 color="primary">
+                <div class="absolute-full flex flex-center">
+                  <q-badge color="white"
+                           text-color="primary"
+                           :label="Math.floor(downloadDescriptiveAnswerPagesProgress * 100) + '%'" />
+                </div>
+              </q-linear-progress>
               <div v-if="loading"
                    class="loading">
                 <q-skeleton height="900px"
@@ -252,11 +330,13 @@
                             class="pdf-skeleton" />
               </div>
               <p-d-f-container v-else
+                               v-model:pages="descriptiveAnswerPages"
+                               :is3a="$route.params.user_exam_id"
                                :exam="examInfo"
                                :questions="questions"
                                :pdfConfig="pdfConfig"
                                :mode="'onlyDescriptiveAnswers'"
-                               @loaded="onQuestionsLoaded" />
+                               @loaded="onDescriptiveAnswersLoaded" />
             </div>
           </q-tab-panel>
           <q-tab-panel class="tab-panel-style"
@@ -267,7 +347,7 @@
                 {{ examInfo.n_questions }}
               </div>
               <div class="pages">
-                تعداد کل صفحات : {{ questionPagesCount }}
+                تعداد کل صفحات : 1
               </div>
               <div class="action-box full-width flex justify-between items-end">
                 <div class="description">
@@ -279,12 +359,12 @@
                          :to="{name:'User.Exam.List'}"
                          label="انصراف" />
                   <q-btn unelevated
-                         :disable="downloadLoading"
-                         :loading="downloadLoading"
+                         :disable="downloadKeyAnswerPdfLoading"
+                         :loading="downloadKeyAnswerPdfLoading"
                          color="primary"
                          class="btn"
                          label="دانلود PDF"
-                         @click="downloadPDF('keyAnswerPdf')" />
+                         @click="downloadKeyAnswerPdf" />
                 </div>
               </div>
             </div>
@@ -293,7 +373,8 @@
               <pdf-page :title="examInfo.title"
                         :grade="examInfo.gradeTitle"
                         :major="examInfo.majorTitle"
-                        :page="1">
+                        :page="1"
+                        :is3a="$route.params.user_exam_id">
                 <template v-slot:body>
                   <paginate-bubble-sheet :questions="questions"
                                          :info="{
@@ -319,12 +400,16 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
+import 'src/Utils/PrintElements/print.css'
+import ExamData from 'src/assets/js/ExamData.js'
 import PdfPage from 'src/components/Utils/PDF/PDFPage.vue'
 import PDFContainer from 'src/components/Utils/PDF/PDFContainer.vue'
-// import VuePdfEmbed from 'vue-pdf-embed'
-// import html2pdf from 'html2pdf.js'
+import PaginateBubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/paginateBubbleSheet.vue'
 
+// import VuePdfEmbed from 'vue-pdf-embed'
+// import html2canvas from 'html2canvas'
+
+// import html2pdf from 'html2pdf.js'
 let html2pdf
 if (typeof window !== 'undefined') {
   import('html2pdf.js')
@@ -332,10 +417,6 @@ if (typeof window !== 'undefined') {
       html2pdf = html2pdfLib.default
     })
 }
-
-// import html2canvas from 'html2canvas'
-import 'src/Utils/PrintElements/print.css'
-import PaginateBubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/paginateBubbleSheet.vue'
 
 export default {
   name: 'DownloadExam',
@@ -347,12 +428,18 @@ export default {
   },
   data: () => ({
     tab: 'questions',
+    questionPages: [],
+    downloadKeyAnswerPdfLoading: false,
+    downloadQuestionPagesProgress: 0,
+    downloadQuestionPagesLoading: false,
+    descriptiveAnswerPages: [],
+    downloadDescriptiveAnswerLoading: false,
+    downloadDescriptiveAnswerPagesProgress: 0,
     questionPagesCount: 0,
-    reportUsedPdfLoading: false,
+    descriptiveAnswerPagesCount: 0,
     downloadLoading: false,
     pageCount: 0,
     page: 1,
-    pdfSrc: '',
     examInfo: {
       title: '',
       gradeTitle: '',
@@ -366,7 +453,16 @@ export default {
       hasMajor: true,
       hasGrade: true,
       hasPaginate: true,
+      hasPaginateQuestion: true,
+      hasPaginateAnswer: true,
+      hasLevelQuestion: true,
+      hasLevelAnswer: true,
+      hasReferenceQuestion: true,
+      hasReferenceAnswer: true,
+      hasYearQuestion: true,
+      hasYearAnswer: true,
       paginateStart: 1,
+      questionStart: 1,
       spaceBetweenQuestion: 5,
       rightMargin: 5,
       leftMargin: 5,
@@ -379,9 +475,10 @@ export default {
   }),
   mounted() {
     this.requestPdf()
-    this.getExamInfo()
   },
   methods: {
+    onChangeTabpage() {
+    },
     deleteAll(type) {
       if (type === 'info') {
         this.pdfConfig.hasTitle = false
@@ -398,12 +495,20 @@ export default {
         this.pdfConfig.paginateStart = 0
       }
     },
-    onQuestionsLoaded (pages) {
+    onQuestionsLoaded(pages) {
       if (!pages) {
         this.questionPagesCount = 0
         return
       }
       this.questionPagesCount = pages.length
+      this.loading = false
+    },
+    onDescriptiveAnswersLoaded(pages) {
+      if (!pages) {
+        this.descriptiveAnswerPagesCount = 0
+        return
+      }
+      this.descriptiveAnswerPagesCount = pages.length
       this.loading = false
     },
     handleDocumentRender(data) {
@@ -412,7 +517,7 @@ export default {
     onChangePage(value) {
       // console.log('value :', value)
     },
-    getExamInfo () {
+    getExamInfo() {
       this.loading = true
       this.$apiGateway.exam.userExamInfo({
         examId: this.$route.params.examId
@@ -432,77 +537,165 @@ export default {
     },
     requestPdf() {
       this.loading = true
-      this.pdfSrc = ''
-      this.$apiGateway.exam.userQuestionsWithAnswer({
-        examId: this.$route.params.examId,
-        data: this.pdfConfig
+      if (this.$route.params.user_exam_id) {
+        const userExamId = this.$route.params.user_exam_id
+        const examId = this.$route.params.examId
+        const examData = new ExamData(this.$axios)
+        examData.getUserExamWithCorrectAnswers(userExamId, examId)
+          .loadQuestionsFromFile()
+          .getUserExamData(userExamId)
+          .run()
+          .then(() => {
+            this.questions = examData.exam.questions.list
+            this.questions.forEach(item => {
+              item.chunk = []
+            })
+            this.examInfo.title = examData.exam.title
+            this.examInfo.gradeTitle = examData.exam.grade?.title
+            if (examData.exam.grade) {
+              this.examInfo.gradeTitle = examData.exam.grade.title
+            }
+            if (examData.exam.major) {
+              this.examInfo.majorTitle = examData.exam.major.value
+            }
+            this.examInfo.n_questions = examData.exam.questions.list.length
+            this.doesHaveQuestion = true
+            this.loading = false
+            // that.report = examData.studentReport
+          })
+          .catch((error) => {
+            // that.goToExamList()
+            console.error(error)
+            this.$q.notify({
+              type: 'negative',
+              message: 'مشکلی در دریافت اطلاعات کارنامه رخ داده است.',
+              position: 'top'
+            })
+          })
+      } else {
+        this.pdfSrc = ''
+        this.$apiGateway.exam.userQuestionsWithAnswer({
+          examId: this.$route.params.examId,
+          data: this.pdfConfig
+        })
+          .then((questionList) => {
+            this.questions = questionList.list
+            this.questions.forEach(item => {
+              item.chunk = []
+            })
+            this.getExamInfo()
+            this.doesHaveQuestion = true
+            this.loading = false
+          }).catch(() => {
+            this.loading = false
+          })
+      }
+    },
+    downloadKeyAnswerPdf() {
+      this.download([this.$refs.keyAnswerPdf], this.downloadKeyAnswerPdfLoading)
+      this.downloadKeyAnswerPdfLoading = true
+      this.downloadPdfPages([this.$refs.keyAnswerPdf], () => {
       })
-        .then((questionList) => {
-          this.questions = questionList.list
-          this.doesHaveQuestion = true
-          this.loading = false
-        }).catch(() => {
-          this.loading = false
+        .then(() => {
+          this.downloadKeyAnswerPdfLoading = false
+        })
+        .catch(() => {
+          this.downloadKeyAnswerPdfLoading = false
         })
     },
-    canGeneratePDF () {
-
+    downloadQuestionPages() {
+      this.downloadQuestionPagesLoading = true
+      const totalPages = this.questionPages.length
+      this.downloadPdfPages(this.questionPages, (page, pageIndex) => {
+        this.downloadQuestionPagesProgress = ((pageIndex + 1) / totalPages)
+      })
+        .then(() => {
+          this.downloadQuestionPagesLoading = false
+        })
+        .catch(() => {
+          this.downloadQuestionPagesLoading = false
+        })
     },
-    reportUsedPdf () {
+    downloadDescriptiveAnswerPages () {
+      this.downloadDescriptiveAnswerLoading = true
+      const totalPages = this.descriptiveAnswerPages.length
+      this.downloadPdfPages(this.descriptiveAnswerPages, (page, pageIndex) => {
+        this.downloadDescriptiveAnswerPagesProgress = ((pageIndex + 1) / totalPages)
+      })
+        .then(() => {
+          this.downloadDescriptiveAnswerLoading = false
+        })
+        .catch(() => {
+          this.downloadDescriptiveAnswerLoading = false
+        })
+    },
+    downloadPdfPages (pages, progressCallback) {
       return new Promise((resolve, reject) => {
-        this.reportUsedPdfLoading = true
-        this.$axios.get(API_ADDRESS.exam.user.pdf(this.$route.params.examId))
-          .then(() => {
-            this.reportUsedPdfLoading = false
+        const html2pdfConfig = {
+          margin: [0, 0, 0, 0],
+          image: {
+            type: 'jpeg',
+            quality: 0.6
+          },
+          filename: this.examInfo.title,
+          html2canvas: {
+            dpi: 1,
+            scale: 2.5,
+            letterRendering: true,
+            useCORS: true
+          },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        }
+        function chunkPages(size) {
+          const chunkedPages = []
+          for (let i = 0; i < pages.length; i += size) {
+            let chunkedArr = []
+            const newDiv = document.createElement('div')
+            if (i + size <= pages.length) {
+              chunkedArr = pages.slice(i, i + size)
+            } else {
+              chunkedArr = pages.slice(i)
+            }
+            chunkedArr.forEach(page => {
+              newDiv.appendChild(page.cloneNode(true))
+            })
+            chunkedPages.push(newDiv)
+          }
+          return chunkedPages
+        }
+        const chunkedPages = chunkPages(23)
+        // The maximum size for each chunk must be 23. This is because the html2pdf package uses the html2canvas package to convert HTML to canvas,
+        // and this package cannot convert HTML to canvas with a size greater than 23 page.
+        let worker = html2pdf()
+          .set(html2pdfConfig)
+          .from(chunkedPages[0])
+          .toPdf()
+        chunkedPages.slice(1)
+          .forEach(function (page, pageIndex) {
+            worker = worker.get('pdf')
+              .then(function (pdf) {
+                pdf.addPage()
+                progressCallback(page, pageIndex)
+              })
+              .from(page)
+              .toContainer()
+              .toCanvas()
+              .toPdf()
+          })
+        worker = worker.save()
+          .thenExternal(() => {
             resolve()
           })
-          .catch(() => {
-            this.reportUsedPdfLoading = false
-            reject()
+          .catchExternal((error) => {
+            reject(error)
+          })
+          .error((error) => {
+            reject(error)
+          })
+          .thenCore((error) => {
+            reject(error)
           })
       })
-    },
-    downloadPDF (ref) {
-      this.generatePDF(ref)
-
-      // if (ref === 'questionPdf') {
-      //   this.downloadLoading = true
-      //   this.reportUsedPdf()
-      //     .then(() => {
-      //       this.generatePDF(ref)
-      //     })
-      //     .catch(() => {
-      //       this.downloadLoading = false
-      //     })
-      // } else {
-      //   this.generatePDF(ref)
-      // }
-    },
-    generatePDF (ref) {
-      this.downloadLoading = true
-      setTimeout(() => {
-        html2pdf()
-          .set({
-            margin: [0, 0, 0, 0],
-            image: {
-              type: 'jpeg',
-              quality: 0.6
-            },
-            filename: this.examInfo.title,
-            html2canvas: {
-              dpi: 1,
-              scale: 2.5,
-              letterRendering: true,
-              useCORS: true
-            },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-          })
-          .from(this.$refs[ref])
-          .save()
-          .thenExternal(() => {
-            this.downloadLoading = false
-          })
-      }, 100)
     }
   }
 }
@@ -516,13 +709,16 @@ export default {
   body * {
     visibility: hidden;
   }
+
   #pdf-container, #pdf-container * {
     visibility: visible;
   }
+
   #pdf-container {
     left: 0;
     top: 0;
   }
+
   .page-break {
     clear: both;
     page-break-before: always;
@@ -565,7 +761,7 @@ export default {
   .form {
     padding-right: 15px;
 
-    @media screen and (max-width:600px){
+    @media screen and (max-width: 600px) {
       padding-right: 0;
     }
 
@@ -585,6 +781,7 @@ export default {
         color: #FFFFFF;
       }
     }
+
     .value {
       width: 155px;
       padding: 9px 16px;
@@ -606,6 +803,7 @@ export default {
         min-width: 128px;
       }
     }
+
     .spaces {
       .sub-title {
         font-weight: 400;
@@ -664,13 +862,14 @@ export default {
         margin-top: 20px;
       }
 
-      .radio-btn{
+      .radio-btn {
         .q-radio {
           .q-radio__inner {
             .q-radio__icon-container {
               border-radius: 50%;
               color: white;
               background: var(--3a-Secondary);
+
               i {
                 font-size: 16px;
               }
@@ -693,7 +892,7 @@ export default {
     padding-left: 15px;
     overflow-x: auto;
 
-    @media screen and (max-width:600px){
+    @media screen and (max-width: 600px) {
       padding-left: 0;
     }
 
@@ -739,7 +938,7 @@ export default {
     }
 
     .tab-panel-style {
-     padding: 30px 0 0 0;
+      padding: 30px 0 0 0;
       border-top: 1px solid #E4E8EF;
 
       // .pdf-container{
@@ -758,15 +957,15 @@ export default {
       //   }
       // }
 
-      .pagination-box{
-          margin-top: 30px;
+      .pagination-box {
+        margin-top: 30px;
       }
 
-      .ifa{
+      .ifa {
         height: 500px;
       }
 
-      .question-info{
+      .question-info {
         font-style: normal;
         font-weight: 400;
         font-size: 14px;
@@ -774,49 +973,55 @@ export default {
         text-align: right;
         color: #434765;
         margin-bottom: 5px;
-        .question-count{
+
+        .question-count {
           margin-right: 33px;
         }
       }
 
-      .action-box{
+      .action-box {
         margin-bottom: 25px;
         width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
 
-        @media screen and (max-width:600px){
+        @media screen and (max-width: 600px) {
           flex-direction: column;
           align-items: flex-start;
         }
-        .description{
+
+        .description {
           font-weight: 400;
           font-size: 14px;
           line-height: 22px;
           text-align: right;
           color: #434765;
         }
+
         .action-btn {
-          @media screen and (max-width:600px){
+          @media screen and (max-width: 600px) {
             width: 100%;
           }
 
-          .cancel{
+          .cancel {
             margin-right: 12px;
             background: #F2F5F9;
 
-            @media screen and (max-width:600px){
+            @media screen and (max-width: 600px) {
               margin-right: 0;
               margin-bottom: 10px;
             }
-            :deep(.q-btn__content){
+
+            :deep(.q-btn__content) {
               color: #6D708B;
             }
           }
-          .btn{
+
+          .btn {
             width: 120px;
-            :deep(.q-btn__content){
+
+            :deep(.q-btn__content) {
               font-weight: 600;
               font-size: 14px;
               line-height: 22px;
@@ -828,7 +1033,7 @@ export default {
               cursor: not-allowed;
             }
 
-            @media screen and (max-width:600px){
+            @media screen and (max-width: 600px) {
               width: 100%;
             }
           }
