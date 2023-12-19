@@ -2,7 +2,7 @@
   <div class="landing-header column items-center">
     <div class="introduction ">
       <div class="title-style">
-        16 مرحله آزمون آنلاین
+        10 مرحله آزمون آنلاین
         <br>
         برای موفقیت در کنکور 1403
       </div>
