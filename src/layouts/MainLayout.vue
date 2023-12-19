@@ -175,7 +175,7 @@ export default {
 }
 
 .drawer-inside{
-  @media screen and(max-width: 599px) {
+  @media screen and (max-width: 599px) {
     width: 250px
   }
 }

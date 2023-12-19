@@ -543,7 +543,7 @@ export default {
 
     .action-btn {
       width: 100%;
-      @media screen and(max-width: 1439px) {
+      @media screen and (max-width: 1439px) {
         display: grid;
         justify-content: flex-end;
         grid-template-columns: 140px 140px;

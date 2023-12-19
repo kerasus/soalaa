@@ -1180,14 +1180,14 @@ export default {
       .description-answer-video {
         min-height: 176px;
         width: 40%;
-        @media screen and(max-width: 1439px) {
+        @media screen and (max-width: 1439px) {
           width: 38%;
           height: 130px;
         }
-        @media screen and(max-width: 1023px) {
+        @media screen and (max-width: 1023px) {
           width: 48%;
         }
-        @media screen and(max-width: 599px) {
+        @media screen and (max-width: 599px) {
           width: 100%;
           height: 158px;
         }
