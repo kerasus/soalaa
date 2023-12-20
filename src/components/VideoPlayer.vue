@@ -430,7 +430,7 @@ export default {
       background: $primary;
       border-color: $primary;
 
-      @media screen and(max-width: 600px) {
+      @media screen and (max-width: 600px) {
         margin-top: -60px;
       }
       .vjs-icon-placeholder:before {

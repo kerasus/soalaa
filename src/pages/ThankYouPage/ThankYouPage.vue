@@ -145,7 +145,7 @@ export default {
     }
   }
 }
-@media screen and(max-width: 1023px) {
+@media screen and (max-width: 1023px) {
   .cart-image {
     width: 245px;
     height: 245px;

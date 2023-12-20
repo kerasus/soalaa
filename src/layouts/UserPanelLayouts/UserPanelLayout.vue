@@ -67,7 +67,7 @@ export default {
   justify-content: space-between;
   .user-side-bar {
     width: 277px;
-    @media screen and(max-width: 1439px) {
+    @media screen and (max-width: 1439px) {
       width: 220px;
     }
   }
