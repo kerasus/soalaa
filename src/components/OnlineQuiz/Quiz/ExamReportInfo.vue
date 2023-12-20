@@ -16,71 +16,51 @@
           <!--            </div>-->
           <!--          </div>-->
           <div class="col-12">
-            <q-input
-              v-model="exam.report_config.maximum_question_answered"
-              type="number"
-              label="maximum_question_answered"
-            />
+            <q-input v-model="exam.report_config.maximum_question_answered"
+                     type="number"
+                     label="maximum_question_answered" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.include_abnormal"
-              label="include_abnormal"
-            />
+            <q-checkbox v-model="exam.report_config.include_abnormal"
+                        label="include_abnormal" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.include_unranked"
-              label="include_unranked"
-            />
+            <q-checkbox v-model="exam.report_config.include_unranked"
+                        label="include_unranked" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.make_report_for_before_delay"
-              label="make_report_for_before_delay"
-            />
+            <q-checkbox v-model="exam.report_config.make_report_for_before_delay"
+                        label="make_report_for_before_delay" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.make_report_for_remaining_only"
-              label="make_report_for_remaining_only"
-            />
+            <q-checkbox v-model="exam.report_config.make_report_for_remaining_only"
+                        label="make_report_for_remaining_only" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.temp_exams_in_exam_interval"
-              label="temp_exams_in_exam_interval"
-            />
+            <q-checkbox v-model="exam.report_config.temp_exams_in_exam_interval"
+                        label="temp_exams_in_exam_interval" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.consider_negative_point"
-              label="consider_negative_point"
-            />
+            <q-checkbox v-model="exam.report_config.consider_negative_point"
+                        label="consider_negative_point" />
           </div>
           <div class="col-12">
-            <q-checkbox
-              v-model="exam.report_config.populate_school_ranking"
-              label="populate_school_ranking"
-            />
+            <q-checkbox v-model="exam.report_config.populate_school_ranking"
+                        label="populate_school_ranking" />
           </div>
           <div class="col-12">
-            <q-input
-              v-model="exam.report_config.right_answer_weight"
-              type="number"
-              label="right_answer_weight"
-            />
+            <q-input v-model="exam.report_config.right_answer_weight"
+                     type="number"
+                     label="right_answer_weight" />
           </div>
         </div>
         <div class="row">
           <div class="col">
             <div class="text-center">
-              <q-btn
-                :disabled="exam.loading"
-                :loading="exam.loading"
-                elevation="2"
-                @click="save"
-              >
+              <q-btn :disabled="exam.loading"
+                     :loading="exam.loading"
+                     elevation="2"
+                     @click="save">
                 ثبت
               </q-btn>
             </div>
@@ -100,8 +80,7 @@
 </template>
 
 <script>
-import { Exam, ExamList } from 'src/models/Exam'
-import API_ADDRESS from 'src/api/Addresses'
+import { Exam, ExamList } from 'src/models/Exam.js'
 
 export default {
   name: 'ExamReportInfo',
@@ -114,15 +93,15 @@ export default {
     examId: null,
     examTitle: null + 'ویرایش'
   }),
-  created () {
+  mounted () {
     this.$store.commit('AppLayout/updateLastBreadcrumb', {
       loading: true
     })
     this.examId = this.$route.params.id
     const that = this
-    this.$axios.get(API_ADDRESS.option.base + '?type=exam_type')
-      .then(function (response) {
-        const optionQuestion = response.data.data.find(item => (item.value === 'psychometric'))
+    this.$apiGateway.option.getUserOptions('exam_type')
+      .then(function (options) {
+        const optionQuestion = options.find(item => (item.value === 'psychometric'))
         if (!optionQuestion) {
           return this.$q.notify({
             message: ' API با مشکل مواجه شد!',
@@ -130,7 +109,7 @@ export default {
           })
         }
         that.optionQuestionId = optionQuestion.id
-        const itemstype = response.data.data.filter(data => data.type === 'question_type')
+        const itemstype = options.filter(data => data.type === 'question_type')
         that.items = itemstype
         that.loading = false
       })
@@ -152,9 +131,9 @@ export default {
     getExam (id) {
       this.$store.dispatch('loading/linearLoading', true)
       const that = this
-      this.$axios.get(API_ADDRESS.exam.base() + '/' + id)
-        .then(function (response) {
-          that.exam = new Exam(response.data.data)
+      this.$apiGateway.exam.showExam(id)
+        .then(function (exam) {
+          that.exam = new Exam(exam)
           that.examItem = that.exam
           that.$store.dispatch('loading/linearLoading', false)
           that.examTitle = that.exam.title
@@ -163,7 +142,10 @@ export default {
     },
     save () {
       const that = this
-      this.$axios.post(API_ADDRESS.exam.report.updateReportOptions(this.exam.id), this.exam.report_config)
+      this.$apiGateway.exam.updateReportOptions({
+        examId: this.exam.id,
+        data: this.exam.report_config
+      })
         .then(() => {
           that.$q.notify({
             message: 'اطلاعات آزمون شما ثبت شد.',

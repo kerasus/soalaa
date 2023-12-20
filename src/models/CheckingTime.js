@@ -1,11 +1,11 @@
 import { Collection, Model } from 'js-abstract-model'
 // eslint-disable-next-line import/named
-import { createApp } from 'vue'
+// import { createApp } from 'vue'
 import Time from '../plugins/time'
-if (!window.app) {
-// window.app
-  window.app = createApp({})
-}
+// if (!window.app) {
+// // window.app
+//   window.app = createApp({})
+// }
 
 class CheckingTime extends Model {
   constructor (data) {

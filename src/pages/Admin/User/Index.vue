@@ -1,22 +1,18 @@
 <template>
   <div>
-    <entity-index
-      v-model:value="inputs"
-      title="لیست کاربران"
-      :api="api"
-      :table="table"
-      :table-keys="tableKeys"
-      :create-route-name="'Admin.User.Create'"
-    >
+    <entity-index v-model:value="inputs"
+                  title="لیست کاربران"
+                  :api="api"
+                  :table="table"
+                  :table-keys="tableKeys"
+                  :create-route-name="'Admin.User.Create'">
       <template #entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
         <template v-if="inputData.col.name === 'avatar'">
           <q-avatar>
-            <q-img
-              :src="inputData.col.value"
-              placeholder-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWBAMAAADOL2zRAAAAG1BMVEXMzMyWlpaqqqq3t7fFxcW+vr6xsbGjo6OcnJyLKnDGAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABAElEQVRoge3SMW+DMBiE4YsxJqMJtHOTITPeOsLQnaodGImEUMZEkZhRUqn92f0MaTubtfeMh/QGHANEREREREREREREtIJJ0xbH299kp8l8FaGtLdTQ19HjofxZlJ0m1+eBKZcikd9PWtXC5DoDotRO04B9YOvFIXmXLy2jEbiqE6Df7DTleA5socLqvEFVxtJyrpZFWz/pHM2CVte0lS8g2eDe6prOyqPglhzROL+Xye4tmT4WvRcQ2/m81p+/rdguOi8Hc5L/8Qk4vhZzy08DduGt9eVQyP2qoTM1zi0/uf4hvBWf5c77e69Gf798y08L7j0RERERERERERH9P99ZpSVRivB/rgAAAABJRU5ErkJggg=="
-              spinner-color="white"
-              style="height: 50px; max-width: 50px"
-            />
+            <q-img :src="inputData.col.value"
+                   placeholder-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWBAMAAADOL2zRAAAAG1BMVEXMzMyWlpaqqqq3t7fFxcW+vr6xsbGjo6OcnJyLKnDGAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABAElEQVRoge3SMW+DMBiE4YsxJqMJtHOTITPeOsLQnaodGImEUMZEkZhRUqn92f0MaTubtfeMh/QGHANEREREREREREREtIJJ0xbH299kp8l8FaGtLdTQ19HjofxZlJ0m1+eBKZcikd9PWtXC5DoDotRO04B9YOvFIXmXLy2jEbiqE6Df7DTleA5socLqvEFVxtJyrpZFWz/pHM2CVte0lS8g2eDe6prOyqPglhzROL+Xye4tmT4WvRcQ2/m81p+/rdguOi8Hc5L/8Qk4vhZzy08DduGt9eVQyP2qoTM1zi0/uf4hvBWf5c77e69Gf798y08L7j0RERERERERERH9P99ZpSVRivB/rgAAAABJRU5ErkJggg=="
+                   spinner-color="white"
+                   style="height: 50px; max-width: 50px" />
           </q-avatar>
         </template>
         <template v-if="inputData.col.name === 'actions'">
@@ -55,7 +51,7 @@
 
 <script>
 import { EntityIndex } from 'quasar-crud'
-// import API_ADDRESS from "src/api/Addresses";
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Index',
@@ -63,7 +59,7 @@ export default {
   data () {
     return {
       expanded: true,
-      // api: API_ADDRESS.user.base,
+      api: APIGateway.user.APIAdresses.base,
       tableKeys: {
         data: 'results',
         total: 'count',

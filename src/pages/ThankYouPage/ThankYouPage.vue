@@ -1,53 +1,39 @@
 <template>
   <div class="cart-container">
     <div class="cart-image">
-      <q-img
-        v-if="hasPaid"
-        src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/thankyou_page.png"
-      />
-      <q-icon
-        v-else
-        name="error"
-        color="red"
-      />
+      <q-img v-if="hasPaid"
+             src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/thankyou_page.png" />
+      <q-icon v-else
+              name="error"
+              color="red" />
     </div>
 
-    <div
-      v-if="hasPaid"
-      class="title"
-    >
+    <div v-if="hasPaid"
+         class="title">
       ثبت نام شما با موفقیت انجام شد
     </div>
-    <div
-      v-else
-      class="title"
-    >
+    <div v-else
+         class="title">
       متاسفانه پرداخت انجام نشد :(
     </div>
     <!--    <div class="tracking-code-container">-->
     <!--      <span class="tracking-code-title">کد پیگیری:</span>-->
     <!--      <span class="tracking-code">{{ trackingCode }}</span>-->
     <!--    </div>-->
-    <router-link
-      v-if="hasPaid"
-      :to="{name: 'dashboard'}"
-      class="redirect-element"
-    >
+    <router-link v-if="hasPaid"
+                 :to="{name: 'dashboard'}"
+                 class="redirect-element">
       مشاهده آزمون در پنل کاربری
     </router-link>
-    <router-link
-      v-else
-      :to="{name: 'HomePage'}"
-      class="redirect-element"
-    >
+    <router-link v-else
+                 :to="{name: 'HomePage'}"
+                 class="redirect-element">
       بازگشت به فروشگاه
     </router-link>
   </div>
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-
 export default {
   name: 'ThankYouPage',
   data() {
@@ -55,19 +41,19 @@ export default {
       hasPaid: false
     }
   },
-  created () {
-    this.onLoadPage()
-  },
   computed: {
     orderId () {
       return this.$route.params.orderId
     }
   },
+  created () {
+    this.onLoadPage()
+  },
   methods: {
     onLoadPage () {
-      this.$axios.get(API_ADDRESS.cart.orderWithTransaction(this.orderId))
-        .then((response) => {
-          const paymentStatus = response.data.data.paymentstatus
+      this.$apiGateway.cart.getOrderWithTransaction({ orderId: this.orderId })
+        .then((paymentstatus) => {
+          const paymentStatus = paymentstatus
 
           if (paymentStatus.id === 3) {
             this.hasPaid = true
@@ -159,7 +145,7 @@ export default {
     }
   }
 }
-@media screen and(max-width: 1023px) {
+@media screen and (max-width: 1023px) {
   .cart-image {
     width: 245px;
     height: 245px;

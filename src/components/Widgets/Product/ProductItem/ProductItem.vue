@@ -123,7 +123,6 @@
 
 <script>
 import { defineComponent } from 'vue'
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Product } from 'src/models/Product.js'
 import LazyImg from 'src/components/lazyImg.vue'
 import { mixinWidget, mixinPrefetchServerData } from 'src/mixin/Mixins'
@@ -193,7 +192,7 @@ export default defineComponent({
       } else if (this.options.productId || this.options.paramKey || this.$route.params.id) {
         this.loading = true
         const productId = this.options.productId ? this.options.productId : this.options.paramKey ? this.$route.params[this.options.paramKey] : this.$route.params.id
-        return this.$axios.get(API_ADDRESS.product.show.base + '/' + productId)
+        return this.$apiGateway.product.show(productId)
       } else {
         this.product = new Product(this.options)
         return new Promise((resolve) => {
@@ -238,9 +237,7 @@ export default defineComponent({
   }
 
   .img-box {
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    overflow: hidden;
+
     a {
       box-shadow: none;
       width: 100%;
@@ -334,7 +331,8 @@ export default defineComponent({
 
     .action-box {
       display: flex;
-      flex-flow: column;
+      justify-content: space-between;
+      align-items: center;
 
       .more-detail {
         font-weight: 500;
@@ -394,6 +392,8 @@ export default defineComponent({
         font-size: 14px;
         padding-top: 3px;
       }
+    }
+    @media screen and (max-width: 600px) {
     }
   }
 
@@ -503,6 +503,132 @@ export default defineComponent({
 
       .discount {
         span {
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    width: 240px;
+    display: flex;
+    border-radius: 18px;
+    margin-bottom: 16px;
+
+    .img-box {
+      width: 100px;
+
+      .img {
+        border-radius: 10px;
+      }
+
+      @media screen and (max-width: 600px){
+        width: 100%;
+      }
+    }
+
+    .product-content-box {
+      padding: 0 0 0 16px;
+      width: 100%;
+
+      .main-title {
+        margin-bottom: 0;
+
+        a {
+        }
+
+        .title-box {
+          height: 44px;
+          justify-content: center;
+
+          .title-text {
+            -webkit-line-clamp: 2;
+          }
+        }
+      }
+
+      .price-box {
+        margin-bottom: 0;
+
+        .add-cart-info {
+          .add-cart-icon {
+          }
+        }
+
+        .price-info {
+          .final-price-box {
+            .final-price {
+              margin-left: 2px;
+            }
+          }
+
+          .main-price {
+            margin-left: 4px;
+          }
+
+          .price-Toman {
+          }
+        }
+      }
+
+      .action-box {
+        .more-detail {
+          .more {
+            display: none;
+          }
+        }
+        .btn-green{
+          margin-left: 20px;
+        }
+
+        .btn-style {
+          width: 100px;
+          height: 25px !important;
+          border-radius: 8px;
+
+          img {
+            margin-left: 0;
+          }
+
+          .content {
+          }
+
+          .active {
+          }
+        }
+      }
+
+      .discount {
+        height: 20px;
+        /* margin-left: 3px; */
+      }
+    }
+  }
+
+  @media screen and (max-width: 600px){
+    flex-direction: row;
+    padding: 10px;
+    .img-box{
+      a{
+        .img{
+          border-radius: 20px;
+        }
+      }
+    }
+    .product-content-box{
+      .action-box{
+        display: block;
+        .price-box{
+          display: block;
+          .price-info{
+            margin-right: 10px;
+            align-items: center;
+            .discount{
+              margin-right: 5px;
+            }
+          }
+        }
+        .btn-green{
+          width: 100px;
         }
       }
     }

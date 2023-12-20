@@ -1,54 +1,42 @@
 <template>
   <div>
     <div class="row justify-center q-ma-lg">
-      <q-btn
-        v-if="!waiting"
-        color="blue"
-        rounded
-        @click="sendCode"
-      >
+      <q-btn v-if="!waiting"
+             color="blue"
+             rounded
+             @click="sendCode">
         دریافت کد فعالسازی
       </q-btn>
     </div>
     <div v-if="totalTime"
          class="row justify-center q-ma-lg">
       <div class="col-12 row justify-center mit">
-        <span
-          :class="totalTime <60 ? 'red-text' : ''"
-        >{{ ((totalTime) % 3600) % 60 }}</span>
+        <span :class="totalTime <60 ? 'red-text' : ''">{{ ((totalTime) % 3600) % 60 }}</span>
         <span>:</span>
-        <span
-          :class="totalTime <60 ? 'red-text' : ''"
-        >{{ Math.floor(((totalTime) % 3600) / 60) }}</span>
+        <span :class="totalTime <60 ? 'red-text' : ''">{{ Math.floor(((totalTime) % 3600) / 60) }}</span>
       </div>
       کد ارسال شده را وارد نمایید.
     </div>
     <div class="q-px-lg">
-      <q-input
-        v-if="totalTime"
-        v-model="typedCode"
-        dir="ltr"
-        label="کد فعالسازی"
-        @keydown="pressedEnter"
-      />
+      <q-input v-if="totalTime"
+               v-model="typedCode"
+               dir="ltr"
+               label="کد فعالسازی"
+               @keydown="pressedEnter" />
     </div>
     <div class="row justify-center q-px-lg">
-      <q-btn
-        v-if="!totalTime && waiting"
-        rounded
-        color="blue"
-        @click="sendCode"
-      >
+      <q-btn v-if="!totalTime && waiting"
+             rounded
+             color="blue"
+             @click="sendCode">
         دریافت مجدد کد
       </q-btn>
     </div>
     <div class="row justify-center q-mt-lg">
-      <q-btn
-        v-if="totalTime"
-        rounded
-        color="blue"
-        @click="verifyCode"
-      >
+      <q-btn v-if="totalTime"
+             rounded
+             color="blue"
+             @click="verifyCode">
         ثبت شماره موبایل
       </q-btn>
     </div>
@@ -56,8 +44,7 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import { User } from 'src/models/User'
+import { User } from 'src/models/User.js'
 
 export default {
   name: 'Verify',
@@ -90,7 +77,7 @@ export default {
     verifyCode () {
       const that = this
       //  that.modelValue.loading = true
-      this.$axios.post(API_ADDRESS.user.mobile.verify, { code: this.typedCode })
+      this.$apiGateway.mobileVerify({ code: this.typedCode })
         .then(() => {
           // that.user.loading = false
           that.$emit('verified')
@@ -114,10 +101,10 @@ export default {
     sendCode () {
       const that = this
       // this.user.loading = true
-      this.$axios.get(API_ADDRESS.user.mobile.resend)
+      this.$apiGateway.user.mobileResend()
         .then((resp) => {
         //  that.user.loading = false
-          that.code = resp
+          that.code = resp.code
           that.startTimer()
           that.waiting = true
           that.showTimer = true

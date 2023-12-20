@@ -1,4 +1,4 @@
-import { APIGateway } from 'src/api/APIGateway'
+import { APIGateway } from 'src/api/APIGateway.js'
 
 const mixinPageOptions = {
   data() {
@@ -66,11 +66,14 @@ const mixinPageOptions = {
     prefetchServerDataPromiseCatch () {
       this.pageBuilderLoading = false
     },
-    getPageConfigRequest() {
-      this.pageBuilderLoading = true
+    getPageKey () {
       const params = JSON.stringify(this.$route.params)
       const routeName = this.$route.name
-      const key = 'route_name:' + routeName + (this.hasDynamicSettingWithParams ? ('-params:' + params) : '')
+      return 'route_name:' + routeName + (this.hasDynamicSettingWithParams ? ('-params:' + params) : '')
+    },
+    getPageConfigRequest() {
+      this.pageBuilderLoading = true
+      const key = this.getPageKey()
       return APIGateway.pageSetting.get(key)
     }
   }

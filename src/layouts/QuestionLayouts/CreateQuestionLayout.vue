@@ -1,14 +1,14 @@
 <template>
   <div class="createQ-text-container">
     <navbar />
-    <Router :include="keepAliveComponents" />
+    <router :include="keepAliveComponents" />
   </div>
 </template>
 
 <script>
-import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
-import Router from 'src/router/Router'
-import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import Router from 'src/router/Router.vue'
+import KeepAliveComponents from 'src/assets/js/KeepAliveComponents.js'
+import Navbar from 'src/components/Question/QuestionPage/Create/textMode/Navbar.vue'
 
 export default {
   name: 'CreateLayout',

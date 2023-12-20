@@ -143,17 +143,15 @@
                         ['viewsource']
                       ]">
               <template v-slot:token>
-                <q-btn-dropdown
-                  ref="token"
-                  dense
-                  no-caps
-                  no-wrap
-                  unelevated
-                  color="white"
-                  text-color="primary"
-                  label="Text Color"
-                  size="sm"
-                >
+                <q-btn-dropdown ref="token"
+                                dense
+                                no-caps
+                                no-wrap
+                                unelevated
+                                color="white"
+                                text-color="primary"
+                                label="Text Color"
+                                size="sm">
                   <q-list dense>
                     <q-item tag="label"
                             clickable
@@ -162,13 +160,11 @@
                         <q-icon name="format_paint" />
                       </q-item-section>
                       <q-item-section>
-                        <q-color
-                          v-model="foreColor"
-                          no-header
-                          no-footer
-                          default-view="palette"
-                          class="my-picker"
-                        />
+                        <q-color v-model="foreColor"
+                                 no-header
+                                 no-footer
+                                 default-view="palette"
+                                 class="my-picker" />
                       </q-item-section>
                     </q-item>
                   </q-list>
@@ -210,10 +206,10 @@
 </template>
 <script>
 import { defineComponent } from 'vue'
-import mixinOptionPanel from 'quasar-ui-q-page-builder/src/mixin/OptionPanel.js'
-import OptionPanelTabs from 'quasar-ui-q-page-builder/src/components/OptionPanelComponents/OptionPanelTabs.vue'
-import lazyImg from 'components/lazyImg'
+import lazyImg from 'src/components/lazyImg.vue'
 import { TabPanel } from 'src/models/TabPanel.js'
+import { mixinOptionPanel } from 'quasar-ui-q-page-builder'
+import OptionPanelTabs from 'quasar-ui-q-page-builder/src/components/OptionPanelComponents/OptionPanelTabs.vue'
 
 export default defineComponent({
   name: 'OptionPanel',

@@ -5,56 +5,42 @@
         <span>صورت سوال</span>
       </div>
       <div class="question-box">
-        <QuestionField
-          ref="tiptapQuestionStatement"
-          :key="'statement' + domKey"
-        />
+        <question-field ref="tiptapQuestionStatement"
+                        :key="'statement' + domKey" />
       </div>
     </q-card-section>
-    <q-card-section
-      v-if="question.choices.list[0]"
-      class="row main-card-section multiple-answer"
-    >
-      <div
-        v-for="(item, index) in question.choices.list"
-        :key="item.order"
-        class="col-lg-6 col-12"
-      >
+    <q-card-section v-if="question.choices.list[0]"
+                    class="row main-card-section multiple-answer">
+      <div v-for="(item, index) in question.choices.list"
+           :key="item.order"
+           class="col-lg-6 col-12">
         <div class="card-section-header">
-          <q-btn
-            class="icon-type"
-            icon="isax:close-square5"
-            color="negative"
-            flat
-            @click="removeChoice(item.order)"
-          />
-          <q-radio
-            v-model="choice"
-            dense
-            :val="'choice' + index"
-            :label="'گزینه ' + (index + 1)"
-            color="primary"
-            @click="choiceClicked(item.order)"
-          />
+          <q-btn class="icon-type"
+                 icon="isax:close-square5"
+                 color="negative"
+                 flat
+                 @click="removeChoice(item.order)" />
+          <q-radio v-model="choice"
+                   dense
+                   :val="'choice' + index"
+                   :label="'گزینه ' + (index + 1)"
+                   color="primary"
+                   @click="choiceClicked(item.order)" />
         </div>
         <div class="multiple-answer-box">
-          <QuestionField
-            :ref="'tiptapChoice' + index"
-            :key="'choices' + index + domKey"
-          />
+          <question-field :ref="'tiptapChoice' + index"
+                          :key="'choices' + index + domKey" />
         </div>
       </div>
     </q-card-section>
     <q-card-section class="row main-card-section">
       <div class="col-12">
         <div class="card-section-header">
-          <q-btn
-            class="icon-type"
-            icon="isax:add-square5"
-            color="positive"
-            flat
-            @click="addChoice"
-          />
+          <q-btn class="icon-type"
+                 icon="isax:add-square5"
+                 color="positive"
+                 flat
+                 @click="addChoice" />
           <span>گزینه جدید</span>
         </div>
       </div>
@@ -62,56 +48,51 @@
     <q-card-section class="main-card-section long-answer">
       <div class="card-section-header">پاسخ تشریحی</div>
       <div class="answer-box">
-        <QuestionField
-          ref="tiptapDescriptiveAnswer"
-          :key="'descriptive_answer' + domKey"
-        />
+        <question-field ref="tiptapDescriptiveAnswer"
+                        :key="'descriptive_answer' + domKey" />
       </div>
     </q-card-section>
   </q-card>
   <div class="relative-position">
     <div class="attach-btn row">
-      <question-identifier
-        ref="questionIdentifier"
-        editable
-        class="col-12"
-        :exams="examList"
-        :lessons="subCategoriesList"
-        :categories="categoryList"
-        :gradesList="gradesList"
-        :groups-list="lessonGroupList"
-        :lessons-list="lessonsList"
-        :major-list="majorList"
-        :authorship-dates-list="authorshipDatesList"
-        :question-authors-list="questionAuthorsList"
-        :question-target-list="questionTargetList"
-        buffer
-        @gradeSelected="getLessonsList"
-        @groupSelected="getLessonsList"
-        @attach="attachExam"
-        @detach="detachExam"
-        @tags-collected="setTagsOnCreate"
-      />
+      <question-identifier ref="questionIdentifier"
+                           editable
+                           class="col-12"
+                           :exams="examList"
+                           :lessons="subCategoriesList"
+                           :categories="categoryList"
+                           :gradesList="gradesList"
+                           :groups-list="lessonGroupList"
+                           :lessons-list="lessonsList"
+                           :major-list="majorList"
+                           :authorship-dates-list="authorshipDatesList"
+                           :question-authors-list="questionAuthorsList"
+                           :question-target-list="questionTargetList"
+                           buffer
+                           @gradeSelected="getLessonsList"
+                           @groupSelected="getLessonsList"
+                           @attach="attachExam"
+                           @detach="detachExam"
+                           @tags-collected="setTagsOnCreate" />
     </div>
-    <btn-box
-      class="col-12"
-      @saveQuestion="saveQuestion"
-    />
+    <btn-box class="col-12"
+             @saveQuestion="saveQuestion" />
   </div>
 </template>
 
 <script>
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
-import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
-import { Question } from 'src/models/Question'
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { ExamList } from 'src/models/Exam'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { computed } from 'vue'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
-import mixinTree from 'src/mixin/Tree'
+import mixinTree from 'src/mixin/Tree.js'
+import { ExamList } from 'src/models/Exam.js'
+import { Question } from 'src/models/Question.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
+import BtnBox from 'src/components/Question/QuestionPage/BtnBox.vue'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
+import QuestionField from 'src/components/Question/QuestionPage/QuestionField.vue'
+import QuestionIdentifier from 'src/components/Question/QuestionPage/QuestionIdentifier.vue'
+
 export default {
   name: 'MultipleChoiceQ',
   components: {
@@ -123,6 +104,11 @@ export default {
     AdminActionOnQuestion,
     mixinTree
   ],
+  provide () {
+    return {
+      providedQuestion: computed(() => this.question)
+    }
+  },
   props: {
     loading: {
       default: false,
@@ -143,11 +129,6 @@ export default {
       allProps: {
         loading: false
       }
-    }
-  },
-  provide () {
-    return {
-      providedQuestion: computed(() => this.question)
     }
   },
   created () {

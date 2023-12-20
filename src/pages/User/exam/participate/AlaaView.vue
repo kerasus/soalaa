@@ -5,18 +5,14 @@
       <div class="row main-page"
            :style="{ 'min-width': '100%' }">
         <div class="col btnpre col-md-1 justify-start sm-hide xs-hide">
-          <q-btn
-            v-if="getQuestionNumberFromId(currentQuestion.id) !== 1"
-            flat
-            class="q-px-none"
-            :style="{ 'width':'64px','height': '400px' }"
-            no-shadow
-            @click="goToPrevQuestion('onlineQuiz.alaaView')"
-          >
-            <q-icon
-              size="40px"
-              name="mdi-chevron-right"
-            />
+          <q-btn v-if="getQuestionNumberFromId(currentQuestion.id) !== 1"
+                 flat
+                 class="q-px-none"
+                 :style="{ 'width':'64px','height': '400px' }"
+                 no-shadow
+                 @click="goToPrevQuestion('onlineQuiz.alaaView')">
+            <q-icon size="40px"
+                    name="mdi-chevron-right" />
           </q-btn>
         </div>
         <div class="col col-md-10 q-px-sm ">
@@ -31,136 +27,103 @@
                 </p>
               </div>
               <div class="question-buttons ">
-                <q-btn
-                  size="12px"
-                  round
-                  flat
-                  @click="changeStatus(currentQuestion.id, 'o')"
-                >
-                  <q-icon
-                    v-if="!getUserQuestionData(quiz.user_exam_id, currentQuestion.id) || getUserQuestionData(quiz.user_exam_id, currentQuestion.id).status !== 'o'"
-                    :style="{ 'width':'24px','height': '24px' }"
-                    color="grey-7"
-                    size="30px"
-                    name="mdi-checkbox-blank-circle-outline"
-                  />
-                  <q-icon
-                    v-if="getUserQuestionData(quiz.user_exam_id, currentQuestion.id) && getUserQuestionData(quiz.user_exam_id, currentQuestion.id).status === 'o'"
-                    color="amber"
-                    size="30px"
-                    name="mdi-checkbox-blank-circle"
-                  />
+                <q-btn size="12px"
+                       round
+                       flat
+                       @click="changeStatus(currentQuestion.id, 'o')">
+                  <q-icon v-if="!getUserQuestionData(quiz.user_exam_id, currentQuestion.id) || getUserQuestionData(quiz.user_exam_id, currentQuestion.id).status !== 'o'"
+                          :style="{ 'width':'24px','height': '24px' }"
+                          color="grey-7"
+                          size="30px"
+                          name="mdi-checkbox-blank-circle-outline" />
+                  <q-icon v-if="getUserQuestionData(quiz.user_exam_id, currentQuestion.id) && getUserQuestionData(quiz.user_exam_id, currentQuestion.id).status === 'o'"
+                          color="amber"
+                          size="30px"
+                          name="mdi-checkbox-blank-circle" />
                 </q-btn>
-                <q-btn
-                  size="12px"
-                  round
-                  flat
-                  @click="changeStatus(currentQuestion.id, 'x')"
-                >
-                  <q-icon
-                    size="30px"
-                    :color="getUserQuestionData(quiz.user_exam_id, currentQuestion.id) && getUserQuestionData(quiz.user_exam_id, currentQuestion.id).status === 'x' ? 'red' : 'grey-7'"
-                    name="mdi-close"
-                  />
+                <q-btn size="12px"
+                       round
+                       flat
+                       @click="changeStatus(currentQuestion.id, 'x')">
+                  <q-icon size="30px"
+                          :color="getUserQuestionData(quiz.user_exam_id, currentQuestion.id) && getUserQuestionData(quiz.user_exam_id, currentQuestion.id).status === 'x' ? 'red' : 'grey-7'"
+                          name="mdi-close" />
                 </q-btn>
-                <q-btn
-                  size="12px"
-                  flat
-                  round
-                  @click="changeBookmark(currentQuestion.id)"
-                >
-                  <q-icon
-                    v-if="!getUserQuestionData(quiz.user_exam_id, currentQuestion.id) || !getUserQuestionData(quiz.user_exam_id, currentQuestion.id).bookmarked"
-                    size="30px"
-                    color="grey-7"
-                    name="mdi-bookmark-outline"
-                  />
-                  <q-icon
-                    v-if="getUserQuestionData(quiz.user_exam_id, currentQuestion.id) && getUserQuestionData(quiz.user_exam_id, currentQuestion.id).bookmarked"
-                    flat
-                    color="blue-6"
-                    size="30px"
-                    name="mdi-bookmark"
-                  />
+                <q-btn size="12px"
+                       flat
+                       round
+                       @click="changeBookmark(currentQuestion.id)">
+                  <q-icon v-if="!getUserQuestionData(quiz.user_exam_id, currentQuestion.id) || !getUserQuestionData(quiz.user_exam_id, currentQuestion.id).bookmarked"
+                          size="30px"
+                          color="grey-7"
+                          name="mdi-bookmark-outline" />
+                  <q-icon v-if="getUserQuestionData(quiz.user_exam_id, currentQuestion.id) && getUserQuestionData(quiz.user_exam_id, currentQuestion.id).bookmarked"
+                          flat
+                          color="blue-6"
+                          size="30px"
+                          name="mdi-bookmark" />
                 </q-btn>
               </div>
             </div>
             <div class="col question-body">
-              <div
-                v-if="currentQuestion.in_active_category"
-                :class="{ ltr: isLtrString(currentQuestion.statement)}"
-                class="renderedPanel"
-              >
+              <div v-if="currentQuestion.in_active_category"
+                   :class="{ ltr: isLtrString(currentQuestion.statement)}"
+                   class="renderedPanel">
                 <div v-if="currentQuestion.parent.id"
                      class="q-pb-md">
                   <vue-katex :input="currentQuestion.parent.statement" />
                 </div>
                 <vue-katex :input="currentQuestion.statement" />
               </div>
-              <q-card
-                v-if="!currentQuestion.in_active_category"
-                class="col flex align-center justify-center"
-              >
-                <q-card-section
-                  class="WarningSheet flex"
-                  :style="{ 'width':'1300px','height': '400px' }"
-                >
+              <q-card v-if="!currentQuestion.in_active_category"
+                      class="col flex align-center justify-center">
+                <q-card-section class="WarningSheet flex"
+                                :style="{ 'width':'1300px','height': '400px' }">
                   در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
                 </q-card-section>
               </q-card>
             </div>
             <div v-if="currentQuestion.in_active_category"
-                 class="col question-answers"
-            >
-              <div
-                class="row">
-                <div
-                  v-for="(item, index) in currentQuestion.choices.list"
-                  :key="item.id"
-                  class="choice-parent col-12 col-md-6"
-                >
-                  <choice
-                    :choice-number="index+1"
-                    :question-id="currentQuestion.id"
-                    :choice="item"
-                    :is-rtl="!isLtrString(item.title)"
-                    @answerClicked="answerClicked"
-                  />
+                 class="col question-answers">
+              <div class="row">
+                <div v-for="(item, index) in currentQuestion.choices.list"
+                     :key="item.id"
+                     class="choice-parent col-12 col-md-6">
+                  <choice :choice-number="index+1"
+                          :question-id="currentQuestion.id"
+                          :choice="item"
+                          :is-rtl="!isLtrString(item.title)"
+                          @answerClicked="answerClicked" />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col btnpre col-md-1 justify-start sm-hide xs-hide"
-        >
-          <q-btn
-            v-if="getQuestionNumberFromId(currentQuestion.id) !== getCurrentExamQuestionsInArray().length"
-            flat
-            class="q-px-none"
-            :style="{ 'width':'64px','height': '400px' }"
-            no-shadow
-            @click="goToNextQuestion('onlineQuiz.alaaView')"
-          >
-            <q-icon
-              size="40px"
-              name="mdi-chevron-left"
-            />
+        <div class="col btnpre col-md-1 justify-start sm-hide xs-hide">
+          <q-btn v-if="getQuestionNumberFromId(currentQuestion.id) !== getCurrentExamQuestionsInArray().length"
+                 flat
+                 class="q-px-none"
+                 :style="{ 'width':'64px','height': '400px' }"
+                 no-shadow
+                 @click="goToNextQuestion('onlineQuiz.alaaView')">
+            <q-icon size="40px"
+                    name="mdi-chevron-left" />
           </q-btn>
         </div>
       </div>
     </div>
     <div class="timer-row col">
-      <Timer v-if="quiz.accept_at" />
+      <timer v-if="quiz.accept_at" />
     </div>
   </div>
 </template>
 
 <script>
-import Assistant from 'src/plugins/assistant'
-import VueKatex from 'src/components/VueKatex'
-import Choice from 'src/components/OnlineQuiz/Quiz/Choice'
-import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
-import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer } from 'src/mixin/Mixins'
+import Assistant from 'src/plugins/assistant.js'
+import VueKatex from 'src/components/VueKatex.vue'
+import Choice from 'src/components/OnlineQuiz/Quiz/Choice.vue'
+import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer.vue'
+import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'AlaaView',
@@ -170,13 +133,18 @@ export default {
     Timer
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer],
+  beforeRouteUpdate () {
+    this.getLatestUserAnswersFromServer()
+  },
   data () {
     return {
       userExamId: null
     }
   },
-  beforeRouteUpdate () {
-    this.getLatestUserAnswersFromServer()
+  computed: {
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    }
   },
   created () {
     this.userExamId = this.$route.params.quizId
@@ -186,11 +154,6 @@ export default {
     this.showAppBar()
     this.updateDrawerBasedOnWindowSize()
     this.startExamProcess()
-  },
-  computed: {
-    windowSize () {
-      return this.$store.getters['AppLayout/windowSize']
-    }
   },
   methods: {
     startExamProcess () {

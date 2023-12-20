@@ -5,8 +5,7 @@
       <div v-for="(item, index) in questionCategories.list"
            :key="index"
            class="row upload-file-side"
-           style="width: 400px"
-      >
+           style="width: 400px">
         <div class="col">
           <q-file :ref="item.id + 'questionFile'"
                   v-model="item.questionFile"
@@ -16,15 +15,12 @@
                   :loading="dataLoading"
                   filled
                   :disable="item.loading.question ? true : false"
-                  @update:model-value="addFiles (item.questionFile, item, 'question')"
-          >
+                  @update:model-value="addFiles (item.questionFile, item, 'question')">
             <template v-slot:append>
-              <q-icon
-                v-if="!item.loading.question"
-                name="cancel"
-                class="cursor-pointer"
-                @click="deleteFile (item, 'questionFile', 'question')"
-              />
+              <q-icon v-if="!item.loading.question"
+                      name="cancel"
+                      class="cursor-pointer"
+                      @click="deleteFile (item, 'questionFile', 'question')" />
             </template>
           </q-file>
           <div class="buttons-block">
@@ -36,21 +32,18 @@
                    label="آپلود"
                    :loading="dataLoading || item.loading.question"
                    :disabled="!item.canUpload['question']"
-                   @click="upload(item, 'questionFile', 'questions_booklet', 'question')"
-            />
+                   @click="upload(item, 'questionFile', 'questions_booklet', 'question')" />
             <a v-if="item.questions_booklet"
                :href="item.questions_booklet"
                target="_blank"
-               :style="{ textDecoration: 'none'}"
-            >
+               :style="{ textDecoration: 'none'}">
               <q-btn class="full-width upload-file-btn"
                      dense
                      color="orange"
                      flat
                      icon-right="file_download"
                      label="دانلود"
-                     :loading="dataLoading"
-              />
+                     :loading="dataLoading" />
             </a>
           </div>
           <br>
@@ -62,16 +55,13 @@
                   :loading="dataLoading"
                   filled
                   :disable="item.loading.answer ? true :false"
-                  @update:model-value="addFiles (item.questionFile, item, 'answer')"
-          >
+                  @update:model-value="addFiles (item.questionFile, item, 'answer')">
             <template v-if="item.answerFile"
                       v-slot:append>
-              <q-icon
-                v-if="!item.loading.answer"
-                name="cancel"
-                class="cursor-pointer"
-                @click="deleteFile (item, 'answerFile', 'answer')"
-              />
+              <q-icon v-if="!item.loading.answer"
+                      name="cancel"
+                      class="cursor-pointer"
+                      @click="deleteFile (item, 'answerFile', 'answer')" />
             </template>
           </q-file>
           <div class="buttons-block">
@@ -83,21 +73,18 @@
                    label="آپلود"
                    :loading="dataLoading || item.loading.answer"
                    :disabled="!item.canUpload['answer']"
-                   @click="upload(item, 'answerFile', 'descriptive_answers_booklet','answer')"
-            />
+                   @click="upload(item, 'answerFile', 'descriptive_answers_booklet','answer')" />
             <a v-if="item.descriptive_answers_booklet"
                :href="item.descriptive_answers_booklet"
                target="_blank"
-               :style="{ textDecoration: 'none' }"
-            >
+               :style="{ textDecoration: 'none' }">
               <q-btn class="full-width upload-file-btn"
                      dense
                      color="orange"
                      flat
                      icon-right="file_download"
                      label="دانلود"
-                     :loading="dataLoading"
-              />
+                     :loading="dataLoading" />
             </a>
           </div>
         </div>
@@ -107,8 +94,7 @@
 </template>
 
 <script>
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import API_ADDRESS from 'src/api/Addresses'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
 
 export default {
   name: 'uploadFile',
@@ -140,9 +126,9 @@ export default {
     },
     getData () {
       this.dataLoading = true
-      this.$axios.get(API_ADDRESS.questionCategory.base)
-        .then(response => {
-          this.questionCategories = new QuestCategoryList(response.data.data)
+      this.$apiGateway.questionCategory.get()
+        .then(questCategoryList => {
+          this.questionCategories = new QuestCategoryList(questCategoryList)
           this.questionCategories.list.forEach(item => {
             item.questionFile = []
             item.answerFile = []
@@ -157,33 +143,43 @@ export default {
           })
           this.getBookletOptions()
         })
+        .catch(() => {
+        })
     },
     getBookletOptions () {
-      this.$axios.get(API_ADDRESS.option.base + '?type=booklet_type')
-        .then(response => {
-          this.bookletOptions = response.data.data
+      this.$apiGateway.option.getOptions({
+        type: 'booklet_type'
+      })
+        .then(options => {
+          this.bookletOptions = options
           this.getBooklets()
+        })
+        .catch(() => {
         })
     },
     getBooklets () {
-      this.$axios.get(API_ADDRESS.exam.pdf(this.examId))
-        .then(response => {
+      this.$apiGateway.exam.getExamAnswersFiles(this.examId)
+        .then(fileList => {
           this.questionCategories.list.forEach(category => {
             category.descriptive_answers_booklet = ''
             category.questions_booklet = ''
-            response.data.forEach(file => {
-              if (file.category.id === category.id) {
-                file.booklets.forEach(booklet => {
-                  if (booklet.value === 'descriptive_answers_booklet') {
-                    category.descriptive_answers_booklet = booklet.url
-                  } else if (booklet.value === 'questions_booklet') {
-                    category.questions_booklet = booklet.url
-                  }
-                })
-              }
-            })
+            if (fileList) {
+              fileList.forEach(file => {
+                if (file.category.id === category.id) {
+                  file.booklets.forEach(booklet => {
+                    if (booklet.value === 'descriptive_answers_booklet') {
+                      category.descriptive_answers_booklet = booklet.url
+                    } else if (booklet.value === 'questions_booklet') {
+                      category.questions_booklet = booklet.url
+                    }
+                  })
+                }
+              })
+            }
           })
           this.dataLoading = false
+        })
+        .catch(() => {
         })
     },
     addFiles (files, item, group) {
@@ -198,19 +194,18 @@ export default {
       formData.append('category_id', item.id)
       const option = this.bookletOptions.find(option => option.value === bookletType)
       formData.append('booklet_type', option.id)
-      that.$axios.post(API_ADDRESS.exam.examBookletUpload(this.examId), formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      that.$apiGateway.exam.examBookletUpload({
+        examId: this.examId,
+        data: formData
       })
-        .then((res) => {
+        .then((url) => {
           item.loading[group] = false
           that.$q.notify({
             message: 'اطلاعات آزمون شما ثبت شد.',
             type: 'positive',
             position: 'top'
           })
-          item[bookletType] = res.data.data.url
+          item[bookletType] = url
           item[key] = []
         })
         .catch(() => {

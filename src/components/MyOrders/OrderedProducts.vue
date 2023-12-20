@@ -1,21 +1,13 @@
 <template>
   <div class="cart-view-widget">
-    <div
-      class="cart-items"
-    >
+    <div class="cart-items">
       <q-card class="cart-card">
-        <q-card-section
-          v-if="orderedItem.grand.id"
-          class="card-section"
-        >
-          <div
-            v-if="orderedItem.grand.photo"
-            class="order-image-section"
-          >
-            <q-img
-              :src="orderedItem.grand.photo"
-              class="order-image "
-            />
+        <q-card-section v-if="orderedItem.grand.id"
+                        class="card-section">
+          <div v-if="orderedItem.grand.photo"
+               class="order-image-section">
+            <q-img :src="orderedItem.grand.photo"
+                   class="order-image " />
           </div>
 
           <div class="product-text-info">
@@ -24,14 +16,11 @@
                 {{ orderedItem.grand.title }}
               </div>
             </div>
-            <div
-              class="price-container"
-            >
+            <div class="price-container">
               <div v-if="orderedItem.grand?.price"
                    class="discount-part">
-                <div
-                  v-if=" orderedItem.grand.price.discountInPercent() "
-                  class="discount-percent">
+                <div v-if=" orderedItem.grand.price.discountInPercent() "
+                     class="discount-percent">
                   {{ orderedItem.grand.price.discountInPercent() }}%
                 </div>
 
@@ -49,18 +38,12 @@
           </div>
         </q-card-section>
 
-        <q-card-section
-          v-else
-          class="card-section"
-        >
-          <div
-            v-if="orderedItem.order_product.list[0].photo"
-            class="order-image-section"
-          >
-            <q-img
-              :src="orderedItem.order_product.list[0].photo"
-              class="order-image"
-            />
+        <q-card-section v-else
+                        class="card-section">
+          <div v-if="orderedItem.order_product.list[0].photo"
+               class="order-image-section">
+            <q-img :src="orderedItem.order_product.list[0].photo"
+                   class="order-image" />
           </div>
 
           <div class="product-text-info">
@@ -69,9 +52,7 @@
                 {{ orderedItem.order_product.list[0].product.title }}
               </div>
             </div>
-            <div
-              class="price-container"
-            >
+            <div class="price-container">
               <div v-if="orderedItem.order_product.list[0].price.discountInPercent()"
                    class="discount-part">
                 <div class="discount-percent">
@@ -85,7 +66,7 @@
 
               <div class="final-part">
                 <div class="final-price">
-                  {{ orderedItem.order_product.list[0].price.toman('final', null)  ? orderedItem.order_product.list[0].price.toman('final', null) : 0}}
+                  {{ orderedItem.order_product.list[0].price.toman('final', null) ? orderedItem.order_product.list[0].price.toman('final', null) : 0}}
                 </div>
                 <div class="toman">تومان</div>
               </div>
@@ -93,43 +74,31 @@
           </div>
         </q-card-section>
 
-        <q-card-section
-          v-if="orderedItem.grand.id"
-          class="card-actions"
-        >
-          <div
-            class="product-details"
-            :class="expanded ?'on-open-expansion': ''"
-          >
-            <div
-              class="action-buttons"
-              :class="expanded ? 'expansion-opened' : 'expansion-closed'"
-            >
+        <q-card-section v-if="orderedItem.grand.id"
+                        class="card-actions">
+          <div class="product-details"
+               :class="expanded ?'on-open-expansion': ''">
+            <div class="action-buttons"
+                 :class="expanded ? 'expansion-opened' : 'expansion-closed'">
 
-              <q-expansion-item
-                v-model="expanded"
-                label="جزئیات محصول"
-                class="details-expansion"
-                :class="expanded ?'open-expansion-style': ''"
-                :header-class=" expanded ? 'hide-expansion-header' : ''"
-              >
+              <q-expansion-item v-model="expanded"
+                                label="جزئیات محصول"
+                                class="details-expansion"
+                                :class="expanded ?'open-expansion-style': ''"
+                                :header-class=" expanded ? 'hide-expansion-header' : ''">
                 <q-card class="details-expansion-card">
                   <q-card-section class="details-expansion-card-section">
-                    <div
-                      v-for="(item, index) in orderedItem.order_product.list"
-                      :key="index"
-                      class="pamphlet"
-                    >
+                    <div v-for="(item, index) in orderedItem.order_product.list"
+                         :key="index"
+                         class="pamphlet">
                       <template v-if="item && item.product">
                         <div class="title ellipsis">
                           {{ item.product.title }}
                         </div>
 
                         <div class="right-part">
-                          <span
-                            class="price"
-                          >
-                            {{ item.price.toman('final', null)  }} تومان
+                          <span class="price">
+                            {{ item.price.toman('final', null) }} تومان
                           </span>
                         </div>
                       </template>
@@ -137,14 +106,11 @@
                   </q-card-section>
 
                   <q-card-section class="details-expansion-actions">
-                    <q-btn-dropdown
-                      class="details-button"
-                      label="جزئیات محصول"
-                      dropdown-icon="isax:arrow-up-2"
-                      flat
-                      @click="expanded = !expanded"
-                    >
-                    </q-btn-dropdown>
+                    <q-btn-dropdown class="details-button"
+                                    label="جزئیات محصول"
+                                    dropdown-icon="isax:arrow-up-2"
+                                    flat
+                                    @click="expanded = !expanded" />
                   </q-card-section>
                 </q-card>
               </q-expansion-item>
@@ -158,17 +124,10 @@
 </template>
 
 <script>
-import { OrderItem } from 'src/models/OrderItem'
+import { OrderItem } from 'src/models/OrderItem.js'
 
 export default {
   name: 'OrderedProducts',
-  data() {
-    return {
-      dialogState: false,
-      expanded: true,
-      clickedItemToRemove: null
-    }
-  },
   props: {
     // order: {
     //   type: Order,
@@ -183,8 +142,12 @@ export default {
       }
     }
   },
-  created() {
-    this.loading = true
+  data() {
+    return {
+      dialogState: false,
+      expanded: true,
+      clickedItemToRemove: null
+    }
   },
   computed: {
     cartItems() {
@@ -211,6 +174,9 @@ export default {
     //     return null
     //   }
     // }
+  },
+  created() {
+    this.loading = true
   },
 
   methods: {

@@ -1,28 +1,20 @@
 <template>
   <div class="user-panel-side-drawer">
-    <q-img
-      class="logo-pic-img"
-      src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
-      @click="routeTo('HomePage')"
-    />
-    <div class="separator-line"></div>
+    <q-img class="logo-pic-img"
+           src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
+           @click="routeTo('HomePage')" />
+    <div class="separator-line" />
     <q-list class="tabs-list">
-      <div
-        v-for="(item , index) in headerItems"
-        :key="index"
-        class="tabs-list-container"
-      >
-        <div
-          v-if="showMenuItem(item)"
-          class="self-center"
-        >
-          <q-item
-            v-ripple
-            clickable
-            :active="isRouteSelected(item.to)"
-            active-class="active-item"
-            :to="{ name: item.to }"
-          >
+      <div v-for="(item , index) in headerItems"
+           :key="index"
+           class="tabs-list-container">
+        <div v-if="showMenuItem(item)"
+             class="self-center">
+          <q-item v-ripple
+                  clickable
+                  :active="isRouteSelected(item.to)"
+                  active-class="active-item"
+                  :to="{ name: item.to }">
             <q-item-section class="tab-title">
               {{ item.title }}
             </q-item-section>
@@ -34,7 +26,7 @@
 </template>
 
 <script>
-import UserLayoutHeader from 'src/mixin/UserLayoutHeader'
+import UserLayoutHeader from 'src/mixin/UserLayoutHeader.js'
 
 export default {
   name: 'UserPanelSideDrawer',

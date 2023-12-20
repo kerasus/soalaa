@@ -2,23 +2,18 @@
   <div class="faq-container">
     <div class="faq-title">سوالات متداول</div>
     <q-list class="faq-list">
-      <q-expansion-item
-        v-for="(item, index) in info"
-        :key="index"
-        dense
-        :default-opened="index === 0 ? true : false"
-        icon="format_quote"
-        class="faq-item"
-      >
+      <q-expansion-item v-for="(item, index) in info"
+                        :key="index"
+                        dense
+                        :default-opened="index === 0 ? true : false"
+                        icon="format_quote"
+                        class="faq-item">
         <template v-slot:header>
           <q-item-section class="faq-item-header">
-            <q-icon
-              name="format_quote"
-              class="faq-item-header-icon"
-              color="primary"
-              size="28px"
-
-            />
+            <q-icon name="format_quote"
+                    class="faq-item-header-icon"
+                    color="primary"
+                    size="28px" />
             <div class="faq-item-label">
               {{ item.key }}
             </div>
@@ -35,7 +30,6 @@
   </div>
 </template>
 <script>
-import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'FAQ',
@@ -55,9 +49,9 @@ export default {
   },
   methods: {
     loadData () {
-      this.$axios.get(API_ADDRESS.subscription.landing)
-        .then(res => {
-          this.info = res.data.data.questions
+      this.$apiGateway.user.subscriptionLanding()
+        .then(landingData => {
+          this.info = landingData.questions
         })
     }
   }

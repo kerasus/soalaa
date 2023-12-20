@@ -3,12 +3,10 @@
     <q-img src="https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg"
            width="300px"
            height="300px"
-           dark
-    />
+           dark />
     <q-card-actions vertical>
       <q-btn class="profile-link bg-green"
-             :to="{ name: 'User.Exam.List' }"
-      >
+             :to="{ name: 'User.Exam.List' }">
         بازگشت به پیشخوان
       </q-btn>
     </q-card-actions>
@@ -16,7 +14,7 @@
 </template>
 
 <script>
-import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
+import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'onlineQuizTopMenu',

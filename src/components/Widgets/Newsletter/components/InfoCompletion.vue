@@ -60,7 +60,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'InfoCompletion',
@@ -178,11 +177,10 @@ export default {
     },
     getTags() {
       // this.$apiGateway.forrest.getTags(['major', 'grade'])
-      this.$axios.get(API_ADDRESS.tree.getMultiType(['major', 'grade']))
-        .then(response => {
-          const res = response.data.data
+      this.$apiGateway.tree.getMultiType(['major', 'grade'])
+        .then(treeNodeList => {
           this.stringOptions = []
-          res.map((tree) => tree.children).forEach(category => {
+          treeNodeList.list.map((tree) => tree.children).forEach(category => {
             category.forEach(item => {
               this.stringOptions[category].push(item)
             })
@@ -195,7 +193,7 @@ export default {
       this.form.mobile = this.userInfo.mobile
       this.form.code = this.userInfo.code
       this.setLoading(true)
-      this.$axios.post(API_ADDRESS.user.newsletter, {
+      this.$apiGateway.user.newsletter({
         mobile: this.form.mobile, // String
         code: this.form.code, // String
         first_name: this.form.first_name, // String
@@ -204,8 +202,7 @@ export default {
         grade_id: this.form.grade_id.id // String
       })
       // this.$apiGateway.user.newsletter(this.form)
-        .then((response) => {
-          const message = response.data.message
+        .then((message) => {
           this.$q.notify({
             message,
             color: 'success',

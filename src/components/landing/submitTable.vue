@@ -18,8 +18,7 @@
                  :name="exam"
                  class="exam-btn"
                  :class="{'active-exam-btn':activeTab.id === exam.id}"
-                 @click="updateActiveTab(exam)"
-          >
+                 @click="updateActiveTab(exam)">
             <span class="btn-text">
               {{ exam.title }}
             </span>
@@ -27,19 +26,16 @@
           </q-btn>
         </div>
         <div class="exams-q-select">
-          <q-select
-            v-model="activeTab"
-            :options="tabPages"
-            dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
-            hide-bottom-space
-            dense
-            color="amber-14"
-            borderless
-            rounded
-            option-label="title"
-            @update:model-value="setFirstMajorsGradesSelected"
-          >
-          </q-select>
+          <q-select v-model="activeTab"
+                    :options="tabPages"
+                    dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
+                    hide-bottom-space
+                    dense
+                    color="amber-14"
+                    borderless
+                    rounded
+                    option-label="title"
+                    @update:model-value="setFirstMajorsGradesSelected" />
         </div>
         <div class="table-description"
              v-html="description" />
@@ -48,18 +44,16 @@
         <!--        <table-component :table-data="data"/>-->
         <div class="table-parent">
           <div class="major-grade-btn">
-            <q-select
-              v-if="currentGrades?.length > 1"
-              v-model="selectedGrade"
-              borderless
-              color="amber-14"
-              dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
-              hide-bottom-space
-              dense
-              :options="currentGrades"
-              class="dropdown-btn first q-mr-md"
-              @update:model-value="onUpdateSelectedExams"
-            >
+            <q-select v-if="currentGrades?.length > 1"
+                      v-model="selectedGrade"
+                      borderless
+                      color="amber-14"
+                      dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
+                      hide-bottom-space
+                      dense
+                      :options="currentGrades"
+                      class="dropdown-btn first q-mr-md"
+                      @update:model-value="onUpdateSelectedExams">
               <template v-slot:selected>
                 <span class="custom-label-prefix"> پایه تحصیلی: </span>
                 {{ selectedGrade }}
@@ -74,8 +68,7 @@
                       dense
                       :options="currentMajors"
                       class="select-2 dropdown-btn"
-                      @update:model-value="onUpdateSelectedExams"
-            >
+                      @update:model-value="onUpdateSelectedExams">
               <template v-slot:selected>
                 <span class="custom-label-prefix"> رشته تحصیلی: </span>
                 {{ selectedMajor }}
@@ -101,20 +94,17 @@
               <td class="date custom-border"
                   :class="{'date-selective': selectiveRegister}">{{ item.attributes?.info?.examDate ? item.attributes.info.examDate[0] : ' - ' }}</td>
               <td class="title custom-border"
-                  :class="{ 'title-selective-mod': selectiveRegister}"
-              >{{ item.short_title }}</td>
+                  :class="{ 'title-selective-mod': selectiveRegister}">{{ item.short_title }}</td>
               <td v-if="selectiveRegister"
                   class="submitStatus-selective-mode custom-border">
                 <div class="flex items-center justify-center">
                   <div v-if="item.selected">
-                    <div
-                      class="flex items-center justify-center svg cursor"
-                      @click="onSelectedExam(item, index)">
+                    <div class="flex items-center justify-center svg cursor"
+                         @click="onSelectedExam(item, index)">
 
-                      <svg
-                        viewBox="0 0 21 20"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
+                      <svg viewBox="0 0 21 20"
+                           fill="none"
+                           xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd"
                               clip-rule="evenodd"
                               d="M10.5 20C16.0228 20 20.5 15.5228 20.5 10C20.5 4.47715 16.0228 0 10.5 0C4.97715 0 0.5 4.47715 0.5 10C0.5 15.5228 4.97715 20 10.5 20ZM16.0588 7.50027C16.3351 7.19167 16.3089 6.71752 16.0003 6.44123C15.6917 6.16493 15.2175 6.19113 14.9412 6.49973L11.5721 10.2629C10.8894 11.0254 10.4296 11.5363 10.0365 11.8667C9.66207 12.1814 9.44213 12.25 9.25 12.25C9.05787 12.25 8.83794 12.1814 8.46348 11.8667C8.0704 11.5363 7.61064 11.0254 6.92794 10.2629L6.05877 9.29209C5.78248 8.98349 5.30833 8.9573 4.99973 9.23359C4.69113 9.50988 4.66493 9.98403 4.94123 10.2926L5.84753 11.3049C6.48338 12.0152 7.01374 12.6076 7.49835 13.0149C8.01099 13.4458 8.56393 13.75 9.25 13.75C9.93607 13.75 10.489 13.4458 11.0016 13.0149C11.4863 12.6076 12.0166 12.0152 12.6525 11.3049L16.0588 7.50027Z"
@@ -122,20 +112,18 @@
                       </svg>
                     </div>
                   </div>
-                  <div  v-else
-                        class="empty-circle"
-                        @click="onSelectedExam(item, index)"></div>
+                  <div v-else
+                       class="empty-circle"
+                       @click="onSelectedExam(item, index)" />
                 </div>
               </td>
               <td class="custom-border"
                   :class="selectiveRegister ? 'submitStatus-selective-mode ': 'submitStatus' ">
 
-                <div
-                  class="flex items-center justify-center svg">
-                  <svg
-                    viewBox="0 0 21 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
+                <div class="flex items-center justify-center svg">
+                  <svg viewBox="0 0 21 20"
+                       fill="none"
+                       xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
                           clip-rule="evenodd"
                           d="M10.5 20C16.0228 20 20.5 15.5228 20.5 10C20.5 4.47715 16.0228 0 10.5 0C4.97715 0 0.5 4.47715 0.5 10C0.5 15.5228 4.97715 20 10.5 20ZM16.0588 7.50027C16.3351 7.19167 16.3089 6.71752 16.0003 6.44123C15.6917 6.16493 15.2175 6.19113 14.9412 6.49973L11.5721 10.2629C10.8894 11.0254 10.4296 11.5363 10.0365 11.8667C9.66207 12.1814 9.44213 12.25 9.25 12.25C9.05787 12.25 8.83794 12.1814 8.46348 11.8667C8.0704 11.5363 7.61064 11.0254 6.92794 10.2629L6.05877 9.29209C5.78248 8.98349 5.30833 8.9573 4.99973 9.23359C4.69113 9.50988 4.66493 9.98403 4.94123 10.2926L5.84753 11.3049C6.48338 12.0152 7.01374 12.6076 7.49835 13.0149C8.01099 13.4458 8.56393 13.75 9.25 13.75C9.93607 13.75 10.489 13.4458 11.0016 13.0149C11.4863 12.6076 12.0166 12.0152 12.6525 11.3049L16.0588 7.50027Z"
@@ -151,8 +139,7 @@
               <div class="table-footer-container">
                 <div class="pic-container">
                   <q-img src="https://nodes.alaatv.com/upload/landing/3a/13.png"
-                         class="img">
-                  </q-img>
+                         class="img" />
                 </div>
                 <div class="download-box">
                   <div class="text-style">
@@ -239,8 +226,7 @@
                 </div>
                 <q-btn unelevated
                        class="sub-btn active"
-                       @click="addPackProductToCart"
-                >
+                       @click="addPackProductToCart">
                   <span class="sub-btn-text">
                     ثبت‌نام
                   </span>
@@ -249,8 +235,7 @@
             </div>
           </div>
         </div>
-        <div>
-        </div>
+        <div />
       </div>
     </div>
     <q-dialog v-model="messageDialog">
@@ -276,7 +261,8 @@
 
 <script>
 // import tableComponent from 'src/components/landing/table'
-import API_ADDRESS from 'src/api/Addresses'
+import { APIGateway } from 'src/api/APIGateway'
+
 export default {
   name: 'submitTable',
   components: {
@@ -294,7 +280,7 @@ export default {
       {
         id: 0,
         title: 'آزمون کنکوری های 1403',
-        description: '۱۶ مرحله آزمون آزمایشی آنلاین سه آ به همراه برنامه مطالعاتی جامع و دقیق برای پیشروی و جمع بندی طراحی شده و یک سال مطالعه حرفه ای شما رو کامل پوشش می دهد تا برای هر دو مرحله آزمون سراسری 1403 آمادگی کامل داشته باشید. در جدول پایین "(ج)" و "(ب)" به ترتیب نمایش اختصاری کلمه "جمع بندی" و "بخشی از" می‌باشد.',
+        description: '۱۰ مرحله آزمون آزمایشی آنلاین سه آ به همراه برنامه مطالعاتی جامع و دقیق برای پیشروی و جمع بندی طراحی شده و یک سال مطالعه حرفه ای شما رو کامل پوشش می دهد تا برای هر دو مرحله آزمون سراسری 1403 آمادگی کامل داشته باشید. در جدول پایین "(ج)" و "(ب)" به ترتیب نمایش اختصاری کلمه "جمع بندی" و "بخشی از" می‌باشد.',
         majors: ['ریاضی', 'تجربی', 'انسانی'],
         grades: ['دوازدهم'],
         exams: [
@@ -1397,9 +1383,6 @@ export default {
       products: []
     }
   }),
-  created() {
-    this.initPageData()
-  },
   computed: {
     singlePriceOnPackMode() {
       if (!this.currentBundle.exams) {
@@ -1440,6 +1423,9 @@ export default {
     selectiveRegister() {
       return this.activeTab.selective
     }
+  },
+  mounted () {
+    this.initPageData()
   },
   methods: {
     async addToCart() {
@@ -1546,14 +1532,14 @@ export default {
     async getProducts() {
       try {
         const productList = await this.callProductApi()
-        this.adaptData(productList.data.data)
+        this.adaptData(productList.list)
       } catch (e) {
         // console.log(e)
       }
     },
 
     callProductApi() {
-      return this.$axios.get(API_ADDRESS.product.landing.sea.all)
+      return APIGateway.product.landingAllProducts()
     },
 
     updateActiveTab(exam) {

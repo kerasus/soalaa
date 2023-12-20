@@ -26,10 +26,10 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import moment from 'moment-jalaali'
-import API_ADDRESS from 'src/api/Addresses'
 
-export default {
+export default defineComponent({
   name: 'NextExam',
   data() {
     return {
@@ -43,6 +43,10 @@ export default {
       countDown: 0
     }
   },
+  mounted() {
+    this.getExams()
+    this.countDownTimer()
+  },
   methods: {
     getExams() {
       this.calendarDate = moment(new Date())
@@ -50,25 +54,25 @@ export default {
       this.dayNum = moment.jDaysInMonth(this.calendarYear, this.calendarDate.jMonth())
       this.startFrom = moment(`${this.calendarYear}/${this.calendarDate.jMonth() + 1}/${moment().startOf('jMonth').jDate()}`, 'jYYYY/jM/jD').format('YYYY-M-D')
       this.startTill = moment(`${this.calendarYear}/${this.calendarDate.jMonth() + 1}/${this.dayNum}`, 'jYYYY/jM/jD').format('YYYY-M-D')
-      this.$axios.get(API_ADDRESS.exam.userExamList.base(), {
-        params: {
-          start_at_from: this.startFrom,
-          start_at_till: this.startTill
-        }
-      }).then((res) => {
-        this.exam = res.data.data
-        this.exam.forEach(element => {
-          if (element.start_at.substring(0, 10) === moment().format('YYYY-MM-DD')) {
-            const timeToExam = moment(element.start_at, 'YYYY-MM-DD HH:mm:ss').diff(moment(new Date()))
-            if (timeToExam > 0) {
-              this.lastExam = element.start_at
-              this.countDown = timeToExam / 1000
-            } else {
-              this.countDown = 0
-            }
-          }
-        })
+
+      this.$apiGateway.exam.userExamList({
+        start_at_from: this.startFrom,
+        start_at_till: this.startTill
       })
+        .then((res) => {
+          this.exam = res.examList.list
+          this.exam.forEach(element => {
+            if (element.start_at.substring(0, 10) === moment().format('YYYY-MM-DD')) {
+              const timeToExam = moment(element.start_at, 'YYYY-MM-DD HH:mm:ss').diff(moment(new Date()))
+              if (timeToExam > 0) {
+                this.lastExam = element.start_at
+                this.countDown = timeToExam / 1000
+              } else {
+                this.countDown = 0
+              }
+            }
+          })
+        })
     },
     countDownTimer() {
       if (this.countDown > 0) {
@@ -78,12 +82,8 @@ export default {
         }, 1000)
       }
     }
-  },
-  created() {
-    this.getExams()
-    this.countDownTimer()
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

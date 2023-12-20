@@ -34,13 +34,10 @@
     </div>
     <div v-else
          class="quiz-page-wrapper">
-      <div
-        class="userExamList"
-        style="font-size: 16px;"
-      >
+      <div class="userExamList"
+           style="font-size: 16px;">
         <div v-if="allExamsList.list.length > 0 || myExams.list.length > 0 || upcomingExams.list.length > 0"
-             class="fit row wrap justify-center items-start content-start"
-        >
+             class="fit row wrap justify-center items-start content-start">
           <div v-if="$q.screen.lt.sm"
                class="col-12">
             <div class="flex justify-start my-exam-btn">
@@ -61,14 +58,12 @@
                 <div class="exam-list-title">
                   آزمون ها
                 </div>
-                <q-tabs
-                  v-model="tab"
-                  color="light1"
-                  class="exam-tabs"
-                  active-class="active-tab"
-                  active-color="secondary"
-                  align="left"
-                >
+                <q-tabs v-model="tab"
+                        color="light1"
+                        class="exam-tabs"
+                        active-class="active-tab"
+                        active-color="secondary"
+                        align="left">
                   <q-tab name="exam"
                          label="آزمون های سه آ" />
                   <q-tab name="myExam"
@@ -78,28 +73,24 @@
                               class="quiz-panels"
                               animated>
                   <q-tab-panel name="exam">
-                    <quiz-list
-                      :key="examPagination"
-                      :pagination="pagination.exam.current_page"
-                      :pageCount="pageCount"
-                      :quiz-type="'exam'"
-                      :exams="allExamsList"
-                      :personal="false"
-                      @onFilter="filterAllExams"
-                      @changePage="paginateList($event,'exam')"
-                    />
+                    <quiz-list :key="examPagination"
+                               :pagination="pagination.exam.current_page"
+                               :pageCount="pageCount"
+                               :quiz-type="'exam'"
+                               :exams="allExamsList"
+                               :personal="false"
+                               @onFilter="filterAllExams"
+                               @changePage="paginateList($event,'exam')" />
                   </q-tab-panel>
                   <q-tab-panel name="myExam">
-                    <quiz-list
-                      :key="myExamPagination"
-                      :pagination="pagination.myExam.current_page"
-                      :pageCount="pageCount"
-                      :quiz-type="'myExam'"
-                      :exams="myExams"
-                      :personal="true"
-                      @onFilter="filterMyExams"
-                      @changePage="paginateList($event,'myExam')"
-                    />
+                    <quiz-list :key="myExamPagination"
+                               :pagination="pagination.myExam.current_page"
+                               :pageCount="pageCount"
+                               :quiz-type="'myExam'"
+                               :exams="myExams"
+                               :personal="true"
+                               @onFilter="filterMyExams"
+                               @changePage="paginateList($event,'myExam')" />
                   </q-tab-panel>
                 </q-tab-panels>
               </div>
@@ -133,13 +124,12 @@
 </template>
 
 <script>
+import moment from 'moment-jalaali'
 import { defineComponent } from 'vue'
-import FutureQuizzesCarousel from 'src/components/Quiz/FutureQuizzesCarousel'
-import QuizList from 'src/components/Quiz/QuizList'
-import API_ADDRESS from 'src/api/Addresses'
-import { ExamList } from 'src/models/Exam'
-import moment from 'moment'
 import Time from 'src/plugins/time.js'
+import { ExamList } from 'src/models/Exam.js'
+import QuizList from 'src/components/Quiz/QuizList.vue'
+import FutureQuizzesCarousel from 'src/components/Quiz/FutureQuizzesCarousel.vue'
 
 export default defineComponent({
   name: 'List',
@@ -197,19 +187,17 @@ export default defineComponent({
   methods: {
     getBaseExamList () {
       this.allExamsList.loading = true
-      this.$axios.get(API_ADDRESS.exam.userExamList.base(), {
-        params:
-          {
-            start_at_till: this.date,
-            page: 1
-          }
+      this.$apiGateway.exam.userExamList({
+        start_at_till: this.date,
+        page: 1
       })
-        .then((response) => {
-          this.allExamsList = new ExamList(response.data.data)
-          this.pagination.exam = response.data.meta
+        .then((examListAndMeta) => {
+          this.allExamsList = examListAndMeta.examList
+          this.pagination.exam = examListAndMeta.meta
           this.allExamsList.loading = false
           this.filterData.to = this.date
-        }).catch(() => {
+        })
+        .catch(() => {
           this.allExamsList.loading = false
         })
     },
@@ -223,19 +211,15 @@ export default defineComponent({
     },
     getAllExams (title, start, end, page) {
       this.allExamsList.loading = true
-      this.$axios.get(API_ADDRESS.exam.userExamList.base(),
-        {
-          params:
-            {
-              ...(title && { title }),
-              ...(start && { start_at_from: start }),
-              ...(end && { start_at_till: end }),
-              ...(page && { page })
-            }
-        })
-        .then((response) => {
-          this.allExamsList = new ExamList(response.data.data)
-          this.pagination.exam = response.data.meta
+      this.$apiGateway.exam.userExamList({
+        ...(title && { title }),
+        ...(start && { start_at_from: start }),
+        ...(end && { start_at_till: end }),
+        ...(page && { page })
+      })
+        .then((examListAndMeta) => {
+          this.allExamsList = examListAndMeta.examList
+          this.pagination.exam = examListAndMeta.meta
           this.allExamsList.loading = false
           this.examPagination++
         }).catch(() => {
@@ -244,19 +228,20 @@ export default defineComponent({
     },
     getMyExams (title, start, end, page) {
       this.myExams.loading = true
-      this.$axios.get(API_ADDRESS.exam.userExamList.myExams(),
+      this.$apiGateway.exam.myExams(
         {
-          params:
-            {
-              ...(title && { title }),
-              ...(start && { created_at_from: start }),
-              ...(end && { created_at_till: end }),
-              ...(page && { page })
-            }
-        })
-        .then((response) => {
-          this.myExams = new ExamList(response.data.data)
-          this.pagination.myExam = response.data.meta
+          designerType: 'personal',
+          params: {
+            ...(title && { title }),
+            ...(start && { created_at_from: start }),
+            ...(end && { created_at_till: end }),
+            ...(page && { page })
+          }
+        }
+      )
+        .then((examListAndMeta) => {
+          this.myExams = examListAndMeta.examList
+          this.pagination.myExam = examListAndMeta.meta
           this.myExams.loading = false
           this.myExamPagination++
         }).catch(() => {
@@ -265,10 +250,10 @@ export default defineComponent({
     },
     getUpcomingExams () {
       this.upcomingExams.loading = true
-      const today = moment(new Date(Time.now())).format('YYYY-MM-DD')
-      this.$axios.get(API_ADDRESS.exam.userExamList.upcomingExams(today))
-        .then((response) => {
-          this.upcomingExams = new ExamList(response.data.data)
+      const tomorrow = moment(new Date(Time.now())).add(1, 'days').format('YYYY-MM-DD')
+      this.$apiGateway.exam.upcomingExams(tomorrow)
+        .then((examList) => {
+          this.upcomingExams = examList
           this.upcomingExams.loading = false
         }).catch(() => {
           this.allExamsList.loading = false

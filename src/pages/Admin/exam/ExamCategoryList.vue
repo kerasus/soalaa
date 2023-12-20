@@ -10,13 +10,11 @@
                       width="150px" />
         </template>
       </div>
-      <q-btn
-        round
-        dark-percentage
-        color="primary"
-        icon="isax:arrow-left-2"
-        @click="goToExamList"
-      >
+      <q-btn round
+             dark-percentage
+             color="primary"
+             icon="isax:arrow-left-2"
+             @click="goToExamList">
         <q-tooltip anchor="top middle"
                    self="bottom middle"
                    :offset="[10, 10]">
@@ -40,19 +38,16 @@
           <template v-if="!categoryList.loading">
             <template v-if="categoryList.list.length > 0">
               <tr v-for="category in categoryList.list"
-                  :key="category.id"
-              >
+                  :key="category.id">
                 <td>{{ category.title }}</td>
                 <td class="actionsColumn">
                   <div class="row q-pt-sm justify-center">
                     <div class="col-auto">
-                      <q-btn
-                        round
-                        dark-percentage
-                        color="primary"
-                        icon="isax:arrow-left-2"
-                        @click="goToSubCategoryList(category.id)"
-                      >
+                      <q-btn round
+                             dark-percentage
+                             color="primary"
+                             icon="isax:arrow-left-2"
+                             @click="goToSubCategoryList(category.id)">
                         <q-tooltip anchor="top middle"
                                    self="bottom middle"
                                    :offset="[10, 10]">
@@ -71,10 +66,8 @@
             </template>
           </template>
           <template v-else>
-            <tr
-              v-for="counter in [1, 2, 3, 4, 5]"
-              :key="counter"
-            >
+            <tr v-for="counter in [1, 2, 3, 4, 5]"
+                :key="counter">
               <td>
                 <q-skeleton type="text" />
               </td>
@@ -96,13 +89,13 @@
 </template>
 
 <script>
-// import ExamSubCategoryList from 'pages/Admin/exam/ExamSubCategoryList'
-import { mixinGetQuizData } from 'src/mixin/Mixins'
-import { Exam } from 'src/models/Exam'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import API_ADDRESS from 'src/api/Addresses'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-// import CategoryList from 'components/Category/categoryList'
+// import ExamSubCategoryList from 'src/pages/Admin/exam/ExamSubCategoryList'
+import { Exam } from 'src/models/Exam.js'
+import { mixinGetQuizData } from 'src/mixin/Mixins.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+// import CategoryList from 'src/components/Category/categoryList'
+
 export default {
   name: 'ExamCategoryList',
   components: {
@@ -118,14 +111,14 @@ export default {
       categoryList: new QuestCategoryList()
     }
   },
-  created () {
-    this.setExam()
-    this.loadLessons()
-  },
   computed: {
     examId () {
       return this.$route.params.exam_id
     }
+  },
+  created () {
+    this.setExam()
+    this.loadLessons()
   },
   methods: {
     goToExamList () {
@@ -134,28 +127,25 @@ export default {
       })
     },
     async setExam () {
-      const res = await this.getExamData(this.examId)
-      if (res.data.data) {
-        this.exam = new Exam(res.data.data)
-        this.examTitle = res.data.data.title
+      const exam = await this.getExamData(this.examId)
+      if (exam) {
+        this.exam = exam
+        this.examTitle = exam.title
       }
     },
     async loadLessons () {
       this.categoryList.loading = true
       try {
-        const response = await this.getLessons()
+        const categoryList = await this.getLessons()
         this.categoryList.loading = false
-        this.categoryList = new QuestCategoryList(response.data.data, {
-          meta: response.data.meta,
-          links: response.data.links
-        })
+        this.categoryList = categoryList
       } catch (e) {
         this.categoryList.loading = false
         this.categoryList = new QuestCategoryList()
       }
     },
     getLessons () {
-      return this.$axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.examId))
+      return this.$apiGateway.exam.getSubCategoriesWithPermissions(this.examId)
     },
     goToSubCategoryList (id) {
       this.$router.push({

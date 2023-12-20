@@ -2,20 +2,21 @@
   <div class="statistic-result">
     <div class="row justify-center">
       <div class="col col-12 col-md-9 default-result-table statistic-result-table d-flex justify-center">
-        <q-table
-          :rows="dataTable"
-          :columns="columns1"
-          row-key="name"
-          color="amber"
-          hide-bottom
-          flat
-          :rows-per-page-options="[0]"
-        ></q-table>
+        <q-table :rows="dataTable"
+                 :columns="columns1"
+                 row-key="name"
+                 color="amber"
+                 hide-bottom
+                 flat
+                 :rows-per-page-options="[0]" />
       </div>
       <div class="col-12 row">
         <div class="col">
           <div :style="{ 'max-width': '100%'}">
-            <highcharts :options="chartOptions" />
+            <div v-if="isHighchartsReady">
+              <component :is="highChartComponentName"
+                         :options="chartOptions" />
+            </div>
           </div>
         </div>
       </div>
@@ -24,11 +25,21 @@
 </template>
 
 <script>
-import { Chart } from 'highcharts-vue'
-
+import { defineAsyncComponent } from 'vue'
 export default {
   name: 'StatisticResult',
-  components: { highcharts: Chart },
+  components: {
+    HighCharts: defineAsyncComponent(() => {
+      return new Promise((resolve) => {
+        let Chart
+        import('highcharts-vue')
+          .then((ChartLib) => {
+            Chart = ChartLib.Chart
+            resolve(Chart)
+          })
+      })
+    })
+  },
   props: ['report'],
   data () {
     return {
@@ -89,19 +100,26 @@ export default {
         xAxis: {
           categories: []
         }
-      }
+      },
+      isHighchartsReady: false,
+      highChartComponentName: ''
     }
   },
-  created () {
+  mounted () {
     if (this.report && this.report.best) {
       if (this.report.sub_category[0].rank_school) {
-        this.headers.splice(9, 0, { text: ' رتبه مدرسه', value: 'rank_school', align: 'center', sortable: true })
+        this.columns1.splice(9, 0, { text: ' رتبه مدرسه', value: 'rank_school', align: 'center', sortable: true })
       }
       this.loadDataTable()
       this.loadChart()
     }
+    this.setUpHighChart()
   },
   methods: {
+    setUpHighChart () {
+      this.isHighchartsReady = true
+      this.highChartComponentName = 'high-charts'
+    },
     getPercentDataForChart () {
       let data = []
       this.dataTable.forEach((item) => {

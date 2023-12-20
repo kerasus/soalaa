@@ -7,59 +7,53 @@
         </q-card-section>
         <q-separator inset />
         <q-card-section>
-          <div
-            v-if="question.statement"
-            class="row justify-between question-box default-Qcard-box"
-          >
-            <vue-katex
-              :input="question.statement"
-            />
+          <div v-if="question.statement"
+               class="row justify-between question-box default-Qcard-box">
+            <vue-katex :input="question.statement" />
           </div>
         </q-card-section>
       </q-card>
-      <q-card
-        v-if="question.descriptive_answer"
-        class="default-questions-card"
-      >
+      <q-card v-if="question.descriptive_answer"
+              class="default-questions-card">
         <q-card-section class="default-Qcard-title">
           <div>پاسخ تشریحی</div>
         </q-card-section>
         <q-separator inset />
         <q-card-section>
           <div class="row justify-between default-Qcard-box">
-            <vue-katex
-              :input="question.descriptive_answer"
-            />
+            <vue-katex :input="question.descriptive_answer" />
           </div>
         </q-card-section>
       </q-card>
     </div>
-    <div
-      class="q-pt-lg"
-    >
-      <div  class="q-pb-md"> سوالات گروهی این سوال </div>
-      <question-item
-        v-for="(question, index) in question.group"
-        :key="index"
-        :question="question"
-        pageStrategy="question-bank"
-        :listOptions="questionsItemOptions"
-      />
+    <div class="q-pt-lg">
+      <div class="q-pb-md"> سوالات گروهی این سوال </div>
+      <question-item v-for="(question, index) in question.group"
+                     :key="index"
+                     :question="question"
+                     pageStrategy="question-bank"
+                     :listOptions="questionsItemOptions" />
     </div>
   </div>
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
-import { Question } from 'src/models/Question'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
+import { Question } from 'src/models/Question.js'
+import VueKatex from 'src/components/VueKatex.vue'
+import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
+
 export default {
   name: 'GroupQuestionShow',
   components: {
     QuestionItem,
     VueKatex
   },
-  props: {},
+  inject: {
+    question: {
+      from: 'providedQuestion', // this is optional if using the same key for injection
+      default: new Question()
+    }
+  },
   data () {
     return {
       choice: '',
@@ -71,12 +65,6 @@ export default {
         editQuestion: true,
         switch: true
       }
-    }
-  },
-  inject: {
-    question: {
-      from: 'providedQuestion', // this is optional if using the same key for injection
-      default: new Question()
     }
   },
   created () {

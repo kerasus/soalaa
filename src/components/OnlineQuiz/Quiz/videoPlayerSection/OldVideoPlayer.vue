@@ -79,9 +79,7 @@
     <video id="my-video"
            ref="videoPlayer"
            dir="ltr"
-           class="video-js vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause">
-
-    </video>
+           class="video-js vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause" />
   </div>
 </template>
 
@@ -183,6 +181,19 @@ export default {
       postIsFavored: {}
     }
   },
+  computed: {
+    calcTheHeight () {
+      return '100%'
+    },
+    calcTheWidth () {
+      return '100%'
+    }
+  },
+  watch: {
+    source: function () {
+      this.reInitVideo()
+    }
+  },
   created () {
     this.setSources()
     this.setPoster()
@@ -222,14 +233,6 @@ export default {
     //     }
     //     console.log('player.isFullscreen()' , that.player.isFullscreen());
     // })
-  },
-  computed: {
-    calcTheHeight () {
-      return '100%'
-    },
-    calcTheWidth () {
-      return '100%'
-    }
   },
   beforeUnmount () {
     if (this.player) {
@@ -306,11 +309,6 @@ export default {
     },
     videoStatus (val) {
       this.videoIsPlaying = val
-    }
-  },
-  watch: {
-    source: function () {
-      this.reInitVideo()
     }
   }
 }

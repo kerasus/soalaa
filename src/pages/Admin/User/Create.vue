@@ -1,18 +1,16 @@
 <template>
-  <entity-create
-    v-model:value="inputs"
-    title="تعریف کاربر"
-    :api="api"
-    :entity-id-key-in-response="entityIdKeyInResponse"
-    :show-route-param-key="showRouteParamKey"
-    :index-route-name="indexRouteName"
-    :show-route-name="showRouteName"
-  />
+  <entity-create v-model:value="inputs"
+                 title="تعریف کاربر"
+                 :api="api"
+                 :entity-id-key-in-response="entityIdKeyInResponse"
+                 :show-route-param-key="showRouteParamKey"
+                 :index-route-name="indexRouteName"
+                 :show-route-name="showRouteName" />
 </template>
 
 <script>
 import { EntityCreate } from 'quasar-crud'
-// import API_ADDRESS from "src/api/Addresses";
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Create',
@@ -20,7 +18,7 @@ export default {
   data () {
     return {
       expanded: true,
-      // api: API_ADDRESS.user.base,
+      api: APIGateway.user.APIAdresses.base,
       entityIdKeyInResponse: 'id',
       showRouteParamKey: 'id',
       showRouteName: 'Admin.User.Show',

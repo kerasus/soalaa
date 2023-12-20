@@ -1,49 +1,7 @@
 import { Notify } from 'quasar'
-import { axios } from 'src/boot/axios'
 import { Cart } from 'src/models/Cart.js'
-import API_ADDRESS from 'src/api/Addresses'
+import { APIGateway } from 'src/api/APIGateway.js'
 import CookieCart from 'src/assets/js/CookieCart.js'
-
-const addToCartMerge = function (data = {}) {
-  const payload = {
-    product_id: data.product_id, // Number or String
-    products: data.products, // Number or String (List ofProduct's ID)
-    attribute: data.attribute, // Number or String
-    seller: 2
-  }
-  if (!payload.products || (Array.isArray(payload.products) && payload.products.length === 0)) {
-    delete payload.products
-  }
-  if (!payload.attribute || (Array.isArray(payload.attribute) && payload.attribute.length === 0)) {
-    delete payload.attribute
-  }
-
-  return payload
-}
-
-const reviewCartMerge = function (cartItems = []) {
-  const queryParams = {}
-  queryParams.seller = 2
-  cartItems.forEach((cartItem, cartItemIndex) => {
-    queryParams['cartItems' + '[' + cartItemIndex + ']' + '[product_id]'] = cartItem.product_id
-    if (Array.isArray(cartItem.products)) {
-      cartItem.products.forEach((productItem, productItemIndex) => {
-        queryParams['cartItems' + '[' + cartItemIndex + ']' + '[products]' + '[' + productItemIndex + ']'] = productItem
-      })
-    }
-  })
-
-  if (Object.keys(queryParams).length === 0) {
-    return ''
-  }
-
-  let paramsString = ''
-  Object.keys(queryParams).forEach(key => {
-    paramsString += '&' + key + '=' + queryParams[key]
-  })
-
-  return paramsString.substr(1)
-}
 
 export function addToCart(context, newProductData) {
   const isUserLogin = !!this.getters['Auth/isUserLogin']
@@ -54,13 +12,7 @@ export function addToCart(context, newProductData) {
       attribute: newProductData.attribute ? newProductData.attribute : [] // Array
     }
     if (isUserLogin) {
-      axios
-        .post(API_ADDRESS.cart.orderproduct.add,
-          addToCartMerge(payload)
-          // { product_id: data[0].product.id, products: data[0].products, attribute: data[0].attribute, seller: 2 }
-        )
-
-      // APIGateway.cart.addToCart(payload)
+      APIGateway.cart.addToCart(payload)
         .then((response) => {
           Notify.create({
             type: 'positive',
@@ -75,7 +27,7 @@ export function addToCart(context, newProductData) {
               color: 'white',
               class: 'bg-green-3',
               handler: () => {
-                this.$router.push({ name: 'cart' })
+                this.$router.push({ name: 'Public.Checkout.Review' })
               }
             }]
           })
@@ -101,7 +53,7 @@ export function addToCart(context, newProductData) {
           color: 'white',
           class: 'bg-green-3',
           handler: () => {
-            this.$router.push({ name: 'cart' })
+            this.$router.push({ name: 'Public.Checkout.Review' })
           }
         }]
       })
@@ -130,32 +82,7 @@ export function reviewCart(context) {
   })
 
   return new Promise((resolve, reject) => {
-    const paramsString = reviewCartMerge(cartItems)
-    // APIGateway.cart.reviewCart(cartItems)
-
-    axios
-      .get(API_ADDRESS.cart.review + '?' + paramsString
-      //   {
-      //   // params: {
-      //   //   seller: 2,
-      //   //   cartItems: orders
-      //   // },
-      //   // paramsSerializer: {
-      //   //   encode: parse,
-      //   //   serialize: params => {
-      //   //     const q = new URLSearchParams()
-      //   //     q.set('seller', params.seller)
-      //   //     for (let item = 0; item < params.cartItems.length; item++) {
-      //   //       q.set(`cartItems[${item}][product_id]`, params.cartItems[item].product_id)
-      //   //       for (let product = 0; product < params.cartItems[item].products.length; product++) {
-      //   //         q.set(`cartItems[${item}][products][${product}]`, params.cartItems[item].products[product].id)
-      //   //       }
-      //   //     }
-      //   //     return q
-      //   //   }
-      //   // }
-      // }
-      )
+    APIGateway.cart.reviewCart(cartItems)
       .then((response) => {
         if (isUserLogin) {
           context.commit('updateCart', new Cart(response))
@@ -166,45 +93,11 @@ export function reviewCart(context) {
         reject(error)
       })
   })
-  // return new Promise((resolve, reject) => {
-  //   axios
-  //     .get(API_ADDRESS.cart.review, {
-  //       params: {
-  //         seller: 1,
-  //         cartItems
-  //       },
-  //       paramsSerializer: {
-  //         encode: parse,
-  //         serialize: params => {
-  //           const q = new URLSearchParams()
-  //           q.set('seller', params.seller)
-  //           for (let item = 0; item < params.cartItems.length; item++) {
-  //             q.set(`cartItems[${item}][product_id]`, params.cartItems[item].product_id)
-  //             for (let product = 0; product < params.cartItems[item].products.length; product++) {
-  //               q.set(`cartItems[${item}][products][${product}]`, params.cartItems[item].products[product].id)
-  //             }
-  //           }
-  //           return q
-  //         }
-  //       }
-  //     })
-  //     .then((response) => {
-  //       if (isUserLogin) {
-  //         context.commit('updateCart', new Cart())
-  //       }
-  //       return resolve(response)
-  //     })
-  //     .catch((error) => {
-  //       reject(error)
-  //     })
-  // })
 }
 
 export function paymentCheckout(context) {
   return new Promise((resolve, reject) => {
-    axios
-      .get(API_ADDRESS.cart.getPaymentRedirectEncryptedLink)
-    // APIGateway.cart.getPaymentRedirectEncryptedLink()
+    APIGateway.cart.getPaymentRedirectEncryptedLink()
       .then(encryptedPaymentRedirectLink => {
         return resolve(encryptedPaymentRedirectLink)
       })
@@ -228,9 +121,7 @@ export function removeItemFromCart(context, orderProductId) {
   return new Promise((resolve, reject) => {
     const isUserLogin = this.getters['Auth/isUserLogin']
     if (isUserLogin) {
-      // APIGateway.cart.removeFromCart(orderProductId)
-      axios
-        .delete(API_ADDRESS.cart.orderproduct.delete(orderProductId))
+      APIGateway.cart.removeFromCart(orderProductId)
         .then((response) => {
           removeOrderProductFromCart(orderProductId)
           Notify.create({

@@ -1,4 +1,4 @@
-import API_ADDRESS from 'src/api/Addresses'
+import { APIGateway } from 'src/api/APIGateway.js'
 import Assistant from 'src/plugins/assistant'
 import { Exam } from 'src/models/Exam'
 import { QuestionList } from 'src/models/Question'
@@ -151,18 +151,18 @@ class ExamData {
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
       }
-      this.$axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
-        .then(response => {
+      APIGateway.exam.getAnswerOfUserWithCorrect(userExamId)
+        .then(exam => {
           that.exam = new Exam()
           if (examId) {
             that.exam.id = examId
           }
           that.exam.user_exam_id = Assistant.getId(userExamId)
-          that.exam.title = response.data.data.exam.title
-          that.exam.questions_file_url = response.data.data.exam.questions_file_url
-          that.questionsFileUrl = response.data.data.exam.questions_file_url
+          that.exam.title = exam.title
+          that.exam.questions_file_url = exam.questions_file_url
+          that.questionsFileUrl = exam.questions_file_url
           resolve({
-            data: response,
+            data: exam,
             type: 'resolve'
           })
         })
@@ -197,19 +197,19 @@ class ExamData {
         const params = {
           user_exam_id: userExamId
         }
-        this.$axios.get(API_ADDRESS.exam.report.adminGetReport, { params })
-          .then(response => {
-            that.studentReport = response.data.data
-            resolve(response)
+        APIGateway.exam.adminGetReport({ params })
+          .then(report => {
+            that.studentReport = report
+            resolve(report)
           })
           .catch(error => {
             reject(error)
           })
       } else {
-        this.$axios.get(API_ADDRESS.exam.report.getReport(userExamId))
-          .then(response => {
-            that.studentReport = response.data.data
-            resolve(response)
+        APIGateway.exam.getReport(userExamId)
+          .then(report => {
+            that.studentReport = report
+            resolve(report)
           })
           .catch(error => {
             reject(error)
@@ -235,11 +235,11 @@ class ExamData {
         userExamId = that.exam.user_exam_id
       }
       // if (navigator.onLine) {
-      this.$axios.get(API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
-        .then(response => {
-          that.userExamData = response.data
+      APIGateway.exam.getAllAnswerOfUser(userExamId)
+        .then(userExamData => {
+          that.userExamData = userExamData
           resolve({
-            data: response,
+            data: userExamData,
             type: 'resolve'
           })
         })
@@ -274,23 +274,27 @@ class ExamData {
       if (retake) {
         data.retake = true
       }
-      const url = personal ? API_ADDRESS.exam.participate.personal(examId) : API_ADDRESS.exam.participate.sample(examId)
-      this.$axios.post(url, data)
-        .then(response => {
+      const participateData = {
+        data,
+        personal,
+        examId
+      }
+      APIGateway.exam.participate(participateData)
+        .then(userExamData => {
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
-          that.exam.id = Assistant.getId(response.data.data.exam_id)
-          that.exam.title = Assistant.getId(response.data.data.exam_title)
-          that.exam.user_exam_id = Assistant.getId(response.data.data.id)
-          that.exam.created_at = response.data.data.created_at
-          that.exam.accept_at = response.data.data.accept_at
-          that.exam.questions_file_url = response.data.data.questions_file_url
-          that.exam.categories = new QuestCategoryList(response.data.data.categories)
-          that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
-          that.exam.holding_config = response.data.data.holding_config
-          that.userExamData = response.data
+          that.exam.id = Assistant.getId(userExamData.exam_id)
+          that.exam.title = Assistant.getId(userExamData.exam_title)
+          that.exam.user_exam_id = Assistant.getId(userExamData.id)
+          that.exam.created_at = userExamData.created_at
+          that.exam.accept_at = userExamData.accept_at
+          that.exam.questions_file_url = userExamData.questions_file_url
+          that.exam.categories = new QuestCategoryList(userExamData.categories)
+          that.exam.sub_categories = new QuestSubcategoryList(userExamData.sub_categories)
+          that.exam.holding_config = userExamData.holding_config
+          that.userExamData = userExamData
           resolve({
-            data: response,
+            data: userExamData,
             type: 'resolve'
           })
         })
@@ -318,22 +322,22 @@ class ExamData {
       if (!examId) {
         examId = that.exam.id
       }
-      this.$axios.get(API_ADDRESS.exam.showExam(examId))
-        .then(response => {
-          // that.exam = new Exam()
+      APIGateway.exam.examUserAfterExam(examId)
+        .then(userExamData => {
+          that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
-          that.exam.id = Assistant.getId(response.data.data.id)
-          that.exam.title = Assistant.getId(response.data.data.title)
-          // that.exam.user_exam_id = Assistant.getId(response.data.data.user_exam_id)
-          that.exam.created_at = response.data.data.created_at
-          // that.exam.accept_at = response.data.data.accept_at
-          // that.exam.questions_file_url = response.data.data.questions_file_url
-          that.exam.categories = new QuestCategoryList(response.data.data.categories)
-          that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
-          that.exam.holding_config = response.data.data.holding_config
-          // that.userExamData = response.data
+          that.exam.id = Assistant.getId(userExamData.exam_id)
+          that.exam.title = Assistant.getId(userExamData.exam_title)
+          // that.exam.user_exam_id = Assistant.getId(userExamData.id)
+          that.exam.created_at = userExamData.created_at
+          // that.exam.accept_at = userExamData.accept_at
+          // that.exam.questions_file_url = userExamData.questions_file_url
+          that.exam.categories = new QuestCategoryList(userExamData.categories)
+          that.exam.sub_categories = new QuestSubcategoryList(userExamData.sub_categories)
+          that.exam.holding_config = userExamData.holding_config
+          // that.userExamData = userExamData
           resolve({
-            data: response,
+            data: userExamData,
             type: 'resolve'
           })
         })

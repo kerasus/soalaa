@@ -31,50 +31,36 @@
           <!--          </div>-->
           <!--                      :style="{ visibility: isUserLogin ? 'visible' : 'hidden' }"
 -->
-          <div
-            class="drawer-btn hamburger"
-          >
-            <q-btn
-              class="toolbar-button"
-              icon="isax:menu-1"
-              color="white"
-              text-color="accent"
-              dense
-              unelevated
-              @click="toggleLeftDrawer"
-            />
+          <div class="drawer-btn hamburger">
+            <q-btn class="toolbar-button"
+                   icon="isax:menu-1"
+                   color="white"
+                   text-color="accent"
+                   dense
+                   unelevated
+                   @click="toggleLeftDrawer" />
           </div>
           <div class="logo-pic">
-            <div
-              class="homepage"
-            >
-              <q-img
-                class="logo-pic-img"
-                src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
-                @click="routeTo('HomePage')"
-              />
+            <div class="homepage">
+              <q-img class="logo-pic-img"
+                     src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"
+                     @click="routeTo('HomePage')" />
             </div>
           </div>
         </div>
         <!--        -----------------------------------------------------Tabs Section--------------------------------------------   -->
         <div class="user-tab-section">
           <q-list class="flex tabs-list">
-            <div
-              v-for="(item , index) in headerItems"
-              :key="index"
-              class="tabs-list-container"
-            >
-              <div
-                v-if="showMenuItem(item)"
-                class="self-center"
-              >
-                <q-item
-                  v-ripple
-                  clickable
-                  :active="isRouteSelected(item.to)"
-                  active-class="active-item"
-                  :to="{ name: item.to }"
-                >
+            <div v-for="(item , index) in headerItems"
+                 :key="index"
+                 class="tabs-list-container">
+              <div v-if="showMenuItem(item)"
+                   class="self-center">
+                <q-item v-ripple
+                        clickable
+                        :active="isRouteSelected(item.to)"
+                        active-class="active-item"
+                        :to="{ name: item.to }">
                   <q-item-section class="tab-title">
                     {{ item.title }}
                   </q-item-section>
@@ -113,11 +99,9 @@
             </div>
             <div v-if="user.hasPermission('examStore') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams')"
                  class="self-center">
-              <q-item
-                v-ripple
-                clickable
-                @click="copyPageBuilderConfigs"
-              >
+              <q-item v-ripple
+                      clickable
+                      @click="copyPageBuilderConfigs">
                 <q-item-section class="tab-title">
                   کپی
                 </q-item-section>
@@ -135,26 +119,20 @@
             <!--              size="12px"-->
             <!--              class="action-btn"-->
             <!--            />-->
-            <q-btn
-              icon="isax:shopping-bag"
-              unelevated
-              rounded
-              size="12px"
-              class="action-btn"
-              :to="{name: 'cart'}"
-            />
+            <q-btn icon="isax:shopping-bag"
+                   unelevated
+                   rounded
+                   size="12px"
+                   class="action-btn"
+                   :to="{name: 'cart'}" />
           </div>
-          <q-btn
-            v-if="isUserLogin"
-            flat
-            class="btn-user-profile"
-          >
-            <q-img
-              class="user-photo"
-              :src="user.photo"
-              width="48px"
-              height="48px"
-            />
+          <q-btn v-if="isUserLogin"
+                 flat
+                 class="btn-user-profile">
+            <q-img class="user-photo"
+                   :src="user.photo"
+                   width="48px"
+                   height="48px" />
             <q-menu class="user-profile-dropdown"
                     :offset="[170, 10]">
               <div class="dropdown-box">
@@ -163,18 +141,14 @@
                     <div class="profile-detail">
                       <div class="profile-photo-box">
                         <div class="profile-photo-img">
-                          <q-img
-                            class="user-photo"
-                            :src="user.photo"
-                            width="60px"
-                            height="60px"
-                          />
+                          <q-img class="user-photo"
+                                 :src="user.photo"
+                                 width="60px"
+                                 height="60px" />
                         </div>
                       </div>
-                      <div
-                        v-if="isUserLogin"
-                        class="profile-detail-info"
-                      >
+                      <div v-if="isUserLogin"
+                           class="profile-detail-info">
                         <div class="info-name">{{user.full_name}}</div>
                         <div class="info-phoneNumber">{{user.mobile}}</div>
                       </div>
@@ -182,45 +156,31 @@
                   </div>
                 </div>
                 <div class="body">
-                  <div
-                    class="user-panel-base-menu"
-                  >
-                    <q-list
-                      class="side-menu-list"
-                      padding
-                      dark
-                    >
-                      <div
-                        v-for="(item , index) in titlesList"
-                        :key="index"
-                      >
-                        <div
-                          v-if="showMenuItem(item)"
-                        >
-                          <q-expansion-item
-                            v-if="item.children.length"
-                            :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
-                            :label="item.title"
-                            :icon="item.icon"
-                            class="side-expansion-list"
-                            dark
-                          >
+                  <div class="user-panel-base-menu">
+                    <q-list class="side-menu-list"
+                            padding
+                            dark>
+                      <div v-for="(item , index) in titlesList"
+                           :key="index">
+                        <div v-if="showMenuItem(item)">
+                          <q-expansion-item v-if="item.children.length"
+                                            :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
+                                            :label="item.title"
+                                            :icon="item.icon"
+                                            class="side-expansion-list"
+                                            dark>
                             <div class="expansion-body">
                               <q-separator dark
                                            size="2px"
                                            vertical
                                            class="vertical-separator" />
                               <q-list class="list-expansion">
-                                <q-item
-                                  v-for="(subItem , i) in item.children"
-                                  :key="i"
-                                  :to="{ name: subItem.routeName, params: subItem.params }"
-                                  class="list-child-item"
-                                  :exact-active-class="getQItemExactActiveClass"
-                                >
-                                  <q-item-section
-                                    class="list-child-section"
-                                  >
+                                <q-item v-for="(subItem , i) in item.children"
+                                        :key="i"
+                                        :to="{ name: subItem.routeName, params: subItem.params }"
+                                        class="list-child-item"
+                                        :exact-active-class="getQItemExactActiveClass">
+                                  <q-item-section class="list-child-section">
                                     {{ subItem.displayName }}
                                   </q-item-section>
                                   <span class="indicator" />
@@ -228,12 +188,10 @@
                               </q-list>
                             </div>
                           </q-expansion-item>
-                          <q-item
-                            v-else
-                            :to="(item.routeName) ? {name: item.routeName} : null"
-                            class="item-list"
-                            :class="{ 'alone-item': !item.children.length }"
-                          >
+                          <q-item v-else
+                                  :to="(item.routeName) ? {name: item.routeName} : null"
+                                  class="item-list"
+                                  :class="{ 'alone-item': !item.children.length }">
                             <div class="section-title">
                               <q-item-section class="list-section title-icon"
                                               avatar>
@@ -249,11 +207,9 @@
                         </div>
                       </div>
                     </q-list>
-                    <div
-                      v-if="isUserLogin"
-                      class="log-out"
-                      @click="logOut"
-                    >
+                    <div v-if="isUserLogin"
+                         class="log-out"
+                         @click="logOut">
                       <span>
                         <q-avatar icon="isax:logout"
                                   size="30"
@@ -261,11 +217,9 @@
                       </span>
                       <span class="logout-text">خروج </span>
                     </div>
-                    <div
-                      v-else
-                      class="log-out"
-                      @click="goToLogin"
-                    >
+                    <div v-else
+                         class="log-out"
+                         @click="goToLogin">
                       <span>
                         <q-avatar icon="isax:logout"
                                   size="30"
@@ -278,23 +232,17 @@
               </div>
             </q-menu>
           </q-btn>
-          <div
-            v-else
-            class="sub-mit-box"
-          >
-            <q-btn
-              unelevated
-              class="btn-style"
-              label="ورود"
-              :to="{ name: 'login' }"
-            />
-            <q-btn
-              unelevated
-              color="primary"
-              class="btn-style"
-              label="ثبت نام"
-              :to="{ name: 'login' }"
-            />
+          <div v-else
+               class="sub-mit-box">
+            <q-btn unelevated
+                   class="btn-style"
+                   label="ورود"
+                   :to="{ name: 'login' }" />
+            <q-btn unelevated
+                   color="primary"
+                   class="btn-style"
+                   label="ثبت نام"
+                   :to="{ name: 'login' }" />
           </div>
         </div>
       </div>
@@ -313,6 +261,7 @@ export default {
   mixins: [UserLayoutHeader, mixinPageBuilder],
   data () {
     return {
+      isUserLogin: false,
       selected: '',
       headerItems: [
         {
@@ -392,6 +341,14 @@ export default {
       ]
     }
   },
+  computed: {
+    pageBuilderEditable() {
+      return this.$store.getters['PageBuilder/pageBuilderEditable']
+    },
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    }
+  },
   watch: {
     'windowSize.x': {
       handler() {
@@ -400,21 +357,14 @@ export default {
     }
   },
   mounted() {
+    this.loadAuthData()
     this.updateLayout()
     this.addAdminItem()
   },
-  computed: {
-    pageBuilderEditable() {
-      return this.$store.getters['PageBuilder/pageBuilderEditable']
-    },
-    isUserLogin() {
-      return this.$store.getters['Auth/isUserLogin']
-    },
-    windowSize () {
-      return this.$store.getters['AppLayout/windowSize']
-    }
-  },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.isUserLogin = this.$store.getters['Auth/isUserLogin']
+    },
     copyPageBuilderConfigs () {
       copyToClipboard(JSON.stringify(this.currenSections))
         .then(() => {

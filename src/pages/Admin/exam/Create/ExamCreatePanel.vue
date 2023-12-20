@@ -11,41 +11,33 @@
           <create-exam-page ref="createExam" />
         </q-tab-panel>
         <q-tab-panel name="chooseQuestion">
-          <question-bank
-            v-model="exam.questions.list"
-            @onFilter="onFilter"
-            @addQuestionToExam="addQuestionToExam"
-            @deleteQuestionFromExam="deleteQuestionFromExam"
-          />
+          <question-bank v-model="exam.questions.list"
+                         @onFilter="onFilter"
+                         @addQuestionToExam="addQuestionToExam"
+                         @deleteQuestionFromExam="deleteQuestionFromExam" />
         </q-tab-panel>
         <q-tab-panel name="finalApproval">
-          <final-exam-approval
-            @deleteQuestionFromExam="deleteQuestionFromExam"
-            @goToLastStep = goToLastStep
-            @goToNextStep = goToNextStep
-          />
+          <final-exam-approval @deleteQuestionFromExam="deleteQuestionFromExam"
+                               @goToLastStep ="goToLastStep"
+                               @goToNextStep = "goToNextStep" />
         </q-tab-panel>
       </q-tab-panels>
       <div class="btn-box flex justify-end items-center">
-        <q-btn
-          unelevated
-          color="white"
-          text-color="black"
-          class="q-mr-xl btn-md"
-          :icon="'isax:arrow-right-3'"
-          style="margin-right: 18px;"
-          @click="goToLastStep"
-        >
+        <q-btn unelevated
+               color="white"
+               text-color="black"
+               class="q-mr-xl btn-md"
+               :icon="'isax:arrow-right-3'"
+               style="margin-right: 18px;"
+               @click="goToLastStep">
           بازگشت
         </q-btn>
-        <q-btn
-          unelevated
-          color="primary"
-          class="q-mr-xl btn-md"
-          style="margin-right: 18px;"
-          :icon-right="'isax:arrow-left-2'"
-          @click="goToNextStep"
-        >
+        <q-btn unelevated
+               color="primary"
+               class="q-mr-xl btn-md"
+               style="margin-right: 18px;"
+               :icon-right="'isax:arrow-left-2'"
+               @click="goToNextStep">
           مرحله بعد
         </q-btn>
       </div>
@@ -65,12 +57,10 @@
                  style="padding-bottom: 20px">
               آزمون شما با موفقیت ثبت شد
             </div>
-            <q-btn
-              unelevated
-              color="primary"
-              class="btn-lg final-btn"
-              :to="{name :'Admin.Exam.Index'}"
-            >
+            <q-btn unelevated
+                   color="primary"
+                   class="btn-lg final-btn"
+                   :to="{name :'Admin.Exam.Index'}">
               رفتن به صفحه لیست آزمون
             </q-btn>
           </q-card-section>
@@ -82,12 +72,11 @@
 
 <script>
 import { computed } from 'vue'
-import { Exam } from 'src/models/Exam'
-import Steps from 'pages/Admin/exam/Create/Steps'
-import CreateExamPage from 'pages/Admin/exam/Create/CreateExamPage'
-import FinalExamApproval from 'pages/Admin/exam/Create/FinalExamApproval'
-import API_ADDRESS from 'src/api/Addresses'
-import QuestionBank from 'pages/Admin/Question/QuestionBank/QuestionBank'
+import { Exam } from 'src/models/Exam.js'
+import Steps from 'src/pages/Admin/exam/Create/Steps.vue'
+import CreateExamPage from 'src/pages/Admin/exam/Create/CreateExamPage.vue'
+import FinalExamApproval from 'src/pages/Admin/exam/Create/FinalExamApproval.vue'
+import QuestionBank from 'src/pages/Admin/Question/QuestionBank/QuestionBank.vue'
 
 export default {
   name: 'ExamCreatePanel',
@@ -96,6 +85,11 @@ export default {
     FinalExamApproval,
     CreateExamPage,
     Steps
+  },
+  provide () {
+    return {
+      providedExam: computed(() => this.exam)
+    }
   },
   data () {
     return {
@@ -107,10 +101,14 @@ export default {
       accept: false
     }
   },
-  provide () {
-    return {
-      providedExam: computed(() => this.exam)
-    }
+  computed: {},
+  watch: {
+    /* exam: {
+      handler (val) {
+        console.log(val)
+      },
+      deep: true
+    } */
   },
   methods: {
     onFilter (filterData) {
@@ -169,7 +167,7 @@ export default {
     },
     createExam () {
       return new Promise((resolve, reject) => {
-        this.$axios.post(API_ADDRESS.exam.base())
+        this.$apiGateway.exam.postBase()
           .then(response => {
             resolve(response)
           })
@@ -237,16 +235,7 @@ export default {
         this.showMessagesInNotify(messages)
       }
     }
-  },
-  watch: {
-    /* exam: {
-      handler (val) {
-        console.log(val)
-      },
-      deep: true
-    } */
-  },
-  computed: {}
+  }
 }
 </script>
 

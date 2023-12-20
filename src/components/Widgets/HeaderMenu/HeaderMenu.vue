@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import LazyImg from 'src/components/lazyImg.vue'
 import { openURL } from 'quasar'
+import LazyImg from 'src/components/lazyImg.vue'
 import { mixinWidget } from 'src/mixin/Mixins.js'
 
 export default {

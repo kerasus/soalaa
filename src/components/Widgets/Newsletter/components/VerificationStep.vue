@@ -49,7 +49,6 @@
 <script>
 import Timer from './Timer.vue'
 import VOtpInput from 'vue3-otp-input'
-import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'VerificationStep',
@@ -81,11 +80,10 @@ export default {
   },
   methods: {
     verifyCode() {
-      this.$axios.post(API_ADDRESS.user.verifyMoshavereh, {
+      this.$apiGateway.user.verifyMoshavereh({
         mobile: this.userInfo.mobile, // String
         code: this.bindModal // String
       })
-      // this.$apiGateway.user.verifyMoshavereh(verifyData)
         .then(() => {
           this.$emit('gotoNextStep')
           this.setLoading(false)
@@ -127,10 +125,11 @@ export default {
     },
     resendRequest(userInfo) {
       this.setLoading(true)
-      this.$axios.get(API_ADDRESS.user.resendGuest + '?mobile=' + userInfo.mobile)
-      // this.$apiGateway.user.resendGuest(userInfo)
-        .then(response => {
-          const message = response.data.message
+      this.$apiGateway.user.resendGuest({
+        mobile: userInfo.mobile
+      })
+        .then(messageWithCode => {
+          const message = messageWithCode.message
           this.showMessage(message, 'success')
           this.$emit('updateUser', {
             mobile: this.userInfo.mobile,

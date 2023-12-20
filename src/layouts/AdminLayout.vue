@@ -1,31 +1,18 @@
 <template>
   <div class="admin-layout">
-    <q-scroll-observer @scroll="onscroll" />
-    <Router :include="keepAliveComponents" />
+    <router :include="keepAliveComponents" />
   </div>
 </template>
 
 <script>
-import Router from 'src/router/Router'
-import KeepAliveComponents from 'assets/js/KeepAliveComponents'
-import { computed } from 'vue'
+import Router from 'src/router/Router.vue'
+import KeepAliveComponents from 'src/assets/js/KeepAliveComponents.js'
 
 export default {
   components: { Router },
   data() {
     return {
-      keepAliveComponents: KeepAliveComponents,
-      scrollInfo: {}
-    }
-  },
-  provide() {
-    return {
-      scrollInfo: computed(() => this.scrollInfo)
-    }
-  },
-  methods: {
-    onscroll(info) {
-      this.scrollInfo = info
+      keepAliveComponents: KeepAliveComponents
     }
   }
 }

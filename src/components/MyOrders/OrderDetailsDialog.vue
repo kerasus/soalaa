@@ -1,20 +1,16 @@
 <template>
-  <q-dialog
-    v-model="modal"
-    class="order-details-dialog"
-  >
+  <q-dialog v-model="modal"
+            class="order-details-dialog">
     <q-card class="order-details-card">
       <div class="dialog-header">
-        <div></div>
+        <div />
         <div class="title">جزییات سفارش</div>
         <div class="close">
-          <q-btn
-            round
-            flat
-            dense
-            size="md"
-            @click="modal = false"
-          >
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 @click="modal = false">
             <svg width="24"
                  height="24"
                  viewBox="0 0 24 24"
@@ -69,15 +65,11 @@
             </div>
           </div>
         </q-card-section>
-        <q-card-section
-          v-if="order.orderItems.list && order.orderItems.list.length > 0 "
-          class="products"
-        >
+        <q-card-section v-if="order.orderItems.list && order.orderItems.list.length > 0 "
+                        class="products">
           <div class="default-info paid">محصولات سفارش</div>
-          <div
-            v-for="(orderItem, index) in order.orderItems.list"
-            :key="index"
-          >
+          <div v-for="(orderItem, index) in order.orderItems.list"
+               :key="index">
             <ordered-products :ordered-item="orderItem" />
           </div>
         </q-card-section>
@@ -87,9 +79,9 @@
 </template>
 
 <script>
-import { Order } from 'src/models/Order'
 import moment from 'moment-jalaali'
-import OrderedProducts from 'components/MyOrders/OrderedProducts'
+import { Order } from 'src/models/Order.js'
+import OrderedProducts from 'src/components/MyOrders/OrderedProducts.vue'
 
 export default {
   name: 'OrderDetailsDialog',
@@ -104,11 +96,6 @@ export default {
         return new Order()
       }
     }
-  },
-  watch: {
-    // order(val) {
-    //   console.log(val)
-    // }
   },
   emits: [
     'update:dialogValue'
@@ -138,6 +125,11 @@ export default {
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']
     }
+  },
+  watch: {
+    // order(val) {
+    //   console.log(val)
+    // }
   },
   methods: {
     toman (key, suffix) {

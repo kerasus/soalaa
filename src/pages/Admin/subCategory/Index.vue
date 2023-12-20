@@ -3,29 +3,23 @@
     <!--    v-model:value="inputs"-->
     <template v-if="loading">
       <div class="text-center q-mt-xl">
-        <q-spinner-ball
-          color="primary"
-          size="5em"
-        />
+        <q-spinner-ball color="primary"
+                        size="5em" />
       </div>
     </template>
     <template v-else>
-      <entity-index
-        title="لیست دروس"
-        :api="api"
-        :table="table"
-        :table-keys="tableKeys"
-        :create-route-name="'Admin.subCategory.Create'"
-      >
+      <entity-index title="لیست دروس"
+                    :api="api"
+                    :table="table"
+                    :table-keys="tableKeys"
+                    :create-route-name="'Admin.subCategory.Create'">
         <template #entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
           <template v-if="inputData.col.name === 'icon'">
-            <q-avatar
-              size="40px"
-              round
-              text-color="white"
-              :color="iconPicker(inputData.props.row.title).color"
-              :icon="iconPicker(inputData.props.row.title).icon"
-            />
+            <q-avatar size="40px"
+                      round
+                      text-color="white"
+                      :color="iconPicker(inputData.props.row.title).color"
+                      :icon="iconPicker(inputData.props.row.title).icon" />
           </template>
           <template v-if="inputData.col.name === 'actions'">
             <q-btn round
@@ -50,15 +44,14 @@
                 ویرایش
               </q-tooltip>
             </q-btn>
-            <q-btn
-              round
-              flat
-              dense
-              size="md"
-              color="negative"
-              icon="delete"
-              class="q-ml-md"
-              @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
+            <q-btn round
+                   flat
+                   dense
+                   size="md"
+                   color="negative"
+                   icon="delete"
+                   class="q-ml-md"
+                   @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
               <q-tooltip>
                 حذف درس
               </q-tooltip>
@@ -79,7 +72,7 @@
 
 <script>
 import { EntityIndex } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Index',
@@ -89,7 +82,7 @@ export default {
       loading: false,
       expanded: true,
       categoryResponse: null,
-      api: API_ADDRESS.questionSubcategory.base,
+      api: APIGateway.questionSubcategory.APIAdresses.base,
       tableKeys: {
         data: 'data',
         total: 'count',
@@ -138,9 +131,6 @@ export default {
         // { type: 'dateRange', name: 'created_at_range', value: [], label: 'بازه تاریخ عضویت', col: 'col-md-6' }
       ]
     }
-  },
-  created () {
-    this.loadCategories()
   },
   computed: {
     iconPicker () {
@@ -224,6 +214,9 @@ export default {
       }
     }
   },
+  created () {
+    this.loadCategories()
+  },
   methods: {
     getRemoveMessage (row) {
       // const title = row.title
@@ -234,8 +227,8 @@ export default {
     async loadCategories () {
       this.loading = true
       try {
-        const response = await this.$axios.get(API_ADDRESS.questionCategory.base)
-        this.categoryResponse = response.data.data
+        const questionCategory = await this.$apiGateway.questionCategory.get()
+        this.categoryResponse = questionCategory
         this.loading = false
       } catch (e) {
         this.loading = false
@@ -248,7 +241,7 @@ export default {
     },
     setCategoryTitle (id) {
       let title = ''
-      this.categoryResponse.forEach(category => {
+      this.categoryResponse.list.forEach(category => {
         if (category.id === id) {
           title = category.title
         }

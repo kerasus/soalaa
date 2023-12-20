@@ -3,35 +3,30 @@
     <div class="details-container-2 default-details-container row">
       <div class="detail-box detail-box-last-of-row"
            :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <q-btn
-          unelevated
-          :loading="totalLoading"
-          color="primary"
-          label="حذف از پایگاه داده"
-          class=" q-mr-sm default-detail-btn"
-          @click="emitAction('deletefromDb')"
-        />
-        <q-btn
-          unelevated
-          :loading="draftBtnLoading"
-          label="پیش نویس"
-          class="draft-btn default-detail-btn"
-        ></q-btn>
-        <q-btn
-          unelevated
-          :loading="totalLoading"
-          color="primary"
-          label="ذخیره سوال"
-          class="save-btn default-detail-btn"
-          @click="emitAction('saveQuestion')"
-        />
+        <q-btn unelevated
+               :loading="totalLoading"
+               color="primary"
+               label="حذف از پایگاه داده"
+               class=" q-mr-sm default-detail-btn"
+               @click="emitAction('deletefromDb')" />
+        <q-btn unelevated
+               :loading="draftBtnLoading"
+               label="پیش نویس"
+               class="draft-btn default-detail-btn" />
+        <q-btn unelevated
+               :loading="totalLoading"
+               color="primary"
+               label="ذخیره سوال"
+               class="save-btn default-detail-btn"
+               @click="emitAction('saveQuestion')" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
+
 export default {
   name: 'BtnBox',
   mixins: [AdminActionOnQuestion],

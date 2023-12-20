@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import questions from 'src/components/Question/commonQuestionList'
+import questions from 'src/components/Question/commonQuestionList.vue'
 export default {
   name: 'list',
   components: { questions }

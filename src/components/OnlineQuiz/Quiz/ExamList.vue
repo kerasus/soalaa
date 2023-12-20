@@ -1,9 +1,7 @@
 <template>
   <div class="admin-exam-list full-width q-pa-md">
-    <q-dialog
-      v-model="dialogDelete"
-      persisten
-    >
+    <q-dialog v-model="dialogDelete"
+              persisten>
       <q-card>
         <q-card-section class="row items-center">
           <q-avatar icon="delete"
@@ -13,124 +11,94 @@
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn
-            flat
-            label="خیر"
-            color="primary"
-            @click="dontDelete"
-          />
-          <q-btn
-            flat
-            label="بله"
-            color="primary"
-            @click="confirmDelete"
-          />
+          <q-btn flat
+                 label="خیر"
+                 color="primary"
+                 @click="dontDelete" />
+          <q-btn flat
+                 label="بله"
+                 color="primary"
+                 @click="confirmDelete" />
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-table
-      :columns="headers"
-      :rows="rows"
-      row-key="name"
-      rows-per-page-label="تعداد ردیف در هر صفحه"
-      :rows-per-page-options="[15,15]"
-      :loading="$store.getters['loading/loading']"
-      loading-label="لطفا منتظر بمانید..."
-      :no-data-label="$store.getters['loading/loading'] ? '' : 'متاسفم:( موردی وجود ندارد...'"
-      @row-click="rowClick"
-    >
+    <q-table :columns="headers"
+             :rows="rows"
+             row-key="name"
+             rows-per-page-label="تعداد ردیف در هر صفحه"
+             :rows-per-page-options="[15,15]"
+             :loading="$store.getters['loading/loading']"
+             loading-label="لطفا منتظر بمانید..."
+             :no-data-label="$store.getters['loading/loading'] ? '' : 'متاسفم:( موردی وجود ندارد...'"
+             @row-click="rowClick">
       <template v-slot:header="props">
         <q-tr :props="props">
-          <q-th
-            v-for="col in props.cols"
-            :key="col.name"
-            :props="props"
-            :field="col.field"
-          >
+          <q-th v-for="col in props.cols"
+                :key="col.name"
+                :props="props"
+                :field="col.field">
             {{ col.label }}
           </q-th>
         </q-tr>
       </template>
       <template #body-cell-options="props">
-        <q-td
-          :props="props"
-        >
-          <q-btn
-            class="options-btn"
-            round
-            dark
-            color="purple"
-            icon="edit"
-            size="11px"
-          >
-            <q-menu
-              class="options-menu"
-              transition-show="jump-down"
-              transition-hide="jump-up"
-              :offset="[170,5]"
-            >
+        <q-td :props="props">
+          <q-btn class="options-btn"
+                 round
+                 dark
+                 color="purple"
+                 icon="edit"
+                 size="11px">
+            <q-menu class="options-menu"
+                    transition-show="jump-down"
+                    transition-hide="jump-up"
+                    :offset="[170,5]">
               <q-list style="min-width: 100px">
-                <q-item
-                  v-ripple:yellow
-                  clickable
-                  manual-focus
-                  @click="sendExamInfo(tableRow.id)"
-                >
+                <q-item v-ripple:yellow
+                        clickable
+                        manual-focus
+                        @click="sendExamInfo(tableRow.id)">
                   <q-item-section> ویرایش آزمون</q-item-section>
                 </q-item>
-                <q-item
-                  v-ripple:yellow
-                  clickable
-                  manual-focus
-                  @click="sendExamReportInfo"
-                >
+                <q-item v-ripple:yellow
+                        clickable
+                        manual-focus
+                        @click="sendExamReportInfo">
                   <q-item-section>ویرایش کارنامه</q-item-section>
                 </q-item>
-                <q-item
-                  v-ripple:yellow
-                  clickable
-                  manual-focus
-                >
+                <q-item v-ripple:yellow
+                        clickable
+                        manual-focus>
                   <q-item-section>مشاهده تمام سوالات</q-item-section>
                 </q-item>
-                <q-item
-                  v-ripple:yellow
-                  clickable
-                  manual-focus
-                  @click="generateJsonFile(tableRow, false)"
-                >
+                <q-item v-ripple:yellow
+                        clickable
+                        manual-focus
+                        @click="generateJsonFile(tableRow, false)">
                   <q-item-section>ساخت فایل سوالات</q-item-section>
                 </q-item>
-                <q-item
-                  v-ripple:yellow
-                  clickable
-                  manual-focus
-                  @click="generateJsonFile(tableRow, true)"
-                >
+                <q-item v-ripple:yellow
+                        clickable
+                        manual-focus
+                        @click="generateJsonFile(tableRow, true)">
                   <q-item-section>ساخت فایل سوالات با جواب</q-item-section>
                 </q-item>
-                <q-item
-                  v-ripple:yellow
-                  clickable
-                  manual-focus
-                  @click="upload(tableRow.id)"
-                >
+                <q-item v-ripple:yellow
+                        clickable
+                        manual-focus
+                        @click="upload(tableRow.id)">
                   <q-item-section>آپلود فایل سوالات و جواب ها</q-item-section>
                 </q-item>
-                <q-item
-                  v-ripple:yellow
-                  clickable
-                  manual-focus
-                  @click="sendCoefficientInfo"
-                >
+                <q-item v-ripple:yellow
+                        clickable
+                        manual-focus
+                        @click="sendCoefficientInfo">
                   <q-item-section>اصلاح ضرایب</q-item-section>
                 </q-item>
-                <q-item
-                  v-ripple:yellow
-                  clickable
-                  manual-focus
-                  @click="deleteItem"
-                >
+                <q-item v-ripple:yellow
+                        clickable
+                        manual-focus
+                        @click="deleteItem">
                   <q-item-section>حذف آزمون</q-item-section>
                 </q-item>
               </q-list>
@@ -140,48 +108,38 @@
               ویرایش
             </q-tooltip>
           </q-btn>
-          <q-btn
-            class="options-btn"
-            round
-            dark
-            color="indigo"
-            icon="auto_stories"
-            size="11px"
-            @click="sendLessonsListInfo"
-          >
+          <q-btn class="options-btn"
+                 round
+                 dark
+                 color="indigo"
+                 icon="auto_stories"
+                 size="11px"
+                 @click="sendLessonsListInfo">
             <q-tooltip anchor="top middle"
                        self="bottom middle">
               مشاهده دروس
             </q-tooltip>
           </q-btn>
-          <q-btn
-            class="options-btn"
-            round
-            dark
-            color="blue"
-            icon="assignment"
-            size="11px"
-          >
-            <q-menu
-              class="options-menu"
-              transition-show="jump-down"
-              transition-hide="jump-up"
-              :offset="[150,5]"
-            >
+          <q-btn class="options-btn"
+                 round
+                 dark
+                 color="blue"
+                 icon="assignment"
+                 size="11px">
+            <q-menu class="options-menu"
+                    transition-show="jump-down"
+                    transition-hide="jump-up"
+                    :offset="[150,5]">
               <q-list style="min-width: 100px">
-                <q-item
-                  v-ripple:yellow
-                  clickable
-                  manual-focus
-                  @click="goExamResult(tableRow.id)"
-                >
+                <q-item v-ripple:yellow
+                        clickable
+                        manual-focus
+                        @click="goExamResult(tableRow.id)">
                   <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>
                 </q-item>
-                <q-item
-                  v-ripple:yellow
-                  clickable
-                  manual-focus
-                >
+                <q-item v-ripple:yellow
+                        clickable
+                        manual-focus>
                   <q-item-section>کارنامه سرگروه</q-item-section>
                 </q-item>
               </q-list>
@@ -195,31 +153,25 @@
       </template>
       <template v-slot:pagination>
         <div>{{'صفحه ' + pagination.page + ' از ' + this.lastPage }}</div>
-        <q-btn
-          icon="chevron_right"
-          color="grey-8"
-          round
-          dense
-          flat
-          :disable="pagination.page === 1 "
-          @click="prevPage"
-        />
-        <q-btn
-          icon="chevron_left"
-          color="grey-8"
-          round
-          dense
-          flat
-          :disable="pagination.page === lastPage "
-          @click="nextPage"
-        />
+        <q-btn icon="chevron_right"
+               color="grey-8"
+               round
+               dense
+               flat
+               :disable="pagination.page === 1 "
+               @click="prevPage" />
+        <q-btn icon="chevron_left"
+               color="grey-8"
+               round
+               dense
+               flat
+               :disable="pagination.page === lastPage "
+               @click="nextPage" />
       </template>
     </q-table>
     <div class="text-center">
-      <q-btn
-        elevation="2"
-        :to="{ name: 'create'}"
-      >
+      <q-btn elevation="2"
+             :to="{ name: 'create'}">
         ثبت آزمون جدید
       </q-btn>
     </div>
@@ -227,8 +179,7 @@
 </template>
 
 <script>
-import { Exam, ExamList } from 'src/models/Exam'
-import API_ADDRESS from 'src/api/Addresses'
+import { Exam, ExamList } from 'src/models/Exam.js'
 
 export default {
   name: 'ExamList',
@@ -271,7 +222,9 @@ export default {
     },
     getExams () {
       this.$store.dispatch('loading/linearLoading', true)
-      this.$axios.get(API_ADDRESS.exam.base(this.pagination.page))
+      this.$apiGateway.exam.userExamList({
+        page: this.pagination.page
+      })
         .then((response) => {
           this.$store.dispatch('loading/linearLoading', false)
           this.pagination.rowsNumber = response.data.meta.total
@@ -340,7 +293,10 @@ export default {
     },
     generateJsonFile (exams, withAnswer) {
       this.$store.dispatch('loading/linearLoading', true)
-      this.$axios.post(API_ADDRESS.exam.generateExamFile(exams.id, withAnswer))
+      this.$apiGateway.exam.generateExamFile({
+        examId: exams.id,
+        withAnswer
+      })
         .then(() => {
           this.$q.notify({
             type: 'positive',

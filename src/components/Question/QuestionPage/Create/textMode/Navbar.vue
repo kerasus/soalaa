@@ -2,66 +2,48 @@
   <div class="question-txtMode-navbar">
     <div class="fit row wrap justify-between">
       <div class="col-auto">
-        <div
-          v-if="mode === 'create'"
-          class="question-type row items-center relative-position"
-        >
+        <div v-if="mode === 'create'"
+             class="question-type row items-center relative-position">
           <div class="col">نوع سوال</div>
           <div>
-            <q-tabs
-              v-if="componentTabs?.list[0] && !qTabLoading"
-              v-model="questionTab"
-              no-caps
-              dense
-              shrink
-              :breakpoint="0"
-              class="col question-type-tabs"
-            >
-              <q-route-tab
-                v-for="(item, index) in componentTabs.list"
-                :key="index"
-                class="question-type-tab"
-                :name="item.value"
-                :label="item.tabName"
-                :to="getCurrentRoute(item.componentName)"
-              />
+            <q-tabs v-if="componentTabs?.list[0] && !qTabLoading"
+                    v-model="questionTab"
+                    no-caps
+                    dense
+                    shrink
+                    :breakpoint="0"
+                    class="col question-type-tabs">
+              <q-route-tab v-for="(item, index) in componentTabs.list"
+                           :key="index"
+                           class="question-type-tab"
+                           :name="item.value"
+                           :label="item.tabName"
+                           :to="getCurrentRoute(item.componentName)" />
             </q-tabs>
-            <q-skeleton
-              v-if="qTabLoading"
-              type="QToolbar"
-              width="268px"
-              height="30px"
-              class="q-ml-md"
-            />
+            <q-skeleton v-if="qTabLoading"
+                        type="QToolbar"
+                        width="268px"
+                        height="30px"
+                        class="q-ml-md" />
           </div>
         </div>
-        <div
-          v-if="mode === 'show'"
-        >
-          <q-btn
-            unelevated
-            color="primary"
-            label="ویرایش سوال"
-            class="save-btn default-detail-btn"
-            @click="redirectToEditPage"
-          />
+        <div v-if="mode === 'show'">
+          <q-btn unelevated
+                 color="primary"
+                 label="ویرایش سوال"
+                 class="save-btn default-detail-btn"
+                 @click="redirectToEditPage" />
         </div>
       </div>
       <div class="col-auto">
-        <div
-          v-if="!(mode === 'create')"
-          class="question-img-btn row"
-        >
-          <div
-            v-ripple.early
-            class="relative-position container bg-primary text-black flex flex-center question-pics"
-            @click="panelClicked"
-          >
-            <q-img
-              src="/img/img-panel-btn.png"
-              spinner-color="white"
-              class="question-pics-img"
-            />
+        <div v-if="!(mode === 'create')"
+             class="question-img-btn row">
+          <div v-ripple.early
+               class="relative-position container bg-primary text-black flex flex-center question-pics"
+               @click="panelClicked">
+            <q-img src="/img/img-panel-btn.png"
+                   spinner-color="white"
+                   class="question-pics-img" />
             <div class="text-white text-center question-pics-txt">تصاویر سوال</div>
           </div>
         </div>
@@ -71,13 +53,16 @@
 </template>
 
 <script>
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
-import { Question } from 'src/models/Question'
-import { TypeList } from 'src/models/QuestionType'
-import API_ADDRESS from 'src/api/Addresses'
+import { Question } from 'src/models/Question.js'
+import { APIGateway } from 'src/api/APIGateway.js'
+import { TypeList } from 'src/models/QuestionType.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
 
 export default {
   name: 'Navbar',
+  mixins: [
+    AdminActionOnQuestion
+  ],
   props: {
     mode: {
       type: String,
@@ -94,34 +79,32 @@ export default {
       qTabLoading: false
     }
   },
-  mixins: [
-    AdminActionOnQuestion
-  ],
-  created () {
-    this.qTabLoading = true
-  },
-  mounted () {
-    this.init()
-  },
   computed: {
     doesHaveImage () {
       // return !!()
       return null
     }
   },
+  watch: {},
+  created () {
+    this.qTabLoading = true
+  },
+  mounted () {
+    this.init()
+  },
   methods: {
-    async init() {
-      const response = await this.getQuestionType()
-      this.componentTabs = new TypeList(response.data.data)
-      this.$nextTick(() => {
-        this.qTabLoading = false
-      })
+    init() {
+      APIGateway.option.getOptions({ type: 'question_type' })
+        .then((options) => {
+          this.componentTabs = new TypeList(options.list)
+          this.$nextTick(() => {
+            this.qTabLoading = false
+          })
+        })
+        .catch(() => {})
     },
     panelClicked () {
       this.$emit('panelClicked')
-    },
-    getQuestionType() {
-      return this.$axios.get(API_ADDRESS.option.base + '?type=question_type')
     },
     getCurrentRoute (componentName) {
       const currentQuestionMode = this.getCurrentQuestionMode()
@@ -167,8 +150,7 @@ export default {
         }
       }
     }
-  },
-  watch: {}
+  }
 }
 </script>
 

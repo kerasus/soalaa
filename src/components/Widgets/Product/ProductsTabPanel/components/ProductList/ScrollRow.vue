@@ -12,7 +12,7 @@
          :style="options.style">
       <div v-for="(product, index) in data"
            :key="index"
-           class="product-item col-xl-2 col-lg-2 col-md-3 col-sm-5 col-xs-9">
+           class="product-item col-md-3">
         <product-item :options="{product: product}" />
       </div>
     </div>

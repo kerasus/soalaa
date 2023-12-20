@@ -1,108 +1,87 @@
 <template>
   <div class="showQ-text-container">
-    <q-linear-progress
-      v-if="loadingState"
-      size="md"
-      indeterminate
-      rounded
-      color="primary"
-    />
-    <navbar
-      :mode="'show'"
-      @panelClicked="openCloseImgPanel"
-    />
+    <q-linear-progress v-if="loadingState"
+                       size="md"
+                       indeterminate
+                       rounded
+                       color="primary" />
+    <navbar :mode="'show'"
+            @panelClicked="openCloseImgPanel" />
     <div class="relative-position">
-      <div
-        :class="{ 'row reverse': (isPanelOpened && !imgFloatMode) }"
-      >
-        <div
-          v-if="isPanelOpened"
-          class="image-panel"
-          :class="{ 'col-5 image-panel-side-mode': !imgFloatMode , 'image-panel-float-mode' : imgFloatMode }"
-        >
-          <image-panel
-            :mode="'show'"
-            :editable="false"
-            @closePanelBtnClicked="openCloseImgPanel"
-            @imgPanelModeChanged="changeImagePAnelMode"
-          />
+      <div :class="{ 'row reverse': (isPanelOpened && !imgFloatMode) }">
+        <div v-if="isPanelOpened"
+             class="image-panel"
+             :class="{ 'col-5 image-panel-side-mode': !imgFloatMode , 'image-panel-float-mode' : imgFloatMode }">
+          <image-panel :mode="'show'"
+                       :editable="false"
+                       @closePanelBtnClicked="openCloseImgPanel"
+                       @imgPanelModeChanged="changeImagePAnelMode" />
         </div>
-        <component
-          :is="getComponent"
-          v-if="question.type"
-          v-bind="allProps"
-          :class="{ 'col-7': isPanelOpened }"
-        />
+        <component :is="getComponent"
+                   v-if="question.type"
+                   v-bind="allProps"
+                   :class="{ 'col-7': isPanelOpened }" />
       </div>
     </div>
     <div class="relative-position">
       <div class="attach-btn row">
-        <question-identifier
-          ref="questionIdentifier"
-          class="col-12"
-          :exams="examList"
-          :lessons="subCategoriesList"
-          :categories="categoryList"
-          :gradesList="gradesList"
-          :groups-list="lessonGroupList"
-          :lessons-list="lessonsList"
-          :major-list="majorList"
-          :authorship-dates-list="authorshipDatesList"
-          :question-authors-list="questionAuthorsList"
-          :question-target-list="questionTargetList"
-          @gradeSelected="getLessonsList"
-          @groupSelected="getLessonsList"
-          @attach="attachExam"
-          @detach="detachExam"
-          @tags-collected="setTags"
-        />
+        <question-identifier ref="questionIdentifier"
+                             class="col-12"
+                             :exams="examList"
+                             :lessons="subCategoriesList"
+                             :categories="categoryList"
+                             :gradesList="gradesList"
+                             :groups-list="lessonGroupList"
+                             :lessons-list="lessonsList"
+                             :major-list="majorList"
+                             :authorship-dates-list="authorshipDatesList"
+                             :question-authors-list="questionAuthorsList"
+                             :question-target-list="questionTargetList"
+                             @gradeSelected="getLessonsList"
+                             @groupSelected="getLessonsList"
+                             @attach="attachExam"
+                             @detach="detachExam"
+                             @tags-collected="setTags" />
       </div>
-      <status-change
-        :statuses="questionStatuses"
-        @update="changeStatus"
-      />
+      <status-change :statuses="questionStatuses"
+                     @update="changeStatus" />
     </div>
-    <div
-      v-if="question.logs && question.logs.list && question.logs.list.length > 0"
-    >
-      <log-list-component
-        :logs="question.logs"
-        @addComment="addComment"
-      />
+    <div v-if="question.logs && question.logs.list && question.logs.list.length > 0">
+      <log-list-component :logs="question.logs"
+                          @addComment="addComment" />
     </div>
   </div>
 </template>
 
 <script>
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
-/* eslint-disable no-var */
-import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
+import mixinTree from 'src/mixin/Tree.js'
+import { ExamList } from 'src/models/Exam.js'
+import { Question } from 'src/models/Question.js'
 import { computed, defineAsyncComponent } from 'vue'
-import { Question } from 'src/models/Question'
-import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
-// import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
-import { QuestionType, TypeList } from 'src/models/QuestionType'
-import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
-import StatusChange from 'components/Question/QuestionPage/StatusChange'
-import { ExamList } from 'src/models/Exam'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
-import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
-import mixinTree from 'src/mixin/Tree'
-// import API_ADDRESS from 'src/api/Addresses'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
+import { QuestionType, TypeList } from 'src/models/QuestionType.js'
+import BtnBox from 'src/components/Question/QuestionPage/BtnBox.vue'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
+import ImagePanel from 'src/components/Question/QuestionPage/ImagePanel.vue'
+import StatusChange from 'src/components/Question/QuestionPage/StatusChange.vue'
+import Navbar from 'src/components/Question/QuestionPage/Create/textMode/Navbar.vue'
+import LogListComponent from 'src/components/QuestionBank/EditQuestion/Log/LogList.vue'
+import AttachExam from 'src/components/Question/QuestionPage/AttachExam/AttachExam.vue'
+import QuestionIdentifier from 'src/components/Question/QuestionPage/QuestionIdentifier.vue'
+// import QuestionDetails from 'src/components/Question/QuestionPage/Create/textMode/QuestionDetails'
+
 export default {
   name: 'ShowQuestion',
   components: {
     QuestionIdentifier,
     ImagePanel,
     Navbar,
-    DescriptiveShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/DescriptiveQuestion/DescriptiveShowQuestion')),
-    MultipleChoiceShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MultipleChoiceQuestion/MultipleChoiceShowQuestion')),
-    MBTIShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MBTIQuestion/MBTIShowQuestion')),
-    GroupQuestionShow: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/GroupQuestion/GroupQuestionShow')),
+    MBTIShowQuestion: defineAsyncComponent(() => import('src/components/Question/QuestionPage/Show/questionTypes/MBTIQuestion/MBTIShowQuestion.vue')),
+    GroupQuestionShow: defineAsyncComponent(() => import('src/components/Question/QuestionPage/Show/questionTypes/GroupQuestion/GroupQuestionShow.vue')),
+    DescriptiveShowQuestion: defineAsyncComponent(() => import('src/components/Question/QuestionPage/Show/questionTypes/DescriptiveQuestion/DescriptiveShowQuestion.vue')),
+    MultipleChoiceShowQuestion: defineAsyncComponent(() => import('src/components/Question/QuestionPage/Show/questionTypes/MultipleChoiceQuestion/MultipleChoiceShowQuestion.vue')),
     BtnBox,
     StatusChange,
     AttachExam,
@@ -112,6 +91,11 @@ export default {
     AdminActionOnQuestion,
     mixinTree
   ],
+  provide () {
+    return {
+      providedQuestion: computed(() => this.question)
+    }
+  },
   props: {},
   data () {
     return {
@@ -124,11 +108,24 @@ export default {
       questionStatuses: new QuestionStatusList(),
       categoryList: new QuestCategoryList(),
       isPanelOpened: false,
-      imgFloatMode: false,
-      totalLoading: false
+      imgFloatMode: false
     }
   },
-  created () {
+  computed: {
+    getComponent () {
+      // updates even if properties inside are updated
+      return this.chosenComponent(this.question.type)
+    }
+  },
+  watch: {
+    question: {
+      handler (newValue, oldValue) {
+        // console.log('question', newValue)
+      },
+      deep: true
+    }
+  },
+  mounted () {
     this.enableLoading()
     this.getQuestionTypeForTypeId(this.question)
     this.loadExamList()
@@ -140,16 +137,6 @@ export default {
     this.loadQuestionTargets()
     this.loadAuthorshipDates()
     this.loadMajorList()
-  },
-  provide () {
-    return {
-      providedQuestion: computed(() => this.question)
-    }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      // this.disableLoading()
-    })
   },
   methods: {
     changeImagePAnelMode () {
@@ -178,20 +165,6 @@ export default {
     },
     disableLoading () {
       this.question.loading = false
-    }
-  },
-  computed: {
-    getComponent () {
-      // updates even if properties inside are updated
-      return this.chosenComponent(this.question.type)
-    }
-  },
-  watch: {
-    question: {
-      handler (newValue, oldValue) {
-        // console.log('question', newValue)
-      },
-      deep: true
     }
   }
 }
@@ -225,6 +198,7 @@ export default {
   padding-top: 30px;
 }
 </style>
+
 <style lang="scss">
 // USED IN MANY OTHER COMPONENTS
 .default-questions-card {

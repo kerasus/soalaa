@@ -1,45 +1,39 @@
 <template>
-  <q-linear-progress
-    v-if="this.question.loading"
-    size="md"
-    indeterminate
-    rounded
-    color="primary"
-  />
+  <q-linear-progress v-if="this.question.loading"
+                     size="md"
+                     indeterminate
+                     rounded
+                     color="primary" />
   <q-card class="edit-question-main-card custom-card">
     <q-card-section class="main-card-section question">
       <div class="card-section-header">
         <span>صورت سوال</span>
       </div>
       <div class="question-box">
-        <QuestionField
-          ref="tiptapQuestionStatement"
-          :key="'statement' + domKey"
-          :editorValue="question.statement"
-        />
+        <question-field ref="tiptapQuestionStatement"
+                        :key="'statement' + domKey"
+                        :editorValue="question.statement" />
       </div>
     </q-card-section>
     <q-card-section class="main-card-section long-answer">
       <div class="card-section-header">پاسخ تشریحی</div>
       <div class="answer-box">
-        <QuestionField
-          ref="tiptapDescriptiveAnswer"
-          :key="'descriptive_answer' + domKey"
-          :editor-value="question.descriptive_answer"
-        />
+        <question-field ref="tiptapDescriptiveAnswer"
+                        :key="'descriptive_answer' + domKey"
+                        :editor-value="question.descriptive_answer" />
       </div>
     </q-card-section>
   </q-card>
 </template>
 
 <script>
+import { ExamList } from 'src/models/Exam.js'
+import { Question } from 'src/models/Question.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
-import { Question } from 'src/models/Question'
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { ExamList } from 'src/models/Exam'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
-import { QuestCategoryList } from 'src/models/QuestCategory'
 
 export default {
   name: 'DescriptiveEditQuestion',
@@ -49,16 +43,16 @@ export default {
   mixins: [
     AdminActionOnQuestion
   ],
-  props: {
-    status: {
-      type: Boolean,
-      default: () => false
-    }
-  },
   inject: {
     question: {
       from: 'providedQuestion', // this is optional if using the same key for injection
       default: new Question()
+    }
+  },
+  props: {
+    status: {
+      type: Boolean,
+      default: () => false
     }
   },
   data () {

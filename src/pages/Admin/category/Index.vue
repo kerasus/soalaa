@@ -1,22 +1,18 @@
 <template>
   <div>
-    <entity-index
-      v-model:value="inputs"
-      title="لیست دفترچه ها"
-      :api="api"
-      :table="table"
-      :table-keys="tableKeys"
-      :create-route-name="'Admin.Category.Create'"
-    >
+    <entity-index v-model:value="inputs"
+                  title="لیست دفترچه ها"
+                  :api="api"
+                  :table="table"
+                  :table-keys="tableKeys"
+                  :create-route-name="'Admin.Category.Create'">
       <template #entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
         <template v-if="inputData.col.name === 'thumbnail'">
-          <q-avatar
-            round
-            font-size="30px"
-            text-color="white"
-            icon="mdi-card-text"
-            color="grey"
-          />
+          <q-avatar round
+                    font-size="30px"
+                    text-color="white"
+                    icon="mdi-card-text"
+                    color="grey" />
         </template>
         <template v-else-if="inputData.col.name === 'actions'">
           <q-btn round
@@ -54,7 +50,7 @@
 
 <script>
 import { EntityIndex } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Index',
@@ -62,7 +58,7 @@ export default {
   data () {
     return {
       expanded: true,
-      api: API_ADDRESS.questionCategory.base,
+      api: APIGateway.questionCategory.APIAdresses.base,
       tableKeys: {
         data: 'data',
         total: 'count',

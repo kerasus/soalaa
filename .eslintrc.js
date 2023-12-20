@@ -1,24 +1,26 @@
 module.exports = {
   // https://eslint.org/docs/user-guide/configuring#configuration-cascading-and-hierarchy
   // This option interrupts the configuration hierarchy at this file
-  // Remove this if you have an higher level ESLint config file (it usually happens into a monorepos)
+  // Remove this if you have a higher level ESLint config file (it usually happens into a mono repos)
   root: true,
 
   parserOptions: {
-    parser: '@babel/eslint-parser',
-    ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
-    sourceType: 'module' // Allows for the use of imports
+    ecmaVersion: '2021', // Allows for the parsing of modern ECMAScript features
+    ecmaFeatures: {
+      experimentalObjectRestSpread: true
+    }
   },
 
   env: {
-    browser: true
+    node: true,
+    browser: true,
+    'vue/setup-compiler-macros': true
   },
 
   // Rules order is important, please avoid shuffling them
   extends: [
     // Base ESLint recommended rules
     // 'eslint:recommended',
-
 
     // Uncomment any of the lines below to choose desired strictness,
     // but leave only one uncommented!
@@ -32,9 +34,9 @@ module.exports = {
   ],
 
   plugins: [
-    // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-file
+    // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-files
     // required to lint *.vue files
-    'vue',
+    'vue'
 
   ],
 
@@ -71,23 +73,59 @@ module.exports = {
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
-    'prefer-promise-reject-errors': 'off',
 
-    "vue/attributes-order": 'error',
-    "vue/max-attributes-per-line": 'error',
-    "vue/html-indent": 'error',
-    "vue/html-closing-bracket-spacing": 'error',
-    "no-console": [
-      "warn",
-      { "allow": ["clear", "info", "error", "dir", "trace", "groupEnd", "groupCollapsed"] }
+    'prefer-promise-reject-errors': 'off',
+    'no-unused-vars': 'error',
+
+    'vue/attributes-order': 'error',
+    'vue/order-in-components': 'error',
+    'vue/max-attributes-per-line': 'error',
+    'vue/html-indent': 'error',
+    'vue/html-closing-bracket-spacing': 'error',
+    'vue/no-multi-spaces': 'error',
+    'no-console': [
+      'warn',
+      { allow: ['clear', 'info', 'error', 'dir', 'trace', 'groupEnd', 'groupCollapsed'] }
     ],
 
     'vue/multi-word-component-names': 'off',
     'vue/no-v-text-v-html-on-component': 'off',
-
+    'vue/component-name-in-template-casing': [
+      'error',
+      'kebab-case',
+      {
+        ignores: []
+      }
+    ],
+    'vue/html-closing-bracket-newline': [
+      'error',
+      {
+        singleline: 'never',
+        multiline: 'never'
+      }
+    ],
+    'vue/html-self-closing': [
+      'error',
+      {
+        html: {
+          void: 'never',
+          normal: 'always',
+          component: 'always'
+        },
+        svg: 'always',
+        math: 'always'
+      }
+    ],
+    'vue/first-attribute-linebreak': [
+      'error',
+      {
+        singleline: 'beside',
+        multiline: 'beside'
+      }
+    ],
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    "space-before-function-paren": 0
+    'space-before-function-paren': 0
 
   }
 }

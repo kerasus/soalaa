@@ -1,58 +1,57 @@
 <template>
-  <div>
-    <entity-index
-      v-model:value="inputs"
-      title="لیست تیکت ها"
-      :api="api"
-      :table="table"
-      :table-keys="tableKeys"
-      :create-route-name="'User.Ticket.Create'"
-      :show-expand-button="false"
-    >
-      <template v-slot:table-cell="{inputData}">
-        <q-td :props="inputData.props">
-          <template v-if="inputData.props.col.name === 'status'">
-            <q-chip :color="checkStatusColor(inputData.props.row.status.id)"
-                    :style="{color: '#FFF', height: '26px'}">
-              {{ inputData.props.row.status.title }}
-            </q-chip>
-          </template>
-          <template v-if="inputData.props.col.name === 'score'">
-            <q-img :src="rateImg(inputData.props.row.rate)"
-                   class="rate-img" />
-          </template>
-          <template v-if="inputData.props.col.name === 'actions'">
-            <q-btn round
-                   flat
-                   dense
-                   size="md"
-                   color="info"
-                   icon="info"
-                   :to="{name:'User.Ticket.Show', params: {id: inputData.props.row.id}}">
-              <q-tooltip>
-                مشاهده
-              </q-tooltip>
-            </q-btn>
-          </template>
-          <template v-else>
-            {{ inputData.props.value }}
-          </template>
-        </q-td>
-      </template>
-    </entity-index>
-  </div>
+  <entity-index v-model:value="inputs"
+                title="لیست تیکت ها"
+                :api="api"
+                :table="table"
+                :table-keys="tableKeys"
+                :create-route-name="'User.Ticket.Create'"
+                :show-expand-button="false">
+    <template v-slot:table-cell="{inputData}">
+      <q-td :props="inputData.props">
+        <template v-if="inputData.props.col.name === 'status'">
+          <q-chip :color="checkStatusColor(inputData.props.row.status.id)"
+                  :style="{color: '#FFF', height: '26px'}">
+            {{ inputData.props.row.status.title }}
+          </q-chip>
+        </template>
+        <template v-if="inputData.props.col.name === 'score'">
+          <q-img :src="rateImg(inputData.props.row.rate)"
+                 class="rate-img" />
+        </template>
+        <template v-if="inputData.props.col.name === 'actions'">
+          <q-btn round
+                 flat
+                 dense
+                 size="md"
+                 color="info"
+                 icon="info"
+                 :to="{name:'User.Ticket.Show', params: {id: inputData.props.row.id}}">
+            <q-tooltip>
+              مشاهده
+            </q-tooltip>
+          </q-btn>
+        </template>
+        <template v-else>
+          {{ inputData.props.value }}
+        </template>
+      </q-td>
+    </template>
+  </entity-index>
 </template>
 
 <script>
 import { EntityIndex } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
+import { APIGateway } from 'src/api/APIGateway.js'
 
 export default {
   name: 'Index',
   components: { EntityIndex },
+  beforeRouteLeave() {
+    this.$axios.defaults.baseURL = this.$appApiInstance.defaults.baseURL
+  },
   data () {
     return {
-      api: API_ADDRESS.ticket.index.base,
+      api: APIGateway.ticket.APIAdresses.index,
       tableKeys: {
         data: 'data',
         total: 'meta.total',
@@ -160,6 +159,9 @@ export default {
         { type: 'hidden', name: 'department', value: 12, col: 'col-md-12' }
       ]
     }
+  },
+  created() {
+    this.$axios.defaults.baseURL = this.$alaaApiInstance.defaults.baseURL
   },
   methods: {
     rateImg (id) {

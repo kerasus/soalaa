@@ -1,33 +1,25 @@
 <template>
-  <div
-    class="question-image-panel"
-    :class="{'question-image-float-panel' : isPanelFloat }"
-  >
-    <q-card
-      class="question-card default-questions-card image-panel-box"
-      :class="{'float-panel-box' : isPanelFloat }"
-    >
+  <div class="question-image-panel"
+       :class="{'question-image-float-panel' : isPanelFloat }">
+    <q-card class="question-card default-questions-card image-panel-box"
+            :class="{'float-panel-box' : isPanelFloat }">
       <q-card-section class="image-panel-header default-Qcard-title row justify-between">
-        <q-btn
-          class="close-panel-btn"
-          icon="isax:close-circle"
-          color="white"
-          text-color="accent"
-          dense
-          unelevated
-          rounded
-          @click="closePanelBtnClicked"
-        />
-        <q-btn
-          class="change-mode-btn"
-          color="white"
-          text-color="accent"
-          label="تغییر حالت"
-          flat
-          rounded
-          unelevated
-          @click="imgPanelModeChanged"
-        />
+        <q-btn class="close-panel-btn"
+               icon="isax:close-circle"
+               color="white"
+               text-color="accent"
+               dense
+               unelevated
+               rounded
+               @click="closePanelBtnClicked" />
+        <q-btn class="change-mode-btn"
+               color="white"
+               text-color="accent"
+               label="تغییر حالت"
+               flat
+               rounded
+               unelevated
+               @click="imgPanelModeChanged" />
       </q-card-section>
       <div>
         <q-card-section>
@@ -48,7 +40,7 @@
                        size="xs"
                        @click="deleteImage({ src: item, type: 'statement_photo' })" />
                 <img :src="item"
-                     @click="selectImage(item)" />
+                     @click="selectImage(item)">
               </div>
               <div v-for="(item, index) in question.added_statement_photos"
                    :key="index"
@@ -60,7 +52,7 @@
                        icon="mdi-delete"
                        size="xs" />
                 <img :src="getUrl(item)"
-                     @click="selectImage(getUrl(item))" />
+                     @click="selectImage(getUrl(item))">
               </div>
               <div v-if="editable"
                    style="margin-right: 50px">
@@ -81,7 +73,7 @@
                        size="xs"
                        @click="deleteImage({ src: item, type: 'answer_photo' })" />
                 <img :src="item"
-                     @click="selectImage(item)" />
+                     @click="selectImage(item)">
               </div>
               <div v-for="(item, index) in question.added_answer_photos"
                    :key="index"
@@ -93,7 +85,7 @@
                        icon="mdi-delete"
                        size="xs" />
                 <img :src="getUrl(item)"
-                     @click="selectImage(getUrl(item))" />
+                     @click="selectImage(getUrl(item))">
               </div>
               <div v-if="editable"
                    style="margin-right: 50px">
@@ -109,11 +101,11 @@
 </template>
 
 <script>
-import { Question } from 'src/models/Question'
 import * as FilePond from 'filepond'
 import 'filepond/dist/filepond.min.css'
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
+import { Question } from 'src/models/Question.js'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 FilePond.registerPlugin(FilePondPluginImagePreview)
 
 const dropAreaHTML = `
@@ -126,7 +118,12 @@ const dropAreaHTML = `
 
 export default {
   name: 'ImagePanel',
-  components: {},
+  inject: {
+    question: {
+      from: 'providedQuestion', // this is optional if using the same key for injection
+      default: new Question()
+    }
+  },
   props: {
     mode: {
       type: String,
@@ -139,6 +136,27 @@ export default {
       default () {
         return false
       }
+    }
+  },
+  data () {
+    return {
+      floatPanelMode: false,
+      pond_statement: FilePond.create({
+        allowMultiple: true,
+        name: 'filepond',
+        labelIdle: dropAreaHTML
+      }),
+      pond_answer: FilePond.create({
+        allowMultiple: true,
+        name: 'filepond',
+        labelIdle: dropAreaHTML
+      }),
+      selectedImageSrc: ''
+    }
+  },
+  computed: {
+    isPanelFloat () {
+      return !!(this.floatPanelMode)
     }
   },
   mounted () {
@@ -164,28 +182,6 @@ export default {
       })
     }
   },
-  inject: {
-    question: {
-      from: 'providedQuestion', // this is optional if using the same key for injection
-      default: new Question()
-    }
-  },
-  data () {
-    return {
-      floatPanelMode: false,
-      pond_statement: FilePond.create({
-        allowMultiple: true,
-        name: 'filepond',
-        labelIdle: dropAreaHTML
-      }),
-      pond_answer: FilePond.create({
-        allowMultiple: true,
-        name: 'filepond',
-        labelIdle: dropAreaHTML
-      }),
-      selectedImageSrc: ''
-    }
-  },
   methods: {
     // deleteUnsavedImage (object) {
     //   this.question[object.type] = this.question[object.type].filter(file => {
@@ -207,11 +203,6 @@ export default {
     imgPanelModeChanged () {
       this.floatPanelMode = !this.floatPanelMode
       this.$emit('imgPanelModeChanged')
-    }
-  },
-  computed: {
-    isPanelFloat () {
-      return !!(this.floatPanelMode)
     }
   }
 }

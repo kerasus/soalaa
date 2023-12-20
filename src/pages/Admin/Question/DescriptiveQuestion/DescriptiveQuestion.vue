@@ -1,76 +1,66 @@
 <template>
-  <q-linear-progress
-    v-if="this.question.loading"
-    size="md"
-    indeterminate
-    rounded
-    color="primary"
-  />
+  <q-linear-progress v-if="this.question.loading"
+                     size="md"
+                     indeterminate
+                     rounded
+                     color="primary" />
   <q-card class="create-question-main-card custom-card">
     <q-card-section class="main-card-section question">
       <div class="card-section-header">
         <span>صورت سوال</span>
       </div>
       <div class="question-box">
-        <QuestionField
-          ref="tiptapQuestionStatement"
-          :key="'statement' + domKey"
-        />
+        <question-field ref="tiptapQuestionStatement"
+                        :key="'statement' + domKey" />
       </div>
     </q-card-section>
     <q-card-section class="main-card-section long-answer">
       <div class="card-section-header">پاسخ تشریحی</div>
       <div class="answer-box">
-        <QuestionField
-          ref="tiptapDescriptiveAnswer"
-          :key="'descriptive_answer' + domKey"
-        />
+        <question-field ref="tiptapDescriptiveAnswer"
+                        :key="'descriptive_answer' + domKey" />
       </div>
     </q-card-section>
   </q-card>
   <div class="relative-position">
     <div class="attach-btn row">
-      <question-identifier
-        ref="questionIdentifier"
-        editable
-        class="col-12"
-        :exams="examList"
-        :lessons="subCategoriesList"
-        :categories="categoryList"
-        :gradesList="gradesList"
-        :groups-list="lessonGroupList"
-        :lessons-list="lessonsList"
-        :major-list="majorList"
-        :authorship-dates-list="authorshipDatesList"
-        :question-authors-list="questionAuthorsList"
-        :question-target-list="questionTargetList"
-        :buffer="true"
-        @gradeSelected="getLessonsList"
-        @groupSelected="getLessonsList"
-        @attach="attachExam"
-        @detach="detachExam"
-        @tags-collected="setTagsOnCreate"
-      />
+      <question-identifier ref="questionIdentifier"
+                           editable
+                           class="col-12"
+                           :exams="examList"
+                           :lessons="subCategoriesList"
+                           :categories="categoryList"
+                           :gradesList="gradesList"
+                           :groups-list="lessonGroupList"
+                           :lessons-list="lessonsList"
+                           :major-list="majorList"
+                           :authorship-dates-list="authorshipDatesList"
+                           :question-authors-list="questionAuthorsList"
+                           :question-target-list="questionTargetList"
+                           :buffer="true"
+                           @gradeSelected="getLessonsList"
+                           @groupSelected="getLessonsList"
+                           @attach="attachExam"
+                           @detach="detachExam"
+                           @tags-collected="setTagsOnCreate" />
     </div>
-    <btn-box
-      class="col-12"
-      @saveQuestion="saveQuestion"
-    />
+    <btn-box class="col-12"
+             @saveQuestion="saveQuestion" />
   </div>
 </template>
 
 <script>
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
-import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
-import { Question } from 'src/models/Question'
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { ExamList } from 'src/models/Exam'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { computed } from 'vue'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
-import mixinTree from 'src/mixin/Tree'
+import mixinTree from 'src/mixin/Tree.js'
+import { ExamList } from 'src/models/Exam.js'
+import { Question } from 'src/models/Question.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
+import BtnBox from 'src/components/Question/QuestionPage/BtnBox.vue'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
+import QuestionField from 'src/components/Question/QuestionPage/QuestionField.vue'
+import QuestionIdentifier from 'src/components/Question/QuestionPage/QuestionIdentifier.vue'
 
 export default {
   name: 'DescriptiveQ',
@@ -83,15 +73,15 @@ export default {
     AdminActionOnQuestion,
     mixinTree
   ],
+  provide () {
+    return {
+      providedQuestion: computed(() => this.question)
+    }
+  },
   props: {
     status: {
       type: Boolean,
       default: () => false
-    }
-  },
-  provide () {
-    return {
-      providedQuestion: computed(() => this.question)
     }
   },
   data () {

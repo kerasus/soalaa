@@ -1,39 +1,33 @@
 <template>
   <div class="online-quiz-template-header">
     <div class="right-side">
-      <q-btn
-        class="toolbar-button"
-        icon="isax:menu-1"
-        color="white"
-        text-color="accent"
-        dense
-        unelevated
-        @click="toggleLeftDrawer"
-      />
-      <q-btn
-        v-if="windowSize.x > 969"
-        class="toolbar-button"
-        icon="mdi-dots-grid"
-        color="white"
-        text-color="accent"
-        dense
-        unelevated
-        @click="changeView"
-      />
+      <q-btn class="toolbar-button"
+             icon="isax:menu-1"
+             color="white"
+             text-color="accent"
+             dense
+             unelevated
+             @click="toggleLeftDrawer" />
+      <q-btn v-if="windowSize.x > 969"
+             class="toolbar-button"
+             icon="mdi-dots-grid"
+             color="white"
+             text-color="accent"
+             dense
+             unelevated
+             @click="changeView" />
     </div>
     <div class="left-side">
-      <q-btn-dropdown
-        class="toolbar-button"
-        content-class="profile-menu"
-        icon="isax:user"
-        dropdown-icon="false"
-        color="white"
-        text-color="accent"
-        :label="user.full_name "
-        dir="ltr"
-        dense
-        unelevated
-      >
+      <q-btn-dropdown class="toolbar-button"
+                      content-class="profile-menu"
+                      icon="isax:user"
+                      dropdown-icon="false"
+                      color="white"
+                      text-color="accent"
+                      :label="user.full_name "
+                      dir="ltr"
+                      dense
+                      unelevated>
         <online-quiz-top-menu />
       </q-btn-dropdown>
     </div>
@@ -41,7 +35,7 @@
 </template>
 
 <script>
-import onlineQuizTopMenu from 'components/Menu/topMenu/onlineQuizTopMenu'
+import onlineQuizTopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu.vue'
 
 export default {
   name: 'onlineQuizTemplateHeader',
@@ -49,6 +43,11 @@ export default {
   data () {
     return {
       user: {}
+    }
+  },
+  computed: {
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
     }
   },
   methods: {
@@ -69,11 +68,6 @@ export default {
     toggleLeftDrawer () {
       const visibility = this.$store.getters['AppLayout/layoutLeftDrawerVisible']
       return this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', !visibility)
-    }
-  },
-  computed: {
-    windowSize () {
-      return this.$store.getters['AppLayout/windowSize']
     }
   }
 }

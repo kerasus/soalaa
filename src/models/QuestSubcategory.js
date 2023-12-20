@@ -1,15 +1,10 @@
 /* eslint-disable */
 import { Model, Collection } from 'js-abstract-model'
 import { QuestionList } from 'src/models/Question'
-import API_ADDRESS from 'src/api/Addresses'
 
 class QuestSubcategory extends Model {
   constructor (data) {
     super(data, [
-      {
-        key: 'baseRoute',
-        default: API_ADDRESS.questionSubcategory.base
-      },
       { key: 'id' },
       { key: '_id' },
       { key: 'title' },

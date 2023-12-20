@@ -4,111 +4,88 @@
       <div class="row q-col-gutter-md shadow-1 q-pa-md">
         <div class="col-md-10" />
         <div class="col-md-1">
-          <q-input
-            v-model="fontSize"
-            dense
-            outlined
-            label="text font size"
-            type="number"
-            @input="updateFontSize"
-          />
+          <q-input v-model="fontSize"
+                   dense
+                   outlined
+                   label="text font size"
+                   type="number"
+                   @input="updateFontSize" />
         </div>
         <div class="col-md-1">
-          <q-input
-            v-model="formulaFontSize"
-            dense
-            outlined
-            label="formula font size"
-            type="number"
-            @input="updateFontSize"
-          />
+          <q-input v-model="formulaFontSize"
+                   dense
+                   outlined
+                   label="formula font size"
+                   type="number"
+                   @input="updateFontSize" />
         </div>
       </div>
     </div>
     <div class="print-page col-md-12">
-      <div
-        v-for="(question) in quizData.questions.list"
-        :key="question.id"
-        class="question-parent row"
-        :class="{ 'ltr': question.ltr, 'rtl': !question.ltr }"
-      >
+      <div v-for="(question) in quizData.questions.list"
+           :key="question.id"
+           class="question-parent row"
+           :class="{ 'ltr': question.ltr, 'rtl': !question.ltr }">
         <div class="vertical-choice not-visible-in-print">
-          <q-input
-            v-model="question.verticalChoice"
-            type="number"
-            outlined
-            label="فاصله"
-            @input="changeVertical(question.id, $event)"
-          />
+          <q-input v-model="question.verticalChoice"
+                   type="number"
+                   outlined
+                   label="فاصله"
+                   @input="changeVertical(question.id, $event)" />
         </div>
         <div class="question-box">
           <div class="statement">
-            <q-btn
-              color="blue"
-              class="edit-button"
-              icon="isax:edit"
-              @click="toggleEditMode(question)"
-            />
-            <vue-katex
-              v-if="!question.editMode"
-              :input="question.statement"
-            />
-            <vue-tiptap-katex
-              v-else
-              v-model="question.statement"
-              class="vue-tiptap-katex"
-              :options="{
-                bubbleMenu: false,
-                floatingMenu: false,
-                poem: true,
-                reading: true,
-                persianKeyboard: true,
-                mathliveOptions: { smartFence: false },
-                uploadServer: {
-                  url: imageUrl,
-                  instantUpload: true,
-                  headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] }
-                }
-              }"
-            />
+            <q-btn color="blue"
+                   class="edit-button"
+                   icon="isax:edit"
+                   @click="toggleEditMode(question)" />
+            <vue-katex v-if="!question.editMode"
+                       :input="question.statement" />
+            <vue-tiptap-katex v-else
+                              v-model="question.statement"
+                              class="vue-tiptap-katex"
+                              :options="{
+                                bubbleMenu: false,
+                                floatingMenu: false,
+                                poem: true,
+                                reading: true,
+                                persianKeyboard: true,
+                                mathliveOptions: { smartFence: false },
+                                uploadServer: {
+                                  url: imageUrl,
+                                  instantUpload: true,
+                                  headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] }
+                                }
+                              }" />
           </div>
-          <div
-            :id="`question${question.id}`"
-            class="choice-parent"
-          >
-            <div
-              v-for="(choice, cIndex) in question.choices.list"
-              :key="cIndex"
-              class="choice"
-            >
-              <q-btn
-                color="blue"
-                class="edit-button"
-                icon="isax:edit"
-                @click="toggleEditMode(choice)"
-              />
-              <vue-katex
-                v-if="!choice.editMode"
-                :input="choice.title"
-              />
-              <vue-tiptap-katex
-                v-else
-                v-model="choice.title"
-                class="vue-tiptap-katex"
-                :options="{
-                  bubbleMenu: false,
-                  floatingMenu: false,
-                  poem: true,
-                  reading: true,
-                  persianKeyboard: true,
-                  mathliveOptions: { smartFence: false },
-                  uploadServer: {
-                    url: imageUrl,
-                    instantUpload: true,
-                    headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] }
-                  }
-                }"
-              />
+          <div :id="`question${question.id}`"
+               class="choice-parent">
+            <div v-for="(choice, cIndex) in question.choices.list"
+                 :key="cIndex"
+                 class="choice">
+              <q-btn color="blue"
+                     class="edit-button"
+                     icon="isax:edit"
+                     @click="toggleEditMode(choice)" />
+
+              <!--              v-if="!choice.editMode"-->
+              <vue-katex :input="choice.title" />
+              <!--              <vue-tiptap-katex v-else-->
+              <!--                                v-model="choice.title"-->
+              <!--                                class="vue-tiptap-katex"-->
+              <!--                                :options="{-->
+              <!--                                  bubbleMenu: false,-->
+              <!--                                  floatingMenu: false,-->
+              <!--                                  poem: true,-->
+              <!--                                  reading: true,-->
+              <!--                                  persianKeyboard: true,-->
+              <!--                                  mathliveOptions: { smartFence: false },-->
+              <!--                                  uploadServer: {-->
+              <!--                                    url: imageUrl,-->
+              <!--                                    instantUpload: true,-->
+              <!--                                    headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] }-->
+              <!--                                  }-->
+              <!--                                }" />-->
             </div>
           </div>
         </div>
@@ -118,17 +95,20 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
-import VueTiptapKatex from 'vue3-tiptap-katex'
-import API_ADDRESS from 'src/api/Addresses.js'
-import { Exam } from 'src/models/Exam'
-import { QuestionList } from 'src/models/Question'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { mixinAuth, mixinQuiz, mixinDrawer } from 'src/mixin/Mixins'
+import { Exam } from 'src/models/Exam.js'
+import VueKatex from 'src/components/VueKatex.vue'
+import { APIGateway } from 'src/api/APIGateway.js'
+import { QuestionList } from 'src/models/Question.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import { mixinAuth, mixinQuiz, mixinDrawer } from 'src/mixin/Mixins.js'
+// import VueTiptapKatex from 'vue3-tiptap-katex/src/vue3-tiptap-katex.vue'
 
 export default {
   name: 'QuestionPreview',
-  components: { VueKatex, VueTiptapKatex },
+  components: {
+    VueKatex
+    // VueTiptapKatex
+  },
   mixins: [mixinAuth, mixinQuiz, mixinDrawer],
   data () {
     return {
@@ -141,7 +121,7 @@ export default {
   },
   computed: {
     imageUrl () {
-      return API_ADDRESS.question.uploadImage(this.questionId)
+      return this.$apiGateway.question.APIAdresses.uploadImage(this.questionId)
     }
     // tiptapOptions: {
     //   bubbleMenu: false,
@@ -182,9 +162,9 @@ export default {
     },
     loadSubCategories (quizResponse, reload) {
       const that = this
-      this.$axios.get(API_ADDRESS.questionSubcategory.base)
-        .then((response) => {
-          this.subCategoriesList.list = response.data.data
+      this.$apiGateway.questionSubcategory.get()
+        .then((QuestSubcategoryList) => {
+          this.subCategoriesList.list = QuestSubcategoryList.list
           if (reload) {
             this.$notify({
               group: 'notifs',
@@ -194,8 +174,8 @@ export default {
             })
           }
           // that.quiz.sub_categories = new QuestSubcategoryList(response.data)
-          that.quizData.sub_categories = new QuestSubcategoryList(response.data.data)
-          const questions = quizResponse.data.data
+          that.quizData.sub_categories = new QuestSubcategoryList(QuestSubcategoryList)
+          const questions = quizResponse
           that.sortQuestions(questions)
           that.quizData.questions = new QuestionList(questions)
           // that.quiz = new Exam(that.quizData)
@@ -227,12 +207,15 @@ export default {
         })
     },
     loadQuizDataAndSubCategories (reload = false) {
-      this.$axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.quizId), {
-        sub_categories: [this.$route.params.lessonId]
+      APIGateway.exam.examQuestion({
+        examId: this.$route.params.quizId,
+        data: {
+          sub_categories: [this.$route.params.lessonId]
+        }
       })
-        .then((response) => {
-          if (response.data.data.length) {
-            this.loadSubCategories(response, reload)
+        .then(({ data }) => {
+          if (data.list.length) {
+            this.loadSubCategories(data, reload)
           } else {
             this.$router.push({ name: 'onlineQuiz.exams' })
           }
@@ -240,7 +223,6 @@ export default {
     },
     downLoadQuestions () {
       this.loading = true
-      let fileUrl = ''
       const questionsList = this.quizData.questions.list
       const questionsIdList = []
 
@@ -248,11 +230,10 @@ export default {
         questionsIdList.push(question.id)
       })
 
-      this.$axios.post(API_ADDRESS.question.printQuestions, {
+      this.$apiGateway.question.printQuestions({
         questions: questionsIdList
       })
-        .then(response => {
-          fileUrl = response.data.data
+        .then(fileUrl => {
           this.download('questions-list', fileUrl)
           this.loading = false
         }).catch(err => {
@@ -283,7 +264,7 @@ export default {
 
 <style lang="scss">
 /*rtl:ignore*/
-@import "vue-tiptap-katex-core/css/base";
+//@import "vue-tiptap-katex-core/css/base.scss";
 @import "src/css/katex-rtl-fix.scss";
 //rtl change bug fix
 [dir="rtl"] {

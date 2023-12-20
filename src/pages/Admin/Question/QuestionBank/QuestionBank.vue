@@ -3,51 +3,56 @@
     <div class="row">
       <div ref="header"
            class="col-12 question-bank-header">
-        <QuestionBankHeader />
+        <question-bank-header />
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
         <sticky-both-sides :max-width="1024"
                            :top-gap="130">
-          <question-filter
-            ref="filter"
-            :loadings="loadings"
-            :filterQuestions="filterQuestions"
-            @onFilter="onFilter"
-            @delete-filter="deleteFilterItem"
-          />
+          <question-filter ref="filter"
+                           :loadings="loadings"
+                           :filterQuestions="filterQuestions"
+                           @onFilter="onFilter"
+                           @delete-filter="deleteFilterItem" />
         </sticky-both-sides>
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
-          <QuestionToolBar
-            :key="questionListKey"
-            :check-box="checkBox"
-            :selectedQuestions="selectedQuestions"
-            @remove="RemoveChoice"
-            @deleteAllQuestions="deleteAllQuestions"
-            @selectAllQuestions="selectAllQuestions"
-          />
+          <question-tool-bar :key="questionListKey"
+                             :check-box="checkBox"
+                             :selectedQuestions="selectedQuestions"
+                             @remove="RemoveChoice"
+                             @deleteAllQuestions="deleteAllQuestions"
+                             @selectAllQuestions="selectAllQuestions" />
         </div>
         <div class="col-12 filter-card-container">
-          <q-card
-            class="filter-card"
-            flat
-          >
+          <q-card class="filter-card"
+                  flat>
             <q-card-section class="search-section">
-              <q-input
-                v-model="searchInput"
-                filled
-                class="bg-white search-input"
-                placeholder="جستجو در سوالات..."
-              >
+              <q-input v-model="searchInput"
+                       filled
+                       class="bg-white search-input"
+                       placeholder="جستجو در سوالات...">
                 <template v-slot:append>
-                  <q-btn
-                    flat
-                    rounded
-                    icon="isax:search-normal-1"
-                    class="search"
-                    @click="filterByStatement"
-                  />
+                  <q-btn flat
+                         rounded
+                         icon="isax:search-normal-1"
+                         class="search"
+                         @click="filterByStatement" />
+                </template>
+              </q-input>
+            </q-card-section>
+            <q-card-section class="search-with-code-section">
+              <q-input v-model="searchWithCodeInput"
+                       filled
+                       class="bg-white search-input"
+                       type="number"
+                       placeholder="جستجوی سوالات با کد...">
+                <template v-slot:append>
+                  <q-btn flat
+                         rounded
+                         icon="isax:search-normal-1"
+                         class="search"
+                         @click="filterByCode" />
                 </template>
               </q-input>
             </q-card-section>
@@ -69,19 +74,16 @@
         </div>
         <div class="question-bank-content">
           <question-item v-if="questions.loading"
-                         :question="loadingQuestion"
-          />
+                         :question="loadingQuestion" />
           <template v-else>
-            <question-item
-              v-for="question in questions.list"
-              :key="question.id"
-              :question="question"
-              :listOptions="questionsOptions"
-              pageStrategy="question-bank"
-              :report-options="reportIssuesList"
-              @deleteFromDb="deleteQuestionFromDataBase"
-              @checkSelect="onClickedCheckQuestionBtn"
-            />
+            <question-item v-for="question in questions.list"
+                           :key="question.id"
+                           :question="question"
+                           :listOptions="questionsOptions"
+                           pageStrategy="question-bank"
+                           :report-options="reportIssuesList"
+                           @deleteFromDb="deleteQuestionFromDataBase"
+                           @checkSelect="onClickedCheckQuestionBtn" />
           </template>
         </div>
 
@@ -96,16 +98,13 @@
           <template v-slot:action>
             <q-btn flat
                    label="بستن"
-                   @click="showSearchResultReport = false"
-            />
+                   @click="showSearchResultReport = false" />
           </template>
         </q-banner>
         <div class="pagination">
-          <pagination
-            :meta="paginationMeta"
-            :disable="disablePagination"
-            @updateCurrentPage="updatePage"
-          />
+          <pagination :meta="paginationMeta"
+                      :disable="disablePagination"
+                      @updateCurrentPage="updatePage" />
         </div>
       </div>
     </div>
@@ -113,15 +112,15 @@
 </template>
 
 <script>
-import pagination from 'components/Question/QuestionBank/Pagination'
-import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from 'src/models/Exam'
-import { Question, QuestionList } from 'src/models/Question'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
-import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
-import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
-import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
-import StickyBothSides from 'components/Utils/StickyBothSides'
+import { Exam } from 'src/models/Exam.js'
+import { APIGateway } from 'src/api/APIGateway.js'
+import { Question, QuestionList } from 'src/models/Question.js'
+import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
+import pagination from 'src/components/Question/QuestionBank/Pagination.vue'
+import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
+import QuestionFilter from 'src/components/Question/QuestionBank/QuestionFilter.vue'
+import QuestionToolBar from 'src/components/Question/QuestionBank/QuestionToolBar.vue'
+import QuestionBankHeader from 'src/components/Question/QuestionBank/components/QuestionBankHeader.vue'
 
 export default {
   name: 'QuestionBank',
@@ -133,6 +132,13 @@ export default {
     QuestionItem,
     pagination
   },
+  inject: {
+    exam: {
+      from: 'providedExam',
+      default: new Exam()
+    }
+  },
+  emits: ['onFilter'],
   data() {
     return {
       reportIssuesList: [],
@@ -142,6 +148,7 @@ export default {
         statusLoading: false,
         reportStatusLoading: false
       },
+      searchWithCodeInput: null,
       searchInput: '',
       searchSelector: {
         title: 'جدید ترین',
@@ -196,12 +203,6 @@ export default {
       }
     }
   },
-  inject: {
-    exam: {
-      from: 'providedExam',
-      default: new Exam()
-    }
-  },
   watch: {
     'selectedQuestions.length': {
       handler(newValue, oldValue) {
@@ -211,11 +212,10 @@ export default {
       }
     }
   },
-  created() {
+  mounted () {
     this.getQuestionData()
     this.getFilterOptions()
   },
-  emits: ['onFilter'],
   methods: {
     onFilter(filterData) {
       // this.$emit('onFilter', filterData)
@@ -286,7 +286,9 @@ export default {
       }
     },
     deleteQuestionReq (questionId) {
-      return this.$axios.delete(API_ADDRESS.question.delete(questionId))
+      return this.$apiGateway.question.delete({
+        questionId
+      })
     },
     closeConfirmModal () {
       this.$store.commit('AppLayout/showConfirmDialog', {
@@ -344,6 +346,7 @@ export default {
         statuses: filterData.statuses.map(item => item.id),
         report_type: filterData.question_report_type ? filterData.question_report_type.id : '',
         report_status: (filterData.report_status.title) ? filterData.report_status.title : '',
+        code: filterData.code ? filterData.code : '',
         ...(typeof filterData.tags_with_childrens && { tags_with_childrens: filterData.tags_with_childrens })
       }
     },
@@ -363,26 +366,25 @@ export default {
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
-      this.$axios.get(API_ADDRESS.question.index(filters, page, true))
-        .then((response) => {
-          this.questions = new QuestionList(response.data.data)
-          this.paginationMeta = response.data.meta
+      APIGateway.question.getIndex({ filters, page, isAdmin: true })
+        .then((questionListAndMeta) => {
+          this.questions = new QuestionList(questionListAndMeta.QuestionList)
+          this.paginationMeta = questionListAndMeta.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
           this.showSearchResultReport = true
         })
-        .catch(function (error) {
-          console.error(error)
+        .catch(() => {
           this.loadingQuestion.loading = false
           this.questions.loading = false
         })
     },
     getFilterOptions() {
       this.loadings.optionsLoading = true
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
+      APIGateway.option.getFilterOptions()
+        .then((filterOptions) => {
           this.loadings.optionsLoading = false
-          response.data.data.forEach(option => {
+          filterOptions.forEach(option => {
             if (option.type === 'reference_type') {
               this.filterQuestions.reference_type.push(option)
             } else if (option.type === 'year_type') {
@@ -406,9 +408,9 @@ export default {
     },
     getLevelsFilterData() {
       this.loadings.levelTypeLoading = true
-      this.$axios.get(API_ADDRESS.question.levels)
-        .then(response => {
-          this.filterQuestions.level_type = response.data.data
+      APIGateway.option.getLevels()
+        .then(levels => {
+          this.filterQuestions.level_type = levels
           this.loadings.levelTypeLoading = false
         })
         .catch(() => {
@@ -417,9 +419,9 @@ export default {
     },
     getQuestionStatuses () {
       this.loadings.statusLoading = true
-      this.$axios.get(API_ADDRESS.question.status.base)
-        .then(response => {
-          this.filterQuestions.statuses = response.data.data
+      APIGateway.option.getQuestionStatuses()
+        .then(statuses => {
+          this.filterQuestions.statuses = statuses
           this.loadings.statusLoading = false
         })
         .catch(() => {
@@ -428,10 +430,10 @@ export default {
     },
     getQuestionReportStatuses() {
       this.loadings.reportStatusLoading = true
-      this.$axios.get(API_ADDRESS.question.reportStatuses)
-        .then(response => {
+      APIGateway.option.getQuestionReportStatuses()
+        .then(reportStatuses => {
           this.loadings.reportStatusLoading = false
-          this.filterQuestions.report_status = response.data.data
+          this.filterQuestions.report_status = reportStatuses
         })
         .catch(() => {
           this.loadings.reportStatusLoading = false
@@ -439,6 +441,9 @@ export default {
     },
     filterByStatement() {
       this.$refs.filter.changeFilterData('statement', [this.searchInput])
+    },
+    filterByCode() {
+      this.$refs.filter.changeFilterData('code', Number(this.searchWithCodeInput))
     },
     sortByCreatedAt() {
       this.$refs.filter.changeFilterData('sort_type', [this.searchSelector.value])
@@ -490,7 +495,7 @@ export default {
   .filter-card {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    //justify-content: space-between;
     background: #f4f6f9;
 
     @media only screen and (max-width: 600px) {
@@ -518,6 +523,45 @@ export default {
     }
 
     .search-section {
+      .search-input {
+        width: 300px;
+        background-color: white;
+
+        &:deep(.q-field__append) {
+          padding-right: 8px !important;
+
+          .q-icon {
+            color: #6D708B;
+            cursor: pointer;
+          }
+        }
+
+        &:deep(.q-field__control) {
+          background-color: white;
+        }
+
+        //&:deep(.q-field--filled .q-field__inner .q-field__control .q-field__append, .q-field--filled .q-field__inner .q-field__control .q-field__prepend ){
+        //
+        //}
+        @media only screen and (max-width: 1023px) {
+          width: 352px;
+        }
+        @media only screen and (max-width: 599px) {
+          width: 100%;
+        }
+
+        .search {
+          color: #6D708B;
+
+          :deep(.q-field__inner .q-field__control .q-field__append .q-icon) {
+            color: #6D708B;
+          }
+        }
+      }
+    }
+
+    .search-with-code-section {
+      margin-left: 10px;
       .search-input {
         width: 300px;
         background-color: white;

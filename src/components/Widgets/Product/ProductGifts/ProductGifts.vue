@@ -1,5 +1,5 @@
 <template>
-  <div v-if="products.list && products.list.length > 0"
+  <div v-if="products.list.length > 0"
        class="product-gift-widgets row"
        :style="options.style"
        :class="options.className">
@@ -29,10 +29,10 @@
 </template>
 
 <script>
+import { APIGateway } from 'src/api/APIGateway.js'
 import { ProductList } from 'src/models/Product.js'
 import { mixinPrefetchServerData } from 'src/mixin/Mixins.js'
 import ProductItem from 'components/Widgets/Product/ProductItem/ProductItem.vue'
-import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'ProductGifts',
@@ -62,11 +62,7 @@ export default {
       if (this.$route.params.id) {
         return this.$route.params.id
       }
-      if (this.product) {
-        return this.product.id
-      }
-
-      return null
+      return this.product.id
     }
   },
   methods: {
@@ -74,16 +70,15 @@ export default {
       this.products.loading = true
       return this.getPriductCifts()
     },
-    prefetchServerDataPromiseThen (response) {
-      this.products = new ProductList(response.data.data)
+    prefetchServerDataPromiseThen (data) {
+      this.products = data
       this.products.loading = false
     },
     prefetchServerDataPromiseCatch () {
       this.products.loading = false
     },
     getPriductCifts() {
-      return this.$axios.get(API_ADDRESS.product.gifts(this.productId))
-      // return APIGateway.product.gifts(this.productId)
+      return APIGateway.product.gifts(this.productId)
     }
   }
 }

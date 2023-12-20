@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="infoCard infoText"
-  >
+  <div class="infoCard infoText">
     <div class="infoHeight">
       <div class="infoCols">
         نام و نام خانوادگی :
@@ -16,24 +14,18 @@
         مقطع :
         {{ user.grade.title }}
       </div>
-      <div
-        v-if="user.province"
-        class="infoCols"
-      >
+      <div v-if="user.province"
+           class="infoCols">
         استان :
         {{ user.province.title }}
       </div>
-      <div
-        v-if="user.city"
-        class=" infoCols"
-      >
+      <div v-if="user.city"
+           class=" infoCols">
         شهر :
         {{ user.city.title }}
       </div>
-      <div
-        v-if="user.school"
-        class=" infoCols"
-      >
+      <div v-if="user.school"
+           class=" infoCols">
         مدرسه :
         {{ user.school }}
       </div>
@@ -42,7 +34,7 @@
 </template>
 
 <script>
-import { mixinAuth } from 'src/mixin/Mixins'
+import { mixinAuth } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'Info',

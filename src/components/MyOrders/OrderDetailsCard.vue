@@ -1,20 +1,12 @@
 <template>
-  <q-expansion-item
-    v-model="modal"
-  >
-    <div
-      class="order-details-container-card"
-    >
+  <q-expansion-item v-model="modal">
+    <div class="order-details-container-card">
       <q-card class="order-details-card">
         <div>
-          <q-card-section
-            v-if="order.orderItems.list && order.orderItems.list.length > 0 "
-            class="products"
-          >
-            <div
-              v-for="(orderItem, index) in order.orderItems.list"
-              :key="index"
-            >
+          <q-card-section v-if="order.orderItems.list && order.orderItems.list.length > 0 "
+                          class="products">
+            <div v-for="(orderItem, index) in order.orderItems.list"
+                 :key="index">
               <ordered-products :ordered-item="orderItem" />
             </div>
           </q-card-section>
@@ -25,9 +17,9 @@
 </template>
 
 <script>
-import OrderedProducts from 'components/MyOrders/OrderedProducts'
-import { Order } from 'src/models/Order'
 import moment from 'moment-jalaali'
+import { Order } from 'src/models/Order.js'
+import OrderedProducts from 'src/components/MyOrders/OrderedProducts.vue'
 
 export default {
   name: 'OrderDetailsCard',

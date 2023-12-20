@@ -1,59 +1,46 @@
 <template>
   <div class="create-exam-panel">
     <div class="exam-create-panel">
-      <steps
-        v-model:currentComponent="currentTab"
-        @currentStepChanged = "changeTab"
-      />
-      <q-tab-panels
-        v-model="currentTab"
-        animated
-      >
+      <steps v-model:currentComponent="currentTab"
+             @currentStepChanged = "changeTab" />
+      <q-tab-panels v-model="currentTab"
+                    animated>
         <q-tab-panel name="createPage">
           <exam-info-tab ref="createExam"
                          v-model:exam="draftExam"
                          :gradesList="gradesList"
                          :majorList="majorList"
-                         @nextTab="goToNextStep"
-          />
+                         @nextTab="goToNextStep" />
         </q-tab-panel>
         <q-tab-panel name="chooseQuestion">
-          <question-selection-tab
-            v-model:lesson="exam.temp.lesson"
-            v-model:exam="exam"
-            :questionLoading="exam.questions.loading"
-            @nextTab="goToNextStep"
-            @lastTab="goToLastStep"
-            @addQuestionToExam="addQuestionToExam"
-            @deleteQuestionFromExam="deleteQuestionFromExam"
-          />
+          <question-selection-tab v-model:lesson="exam.temp.lesson"
+                                  v-model:exam="exam"
+                                  :questionLoading="exam.questions.loading"
+                                  @nextTab="goToNextStep"
+                                  @lastTab="goToLastStep"
+                                  @addQuestionToExam="addQuestionToExam"
+                                  @deleteQuestionFromExam="deleteQuestionFromExam" />
         </q-tab-panel>
         <q-tab-panel name="finalApproval">
           <!--          deleteQuestionFromExam-->
-          <final-approval-tab
-            v-model:exam="exam"
-            :majors="majorList"
-            :grades="gradesList"
-            @detachQuestion="bulkDetachLastStep"
-            @updateOrders="updateQuestionOrder"
-            @creatFinalExam="submitFinalExam"
-            @goToNextStep="goToNextStep"
-          />
+          <final-approval-tab v-model:exam="exam"
+                              :majors="majorList"
+                              :grades="gradesList"
+                              @detachQuestion="bulkDetachLastStep"
+                              @updateOrders="updateQuestionOrder"
+                              @creatFinalExam="submitFinalExam"
+                              @goToNextStep="goToNextStep" />
         </q-tab-panel>
       </q-tab-panels>
       <q-dialog v-model="createDraftExamMessageDialog">
-        <q-card
-          flat
-          class="report-problem-dialog"
-        >
-          <q-btn
-            v-close-popup
-            flat
-            round
-            dense
-            icon="close"
-            class="close-btn"
-          />
+        <q-card flat
+                class="report-problem-dialog">
+          <q-btn v-close-popup
+                 flat
+                 round
+                 dense
+                 icon="close"
+                 class="close-btn" />
           <q-card-section class="problem-type no-padding">
             <q-icon name="isax:tick-circle"
                     size="110px" />
@@ -61,12 +48,10 @@
                  style="padding-bottom: 20px">
               آزمون شما با موفقیت ثبت شد
             </div>
-            <q-btn
-              unelevated
-              color="primary"
-              class="btn-lg final-btn"
-              :to="{name :'Admin.Exam.Index'}"
-            >
+            <q-btn unelevated
+                   color="primary"
+                   class="btn-lg final-btn"
+                   :to="{name :'Admin.Exam.Index'}">
               رفتن به صفحه لیست آزمون
             </q-btn>
           </q-card-section>
@@ -98,13 +83,12 @@
 </template>
 
 <script>
-import { Exam } from 'src/models/Exam'
-import Steps from 'pages/Admin/exam/Create/Steps'
-import ExamInfoTab from 'components/CommonComponents/Exam/Create/ExamInfoTab/ExamInfoTab'
-import FinalApprovalTab from 'components/CommonComponents/Exam/Create/FinalApprovalTab/FinalApprovalTab'
-import API_ADDRESS from 'src/api/Addresses'
-import QuestionSelectionTab from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionSelectionTab'
-import mixinTree from 'src/mixin/Tree'
+import { Exam } from 'src/models/Exam.js'
+import mixinTree from 'src/mixin/Tree.js'
+import Steps from 'src/pages/Admin/exam/Create/Steps.vue'
+import ExamInfoTab from 'src/components/CommonComponents/Exam/Create/ExamInfoTab/ExamInfoTab.vue'
+import FinalApprovalTab from 'src/components/CommonComponents/Exam/Create/FinalApprovalTab/FinalApprovalTab.vue'
+import QuestionSelectionTab from 'src/components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionSelectionTab.vue'
 
 export default {
   name: 'tabPanel',
@@ -114,14 +98,14 @@ export default {
     ExamInfoTab,
     Steps
   },
+  mixins: [
+    mixinTree
+  ],
   props: {
     userRule: {
       type: String
     }
   },
-  mixins: [
-    mixinTree
-  ],
   data() {
     return {
       draftExam: new Exam(),
@@ -148,21 +132,18 @@ export default {
     getData () {
       this.getOptions()
         .then(() => {
-          this.getDraftExam()
-            .then((response) => {
+          this.$apiGateway.exam.user.getUserDraftExam()
+            .then((draftExam) => {
               // ToDo: must check
-              if (!response.data?.data) {
+              if (!draftExam) {
                 return
               }
               this.continueWithOldDraftExamConfirmationDialog = true
-              this.loadDraftExam(response.data.data)
+              this.loadDraftExam(draftExam)
             })
             .catch(() => {
             })
         })
-    },
-    getDraftExam () {
-      return this.$axios.get(API_ADDRESS.exam.user.draft())
     },
     getOptions () {
       return Promise.all([
@@ -182,8 +163,8 @@ export default {
     },
     createAndLoadNewDraftExam () {
       this.createExam(this.draftExam)
-        .then(response => {
-          this.draftExam = new Exam(response.data.data)
+        .then(exam => {
+          this.draftExam = new Exam(exam)
         })
         .catch(() => {
 
@@ -222,10 +203,10 @@ export default {
         error = true
         messages.push('رشته آزمون مشخص نشده است.')
       }
-      if (!this.draftExam.temp.grade) {
-        error = true
-        messages.push('پایه آزمون مشخص نشده است.')
-      }
+      // if (!this.draftExam.temp.grade) {
+      //   error = true
+      //   messages.push('پایه آزمون مشخص نشده است.')
+      // }
 
       return { error, messages }
     },
@@ -240,10 +221,10 @@ export default {
         error = true
         messages.push('رشته آزمون مشخص نشده است.')
       }
-      if (!this.draftExam.temp.grade) {
-        error = true
-        messages.push('پایه آزمون مشخص نشده است.')
-      }
+      // if (!this.draftExam.temp.grade) {
+      //   error = true
+      //   messages.push('پایه آزمون مشخص نشده است.')
+      // }
 
       return { error, messages }
     },
@@ -258,10 +239,10 @@ export default {
         error = true
         messages.push('رشته آزمون مشخص نشده است.')
       }
-      if (!this.draftExam.temp.grade) {
-        error = true
-        messages.push('پایه آزمون مشخص نشده است.')
-      }
+      // if (!this.draftExam.temp.grade) {
+      //   error = true
+      //   messages.push('پایه آزمون مشخص نشده است.')
+      // }
 
       return { error, messages }
     },
@@ -276,7 +257,7 @@ export default {
       const hasOldDraftExam = !!this.draftExam.id
       if (hasOldDraftExam) {
         this.updateExam()
-          .then(response => {
+          .then(exam => {
             this.draftExam.loading = false
             this.currentTab = nextStep
           })
@@ -285,8 +266,8 @@ export default {
           })
       } else {
         this.createExam()
-          .then(response => {
-            this.loadDraftExam(response.data.data)
+          .then(exam => {
+            this.loadDraftExam(exam)
             this.currentTab = nextStep
             this.draftExam.loading = false
           })
@@ -308,17 +289,20 @@ export default {
     },
     createExam () {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.create, this.draftExam)
+      return this.$apiGateway.exam.userDraftExamCreate(this.draftExam)
     },
     updateExam (params) {
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.update(this.draftExam.id), this.draftExam)
+      return this.$apiGateway.exam.userDraftExamUpdate({
+        examId: this.draftExam.id,
+        data: this.draftExam
+      })
     },
 
     loadAttachedQuestions () {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.getAttachedQuestions(this.draftExam.id))
-        .then((response) => {
-          this.draftExam.questions.add(response.data.data)
+      return this.$apiGateway.exam.userDraftExamGetAttachedQuestions(this.draftExam.id)
+        .then((questionList) => {
+          this.draftExam.questions.add(questionList.list)
           this.draftExam.loading = false
         })
         .catch(() => {
@@ -327,13 +311,15 @@ export default {
     },
     addQuestionsToExam(questions) {
       this.draftExam.loading = true
-      return this.$axios.post(API_ADDRESS.exam.user.draftExam.bulkAttachQuestions(this.draftExam.id),
-        this.draftExam.questions.list.map(question => {
+      return this.$apiGateway.exam.userDraftExamBulkAttachQuestions({
+        examId: this.draftExam.id,
+        data: this.draftExam.questions.list.map(question => {
           return {
             question_id: question.id,
             order: question.order
           }
-        }))
+        })
+      })
         .then(() => {
           this.loadAttachedQuestions()
           this.draftExam.loading = false
@@ -374,8 +360,8 @@ export default {
     },
     setFinalStep() {
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-      this.createExam().then((createExam) => {
-        this.exam = new Exam(createExam.data.data)
+      this.createExam().then((exam) => {
+        this.exam = new Exam(exam)
         // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         this.createDraftExamMessageDialog = true
       }).catch(err => {
@@ -443,12 +429,6 @@ export default {
         this.showMessagesInNotify(messages)
       }
     },
-    createExammm() {
-      this.$axios.get(API_ADDRESS.exam.user.create)
-        .then((response) => {
-          this.exam = new Exam(response.data.data)
-        })
-    },
     getGradesList () {
       return new Promise((resolve, reject) => {
         this.getRootNode('test')
@@ -462,10 +442,10 @@ export default {
     },
     loadMajorList () {
       return new Promise((resolve, reject) => {
-        this.$axios.get(API_ADDRESS.option.user('major_type'))
-          .then((response) => {
-            this.majorList = response.data.data
-            resolve(response)
+        this.$apiGateway.option.getUserOptions('major_type')
+          .then((options) => {
+            this.majorList = options
+            resolve(options)
           }).catch(() => {
             reject()
           })
@@ -481,7 +461,10 @@ export default {
     async updateQuestionOrder(data) {
       this.exam.questions.loading = true
       try {
-        await this.$axios.post(API_ADDRESS.exam.user.updateOrders('633aed8b3b8e23f84807cca2'), data)
+        await this.$apiGateway.exam.userUpdateOrders({
+          examId: '633aed8b3b8e23f84807cca2',
+          data
+        })
         // console.log('response update exam :', response)
         this.exam.questions.loading = false
       } catch (e) {
@@ -491,7 +474,10 @@ export default {
     async bulkDetachLastStep(data) {
       this.exam.questions.loading = true
       try {
-        await this.$axios.post(API_ADDRESS.exam.user.detachBulk('633aed8b3b8e23f84807cca2'), data)
+        await this.$apiGateway.exam.userDetachBulk({
+          examId: '633aed8b3b8e23f84807cca2',
+          data
+        })
         // console.log('response bulkDetachLastStep:', response)
         this.exam.questions.loading = false
       } catch (e) {

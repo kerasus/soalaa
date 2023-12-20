@@ -2,10 +2,8 @@
   <div class="main-log-item">
     <div class="row log-item">
       <div class="col-md-4 col-xs-12 log-item-right-side">
-        <q-avatar
-          class="log-item-avatar"
-          size="24px"
-        >
+        <q-avatar class="log-item-avatar"
+                  size="24px">
           <img :src="log.causer.photo">
           <!--          <img src="https://cdn.quasar.dev/img/avatar.png">-->
         </q-avatar>
@@ -25,38 +23,30 @@
         </span>
       </div>
       <div class="col-6 log-btn-box">
-        <q-btn
-          v-if="(log.properties.new.descriptive_answer || log.properties.new.statement) && mode ==='edit'"
-          icon="history"
-          class="icon-type log-comment-btn"
-          flat
-          @click="restoreQuestion"
-        >
+        <q-btn v-if="(log.properties.new.descriptive_answer || log.properties.new.statement) && mode ==='edit'"
+               icon="history"
+               class="icon-type log-comment-btn"
+               flat
+               @click="restoreQuestion">
           <q-tooltip anchor="top middle"
                      self="bottom middle">
             بازگردانی سوال به این تغییرات
           </q-tooltip>
         </q-btn>
-        <q-btn
-          v-if="true"
-          icon="add_comment"
-          class="icon-type log-comment-btn"
-          flat
-          @click="addComment"
-        />
-        <q-btn
-          v-if="true"
-          icon="more_horiz"
-          class="icon-type log-comment-btn"
-          flat
-        />
+        <q-btn v-if="true"
+               icon="add_comment"
+               class="icon-type log-comment-btn"
+               flat
+               @click="addComment" />
+        <q-btn v-if="true"
+               icon="more_horiz"
+               class="icon-type log-comment-btn"
+               flat />
       </div>
       <div class="col-12 log-actions">
         <ul class="actions-list">
-          <li
-            v-if="log.log_status.actions.message"
-            class="actions-list-item"
-          >
+          <li v-if="log.log_status.actions.message"
+              class="actions-list-item">
             {{ log.log_status.actions.message }}
           </li>
         </ul>
@@ -68,7 +58,7 @@
 </template>
 
 <script>
-import { Log } from 'src/models/Log'
+import { Log } from 'src/models/Log.js'
 
 export default {
   name: 'LogItem',

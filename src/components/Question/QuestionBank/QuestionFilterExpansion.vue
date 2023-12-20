@@ -2,10 +2,8 @@
   <div class="filter-options-section">
     <q-card class="custom-card q-pa-none">
       <q-card-section class="q-pa-none">
-        <q-expansion-item
-          group="somegroup"
-          expand-icon="isax:arrow-down-1"
-        >
+        <q-expansion-item group="somegroup"
+                          expand-icon="isax:arrow-down-1">
           <template v-slot:header>
             <div class="filter-option-container">
               <div class="filter-option-title">
@@ -16,26 +14,20 @@
           <slot />
         </q-expansion-item>
       </q-card-section>
-      <q-inner-loading
-        :showing="loading"
-        label="کمی صبر کنید..."
-        label-class="text-teal"
-        label-style="font-size: 1.1em"
-      />
+      <q-inner-loading :showing="loading"
+                       label="کمی صبر کنید..."
+                       label-class="text-teal"
+                       label-style="font-size: 1.1em" />
     </q-card>
   </div>
 </template>
 
 <script>
-
-import { mixinTree } from 'src/mixin/Mixins'
+import { mixinTree } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'QuestionFilterExpansion',
-  data () {
-    return {
-    }
-  },
+  mixins: [mixinTree],
   props: {
     loading: {
       type: Boolean,
@@ -46,12 +38,15 @@ export default {
       default: ''
     }
   },
-  mixins: [mixinTree],
+  data () {
+    return {
+    }
+  },
+  computed: {
+  },
   created () {
   },
   updated () {
-  },
-  computed: {
   },
   methods: {
     closeExpansion() {

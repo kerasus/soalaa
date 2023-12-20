@@ -3,10 +3,8 @@
           class="login-card">
     <div v-if="loadingList"
          class="text-center">
-      <q-spinner-ball
-        color="primary"
-        size="5em"
-      />
+      <q-spinner-ball color="primary"
+                      size="5em" />
     </div>
     <div v-else>
       <div class="header">
@@ -16,31 +14,26 @@
         <div class="label">
           شماره همراه
         </div>
-        <q-input
-          ref="userName"
-          v-model="username"
-          bottom-slots
-          hide-bottom-space
-          autocomplete="off"
-          onfocus="this.removeAttribute('readonly');"
-          name="userName"
-          placeholder=" - - - - - - - - - 09"
-          @keydown.enter="getEnter('pass')"
-        >
-        </q-input>
+        <q-input ref="userName"
+                 v-model="username"
+                 bottom-slots
+                 hide-bottom-space
+                 autocomplete="off"
+                 onfocus="this.removeAttribute('readonly');"
+                 name="userName"
+                 placeholder=" - - - - - - - - - 09"
+                 @keydown.enter="getEnter('pass')" />
       </div>
       <div class="national-code">
         <div class="label">
           کد ملی
         </div>
-        <q-input
-          ref="pass"
-          v-model="password"
-          name="pass"
-          hide-bottom-space
-          type="password"
-          @keydown.enter="login">
-        </q-input>
+        <q-input ref="pass"
+                 v-model="password"
+                 name="pass"
+                 hide-bottom-space
+                 type="password"
+                 @keydown.enter="login" />
       </div>
       <q-btn class="full-width login-btn"
              unelevated
@@ -48,12 +41,11 @@
              label="ثبت نام / ورود"
              @click="login" />
     </div>
-
   </q-card>
 </template>
 
 <script>
-import { mixinAuth } from 'src/mixin/Mixins'
+import { mixinAuth } from 'src/mixin/Mixins.js'
 export default {
   name: 'Auth',
   mixins: [mixinAuth],

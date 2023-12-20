@@ -14,70 +14,58 @@
                           {label: 'نمایش همه', value:'not-filtered'},
                           {label: ' کلا تایید نشده', value:'not-confirmed-at-all'},
                           {label: 'من تایید نکردم', value:'not-confirmed-by-me'}
-                        ]"
-          />
+                        ]" />
           <q-btn v-if="false"
                  round
                  color="primary"
                  unelevated
                  icon="isax:printer"
-                 @click="printQuestions"
-          />
+                 @click="printQuestions" />
         </div>
         <div class="col-4 flex justify-end">
           <div class="search-box q-pr-md">
             <div>
-              <q-input
-                v-model="searchedQuestionOrder"
-                type="number"
-                outlined
-                dense
-                label="شماره سوال"
-                @keydown.enter="paginateToQuestion"
-              >
+              <q-input v-model="searchedQuestionOrder"
+                       type="number"
+                       outlined
+                       dense
+                       label="شماره سوال"
+                       @keydown.enter="paginateToQuestion">
                 <template v-slot:append>
                   <div @click="paginateToQuestion">
-                    <i class="fi fi-rr-search search-icon cursor-pointer"></i>
+                    <i class="fi fi-rr-search search-icon cursor-pointer" />
                   </div>
                 </template>
               </q-input>
             </div>
             <i class="fi fi-rr-refresh refresh-icon cursor-pointer q-ml-md"
-               @click="reload"
-            />
+               @click="reload" />
           </div>
-          <q-btn
-            round
-            color="primary"
-            unelevated
-            @click="this.$router.go(-1)"
-          >
+          <q-btn round
+                 color="primary"
+                 unelevated
+                 @click="this.$router.go(-1)">
             <i class="fi-rr-angle-left row" />
           </q-btn>
         </div>
       </div>
     </q-card>
-    <div  v-if="pageLoading"
-          class="text-center ">
-      <q-spinner-ball
-        class="q-my-xl"
-        color="primary"
-        size="5em"
-      />
+    <div v-if="pageLoading"
+         class="text-center ">
+      <q-spinner-ball class="q-my-xl"
+                      color="primary"
+                      size="5em" />
     </div>
     <template v-else>
-      <q-virtual-scroll
-        ref="scroller"
-        :key="questionListKey"
-        class="konkoor-view-scroll q-pa-md q-mt-md"
-        :items="filteredQuestions"
-        @virtual-scroll="onScroll"
-      >
+      <q-virtual-scroll ref="scroller"
+                        :key="questionListKey"
+                        class="konkoor-view-scroll q-pa-md q-mt-md"
+                        :items="filteredQuestions"
+                        @virtual-scroll="onScroll">
         <template v-slot="{ item, index }">
           <q-item :key="index"
                   class="question-field no-padding q-mb-md"
-                  dense
-          >
+                  dense>
             <q-item-section class="no-wrap">
               <!--            :sub-category="quizData.sub_categories"-->
               <!--            :exam-id="$route.params.quizId"-->
@@ -92,35 +80,33 @@
                              @deleteFromExam="detachQuestion"
                              @deleteFromDb="deleteQuestion"
                              @copyIdToClipboard="copyIdToClipboard"
-                             @confirmQuestion="confirmQuestion"
-              />
+                             @confirmQuestion="confirmQuestion" />
             </q-item-section>
           </q-item>
         </template>
       </q-virtual-scroll>
     </template>
     <div class="pagination">
-      <pagination
-        :key="paginationKey"
-        :meta="paginationMeta"
-        :disable="pageLoading"
-        @updateCurrentPage="updateQuizData"
-      />
+      <pagination :key="paginationKey"
+                  :meta="paginationMeta"
+                  :disable="pageLoading"
+                  @updateCurrentPage="updateQuizData" />
     </div>
 
   </div>
 </template>
 
 <script>
-import Question from 'src/components/QuizEditor/Question'
-import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { QuestionList } from 'src/models/Question'
-import { Exam } from 'src/models/Exam'
-import API_ADDRESS from 'src/api/Addresses'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { copyToClipboard } from 'quasar'
-import Pagination from 'components/Question/QuestionBank/Pagination'
+import { Exam } from 'src/models/Exam.js'
+import { APIGateway } from 'src/api/APIGateway.js'
+import { QuestionList } from 'src/models/Question.js'
+import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
+import Question from 'src/components/QuizEditor/Question.vue'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import Pagination from 'src/components/Question/QuestionBank/Pagination.vue'
+import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
+
 export default {
   name: 'SubCategoryQuestions',
   components: {
@@ -182,9 +168,6 @@ export default {
       paginationKey: 0
     }
   },
-  created () {
-    this.loadQuizDataAndSubCategories(false, this.$route.params.page)
-  },
   computed: {
     filteredQuestions () {
       this.quizData.questions.list.forEach((item, index) => {
@@ -206,6 +189,9 @@ export default {
       return this.$route.params.exam_id
     }
   },
+  created () {
+    this.loadQuizDataAndSubCategories(false, this.$route.params.page)
+  },
   methods: {
     printQuestions () {
       const routeData = this.$router.resolve({ name: 'Admin.Exam.Lessons.PrintQuestions', params: { quizId: this.$route.params.exam_id, lessonId: this.$route.params.subcategory_id } })
@@ -220,9 +206,9 @@ export default {
     },
     async confirmUser (question) {
       try {
-        const response = await this.sendConfirmReq(question)
-        question.confirmed = response.data.data.confirmed
-        question.confirmers = response.data.data.confirmers
+        const confirmedAndConfirmers = await this.sendConfirmReq(question)
+        question.confirmed = confirmedAndConfirmers.confirmed
+        question.confirmers = confirmedAndConfirmers.confirmers
         this.confirmLoading = false
       } catch (e) {
         question.confirmed = !question.confirmed
@@ -231,9 +217,9 @@ export default {
     },
     async unConfirmUser (question) {
       try {
-        const response = await this.sendUnConfirmReq(question)
-        question.confirmed = response.data.data.confirmed
-        question.confirmers = response.data.data.confirmers
+        const confirmedAndConfirmers = await this.sendUnConfirmReq(question)
+        question.confirmed = confirmedAndConfirmers.confirmed
+        question.confirmers = confirmedAndConfirmers.confirmers
         this.confirmLoading = false
       } catch (e) {
         question.confirmed = !question.confirmed
@@ -241,10 +227,10 @@ export default {
       }
     },
     sendUnConfirmReq (question) {
-      return this.$axios.get(API_ADDRESS.question.unconfirm(question.id))
+      return this.$apiGateway.question.unconfirm(question.id)
     },
     sendConfirmReq (question) {
-      return this.$axios.get(API_ADDRESS.question.confirm(question.id))
+      return this.$apiGateway.question.confirm(question.id)
     },
     paginateToQuestion () {
       if (this.paginationMeta.per_page === 0) {
@@ -289,50 +275,58 @@ export default {
           }
         })
       }
-      try {
-        const response = await this.getQuizDataAndSubCategories(pageNumber)
-        if (response.data.data.length) {
-          this.paginationMeta = response.data.meta
-          // this.paginationKey++
-          this.firstQuestionOrder = response.data.data[0].order
-          this.loadSubCategories(response, reload, callback)
+
+      this.getQuizDataAndSubCategories(pageNumber)
+        .then(({ data, meta }) => {
+          if (data.list.length) {
+            this.paginationMeta = meta
+            // this.paginationKey++
+            this.firstQuestionOrder = data.list[0].order
+            this.loadSubCategories(data, reload, callback)
+            this.pageLoading = false
+          } else {
+            // this.$router.push({ name: 'Admin.Exam.Index' })
+            this.$q.notify({
+              type: 'negative',
+              message: 'دیتای مورد نظر یافت نشد'
+            })
+          }
           this.pageLoading = false
-        } else {
-          // this.$router.push({ name: 'Admin.Exam.Index' })
-          this.$q.notify({
-            type: 'negative',
-            message: 'دیتای مورد نظر یافت نشد'
-          })
-        }
-        this.pageLoading = false
-      } catch (e) {
-        console.error('err ', e)
-        this.pageLoading = false
-      }
+        })
+        .catch(() => {
+          this.pageLoading = false
+        })
     },
     getQuizDataAndSubCategories (pageNumber) {
-      return this.$axios.post(API_ADDRESS.exam.examQuestion(this.examId, pageNumber), {
-        sub_categories: [this.$route.params.subcategory_id]
+      return APIGateway.exam.examQuestion({
+        examId: this.examId,
+        page: pageNumber,
+        data: {
+          sub_categories: [this.$route.params.subcategory_id]
+        }
       })
     },
     loadSubCategories (quizResponse, reload, callback) {
       const that = this
-      this.$axios.get(API_ADDRESS.questionSubcategory.base)
-        .then((response) => {
+      APIGateway.questionSubcategory.get()
+        .then((questSubCategoryList) => {
           if (reload) {
             that.$q.notify({
               message: 'اطلاعات بروزرسانی شد.',
               type: 'positive'
             })
           }
-          that.quizData.sub_categories = new QuestSubcategoryList(response.data.data)
-          const questions = quizResponse.data.data
+          that.quizData.sub_categories = new QuestSubcategoryList(questSubCategoryList)
+          const questions = quizResponse
           that.sortQuestions(questions)
           that.quizData.questions = new QuestionList(questions)
           this.questionListKey = Date.now()
           if (typeof callback === 'function') {
-            callback(response)
+            callback(questSubCategoryList)
           }
+        })
+        .catch(() => {
+
         })
     },
     scrollTo (questionId, questionNumber) {
@@ -429,7 +423,9 @@ export default {
       })
     },
     deleteQuestionReq (questionId) {
-      return this.$axios.delete(API_ADDRESS.question.delete(questionId))
+      return this.$apiGateway.question.delete({
+        questionId
+      })
     },
     detachQuestion (question) {
       this.$store.dispatch('AppLayout/showConfirmDialog', {
@@ -460,11 +456,14 @@ export default {
       })
     },
     detachQuestionReq (questionId) {
-      return this.$axios.post(API_ADDRESS.question.detach(questionId), {
-        detaches: [{
-          exam_id: this.examId,
-          sub_category_id: this.$route.params.subcategory_id
-        }]
+      return this.$apiGateway.question.detach({
+        questionId,
+        data: {
+          exams: [{
+            exam_id: this.examId,
+            sub_category_id: this.$route.params.subcategory_id
+          }]
+        }
       })
     },
     closeConfirmModal () {

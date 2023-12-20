@@ -18,36 +18,24 @@
         </router-link>
       </div>
     </div>
-    <q-list
-      class="side-menu-list"
-      padding
-      dark
-    >
-      <q-expansion-item
-        class="side-expansion-list top-expansion"
-        :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
-        label="برنامه ی آزمون ها"
-        dark
-      >
-        <q-list
-          class="list-expansion"
-          padding
-        >
-          <div
-            v-for="(examPlan, index) in examsPlan"
-            :key="index"
-          >
-            <a
-              v-if="!examPlan.divider"
-              :href="examPlan.link"
-              target="_blank"
-            >
-              <q-item
-                v-ripple:deep-purple
-                clickable
-                :active="false"
-                active-class="active-route"
-              >
+    <q-list class="side-menu-list"
+            padding
+            dark>
+      <q-expansion-item class="side-expansion-list top-expansion"
+                        :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
+                        label="برنامه ی آزمون ها"
+                        dark>
+        <q-list class="list-expansion"
+                padding>
+          <div v-for="(examPlan, index) in examsPlan"
+               :key="index">
+            <a v-if="!examPlan.divider"
+               :href="examPlan.link"
+               target="_blank">
+              <q-item v-ripple:deep-purple
+                      clickable
+                      :active="false"
+                      active-class="active-route">
                 <q-item-section class="item-list-expansion">
                   <span class="item-list-expansion-title">
                     {{ examPlan.name }}
@@ -55,49 +43,37 @@
                 </q-item-section>
               </q-item>
             </a>
-            <q-separator
-              v-else
-              class="top-expansion-separator"
-              size="2px"
-              dark
-            />
+            <q-separator v-else
+                         class="top-expansion-separator"
+                         size="2px"
+                         dark />
           </div>
         </q-list>
       </q-expansion-item>
       <q-separator class="top-separator"
                    size="2px"
                    dark />
-      <div
-        v-for="(item , index) in titlesList"
-        :key="index"
-      >
-        <div
-          v-if="showMenuItem(item)"
-        >
-          <q-expansion-item
-            v-if="item.title === 'ویرایش صفحه' && this.$route.name === 'HomePage'"
-            :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
-            :label="item.title"
-            :icon="item.icon"
-            class="side-expansion-list"
-            dark
-          >
+      <div v-for="(item , index) in titlesList"
+           :key="index">
+        <div v-if="showMenuItem(item)">
+          <q-expansion-item v-if="item.title === 'ویرایش صفحه' && this.$route.name === 'HomePage'"
+                            :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
+                            :label="item.title"
+                            :icon="item.icon"
+                            class="side-expansion-list"
+                            dark>
             <div class="expansion-body">
               <q-separator dark
                            size="2px"
                            vertical
                            class="vertical-separator" />
               <q-list class="list-expansion">
-                <q-item
-                  v-for="(subItem , i) in item.children"
-                  :key="i"
-                  class="list-child-item"
-                  exact-active-class="active-route"
-                >
-                  <q-item-section
-                    class="list-child-section"
-                    @click="editPage(subItem.name)"
-                  >
+                <q-item v-for="(subItem , i) in item.children"
+                        :key="i"
+                        class="list-child-item"
+                        exact-active-class="active-route">
+                  <q-item-section class="list-child-section"
+                                  @click="editPage(subItem.name)">
                     {{ subItem.displayName }}
                   </q-item-section>
                   <span class="indicator" />
@@ -106,30 +82,24 @@
             </div>
           </q-expansion-item>
 
-          <q-expansion-item
-            v-if="item.children.length && item.title !== 'ویرایش صفحه'"
-            :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
-            :label="item.title"
-            :icon="item.icon"
-            class="side-expansion-list"
-            dark
-          >
+          <q-expansion-item v-if="item.children.length && item.title !== 'ویرایش صفحه'"
+                            :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
+                            :label="item.title"
+                            :icon="item.icon"
+                            class="side-expansion-list"
+                            dark>
             <div class="expansion-body">
               <q-separator dark
                            size="2px"
                            vertical
                            class="vertical-separator" />
               <q-list class="list-expansion">
-                <q-item
-                  v-for="(subItem , i) in item.children"
-                  :key="i"
-                  :to="{ name: subItem.routeName, params: subItem.params }"
-                  class="list-child-item"
-                  exact-active-class="active-route"
-                >
-                  <q-item-section
-                    class="list-child-section"
-                  >
+                <q-item v-for="(subItem , i) in item.children"
+                        :key="i"
+                        :to="{ name: subItem.routeName, params: subItem.params }"
+                        class="list-child-item"
+                        exact-active-class="active-route">
+                  <q-item-section class="list-child-section">
                     {{ subItem.displayName }}
                   </q-item-section>
                   <span class="indicator" />
@@ -137,14 +107,12 @@
               </q-list>
             </div>
           </q-expansion-item>
-          <q-item
-            v-else-if="item.title !== 'ویرایش صفحه'"
-            v-model="clickedItem"
-            :to="(item.routeName) ? {name: item.routeName} : null"
-            class="item-list"
-            :class="{ 'alone-item': !item.children.length}"
-            exact-active-class="active-route"
-          >
+          <q-item v-else-if="item.title !== 'ویرایش صفحه'"
+                  v-model="clickedItem"
+                  :to="(item.routeName) ? {name: item.routeName} : null"
+                  class="item-list"
+                  :class="{ 'alone-item': !item.children.length}"
+                  exact-active-class="active-route">
             <div class="section-title">
               <q-item-section class="list-section title-icon"
                               avatar>
@@ -173,13 +141,13 @@
 </template>
 
 <script>
-
-import { User } from 'src/models/User'
+import { User } from 'src/models/User.js'
 export default {
   name: 'SideMenu-dashboard',
   data () {
     return {
       clickedItem: null,
+      user: new User(),
       titlesList: [
         {
           title: 'صفحه اصلی',
@@ -303,7 +271,7 @@ export default {
           title: 'درخت تگ موضوعی',
           icon: 'isax:tree',
           permission: 'examStore',
-          routeName: 'Admin.SubjectTree',
+          routeName: 'Admin.SubjectTree.tree',
           active: false,
           children: []
         },
@@ -397,7 +365,20 @@ export default {
       ]
     }
   },
+  computed: {
+    showMenuItem () {
+      return (item) => {
+        return (item.permission === 'all' || this.user.hasPermission(item.permission))
+      }
+    }
+  },
+  mounted () {
+    this.loadAuthData()
+  },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+    },
     logOut () {
       this.$store.dispatch('Auth/logOut')
         .then(() => {
@@ -421,19 +402,6 @@ export default {
         const initialSections = this.$store.getters['PageBuilder/initialSections']
         this.$store.commit('PageBuilder/updateCurrentSections', initialSections)
         this.togglePageBuilderEditable()
-      }
-    }
-  },
-  computed: {
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    },
-    showMenuItem () {
-      return (item) => {
-        return (item.permission === 'all' || this.user.hasPermission(item.permission))
       }
     }
   }

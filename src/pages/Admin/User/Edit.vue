@@ -1,18 +1,16 @@
 <template>
-  <entity-edit
-    ref="entityEdit"
-    v-model:value="inputs"
-    title="ویرایش اطلاعات کاربر"
-    :api="api"
-    :entity-id-key="entityIdKey"
-    :entity-param-key="entityParamKey"
-    :show-route-name="showRouteName"
-  />
+  <entity-edit ref="entityEdit"
+               v-model:value="inputs"
+               title="ویرایش اطلاعات کاربر"
+               :api="api"
+               :entity-id-key="entityIdKey"
+               :entity-param-key="entityParamKey"
+               :show-route-name="showRouteName" />
 </template>
 
 <script>
 import { EntityEdit } from 'quasar-crud'
-// import API_ADDRESS from "src/api/Addresses";
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Edit',
@@ -21,7 +19,7 @@ export default {
     return {
       expanded: true,
       potentialDatesLoading: false,
-      // api: API_ADDRESS.user.base,
+      api: APIGateway.user.APIAdresses.base,
       entityIdKey: 'id',
       entityParamKey: 'id',
       showRouteName: 'Admin.User.Show',

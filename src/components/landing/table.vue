@@ -13,14 +13,12 @@
                     class="select-1 dropdown-btn q-mr-md">
             <template v-slot:selected>
               <span class="custom-label-prefix"> مقطع تحصیلی: </span>
-              <q-chip
-                v-if="model"
-                dense
-                square
-                color="white"
-                text-color="primary"
-                class="q-my-none q-ml-xs q-mr-none"
-              >
+              <q-chip v-if="model"
+                      dense
+                      square
+                      color="white"
+                      text-color="primary"
+                      class="q-my-none q-ml-xs q-mr-none">
                 {{ model.label }}
               </q-chip>
             </template>
@@ -34,14 +32,12 @@
                     class="select-2 dropdown-btn">
             <template v-slot:selected>
               <span class="custom-label-prefix"> رشته تحصیلی: </span>
-              <q-chip
-                v-if="model"
-                dense
-                square
-                color="white"
-                text-color="primary"
-                class="q-my-none q-ml-xs q-mr-none"
-              >
+              <q-chip v-if="model"
+                      dense
+                      square
+                      color="white"
+                      text-color="primary"
+                      class="q-my-none q-ml-xs q-mr-none">
                 {{ model.label }}
               </q-chip>
             </template>
@@ -82,8 +78,7 @@
         <div class="table-footer-container">
           <div class="pic-container">
             <q-img src="https://nodes.alaatv.com/upload/landing/3a/13.png"
-                   class="img">
-            </q-img>
+                   class="img" />
           </div>
           <div class="download-box">
             <div class="text-style">
@@ -151,14 +146,14 @@
 <script>
 export default {
   name: 'ExamTable',
-  data: () => ({
-
-  }),
   props: {
     tableData: {
       type: Array
     }
-  }
+  },
+  data: () => ({
+
+  })
 }
 </script>
 

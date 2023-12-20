@@ -12,26 +12,22 @@
                  color="primary"
                  @click="sendData" />
         </div>
-        <div
-          class="col col-md-5 col-12 default-result-table"
-        >
+        <div class="col col-md-5 col-12 default-result-table">
           <div class="row default-result-table default-resultTable-row">
             <div class="col default-resultTable-col">
               <span class="tableTitle col-12 q-pb-lg">
                 انتخاب کنکور
               </span>
-              <q-select
-                v-model="takhminRotbeExam"
-                option-value="id"
-                option-label="title"
-                :loading="takhminRotbeLoading"
-                :options="takhminRotbeExamList"
-                label-color="grey-8"
-                label="انتخاب نوع آزمون"
-                emit-value
-                map-options
-                @update:model-value="onTakhminRotbeExamChanged"
-              />
+              <q-select v-model="takhminRotbeExam"
+                        option-value="id"
+                        option-label="title"
+                        :loading="takhminRotbeLoading"
+                        :options="takhminRotbeExamList.list"
+                        label-color="grey-8"
+                        label="انتخاب نوع آزمون"
+                        emit-value
+                        map-options
+                        @update:model-value="onTakhminRotbeExamChanged" />
             </div>
           </div>
           <div class="col col-12 row default-resultTable-row">
@@ -65,16 +61,14 @@
               </span>
               <br>
               <br>
-              <q-table
-                :key="tableKey"
-                :rows="takhminReport.sub_category"
-                :columns="columns"
-                row-key="name"
-                color="amber"
-                hide-bottom
-                flat
-                :rows-per-page-options="[0]"
-              >
+              <q-table :key="tableKey"
+                       :rows="takhminReport.sub_category"
+                       :columns="columns"
+                       row-key="name"
+                       color="amber"
+                       hide-bottom
+                       flat
+                       :rows-per-page-options="[0]">
                 <template v-slot:body="props">
                   <q-tr :props="props">
                     <q-td key="sub_category"
@@ -83,14 +77,12 @@
                     </q-td>
                     <q-td key="percent"
                           :props="props">
-                      <q-input
-                        v-model="percents[props.row.sub_category_id]"
-                        type="number"
-                        :rules="[numberRule, percentRule]"
-                        dense
-                        autofocus
-                        @change="resetAnswerCount(props.row.sub_category_id)"
-                      />
+                      <q-input v-model="percents[props.row.sub_category_id]"
+                               type="number"
+                               :rules="[numberRule, percentRule]"
+                               dense
+                               autofocus
+                               @change="resetAnswerCount(props.row.sub_category_id)" />
                     </q-td>
                   </q-tr>
                 </template>
@@ -104,7 +96,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'NewTakhminRotbe',
   props: {
@@ -189,9 +180,9 @@ export default {
     },
     setTakhminRotbeExamList () {
       this.takhminRotbeLoading = true
-      this.$axios.get(API_ADDRESS.exam.report.takhminRotbeExamList)
-        .then(res => {
-          this.takhminRotbeExamList = res.data.data
+      this.$apiGateway.exam.report.takhminRotbeExamList()
+        .then(examList => {
+          this.takhminRotbeExamList = examList
           this.takhminRotbeLoading = false
         })
         .catch(() => {
@@ -275,11 +266,14 @@ export default {
           subcategoryId: keys[i]
         })
       }
-      this.$axios.post(API_ADDRESS.exam.konkurTakhminRotbe(this.takhminRotbeExam), {
-        percents: sentPercents
+      this.$apiGateway.exam.konkurTakhminRotbe({
+        examId: this.takhminRotbeExam,
+        data: {
+          percents: sentPercents
+        }
       })
-        .then(response => {
-          this.ranks = response.data.ranks
+        .then(ranks => {
+          this.ranks = ranks
         })
     }
   }

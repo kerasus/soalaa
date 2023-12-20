@@ -1,4 +1,4 @@
-import auth from './auth'
-import Permissions from './Permission'
+import Authenticated from './Authenticated.js'
+import Permissions from './Permission.js'
 
-export { auth, Permissions }
+export { Authenticated, Permissions }

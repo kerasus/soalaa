@@ -1,13 +1,11 @@
 <template>
-  <div
-    ref="shadow"
-    class="parent-fix"
-    :top-gap="topGap"
-    :bottom-gap="bottomGap"
-  >
+  <div ref="shadow"
+       class="parent-fix"
+       :top-gap="topGap"
+       :bottom-gap="bottomGap">
     <div ref="sticky"
          class="position-fix">
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>
@@ -15,6 +13,12 @@
 <script>
 export default {
   name: 'StickyBothSides',
+  inject: {
+    scrollInfo: {
+      from: 'scrollInfo',
+      default: {}
+    }
+  },
   props: {
     maxWidth: {
       type: Number,
@@ -29,12 +33,6 @@ export default {
       default: 15
     }
   },
-  inject: {
-    scrollInfo: {
-      from: 'scrollInfo',
-      default: {}
-    }
-  },
   data() {
     return {
       disableSticky: false,
@@ -44,15 +42,6 @@ export default {
       start: 0,
       previousPosition: 0
     }
-  },
-  mounted() {
-    this.windowWidth = window.innerWidth
-    window.addEventListener('resize', this.onResize)
-    this.getStartFixElementPosition()
-    this.stickyElementWidth = this.shadowElement.offsetWidth
-  },
-  beforeUnmount() {
-    window.removeEventListener('resize', this.onResize)
   },
   computed: {
     stickyElement() {
@@ -73,6 +62,15 @@ export default {
         this.stickyElement.style.position = 'static'
       }
     }
+  },
+  mounted() {
+    this.windowWidth = window.innerWidth
+    window.addEventListener('resize', this.onResize)
+    this.getStartFixElementPosition()
+    this.stickyElementWidth = this.shadowElement.offsetWidth
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.onResize)
   },
   methods: {
     onResize() {

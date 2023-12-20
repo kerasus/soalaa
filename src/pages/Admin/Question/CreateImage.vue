@@ -14,13 +14,11 @@
           <!--          />-->
         </span>
         <div class="action-buttons">
-          <q-btn
-            label="تایپ سوال"
-            color="primary"
-            class="change-type"
-            :to="{ name: 'Admin.Question.Create.Text.MultipleChoice' }"
-            unelevated
-          />
+          <q-btn label="تایپ سوال"
+                 color="primary"
+                 class="change-type"
+                 :to="{ name: 'Admin.Question.Create.Text.MultipleChoice' }"
+                 unelevated />
         </div>
       </div>
     </div>
@@ -38,52 +36,48 @@
     </div>
     <div class="relative-position">
       <div class="attach-btn row">
-        <question-identifier
-          ref="questionIdentifier"
-          editable
-          class="col-12"
-          :exams="examList"
-          :lessons="subCategoriesList"
-          :categories="categoryList"
-          :gradesList="gradesList"
-          :groups-list="lessonGroupList"
-          :lessons-list="lessonsList"
-          :major-list="majorList"
-          :authorship-dates-list="authorshipDatesList"
-          :question-authors-list="questionAuthorsList"
-          :question-target-list="questionTargetList"
-          :buffer="true"
-          @gradeSelected="getLessonsList"
-          @groupSelected="getLessonsList"
-          @attach="attachExam"
-          @detach="detachExam"
-          @tags-collected="setTagsOnCreate"
-        />
+        <question-identifier ref="questionIdentifier"
+                             editable
+                             class="col-12"
+                             :exams="examList"
+                             :lessons="subCategoriesList"
+                             :categories="categoryList"
+                             :gradesList="gradesList"
+                             :groups-list="lessonGroupList"
+                             :lessons-list="lessonsList"
+                             :major-list="majorList"
+                             :authorship-dates-list="authorshipDatesList"
+                             :question-authors-list="questionAuthorsList"
+                             :question-target-list="questionTargetList"
+                             :buffer="true"
+                             @gradeSelected="getLessonsList"
+                             @groupSelected="getLessonsList"
+                             @attach="attachExam"
+                             @detach="detachExam"
+                             @tags-collected="setTagsOnCreate" />
       </div>
       <question-video-answer :contentId="question.content_id"
                              :timePointId="question.time_point_id"
                              @update-value="updateQuestionContent($event)" />
-      <btn-box
-        class="col-12"
-        @saveQuestion="createQuestionImage(question)"
-      />
+      <btn-box class="col-12"
+               @saveQuestion="createQuestionImage(question)" />
     </div>
   </div>
 </template>
 
 <script>
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
-import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
-import { Question } from 'src/models/Question'
 import { computed } from 'vue'
-import { AdminActionOnQuestion } from 'src/mixin/Mixins'
-import { ExamList } from 'src/models/Exam'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
-import mixinTree from 'src/mixin/Tree'
-import QuestionVideoAnswer from 'components/Question/QuestionPage/QuestionVideoAnswer.vue'
+import mixinTree from 'src/mixin/Tree.js'
+import { ExamList } from 'src/models/Exam.js'
+import { Question } from 'src/models/Question.js'
+import { AdminActionOnQuestion } from 'src/mixin/Mixins.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
+import BtnBox from 'src/components/Question/QuestionPage/BtnBox.vue'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import uploadImage from 'src/components/Question/QuestionPage/UploadImage.vue'
+import QuestionIdentifier from 'src/components/Question/QuestionPage/QuestionIdentifier.vue'
+import QuestionVideoAnswer from 'src/components/Question/QuestionPage/QuestionVideoAnswer.vue'
 
 export default {
   name: 'CreateImage',
@@ -97,6 +91,14 @@ export default {
     AdminActionOnQuestion,
     mixinTree
   ],
+  provide () {
+    return {
+      providedQuestion: computed(() => this.question)
+    }
+  },
+  beforeRouteUpdate () {
+    this.getPageReady()
+  },
   data () {
     return {
       question: new Question(),
@@ -106,9 +108,6 @@ export default {
       categoryList: new QuestCategoryList(),
       questionVideoAnswerDialog: false
     }
-  },
-  beforeRouteUpdate () {
-    this.getPageReady()
   },
   created () {
     this.getPageReady()
@@ -121,11 +120,6 @@ export default {
   updated () {
   },
   mounted () {
-  },
-  provide () {
-    return {
-      providedQuestion: computed(() => this.question)
-    }
   },
   methods: {
     updateQuestionContent(data) {

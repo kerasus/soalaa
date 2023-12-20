@@ -1,11 +1,14 @@
 import moment from 'moment'
-import { getServerDate } from '@nodeguy/server-date'
-import Assistant from '../plugins/assistant'
-import API_ADDRESS from 'src/api/Addresses'
 import process from 'process'
+import API_ADDRESS from 'src/api/Addresses.js'
+import Assistant from '../plugins/assistant.js'
+import { getServerDate } from '@nodeguy/server-date'
 
 const Time = (function () {
   async function synchronizeTime () {
+    if (typeof window === 'undefined') {
+      return
+    }
     window.serverDate = {}
     const { date, offset, uncertainty } = await getServerDate({
       fetchSample: async () => {
@@ -32,6 +35,9 @@ const Time = (function () {
     // console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:` + offset)
   }
   async function synchronizeTimeWithData (response) {
+    if (typeof window === 'undefined') {
+      return
+    }
     window.serverDate = {}
     const { date, offset, uncertainty } = await getServerDate({
       fetchSample: async () => {
@@ -50,6 +56,13 @@ const Time = (function () {
     // console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:` + offset)
   }
   function now (justDate) {
+    if (typeof window === 'undefined') {
+      const serverDate = new Date(Date.now())
+      if (justDate) {
+        return moment(serverDate).format('YYYY-MM-DD')
+      }
+      return moment(serverDate).format('YYYY-MM-DD HH:mm:ss.SSS')
+    }
     if (!window.serverDate?.offset) {
       if (!window.serverDate) {
         window.serverDate = {}

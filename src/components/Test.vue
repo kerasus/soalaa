@@ -5,6 +5,12 @@
 <script>
 export default {
   name: 'Test',
+  mounted() {
+    setTimeout(() => {
+      this.getTemplateHeaderType()
+    }, 50)
+    // this.getTemplateHeaderType()
+  },
   methods: {
     getTemplateHeaderType () {
       this.$store.dispatch('AppLayout/updateTemplateHeaderType', {
@@ -15,12 +21,6 @@ export default {
       })
       // this.$store.commit('AppLayout/updateTemplateHeaderType', this.$route.name)
     }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.getTemplateHeaderType()
-    }, 50)
-    // this.getTemplateHeaderType()
   }
 }
 </script>

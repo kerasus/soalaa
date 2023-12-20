@@ -1,29 +1,28 @@
 <template>
   <div>
-    <mobile-timer
-      v-if="windowSize.x < 1024"
-      class="Mobiletimer"
-      :passed-time="passedTime"
-      :remaining-time="remainTime"
-      :current-cat="currentCat"
-    />
-    <pc-timer
-      v-else
-      class="Pctimer"
-      :passed-time="passedTime"
-      :remaining-time="remainTime"
-      :current-cat="currentCat"
-      @timerOpen="passEvent"
-    />
+    <q-no-ssr>
+      <mobile-timer v-if="windowSize.x < 1024"
+                    class="Mobiletimer"
+                    :passed-time="passedTime"
+                    :remaining-time="remainTime"
+                    :current-cat="currentCat" />
+      <pc-timer v-else
+                class="Pctimer"
+                :passed-time="passedTime"
+                :remaining-time="remainTime"
+                :current-cat="currentCat"
+                @timerOpen="passEvent" />
+    </q-no-ssr>
   </div>
 </template>
 
 <script>
-import pcTimer from 'src/components/OnlineQuiz/Quiz/timer/pcTimer'
-import mobileTimer from 'src/components/OnlineQuiz/Quiz/timer/mobileTimer'
-import { mixinQuiz } from 'src/mixin/Mixins'
-import Time from 'src/plugins/time'
-import Assistant from 'src/plugins/assistant'
+import Time from 'src/plugins/time.js'
+import { mixinQuiz } from 'src/mixin/Mixins.js'
+import Assistant from 'src/plugins/assistant.js'
+import pcTimer from 'src/components/OnlineQuiz/Quiz/timer/pcTimer.vue'
+import mobileTimer from 'src/components/OnlineQuiz/Quiz/timer/mobileTimer.vue'
+
 export default {
   name: 'timer',
   components: {
@@ -37,6 +36,11 @@ export default {
     passedTime: '00:00:00',
     remainTime: false
   }),
+  computed: {
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    }
+  },
   mounted () {
     const that = this
     this.interval = setInterval(() => {
@@ -48,11 +52,6 @@ export default {
   },
   unmounted () {
     clearInterval(this.interval)
-  },
-  computed: {
-    windowSize () {
-      return this.$store.getters['AppLayout/windowSize']
-    }
   },
   methods: {
     passEvent (value) {

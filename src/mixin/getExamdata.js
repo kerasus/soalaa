@@ -1,9 +1,9 @@
-import API_ADDRESS from 'src/api/Addresses'
+import { APIGateway } from 'src/api/APIGateway.js'
 
 const getQuizData = {
   methods: {
     getExamData (examId) {
-      return this.$axios.get(API_ADDRESS.exam.showExam(examId))
+      return APIGateway.exam.showExam(examId)
     }
   }
 }

@@ -4,48 +4,38 @@
 
     <div class="landing-3a-features">
       <div class="landing-3a-feature">
-        <q-img
-          src="https://nodes.alaatv.com/upload/landing/3a/7.png"
-          :width="imageWidth[0]"
-          class="feature-image"
-        />
+        <q-img src="https://nodes.alaatv.com/upload/landing/3a/7.png"
+               :width="imageWidth[0]"
+               class="feature-image" />
         <p class="feature-title">سه شنبه روز آزمون</p>
       </div>
 
       <div class="landing-3a-feature">
-        <q-img
-          src="https://nodes.alaatv.com/upload/landing/3a/8.png"
-          :width="imageWidth[1]"
-          class="feature-image"
-        />
+        <q-img src="https://nodes.alaatv.com/upload/landing/3a/8.png"
+               :width="imageWidth[1]"
+               class="feature-image" />
         <p class="feature-title">تجربه عالی در موبایل</p>
       </div>
 
       <div class="landing-3a-feature">
-        <q-img
-          src="https://nodes.alaatv.com/upload/landing/3a/9.png"
-          :width="imageWidth[2]"
-          class="feature-image"
-        />
+        <q-img src="https://nodes.alaatv.com/upload/landing/3a/9.png"
+               :width="imageWidth[2]"
+               class="feature-image" />
         <p class="feature-title">کارنامه آنی و تخمین کنکور</p>
       </div>
 
       <div class="landing-3a-feature">
-        <q-img
-          src="https://nodes.alaatv.com/upload/landing/3a/10.png"
-          :width="imageWidth[3]"
-          class="feature-image"
-        />
+        <q-img src="https://nodes.alaatv.com/upload/landing/3a/10.png"
+               :width="imageWidth[3]"
+               class="feature-image" />
         <p class="feature-title">استاندارد کنکور</p>
       </div>
 
       <div class="landing-3a-feature">
-        <q-img
-          src="https://nodes.alaatv.com/upload/landing/3a/12.png"
-          :width="imageWidth[4]"
+        <q-img src="https://nodes.alaatv.com/upload/landing/3a/12.png"
+               :width="imageWidth[4]"
 
-          class="feature-image"
-        />
+               class="feature-image" />
         <p class="feature-title">تحلیل کامل ویدئویی</p>
       </div>
     </div>

@@ -1,21 +1,15 @@
 <template>
   <div class="cart-view-widget">
-    <div
-      v-for="(order, i) in orderList"
-      :key="order.id"
-      class="cart-items"
-    >
-      <q-card
-        class="cart-card"
-        :class="order.order_product?.list.length > 0 ? '': 'cart'"
-      >
+    <div v-for="(order, i) in orderList"
+         :key="order.id"
+         class="cart-items">
+      <q-card class="cart-card"
+              :class="order.order_product?.list.length > 0 ? '': 'cart'">
         <q-card-section class="card-section">
           <div class="order-image-section">
             <div class="order-image-container">
-              <q-img
-                :src="order.grand.photo"
-                class="order-image"
-              />
+              <q-img :src="order.grand.photo"
+                     class="order-image" />
             </div>
           </div>
 
@@ -25,53 +19,37 @@
                 {{ order.grand.title }}
               </div>
 
-              <q-btn
-                v-if="order.orderProductId"
-                unelevated
-                class="trash-button"
-                icon="isax:trash"
-                @click="changeDialogState(true, order.orderProductId)"
-              />
+              <q-btn v-if="order.orderProductId"
+                     unelevated
+                     class="trash-button"
+                     icon="isax:trash"
+                     @click="changeDialogState(true, order.orderProductId)" />
             </div>
 
-            <div
-              v-if="order.grand && order.grand.attributes && order.grand.attributes.info"
-              class="product-information"
-            >
-              <div
-                v-if="order.grand.attributes.info.teacher"
-                class="product-info"
-              >
-                <q-icon
-                  name="isax:teacher"
-                  class="info-icon"
-                />
+            <div v-if="order.grand && order.grand.attributes && order.grand.attributes.info"
+                 class="product-information">
+              <div v-if="order.grand.attributes.info.teacher"
+                   class="product-info">
+                <q-icon name="isax:teacher"
+                        class="info-icon" />
                 <div class="info-value">
                   {{ order.grand.attributes.info.teacher.join('، ') }}
                 </div>
               </div>
 
-              <div
-                v-if="order.grand.attributes.info.major"
-                class="product-info"
-              >
-                <q-icon
-                  name="isax:book-1"
-                  class="info-icon"
-                />
+              <div v-if="order.grand.attributes.info.major"
+                   class="product-info">
+                <q-icon name="isax:book-1"
+                        class="info-icon" />
                 <div class="info-value">
                   رشته تحصیلی: {{ order.grand.attributes.info.major.join(' - ') }}
                 </div>
               </div>
 
-              <div
-                v-if="order.grand.attributes.info.production_year"
-                class="product-info"
-              >
-                <q-icon
-                  name="isax:menu-board4"
-                  class="info-icon"
-                />
+              <div v-if="order.grand.attributes.info.production_year"
+                   class="product-info">
+                <q-icon name="isax:menu-board4"
+                        class="info-icon" />
                 <div class="info-value">
                   {{ order.grand.attributes.info.production_year.join('، ') }}
                 </div>
@@ -81,14 +59,10 @@
         </q-card-section>
 
         <q-card-section class="card-actions">
-          <div
-            class="product-details"
-            :class="expandedObject[i] ?'on-open-expansion': ''"
-          >
-            <div
-              v-if="order.price"
-              class="price-container"
-            >
+          <div class="product-details"
+               :class="expandedObject[i] ?'on-open-expansion': ''">
+            <div v-if="order.price"
+                 class="price-container">
               <div class="discount-part">
                 <div class="discount-percent">
                   {{ order.price.discountInPercent() }}%
@@ -105,72 +79,55 @@
               </div>
             </div>
 
-            <div
-              class="action-buttons"
-              :class="expandedObject[i] ? '' : 'open-expansion'"
-            >
+            <div class="action-buttons"
+                 :class="expandedObject[i] ? '' : 'open-expansion'">
               <span v-if="!expandedObject[i] || !order.order_product">
-                <a
-                  v-if="order.grand && order.grand.url && order.grand.url.web"
-                  class="link"
-                  :href="order.grand?.url?.web"
-                >
+                <a v-if="order.grand && order.grand.url && order.grand.url.web"
+                   class="link"
+                   :href="order.grand?.url?.web">
                   {{ descLinkLabel }}
                 </a>
               </span>
 
-              <q-expansion-item
-                v-if="order.order_product?.list.length > 0"
-                v-model="expandedObject[i]"
-                label="جزئیات محصول"
-                class="details-expansion"
-                :class="expandedObject[i] ?'open-expansion-style': 'close-expansion-style'"
-                :header-class=" expandedObject[i] ? 'hide-expansion-header' : ''"
-              >
+              <q-expansion-item v-if="order.order_product?.list.length > 0"
+                                v-model="expandedObject[i]"
+                                label="جزئیات محصول"
+                                class="details-expansion"
+                                :class="expandedObject[i] ?'open-expansion-style': 'close-expansion-style'"
+                                :header-class=" expandedObject[i] ? 'hide-expansion-header' : ''">
                 <q-card class="details-expansion-card">
                   <q-card-section class="details-expansion-card-section">
-                    <div
-                      v-for="(orderProduct, index) in order.order_product.list"
-                      :key="orderProduct.id"
-                      class="pamphlet"
-                    >
+                    <div v-for="(orderProduct, index) in order.order_product.list"
+                         :key="orderProduct.id"
+                         class="pamphlet">
                       <div class="title ellipsis">
                         {{ orderProduct.product.title }}
                       </div>
 
                       <div class="right-part">
-                        <span
-                          class="price"
-                          :class="index !== 0 ? 'without-trash': ''"
-                        >
+                        <span class="price"
+                              :class="index !== 0 ? 'without-trash': ''">
                           {{ orderProduct.price.toman('final') }}
                         </span>
-                        <q-btn
-                          unelevated
-                          :class="index === 0 ? 'trash-button': 'hidden-trash-button'"
-                          icon="isax:trash"
-                          @click="changeDialogState(true, orderProduct.id)"
-                        />
+                        <q-btn unelevated
+                               :class="index === 0 ? 'trash-button': 'hidden-trash-button'"
+                               icon="isax:trash"
+                               @click="changeDialogState(true, orderProduct.id)" />
                       </div>
                     </div>
                   </q-card-section>
 
                   <q-card-section class="details-expansion-actions">
-                    <a
-                      v-if="order.grand && order.grand.url && order.grand.url.web"
-                      class="link expansion-link"
-                      :href="order.grand?.url?.web"
-                    >
+                    <a v-if="order.grand && order.grand.url && order.grand.url.web"
+                       class="link expansion-link"
+                       :href="order.grand?.url?.web">
                       {{ descLinkLabel }}
                     </a>
-                    <q-btn-dropdown
-                      class="details-button"
-                      label="جزئیات محصول"
-                      dropdown-icon="isax:arrow-up-2"
-                      flat
-                      @click="expandedObject[i] = !expandedObject[i]"
-                    >
-                    </q-btn-dropdown>
+                    <q-btn-dropdown class="details-button"
+                                    label="جزئیات محصول"
+                                    dropdown-icon="isax:arrow-up-2"
+                                    flat
+                                    @click="expandedObject[i] = !expandedObject[i]" />
                   </q-card-section>
                 </q-card>
               </q-expansion-item>
@@ -182,17 +139,13 @@
     </div>
   </div>
 
-  <q-dialog
-    v-model="dialogState"
-    class="delete-dialog"
-  >
+  <q-dialog v-model="dialogState"
+            class="delete-dialog">
     <q-card class="delete-dialog-card">
       <q-card-section class="close-button-section">
-        <q-icon
-          class="close-dialog-button"
-          name="isax:close-circle"
-          @click="changeDialogState(false)"
-        />
+        <q-icon class="close-dialog-button"
+                name="isax:close-circle"
+                @click="changeDialogState(false)" />
       </q-card-section>
 
       <q-card-section class="delete-dialog-card-section">
@@ -204,17 +157,13 @@
       </q-card-section>
 
       <q-card-actions class="delete-dialog-card-actions">
-        <div
-          class="dont-delete-button"
-          @click="changeDialogState(false)"
-        >
+        <div class="dont-delete-button"
+             @click="changeDialogState(false)">
           انصراف
         </div>
 
-        <div
-          class="surely-delete-button"
-          @click="removeItem(clickedItemIdToRemove)"
-        >
+        <div class="surely-delete-button"
+             @click="removeItem(clickedItemIdToRemove)">
           بله، مطمئن هستم
         </div>
       </q-card-actions>
@@ -223,19 +172,11 @@
 </template>
 
 <script>
-import { Cart } from 'src/models/Cart'
-import { Product } from 'src/models/Product'
+import { Cart } from 'src/models/Cart.js'
+import { Product } from 'src/models/Product.js'
 
 export default {
   name: 'cartView',
-  data() {
-    return {
-      dialogState: false,
-      test: null,
-      expandedObject: {},
-      clickedItemIdToRemove: null
-    }
-  },
 
   props: {
     getData: {
@@ -247,8 +188,13 @@ export default {
     }
   },
   emits: ['cartReview'],
-  created() {
-    this.loading = true
+  data() {
+    return {
+      dialogState: false,
+      test: null,
+      expandedObject: {},
+      clickedItemIdToRemove: null
+    }
   },
 
   computed: {
@@ -267,6 +213,9 @@ export default {
         return 'صفحه محصول'
       }
     }
+  },
+  created() {
+    this.loading = true
   },
 
   methods: {

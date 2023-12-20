@@ -30,6 +30,7 @@ class Product extends Model {
           slogan: null
         }
       },
+      { key: 'grandsChildren' },
       { key: 'longDescription' },
       { key: 'last_content_user_watched' },
       { key: 'specialDescription' },

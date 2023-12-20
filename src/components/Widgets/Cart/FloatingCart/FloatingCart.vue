@@ -36,9 +36,9 @@
 </template>
 
 <script>
+import CartView from '../CartView/CartView.vue'
 import CartEmpty from '../CartEmpty/CartEmpty.vue'
 import CartInvoice from '../CartInvoice/CartInvoice.vue'
-import CartView from '../CartView/CartView.vue'
 
 const nextMorphStep = {
   btn: 'card1',

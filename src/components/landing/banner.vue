@@ -8,32 +8,27 @@
                     class="extra-large"
                     src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/seA_Desktop.png"
                     width="3520"
-                    height="977"
-        />
+                    height="977" />
         <lazy-image v-if="!lazy"
                     class="large"
                     src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Desktop_HD.png"
                     width="3519"
-                    height="1006"
-        />
+                    height="1006" />
         <lazy-image v-if="!lazy"
                     class="medium"
                     src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Tablet_(Medium).png"
                     width="2875"
-                    height="1072"
-        />
+                    height="1072" />
         <lazy-image v-if="!lazy"
                     class="small"
                     src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Tablet_(Small).png"
                     width="2113"
-                    height="822"
-        />
+                    height="822" />
         <lazy-image v-if="!lazy"
                     class="extra-small"
                     src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/Mobile_(Extra_small).png"
                     width="352"
-                    height="399"
-        />
+                    height="399" />
 
         <!--        <q-img class="extra-large"-->
         <!--               src="https://nodes.alaatv.com/upload/landing/3a/TATABOGH/seA_Desktop.png"></q-img>-->
@@ -51,7 +46,7 @@
 </template>
 
 <script>
-import LazyImage from 'components/LazyImage'
+import LazyImage from 'src/components/LazyImage.vue'
 export default {
   name: 'banner',
   components: { LazyImage },

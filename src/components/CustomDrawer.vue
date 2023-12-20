@@ -11,18 +11,16 @@
       <!--          transitionDuration: `${speed}ms`-->
       <!--        }"-->
       <!--      ></div>-->
-      <div
-        class="drawer__content"
-        :dir="directionBasedOnSideSelection('content')"
-        :style="{
-          transform: `translateX(${transformValue})`,
-          maxWidth: maxWidth,
-          transitionDuration: `${speed}ms`,
-          background: backgroundColor,
-        }"
-      >
+      <div class="drawer__content"
+           :dir="directionBasedOnSideSelection('content')"
+           :style="{
+             transform: `translateX(${transformValue})`,
+             maxWidth: maxWidth,
+             transitionDuration: `${speed}ms`,
+             background: backgroundColor,
+           }">
         <!--v-click-away="closeDrawer"-->
-        <slot></slot>
+        <slot />
       </div>
     </div>
   </div>
@@ -88,6 +86,8 @@ export default {
       transformValue: '100%'
     }
   },
+  computed: {
+  },
 
   watch: {
     isExpanded() {
@@ -111,6 +111,11 @@ export default {
 
       setTimeout(() => (this.isTransitioning = false), this.speed)
     }
+  },
+
+  mounted () {
+    this.transformValue = this.changeDrawerTransition(this.transformValue)
+    this.isVisible = this.isOpen
   },
 
   methods: {
@@ -143,13 +148,6 @@ export default {
     //     this.$emit('close')
     //   }
     // }
-  },
-  computed: {
-  },
-
-  mounted () {
-    this.transformValue = this.changeDrawerTransition(this.transformValue)
-    this.isVisible = this.isOpen
   }
 }
 </script>

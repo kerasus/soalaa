@@ -2,7 +2,7 @@
   <div class="container-box text-center">
     <div class="img-box text-center">
       <q-img class="img"
-             src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/404.png"></q-img>
+             src="https://nodes.alaatv.com/aaa/landing/Soalaa/States/404.png" />
     </div>
     <div class="main-text">
       صفحه‌ای یافت نشد!
@@ -38,13 +38,13 @@ export default {
   .img-box{
     width: 462px;
     margin: 0 auto 50px;
-    @media screen and(max-width: 1439px) {
+    @media screen and (max-width: 1439px) {
       width: 299px;
     }
-    @media screen and(max-width: 1023px) {
+    @media screen and (max-width: 1023px) {
       width: 356px;
     }
-    @media screen and(max-width: 599px) {
+    @media screen and (max-width: 599px) {
       width: 240px;
     }
     .img{
@@ -59,11 +59,11 @@ export default {
     line-height: 37px;
     letter-spacing: -0.03em;
     color: var(--Text-2);
-    @media screen and(max-width: 1439px) {
+    @media screen and (max-width: 1439px) {
       font-size: 22px;
       line-height: 34px;
     }
-    @media screen and(max-width: 599px) {
+    @media screen and (max-width: 599px) {
       font-size: 18px;
       line-height: 28px;
     }
@@ -85,7 +85,7 @@ export default {
       :deep(.q-btn__content){
         margin: 0 10px
       }
-      @media screen and(max-width: 599px) {
+      @media screen and (max-width: 599px) {
         font-size: 14px;
         line-height: 22px;
       }

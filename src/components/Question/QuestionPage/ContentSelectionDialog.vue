@@ -2,26 +2,22 @@
   <q-dialog :model-value="dialog">
     <q-card class="content-selection-card">
       <q-card-section class="row items-center justify-center">
-        <entity-index
-          v-model:value="inputs"
-          v-model:table-selected-values="selected"
-          title="لیست محتوا"
-          show-no-entity-slot
-          :api="api"
-          :table="table"
-          :table-keys="tableKeys"
-          :table-selection-mode="'single'"
-          :item-indicator-key="'id'"
-          :default-layout="true"
-        >
+        <entity-index v-model:value="inputs"
+                      v-model:table-selected-values="selected"
+                      title="لیست محتوا"
+                      show-no-entity-slot
+                      :api="api"
+                      :table="table"
+                      :table-keys="tableKeys"
+                      :table-selection-mode="'single'"
+                      :item-indicator-key="'id'"
+                      :default-layout="true">
           <template #entity-index-table-cell="{inputData}">
             <template v-if="inputData.col.name === 'photo'">
-              <q-img
-                :src="inputData.col.value"
-                class="content-photo"
-                spinner-color="primary"
-                spinner-size="82px"
-              />
+              <q-img :src="inputData.col.value"
+                     class="content-photo"
+                     spinner-color="primary"
+                     spinner-size="82px" />
             </template>
           </template>
         </entity-index>
@@ -39,12 +35,15 @@
 
 <script>
 import { EntityIndex } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
-import { Content } from 'src/models/Content'
+import { APIGateway } from 'src/api/APIGateway'
+import { Content } from 'src/models/Content.js'
 
 export default {
   name: 'ContentSelectionDialog',
   components: { EntityIndex },
+  beforeRouteUpdate() {
+    this.$axios.defaults.baseURL = this.$appApiInstance.defaults.baseURL
+  },
   props: {
     dialog: {
       type: Boolean,
@@ -57,7 +56,7 @@ export default {
   emits: ['updateValue', 'toggleDialog'],
   data () {
     return {
-      api: API_ADDRESS.content.admin,
+      api: APIGateway.content.APIAdresses.admin,
       selected: [],
       tableKeys: {
         data: 'data',
@@ -134,6 +133,12 @@ export default {
     content(newContent) {
       this.selected[0] = newContent
     }
+  },
+  created() {
+    this.$axios.defaults.baseURL = this.$alaaApiInstance.defaults.baseURL
+  },
+  beforeUnmount() {
+    this.$axios.defaults.baseURL = this.$appApiInstance.defaults.baseURL
   }
 }
 </script>

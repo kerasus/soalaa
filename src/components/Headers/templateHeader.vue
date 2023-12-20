@@ -1,75 +1,54 @@
 <template>
-  <div
-    class="drawer-btn"
-    :class="{'col-6': windowSize.x < 599}"
-  >
-    <q-btn
-      class="toolbar-button"
-      icon="isax:menu-1"
-      color="white"
-      text-color="accent"
-      dense
-      unelevated
-      @click="toggleLeftDrawer"
-    />
+  <div class="drawer-btn"
+       :class="{'col-6': localWindowSize.x < 599}">
+    <q-btn class="toolbar-button"
+           icon="isax:menu-1"
+           color="white"
+           text-color="accent"
+           dense
+           unelevated
+           @click="toggleLeftDrawer" />
   </div>
-  <div
-    class="right-side"
-    :class="{'col-6': windowSize.x > 1439, 'col-12': windowSize.x < 599}"
-  >
-    <div
-      v-if="breadcrumbsVisibility"
-    >
-      <q-skeleton
-        v-if="!breadcrumbs.path"
-        width="100px"
-        height="10px"
-      />
-      <q-breadcrumbs
-        v-else
-        class="breadcrumbs"
-        separator-color="dark"
-        gutter="sm"
-      >
+  <div class="right-side"
+       :class="{'col-6': localWindowSize.x > 1439, 'col-12': localWindowSize.x < 599}">
+    <div v-if="breadcrumbsVisibility">
+      <q-skeleton v-if="!breadcrumbs.path"
+                  width="100px"
+                  height="10px" />
+      <q-breadcrumbs v-else
+                     class="breadcrumbs"
+                     separator-color="dark"
+                     gutter="sm">
         <template v-slot:separator>
           <q-icon name="isax:arrow-right-3 " />
         </template>
-        <q-breadcrumbs-el
-          v-for="(breadcrumb, index) in breadcrumbs.path"
-          :key="index"
-        >
-          <q-skeleton
-            v-if="breadcrumb.loading"
-            width="100px"
-            height="10px"
-          />
-          <q-breadcrumbs-el
-            v-else
-            :icon=breadcrumb.icon
-            :label=breadcrumb.title
-            :to="getRoute(breadcrumb.route)"
-            class="q-breadcrumbs-el"
-          />
+        <q-breadcrumbs-el v-for="(breadcrumb, index) in breadcrumbs.path"
+                          :key="index">
+          <q-skeleton v-if="breadcrumb.loading"
+                      width="100px"
+                      height="10px" />
+          <q-breadcrumbs-el v-else
+                            :icon=breadcrumb.icon
+                            :label=breadcrumb.title
+                            :to="getRoute(breadcrumb.route)"
+                            class="q-breadcrumbs-el" />
         </q-breadcrumbs-el>
       </q-breadcrumbs>
 
     </div>
   </div>
-  <div
-    class="left-side"
-    :class="{'col-6': windowSize.x < 599, 'col-6': windowSize.x > 1439}">
-    <q-btn-dropdown
-      v-if="false"
-      class="toolbar-button"
-      content-class="profile-menu"
-      icon="isax:notification"
-      dropdown-icon="false"
-      color="white"
-      text-color="accent"
-      dir="ltr"
-      dense
-      unelevated
-    >
+  <div class="left-side"
+       :class="{'col-6': localWindowSize.x < 599, 'col-6': localWindowSize.x > 1439}">
+    <q-btn-dropdown v-if="false"
+                    class="toolbar-button"
+                    content-class="profile-menu"
+                    icon="isax:notification"
+                    dropdown-icon="false"
+                    color="white"
+                    text-color="accent"
+                    dir="ltr"
+                    dense
+                    unelevated>
       <q-badge color="red"
                rounded
                floating>3</q-badge>
@@ -80,20 +59,17 @@
            text-color="accent"
            icon="isax:login"
            dense
-           unelevated
-    />
-    <q-btn-dropdown
-      v-if="user && user.id !== null"
-      class="toolbar-button"
-      content-class="profile-menu"
-      icon="isax:user"
-      dropdown-icon="false"
-      color="white"
-      text-color="accent"
-      dir="ltr"
-      dense
-      unelevated
-    >
+           unelevated />
+    <q-btn-dropdown v-if="user && user.id !== null"
+                    class="toolbar-button"
+                    content-class="profile-menu"
+                    icon="isax:user"
+                    dropdown-icon="false"
+                    color="white"
+                    text-color="accent"
+                    dir="ltr"
+                    dense
+                    unelevated>
       <q-list>
         <q-item>
           <q-item-section>
@@ -123,21 +99,21 @@
 </template>
 
 <script>
+import { User } from 'src/models/User.js'
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'templateHeader',
   data () {
-    return {}
-  },
-  mounted () {
-    this.$store.commit('AppLayout/updateBreadcrumbLoading', false)
-    this.$store.commit('AppLayout/updateVisibilityBreadcrumb', true)
+    return {
+      user: new User(),
+      localWindowSize: {
+        x: 0,
+        y: 0
+      }
+    }
   },
   computed: {
-    ...mapGetters('Auth', [
-      'user'
-    ]),
     ...mapGetters('AppLayout', [
       'breadcrumbsVisibility',
       'breadcrumbs',
@@ -146,7 +122,16 @@ export default {
       'windowSize'
     ])
   },
+  mounted () {
+    this.loadAuthData()
+    this.localWindowSize = this.windowSize
+    this.$store.commit('AppLayout/updateBreadcrumbLoading', false)
+    this.$store.commit('AppLayout/updateVisibilityBreadcrumb', true)
+  },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+    },
     ...mapMutations('AppLayout', [
       'updateVisibilityBreadcrumb',
       'updateBreadcrumbs',

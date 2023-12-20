@@ -1,14 +1,8 @@
 <template>
-  <div
-    class="personal-results"
-  >
-    <div
-      v-if="report"
-      class="row"
-    >
-      <div
-        class="col col-12 col-md-7"
-      >
+  <div class="personal-results">
+    <div v-if="report"
+         class="row">
+      <div class="col col-12 col-md-7">
         <div class="row proceeds-table default-resultTable-row">
           <div class="col lessons-proceeds default-resultTable-col">
             <br>
@@ -17,34 +11,28 @@
             </span>
             <br>
             <br>
-            <q-table
-              :rows="report.sub_category"
-              :columns="columns1"
-              row-key="name"
-              color="amber"
-              hide-bottom
-              flat
-              :rows-per-page-options="[0]"
-            ></q-table>
+            <q-table :rows="report.sub_category"
+                     :columns="columns1"
+                     row-key="name"
+                     color="amber"
+                     hide-bottom
+                     flat
+                     :rows-per-page-options="[0]" />
           </div>
         </div>
         <div class="row default-result-table default-resultTable-row">
           <div class="col default-resultTable-col">
-            <q-table
-              :rows="[report.exam_user]"
-              :columns="columns3"
-              row-key="name"
-              color="amber"
-              hide-bottom
-              flat
-              :rows-per-page-options="[0]"
-            ></q-table>
+            <q-table :rows="[report.exam_user]"
+                     :columns="columns3"
+                     row-key="name"
+                     color="amber"
+                     hide-bottom
+                     flat
+                     :rows-per-page-options="[0]" />
           </div>
         </div>
       </div>
-      <div
-        class="col col-md-5 col-12"
-      >
+      <div class="col col-md-5 col-12">
         <div class="row default-result-table default-resultTable-row">
           <div class="col default-resultTable-col">
             <br>
@@ -53,15 +41,13 @@
             </span>
             <br>
             <br>
-            <q-table
-              :rows="report.zirgorooh"
-              :columns="columns2"
-              row-key="name"
-              color="amber"
-              hide-bottom
-              flat
-              :rows-per-page-options="[0]"
-            ></q-table>
+            <q-table :rows="report.zirgorooh"
+                     :columns="columns2"
+                     row-key="name"
+                     color="amber"
+                     hide-bottom
+                     flat
+                     :rows-per-page-options="[0]" />
           </div>
         </div>
         <div class="row default-resultTable-row">
@@ -97,10 +83,8 @@
           <div class="col card-col default-resultTable-col">
             <div class="card-parent elevation-1">
               <q-card v-if="report.main"
-                      class="mb-2 default-result-card"
-              >
-                <q-card-section
-                  class="card-title-section">
+                      class="mb-2 default-result-card">
+                <q-card-section class="card-title-section">
                   <div class="row">
                     <div class="col text-center"
                          :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
@@ -114,10 +98,8 @@
                          :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
                       رتبه در شهر
                     </div>
-                    <div
-                      v-if="report.main.rank_school"
-                      class="col col-3 text-center"
-                    >
+                    <div v-if="report.main.rank_school"
+                         class="col col-3 text-center">
                       رتبه در مدرسه
                     </div>
                   </div>
@@ -130,10 +112,8 @@
                          :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_province }}</div>
                     <div class="col text-center"
                          :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_city }}</div>
-                    <div
-                      v-if="report.main.rank_school"
-                      class="col col-3 text-center"
-                    >{{ report.main.rank_school }}</div>
+                    <div v-if="report.main.rank_school"
+                         class="col col-3 text-center">{{ report.main.rank_school }}</div>
                   </div>
                 </q-card-section>
               </q-card>
@@ -195,14 +175,14 @@ export default {
       ]
     }
   },
-  created () {},
   computed: {
     shamsiDate () {
       return (date) => {
         return moment(date, 'YYYY/M/D HH:mm:ss').format('jYYYY/jM/jD HH:mm:ss')
       }
     }
-  }
+  },
+  created () {}
 }
 </script>
 

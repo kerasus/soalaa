@@ -1,15 +1,14 @@
-import API_ADDRESS from 'src/api/Addresses'
+import { APIGateway } from 'src/api/APIGateway'
 
 const mixinTree = {
   methods: {
     showTree (refKey, callback) {
       return new Promise((resolve, reject) => {
         callback
-          .then(response => {
-            const node = response.data.data
+          .then(node => {
             const treeComponent = this.$refs[refKey]
             if (!treeComponent) {
-              resolve(response)
+              resolve(node)
             }
             treeComponent.createRoot({
               title: node.title,
@@ -19,7 +18,7 @@ const mixinTree = {
               parent: node.parent,
               children: node.children
             })
-            resolve(response)
+            resolve(node)
           })
           .catch(err => {
             reject(err)
@@ -28,18 +27,17 @@ const mixinTree = {
     },
 
     getRootNode (nodeType) {
-      return this.$axios.get(API_ADDRESS.tree.getNodeByType(nodeType))
+      return APIGateway.tree.getNodeByType(nodeType)
     },
 
     getNode (id) {
-      return this.$axios.get(API_ADDRESS.tree.getNodeById(id))
+      return APIGateway.tree.getNodeById(id)
     },
 
     getNodeById (id, done, fail, loadChildOfNode) {
       return new Promise((resolve, reject) => {
         this.getNode(id)
-          .then(response => {
-            const node = response.data.data
+          .then(node => {
             resolve(loadChildOfNode(node, done))
           }).catch(err => {
             console.error(err)
@@ -52,12 +50,14 @@ const mixinTree = {
 
     createNode (parentId, type, title, order, callback) {
       return new Promise((resolve, reject) => {
-        this.$axios.post(API_ADDRESS.tree.base, { parent_id: parentId, type, title, order })
-          .then(response => {
+        APIGateway.tree.createNode({
+          data: { parent_id: parentId, type, title, order }
+        })
+          .then(node => {
             if (callback) {
-              callback(response)
+              callback(node)
             }
-            resolve(response)
+            resolve(node)
           }).catch(err => {
             reject(err)
           })
@@ -66,9 +66,11 @@ const mixinTree = {
 
     editNode (id, title, order) {
       return new Promise((resolve, reject) => {
-        this.$axios.put(API_ADDRESS.tree.editNode(id), { title, order })
-          .then(res => {
-            resolve(res)
+        APIGateway.tree.editNode(id, {
+          data: { title, order }
+        })
+          .then(node => {
+            resolve(node)
           }).catch(err => {
             reject(err)
             console.error(err)

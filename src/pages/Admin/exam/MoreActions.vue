@@ -3,57 +3,48 @@
     <q-expansion-item label="ساخت فایل سوالات">
       <div class="more-action-btns">
         <div class="q-pa-md btn">
-          <q-btn
-            color="primary"
-            class="full-width"
-            label="ساخت فایل سوالات"
-            :loading="generateJsonFileLoading"
-            @click="generateJsonFile(entityId, false)"
-          />
+          <q-btn color="primary"
+                 class="full-width"
+                 label="ساخت فایل سوالات"
+                 :loading="generateJsonFileLoading"
+                 @click="generateJsonFile(entityId, false)" />
         </div>
         <div class="q-pa-md btn">
-          <q-btn
-            color="primary"
-            class="full-width"
-            label="ساخت فایل سوالات با جواب"
-            :loading="generateJsonFileLoading"
-            @click="generateJsonFile(entityId, true)"
-          />
+          <q-btn color="primary"
+                 class="full-width"
+                 label="ساخت فایل سوالات با جواب"
+                 :loading="generateJsonFileLoading"
+                 @click="generateJsonFile(entityId, true)" />
         </div>
       </div>
     </q-expansion-item>
     <q-expansion-item label="ویرایش کارنامه آزمون"
                       expand-separator
-                      class="q-mt-md"
-    >
+                      class="q-mt-md">
       <edit-exam-report />
     </q-expansion-item>
     <q-expansion-item label="آپلود فایل سوالات و جواب ها"
                       expand-separator
-                      class="q-mt-md"
-    >
+                      class="q-mt-md">
       <upload />
     </q-expansion-item>
     <q-expansion-item label="اصلاح ضرایب"
                       expand-separator
-                      class="q-mt-md"
-    >
+                      class="q-mt-md">
       <edit-coefficients />
     </q-expansion-item>
     <q-btn color="primary"
            class="full-width q-mt-md"
            label="کپی کردن لینک شرکت در آزمون"
-           @click="copyExamLink"
-    />
+           @click="copyExamLink" />
   </div>
 </template>
 
 <script>
 import { copyToClipboard } from 'quasar'
-import EditExamReport from 'pages/Admin/exam/editExamReport'
-import Upload from 'pages/Admin/exam/Upload'
-import EditCoefficients from 'pages/Admin/exam/editCoefficients'
-import API_ADDRESS from 'src/api/Addresses'
+import Upload from 'src/pages/Admin/exam/Upload.vue'
+import EditExamReport from 'src/pages/Admin/exam/editExamReport.vue'
+import EditCoefficients from 'src/pages/Admin/exam/editCoefficients.vue'
 
 export default {
   name: 'MoreActions',
@@ -68,12 +59,17 @@ export default {
       generateJsonFileLoading: false
     }
   },
+  computed: {
+    entityId () {
+      return this.$route.params.id
+    }
+  },
   methods: {
     generateJsonFile (id, withAnswer) {
       this.generateJsonFileLoading = true
       const that = this
       this.$store.dispatch('loading/linearLoading', true)
-      this.$axios.post(API_ADDRESS.exam.generateExamFile(id, withAnswer))
+      this.$apiGateway.exam.generateExamFile({ examId: id, withAnswer })
         .then(() => {
           that.$q.notify({
             type: 'positive',
@@ -106,11 +102,6 @@ export default {
         .catch(() => {
           // fail
         })
-    }
-  },
-  computed: {
-    entityId () {
-      return this.$route.params.id
     }
   }
 }

@@ -58,8 +58,7 @@
                         ['bold', 'italic', 'strike', 'underline'],
                         ['quote', 'unordered', 'ordered'],
                         ['viewsource']
-                      ]">
-            </q-editor>
+                      ]" />
           </div>
           <div class="col-md-12">
             <q-input v-model="localOptions.data.image.link"
@@ -74,9 +73,9 @@
 </template>
 <script>
 import { defineComponent, getCurrentInstance } from 'vue'
-import mixinOptionPanel from 'quasar-ui-q-page-builder/src/mixin/OptionPanel.js'
+import { mixinOptionPanel } from 'quasar-ui-q-page-builder'
 import OptionPanelTabs from 'quasar-ui-q-page-builder/src/components/OptionPanelComponents/OptionPanelTabs.vue'
-import lazyImg from 'components/lazyImg'
+import lazyImg from 'src/components/lazyImg.vue'
 
 export default defineComponent({
   name: 'OptionPanel',

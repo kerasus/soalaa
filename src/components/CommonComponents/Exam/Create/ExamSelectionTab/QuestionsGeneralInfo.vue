@@ -1,10 +1,8 @@
 <template>
   <q-card :hidden="finalApprovalMode"
           class="questions-general-info-ToolBar custom-card">
-    <q-expansion-item
-      expand-icon-toggle
-      expand-icon="isax:arrow-down-1"
-    >
+    <q-expansion-item expand-icon-toggle
+                      expand-icon="isax:arrow-down-1">
       <template v-slot:header>
         <q-card-section class="general-info-expansion-header">
           <div class="general-info-buttons">
@@ -15,35 +13,27 @@
                      @click="showFiltersOnMobile()" />
             </div>
             <div class="row">
-              <div
-                class="general-info-button back-button"
-                @click="goToLastStep"
-              >
+              <div class="general-info-button back-button"
+                   @click="goToLastStep">
                 بازگشت
               </div>
-              <div
-                class="general-info-button next-button"
-                @click="goToNextStep"
-              >
+              <div class="general-info-button next-button"
+                   @click="goToNextStep">
                 مرحله بعد
 
-                <q-icon
-                  class="next-button-icon"
-                  name="isax:arrow-left"
-                />
+                <q-icon class="next-button-icon"
+                        name="isax:arrow-left" />
               </div>
             </div>
           </div>
 
           <div class="chosen-questions-general-info">
             <div class="check-all">
-              <q-checkbox
-                v-model="checkBoxValue"
-                class="check-all-checkbox"
-                label="انتخاب همه"
-                indeterminate-value="maybe"
-                @click="selectAllQuestions">
-              </q-checkbox>
+              <q-checkbox v-model="checkBoxValue"
+                          class="check-all-checkbox"
+                          label="انتخاب همه"
+                          indeterminate-value="maybe"
+                          @click="selectAllQuestions" />
             </div>
 
             <div class="chosen-questions">
@@ -62,14 +52,12 @@
               سوالات انتخاب شده:
             </div>
             <q-card-actions class="chosen-question-items">
-              <q-chip
-                v-for="item in countOfSelectedSubCategory"
-                :key="item"
-                class="filter-items"
-                icon-remove="mdi-close"
-                removable
-                @remove="RemoveSelectedChoice(item)"
-              >
+              <q-chip v-for="item in countOfSelectedSubCategory"
+                      :key="item"
+                      class="filter-items"
+                      icon-remove="mdi-close"
+                      removable
+                      @remove="RemoveSelectedChoice(item)">
                 {{ item.title }}: {{ item.selectedQuestionsCount }}
               </q-chip>
             </q-card-actions>
@@ -85,17 +73,19 @@
                 </div>
                 <div class="chart-titles">
                   <q-badge class="titles-icon medium"
-                           rounded></q-badge>
+                           rounded />
                   <div>متوسط</div>
                 </div>
                 <div class="chart-titles">
                   <q-badge class="titles-icon easy"
-                           rounded></q-badge>
+                           rounded />
                   <div>آسان</div>
                 </div>
               </div>
-              <div class="question-highchart col-8 ">
-                <highcharts :options="chartOptions" />
+              <div v-if="isHighchartsReady"
+                   class="question-highchart col-8 ">
+                <component :is="highChartComponentName"
+                           :options="chartOptions" />
               </div>
             </div>
           </div>
@@ -103,20 +93,16 @@
           <div v-if="false"
                class="question-deActive">
             <div class=" delete-all">
-              <q-btn
-                rounded
-                flat
-                @click=deleteAllChoose()
-              >
+              <q-btn rounded
+                     flat
+                     @click=deleteAllChoose()>
                 حذف انتخاب ها
               </q-btn>
             </div>
             <div class="deactivate-all">
-              <q-btn
-                style="width: 130px"
-                rounded
-                flat
-              >
+              <q-btn style="width: 130px"
+                     rounded
+                     flat>
                 غیر فعال کردن همه
               </q-btn>
             </div>
@@ -126,75 +112,59 @@
     </q-expansion-item>
   </q-card>
 
-  <q-page-sticky
-    class="pageSticky lg-hide"
-    position="bottom"
-  >
+  <q-page-sticky class="pageSticky lg-hide"
+                 position="bottom">
     <div class="shapes flex ">
       <div class="circle">
-        <q-btn
-          :style="{'height': '36px' }"
-          class="openDialouge"
-          round
-          :icon="this.ToolbarDialog? 'isax:arrow-down-1' : 'isax:arrow-up-2'"
-          @click="this.ToolbarDialog = !this.ToolbarDialog"
-        />
+        <q-btn :style="{'height': '36px' }"
+               class="openDialouge"
+               round
+               :icon="this.ToolbarDialog? 'isax:arrow-down-1' : 'isax:arrow-up-2'"
+               @click="this.ToolbarDialog = !this.ToolbarDialog" />
       </div>
 
       <div class="top-style">
         <div class="top-style-right">
-          <div class="near-circle"></div>
+          <div class="near-circle" />
           <div class="near-btn">
-            <div class="near-btn-top"></div>
+            <div class="near-btn-top" />
           </div>
         </div>
 
         <div class="top-style-left">
           <div class="near-btn">
-            <div class="near-btn-top"></div>
+            <div class="near-btn-top" />
           </div>
-          <div class="near-circle">
-          </div>
+          <div class="near-circle" />
         </div>
       </div>
 
       <div class=" questions-general-info-sticky">
         <div class="general-info-buttons"
-             :class="{'top-space': finalApprovalMode}"
-        >
-          <div
-            class="general-info-button back-button"
-            @click="goToLastStep"
-          >
-            <q-icon
-              class="next-button-icon"
-              name="isax:arrow-right-3"
-            />
+             :class="{'top-space': finalApprovalMode}">
+          <div class="general-info-button back-button"
+               @click="goToLastStep">
+            <q-icon class="next-button-icon"
+                    name="isax:arrow-right-3" />
             بازگشت
           </div>
-          <div
-            class="general-info-button next-button"
-            @click="goToNextStep"
-          >
+          <div class="general-info-button next-button"
+               @click="goToNextStep">
             {{finalApprovalMode ? 'تایید آزمون' : '   مرحله بعد'}}
-            <q-icon
-              class="next-button-icon"
-              name="isax:arrow-left-2"
-            />
+            <q-icon class="next-button-icon"
+                    name="isax:arrow-left-2" />
           </div>
         </div>
 
         <div v-if="!finalApprovalMode"
              class="chosen-questions-general-info">
           <div class="check-all">
-            <q-checkbox
-              v-model="checkBoxValue"
-              class="check-all-checkbox"
-              label="انتخاب همه"
-              :disable="loading"
-              indeterminate-value="maybe"
-              @click="selectAllQuestions">
-            </q-checkbox>
+            <q-checkbox v-model="checkBoxValue"
+                        class="check-all-checkbox"
+                        label="انتخاب همه"
+                        :disable="loading"
+                        indeterminate-value="maybe"
+                        @click="selectAllQuestions" />
           </div>
 
           <div class="chosen-questions">
@@ -206,19 +176,16 @@
     </div>
   </q-page-sticky>
 
-  <q-dialog
-    v-model="ToolbarDialog"
-    class="dialogueCard full-height"
-  >
+  <q-dialog v-model="ToolbarDialog"
+            class="dialogueCard full-height">
     <q-card class="dialogueCardContainer">
       <div v-if="!finalApprovalMode"
            class="dialogHeader">
         <div class="dialogTitle"> سوالات انتخاب شده:</div>
 
         <div class="dialogBtn">
-          <q-btn
-            rounded
-            flat>
+          <q-btn rounded
+                 flat>
             غیر فعال کردن همه
           </q-btn>
         </div>
@@ -226,14 +193,12 @@
 
       <div v-if="!finalApprovalMode"
            class="dialogChip">
-        <q-chip
-          v-for="item in countOfSelectedSubCategory"
-          :key="item"
-          class="filter-items"
-          icon-remove="mdi-close"
-          removable
-          @remove="RemoveSelectedChoice(item)"
-        >
+        <q-chip v-for="item in countOfSelectedSubCategory"
+                :key="item"
+                class="filter-items"
+                icon-remove="mdi-close"
+                removable
+                @remove="RemoveSelectedChoice(item)">
           {{ item.title }}: {{ item.selectedQuestionsCount }}
         </q-chip>
       </div>
@@ -245,37 +210,49 @@
                     height="400px"
                     class="q-ml-xs" />
         <div v-else
-             class="exam-info">
-          <div class="header ">
-            <div class="header-title"> مشخصات آزمون </div>
-            <div class="chip ellipsis">
-              <span class="title">آزمون</span>
-              {{examInformation.id}}
+             class="exam-info-wrapper">
+          <div class="exam-info">
+            <div class="header">
+              <div class="header-title">ترتیب سوالات</div>
             </div>
+            <q-select v-model="computedOrder"
+                      :options="questionOrderOptions" />
           </div>
-          <div class="info-item  ">
-            <div class="field">نوع آزمون:</div>
-            <div class="value">
-              {{ examInformation.type }}
+          <div class="exam-info">
+            <div class="header ">
+              <div class="header-title"> مشخصات آزمون </div>
+              <div class="chip ellipsis">
+                <span class="title">آزمون</span>
+                {{examInformation.id}}
+                <q-tooltip>
+                  {{examInformation.id}}
+                </q-tooltip>
+              </div>
             </div>
-          </div>
-          <div class="info-item  ">
-            <div class="field">عنوان آزمون: </div>
-            <div class="value">
-              {{ examInformation.title }}
+            <div class="info-item  ">
+              <div class="field">نوع آزمون:</div>
+              <div class="value">
+                {{ examInformation.type }}
+              </div>
             </div>
-          </div>
-          <div class="info-item  ">
-            <div class="field">رشته تحصیلی:</div>
-            <div class="value">
-              {{ examInformation.major}}
-            </div></div>
-          <div class="info-item  ">
-            <div class="field">
-              پایه تحصیلی:
+            <div class="info-item  ">
+              <div class="field">عنوان آزمون: </div>
+              <div class="value">
+                {{ examInformation.title }}
+              </div>
             </div>
-            <div class="value">
-              {{ examInformation.grade }}
+            <div class="info-item  ">
+              <div class="field">رشته تحصیلی:</div>
+              <div class="value">
+                {{ examInformation.major}}
+              </div></div>
+            <div class="info-item  ">
+              <div class="field">
+                پایه تحصیلی:
+              </div>
+              <div class="value">
+                {{ examInformation.grade }}
+              </div>
             </div>
           </div>
         </div>
@@ -291,18 +268,21 @@
           </div>
           <div class="chart-titles">
             <q-badge class="titles-icon medium"
-                     rounded></q-badge>
+                     rounded />
             <div>متوسط</div>
           </div>
           <div class="chart-titles">
             <q-badge class="titles-icon easy"
-                     rounded></q-badge>
+                     rounded />
             <div>آسان</div>
           </div>
         </div>
 
-        <div class="dialogHighchart">
-          <highcharts :options="chartOptions" />
+        <div v-if="isHighchartsReady"
+             class="dialogHighchart">
+          <component :is="highChartComponentName"
+                     :options="chartOptions" />
+
         </div>
       </div>
     </q-card>
@@ -310,14 +290,23 @@
 </template>
 
 <script>
-import { Chart } from 'highcharts-vue'
-import { QuestionList } from 'src/models/Question'
+import { QuestionList } from 'src/models/Question.js'
+import { defineAsyncComponent } from 'vue'
 
 export default {
   name: 'QuestionsGeneralInfo',
-
-  components: { highcharts: Chart },
-
+  components: {
+    HighCharts: defineAsyncComponent(() => {
+      return new Promise((resolve) => {
+        let Chart
+        import('highcharts-vue')
+          .then((ChartLib) => {
+            Chart = ChartLib.Chart
+            resolve(Chart)
+          })
+      })
+    })
+  },
   props: {
     showFilters: {
       type: Boolean,
@@ -352,15 +341,31 @@ export default {
       default () {
         return false
       }
+    },
+    questionOrder: {
+      type: String,
+      default: 'تصادفی'
     }
   },
+
+  emits: [
+    'selectAllQuestions',
+    'deselectAllQuestions',
+    'remove',
+    'nextTab',
+    'lastTab',
+    'update:checkbox'
+  ],
 
   data () {
     return {
       checkBoxValue: false,
       selectAllCheckbox: false,
       questions: new QuestionList(),
+      isHighchartsReady: false,
+      highChartComponentName: '',
       ToolbarDialog: false,
+      questionOrderOptions: ['تصادفی', 'آسان ترین', 'سخت ترین'],
       chartOptions: {
         chart: {
           height: '95',
@@ -414,17 +419,6 @@ export default {
     }
   },
 
-  watch: {
-    'selectedQuestions.length': function () {
-      this.setDifficultyLevelsChart()
-      this.numberOfQuestions()
-      this.replaceTitle()
-    },
-    checkBox (newVal) {
-      this.checkBoxValue = newVal
-    }
-  },
-
   computed: {
     countOfSelectedSubCategory () {
       const lessons = this.selectedQuestions.filter((v, i, a) => a.findIndex(question => {
@@ -449,17 +443,27 @@ export default {
         easy: this.selectedQuestions.filter(question => question.level === '1' || question.level === 1).length,
         none: this.selectedQuestions.filter(question => question.level === '0' || question.level === 0).length
       }
+    },
+    computedOrder: {
+      get() {
+        return this.questionOrder
+      },
+      set(value) {
+        this.$emit('reOrderQuestions', value)
+      }
     }
   },
 
-  emits: [
-    'selectAllQuestions',
-    'deselectAllQuestions',
-    'remove',
-    'nextTab',
-    'lastTab',
-    'update:checkbox'
-  ],
+  watch: {
+    'selectedQuestions.length': function () {
+      this.setDifficultyLevelsChart()
+      this.numberOfQuestions()
+      this.replaceTitle()
+    },
+    checkBox (newVal) {
+      this.checkBoxValue = newVal
+    }
+  },
 
   created () {
     this.setDifficultyLevelsChart()
@@ -472,9 +476,14 @@ export default {
       this.numberOfQuestions()
       this.replaceTitle()
     }
+    this.setUpHighChart()
   },
 
   methods: {
+    setUpHighChart () {
+      this.isHighchartsReady = true
+      this.highChartComponentName = 'high-charts'
+    },
     showFiltersOnMobile() {
       this.$emit('update:showFilters', true)
     },

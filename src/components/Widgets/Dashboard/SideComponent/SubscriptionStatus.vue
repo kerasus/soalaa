@@ -19,13 +19,11 @@
       </div>
     </div>
     <div class="subscription-statistics">
-      <q-tabs
-        v-model="tab"
-        color="secondary"
-        class="subscription-tabs"
-        active-class="text-secondary"
-        align="left"
-      >
+      <q-tabs v-model="tab"
+              color="secondary"
+              class="subscription-tabs"
+              active-class="text-secondary"
+              align="left">
         <q-tab name="tests"
                label="ساخت آزمون" />
         <q-tab name="pdf"
@@ -39,9 +37,10 @@
           <div class="subscription-status-test-tab-title">
             محدودیت ساخت آزمون
           </div>
-          <highcharts class="flex flex-center"
-                      :options="chartOptionsExam"
-          />
+          <div v-if="isHighchartsReady">
+            <component :is="highChartComponentName"
+                       :options="chartOptionsExam" />
+          </div>
           <div v-if="subscribe.abilities_n.exam !== -1"
                class="subscription-status-test-tab-info">
             <span><q-icon name="circle"
@@ -57,9 +56,10 @@
           <div class="subscription-status-test-tab-title">
             محدودیت دانلود PDF
           </div>
-          <highcharts class="flex flex-center"
-                      :options="chartOptionsPdf"
-          />
+          <div v-if="isHighchartsReady">
+            <component :is="highChartComponentName"
+                       :options="chartOptionsPdf" />
+          </div>
           <div class="subscription-status-test-tab-info">
             <span><q-icon name="circle"
                           color="warning"
@@ -75,22 +75,33 @@
 </template>
 
 <script>
-import { Chart } from 'highcharts-vue'
+import { defineAsyncComponent } from 'vue'
 
 export default {
   name: 'SubscriptionStatus',
+  components: {
+    HighCharts: defineAsyncComponent(() => {
+      return new Promise((resolve) => {
+        let Chart
+        import('highcharts-vue')
+          .then((ChartLib) => {
+            Chart = ChartLib.Chart
+            resolve(Chart)
+          })
+      })
+    })
+  },
   props: {
     subscribe: {
       type: Object,
       default: null
     }
   },
-  components: {
-    highcharts: Chart
-  },
   data() {
     return {
       tab: 'tests',
+      isHighchartsReady: false,
+      highChartComponentName: '',
       chartOptionsExam: {
         chart: {
           height: '150',
@@ -206,10 +217,15 @@ export default {
       this.updateChartsOptions()
     }
   },
-  created() {
+  mounted () {
     this.updateChartsOptions()
+    this.setUpHighChart()
   },
   methods: {
+    setUpHighChart () {
+      this.isHighchartsReady = true
+      this.highChartComponentName = 'high-charts'
+    },
     updateChartsOptions () {
       this.updateChartOptionsExam()
       this.updateChartOptionsPdf()
@@ -237,6 +253,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+:deep(.highcharts-container) {
+  margin: 0 auto;
+}
 .subscription-tabs {
   color: #8A8CA6;
 

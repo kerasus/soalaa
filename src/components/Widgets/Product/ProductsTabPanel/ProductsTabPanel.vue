@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
-import { ProductList } from 'src/models/Product.js'
 import ProductPanel from './components/ProductPanel.vue'
 import { mixinWidget, mixinPrefetchServerData } from 'src/mixin/Mixins.js'
 
@@ -85,25 +83,19 @@ export default {
       }
     },
     getProductsPromise() {
-      // const data = {
-      //   productIds: this.productIdList,
-      //   params: {
-      //     length: this.productIdListLength
-      //   }
-      // }
-      return this.$axios.get(API_ADDRESS.product.bulk(this.productIdList), {
+      const data = {
+        productIds: this.productIdList,
         params: {
           length: this.productIdListLength
         }
-      })
-      // return this.$apiGateway.product.getProductList(data)
+      }
+      return this.$apiGateway.product.getProductList(data)
     },
     prefetchServerDataPromise () {
       this.loading = true
       return this.getProductsPromise()
     },
-    prefetchServerDataPromiseThen (response) {
-      const productList = new ProductList(response.data.data)
+    prefetchServerDataPromiseThen (productList) {
       this.replaceProducts(this.localOptions.data, productList.list)
       this.loading = false
     },

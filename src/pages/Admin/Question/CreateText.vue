@@ -1,60 +1,50 @@
 <template>
   <div class="createQ-text">
-    <navbar
-      :componentTabs="componentTabs"
-      :loading="componentTabs.loading"
-    />
+    <navbar :componentTabs="componentTabs"
+            :loading="componentTabs.loading" />
     <div class="relative-position">
       <!--      <component-->
       <!--        v-if="question.type"-->
       <!--        :is="getComponent"-->
       <!--        v-bind="allProps"-->
       <!--      />-->
-      <q-inner-loading
-        :showing="question.loading"
-        color="primary"
-        class="QComponents-inner-loading"
-        label-style="font-size: 1.1em"
-      />
+      <q-inner-loading :showing="question.loading"
+                       color="primary"
+                       class="QComponents-inner-loading"
+                       label-style="font-size: 1.1em" />
     </div>
     <div class="relative-position">
-      <attach-exam
-        :exams="examList"
-        :lessons="subCategoriesList"
-      />
+      <attach-exam :exams="examList"
+                   :lessons="subCategoriesList" />
       <div class="attach-btn row">
         <question-identifier class="col-9" />
-        <btn-box
-          class="col-3"
-          @saveQuestion="setQuestionContents"
-        />
+        <btn-box class="col-3"
+                 @saveQuestion="setQuestionContents" />
       </div>
       <comment-box />
-      <q-inner-loading
-        :showing="question.exams.loading"
-        color="primary"
-        class="QComponents-inner-loading"
-        label-style="font-size: 1.1em"
-      />
+      <q-inner-loading :showing="question.exams.loading"
+                       color="primary"
+                       class="QComponents-inner-loading"
+                       label-style="font-size: 1.1em" />
     </div>
   </div>
 </template>
 
 <script>
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
 /* eslint-disable no-var */
 // import { defineAsyncComponent } from 'vue'
-import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
-// import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
-import { Question } from 'src/models/Question'
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
-import { QuestionType, TypeList } from 'src/models/QuestionType'
-import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/StatusChange'
-import { ExamList } from 'src/models/Exam'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
-// import API_ADDRESS from 'src/api/Addresses'
+// import DynamicComponent from 'src/components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
+import { ExamList } from 'src/models/Exam.js'
+import { Question } from 'src/models/Question.js'
+import BtnBox from 'src/components/Question/QuestionPage/BtnBox.vue'
+import { QuestionType, TypeList } from 'src/models/QuestionType.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
+import CommentBox from 'src/components/Question/QuestionPage/StatusChange.vue'
+import Navbar from 'src/components/Question/QuestionPage/Create/textMode/Navbar.vue'
+import AttachExam from 'src/components/Question/QuestionPage/AttachExam/AttachExam.vue'
+import QuestionIdentifier from 'src/components/Question/QuestionPage/QuestionIdentifier.vue'
+
 export default {
   name: 'CreateText',
   components: {
@@ -67,6 +57,11 @@ export default {
   mixins: [
     AdminActionOnQuestion
   ],
+  provide () {
+    return {
+      question: this.question
+    }
+  },
   props: {},
   data () {
     return {
@@ -80,14 +75,23 @@ export default {
       subCategoriesList: new QuestSubcategoryList()
     }
   },
+  computed: {
+    getComponent () {
+      // updates even if properties inside are updated
+      return this.chosenComponent(this.question.type)
+    }
+  },
+  watch: {
+    question: {
+      handler (newValue, oldValue) {
+        // console.log('question', newValue)
+      },
+      deep: true
+    }
+  },
   created () {
     // console.log(this.$route, 'this.$route')
     // console.log(this.$router, 'this.$router')
-  },
-  provide () {
-    return {
-      question: this.question
-    }
   },
   mounted () {
     this.setAllQuestionLoadings()
@@ -111,20 +115,6 @@ export default {
     },
     setQuestionContents () {
       this.allProps.setContentToQuestion = true
-    }
-  },
-  computed: {
-    getComponent () {
-      // updates even if properties inside are updated
-      return this.chosenComponent(this.question.type)
-    }
-  },
-  watch: {
-    question: {
-      handler (newValue, oldValue) {
-        // console.log('question', newValue)
-      },
-      deep: true
     }
   }
 }

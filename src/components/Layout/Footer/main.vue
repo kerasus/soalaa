@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div
-      class="homePage-footer-container">
+    <div class="homePage-footer-container">
       <div class="footer-box-1">
         <div class="content-layout box-1-details">
           <div class="icons">
@@ -107,21 +106,18 @@
               <div class="main-title">دسترسی سایت</div>
               <q-btn flat
                      class="sub-title"
-                     :to="{name: 'HomePage'}"
-              >
+                     :to="{name: 'HomePage'}">
                 صفحه اصلی
               </q-btn>
               <q-btn v-if="user.id"
                      flat
                      class="sub-title"
-                     :to="{name: 'login'}"
-              >
+                     :to="{name: 'login'}">
                 ورود / ثبت نام
               </q-btn>
               <q-btn flat
                      class="sub-title"
-                     :to="{name: 'cart'}"
-              >
+                     :to="{name: 'cart'}">
                 سبد خرید
               </q-btn>
             </div>
@@ -129,20 +125,17 @@
               <div class="main-title">فضای کاربری</div>
               <q-btn flat
                      class="sub-title"
-                     :to="{name: 'User.Profile'}"
-              >
+                     :to="{name: 'User.Profile'}">
                 پروفایل
               </q-btn>
               <q-btn flat
                      class="sub-title"
-                     :to="{name: 'User.MyOrders'}"
-              >
+                     :to="{name: 'User.MyOrders'}">
                 سفارش ها
               </q-btn>
               <q-btn flat
                      class="sub-title"
-                     :to="{name: 'User.Exam.List'}"
-              >
+                     :to="{name: 'User.Exam.List'}">
                 آزمون‌های من
               </q-btn>
             </div>
@@ -150,14 +143,12 @@
               <div class="main-title">محصولات</div>
               <q-btn flat
                      class="sub-title"
-                     :to="{name: 'landing'}"
-              >
+                     :to="{name: 'landing'}">
                 آزمون‌های سه‌آ
               </q-btn>
               <q-btn flat
                      class="sub-title"
-                     :to="{name: 'User.Create.Exam'}"
-              >
+                     :to="{name: 'User.Create.Exam'}">
                 بانک سوالا
               </q-btn>
               <!--            <q-btn flat-->
@@ -172,15 +163,13 @@
               <q-btn flat
                      class="sub-title"
                      :href="'https://alaatv.com'"
-                     :target="'_blank'"
-              >
+                     :target="'_blank'">
                 آلاء
               </q-btn>
               <q-btn flat
                      class="sub-title"
                      :href="'https://forum.alaatv.com/'"
-                     :target="'_blank'"
-              >
+                     :target="'_blank'">
                 آلاخونه
               </q-btn>
             </div>
@@ -196,14 +185,13 @@
             <div class="footer-row">
               <div class="footer-logo-item item-soala">
                 <router-link :to="{name: 'dashboard'}">
-                  <q-img src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"></q-img>
+                  <q-img src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png" />
                 </router-link>
               </div>
               <div class="footer-logo-item item-alaa">
                 <a href="https://alaatv.com">
                   <q-img src="https://nodes.alaatv.com/upload/alaa-logo-480.png"
-                         alt="آلاء"
-                  />
+                         alt="آلاء" />
                 </a>
               </div>
               <div class="footer-logo-item item-enamad">
@@ -211,8 +199,7 @@
                    target="_blank">
                   <q-img src="https://nodes.alaatv.com/aaa/templates/star1.png"
                          alt="enamad.ir"
-                         style="cursor:pointer"
-                  />
+                         style="cursor:pointer" />
                 </a>
               </div>
             </div>
@@ -221,11 +208,9 @@
             <div class="text-1">
               کلیه حقوق این وب سایت به ‌توسعه علمی آموزشی عدالت محور آلاء تعلق دارد و کپی برداری از آن ممنوع می باشد.
             </div>
-            <q-btn
-              unelevated
-              class="scroll-up"
-              @click="scrollToTop"
-            >
+            <q-btn unelevated
+                   class="scroll-up"
+                   @click="scrollToTop">
               <svg width="24"
                    height="24"
                    viewBox="0 0 24 24"
@@ -251,10 +236,8 @@
               <div class="text">
                 کلیه حقوق این وب سایت به ‌توسعه علمی آموزشی عدالت محور آلاء تعلق دارد و کپی برداری از آن ممنوع می باشد.
               </div>
-              <a
-                target="_blank"
-                href="https://alaatv.com"
-              >
+              <a target="_blank"
+                 href="https://alaatv.com">
                 <div class="flex items-center">
                   <div>AlaaTV.com</div>
                   <div class="q-mx-xs">2012 </div>
@@ -270,21 +253,17 @@
       <div class="layer-3 q-px-lg">
         <div class="user-tab-section">
           <q-list class="flex tabs-list justify-center no-wrap">
-            <div
-              v-for="(item , index) in footerItems"
-              :key="index"
-              class="tabs-list-container"
-            >
+            <div v-for="(item , index) in footerItems"
+                 :key="index"
+                 class="tabs-list-container">
               <div class="self-center">
-                <q-item
-                  v-ripple
-                  clickable
-                  class="q-mt-sm"
-                  :active="isRouteSelected(item.to)"
-                  active-class="active-item"
-                  exact-active-class="active-route"
-                  :to="{ name: item.to }"
-                >
+                <q-item v-ripple
+                        clickable
+                        class="q-mt-sm"
+                        :active="isRouteSelected(item.to)"
+                        active-class="active-item"
+                        exact-active-class="active-route"
+                        :to="{ name: item.to }">
                   <q-item-section class="tab-title"
                                   avatar>
                     <q-icon :name="item.icon"
@@ -309,6 +288,7 @@ export default {
   name: 'MainFooter',
   data() {
     return {
+      user: new User(),
       footerItems: [
         {
           title: 'profile',
@@ -337,20 +317,18 @@ export default {
       ]
     }
   },
+  mounted () {
+    this.loadAuthData()
+  },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+    },
     scrollToTop() {
       document.body.scrollIntoView({ behavior: 'smooth', block: 'start' })
     },
     isRouteSelected (itemName) {
       return this.$route.name === itemName
-    }
-  },
-  computed: {
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
     }
   }
 }

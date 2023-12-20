@@ -1,16 +1,15 @@
-import process from 'process'
 const lumenServer = process.env.AAA_API
 const authServer = process.env.AUTH_API
+const apiV2Server = process.env.AUTH_API
 const timeServer = process.env.GET_TIME_SERVER
 const socketServer = process.env.SOCKET_SERVER
-const apiV2Server = process.env.AUTH_API
 
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
   socket: socketServer,
   pages: {
-    base: lumenServer + '/setting',
-    show: (key) => lumenServer + '/setting/show?key=' + key
+    base: '/setting',
+    show: (key) => '/setting/show?key=' + key
   },
   server: {
     time: timeServer,
@@ -18,7 +17,7 @@ const API_ADDRESS = {
     auth: lumenServer
   },
   auth: {
-    login: lumenServer + '/user/login'
+    login: '/user/login'
   },
   user: {
     base: authServer + '/user',
@@ -27,7 +26,7 @@ const API_ADDRESS = {
     newsletter: authServer + '/newsletter',
     edit (userId) { return authServer + '/user/' + userId },
     updatePhoto() {
-      return lumenServer + '/user/avatar'
+      return '/user/avatar'
     },
     mobile: {
       resend: authServer + '/mobile/resend',
@@ -36,11 +35,11 @@ const API_ADDRESS = {
     formData: authServer + '/megaroute/getUserFormData',
     show_user: authServer + '/getUserFor3a',
     orders: {
-      status: lumenServer + '/payment/status',
-      userOrders: lumenServer + '/orders'
+      status: '/payment/status',
+      userOrders: '/orders'
     },
-    statistics: lumenServer + '/user/dashboard/statistics',
-    feature: (feature) => lumenServer + '/user/feature?feature=' + feature
+    statistics: '/user/dashboard/statistics',
+    feature: (feature) => '/user/feature?feature=' + feature
   },
   block: {
     home: authServer + '/home',
@@ -57,172 +56,172 @@ const API_ADDRESS = {
     get: (id) => authServer + `/c/${id}`
   },
   option: {
-    base: lumenServer + '/option',
-    userIndex: lumenServer + '/option/user',
-    user(type) { return lumenServer + '/option/user?type=' + type }
+    base: '/option',
+    userIndex: '/option/user',
+    user(type) { return '/option/user?type=' + type }
   },
   log: {
-    base: lumenServer + '/activity-log',
+    base: '/activity-log',
     addComment (id) {
-      return lumenServer + '/activity-log/' + id + '/comment'
+      return '/activity-log/' + id + '/comment'
     }
   },
   entityCrud: {
     authorshipDates: {
-      show: lumenServer + '/option/',
-      edit: lumenServer + '/option',
-      create: lumenServer + '/option',
-      index: lumenServer + '/option?type=year_type&with_pagination=true'
+      show: '/option/',
+      edit: '/option',
+      create: '/option',
+      index: '/option?type=year_type&with_pagination=true'
     },
     questionAuthors: {
-      show: lumenServer + '/option/',
-      edit: lumenServer + '/option',
-      create: lumenServer + '/option',
-      index: lumenServer + '/option'
+      show: '/option/',
+      edit: '/option',
+      create: '/option',
+      index: '/option'
     },
     questionReport: {
-      show: lumenServer + '/option/',
-      edit: lumenServer + '/option',
-      create: lumenServer + '/option',
-      index: lumenServer + '/option?type=question_report_type&with_pagination=true'
+      show: '/option/',
+      edit: '/option',
+      create: '/option',
+      index: '/option?type=question_report_type&with_pagination=true'
     },
     questionTarget: {
-      show: lumenServer + '/option/',
-      edit: lumenServer + '/option',
-      create: lumenServer + '/option',
-      index: lumenServer + '/option?type=targets_type&with_pagination=true'
+      show: '/option/',
+      edit: '/option',
+      create: '/option',
+      index: '/option?type=targets_type&with_pagination=true'
     },
     majors: {
-      show: lumenServer + '/option/',
-      edit: lumenServer + '/option',
-      create: lumenServer + '/option',
-      index: lumenServer + '/option?type=major_type&with_pagination=true'
+      show: '/option/',
+      edit: '/option',
+      create: '/option',
+      index: '/option?type=major_type&with_pagination=true'
     }
   },
   exam: {
-    exportExcel: lumenServer + '/exam?excel_export=1',
-    showExam: (examId) => lumenServer + '/exam/' + examId,
-    editExam: lumenServer + '/exam',
-    copyCoefficient: lumenServer + '/exam-question/zirgorooh/copy',
-    sendAnswers: lumenServer + '/temp-exam/answer/choice',
-    sendStatus: lumenServer + '/temp-exam/answer/status',
-    sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
-    sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
-    userExamsList: lumenServer + '/examAndUser',
-    takhminRotbe: lumenServer + '/exam-report/rankSimulator',
+    exportExcel: '/exam?excel_export=1',
+    showExam: (examId) => '/exam/' + examId,
+    editExam: '/exam',
+    copyCoefficient: '/exam-question/zirgorooh/copy',
+    sendAnswers: '/temp-exam/answer/choice',
+    sendStatus: '/temp-exam/answer/status',
+    sendBookmark: '/temp-exam/answer/bookmark',
+    sendUnBookmark: '/temp-exam/answer/unbookmark',
+    userExamsList: '/examAndUser',
+    takhminRotbe: '/exam-report/rankSimulator',
     konkurTakhminRotbe (konkurId) {
-      return lumenServer + '/exam-report/rank/' + konkurId
+      return '/exam-report/rank/' + konkurId
     },
-    analysisVideo: lumenServer + '/exam-question/attach/sub-category',
+    analysisVideo: '/exam-question/attach/sub-category',
     userExamList: {
       base () {
-        return lumenServer + '/examAndUser'
+        return '/examAndUser'
       },
       upcomingExams(start) {
-        return lumenServer + '/examAndUser' + '?start_at_from=' + start
+        return '/examAndUser' + '?start_at_from=' + start
       },
       myExams(designerType = 'personal') {
         const route = '?designer_type=' + designerType
-        return lumenServer + '/examAndUser' + route
+        return '/examAndUser' + route
       }
 
     },
     getAnalysisVideo (examId) {
-      return lumenServer + '/exam-question/videos/' + examId
+      return '/exam-question/videos/' + examId
     },
     examReportIndex (type) {
-      return lumenServer + '/exam-report/index/' + type
+      return '/exam-report/index/' + type
     },
     pdf (examId) {
-      return lumenServer + '/exam-question/booklet-file/' + examId
+      return '/exam-question/booklet-file/' + examId
     },
     base (pageNumber) {
       if (pageNumber) {
-        return lumenServer + '/exam?with_pagination=1&page=' + pageNumber
+        return '/exam?with_pagination=1&page=' + pageNumber
       } else {
-        return lumenServer + '/exam'
+        return '/exam'
       }
     },
     // todo : temporary, MUST BE DELETED
     baseProduction (pageNumber) {
       if (pageNumber) {
-        return lumenServer + '/exam?with_pagination=1&page=' + pageNumber
+        return '/exam?with_pagination=1&page=' + pageNumber
       } else {
-        return lumenServer + '/exam'
+        return '/exam'
       }
     },
     generateExamFile (examId, withAnswer) {
-      const baseFileRoute = lumenServer + '/exam-question/file/' + examId
+      const baseFileRoute = '/exam-question/file/' + examId
       return withAnswer ? (baseFileRoute + '/with_answer') : baseFileRoute
     },
     getAnswerOfUser (userExamId) {
-      return lumenServer + '/temp-exam/answer/' + userExamId
+      return '/temp-exam/answer/' + userExamId
     },
     getAllAnswerOfUser (userExamId) {
-      return lumenServer + '/temp-exam/allAnswer/' + userExamId
+      return '/temp-exam/allAnswer/' + userExamId
     },
     getSubCategoriesWithPermissions (examId) {
-      return lumenServer + '/exam-question/show/sub-categories/' + examId
+      return '/exam-question/show/sub-categories/' + examId
     },
     getAnswerOfUserWithCorrect (userExamId) {
-      return lumenServer + '/temp-exam/answer/' + userExamId + '/withCorrect'
+      return '/temp-exam/answer/' + userExamId + '/withCorrect'
     },
-    registerExam: lumenServer + '/user/registerExam',
-    examUser: lumenServer + '/exam-user',
+    registerExam: '/user/registerExam',
+    examUser: '/exam-user',
     participate: {
-      sample: (examId) => lumenServer + '/exam-user/' + examId,
-      personal: (examId) => lumenServer + '/exam-user/personal/' + examId
+      sample: (examId) => '/exam-user/' + examId,
+      personal: (examId) => '/exam-user/personal/' + examId
     },
     examQuestion (quizId, page = 1) {
-      return lumenServer + '/exam-question/attach/show/' + quizId + '?page=' + page
+      return '/exam-question/attach/show/' + quizId + '?page=' + page
     },
     report: {
       getReport (userExamId) {
-        return lumenServer + '/exam-report/show?user_exam_id=' + userExamId
+        return '/exam-report/show?user_exam_id=' + userExamId
       },
-      adminGetReport: lumenServer + '/exam-report/show/admin',
-      takhminRotbeExamList: lumenServer + '/exam-report/rank',
+      adminGetReport: '/exam-report/show/admin',
+      takhminRotbeExamList: '/exam-report/rank',
       updateReportOptions (examId) {
-        return lumenServer + '/exam/config/' + examId
+        return '/exam/config/' + examId
       }
     },
     examBookletUpload (examId) {
-      return lumenServer + '/exam-question/booklet-file/' + examId
+      return '/exam-question/booklet-file/' + examId
     },
-    detachCategory: (examId, categoryId) => lumenServer + '/exam/detach/category/' + examId + '/' + categoryId,
-    attachCategories: (examId) => lumenServer + '/exam/attach/category/' + examId,
+    detachCategory: (examId, categoryId) => '/exam/detach/category/' + examId + '/' + categoryId,
+    attachCategories: (examId) => '/exam/attach/category/' + examId,
     user: {
-      draft () { return lumenServer + '/exam/user/draft' },
-      reportType: lumenServer + '/option/user?type=question_report_type',
-      report(questionId) { return lumenServer + '/question/report/store/' + questionId },
-      attach: lumenServer + '/exam-question/user/attach/v3',
-      detach(questionId) { return lumenServer + '/exam-question/user/detach/' + questionId },
+      draft () { return '/exam/user/draft' },
+      reportType: '/option/user?type=question_report_type',
+      report(questionId) { return '/question/report/store/' + questionId },
+      attach: '/exam-question/user/attach/v3',
+      detach(questionId) { return '/exam-question/user/detach/' + questionId },
       updateOrders(examId) {
-        return lumenServer + '/exam-question/user/replace-questions/' + examId
+        return '/exam-question/user/replace-questions/' + examId
       },
       detachBulk(examId) {
-        return lumenServer + '/exam-question/user/detach/bulk/' + examId
+        return '/exam-question/user/detach/bulk/' + examId
       },
       draftExam: {
-        create: lumenServer + '/exam/user',
-        update: (examId) => lumenServer + '/exam/user/' + examId,
-        getAttachedQuestions: (examId) => lumenServer + '/exam-question/user/attach/show/' + examId,
-        bulkAttachQuestions: (examId) => lumenServer + '/exam-question/user/attach/bulk/' + examId,
-        bulkDetachQuestions: (examId) => lumenServer + '/exam-question/user/detach/bulk/' + examId,
-        replaceQuestions: (examId) => lumenServer + '/exam-question/user/replace-questions/' + examId
+        create: '/exam/user',
+        update: (examId) => '/exam/user/' + examId,
+        getAttachedQuestions: (examId) => '/exam-question/user/attach/show/' + examId,
+        bulkAttachQuestions: (examId) => '/exam-question/user/attach/bulk/' + examId,
+        bulkDetachQuestions: (examId) => '/exam-question/user/detach/bulk/' + examId,
+        replaceQuestions: (examId) => '/exam-question/user/replace-questions/' + examId
       },
-      pdf: (examId) => lumenServer + `/exam/user/pdf/${examId}`,
-      examInfo: (examId) => lumenServer + '/exam/user/' + examId,
-      questionsWithAnswer: (examId) => lumenServer + `/exam-question/user/attach/show/${examId}`
+      pdf: (examId) => `/exam/user/pdf/${examId}`,
+      examInfo: (examId) => '/exam/user/' + examId,
+      questionsWithAnswer: (examId) => `/exam-question/user/attach/show/${examId}`
     }
   },
   question: {
     photo (type, id) {
-      return lumenServer + '/question/' + type + '/' + id
+      return '/question/' + type + '/' + id
     },
-    indexMonta: lumenServer + '/question/search-monta',
+    indexMonta: '/question/search-monta',
     bank: {
-      page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
+      page: (page) => '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
     },
     index (filters, page, isAdmin = false) {
       let newFilter = (filters) ? JSON.parse(JSON.stringify(filters)) : {}
@@ -316,82 +315,82 @@ const API_ADDRESS = {
         queryParam = queryParam.substr(1)
       }
       if (isAdmin) {
-        return lumenServer + '/question?' + queryParam
+        return '/question?' + queryParam
       } else {
-        return lumenServer + '/question/bank/search?' + queryParam
+        return '/question/bank/search?' + queryParam
       }
     },
-    groupAttach: lumenServer + '/question/group/attach',
+    groupAttach: '/question/group/attach',
     status: {
-      base: lumenServer + '/question/statuses',
+      base: '/question/statuses',
       changeStatus (questionId) {
-        return lumenServer + '/question/' + questionId + '/status'
+        return '/question/' + questionId + '/status'
       }
     },
-    reportStatuses: lumenServer + '/question/report/statuses',
-    levels: lumenServer + '/question/levels',
+    reportStatuses: '/question/report/statuses',
+    levels: '/question/levels',
     log: {
       base (questionId, pagination) {
         if (!pagination) {
           pagination = 0
         }
-        return lumenServer + '/activity-log?subject_id=' + questionId + '&subject=question&with_pagination=0'
+        return '/activity-log?subject_id=' + questionId + '&subject=question&with_pagination=0'
       }
     },
-    base: lumenServer + '/exam-question/attach',
-    createAndAttach: () => lumenServer + '/attacexam-question/h/',
-    create: lumenServer + '/question',
-    attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
+    base: '/exam-question/attach',
+    createAndAttach: () => '/attacexam-question/h/',
+    create: '/question',
+    attachSubCategoryToQuestion: '/exam-question/attach/sub-category',
     update (questionId) {
-      return lumenServer + '/question/' + questionId
+      return '/question/' + questionId
     },
-    reportLog: (questionId) => lumenServer + '/question/report/' + questionId,
+    reportLog: (questionId) => '/question/report/' + questionId,
     show (questionId) {
-      return lumenServer + '/question/' + questionId
+      return '/question/' + questionId
     },
-    attach: lumenServer + '/exam-question/attach/v2',
+    attach: '/exam-question/attach/v2',
     detach (questionId) {
-      return lumenServer + '/exam-question/detach/' + questionId
+      return '/exam-question/detach/' + questionId
     },
     delete (questionId) {
-      return lumenServer + '/question/' + questionId
+      return '/question/' + questionId
     },
     getCurrentQuestion (questionId) {
-      return lumenServer + '/question/' + questionId
+      return '/question/' + questionId
     },
     confirm (questionId) {
-      return lumenServer + '/question/confirm/' + questionId
+      return '/question/confirm/' + questionId
     },
     unconfirm (questionId) {
-      return lumenServer + '/question/unconfirm/' + questionId
+      return '/question/unconfirm/' + questionId
     },
     uploadImage (questionId) {
-      return lumenServer + '/question/upload/' + questionId
+      return '/question/upload/' + questionId
     },
-    printQuestions: lumenServer + '/question/export',
+    printQuestions: '/question/export',
     report(questionId) {
-      return lumenServer + 'question/report/store/' + questionId
+      return 'question/report/store/' + questionId
     }
   },
   questionSubcategory: {
-    base: lumenServer + '/sub-category',
+    base: '/sub-category',
     update (id) {
-      return lumenServer + '/sub-category/' + id
+      return '/sub-category/' + id
     },
-    updateOrder: lumenServer + '/exam-question/update/order/sub-category'
+    updateOrder: '/exam-question/update/order/sub-category'
   },
   questionCategory: {
-    base: lumenServer + '/category',
+    base: '/category',
     update (id) {
-      return lumenServer + '/category/' + id
+      return '/category/' + id
     }
   },
   subGroups: {
     base (examId) {
-      return lumenServer + '/exam-question/zirgorooh/' + examId
+      return '/exam-question/zirgorooh/' + examId
     },
     all () {
-      return lumenServer + '/option?with_pagination=0&type=zirgorooh_type'
+      return '/option?with_pagination=0&type=zirgorooh_type'
     }
   },
   tree: {
@@ -405,29 +404,29 @@ const API_ADDRESS = {
       return treeAddress
     },
     getNodeById (nodeId) {
-      return lumenServer + '/forrest/tree/' + nodeId
+      return '/forrest/tree/' + nodeId
     },
     getNodeByType (nodeType) {
-      return lumenServer + '/forrest/tree?type=' + nodeType
+      return '/forrest/tree?type=' + nodeType
     },
     editNode (id) {
-      return lumenServer + '/forrest/tree/' + id
+      return '/forrest/tree/' + id
     },
-    getGradesList: lumenServer + '/forrest/tree?type=test',
+    getGradesList: '/forrest/tree?type=test',
     getLessonList(lessonId) {
-      return lumenServer + '/forrest/tree/' + lessonId
+      return '/forrest/tree/' + lessonId
     },
-    getSubjectTagsTree: lumenServer + '/forrest/tree?type=subject_tags'
+    getSubjectTagsTree: '/forrest/tree?type=subject_tags'
   },
   tags: {
     setTags (questionId) {
-      return lumenServer + '/id/soalaQestion/' + questionId
+      return '/id/soalaQestion/' + questionId
     }
   },
   product: {
     landing: {
       sea: {
-        all: authServer + '/product/soalaa/all'
+        all: '/product/soalaa/all'
       }
     },
     gifts: (id) => authServer + '/gift-products/' + id,
@@ -439,8 +438,8 @@ const API_ADDRESS = {
       productIds.forEach((productId, productIndex) => {
         idParams.push('ids' + '[' + productIndex + ']=' + productId)
       })
-      const queryParams = idParams.join('&') + '&seller=2'
-      return authServer + '/product?' + queryParams
+      const queryParams = idParams.join('&')
+      return '/product?' + queryParams
     },
 
     edit: {
@@ -463,13 +462,13 @@ const API_ADDRESS = {
     orderWithTransaction (orderId) { return apiV2Server + '/orderWithTransaction/' + orderId }
   },
   subscription: {
-    landing: lumenServer + '/subscribe/landing',
-    list: lumenServer + '/subscribe/user',
-    last: lumenServer + '/subscribe/user/last',
-    register: (userId) => lumenServer + `/subscribe/user/${userId}`
+    landing: '/subscribe/landing',
+    list: '/subscribe/user',
+    last: '/subscribe/user/last',
+    register: (userId) => `/subscribe/user/${userId}`
   },
   homePage: {
-    base: lumenServer + '/homepage'
+    base: '/homepage'
   },
   ticket: {
     create: {

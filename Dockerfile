@@ -1,30 +1,68 @@
-# stage1 as builder
-FROM node:16.13.2-alpine as builder
+FROM node:20.9-alpine AS prebuild
 
-WORKDIR /vue-ui
+# Set working directory
+WORKDIR /var/www/app
 
-# Copy the package.json and install dependencies
-COPY package*.json ./
-RUN npm ci
+COPY ./package*.json ./
 
-# Copy rest of the files
+# Install dependencies
+RUN yarn install --production --frozen-lockfile
+
+ARG ASSET_SERVE
+ARG NODES_SERVER_URL_SSL
+
+ARG AUTH_API_SERVER=http://office.alaa.tv:700/api/v2
+ARG AAA_API_SERVER=http://office.alaa.tv:3000/api/v1
+ARG SOCKET_SERVER=http://office.alaatv.com:3006
+
+ARG GET_TIME_SERVER=/time
+ARG AUTH_API=/alaa/api/v2
+ARG AAA_API=/3a/api/v1
+
+ARG ACTIVE_ALL_CATEGORIES_IN_EXAM=false
+
+ARG HEAP_MEMORY_ALLOCATION_INTERVAL
+ARG MAX_HEAP_MEMORY_ALLOCATION_IN_PERCENT
+
+ARG LOG_REQUEST
+
+ARG SENTRY_DSN
+ARG SENTRY_TRACES_SAMPLE_RATE
+ARG SENTRY_REPLAYS_SESSION_SAMPLE_RATE
+ARG SENTRY_REPLAYS_ON_ERROR_SAMPLE_RATE
+ARG SENTRY_ORG
+ARG SENTRY_PROJECT
+ARG SENTRY_AUTH_TOKEN
+
+ARG NGINX_PORT=8082
+
+ARG SSR_PORT=13100
+
+# Copy all files
 COPY . .
 
-# eslint
-# RUN npm run lint
+# Build app on SSR mode
+RUN yarn build:ssr
 
-# Build the project
-RUN npm run build:pwa
+##############################################
 
 
-FROM nginx:1.23.3-alpine as production-build
-COPY ./nginx.conf /etc/nginx/nginx.conf
+FROM node:20.9-alpine
 
-## Remove default nginx index page
-RUN rm -rf /usr/share/nginx/html/*
+COPY --from=prebuild /var/www/app/dist/ssr /var/www/app/dist/ssr
 
-# Copy from the stahg 1
-COPY --from=builder /vue-ui/dist /usr/share/nginx/html
+COPY --from=prebuild /var/www/app/node_modules /var/www/app/dist/ssr/node_modules
 
-EXPOSE 80
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+WORKDIR /var/www/app/dist/ssr
+
+RUN yarn install
+
+# Expose the listening port
+EXPOSE 13100
+
+# Run container as non-root (unprivileged) user
+# The "node" user is provided in the Node.js Alpine base image
+
+USER node
+
+CMD ["node", "/var/www/app/dist/ssr/index.js"]

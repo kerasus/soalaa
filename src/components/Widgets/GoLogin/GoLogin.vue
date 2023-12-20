@@ -1,24 +1,20 @@
 <template>
-  <div  v-if="!isUserLogin"
-        class="page-width">
+  <div v-if="!isUserLogin"
+       class="page-width">
     <div class="sub-mit-box flex justify-between items-center">
       <div class="info">
         <span v-html="options.text" />
       </div>
       <div class="action-box">
-        <q-btn
-          unelevated
-          class="btn-style"
-          label="ورود"
-          :to="{ name: 'login' }"
-        />
-        <q-btn
-          unelevated
-          color="primary"
-          class="btn-style"
-          label="ثبت نام"
-          :to="{ name: 'login' }"
-        />
+        <q-btn unelevated
+               class="btn-style"
+               label="ورود"
+               :to="{ name: 'login' }" />
+        <q-btn unelevated
+               color="primary"
+               class="btn-style"
+               label="ثبت نام"
+               :to="{ name: 'login' }" />
       </div>
     </div>
 
@@ -36,9 +32,17 @@ export default {
       }
     }
   },
-  computed: {
-    isUserLogin() {
-      return this.$store.getters['Auth/isUserLogin']
+  data: () => {
+    return {
+      isUserLogin: false
+    }
+  },
+  mounted () {
+    this.loadAuthData()
+  },
+  methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.isUserLogin = this.$store.getters['Auth/isUserLogin']
     }
   }
 }

@@ -5,7 +5,7 @@
     <div class="choosing-3a-reason-container">
       <div class="choosing-3a-reason ">
         <div class="reason-header">
-          <div class="yellow-bg"></div>
+          <div class="yellow-bg" />
           <span class="badge">1</span>
           <q-img class="reason-image"
                  :src="reasons[0].src"
@@ -21,7 +21,7 @@
 
       <div class="choosing-3a-reason ">
         <div class="reason-header">
-          <div class="yellow-bg"></div>
+          <div class="yellow-bg" />
           <span class="badge">2</span>
           <q-img class="reason-image"
                  :src="reasons[1].src"
@@ -37,7 +37,7 @@
 
       <div class="choosing-3a-reason ">
         <div class="reason-header">
-          <div class="yellow-bg"></div>
+          <div class="yellow-bg" />
           <span class="badge">3</span>
           <q-img class="reason-image"
                  :src="reasons[2].src"
@@ -53,7 +53,7 @@
 
       <div class="choosing-3a-reason ">
         <div class="reason-header">
-          <div class="yellow-bg"></div>
+          <div class="yellow-bg" />
           <span class="badge">4</span>
           <q-img class="reason-image"
                  :src="reasons[3].src"
@@ -69,7 +69,7 @@
 
       <div class="choosing-3a-reason ">
         <div class="reason-header">
-          <div class="yellow-bg"></div>
+          <div class="yellow-bg" />
           <span class="badge">5</span>
           <q-img class="reason-image"
                  :src="reasons[4].src"

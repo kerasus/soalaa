@@ -1,40 +1,29 @@
 <template>
   <div class="ticket">
-    <entity-create
-      ref="EntityCreate"
-      v-model:value="inputs"
-      :title=this.department.title
-      :api="api"
-      :entity-id-key-in-response="entityIdKeyInResponse"
-      :show-route-param-key="showRouteParamKey"
-      :index-route-name="indexRouteName"
-      :show-route-name="showRouteName"
-      :show-save-button="false"
-    >
+    <entity-create ref="EntityCreate"
+                   v-model:value="inputs"
+                   :title="department.title"
+                   :api="api"
+                   :entity-id-key-in-response="entityIdKeyInResponse"
+                   :show-route-param-key="showRouteParamKey"
+                   :index-route-name="indexRouteName"
+                   :show-route-name="showRouteName"
+                   :show-save-button="false">
       <template #before-form-builder>
-        <div
-          v-if="beforeFormBuilder"
-        >
-          <q-dialog
-            v-model="showDialog"
-            no-backdrop-dismiss
-          >
-            <q-card
-              class="flex justify-center">
+        <div v-if="beforeFormBuilder">
+          <q-dialog v-model="showDialog"
+                    no-backdrop-dismiss>
+            <q-card class="flex justify-center">
               <div v-for="(department, index) in departments"
                    :key="index"
                    v-close-popup
                    class="departmentForSelect col-2 q-my-md "
                    @click="selectDepartment(department)">
-                <q-btn
-                  flat
-                  class="departmentActionBtn"
-                  icon="isax:search-status .path4:before"
-                />
-                <div
-                  class="departmentTitle flex justify-center"
-                  v-html="department.title"
-                />
+                <q-btn flat
+                       class="departmentActionBtn"
+                       icon="isax:search-status .path4:before" />
+                <div class="departmentTitle flex justify-center"
+                     v-html="department.title" />
               </div>
             </q-card>
           </q-dialog>
@@ -46,16 +35,15 @@
       <send-message-input ref="SendMessageInput"
                           :send-loading="sendLoading"
                           :show-send-private="false"
-                          @creatTicket="sendTicket"
-      />
+                          @creatTicket="sendTicket" />
     </div>
   </div>
 </template>
 
 <script>
-import SendMessageInput from 'components/Ticket/SendMessageInput'
 import { EntityCreate } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
+import SendMessageInput from 'src/components/Ticket/SendMessageInput.vue'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Create',
@@ -63,12 +51,15 @@ export default {
     EntityCreate,
     SendMessageInput
   },
+  beforeRouteLeave() {
+    this.$axios.defaults.baseURL = this.$appApiInstance.defaults.baseURL
+  },
   data () {
     return {
       sendLoading: null,
       showDialog: false,
       expanded: true,
-      api: API_ADDRESS.ticket.create.base,
+      api: APIGateway.ticket.APIAdresses.create,
       entityIdKeyInResponse: 'id',
       showRouteParamKey: 'id',
       showRouteName: 'User.Ticket.Show',
@@ -176,6 +167,7 @@ export default {
     }
   },
   created () {
+    this.$axios.defaults.baseURL = this.$alaaApiInstance.defaults.baseURL
     this.setDefaultDepartment()
   },
   methods: {

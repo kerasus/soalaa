@@ -1,21 +1,32 @@
 <template>
-  <div ref="HtmlKatex"
-       class="html-katex"
-       style="overflow: hidden"
-       :dir="!isLtrString ? 'rtl' : 'ltr'"
-       v-html="computedKatex"
-  />
-<!--  <canvas v-show="false"-->
-<!--          ref="convertor" />-->
+  <div class="VueKatex">
+    <div v-if="mounted"
+         ref="HtmlKatex"
+         class="html-katex"
+         :dir="!isLtrString ? 'rtl' : 'ltr'"
+         v-html="computedKatex" />
+    <q-skeleton v-else
+                type="rect"
+                width="100%"
+                height="100px" />
+  </div>
 </template>
 
 <script>
-import mixinConvertToTiptap from 'vue-tiptap-katex-core/mixins/convertToTiptap'
 import katex from 'katex'
 import 'katex/dist/katex.css'
-import addPersianTo from 'src/Utils/katex-persian-renderer/src/index.mjs'
 import 'src/Utils/katex-persian-renderer/katex-persian-fonts/index.css'
+import addPersianTo from 'src/Utils/katex-persian-renderer/src/index.mjs'
 import allMetrics from 'src/Utils/katex-persian-renderer/katex-persian-fonts/YekanBakhFontMetrics.json'
+
+import * as VueTiptapKatexAssist from 'vue-tiptap-katex-core/assist.js'
+// let VueTiptapKatexAssist
+// if (typeof window !== 'undefined') {
+//   import('vue-tiptap-katex-core')
+//     .then((vueTiptapKatexCore) => {
+//       VueTiptapKatexAssist = vueTiptapKatexCore.Assist
+//     })
+// }
 
 addPersianTo(katex, {
   fontName: 'YekanBakh',
@@ -41,7 +52,8 @@ export default {
   emits: ['loaded'],
   data() {
     return {
-      rtl: true
+      rtl: true,
+      mounted: false
     }
   },
   computed: {
@@ -59,6 +71,9 @@ export default {
       return !string.match(persianRegex)
     },
     computedKatex() {
+      if (!VueTiptapKatexAssist) {
+        return this.input
+      }
       let string = this.input
       if (string === null || typeof string === 'undefined') {
         return ''
@@ -70,13 +85,16 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
-        item.setAttribute('dir', 'ltr')
-      })
-      this.$emit('loaded')
-      if (this.base64) {
-        this.convertPhotosToBase64()
-      }
+      this.mounted = true
+      setTimeout(() => {
+        document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
+          item.setAttribute('dir', 'ltr')
+        })
+        this.$emit('loaded')
+        if (this.base64) {
+          this.convertPhotosToBase64()
+        }
+      }, 1000)
     }, 1000)
   },
   created() {
@@ -84,7 +102,7 @@ export default {
   },
   methods: {
     removeFirstAndLastBracket(input) {
-      const regexPatternForFormula = mixinConvertToTiptap.methods.getRegexPatternForFormula()
+      const regexPatternForFormula = VueTiptapKatexAssist.getRegexPatternForFormula()
       const regex = /\\\[.*\\]/gms
       let string = input
       string = string.replace(regexPatternForFormula, (match) => {
@@ -111,8 +129,8 @@ export default {
       trust: true
     }) {
       let string = input
-      string = mixinConvertToTiptap.methods.convertToTiptap(string)
-      const regex = mixinConvertToTiptap.methods.getRegexPatternForFormula()
+      string = VueTiptapKatexAssist.convertToTiptap(string)
+      const regex = VueTiptapKatexAssist.getRegexPatternForFormula()
       string = string.replace(regex, (match) => {
         let finalMatch
         if (match.includes('$')) {
@@ -121,7 +139,7 @@ export default {
           finalMatch = match.slice(2, -2)
         }
         if (finalMatch) {
-          finalMatch = mixinConvertToTiptap.methods.replaceKatexSigns(finalMatch)
+          finalMatch = VueTiptapKatexAssist.replaceKatexSigns(finalMatch)
         }
         return katex.renderToString(finalMatch, katexConfig)
       })
@@ -196,43 +214,40 @@ export default {
 
 <style lang="scss">
 /*rtl:ignore*/
-@import "vue-tiptap-katex-core/css/base";
+@import "katex/dist/katex.min.css";
+@import "vue-tiptap-katex-core/css/base.scss";
 @import "src/css/katex-rtl-fix.scss";
+
+.VueKatex {
+  width: 100%;
+  .html-katex {
+    width: 100%;
+    overflow: hidden;
+
+    & > p {
+      direction: inherit;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    .katex {
+      /*rtl:ignore*/
+      direction: ltr !important;
+      /*rtl:ignore*/
+    }
+  }
+}
 
 //rtl change bug fix
 [dir="rtl"] .html-katex {
   @include katex-rtl-fix;
-  //font-size: 1.2rem;
-  //line-height: 4rem;
-
-  .katex {
-    //font-size: 1.9rem;
-    /*rtl:ignore*/
-    direction: ltr !important;
-    /*rtl:ignore*/
-  }
-}
-
-.html-katex {
-  width: 100%;
-
-  & > p {
-    direction: inherit;
-  }
-
-  img {
-    max-width: 100%;
-  }
-
   .katex {
     /*rtl:ignore*/
     direction: ltr !important;
     /*rtl:ignore*/
   }
-}
-
-#mathfield .ML__cmr,
-.katex .mtight {
 }
 
 </style>

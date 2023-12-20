@@ -4,14 +4,12 @@
       <div class="content-label">
         پاسخ ویدیویی
       </div>
-      <q-btn
-        label="انتخاب محتوا"
-        color="primary"
-        class="dialog-btn"
-        :loading="loading"
-        unelevated
-        @click="toggleVideoAnswerDialog()"
-      >
+      <q-btn label="انتخاب محتوا"
+             color="primary"
+             class="dialog-btn"
+             :loading="loading"
+             unelevated
+             @click="toggleVideoAnswerDialog()">
         <q-badge v-if="contentId !== null"
                  color="warning"
                  floating
@@ -19,7 +17,8 @@
           1
         </q-badge>
       </q-btn>
-      <content-selection-dialog :dialog="dialog"
+      <content-selection-dialog v-if="dialog"
+                                :dialog="dialog"
                                 :content="content"
                                 @toggle-dialog="toggleVideoAnswerDialog"
                                 @update-value="updateContent($event)" />
@@ -42,9 +41,10 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import ContentSelectionDialog from 'components/Question/QuestionPage/ContentSelectionDialog.vue'
-import { Content } from 'src/models/Content'
+import { Content } from 'src/models/Content.js'
+import { APIGateway } from 'src/api/APIGateway.js'
+import ContentSelectionDialog from 'src/components/Question/QuestionPage/ContentSelectionDialog.vue'
+
 export default {
   name: 'QuestionVideoAnswer',
   components: { ContentSelectionDialog },
@@ -62,7 +62,7 @@ export default {
   emits: ['updateValue'],
   data () {
     return {
-      api: API_ADDRESS.content.admin,
+      api: APIGateway.content.APIAdresses.admin,
       content: new Content(),
       timePoint: null,
       timePointOptions: [],
@@ -92,9 +92,9 @@ export default {
     },
     getContent(contentId) {
       this.loading = true
-      this.$axios.get(API_ADDRESS.content.get(contentId))
-        .then(res => {
-          this.content = new Content(res.data.data)
+      this.$apiGateway.content.show(contentId)
+        .then(content => {
+          this.content = new Content(content)
           if (this.content.timepoints && this.content.timepoints.list.length > 0) {
             this.timePointOptions = this.content.timepoints.list
             this.timePoint = this.content.timepoints.list.find(x => x.id === this.timePointId)

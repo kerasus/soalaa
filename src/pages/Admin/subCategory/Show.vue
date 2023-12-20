@@ -1,27 +1,25 @@
 <template>
-  <entity-show
-    v-model:value="inputs"
-    title="اطلاعات خبر"
-    :api="api"
-    :entity-id-key="entityIdKey"
-    :entity-param-key="entityParamKey"
-    :edit-route-name="editRouteName"
-    :index-route-name="indexRouteName"
-    :before-get-data="loadCategories"
-  />
+  <entity-show v-model:value="inputs"
+               title="اطلاعات خبر"
+               :api="api"
+               :entity-id-key="entityIdKey"
+               :entity-param-key="entityParamKey"
+               :edit-route-name="editRouteName"
+               :index-route-name="indexRouteName"
+               :before-get-data="loadCategories" />
 </template>
 
 <script>
 import { EntityShow } from 'quasar-crud'
-// import EntityShow from 'components/Entity/Show/EntityShow'
-import API_ADDRESS from 'src/api/Addresses'
+// import EntityShow from 'src/components/Entity/Show/EntityShow'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Show',
   components: { EntityShow },
   data () {
     return {
-      api: API_ADDRESS.questionSubcategory.base,
+      api: APIGateway.questionSubcategory.APIAdresses.base,
       entityIdKey: 'data.id',
       entityParamKey: 'data.id',
       editRouteName: 'Admin.subCategory.Edit',
@@ -46,8 +44,8 @@ export default {
   methods: {
     async loadCategories () {
       const that = this
-      const response = await that.$axios.get(API_ADDRESS.questionCategory.base)
-      that.categories = response.data.data
+      const questionCategory = await that.$apiGateway.questionCategory.get()
+      that.categories = questionCategory
       that.inputs.forEach(item => {
         if (item.name === 'category_id') {
           item.options = that.categories

@@ -24,9 +24,9 @@
 <script>
 import { defineComponent } from 'vue'
 import { mixinOptionPanel } from 'quasar-ui-q-page-builder'
+import CartViewOptionPanel from 'src/components/Widgets/Cart/CartView/OptionPanel.vue'
+import CartInvoiceOptionPanel from 'src/components/Widgets/Cart/CartInvoice/OptionPanel.vue'
 import OptionPanelTabs from 'quasar-ui-q-page-builder/src/components/OptionPanelComponents/OptionPanelTabs.vue'
-import CartInvoiceOptionPanel from 'components/Widgets/Cart/CartInvoice/OptionPanel.vue'
-import CartViewOptionPanel from 'components/Widgets/Cart/CartView/OptionPanel.vue'
 
 export default defineComponent({
   name: 'OptionPanel',

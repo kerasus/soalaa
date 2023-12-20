@@ -3,8 +3,7 @@
     <div class="footer-logo-item">
       <a href="https://alaatv.com">
         <q-img src="https://nodes.alaatv.com/upload/landing/logo.png"
-               alt="آلاء"
-        />
+               alt="آلاء" />
       </a>
     </div>
     <div class="footer-logo-item">
@@ -12,13 +11,12 @@
          target="_blank">
         <q-img src="https://trustseal.enamad.ir/Content/Images/Star/star1.png?v=5.0.0.47"
                alt="enamad.ir"
-               style="cursor:pointer"
-        />
+               style="cursor:pointer" />
       </a>
     </div>
     <div class="footer-logo-item">
       <router-link :to="{name: 'dashboard'}">
-        <q-img src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png"></q-img>
+        <q-img src="https://nodes.alaatv.com/aaa/landing/Soalaa/Logo/logo.png" />
       </router-link>
     </div>
   </div>

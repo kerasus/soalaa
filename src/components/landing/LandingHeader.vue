@@ -2,7 +2,7 @@
   <div class="landing-header column items-center">
     <div class="introduction ">
       <div class="title-style">
-        16 مرحله آزمون آنلاین
+        10 مرحله آزمون آنلاین
         <br>
         برای موفقیت در کنکور 1403
       </div>
@@ -12,8 +12,7 @@
       <q-btn unelevated
              class="submit-btn"
              label="ثبت نام آزمون"
-             @click="onClickRegisterBtn"
-      />
+             @click="onClickRegisterBtn" />
     </div>
     <!--    <div class="video-box flex items-center justify-center">-->
     <!--      <video-player-->
@@ -24,8 +23,8 @@
 </template>
 
 <script>
-import { PlayerSourceList } from 'src/models/PlayerSource'
-// import VideoPlayer from 'components/VideoPlayer'
+// import VideoPlayer from 'src/components/VideoPlayer.vue'
+import { PlayerSourceList } from 'src/models/PlayerSource.js'
 
 export default {
   name: 'LandingHeader',

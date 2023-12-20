@@ -6,62 +6,46 @@
       </q-card-section>
       <q-separator inset />
       <q-card-section>
-        <div
-          v-if="question.statement"
-          class="row justify-between question-box default-Qcard-box"
-        >
-          <vue-katex
-            :input="question.statement"
-          />
+        <div v-if="question.statement"
+             class="row justify-between question-box default-Qcard-box">
+          <vue-katex :input="question.statement" />
         </div>
       </q-card-section>
     </q-card>
     <div class="multiple-choice-A">
-      <div
-        v-if="question.choices.list.length"
-        class="row multiple-choice-Answer"
-      >
-        <div
-          v-for="(item, index) in question.choices.list"
-          :key="item.order"
-          class="col-6 answer-box"
-        >
+      <div v-if="question.choices.list.length"
+           class="row multiple-choice-Answer">
+        <div v-for="(item, index) in question.choices.list"
+             :key="item.order"
+             class="col-6 answer-box">
           <q-card class="col-6 default-questions-card">
             <q-card-section class="default-Qcard-title">
-              <q-radio
-                v-model="choice"
-                dense
-                disable
-                :val="'choice' + index"
-                :label="'گزینه ' + (index + 1)"
-                color="primary"
-              />
+              <q-radio v-model="choice"
+                       dense
+                       disable
+                       :val="'choice' + index"
+                       :label="'گزینه ' + (index + 1)"
+                       color="primary" />
             </q-card-section>
             <q-separator inset />
             <q-card-section>
               <div class="row justify-between default-Qcard-box">
-                <vue-katex
-                  :input="item.title"
-                />
+                <vue-katex :input="item.title" />
               </div>
             </q-card-section>
           </q-card>
         </div>
       </div>
     </div>
-    <q-card
-      v-if="question.descriptive_answer"
-      class="default-questions-card"
-    >
+    <q-card v-if="question.descriptive_answer"
+            class="default-questions-card">
       <q-card-section class="default-Qcard-title">
         <div>پاسخ تشریحی</div>
       </q-card-section>
       <q-separator inset />
       <q-card-section>
         <div class="row justify-between default-Qcard-box">
-          <vue-katex
-            :input="question.descriptive_answer"
-          />
+          <vue-katex :input="question.descriptive_answer" />
         </div>
       </q-card-section>
     </q-card>
@@ -69,23 +53,23 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
-import { Question } from 'src/models/Question'
+import { Question } from 'src/models/Question.js'
+import VueKatex from 'src/components/VueKatex.vue'
+
 export default {
   name: 'MultipleChoiceShowQuestion',
   components: {
     VueKatex
   },
-  props: {},
-  data () {
-    return {
-      choice: ''
-    }
-  },
   inject: {
     question: {
       from: 'providedQuestion', // this is optional if using the same key for injection
       default: new Question()
+    }
+  },
+  data () {
+    return {
+      choice: ''
     }
   },
   created () {

@@ -12,67 +12,59 @@
     <div class="box">
       <div class="header exam-create">
         <div>آزمون‌های ساخته شده</div>
-        <q-btn
-          class="exam-create-btn"
-          icon="isax:add"
-          round
-          flat
-          dense
-          :to="{name:'User.Create.Exam'}"
-          size="md"
-        >
+        <q-btn class="exam-create-btn"
+               icon="isax:add"
+               round
+               flat
+               dense
+               :to="{name:'User.Create.Exam'}"
+               size="md">
           <span v-if="windowSize.x > 1439">ساخت آزمون</span>
         </q-btn>
       </div>
       <div class="footer exam-create">
         {{statistics.self_exam}}
         <span class="exam">آزمون</span>
-        <q-btn
-          class="exam-create-btn md-hide"
-          icon="isax:add"
-          round
-          flat
-          dense
-          :to="{name:'User.Create.Exam'}"
-          size="md"
-        ></q-btn>
+        <q-btn class="exam-create-btn md-hide"
+               icon="isax:add"
+               round
+               flat
+               dense
+               :to="{name:'User.Create.Exam'}"
+               size="md" />
       </div>
     </div>
     <div class="box orders">
       <div class="header exam-plus">
         <div class="title">سفارش‌های من‌</div>
         <div class="md-hide mobile-order-title">سفارش‌ها‌</div>
-        <q-btn
-          class="exam-plus-btn"
-          icon="isax:arrow-left-2"
-          round
-          flat
-          dense
-          size="md"
-          :to="{name: 'User.MyOrders'}"
-        ></q-btn>
+        <q-btn class="exam-plus-btn"
+               icon="isax:arrow-left-2"
+               round
+               flat
+               dense
+               size="md"
+               :to="{name: 'User.MyOrders'}" />
       </div>
       <div class="footer exam-plus">
         {{statistics.self_order}}
         <span class="exam">آزمون</span>
-        <q-btn
-          class="exam-plus-btn md-hide"
-          icon="isax:arrow-left-2"
-          round
-          flat
-          dense
-          size="md"
-          :to="{name: 'User.MyOrders'}"
-        />
+        <q-btn class="exam-plus-btn md-hide"
+               icon="isax:arrow-left-2"
+               round
+               flat
+               dense
+               size="md"
+               :to="{name: 'User.MyOrders'}" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   name: 'DashboardHeader',
   data() {
     return {
@@ -84,17 +76,19 @@ export default {
       return this.$store.getters['AppLayout/windowSize']
     }
   },
+  mounted() {
+    this.getStatistics()
+  },
   methods: {
     getStatistics() {
-      this.$axios.get(API_ADDRESS.user.statistics).then((res) => {
-        this.statistics = res.data.data
-      })
+      this.$apiGateway.user.statistics()
+        .then((statistic) => {
+          this.statistics = statistic
+        })
+        .catch(() => {})
     }
-  },
-  created() {
-    this.getStatistics()
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

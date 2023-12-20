@@ -1,12 +1,11 @@
 import process from 'process'
-import API_ADDRESS from 'src/api/Addresses'
-import Time from 'src/plugins/time'
-import Assistant from 'src/plugins/assistant'
-import SocketConnection from 'src/plugins/socket'
-import ExamData from 'src/assets/js/ExamData'
-import { Exam } from 'src/models/Exam'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
+import Time from 'src/plugins/time.js'
+import { Exam } from 'src/models/Exam.js'
+import Assistant from 'src/plugins/assistant.js'
+import ExamData from 'src/assets/js/ExamData.js'
+import SocketConnection from 'src/plugins/socket.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory.js'
 
 const mixinQuiz = {
   computed: {
@@ -68,6 +67,9 @@ const mixinQuiz = {
       // return currentLesson
     },
     currentExamQuestions () {
+      if (typeof window === 'undefined') {
+        return null
+      }
       return window.currentExamQuestions
     }
   },
@@ -221,7 +223,7 @@ const mixinQuiz = {
     sendUserQuestionsDataToServerAndFinishExam (userExamId, finishExam) {
       const answers = this.getUserAnswers(userExamId)
 
-      return this.$axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: userExamId, finish: finishExam, questions: answers })
+      return this.$apiGateway.exam.sendAnswers({ exam_user_id: userExamId, finish: finishExam, questions: answers })
     },
     actionOnNoQuestionInExam () {
       this.$q.notify({
@@ -233,6 +235,9 @@ const mixinQuiz = {
       this.$router.push({ name: 'User.Exam.List' })
     },
     reloadQuestionFile (questionsFileUrl, viewType, examId) {
+      if (typeof window === 'undefined') {
+        return null
+      }
       if (!Assistant.getId(examId)) {
         return
       }
@@ -325,6 +330,9 @@ const mixinQuiz = {
       return this.$store.getters['Exam/quiz']
     },
     getCurrentExamQuestionIndexes () {
+      if (typeof window === 'undefined') {
+        return []
+      }
       if (window.currentExamQuestionIndexes && window.currentExamQuestionIndexes.length) {
         return window.currentExamQuestionIndexes
       }
@@ -332,10 +340,16 @@ const mixinQuiz = {
       return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
     },
     setCurrentExamQuestions (currentExamQuestions) {
+      if (typeof window === 'undefined') {
+        return null
+      }
       window.currentExamQuestions = currentExamQuestions
       window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
     },
     setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
+      if (typeof window === 'undefined') {
+        return null
+      }
       window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
     },
     sortQuestions (questions) {
@@ -411,6 +425,9 @@ const mixinQuiz = {
       return currentExamQuestionsArray
     },
     getCurrentExamQuestions () {
+      if (typeof window === 'undefined') {
+        return null
+      }
       if (window.currentExamQuestions) {
         return window.currentExamQuestions
       }
@@ -590,12 +607,7 @@ const mixinQuiz = {
     syncUserAnswersWithDBAndSendAnswersToServerInExamTime (userExamId, finishExam) {
       const questions = this.getUserAnswers(userExamId)
 
-      return this.$axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: userExamId, finish: finishExam, questions })
-    },
-    syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime (userExamId, finishExam) {
-      const questions = this.getUserAnswers(userExamId)
-
-      return this.$axios.post(API_ADDRESS.exam.sendAnswersAfterExam, { exam_user_id: userExamId, finish: finishExam, questions })
+      return this.$apiGateway.exam.sendAnswers({ exam_user_id: userExamId, finish: finishExam, questions })
     },
     isLtrString (string) {
       if (!string) {
@@ -813,15 +825,15 @@ const mixinQuiz = {
 
     getExamUserData (examId) {
       return new Promise((resolve, reject) => {
-        this.$axios.post(API_ADDRESS.exam.examUser, { examId })
-          .then((response) => {
+        this.$apiGateway.exam.getExamUser({ examId })
+          .then((exam) => {
             const userExamForParticipate = new Exam()
-            userExamForParticipate.id = Assistant.getId(response.data.data.exam_id)
-            userExamForParticipate.user_exam_id = Assistant.getId(response.data.data.id)
-            userExamForParticipate.created_at = response.data.data.created_at
-            userExamForParticipate.questions_file_url = response.data.data.questions_file_url
-            userExamForParticipate.categories = new QuestCategoryList(response.data.data.categories)
-            userExamForParticipate.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
+            userExamForParticipate.id = Assistant.getId(exam.exam_id)
+            userExamForParticipate.user_exam_id = Assistant.getId(exam.id)
+            userExamForParticipate.created_at = exam.created_at
+            userExamForParticipate.questions_file_url = exam.questions_file_url
+            userExamForParticipate.categories = new QuestCategoryList(exam.categories)
+            userExamForParticipate.sub_categories = new QuestSubcategoryList(exam.sub_categories)
             resolve(userExamForParticipate)
           })
           .catch((error) => {

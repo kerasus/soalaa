@@ -1,7 +1,11 @@
-import axios from 'axios'
-import { Notify } from 'quasar'
-import Time from 'src/plugins/time'
 import { boot } from 'quasar/wrappers'
+import { Notify, Cookies } from 'quasar'
+import APIInstanceWrapper from 'src/api/classes/APIInstanceWrapper.js'
+
+const alaaApi = process.env.AUTH_API
+const alaaApiServer = process.env.AUTH_API_SERVER
+const appApi = process.env.AAA_API
+const appApiServer = process.env.AAA_API_SERVER
 
 const AjaxResponseMessages = (function () {
   const messageMap = {
@@ -63,15 +67,13 @@ const AxiosHooks = (function () {
       messages.push(AjaxResponseMessages.getMessage(error.response.data.error.code))
     } else if (error.response.data.error && !AjaxResponseMessages.isCustomMessage(error.response.data.error.code)) {
       for (const [key, value] of Object.entries(error.response.data.error)) {
-        console.error('key', key)
-        if (typeof value === 'string') {
+        if (typeof error.response.data.error[key] === 'string') {
           messages.push(value)
         }
       }
     } else if (error.response.data.errors) {
       for (const [key, value] of Object.entries(error.response.data.errors)) {
-        console.error('key', key)
-        if (typeof value === 'string') {
+        if (typeof error.response.data.errors[key] === 'string') {
           messages.push(value)
         } else {
           messages = messages.concat(getMessagesFromArrayWithRecursion(value))
@@ -80,6 +82,18 @@ const AxiosHooks = (function () {
     }
 
     toastMessages(messages)
+    return Promise.reject(error)
+  }
+
+  function deAuthorizeUser (router, store) {
+    store.dispatch('Auth/logOut', { redirectTo: false, clearRedirectTo: false })
+    const loginRouteName = 'login'
+    const currentRoute = (router?.currentRoute?._value) ? router.currentRoute._value : (router?.history?.current) ? router.history.current : null
+    if (currentRoute && currentRoute.name === loginRouteName) {
+      return
+    }
+    store.commit('Auth/updateRedirectTo', currentRoute)
+    router.push({ name: loginRouteName })
   }
 
   function toastMessages (messages) {
@@ -104,17 +118,6 @@ const AxiosHooks = (function () {
     })
   }
 
-  function deAuthorizeUser (router, store) {
-    store.dispatch('Auth/logOut')
-    const loginRouteName = 'login'
-    const currentRoute = (router?.currentRoute?._value) ? router.currentRoute._value : (router?.history?.current) ? router.history.current : null
-    if (currentRoute && currentRoute.name === loginRouteName) {
-      return
-    }
-    store.commit('Auth/updateRedirectTo', currentRoute)
-    router.push({ name: loginRouteName })
-  }
-
   function getMessagesFromArrayWithRecursion (array) {
     if (array) {
       if (Array.isArray(array)) {
@@ -133,41 +136,57 @@ const AxiosHooks = (function () {
 // Be careful when using SSR for cross-request state pollution
 // due to creating a Singleton instance here;
 // If any client changes this (global) instance, it might be a
-// good idea to move this instance creation inside of the
+// good idea to move this instance creation inside the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const api = axios.create({ baseURL: 'https://api.example.com' })
 
-export default boot(({ app, store, router }) => {
-  const accessToken = store.getters['Auth/accessToken']
-  if (accessToken) {
-    axios.defaults.headers.common.Authorization = 'Bearer ' + accessToken
-  }
-  // for use inside Vue files (Options API) through this.$axios and this.$api
-  const instance = axios.create(/* ... */)
+const alaaApiInstance = APIInstanceWrapper.createInstance(alaaApi, alaaApiServer)
+const appApiInstance = APIInstanceWrapper.createInstance(appApi, appApiServer)
 
-  app.config.globalProperties.$axios = axios
-  // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
-  //       so you won't necessarily have to import axios in each vue file
-
-  app.config.globalProperties.$api = api
+export default boot(({ app, store, router, ssrContext }) => {
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
   //       so you can easily perform requests against your app's API
-
   AxiosHooks.setNotifyInstance(app.config.globalProperties.$q)
-  axios.interceptors.response.use(function (response) {
-    if (response.config.url.indexOf(process.env.AAA_API) === 0) {
-      Time.synchronizeTimeWithData(response)
-    }
-    return Promise.resolve(response)
-  }, function (error) {
-    AxiosHooks.handleErrors(error, router, store)
-    return Promise.reject(error)
-  })
 
-  app.axios = instance
-  store.$axios = instance
-  router.$axios = instance
+  if (appApiInstance.interceptors) {
+    appApiInstance.interceptors.response.use(undefined, async function (error) {
+      return Promise.reject(await AxiosHooks.handleErrors(error, router, store))
+    })
+  }
+
+  const cookies = process.env.SERVER
+    ? Cookies.parseSSR(ssrContext)
+    : Cookies // otherwise we're on client
+
+  const allCookies = cookies.getAll()
+  const cookiesAccessTokenInCookies = cookies.get('BearerAccessToken') ? cookies.get('BearerAccessToken') : allCookies.BearerAccessToken
+  // const cookiesAccessTokenInCookies = cookies.get('BearerAccessToken')
+  const accessTokenInLocalStorage = store.getters['Auth/accessToken']
+  const cookiesAccessToken = accessTokenInLocalStorage || cookiesAccessTokenInCookies
+
+  if (cookiesAccessToken) {
+    const tokenType = 'Bearer'
+    store.$accessToken = cookiesAccessToken
+    store.commit('Auth/updateAxiosAuthorization', cookiesAccessToken)
+    alaaApiInstance.defaults.headers.common.Authorization = tokenType + ' ' + cookiesAccessToken
+    appApiInstance.defaults.headers.common.Authorization = tokenType + ' ' + cookiesAccessToken
+  } else {
+    // console.error('axios boot->Auth/logOut')
+    store.dispatch('Auth/logOut')
+  }
+
+  store.$appApiInstance = appApiInstance
+  router.$appApiInstance = appApiInstance
+
+  store.$alaaApiInstance = alaaApiInstance
+  router.$alaaApiInstance = alaaApiInstance
+
+  store.$axios = appApiInstance
+  router.$axios = appApiInstance
+
+  app.config.globalProperties.$axios = appApiInstance
+  app.config.globalProperties.$alaaApiInstance = alaaApiInstance
+  app.config.globalProperties.$appApiInstance = appApiInstance
 })
 
-export { axios, api }
+export { appApiInstance, alaaApiInstance }

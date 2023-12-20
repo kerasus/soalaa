@@ -14,57 +14,47 @@
                         icon="search"
                         flat
                         :loading="exams.loading"
-                        @click="setFilter"
-                />
+                        @click="setFilter" />
               </template>
             </q-input>
           </div>
         </div>
         <div class="filter-btn-col"
              :class="quizType === 'myExam' ? 'col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6' : 'col-xs-2 col-sm-6 col-md-6 col-lg-6 col-xl-6'">
-          <q-btn
-            v-if="quizType === 'myExam'"
-            unelevated
-            class="create-exam"
-            @click="gotoCreateExam">
+          <q-btn v-if="quizType === 'myExam'"
+                 unelevated
+                 class="create-exam"
+                 @click="gotoCreateExam">
             آزمون جدید
           </q-btn>
-          <q-btn
-            unelevated
-            class="filter-toggle"
-            :class="filterBar ? 'open': '' "
-            icon="isax:filter"
-            @click="toggleFilter" />
+          <q-btn unelevated
+                 class="filter-toggle"
+                 :class="filterBar ? 'open': '' "
+                 icon="isax:filter"
+                 @click="toggleFilter" />
         </div>
       </div>
       <div class="row filter-wrapper"
            :class="filterBar ? 'open': '' ">
-        <div
-          class="col-xs-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+        <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
           <div class="filter-input-label">{{quizType === 'myExam'? 'تاریخ ایجاد' : 'تاریخ آزمون'}}</div>
-          <form-builder
-            ref="filterForm"
-            class="filter-form-builder"
-            :value="inputs"
-          />
+          <form-builder ref="filterForm"
+                        class="filter-form-builder"
+                        :value="inputs" />
         </div>
         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 flex justify-end items-end">
-          <q-btn
-            unelevated
-            color="white"
-            text-color="dark"
-            class="filter-refresh-btn"
-            icon="isax:rotate-left"
-            @click="clearInputs"
-          />
-          <q-btn
-            unelevated
-            color="primary"
-            label="اعمال"
-            class="filter-submit-btn"
-            :loading="exams.loading"
-            @click="setFilter"
-          />
+          <q-btn unelevated
+                 color="white"
+                 text-color="dark"
+                 class="filter-refresh-btn"
+                 icon="isax:rotate-left"
+                 @click="clearInputs" />
+          <q-btn unelevated
+                 color="primary"
+                 label="اعمال"
+                 class="filter-submit-btn"
+                 :loading="exams.loading"
+                 @click="setFilter" />
         </div>
       </div>
       <div v-if="exams.list.length > 0"
@@ -116,8 +106,7 @@
                   {{item.type.value === 'konkur' ? 'تست' : 'شخصیت شناسی'}}
                 </div>
                 <div class="quiz-list-item-schedule ellipses"
-                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'"
-                >
+                     :class="quizType === 'myExam' ? 'col-xs-12 col-sm-3 col-md-3 col-lg-3 col-xl-3' : 'col-xs-12 col-sm-4 col-md-4 col-lg-4 col-xl-4'">
                   <span v-if="$q.screen.lt.sm"
                         class="quiz-list-res-title time">
                     شروع آزمون :
@@ -130,56 +119,44 @@
                   </div>
                 </div>
                 <div class="quiz-list-item-action"
-                     :class="{'has-secondary':getExamActons(item).secondary,'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2': quizType === 'myExam','col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-3': quizType === 'exam' }"
-                >
+                     :class="{'has-secondary':getExamActons(item).secondary,'col-xs-12 col-sm-2 col-md-2 col-lg-2 col-xl-2': quizType === 'myExam','col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-3': quizType === 'exam' }">
                   <q-btn v-if="getExamActons(item).primary"
                          class="quiz-action-btn"
                          :class="getExamActons(item).primary.title === 'شروع آزمون' ? 'enroll' : getExamActons(item).primary.title === 'ادامه آزمون' ? 'continue' : 'result'"
                          :label="getExamActons(item).primary.title"
-                         @click="getExamActons(item).primary.action"
-                  />
+                         @click="getExamActons(item).primary.action" />
                   <q-btn v-if="getExamActons(item).secondary"
                          flat
-                         class="q-ml-md"
-                  >
+                         class="q-ml-md">
                     <svg width="24"
                          height="24"
                          viewBox="0 0 24 24"
                          fill="none"
-                         xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle
-                        cx="12"
-                        cy="6"
-                        r="2"
-                        fill="#6D708B"
-                      />
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="2"
-                        fill="#6D708B"
-                      />
-                      <circle
-                        cx="12"
-                        cy="18"
-                        r="2"
-                        fill="#6D708B"
-                      />
+                         xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12"
+                              cy="6"
+                              r="2"
+                              fill="#6D708B" />
+                      <circle cx="12"
+                              cy="12"
+                              r="2"
+                              fill="#6D708B" />
+                      <circle cx="12"
+                              cy="18"
+                              r="2"
+                              fill="#6D708B" />
                     </svg>
                     <q-menu fit
                             anchor="bottom left"
                             self="top middle"
                             transition-show="flip-right"
-                            transition-hide="flip-left"
-                    >
+                            transition-hide="flip-left">
                       <q-list>
                         <q-item v-for="(examAction, examActionIndex) in getExamActons(item).secondary"
                                 :key="'actionIndex-'+examActionIndex"
                                 v-ripple
                                 clickable
-                                @click="examAction.action"
-                        >
+                                @click="examAction.action">
                           <q-item-section avatar>
                             <q-icon :name="examAction.icon" />
                           </q-item-section>
@@ -223,17 +200,15 @@
         </div>
       </div>
       <div class="row text-center justify-center pagination-box">
-        <q-pagination
-          v-if="pageCount > 1"
-          v-model="page"
-          :max="pageCount"
-          :max-pages="6"
-          direction-links
-          icon-first="isax:arrow-right-3"
-          icon-next="chevron_right"
-          icon-last="chevron_left"
-          @update:model-value="onChangePage"
-        />
+        <q-pagination v-if="pageCount > 1"
+                      v-model="page"
+                      :max="pageCount"
+                      :max-pages="6"
+                      direction-links
+                      icon-first="isax:arrow-right-3"
+                      icon-next="chevron_right"
+                      icon-last="chevron_left"
+                      @update:model-value="onChangePage" />
       </div>
     </div>
   </div>
@@ -241,15 +216,18 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { Exam, ExamList } from 'src/models/Exam'
-import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
-import API_ADDRESS from 'src/api/Addresses'
-import { FormBuilder, inputMixin } from 'quasar-form-builder'
-import ShamsiDate from 'src/plugins/ShamsiDate'
 import Time from 'src/plugins/time.js'
+import ShamsiDate from 'src/plugins/ShamsiDate.js'
+import { Exam, ExamList } from 'src/models/Exam.js'
+import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
+import { FormBuilder, inputMixin } from 'quasar-form-builder'
 
 export default defineComponent({
   name: 'QuizList',
+  components: {
+    FormBuilder
+  },
+  mixins: [mixinAuth, mixinQuiz, inputMixin],
   props: {
     quizType: {
       type: String,
@@ -275,10 +253,6 @@ export default defineComponent({
     'filterExamList',
     'changePage'
   ],
-  mixins: [mixinAuth, mixinQuiz, inputMixin],
-  components: {
-    FormBuilder
-  },
   data: () => ({
     examActions: [],
     examPrimaryAction: null,
@@ -295,6 +269,11 @@ export default defineComponent({
       { type: 'date', name: 'to', label: 'تا', responseKey: 'toDate', calendarIcon: ' ', col: 'col-12 col-sm-6 form-builder-date-to' }
     ]
   }),
+  computed: {
+    page() {
+      return this.pagination
+    }
+  },
   watch: {
     quizType () {
       this.clearInputs()
@@ -305,11 +284,6 @@ export default defineComponent({
       } else {
         this.$store.commit('loading/loading', false)
       }
-    }
-  },
-  computed: {
-    page() {
-      return this.pagination
     }
   },
   mounted() {
@@ -490,26 +464,11 @@ export default defineComponent({
         }
       })
     },
-    // getExams () {
-    //   const that = this
-    //   this.loadingList = true
-    //   // this.user.getUserExams()
-    //   this.$axios.get(API_ADDRESS.exam.userExamsList)
-    //     .then((response) => {
-    //       this.user.exams = new ExamList(response.data.data.exams)
-    //       this.user.exams.loading = false
-    //       this.exams = new ExamList(response.data.data.exams)
-    //       this.loadingList = false
-    //     })
-    //     .catch(() => {
-    //       that.loadingList = false
-    //     })
-    // },
     registerExam (exam) {
-      this.$axios.post(API_ADDRESS.exam.registerExam, { exam_id: exam.id })
-        .then((response) => {
-          if (response.data.data.redirect_url) {
-            window.location.href = response.data.data.redirect_url
+      this.$apiGateway.exam.registerExam({ exam_id: exam.id })
+        .then((redirectUrl) => {
+          if (redirectUrl) {
+            window.location.href = redirectUrl
           } else {
             this.$q.notify({
               type: 'positive',

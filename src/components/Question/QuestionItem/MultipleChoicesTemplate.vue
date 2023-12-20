@@ -1,25 +1,21 @@
 <template>
   <div class="choice-box">
     <div class="choice-number-box">
-      <div
-        name="question-choice-number"
-        class="question-choice-number"
-        :class="[choice.answer ? 'correct-answer' : 'wrong-answer', isLtr ? 'ltr-margin' : 'rtl-margin']"
-      >
+      <div name="question-choice-number"
+           class="question-choice-number"
+           :class="[choice.answer ? 'correct-answer' : 'wrong-answer', isLtr ? 'ltr-margin' : 'rtl-margin']">
         {{ choice.number }}
       </div>
     </div>
-    <div
-      name="answer-text"
-      class="answer-text"
-    >
+    <div name="answer-text"
+         class="answer-text">
       <vue-katex :input="choice.title" />
     </div>
   </div>
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
+import VueKatex from 'src/components/VueKatex.vue'
 
 export default {
   name: 'MultipleChoicesTemplate',

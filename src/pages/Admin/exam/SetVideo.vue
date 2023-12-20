@@ -1,121 +1,84 @@
 <template>
-  <div
-    class="set-video-back-btn q-mx-auto "
-  >
-    <q-btn
-      class="q-mx-sm float-right"
-      round
-      dark-percentage
-      color="primary"
-      icon="isax:arrow-left-2"
-      @click=this.$router.go(-1)
-    />
-
+  <div class="set-video-back-btn q-mx-auto ">
+    <q-btn class="q-mx-sm float-right"
+           round
+           dark-percentage
+           color="primary"
+           icon="isax:arrow-left-2"
+           @click="this.$router.go(-1)" />
   </div>
-  <q-card
-    class="set-video q-mx-auto q-pa-0"
-    :style="{'max-width':'800px'}"
-  >
-    <q-card-section
-      class="q-pa-0"
-    >
-      <transition
-        appear
-        enter-active-class="animated fadeIn"
-        leave-active-class="animated fadeOut"
-      >
-        <q-toolbar
-          class="set-video-toolbar bg-deep-purple-11  q-mx-auto"
-          :style="{'height' : '64px'}"
-          dark
-        >
+  <q-card class="set-video q-mx-auto q-pa-0"
+          :style="{'max-width':'800px'}">
+    <q-card-section class="q-pa-0">
+      <transition appear
+                  enter-active-class="animated fadeIn"
+                  leave-active-class="animated fadeOut">
+        <q-toolbar class="set-video-toolbar bg-deep-purple-11  q-mx-auto"
+                   :style="{'height' : '64px'}"
+                   dark>
           <q-toolbar-title v-if="selectedSubCategory">
             {{quizTitle + ': ' + selectedSubCategory.title }}
           </q-toolbar-title>
 
           <q-space />
-          <q-btn
-            color="white"
-            flat
-            round
-            icon="mdi-plus"
-            @click="addVideo"
-          >
-            <q-tooltip
-              anchor="top middle"
-              :offset="[20,33]"
-            >
+          <q-btn color="white"
+                 flat
+                 round
+                 icon="mdi-plus"
+                 @click="addVideo">
+            <q-tooltip anchor="top middle"
+                       :offset="[20,33]">
               <span class="smallFontSize">لینک جدید</span>
             </q-tooltip>
           </q-btn>
-          <q-btn
-            color="white"
-            flat
-            round
-            icon="mdi-check"
-            @click="saveVideos"
-          >
-            <q-tooltip
-              anchor="top middle"
-              :offset="[20,33]"
-            >
+          <q-btn color="white"
+                 flat
+                 round
+                 icon="mdi-check"
+                 @click="saveVideos">
+            <q-tooltip anchor="top middle"
+                       :offset="[20,33]">
               <span class="smallFontSize">ثبت</span>
             </q-tooltip>
           </q-btn>
-          <q-inner-loading
-            :showing="loading"
-            color="primary"
-            dark
-            label-class="text-teal"
-            label-style="font-size: 1.1em"
-          />
+          <q-inner-loading :showing="loading"
+                           color="primary"
+                           dark
+                           label-class="text-teal"
+                           label-style="font-size: 1.1em" />
         </q-toolbar>
       </transition>
-      <q-list
-        v-for="(item, index) in videos"
-        :key="index"
-      >
-        <q-item
-          bordered
-        >
+      <q-list v-for="(item, index) in videos"
+              :key="index">
+        <q-item bordered>
           <q-item-section>
-            <q-input
-              v-model="videos[index]"
-              type="url"
-              outlined
-              dense
-              :style="{ 'max-width': '650px' }"
-            />
+            <q-input v-model="videos[index]"
+                     type="url"
+                     outlined
+                     dense
+                     :style="{ 'max-width': '650px' }" />
           </q-item-section>
           <q-item-section avatar>
-            <q-btn
-              color="primary"
-              flat
-              round
-              icon="mdi-play-box-outline"
-              :href="item"
-              target="_blank"
-            >
-              <q-tooltip
-                anchor="top middle"
-                :offset="[20,33]"
-              >
+            <q-btn color="primary"
+                   flat
+                   round
+                   icon="mdi-play-box-outline"
+                   :href="item"
+                   target="_blank">
+              <q-tooltip anchor="top middle"
+                         :offset="[20,33]">
                 <span class="smallFontSize">مشاهده کانتنت</span>
               </q-tooltip>
             </q-btn>
           </q-item-section>
           <q-item-section avatar>
-            <q-btn
-              color="red"
-              flat
-              round
-              icon="mdi-close"
-              @click="removeVideo(index)"
-            >
-              <q-tooltip
-                anchor="top middle"
-                :offset="[20,33]"
-              >
+            <q-btn color="red"
+                   flat
+                   round
+                   icon="mdi-close"
+                   @click="removeVideo(index)">
+              <q-tooltip anchor="top middle"
+                         :offset="[20,33]">
                 <span class="smallFontSize">حذف لینک</span>
               </q-tooltip>
             </q-btn>
@@ -127,13 +90,12 @@
 </template>
 
 <script>
-
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import API_ADDRESS from 'src/api/Addresses'
-import { mixinGetQuizData } from 'src/mixin/Mixins'
+import { mixinGetQuizData } from 'src/mixin/Mixins.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 
 export default {
   name: 'SetVideo',
+  mixins: [mixinGetQuizData],
   data: () => {
     return {
       quizTitle: '',
@@ -143,7 +105,6 @@ export default {
       videos: []
     }
   },
-  mixins: [mixinGetQuizData],
   mounted () {
     this.loadSubcategories()
   },
@@ -153,29 +114,26 @@ export default {
   },
   methods: {
     async getQuizTitle () {
-      const res = await this.getQuizData(this.$route.params.examId)
-      if (res.data.data) {
-        this.quizTitle = res.data.data.title
+      const exam = await this.getQuizData(this.$route.params.examId)
+      if (exam) {
+        this.quizTitle = exam.title
       }
     },
     getCurrentVideos () {
-      this.$axios.get(API_ADDRESS.exam.getAnalysisVideo(this.$route.params.examId))
-        .then(response => {
+      this.$apiGateway.exam.getAnalysisVideo(this.$route.params.examId)
+        .then(examList => {
           this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
-          response.data.data.forEach(item => {
-          })
-          if (response.data.data.find(item => item.sub_category.id === this.selectedSubCategory.id).videos) {
-            this.videos = response.data.data.find(item => item.sub_category.id === this.selectedSubCategory.id).videos
+          if (examList.list.find(item => item.sub_category.id === this.selectedSubCategory.id).videos) {
+            this.videos = examList.list.find(item => item.sub_category.id === this.selectedSubCategory.id).videos
           }
         })
     },
     saveVideos () {
-      this.$axios.post(API_ADDRESS.exam.analysisVideo,
-        {
-          video: this.videos,
-          sub_category_id: this.selectedSubCategory.id,
-          exams: [{ exam_id: this.$route.params.examId }]
-        })
+      this.$apiGateway.exam.analysisVideo({
+        video: this.videos,
+        sub_category_id: this.selectedSubCategory.id,
+        exams: [{ exam_id: this.$route.params.examId }]
+      })
         .then(() => {
           this.$q.notify({
             message: 'اطلاعات ثبت شد.',

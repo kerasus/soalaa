@@ -52,13 +52,12 @@
                    unelevated
                    icon="isax:play"
                    class="play-btn"
-                   @click="playRecordedVoice">
-            </q-btn>
+                   @click="playRecordedVoice" />
             <q-btn v-else
                    size="30px"
                    unelevated
                    @click="pauseRecordedVoice">
-              <q-icon name="isax:pause"></q-icon>
+              <q-icon name="isax:pause" />
             </q-btn>
             <av-waveform ref="waveform"
                          class="av-waveform"
@@ -66,32 +65,28 @@
                          :playtime-font-family="'IRANSans'"
                          :audio-controls="false"
                          :canv-width="900"
-                         :canv-height="64"
-            ></av-waveform>
+                         :canv-height="64" />
           </div>
         </div>
         <q-img v-if="data.files.photo"
                :src="data.files.photo"
-               class="q-my-lg"
-        />
+               class="q-my-lg" />
       </div>
-      <q-separator class="q-my-md"></q-separator>
+      <q-separator class="q-my-md" />
       <div class="flex">
         <q-chip color="blue"
                 class="dateTime-chip"
                 square>
           {{ convertToShamsi(data.created_at) }}
         </q-chip>
-        <q-expansion-item
-          v-if="!isUserCustomer"
-          class="report-panel"
-          icon="isax:ticket"
-          label="گزارش پاسخ نامناسب"
-        >
+        <q-expansion-item v-if="!isUserCustomer"
+                          class="report-panel"
+                          icon="isax:ticket"
+                          label="گزارش پاسخ نامناسب">
           <q-card>
             <q-card-section>
               <q-input v-model="userReportDescription"
-                       type="textarea"></q-input>
+                       type="textarea" />
             </q-card-section>
             <q-card-actions>
               <q-btn v-if="!isUserAdmin"
@@ -108,16 +103,15 @@
   </q-card>
 </template>
 <script>
-import { mixinDateOptions } from 'src/mixin/Mixins'
-import API_ADDRESS from 'src/api/Addresses'
+import { mixinDateOptions } from 'src/mixin/Mixins.js'
 import AvWaveform from 'vue-audio-visual/src/components/AvWaveform'
 
 export default {
   name: 'Messages',
-  mixins: [mixinDateOptions],
   components: {
     AvWaveform
   },
+  mixins: [mixinDateOptions],
   props: {
     data: {
       type: Object,
@@ -136,6 +130,20 @@ export default {
       audioPlayerLastPlayedTime: 0,
       userReportDescription: ''
     }
+  },
+  computed: {
+    isUserCustomer () {
+      return this.data.user.role === 'کاربر'
+    },
+    ltrOrRtl () {
+      if (this.isUserCustomer) {
+        return 'ltr'
+      } else {
+        return 'rtl'
+      }
+    }
+  },
+  watch: {
   },
   methods: {
     playRecordedVoice () {
@@ -160,30 +168,19 @@ export default {
       this.showVoicePlayerIsPlaying = false
     },
     sendReport () {
-      this.$axios.post(API_ADDRESS.ticket.show.reportMessage(this.data.user.id), {
-        report_description: this.userReportDescription
+      this.$apiGateway.ticket.reportMessage({
+        ticketId: this.data.user.id,
+        data: {
+          report_description: this.userReportDescription
+        }
       })
-        .then((res) => {
+        .then((message) => {
           this.$q.notify({
-            message: res.data.message,
+            message,
             type: 'positive'
           })
         })
     }
-  },
-  computed: {
-    isUserCustomer () {
-      return this.data.user.role === 'کاربر'
-    },
-    ltrOrRtl () {
-      if (this.isUserCustomer) {
-        return 'ltr'
-      } else {
-        return 'rtl'
-      }
-    }
-  },
-  watch: {
   }
 }
 </script>

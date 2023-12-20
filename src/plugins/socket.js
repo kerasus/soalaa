@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client'
-import API_ADDRESS from 'src/api/Addresses'
+import API_ADDRESS from 'src/api/Addresses.js'
 
 const SocketConnection = {
   _instance: null,

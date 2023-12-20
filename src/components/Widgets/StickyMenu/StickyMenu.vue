@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import LazyImg from 'src/components/lazyImg.vue'
 import { openURL } from 'quasar'
+import LazyImg from 'src/components/lazyImg.vue'
 
 export default {
   name: 'StickyMenu',

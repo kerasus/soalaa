@@ -1,25 +1,16 @@
 <template>
-  <div
-    class="invoice-container">
+  <div class="invoice-container">
     <q-card class="invoice-cart">
       <q-card-section class="invoice-total-price-section invoice-cart-section">
-        <div
-          class="total-shopping-cart price-section"
-        >
+        <div class="total-shopping-cart price-section">
           <div class="title">جمع سبد خرید{{ `(${cart.count})` }}</div>
-          <div
-            v-if="loading"
-            class="loading-spinner"
-          >
-            <q-spinner-tail
-              color="orange"
-              size="2em"
-            />
+          <div v-if="loading"
+               class="loading-spinner">
+            <q-spinner-tail color="orange"
+                            size="2em" />
           </div>
-          <div
-            v-else
-            class="price"
-          >
+          <div v-else
+               class="price">
             {{ totalBasePrice }}
             <span class="iran-money-unit">تومان</span>
           </div>
@@ -45,24 +36,16 @@
         <!--          </div>-->
         <!--        </div>-->
 
-        <div
-          v-if="discountInPercent"
-          class="purchase-profit price-section"
-        >
+        <div v-if="discountInPercent"
+             class="purchase-profit price-section">
           <div class="title">سود شما از خرید</div>
-          <div
-            v-if="loading"
-            class="loading-spinner"
-          >
-            <q-spinner-tail
-              color="orange"
-              size="2em"
-            />
+          <div v-if="loading"
+               class="loading-spinner">
+            <q-spinner-tail color="orange"
+                            size="2em" />
           </div>
-          <div
-            v-else
-            class="price"
-          >
+          <div v-else
+               class="price">
             {{ `(${discountInPercent}٪) ` + totalDiscount }}
             <span class="iran-money-unit">تومان</span>
           </div>
@@ -95,63 +78,43 @@
       <q-card-section class="payment-section invoice-cart-section">
         <div class="final-price price-section">
           <div class="title">مبلغ نهایی</div>
-          <div
-            v-if="loading"
-            class="loading-spinner"
-          >
-            <q-spinner-tail
-              color="orange"
-              size="2em"
-            />
+          <div v-if="loading"
+               class="loading-spinner">
+            <q-spinner-tail color="orange"
+                            size="2em" />
           </div>
-          <div
-            v-else
-            class="price"
-          >
+          <div v-else
+               class="price">
             {{ totalFinalPrice }}
             <span class="iran-money-unit">تومان</span>
           </div>
         </div>
 
-        <div
-          v-if="isUserLogin"
-          class="payment-gateway"
-        >
+        <div v-if="isUserLogin"
+             class="payment-gateway">
           <p class="payment-title">درگاه پرداخت</p>
 
-          <div
-            v-if="loading"
-            class="loading-spinner"
-          >
-            <q-spinner-tail
-              color="orange"
-              size="3em"
-            />
+          <div v-if="loading"
+               class="loading-spinner">
+            <q-spinner-tail color="orange"
+                            size="3em" />
           </div>
 
-          <div
-            v-else
-            class="banks-gateway-list row"
-          >
+          <div v-else
+               class="banks-gateway-list row">
             <div class="bank-gateway-container col-lg-6  col-md-12 col-sm-6 col-xs-12">
-              <div
-                class="bank-gateway"
-                @click="clickOnGateway"
-              >
+              <div class="bank-gateway"
+                   @click="clickOnGateway">
                 <div class="bank-icon-container">
-                  <q-img
-                    src="https://nodes.alaatv.com/aaa/landing/Banklogos/saman.png"
-                    class="bank-icon"
-                  />
+                  <q-img src="https://nodes.alaatv.com/aaa/landing/Banklogos/saman.png"
+                         class="bank-icon" />
                 </div>
-                <q-checkbox
-                  v-model="selectedBank"
-                  dir="ltr"
-                  label="بانک سامان"
-                  checked-icon="radio_button_checked"
-                  unchecked-icon="radio_button_unchecked"
-                  :class="{'checked-check-box': selectedBank}"
-                />
+                <q-checkbox v-model="selectedBank"
+                            dir="ltr"
+                            label="بانک سامان"
+                            checked-icon="radio_button_checked"
+                            unchecked-icon="radio_button_unchecked"
+                            :class="{'checked-check-box': selectedBank}" />
               </div>
             </div>
           </div>
@@ -169,43 +132,33 @@
           <!--          </div>-->
 
           <div class="payment-button-container payment-button-container-desktop">
-            <div
-              class="payment-button payment-button-desktop-view"
-              :class="{ 'payment-button-disable': !selectedBank}"
-              @click="payment"
-            >
+            <div class="payment-button payment-button-desktop-view"
+                 :class="{ 'payment-button-disable': !selectedBank}"
+                 @click="payment">
               پرداخت و ثبت نهایی
             </div>
           </div>
         </div>
 
-        <q-separator
-          v-if="!isUserLogin"
-          class="invoice-separator"
-        />
+        <q-separator v-if="!isUserLogin"
+                     class="invoice-separator" />
       </q-card-section>
 
-      <q-card-section
-        v-if="!isUserLogin"
-        class="login-section invoice-cart-section"
-      >
+      <q-card-section v-if="!isUserLogin"
+                      class="login-section invoice-cart-section">
         <p class="title">برای ادامه ثبت سفارش، به حساب کاربری خود وارد شوید </p>
 
-        <q-input
-          v-model="userEnteredLoginInfo.mobile"
-          type="text"
-          label="شماره موبایل خود را وارد کنید"
-          class="login-input"
-          outlined
-        />
+        <q-input v-model="userEnteredLoginInfo.mobile"
+                 type="text"
+                 label="شماره موبایل خود را وارد کنید"
+                 class="login-input"
+                 outlined />
 
-        <q-input
-          v-model="userEnteredLoginInfo.password"
-          type="password"
-          label="رمز عبور خود را وارد کنید"
-          class="login-input"
-          outlined
-        />
+        <q-input v-model="userEnteredLoginInfo.password"
+                 type="password"
+                 label="رمز عبور خود را وارد کنید"
+                 class="login-input"
+                 outlined />
 
         <p class="no-account">
           حساب کاربری ندارید؟
@@ -214,43 +167,29 @@
           </router-link>
         </p>
 
-        <div
-          class="sign-in-button"
-          @click="login"
-        >
+        <div class="sign-in-button"
+             @click="login">
           ورود به حساب کاربری
         </div>
       </q-card-section>
     </q-card>
-    <div
-      class="payment-button-container"
-    >
-      <div
-        class="final-price price-section"
-      >
+    <div class="payment-button-container">
+      <div class="final-price price-section">
         <div class="title">مبلغ نهایی:</div>
-        <div
-          v-if="loading"
-          class="loading-spinner"
-        >
-          <q-spinner-tail
-            color="orange"
-            size="2em"
-          />
+        <div v-if="loading"
+             class="loading-spinner">
+          <q-spinner-tail color="orange"
+                          size="2em" />
         </div>
-        <div
-          v-else
-          class="price"
-        >
+        <div v-else
+             class="price">
           {{ totalFinalPrice }}
           <span class="iran-money-unit">تومان</span>
         </div>
       </div>
-      <div
-        class="payment-button payment-button-mobile-view"
-        :class="{ 'payment-button-disable': !selectedBank}"
-        @click="payment"
-      >
+      <div class="payment-button payment-button-mobile-view"
+           :class="{ 'payment-button-disable': !selectedBank}"
+           @click="payment">
         پرداخت
       </div>
     </div>
@@ -260,19 +199,17 @@
         <q-card-section class="row items-center">
           <span class="q-ml-lg">در حال انتقال به درگاه پرداخت،لطفا منتظر بمانید</span>
         </q-card-section>
-        <q-linear-progress
-          query
-          rounded
-          color="positive"
-          class="q-mt-sm"
-        />
+        <q-linear-progress query
+                           rounded
+                           color="positive"
+                           class="q-mt-sm" />
       </q-card>
     </q-dialog>
   </div>
 </template>
 
 <script>
-import { Cart } from 'src/models/Cart'
+import { Cart } from 'src/models/Cart.js'
 
 export default {
   name: 'CartInvoice',
@@ -303,8 +240,6 @@ export default {
     }
   },
 
-  created() {},
-
   computed: {
     totalFinalPrice() {
       return this.getPriceFormat('final') ? this.getPriceFormat('final') : 0
@@ -331,6 +266,8 @@ export default {
     }
   },
 
+  created() {},
+
   methods: {
     cartReview() {
       this.$store.commit('loading/loading', true)
@@ -347,9 +284,9 @@ export default {
       this.transition = true
       this.$store.commit('loading/loading', true)
       this.$store.dispatch('Cart/paymentCheckout')
-        .then((response) => {
-          if (response.data.data.url !== undefined) {
-            window.open(response.data.data.url, '_self')
+        .then((url) => {
+          if (url !== undefined) {
+            window.open(url, '_self')
             this.$store.commit('loading/loading', false)
           } else {
             this.$q.notify({

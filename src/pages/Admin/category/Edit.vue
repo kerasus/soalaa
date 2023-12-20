@@ -1,28 +1,26 @@
 <template>
   <div>
-    <entity-edit
-      ref="entityEdit"
-      v-model:value="inputs"
-      title="ویرایش اطلاعات خبر"
-      :api="api"
-      :entity-id-key="entityIdKey"
-      :entity-param-key="entityParamKey"
-      :show-route-name="showRouteName"
-    />
+    <entity-edit ref="entityEdit"
+                 v-model:value="inputs"
+                 title="ویرایش اطلاعات خبر"
+                 :api="api"
+                 :entity-id-key="entityIdKey"
+                 :entity-param-key="entityParamKey"
+                 :show-route-name="showRouteName" />
   </div>
 </template>
 
 <script>
 import { EntityEdit } from 'quasar-crud'
-// import EntityEdit from 'components/Entity/Edit/EntityEdit'
-import API_ADDRESS from 'src/api/Addresses'
+// import EntityEdit from 'src/components/Entity/Edit/EntityEdit'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Edit',
   components: { EntityEdit },
   data () {
     return {
-      api: API_ADDRESS.questionCategory.base,
+      api: APIGateway.questionCategory.APIAdresses.base,
       entityIdKey: 'id',
       entityParamKey: 'id',
       showRouteName: 'Admin.Category.Show',

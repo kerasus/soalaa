@@ -3,15 +3,13 @@
     <q-btn icon="isax:rotate-left"
            class="reload-icon bg-white"
            unelevated
-           @click="onClick('reload')"
-    />
+           @click="onClick('reload')" />
     <q-btn unelevated
            class="filter-btn"
            color="primary"
            padding="1px 23px"
            label="اعمال"
-           @click="onClick('filter')"
-    />
+           @click="onClick('filter')" />
   </div>
 </template>
 
@@ -29,7 +27,7 @@ export default {
 <style scoped lang="scss">
 .actionBtn {
   padding-top: 33px;
-  @media screen and(max-width:599px ) {
+  @media screen and (max-width:599px ) {
   padding-top: 0;
   }
   .filter-btn{

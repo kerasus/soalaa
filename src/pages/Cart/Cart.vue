@@ -7,7 +7,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'Cart',
   data() {
@@ -40,7 +39,6 @@ export default {
       pageConfig: {}
     }
   },
-  created() {},
   computed: {
     pageBuilderEditable() {
       return this.$store.getters['AppLayout/pageBuilderEditable']
@@ -48,7 +46,8 @@ export default {
     calculateHeightStyle() {
       return this.$store.getters['AppLayout/calculateContainerFullHeight']
     }
-  }
+  },
+  created() {}
 }
 </script>
 

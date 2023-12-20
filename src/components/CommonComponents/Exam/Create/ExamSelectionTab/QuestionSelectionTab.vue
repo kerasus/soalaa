@@ -1,89 +1,71 @@
 <template>
   <div class="row main-container">
-    <div
-      class="col-xs-12"
-      :hidden="$q.screen.gt.sm"
-    >
+    <div class="col-xs-12"
+         :hidden="$q.screen.gt.sm">
       <div class="question-list">
         <div class="question-bank-toolbar">
-          <questions-general-info
-            v-model:check-box="checkBox"
-            v-model:show-filters="showFilters"
-            :loading="questionLoading"
-            :check-box="checkBox"
-            :selectedQuestions="providedExam.questions.list"
-            @remove="RemoveChoice"
-            @nextTab="goToNextStep"
-            @lastTab="goToPrevStep"
-            @deselectAllQuestions="deleteAllQuestions"
-            @selectAllQuestions="selectAllQuestions"
-          />
+          <questions-general-info v-model:check-box="checkBox"
+                                  v-model:show-filters="showFilters"
+                                  :loading="questionLoading"
+                                  :check-box="checkBox"
+                                  :selectedQuestions="providedExam.questions.list"
+                                  @remove="RemoveChoice"
+                                  @nextTab="goToNextStep"
+                                  @lastTab="goToPrevStep"
+                                  @deselectAllQuestions="deleteAllQuestions"
+                                  @selectAllQuestions="selectAllQuestions" />
         </div>
       </div>
     </div>
     <div class="col-md-3 col-xs-12 question-bank-filter">
       <sticky-both-sides :max-width="1024">
-        <question-filter
-          ref="filter"
-          :show-major-list="false"
-          :availableSearchSingleNode="false"
-          :filterQuestions="filterQuestions"
-          :root-node-id-to-load="rootNodeIdInFilter"
-          :node-ids-to-tick="selectedNodesIds"
-          :initial-load-mode="false"
-          @tagsChanged="setSelectedTags"
-          @onFilter="onFilter"
-          @delete-filter="deleteFilterItem"
-        />
+        <question-filter ref="filter"
+                         :show-major-list="false"
+                         :availableSearchSingleNode="false"
+                         :filterQuestions="filterQuestions"
+                         :root-node-id-to-load="rootNodeIdInFilter"
+                         :node-ids-to-tick="selectedNodesIds"
+                         :initial-load-mode="false"
+                         @tagsChanged="setSelectedTags"
+                         @onFilter="onFilter"
+                         @delete-filter="deleteFilterItem" />
       </sticky-both-sides>
     </div>
 
-    <div
-      class="col-md-9 col-xs-12"
-    >
+    <div class="col-md-9 col-xs-12">
       <div class="question-list">
         <sticky-both-sides class="sticky-component"
                            :topGap="72"
                            :max-width="1024">
-          <div
-            class="question-bank-toolbar"
-            :hidden="$q.screen.lt.md"
-          >
-            <questions-general-info
-              v-model:check-box="checkBox"
-              :loading="questionLoading"
-              :check-box="checkBox"
-              :selectedQuestions="providedExam.questions.list"
-              @remove="RemoveChoice"
-              @nextTab="goToNextStep"
-              @lastTab="goToPrevStep"
-              @deselectAllQuestions="deleteAllQuestions"
-              @selectAllQuestions="selectAllQuestions"
-            />
+          <div class="question-bank-toolbar"
+               :hidden="$q.screen.lt.md">
+            <questions-general-info v-model:check-box="checkBox"
+                                    :loading="questionLoading"
+                                    :check-box="checkBox"
+                                    :selectedQuestions="providedExam.questions.list"
+                                    @remove="RemoveChoice"
+                                    @nextTab="goToNextStep"
+                                    @lastTab="goToPrevStep"
+                                    @deselectAllQuestions="deleteAllQuestions"
+                                    @selectAllQuestions="selectAllQuestions" />
             <q-linear-progress v-if="selectionLoading"
                                query
                                color="primary" />
           </div>
           <div class="col-12 filter-card-container">
-            <q-card
-              class="filter-card"
-              flat
-            >
+            <q-card class="filter-card"
+                    flat>
               <q-card-section class="search-section">
-                <q-input
-                  v-model="searchInput"
-                  filled
-                  class="bg-white search-input"
-                  placeholder="جستجو در سوالات..."
-                >
+                <q-input v-model="searchInput"
+                         filled
+                         class="bg-white search-input"
+                         placeholder="جستجو در سوالات...">
                   <template v-slot:append>
-                    <q-btn
-                      flat
-                      rounded
-                      icon="isax:search-normal-1"
-                      class="search"
-                      @click="filterByStatement"
-                    />
+                    <q-btn flat
+                           rounded
+                           icon="isax:search-normal-1"
+                           class="search"
+                           @click="filterByStatement" />
                   </template>
                 </q-input>
               </q-card-section>
@@ -107,64 +89,52 @@
               </q-card-section>
             </q-card>
           </div>
+
+          <!--        </sticky-both-sides>-->
+
+          <div class="question-bank-content">
+            <question-item v-if="questions.loading"
+                           :question="loadingQuestion" />
+            <template v-else>
+              <question-item v-for="question in questions.list"
+                             :key="question.id"
+                             :question="question"
+                             :selected="isQuestionSelected(question.id)"
+                             :report-options="reportTypeList"
+                             pageStrategy="question-bank"
+                             @checkSelect="onClickedCheckQuestionBtn" />
+            </template>
+          </div>
+
+          <div class="pagination">
+            <pagination :meta="paginationMeta"
+                        :disable="disablePagination"
+                        @updateCurrentPage="updatePage" />
+          </div>
         </sticky-both-sides>
-
-        <div class="question-bank-content">
-          <question-item
-            v-if="questions.loading"
-            :question="loadingQuestion"
-          />
-          <template v-else>
-            <question-item
-              v-for="question in questions.list"
-              :key="question.id"
-              :question="question"
-              :selected="isQuestionSelected(question.id)"
-              :report-options="reportTypeList"
-              pageStrategy="question-bank"
-              @checkSelect="onClickedCheckQuestionBtn"
-            />
-          </template>
-        </div>
-
-        <div class="pagination">
-          <pagination
-            :meta="paginationMeta"
-            :disable="disablePagination"
-            @updateCurrentPage="updatePage"
-          />
-        </div>
       </div>
     </div>
 
   </div>
-  <div v-if="isTreeLayerConfigReady">
-    <tree-modal
-      ref="questionTreeModal"
-      :key="treeKey"
-      v-model:dialogValue="treeModalValue"
-      v-model:selected-nodes="selectedNodes"
-      :initial-node="treeModalNodeId"
-      :tree-type="'test'"
-      :no-nodes-label="'لطفا یک درس انتخاب کنید'"
-      exchange-last-layer-only
-      :persistent="!doesExamHaveLesson"
-      :layers-config="treeLayersConfig"
-      @layerSelected="onLessonChanged"
-    >
+  <div>
+    <tree-modal :key="treeKey"
+                ref="questionTreeModal"
+                v-model:dialogValue="treeModalValue"
+                v-model:selected-nodes="selectedNodes"
+                :initial-node="treeModalNodeId"
+                :tree-type="'test'"
+                :persistent="!doesExamHaveLesson"
+                :layers-config="treeLayersConfig"
+                @layerSelected="onLessonChanged">
       <template v-slot:tree-dialog-action-box>
-        <q-btn
-          unelevated
-          label="بازگشت"
-          class="go-back-tree-tab"
-          @click="goToPrevStep"
-        />
-        <q-btn
-          v-close-popup
-          unelevated
-          class="close-tree-tab"
-          label="تایید"
-        />
+        <q-btn unelevated
+               label="بازگشت"
+               class="go-back-tree-tab"
+               @click="goToPrevStep" />
+        <q-btn v-close-popup
+               unelevated
+               class="close-tree-tab"
+               label="تایید" />
       </template>
     </tree-modal>
   </div>
@@ -183,31 +153,27 @@
                  @click="showFilters = false" />
         </div>
         <div class="full-width">
-          <question-filter
-            ref="filter2"
-            :show-major-list="false"
-            :mobile-mode="true"
-            :availableSearchSingleNode="false"
-            :filterQuestions="filterQuestions"
-            :root-node-id-to-load="rootNodeIdInFilter"
-            :node-ids-to-tick="selectedNodesIds"
-            @tagsChanged="setSelectedTags"
-            @onFilter="onFilter"
-            @delete-filter="deleteFilterItem"
-            @update-selected-filters="updateSelectedFilters"
-          />
+          <question-filter ref="filter2"
+                           :show-major-list="false"
+                           :mobile-mode="true"
+                           :availableSearchSingleNode="false"
+                           :filterQuestions="filterQuestions"
+                           :root-node-id-to-load="rootNodeIdInFilter"
+                           :node-ids-to-tick="selectedNodesIds"
+                           @tagsChanged="setSelectedTags"
+                           @onFilter="onFilter"
+                           @delete-filter="deleteFilterItem"
+                           @update-selected-filters="updateSelectedFilters" />
         </div>
       </div>
       <div class="action-buttons col-12">
         <div class="row justify-around">
           <div class="action-btn remove-all-button col-5"
-               @click="deleteAllFilters"
-          >
+               @click="deleteAllFilters">
             حذف همه
           </div>
           <div class="action-btn register-button col-5"
-               @click="showFilters = false"
-          >
+               @click="showFilters = false">
             اعمال فیلتر
           </div>
         </div>
@@ -217,31 +183,30 @@
 </template>
 
 <script>
-import pagination from 'components/Question/QuestionBank/Pagination'
-import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from 'src/models/Exam'
-import { Question, QuestionList } from 'src/models/Question'
-import QuestionItem from 'components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
-import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
-import QuestionsGeneralInfo from 'components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo'
-import TreeModal from 'components/Question/QuestionPage/TreeModal'
-import mixinTree from 'src/mixin/Tree'
-import { TreeNode } from 'src/models/TreeNode'
-import StickyBothSides from 'components/Utils/StickyBothSides'
+import { Exam } from 'src/models/Exam.js'
+import mixinTree from 'src/mixin/Tree.js'
+import { TreeNode } from 'src/models/TreeNode.js'
+import { Question, QuestionList } from 'src/models/Question.js'
+import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
+import TreeModal from 'src/components/Question/QuestionPage/TreeModal.vue'
+import pagination from 'src/components/Question/QuestionBank/Pagination.vue'
+import QuestionFilter from 'src/components/Question/QuestionBank/QuestionFilter.vue'
+import QuestionItem from 'src/components/CommonComponents/Exam/Create/QuestionTemplate/QuestionItem.vue'
+import QuestionsGeneralInfo from 'src/components/CommonComponents/Exam/Create/ExamSelectionTab/QuestionsGeneralInfo.vue'
+import { APIGateway } from 'src/api/APIGateway.js'
 
 export default {
   name: 'QuestionSelectionTab',
-  components: { StickyBothSides, TreeModal, QuestionsGeneralInfo, QuestionFilter, QuestionItem, pagination },
+  components: {
+    StickyBothSides,
+    TreeModal,
+    QuestionsGeneralInfo,
+    QuestionFilter,
+    QuestionItem,
+    pagination
+  },
   mixins: [
     mixinTree
-  ],
-  emits: [
-    'onFilter',
-    'lastTab',
-    'nextTab',
-    'addQuestionToExam',
-    'deleteQuestionFromExam',
-    'update:exam'
   ],
   props: {
     questionLoading: {
@@ -261,6 +226,14 @@ export default {
       }
     }
   },
+  emits: [
+    'onFilter',
+    'lastTab',
+    'nextTab',
+    'addQuestionToExam',
+    'deleteQuestionFromExam',
+    'update:exam'
+  ],
 
   data() {
     return {
@@ -289,12 +262,22 @@ export default {
       groupsList: [],
       treeLayersConfig: [
         {
+          name: 'grade',
+          selectedValue: new TreeNode(),
+          nodeList: [],
+          routeNameToGetNode: APIGateway.tree.getGradesList,
+          disable: false,
+          label: 'پایه تحصیلی',
+          className: 'col-12'
+        },
+        {
           name: 'lesson',
           selectedValue: new TreeNode(),
           nodeList: [],
+          routeNameToGetNode: (layerId) => APIGateway.tree.getNodeById(layerId),
           disable: false,
-          label: 'نام درس',
-          className: 'col-12'
+          label: 'انتخاب درس',
+          className: 'col-12 q-mt-lg'
         }
       ],
       examGradeSetValue: '',
@@ -328,6 +311,39 @@ export default {
       },
       reportTypeList: [],
       treeModalNodeId: null
+    }
+  },
+  computed: {
+    providedExam: {
+      get() {
+        return this.exam
+      },
+      set(value) {
+        this.$emit('update:exam', value)
+      }
+    },
+    isQuestionSelected() {
+      return (id) => {
+        return !!(this.providedExam.questions.list.find(question => question.id === id))
+      }
+    },
+    doesExamHaveLesson() {
+      return !!this.providedExam.temp.lesson
+    },
+    isTreeLayerConfigReady() {
+      return this.providedExam.temp.grade && this.treeModalNodeId
+    },
+    getSelectedQuestionIds() {
+      return this.providedExam.questions.list.map(question => question.id)
+    },
+    selectedQuestionInCurrentMetaPage: {
+      get() {
+        return this.selectedQuestions
+      },
+      set(value) {
+        const questionListIds = this.questions.list.map(question => question.id)
+        this.selectedQuestions = this.providedExam.questions.list.filter(question => questionListIds.includes(question.id))
+      }
     }
   },
   watch: {
@@ -370,39 +386,6 @@ export default {
     this.setFilterTreeLesson(rootToLoad)
     this.setupTreeModal()
   },
-  computed: {
-    providedExam: {
-      get() {
-        return this.exam
-      },
-      set(value) {
-        this.$emit('update:exam', value)
-      }
-    },
-    isQuestionSelected() {
-      return (id) => {
-        return !!(this.providedExam.questions.list.find(question => question.id === id))
-      }
-    },
-    doesExamHaveLesson() {
-      return !!this.providedExam.temp.lesson
-    },
-    isTreeLayerConfigReady() {
-      return this.providedExam.temp.grade && this.treeModalNodeId
-    },
-    getSelectedQuestionIds() {
-      return this.providedExam.questions.list.map(question => question.id)
-    },
-    selectedQuestionInCurrentMetaPage: {
-      get() {
-        return this.selectedQuestions
-      },
-      set(value) {
-        const questionListIds = this.questions.list.map(question => question.id)
-        this.selectedQuestions = this.providedExam.questions.list.filter(question => questionListIds.includes(question.id))
-      }
-    }
-  },
   methods: {
     updateSelectedFilters(key, value) {
       this.$refs.filter.changeFilterData(key, value)
@@ -435,7 +418,7 @@ export default {
       if (this.providedExam.temp.tags && this.providedExam.temp.tags[0]) {
         this.fillAllTagsFromResponse()
       }
-      await this.setupTreeLayer()
+      // await this.setupTreeLayer()
       this.$nextTick(() => {
         this.treeKey++
         this.toggleTreeModal()
@@ -449,21 +432,21 @@ export default {
         }))
           .then(response => {
             this.hideLoading()
-            this.treeModalNodeId = response.data.data.id
-            this.treeModalLessonsList = response.data.data.children
+            this.treeModalNodeId = response.id
+            this.treeModalLessonsList = response.children
             if (this.treeModalLessonsList.length === 0) {
               this.$q.notify({
                 message: 'پایه تحصیلی انتخاب شده درس ندارد',
                 type: 'negative'
               })
             }
-            this.setInitialTreeLayer(this.treeModalLessonsList)
+            // this.setInitialTreeLayer(this.treeModalLessonsList)
             if (this.providedExam.temp.lesson) {
               this.setInitialLesson(this.providedExam.temp.lesson)
             }
             resolve()
           })
-          .catch(() => {
+          .catch((e) => {
             this.hideLoading()
             reject()
           })
@@ -483,15 +466,16 @@ export default {
       this.treeModalValue = !this.treeModalValue
     },
     getReportOptions() {
-      this.$axios.get(API_ADDRESS.exam.user.reportType)
-        .then((response) => {
-          this.reportTypeList = response.data.data
+      this.$apiGateway.exam.userReportType()
+        .then((reportTypeList) => {
+          this.reportTypeList = reportTypeList
         })
+        .catch(() => {})
     },
     getLevelsFilterData() {
-      this.$axios.get(API_ADDRESS.question.levels)
-        .then(response => {
-          this.filterQuestions.level_type = response.data.data
+      this.$apiGateway.question.getLevels()
+        .then(options => {
+          this.filterQuestions.level_type = options
         })
         .catch()
     },
@@ -592,10 +576,11 @@ export default {
         filters.tags.push(this.providedExam.temp.lesson)
       }
       this.showLoading()
-      this.$axios.get(API_ADDRESS.question.index(filters, page))
-        .then((response) => {
-          this.questions = new QuestionList(response.data.data)
-          this.paginationMeta = response.data.meta
+      const isAdmin = false
+      this.$apiGateway.question.getIndex({ filters, page, isAdmin })
+        .then((indexResponse) => {
+          this.questions = new QuestionList(indexResponse.QuestionList)
+          this.paginationMeta = indexResponse.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
           this.setSelectedQuestionOfCurrentMetaPage()
@@ -611,9 +596,9 @@ export default {
         })
     },
     getFilterOptions() {
-      this.$axios.get(API_ADDRESS.option.userIndex)
-        .then((response) => {
-          response.data.data.forEach(option => {
+      this.$apiGateway.option.userIndex()
+        .then((optionList) => {
+          optionList.list.forEach(option => {
             if (option.type === 'reference_type') {
               this.filterQuestions.reference_type.push(option)
             } else if (option.type === 'year_type') {

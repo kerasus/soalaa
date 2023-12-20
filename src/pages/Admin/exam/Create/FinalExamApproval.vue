@@ -17,8 +17,8 @@
             <p> <span class="field">عنوان آزمون:</span> {{ exam.title }}</p>
             <p> <span class="field">رشته تحصیلی:</span> {{exam.major}}</p>
             <p> <span class="field">پایه تحصیلی:</span> {{exam.grade}}</p>
-            <p> <span class="field">شروع آزمون:</span> <span>  {{ exam.start_at === null ? '' :     exam.shamsiDate('start_at').dateTime }} </span></p>
-            <p> <span class="field">پایان آزمون:</span> <span> {{  exam.finish_at === null ? '' :     exam.shamsiDate('finish_at').dateTime  }} </span></p>
+            <p> <span class="field">شروع آزمون:</span> <span>  {{ exam.start_at === null ? '' : exam.shamsiDate('start_at').dateTime }} </span></p>
+            <p> <span class="field">پایان آزمون:</span> <span> {{ exam.finish_at === null ? '' : exam.shamsiDate('finish_at').dateTime }} </span></p>
             <p> <span class="field">مدت زمان آزمون:</span> {{exam.exam_time}} </p>
             <p> <span class="field">مدت تاخیر آزمون:</span> {{exam.delay_time}}</p>
           </div>
@@ -27,22 +27,18 @@
             <div> highchart</div>
           </div>
           <div class="exam-btns">
-            <q-btn
-              unelevated
-              class="q-mr-xl btn-md"
-              :icon="'isax:arrow-right-3'"
-              style="width: 100%;background: #F4F5F6;margin-bottom: 12px"
-              @click="goToLastStep"
-            >
+            <q-btn unelevated
+                   class="q-mr-xl btn-md"
+                   :icon="'isax:arrow-right-3'"
+                   style="width: 100%;background: #F4F5F6;margin-bottom: 12px"
+                   @click="goToLastStep">
               بازگشت
             </q-btn>
-            <q-btn
-              unelevated
-              color="primary"
-              class="q-mr-xl btn-md"
-              style="width: 100%;"
-              @click="goToNextStep"
-            >
+            <q-btn unelevated
+                   color="primary"
+                   class="q-mr-xl btn-md"
+                   style="width: 100%;"
+                   @click="goToNextStep">
               تایید نهایی
             </q-btn>
           </div>
@@ -84,21 +80,17 @@
           <question-item v-if="questions.loading"
                          :question="loadingQuestion" />
           <template v-else-if="exam.questions.list.length > 0">
-            <q-virtual-scroll
-              ref="scroller"
-              :items="exam.questions.list"
-              :virtual-scroll-item-size="450"
-              :virtual-scroll-slice-size="5"
-            >
+            <q-virtual-scroll ref="scroller"
+                              :items="exam.questions.list"
+                              :virtual-scroll-item-size="450"
+                              :virtual-scroll-slice-size="5">
               <template v-slot="{ item }">
-                <question-item
-                  :key="item.id"
-                  :question="item"
-                  pageStrategy="question-bank"
-                  final-approval-mode
-                  @changeOrder="changeSelectedQuestionOrder"
-                  @checkSelect="onClickedCheckQuestionBtn"
-                />
+                <question-item :key="item.id"
+                               :question="item"
+                               pageStrategy="question-bank"
+                               final-approval-mode
+                               @changeOrder="changeSelectedQuestionOrder"
+                               @checkSelect="onClickedCheckQuestionBtn" />
               </template>
             </q-virtual-scroll>
           </template>
@@ -109,9 +101,9 @@
 </template>
 
 <script>
-import { Question, QuestionList } from 'src/models/Question'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
-import { Exam } from 'src/models/Exam'
+import { Exam } from 'src/models/Exam.js'
+import { Question, QuestionList } from 'src/models/Question.js'
+import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
 
 export default {
   name: 'FinalExamApproval',
@@ -147,15 +139,15 @@ export default {
       }
     }
   },
-  created () {
-    this.getExamQuestions()
-  },
   watch: {
     'exam.questions.list.length': {
       handler (newValue) {
         this.getExamQuestions()
       }
     }
+  },
+  created () {
+    this.getExamQuestions()
   },
   methods: {
     // getShamsiDate (value) {

@@ -49,17 +49,14 @@
                      unelevated
                      :disable="!user.hasPermission('soalaaBankSoftLaunch')"
                      :loading="subscribeLoading"
-                     @click="subscribe(item.id)"
-              />
+                     @click="subscribe(item.id)" />
             </div>
           </template>
           <div v-else
                class="flex justify-center items-center q-ma-lg q-pa-lg">
             <div class="text-center">
-              <q-spinner-grid
-                color="primary"
-                size="2em"
-              />
+              <q-spinner-grid color="primary"
+                              size="2em" />
               <div class="q-mt-lg">
                 کمی صبر کنید ...
               </div>
@@ -73,7 +70,6 @@
 
 <script>
 import { defineComponent } from 'vue'
-import API_ADDRESS from 'src/api/Addresses'
 
 export default defineComponent({
   name: 'SubscriptionPackageSection',
@@ -84,9 +80,6 @@ export default defineComponent({
       subscribeLoading: false
     })
   },
-  created() {
-    this.getData()
-  },
   computed: {
     user () {
       return this.$store.getters['Auth/user']
@@ -95,13 +88,15 @@ export default defineComponent({
       return this.$store.getters['Auth/isUserLogin']
     }
   },
+  mounted() {
+    this.getData()
+  },
   methods: {
     getData() {
       this.loading = true
-      this.$axios.get(API_ADDRESS.subscription.list).then((res) => {
-        this.packageList = res.data.data
-      })
-        .then(() => {
+      this.$apiGateway.user.subscriptionList()
+        .then((packageList) => {
+          this.packageList = packageList
           this.loading = false
         })
         .catch(() => {
@@ -111,11 +106,12 @@ export default defineComponent({
     subscribe(id) {
       if (this.isUserLogin) {
         this.subscribeLoading = true
-        this.$axios.post(API_ADDRESS.subscription.register(id)).then((res) => {
-          if (res.status === 200) {
-            this.$router.push({ name: 'User.Dashboard' })
-          }
-        })
+        this.$apiGateway.user.subscriptionRegister(id)
+          .then((res) => {
+            if (res.status === 200) {
+              this.$router.push({ name: 'User.Dashboard' })
+            }
+          })
           .then(() => {
             this.subscribeLoading = false
           })

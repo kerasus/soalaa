@@ -4,5 +4,6 @@
 /src-cordova
 /.quasar
 /node_modules
-.eslintrc.js
+/src-ssr
 babel.config.js
+/src/assets/js/Minio.js

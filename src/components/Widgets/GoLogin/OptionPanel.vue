@@ -17,8 +17,7 @@
                       ['bold', 'italic', 'strike', 'underline'],
                       ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
                       ['viewsource']
-                    ]">
-          </q-editor>
+                    ]" />
         </div>
       </div>
     </template>
@@ -26,7 +25,7 @@
 </template>
 <script>
 import { defineComponent } from 'vue'
-import mixinOptionPanel from 'quasar-ui-q-page-builder/src/mixin/OptionPanel.js'
+import { mixinOptionPanel } from 'quasar-ui-q-page-builder'
 import OptionPanelTabs from 'quasar-ui-q-page-builder/src/components/OptionPanelComponents/OptionPanelTabs.vue'
 
 export default defineComponent({

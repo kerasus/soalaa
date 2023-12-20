@@ -1,17 +1,15 @@
 <template>
   <div class="row  justify-center">
     <div class="col-8 q-mb-xl">
-      <entity-edit
-        ref="entityEdit"
-        v-model:value="inputs"
-        :show-save-button="false"
-        :title="'شماره تیکت ' + searchForInputVal('id') + ' در ' + searchForInputVal('department_title')"
-        :api="api"
-        :entity-id-key="entityIdKey"
-        :entity-param-key="entityParamKey"
-        :show-route-name="indexRouteName"
-        :after-load-input-data="checkLoadInputData"
-      >
+      <entity-edit ref="entityEdit"
+                   v-model:value="inputs"
+                   :show-save-button="false"
+                   :title="'شماره تیکت ' + searchForInputVal('id') + ' در ' + searchForInputVal('department_title')"
+                   :api="api"
+                   :entity-id-key="entityIdKey"
+                   :entity-param-key="entityParamKey"
+                   :show-route-name="indexRouteName"
+                   :after-load-input-data="checkLoadInputData">
         <template #before-form-builder>
           <div class="flex justify-around">
             <q-btn rounded
@@ -58,8 +56,7 @@
                      class="full-width"
                      icon="isax:sms"
                      color="blue"
-                     @click="sendTicketStatusNotice(this.searchForInputVal('id'))"
-              >
+                     @click="sendTicketStatusNotice(this.searchForInputVal('id'))">
                 <q-tooltip>ارسال پیامک اگاه سازی تغییر وضعیت</q-tooltip>
               </q-btn>
             </div>
@@ -70,44 +67,37 @@
             <q-btn unelevated
                    color="blue">ویرایش اپراتورها</q-btn>
           </div>
-          <ticket-rate
-            v-if="!isUserAdmin"
-            :rate="searchForInputVal('rate')"
-            :ticket-id="searchForInputVal('id')"
-            class="q-ml-lg q-mt-lg" />
+          <ticket-rate v-if="!isUserAdmin"
+                       :rate="searchForInputVal('rate')"
+                       :ticket-id="searchForInputVal('id')"
+                       class="q-ml-lg q-mt-lg" />
         </template>
       </entity-edit>
       <messages v-for="item in userMessageArray"
                 :key="item"
                 :is-user-admin="isUserAdmin"
                 :data="item" />
-      <SendMessageInput
-        ref="SendMessageInput"
-        :send-loading="sendMessageLoading"
-        @sendText="sendMessageText"
-        @sendImage="sendMessageImage"
-        @sendVoice="sendMessageVoice"
-      />
-      <drawer
-        :is-open="logDrawer"
-        max-width="310px"
-        side="left"
-      >
+      <send-message-input ref="SendMessageInput"
+                          :send-loading="sendMessageLoading"
+                          @sendText="sendMessageText"
+                          @sendImage="sendMessageImage"
+                          @sendVoice="sendMessageVoice" />
+      <drawer :is-open="logDrawer"
+              max-width="310px"
+              side="left">
         <q-scroll-area class="fit">
           <q-btn icon="mdi-close"
                  unelevated
                  class="close-btn"
                  @click="logDrawer = false" />
           <div class="q-my-md flex content-between">
-            <q-tabs
-              v-model="panel"
-              dense
-              class="text-grey"
-              active-color="primary"
-              indicator-color="primary"
-              align="justify"
-              narrow-indicator
-            >
+            <q-tabs v-model="panel"
+                    dense
+                    class="text-grey"
+                    active-color="primary"
+                    indicator-color="primary"
+                    align="justify"
+                    narrow-indicator>
               <q-tab name="events"
                      label="رویداد ها" />
               <q-tab name="otherTickets"
@@ -124,7 +114,7 @@
               <template v-for="ticket in searchForInputVal('otherTickets')"
                         :key="ticket">
                 <div class="other-ticket">
-                  <div class="right-side-squere"></div>
+                  <div class="right-side-squere" />
                   <div>
                     <q-btn class="link-btn"
                            :href="'/ticket/' + ticket.id"
@@ -138,10 +128,8 @@
           </q-tab-panels>
         </q-scroll-area>
       </drawer>
-      <drawer
-        :is-open="orderDrawer"
-        max-width="1016px"
-      >
+      <drawer :is-open="orderDrawer"
+              max-width="1016px">
         <q-scroll-area class="fit">
           <q-btn icon="mdi-close"
                  class="close-btn"
@@ -157,20 +145,19 @@
 
 <script>
 import { EntityEdit } from 'quasar-crud'
-import Messages from 'components/Ticket/Messages'
-import TicketRate from 'components/Ticket/TicketRate'
-import LogList from 'components/Ticket/LogList'
-import Drawer from 'components/CustomDrawer'
-import UserOrderList from 'components/Ticket/userOrderList'
-import API_ADDRESS from 'src/api/Addresses'
-import { CartItemList } from 'src/models/CartItem'
-import SendMessageInput from 'components/Ticket/SendMessageInput'
-import { mixinDateOptions } from 'src/mixin/Mixins'
+import { APIGateway } from 'src/api/APIGateway'
+import Drawer from 'src/components/CustomDrawer.vue'
+import { mixinDateOptions } from 'src/mixin/Mixins.js'
+import LogList from 'src/components/Ticket/LogList.vue'
+import Messages from 'src/components/Ticket/Messages.vue'
+import TicketRate from 'src/components/Ticket/TicketRate.vue'
+import UserOrderList from 'src/components/Ticket/userOrderList.vue'
+import SendMessageInput from 'src/components/Ticket/SendMessageInput.vue'
 
 export default {
   name: 'Show',
-  mixins: [mixinDateOptions],
   components: { EntityEdit, Messages, LogList, UserOrderList, TicketRate, SendMessageInput, Drawer },
+  mixins: [mixinDateOptions],
   data () {
     return {
       isUserAdmin: false,
@@ -185,7 +172,7 @@ export default {
       userId: null,
       userMessageArray: [],
       expanded: true,
-      api: API_ADDRESS.ticket.show.base,
+      api: APIGateway.ticket.APIAdresses.show,
       entityIdKey: 'id',
       entityParamKey: 'id',
       indexRouteName: 'Admin.Ticket.Index',
@@ -408,6 +395,12 @@ export default {
       ]
     }
   },
+  created () {
+    this.initPageData()
+  },
+  mounted () {
+    this.isUserAdmin = this.$store.getters['Auth/user'].has_admin_permission
+  },
   methods: {
     initPageData () {
       this.api += '/' + this.$route.params.id
@@ -465,9 +458,9 @@ export default {
     },
     postMessage (formData) {
       this.sendLoading = true
-      this.$axios.post(API_ADDRESS.ticket.show.ticketMessage, formData)
-        .then(res => {
-          this.userMessageArray.unshift(res.data.data.ticketMessage)
+      this.$apiGateway.ticket.sendTicketMessage(formData)
+        .then(ticketMessage => {
+          this.userMessageArray.unshift(ticketMessage)
           this.$refs.SendMessageInput.clearMessage()
           this.$q.notify({
             message: 'پیام شما با موفقیت ثبت شد',
@@ -481,15 +474,18 @@ export default {
         })
     },
     saveChanges () {
-      this.$axios.put(API_ADDRESS.ticket.show.base + '/' + this.searchForInputVal('id'), {
-        department_id: this.searchForInputVal('department'),
-        id: this.searchForInputVal('id'),
-        priority_id: this.searchForInputVal('priority-id'),
-        status_id: this.searchForInputVal('status'),
-        title: this.searchForInputVal('title'),
-        user_id: this.searchForInputVal('userId')
+      this.$apiGateway.ticket.updateTicket({
+        ticketId: this.searchForInputVal('id'),
+        data: {
+          department_id: this.searchForInputVal('department'),
+          id: this.searchForInputVal('id'),
+          priority_id: this.searchForInputVal('priority-id'),
+          status_id: this.searchForInputVal('status'),
+          title: this.searchForInputVal('title'),
+          user_id: this.searchForInputVal('userId')
+        }
       })
-        .then((res) => {
+        .then(() => {
           this.$q.notify({
             message: 'تغییرات با موفقیت اعمال شد.',
             type: 'positive'
@@ -504,12 +500,13 @@ export default {
     openShopLogList () {
       this.orderDrawer = this.orderDrawer === false
       this.orderLoading = true
-      this.$axios.get(API_ADDRESS.user.orders(this.userId)).then(
-        response => {
-          this.userOrderData = new CartItemList(response.data.data)
-          this.orderLoading = false
-        }
-      )
+      this.$apiGateway.user.ordersById({ userId: this.userId })
+        .then(
+          cartItemList => {
+            this.userOrderData = cartItemList
+            this.orderLoading = false
+          }
+        )
     },
     checkLoadInputData () {
       this.userMessageArray = this.searchForInputVal('messages')
@@ -523,20 +520,14 @@ export default {
       this.logDrawer = this.logDrawer === false
     },
     sendTicketStatusNotice (ticketId) {
-      this.$axios.post(API_ADDRESS.ticket.show.statusNotice(ticketId))
-        .then((res) => {
+      this.$apiGateway.ticket.sendTicketStatusNotice(ticketId)
+        .then((message) => {
           this.$q.notify({
-            message: res.data.message,
+            message,
             type: 'positive'
           })
         })
     }
-  },
-  created () {
-    this.initPageData()
-  },
-  mounted () {
-    this.isUserAdmin = this.$store.getters['Auth/user'].has_admin_permission
   }
 }
 </script>

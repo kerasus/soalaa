@@ -46,8 +46,8 @@
 
 <script>
 import { Product } from 'src/models/Product.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { mixinPrefetchServerData } from 'src/mixin/Mixins.js'
-import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'ProductPrice',
@@ -91,16 +91,15 @@ export default {
       this.product.loading = true
       return this.getProduct()
     },
-    prefetchServerDataPromiseThen (response) {
-      this.product = new Product(response.data.data)
+    prefetchServerDataPromiseThen (data) {
+      this.product = new Product(data)
       this.product.loading = false
     },
     prefetchServerDataPromiseCatch () {
       this.product.loading = false
     },
     getProduct() {
-      return this.$axios.get(API_ADDRESS.product.show.base + '/' + this.productId)
-      // return APIGateway.product.show(this.productId)
+      return APIGateway.product.show(this.productId)
     },
     addToCart() {
       this.$store.dispatch('Cart/addToCart', { product_id: this.product.id }).then(() => {

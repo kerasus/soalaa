@@ -1,66 +1,46 @@
 <template>
-  <q-card
-    class="question-card custom-card"
-    :class="{ 'selected': ( selected || question.selected) && !finalApprovalMode }"
-  >
+  <q-card class="question-card custom-card"
+          :class="{ 'selected': ( selected || question.selected) && !finalApprovalMode }">
     <!--    <q-resize-observer @resize="onResize" />-->
     <q-card-section class="question-card-header items-center row">
       <div class="question-info col-xl-9 col-sm-8 col-xs-12">
-        <div
-          class="question-card-chip-id"
-        >
-          <q-skeleton
-            v-if="question.loading"
-            class="chip-dynamic-text"
-            type="text"
-            width="110px"
-          />
+        <div class="question-card-chip-id">
+          <q-skeleton v-if="question.loading"
+                      class="chip-dynamic-text"
+                      type="text"
+                      width="110px" />
           <div v-else-if="question.code">
             <q-chip class="question-id ">
               سوال
-              <span
-                class="chip-dynamic-text ellipsis">
+              <span class="chip-dynamic-text ellipsis">
                 {{ question.code }}
               </span>
             </q-chip>
           </div>
         </div>
 
-        <div
-          v-if="listConfig.questionLevel || question.loading "
-          class="question-level"
-        >
-          <div
-            v-if="question.loading"
-            class="level-skeleton"
-          >
+        <div v-if="listConfig.questionLevel || question.loading "
+             class="question-level">
+          <div v-if="question.loading"
+               class="level-skeleton">
             <div class="level-text">
-              <q-skeleton
-                type="text"
-                width="40px"
-                height="25px"
-                class="q-ml-xs"
-              />
+              <q-skeleton type="text"
+                          width="40px"
+                          height="25px"
+                          class="q-ml-xs" />
             </div>
 
-            <q-skeleton
-              v-for="item in 3"
-              :key="item"
-              class="level-circles"
-            >
-            </q-skeleton>
+            <q-skeleton v-for="item in 3"
+                        :key="item"
+                        class="level-circles" />
           </div>
 
-          <div
-            v-else-if="question.level"
-            class="level-content"
-          >
-            <div
-              v-for="item in 3"
-              :key="item"
-              class="level-circles"
-              :class="item === questionLevelClasses[questionLevel]?.level ? questionLevelClasses[questionLevel].class : ''">
-            </div>
+          <div v-else-if="question.level"
+               class="level-content">
+            <div v-for="item in 3"
+                 :key="item"
+                 class="level-circles"
+                 :class="item === questionLevelClasses[questionLevel]?.level ? questionLevelClasses[questionLevel].class : ''" />
             <div class="level-text">
               {{ questionLevelClasses[questionLevel]?.title }}
             </div>
@@ -68,70 +48,47 @@
         </div>
       </div>
 
-      <div
-        v-if="listConfig.questionSource || question.loading "
-        class="question-source col-xl-3 col-sm-4 col-xs-12"
-      >
-        <div
-          v-if="question.loading"
-          class="source-skeleton"
-        >
+      <div v-if="listConfig.questionSource || question.loading "
+           class="question-source col-xl-3 col-sm-4 col-xs-12">
+        <div v-if="question.loading"
+             class="source-skeleton">
           <div class="source-text">
-            <q-skeleton
-              type="text"
-              class="source-name"
-              width="90px"
-              height="30px"
-            />
-            <q-skeleton
-              type="text"
-              class="source-date"
-              width="40px"
-              height="20px"
-            />
+            <q-skeleton type="text"
+                        class="source-name"
+                        width="90px"
+                        height="30px" />
+            <q-skeleton type="text"
+                        class="source-date"
+                        width="40px"
+                        height="20px" />
           </div>
 
           <div class="source-avatar">
-            <q-skeleton
-              type="QAvatar"
-              size="36px"
-            />
+            <q-skeleton type="QAvatar"
+                        size="36px" />
           </div>
         </div>
 
-        <div
-          v-else
-          class="source-content"
-        >
+        <div v-else
+             class="source-content">
           <div class="source-text">
-            <div
-              v-if="question.reference[0]"
-              class="source-name"
-            >
+            <div v-if="question.reference[0]"
+                 class="source-name">
               {{ question.reference[0].value }}
             </div>
-            <div
-              v-if="question.years[0]"
-              class="source-date"
-            >
+            <div v-if="question.years[0]"
+                 class="source-date">
               {{ question.years[0].value }}
             </div>
           </div>
 
-          <div
-            v-if="question.reference[0]"
-            class="source-avatar"
-          >
-            <q-avatar
-              v-if="question.reference[0].image"
-              :icon="`img:${question.reference[0].image}`"
-              size="36px"
-            >
-            </q-avatar>
-            <span
-              v-else
-              class="alternate-avatar"
-            />
+          <div v-if="question.reference[0]"
+               class="source-avatar">
+            <q-avatar v-if="question.reference[0].image"
+                      :icon="`img:${question.reference[0].image}`"
+                      size="36px" />
+            <span v-else
+                  class="alternate-avatar" />
           </div>
         </div>
       </div>
@@ -139,14 +96,10 @@
                      :list-config="listConfig" />
     </q-card-section>
 
-    <q-card-section
-      class="question-section "
-      :class="{'extra-panel' : finalApprovalMode }"
-    >
-      <div
-        v-if="finalApprovalMode || showQuestionNumber"
-        class="question-index"
-      >
+    <q-card-section class="question-section "
+                    :class="{'extra-panel' : finalApprovalMode }">
+      <div v-if="finalApprovalMode || showQuestionNumber"
+           class="question-index">
         <div class="question-number-box">
           <div class="question-number">{{ finalApprovalMode ? questionIndex + 1 : question.order }}</div>
         </div>
@@ -154,62 +107,47 @@
 
       <div v-else>
         <div class="question-icon-box">
-          <div
-            class="question-icon"
-            :class="isLtrQuestion() ? 'order-last' : ''"
-          />
+          <div class="question-icon"
+               :class="isLtrQuestion() ? 'order-last' : ''" />
         </div>
       </div>
 
       <div class="question full-width">
-        <question
-          ref="questionComponent"
-          :loading="question.loading"
-          :question="question"
-        />
+        <question ref="questionComponent"
+                  :loading="question.loading"
+                  :question="question" />
       </div>
     </q-card-section>
 
     <div v-if="question.group">
-      <question-item
-        v-for="childQuestion in question.group"
-        :key="childQuestion.id"
-        :question="childQuestion"
-        pageStrategy="question-bank"
-        @checkSelect="selectQuestion"
-      />
+      <question-item v-for="childQuestion in question.group"
+                     :key="childQuestion.id"
+                     :question="childQuestion"
+                     pageStrategy="question-bank"
+                     @checkSelect="selectQuestion" />
     </div>
 
     <q-card-section class="answer-section">
-      <q-expansion-item
-        v-model="descriptiveAnswerExpanded"
-        header-class="hideExpansionHeader"
-      >
+      <q-expansion-item v-model="descriptiveAnswerExpanded"
+                        header-class="hideExpansionHeader">
         <div class="description-answer-body">
           <div class="description-answer"
-               :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
-          >
-            <div
-              v-if="this.question.choices.getSelected()"
-              class="question-answer-choice"
-            >
+               :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}">
+            <div v-if="this.question.choices.getSelected()"
+                 class="question-answer-choice">
               گزینه
               {{ this.question.choices.getSelected().getNumberTitle() }}
             </div>
 
-            <div
-              v-if="question.descriptive_answer"
-              class="question-answer-description"
-            >
+            <div v-if="question.descriptive_answer"
+                 class="question-answer-description">
               <vue-katex :input="question.descriptive_answer? question.descriptive_answer :'پاسخ تشریحی ندارد.'" />
             </div>
           </div>
 
-          <div class="description-answer-video"
-          >
+          <div class="description-answer-video">
             <div class="answer-video flex items-center justify-center"
-                 :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}"
-            >
+                 :class="{'bg-white': ( selected || question.selected) && !finalApprovalMode}">
               <content-video-player v-if="content.hasVideoSource()"
                                     :content="content"
                                     :timePoint="questionTimePoint"
@@ -227,59 +165,47 @@
       </q-expansion-item>
     </q-card-section>
 
-    <q-card-section
-      v-if="!question.loading"
-      class="question-footer-section"
-    >
+    <q-card-section v-if="!question.loading"
+                    class="question-footer-section">
       <div class="attach-question-buttons">
 
-        <q-btn
-          v-if="listConfig.selectQuestion"
-          unelevated
-          class="question-item-button"
-          :class="(selected || question.selected) ? 'detach-button': 'attach-button'"
-          :icon="(selected || question.selected) ? 'isax:minus' : 'isax:add'"
-          @click="selectQuestion"
-        />
+        <q-btn v-if="listConfig.selectQuestion"
+               unelevated
+               class="question-item-button"
+               :class="(selected || question.selected) ? 'detach-button': 'attach-button'"
+               :icon="(selected || question.selected) ? 'isax:minus' : 'isax:add'"
+               @click="selectQuestion" />
 
-        <q-btn
-          v-if="finalApprovalMode && questionsLength > 1 &&  questionIndex+1 !== 1"
-          unelevated
-          icon="isax:arrow-up-2"
-          color="primary"
-          class="order-btn"
-          @click="changeOrder('up', question)"
-        />
-        <q-btn
-          v-if="finalApprovalMode  && questionsLength > 1 && questionIndex+1 < questionsLength "
-          unelevated
-          icon="isax:arrow-down-1"
-          color="primary"
-          class="order-btn"
-          @click="changeOrder('down', question)"
-        />
+        <q-btn v-if="finalApprovalMode && questionsLength > 1 && questionIndex+1 !== 1"
+               unelevated
+               icon="isax:arrow-up-2"
+               color="primary"
+               class="order-btn"
+               @click="changeOrder('up', question)" />
+        <q-btn v-if="finalApprovalMode && questionsLength > 1 && questionIndex+1 < questionsLength "
+               unelevated
+               icon="isax:arrow-down-1"
+               color="primary"
+               class="order-btn"
+               @click="changeOrder('down', question)" />
       </div>
 
       <div class="user-action-buttons">
-        <q-btn
-          v-if="listConfig.reportProblem"
-          flat
-          dense
-          label="گزارش خطا"
-          icon-right="isax:danger"
-          class="report-button"
-          @click="reportProblemDialog.show = true"
-        />
+        <q-btn v-if="listConfig.reportProblem"
+               flat
+               dense
+               label="گزارش خطا"
+               icon-right="isax:danger"
+               class="report-button"
+               @click="reportProblemDialog.show = true" />
 
-        <q-btn
-          v-if="listConfig.descriptiveAnswer"
-          flat
-          role="presentation"
-          class="see-answer-button no-padding"
-          :label="descriptiveAnswerExpanded ? '' : ''"
-          :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-          @click="toggleContent"
-        >
+        <q-btn v-if="listConfig.descriptiveAnswer"
+               flat
+               role="presentation"
+               class="see-answer-button no-padding"
+               :label="descriptiveAnswerExpanded ? '' : ''"
+               :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
+               @click="toggleContent">
           <span v-if="descriptiveAnswerExpanded">
             پاسخ تشریحی
             <!--            بستن پاسخ تشریحی-->
@@ -295,19 +221,15 @@
     </q-card-section>
   </q-card>
   <q-dialog v-model="reportProblemDialog.show">
-    <q-card
-      flat
-      class="report-problem-dialog"
-    >
+    <q-card flat
+            class="report-problem-dialog">
       <q-card-section class="header-section">
-        <q-btn
-          v-close-popup
-          flat
-          round
-          dense
-          icon="close"
-          class="close-button"
-        />
+        <q-btn v-close-popup
+               flat
+               round
+               dense
+               icon="close"
+               class="close-button" />
         <div class="report-title">گزارش خطا</div>
       </q-card-section>
 
@@ -315,69 +237,61 @@
         <div class="report-title">
           نوع خطا
         </div>
-        <q-select
-          v-model="reportProblemDialog.problemType"
-          filled
-          dense
-          dropdown-icon="isax:arrow-down-1"
-          :options="reportProblemDialog.options"
-          option-value="id"
-          option-label="value"
-          map-options
-          emit-value
-          class="report-select-type"
-        />
+        <q-select v-model="reportProblemDialog.problemType"
+                  filled
+                  dense
+                  dropdown-icon="isax:arrow-down-1"
+                  :options="reportProblemDialog.options"
+                  option-value="id"
+                  option-label="value"
+                  map-options
+                  emit-value
+                  class="report-select-type" />
       </q-card-section>
 
       <q-card-section class="problem-description no-padding">
         <div class="report-title">
           توضیحات
         </div>
-        <q-input
-          v-model="reportProblemDialog.description"
-          filled
-          type="textarea"
-          class="description-input"
-        />
+        <q-input v-model="reportProblemDialog.description"
+                 filled
+                 type="textarea"
+                 class="description-input" />
       </q-card-section>
 
       <q-card-actions class="action-box no-padding">
-        <q-btn
-          v-close-popup
-          unelevated
-          label="انصراف"
-          class="cancel report-button"
-        />
-        <q-btn
-          v-close-popup
-          unelevated
-          label="ثبت"
-          color="primary"
-          class="report-button"
-          @click="reportProblem"
-        />
+        <q-btn v-close-popup
+               unelevated
+               label="انصراف"
+               class="cancel report-button" />
+        <q-btn v-close-popup
+               unelevated
+               label="ثبت"
+               color="primary"
+               class="report-button"
+               @click="reportProblem" />
       </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
-import question from 'components/CommonComponents/Exam/Create/QuestionTemplate/Question'
-import { Question } from 'src/models/Question'
-import API_ADDRESS from 'src/api/Addresses'
-import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import { Content } from 'src/models/Content.js'
+import { Question } from 'src/models/Question.js'
+import VueKatex from 'src/components/VueKatex.vue'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
-import QuestionTags from 'components/CommonComponents/Exam/Create/QuestionTags/QuestionTags'
+import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
+import question from 'src/components/CommonComponents/Exam/Create/QuestionTemplate/Question.vue'
+import QuestionTags from 'src/components/CommonComponents/Exam/Create/QuestionTags/QuestionTags.vue'
 
 export default {
   name: 'QuestionItem',
   components: {
     VueKatex,
     question,
-    ContentVideoPlayer,
-    QuestionTags
+    QuestionTags,
+    ContentVideoPlayer
     // VideoPlayer
   },
   props: {
@@ -505,13 +419,6 @@ export default {
       nextTimePoint: new ContentTimePoint()
     }
   },
-  created () {
-    this.setPageConfig()
-  },
-  mounted () {
-    this.setQuestionLevel()
-    // console.log('question :', this.question)
-  },
   computed: {
     trueChoice () {
       return this.question.choices.getSelected()
@@ -524,6 +431,13 @@ export default {
         }
       }
     }
+  },
+  created () {
+    this.setPageConfig()
+  },
+  mounted () {
+    this.setQuestionLevel()
+    // console.log('question :', this.question)
   },
   methods: {
     onResize () {
@@ -628,7 +542,7 @@ export default {
         body: this.reportProblemDialog.description
       }
       try {
-        await this.$axios.post(API_ADDRESS.exam.user.report(this.question.id), params)
+        await this.$apiGateway.exam.userReport({ questionId: this.question.id, params })
         this.$q.notify({
           type: 'positive',
           message: 'گزازش با موفقیت ثبت شد.'
@@ -652,9 +566,9 @@ export default {
         return
       }
       this.contentLoading = true
-      this.$axios.get(API_ADDRESS.content.get(this.question.content_id))
-        .then(res => {
-          this.content = new Content(res.data.data)
+      APIGateway.content.show(this.question.content_id)
+        .then(content => {
+          this.content = content
           this.getTimePoints()
           this.contentLoading = false
         })

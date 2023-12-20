@@ -5,15 +5,10 @@ import { QuestCategoryList } from '../models/QuestCategory'
 import { QuestSubcategoryList } from '../models/QuestSubcategory'
 import { CheckingTimeList } from '../models/CheckingTime'
 import Assistant from '../plugins/assistant'
-import API_ADDRESS from '../api/Addresses'
 
 class Exam extends Model {
   constructor (data) {
     super(data, [
-      {
-        key: 'baseRoute',
-        default: API_ADDRESS.exam.base
-      },
       { key: 'id' },
       { key: 'title' },
       { key: 'photo' },

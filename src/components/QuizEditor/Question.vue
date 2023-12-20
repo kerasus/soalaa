@@ -1,14 +1,12 @@
 <template>
   <div>
     <div class="admin-actions">
-      <div
-        v-if="source.confirmers.length"
-        class="avatar-section grid-item">
+      <div v-if="source.confirmers.length"
+           class="avatar-section grid-item">
         تایید شده توسط :
-        <q-chip
-          v-for="(item, index) in source.confirmers"
-          :key="index"
-          color="green-11">
+        <q-chip v-for="(item, index) in source.confirmers"
+                :key="index"
+                color="green-11">
           <q-avatar>
             <q-img :src="item.photo" />
           </q-avatar>
@@ -18,186 +16,143 @@
       <div v-else />
       <div class="action-btn-box grid-item">
         <div v-if="options.checkQuestion">
-          <q-btn
-            v-if="getChoiceStatus() !== 'o'"
-            text-color="blue"
-            icon="mdi-checkbox-blank-circle-outline"
-            flat
-            fab-mini
-            @click="changeStatus(source.id, 'o')"
-          />
-          <q-btn
-            v-else
-            icon="mdi-checkbox-blank-circle"
-            text-color="yellow"
-            flat
-            fab-mini
-            @click="changeStatus(source.id, 'o')"
-          />
+          <q-btn v-if="getChoiceStatus() !== 'o'"
+                 text-color="blue"
+                 icon="mdi-checkbox-blank-circle-outline"
+                 flat
+                 fab-mini
+                 @click="changeStatus(source.id, 'o')" />
+          <q-btn v-else
+                 icon="mdi-checkbox-blank-circle"
+                 text-color="yellow"
+                 flat
+                 fab-mini
+                 @click="changeStatus(source.id, 'o')" />
         </div>
         <div v-if="options.markQuestion">
-          <q-btn
-            v-if="getChoiceStatus() === 'x'"
-            text-color="red"
-            icon="mdi-close"
-            flat
-            fab-mini
-            @click="changeStatus(source.id ,'x')"
-          />
-          <q-btn
-            v-else
-            text-color="grey"
-            icon="mdi-close"
-            flat
-            fab-mini
-            @click="changeStatus(source.id ,'x')"
-          />
+          <q-btn v-if="getChoiceStatus() === 'x'"
+                 text-color="red"
+                 icon="mdi-close"
+                 flat
+                 fab-mini
+                 @click="changeStatus(source.id ,'x')" />
+          <q-btn v-else
+                 text-color="grey"
+                 icon="mdi-close"
+                 flat
+                 fab-mini
+                 @click="changeStatus(source.id ,'x')" />
         </div>
         <div v-if="options.bookmark">
-          <q-btn
-            v-if="getChoiceBookmark()"
-            text-color="blue"
-            icon="mdi-bookmark"
-            flat
-            fab-mini
-            @click="changeBookmark(source.id)"
-          />
-          <q-btn
-            v-else
-            text-color="grey"
-            icon="mdi-bookmark-outline"
-            flat
-            fab-mini
-            @click="changeBookmark(source.id)"
-          />
+          <q-btn v-if="getChoiceBookmark()"
+                 text-color="blue"
+                 icon="mdi-bookmark"
+                 flat
+                 fab-mini
+                 @click="changeBookmark(source.id)" />
+          <q-btn v-else
+                 text-color="grey"
+                 icon="mdi-bookmark-outline"
+                 flat
+                 fab-mini
+                 @click="changeBookmark(source.id)" />
         </div>
         <!----------------- admin actions ---------------->
         <div v-if="options.deleteQuestionFromDb">
-          <q-icon
-            class="fi fi-rr-delete document icon-style"
-            @click="deleteQuestion()"
-          >
+          <q-icon class="fi fi-rr-delete document icon-style"
+                  @click="deleteQuestion()">
             <q-tooltip>
               حذف سوال از پایگاه داده
             </q-tooltip>
           </q-icon>
         </div>
         <div v-if="options.detachQuestion">
-          <q-icon
-            class="fi fi-rr-cross-small icon-style"
-            @click="detachQuestion()"
-          >
+          <q-icon class="fi fi-rr-cross-small icon-style"
+                  @click="detachQuestion()">
             <q-tooltip>
               حذف سوال از آزمون
             </q-tooltip>
           </q-icon>
         </div>
         <div v-if="options.editQuestion">
-          <q-icon
-            class="fi fi-rr-pencil icon-style"
-            @click="redirectToEditPage"
-          >
+          <q-icon class="fi fi-rr-pencil icon-style"
+                  @click="redirectToEditPage">
             <q-tooltip>
               ویرایش سوال
             </q-tooltip>
           </q-icon>
         </div>
         <div v-if="options.copy">
-          <q-icon
-            class="fi fi-rr-copy icon-style"
-            @click="copyIdToClipboard(source.id)"
-          >
+          <q-icon class="fi fi-rr-copy icon-style"
+                  @click="copyIdToClipboard(source.id)">
             <q-tooltip>
               کپی شناسه سوال
             </q-tooltip>
           </q-icon>
         </div>
         <div v-if="options.switch">
-          <q-circular-progress
-            v-if="confirmLoading"
-            indeterminate
-            :thickness="0.3"
-            size="20px"
-            color="primary"
-          />
-          <q-toggle
-            v-else
-            v-model="source.confirmed"
-            color="primary"
-            @update:model-value="confirmQuestion"
-          >
+          <q-circular-progress v-if="confirmLoading"
+                               indeterminate
+                               :thickness="0.3"
+                               size="20px"
+                               color="primary" />
+          <q-toggle v-else
+                    v-model="source.confirmed"
+                    color="primary"
+                    @update:model-value="confirmQuestion">
             <q-tooltip>
               تایید سوال
             </q-tooltip>
           </q-toggle>
 
-          <slot
-            name="chartDetail"
-          />
+          <slot name="chartDetail" />
         </div>
       </div>
     </div>
     <div class="question-section">
       <div class="question-statement">
         <div class="text-section">
-          <vue-katex
-            v-if="source.statement"
-            :input="'(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement"
-          />
+          <vue-katex v-if="source.statement"
+                     :input="'(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement" />
         </div>
-        <div
-          v-if="source.statement_photo && !source.statement"
-          class="photo-section">
+        <div v-if="source.statement_photo && !source.statement"
+             class="photo-section">
           <p v-if="$route.name === 'Admin.Exam.SubCategory.Questions'">
             ({{ getSubCategoryName }}) (ترتیب: {{ source.order }})(شماره: {{ source.questNumber }})  -  صورت سوال :
           </p>
           <p v-else>
             ({{ getSubCategoryName }}) ({{ source.order }}) -  صورت سوال :
           </p>
-          <div
-            v-for="(statement_photo , index) in source.statement_photo"
-            :key="index"
-          >
-            <q-img
-              :src="statement_photo"
-              alt="صورت سوال"
-            />
+          <div v-for="(statement_photo , index) in source.statement_photo"
+               :key="index">
+            <q-img :src="statement_photo"
+                   alt="صورت سوال" />
           </div>
         </div>
       </div>
-      <div
-        v-if="checkChoices()"
-        class="question-choices">
+      <div v-if="checkChoices()"
+           class="question-choices">
         <div class="row text-section">
-          <div
-            v-for="(choice , index) in source.choices.list"
-            :key="choice.id"
-            :class="{ choice, renderedPanel: true, ltr: isLtr , choiceClass, space:!choice.answer}"
-          >
+          <div v-for="(choice , index) in source.choices.list"
+               :key="choice.id"
+               :class="{ choice, renderedPanel: true, ltr: isLtr , choiceClass, space:!choice.answer}">
 
-            <vue-katex
-              :input="(choiceNumber[index]) + choice.title"
-              :ltr="isLtrQuestion"
-            />
-            <q-icon
-              v-if="choice.answer"
-              class="fi fi-rr-check question-answer"></q-icon>
+            <vue-katex :input="(choiceNumber[index]) + choice.title"
+                       :ltr="isLtrQuestion" />
+            <q-icon v-if="choice.answer"
+                    class="fi fi-rr-check question-answer" />
           </div>
         </div>
-        <div  v-if="source.answer_photos.length > 0 && !checkChoices()"
-              class="photo-section">
+        <div v-if="source.answer_photos.length > 0 && !checkChoices()"
+             class="photo-section">
           <p>
             پاسخ :
           </p>
-          <div
-            v-for="(src, index) in source.answer_photos"
-            :key="index"
-          >
-            <q-img
-              alt="صورت سوال"
-              class="img-size"
-              :src="src"
-            />
+          <div v-for="(src, index) in source.answer_photos"
+               :key="index">
+            <q-img alt="صورت سوال"
+                   class="img-size"
+                   :src="src" />
           </div>
         </div>
       </div>
@@ -206,12 +161,12 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
-import 'src/assets/scss/markdownKatex.scss'
-import { mixinQuiz } from 'src/mixin/Mixins'
-import API_ADDRESS from 'src/api/Addresses'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { copyToClipboard } from 'quasar'
+import 'src/assets/scss/markdownKatex.scss'
+import { mixinQuiz } from 'src/mixin/Mixins.js'
+import VueKatex from 'src/components/VueKatex.vue'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+
 export default {
   name: 'questionField',
   components: {
@@ -275,10 +230,6 @@ export default {
 
     }
   },
-  created () {
-    this.source = this.sourcee
-    Object.assign(this.options, this.questionListOptions)
-  },
   computed: {
     getSubCategoryName () {
       const target = this.subCategory.list.find(
@@ -331,6 +282,10 @@ export default {
       return 'col-md-3'
     }
   },
+  created () {
+    this.source = this.sourcee
+    Object.assign(this.options, this.questionListOptions)
+  },
   methods: {
     redirectToEditPage () {
       this.$router.push({
@@ -350,9 +305,9 @@ export default {
     },
     async confirmUser () {
       try {
-        const response = await this.sendConfirmReq()
-        this.source.confirmed = response.data.data.confirmed
-        this.source.confirmers = response.data.data.confirmers
+        const confirmedAndConfirmers = await this.sendConfirmReq()
+        this.source.confirmed = confirmedAndConfirmers.confirmed
+        this.source.confirmers = confirmedAndConfirmers.confirmers
         this.confirmLoading = false
       } catch (e) {
         this.source.confirmed = !this.source.confirmed
@@ -361,9 +316,9 @@ export default {
     },
     async unConfirmUser () {
       try {
-        const response = await this.sendUnConfirmReq()
-        this.source.confirmed = response.data.data.confirmed
-        this.source.confirmers = response.data.data.confirmers
+        const confirmedAndConfirmers = await this.sendUnConfirmReq()
+        this.source.confirmed = confirmedAndConfirmers.confirmed
+        this.source.confirmers = confirmedAndConfirmers.confirmers
         this.confirmLoading = false
       } catch (e) {
         this.source.confirmed = !this.source.confirmed
@@ -371,10 +326,10 @@ export default {
       }
     },
     sendConfirmReq () {
-      return this.$axios.get(API_ADDRESS.question.confirm(this.source.id))
+      return this.$apiGateway.question.confirm(this.source.id)
     },
     sendUnConfirmReq () {
-      return this.$axios.get(API_ADDRESS.question.unconfirm(this.source.id))
+      return this.$apiGateway.question.unconfirm(this.source.id)
     },
     copyIdToClipboard (sourceId) {
       copyToClipboard(sourceId)
@@ -437,8 +392,11 @@ export default {
       })
     },
     detachQuestionReq () {
-      return this.$axios.post(API_ADDRESS.question.detach(this.source.id), {
-        exams: [this.examId]
+      return this.$apiGateway.question.detach({
+        questionId: this.source.id,
+        data: {
+          exams: [this.examId]
+        }
       })
     },
     closeConfirmModal () {
@@ -459,8 +417,11 @@ export default {
             this.closeConfirmModal()
             return
           }
-          this.$axios.delete(API_ADDRESS.question.delete(this.source.id), {
-            exams: [this.examId]
+          this.$apiGateway.question.delete({
+            questionId: this.source.id,
+            data: {
+              exams: [this.examId]
+            }
           })
             .then(() => {
               this.closeConfirmModal()

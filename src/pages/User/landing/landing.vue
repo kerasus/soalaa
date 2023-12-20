@@ -3,8 +3,7 @@
     <nav-bar @onClickRegisterBtn="scrollToExamsTable"
              @onClickConditionsBtn="scrollToExamRules"
              @onClickFaqsBtn="scrollToFaqs"
-             @onClickUserExamListBtn="goToUserExamList"
-    />
+             @onClickUserExamListBtn="goToUserExamList" />
     <landing-header @onClickRegisterBtn="scrollToExamsTable" />
     <!--    <why class="landing-width" />-->
     <!--    <banner-->
@@ -21,16 +20,16 @@
 </template>
 
 <script>
-import NavBar from 'src/components/landing/NavBar'
-import LandingHeader from 'src/components/landing/LandingHeader'
-// import why from 'src/components/landing/why3A'
-import features from 'src/components/landing/3aFeatures'
-import examRules from 'components/landing/examRules'
-// import banner from 'components/landing/banner'
-import submitTable from 'components/landing/submitTable'
-import faq from 'components/landing/faq'
-import LandingFooter from 'components/landing/3a-exams/LandingFooter'
 import { scroll } from 'quasar'
+import faq from 'src/components/landing/faq.vue'
+// import why from 'src/components/landing/why3A.vue'
+import NavBar from 'src/components/landing/NavBar.vue'
+// import banner from 'src/components/landing/banner.vue'
+import features from 'src/components/landing/3aFeatures.vue'
+import examRules from 'src/components/landing/examRules.vue'
+import submitTable from 'src/components/landing/submitTable.vue'
+import LandingHeader from 'src/components/landing/LandingHeader.vue'
+import LandingFooter from 'src/components/landing/3a-exams/LandingFooter.vue'
 
 export default {
   name: 'landing',

@@ -1,21 +1,15 @@
 <template>
-  <div
-    class="log-list"
-  >
+  <div class="log-list">
     <q-toolbar class="justify-between">
-      <q-tabs
-        v-model="tab"
-        dense
-        class="taps-group text-grey"
-        active-color="dark"
-        indicator-color="secondary"
-        align="left"
-        narrow-indicator
-      >
-        <q-tab
-          name="history"
-          label="سابقه"
-        />
+      <q-tabs v-model="tab"
+              dense
+              class="taps-group text-grey"
+              active-color="dark"
+              indicator-color="secondary"
+              align="left"
+              narrow-indicator>
+        <q-tab name="history"
+               label="سابقه" />
         <q-tab name="comments"
                label="نظرات کاربران" />
       </q-tabs>
@@ -30,30 +24,24 @@
                   animated>
       <q-tab-panel name="history">
         <q-card class="log-list-tap-panel custom-card">
-          <q-scroll-area
-            class="scroll-bar"
-            tabindex="0"
-            :style="windowSize.x > 991 ? {height: '440px'}: {height: '497px'} "
-            visible
-          >
+          <q-scroll-area class="scroll-bar"
+                         tabindex="0"
+                         :style="windowSize.x > 991 ? {height: '440px'}: {height: '497px'} "
+                         visible>
             <div class="log-list-card">
-              <log-item
-                v-for="(item, index) in logs.list"
-                :key="index"
-                :log="item"
-                :mode="mode"
-                @restoreQuestion="restoreQuestion"
-              />
+              <log-item v-for="(item, index) in logs.list"
+                        :key="index"
+                        :log="item"
+                        :mode="mode"
+                        @restoreQuestion="restoreQuestion" />
             </div>
           </q-scroll-area>
         </q-card>
       </q-tab-panel>
       <q-tab-panel class="flex"
                    name="comments">
-        <q-card
-          class="log-list-tap-panel full-width flex bg-transparent"
-          flat
-        >
+        <q-card class="log-list-tap-panel full-width flex bg-transparent"
+                flat>
           <div class="coming-soon">حالا حالاها خبری از این بخش نیست :)</div>
         </q-card>
       </q-tab-panel>
@@ -62,8 +50,8 @@
 </template>
 
 <script>
-import LogItem from 'src/components/Question/QuestionPage/Log/LogItem/LogItem'
-import { LogList } from 'src/models/Log'
+import { LogList } from 'src/models/Log.js'
+import LogItem from 'src/components/Question/QuestionPage/Log/LogItem/LogItem.vue'
 
 export default {
   name: 'LogList',

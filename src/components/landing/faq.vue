@@ -3,20 +3,16 @@
     <div class="title-s">
       سوالات متداول
     </div>
-    <div
-      class="question-body"
-    >
+    <div class="question-body">
       <div v-for="( question , index ) in allQuestions"
            :key="index">
-        <q-expansion-item
-          class="question-expansion"
-          group="same"
-          expand-separator
-          :header-style="{ backgroundColor: '#fafafa' ,borderRadius:' 24px' }"
-          header-class="header-background"
-          style="border-radius: 10px"
-          icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
-        >
+        <q-expansion-item class="question-expansion"
+                          group="same"
+                          expand-separator
+                          :header-style="{ backgroundColor: '#fafafa' ,borderRadius:' 24px' }"
+                          header-class="header-background"
+                          style="border-radius: 10px"
+                          icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png">
           <template v-slot:header>
             <div class="flex items-center">
               <div class="dot q-mr-sm" />

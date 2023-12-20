@@ -1,4 +1,10 @@
 const getters = {
+  pageDataLoaded: (state) => {
+    return state.pageDataLoaded
+  },
+  pageBuilderLoading: (state) => {
+    return state.pageBuilderLoading
+  },
   pageBuilderEditable: (state) => {
     return state.pageBuilderEditable
   },
@@ -8,7 +14,6 @@ const getters = {
   currentSections: (state) => {
     return state.currentSections
   }
-
 }
 
 export default getters

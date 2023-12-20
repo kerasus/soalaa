@@ -1,13 +1,11 @@
 <template>
   <div>
-    <entity-index
-      v-model:value="inputs"
-      title="لیست تیکت ها"
-      :api="api"
-      :table="table"
-      :table-keys="tableKeys"
-      :create-route-name="'Admin.Ticket.Create'"
-    >
+    <entity-index v-model:value="inputs"
+                  title="لیست تیکت ها"
+                  :api="api"
+                  :table="table"
+                  :table-keys="tableKeys"
+                  :create-route-name="'Admin.Ticket.Create'">
       <template v-slot:entity-index-table-cell="{inputData, showConfirmRemoveDialog}">
         <template v-if="inputData.col.name === 'status'">
           <q-chip :color="checkStatusColor(inputData.props.row.status.id)"
@@ -54,14 +52,14 @@
 
 <script>
 import { EntityIndex } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'Index',
   components: { EntityIndex },
   data () {
     return {
-      api: API_ADDRESS.ticket.index.base,
+      api: APIGateway.ticket.APIAdresses.index,
       tableKeys: {
         data: 'data',
         total: 'meta.total',
@@ -260,7 +258,7 @@ export default {
             label: 'ثبت محصول'
           },
           indexConfig: {
-            apiAddress: API_ADDRESS.product.index.base,
+            apiAddress: APIGateway.product.APIAdresses.index,
             tableTitle: 'لیست محصولات',
             showTableItemsRouteName: 'Admin.Product.Show',
             tableKeys: {

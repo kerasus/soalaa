@@ -1,14 +1,11 @@
 <template>
-  <div
-    v-intersection="inView"
-    class="question-field"
-  >
+  <div v-intersection="inView"
+       class="question-field">
     <q-card v-if="considerActiveCategory && !source.in_active_category && !showWithAnswer"
             class="alert-sheet shadow-2"
             :class="currentQuestion.id === source.id ? 'red-sheet' : 'orange-sheet'"
             rounded
-            dark
-    >
+            dark>
       <q-card-section class="alert-sheet-text">
         (
         سوال شماره
@@ -20,118 +17,87 @@
     </q-card>
     <div v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || showWithAnswer"
          class="question-box"
-         :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
-    >
+         :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}">
       <div class="question-head">
-        <p
-          :id="'question' + source.id"
-          class="question-body"
-          :class="{ ltr: isRtl }"
-        >
-          <vue-katex
-            v-if="source.parent.id"
-            :input="questionParentStatement"
-          />
-          <vue-katex
-            :input="questionStatement"
-          />
+        <p :id="'question' + source.id"
+           class="question-body"
+           :class="{ ltr: isRtl }">
+          <vue-katex v-if="source.parent.id"
+                     :input="questionParentStatement" />
+          <vue-katex :input="questionStatement" />
         </p>
-        <div
-          class="question-icons"
-          :style="{ float: isRtlString ? 'left' : 'right' }"
-        >
-          <q-btn
-            v-if="getChoiceStatus() !== 'o'"
-            text-color="grey"
-            icon="mdi-checkbox-blank-circle-outline"
-            flat
-            fab-mini
-            :disable="showWithAnswer"
-            @click="changeStatus(source.id, 'o')"
-          />
-          <q-btn
-            v-else
-            icon="mdi-checkbox-blank-circle"
-            text-color="yellow"
-            flat
-            fab-mini
-            :disable="showWithAnswer"
-            @click="changeStatus(source.id, 'o')"
-          />
-          <q-btn
-            v-if="getChoiceStatus() === 'x'"
-            text-color="red"
-            icon="mdi-close"
-            flat
-            fab-mini
-            :disable="showWithAnswer"
-            @click="changeStatus(source.id ,'x')"
-          />
-          <q-btn
-            v-else
-            text-color="grey"
-            icon="mdi-close"
-            flat
-            fab-mini
-            :disable="showWithAnswer"
-            @click="changeStatus(source.id ,'x')"
-          />
-          <q-btn
-            v-if="getChoiceBookmark()"
-            text-color="blue"
-            icon="mdi-bookmark"
-            flat
-            fab-mini
-            :disable="showWithAnswer"
-            @click="changeBookmark(source.id)"
-          />
-          <q-btn
-            v-else
-            text-color="grey"
-            icon="mdi-bookmark-outline"
-            flat
-            fab-mini
-            :disable="showWithAnswer"
-            @click="changeBookmark(source.id)"
-          />
+        <div class="question-icons"
+             :style="{ float: isRtlString ? 'left' : 'right' }">
+          <q-btn v-if="getChoiceStatus() !== 'o'"
+                 text-color="grey"
+                 icon="mdi-checkbox-blank-circle-outline"
+                 flat
+                 fab-mini
+                 :disable="showWithAnswer"
+                 @click="changeStatus(source.id, 'o')" />
+          <q-btn v-else
+                 icon="mdi-checkbox-blank-circle"
+                 text-color="yellow"
+                 flat
+                 fab-mini
+                 :disable="showWithAnswer"
+                 @click="changeStatus(source.id, 'o')" />
+          <q-btn v-if="getChoiceStatus() === 'x'"
+                 text-color="red"
+                 icon="mdi-close"
+                 flat
+                 fab-mini
+                 :disable="showWithAnswer"
+                 @click="changeStatus(source.id ,'x')" />
+          <q-btn v-else
+                 text-color="grey"
+                 icon="mdi-close"
+                 flat
+                 fab-mini
+                 :disable="showWithAnswer"
+                 @click="changeStatus(source.id ,'x')" />
+          <q-btn v-if="getChoiceBookmark()"
+                 text-color="blue"
+                 icon="mdi-bookmark"
+                 flat
+                 fab-mini
+                 :disable="showWithAnswer"
+                 @click="changeBookmark(source.id)" />
+          <q-btn v-else
+                 text-color="grey"
+                 icon="mdi-bookmark-outline"
+                 flat
+                 fab-mini
+                 :disable="showWithAnswer"
+                 @click="changeBookmark(source.id)" />
         </div>
       </div>
       <q-list class="choices-box row">
-        <q-item
-          v-for="(choice, index) in source.choices.list"
-          :key="choice.id"
-          class="choices"
-          :class="choiceClass"
-        >
-          <q-item-section
-            ref="choices"
-            class="choice"
-            :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
-            @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
-          >
+        <q-item v-for="(choice, index) in source.choices.list"
+                :key="choice.id"
+                class="choices"
+                :class="choiceClass">
+          <q-item-section ref="choices"
+                          class="choice"
+                          :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
+                          @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})">
             <div class="choice-inside">
-              <q-icon
-                class="check-icon col"
-                color="green"
-                size="20px"
-                name="check"
-              />
-              <vue-katex
-                :input="(choiceNumber[index]) + choice.title"
-                :ltr="isLtrQuestion"
-              />
+              <q-icon class="check-icon col"
+                      color="green"
+                      size="20px"
+                      name="check" />
+              <vue-katex :input="(choiceNumber[index]) + choice.title"
+                         :ltr="isLtrQuestion" />
             </div>
           </q-item-section>
         </q-item>
       </q-list>
-      <q-btn
-        flat
-        role="presentation"
-        class="see-answer-button no-padding"
-        :label="descriptiveAnswerExpanded ? '' : ''"
-        :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-        @click="toggleContent"
-      >
+      <q-btn flat
+             role="presentation"
+             class="see-answer-button no-padding"
+             :label="descriptiveAnswerExpanded ? '' : ''"
+             :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
+             @click="toggleContent">
         <span v-if="descriptiveAnswerExpanded">
           پاسخ تشریحی
         <!--            بستن پاسخ تشریحی-->
@@ -145,33 +111,24 @@
       </q-btn>
       <div v-if="source.descriptive_answer"
            class="answer-section">
-        <q-expansion-item
-          v-model="descriptiveAnswerExpanded"
-          header-class="hideExpansionHeader"
-        >
+        <q-expansion-item v-model="descriptiveAnswerExpanded"
+                          header-class="hideExpansionHeader">
           <div class="description-answer-body">
-            <div class="description-answer"
-            >
-              <div
-                v-if="source.choices.getSelected()"
-                class="question-answer-choice"
-              >
+            <div class="description-answer">
+              <div v-if="source.choices.getSelected()"
+                   class="question-answer-choice">
                 گزینه
                 {{ source.choices.getSelected().getNumberTitle() }}
               </div>
 
-              <div
-                v-if="source.descriptive_answer"
-                class="question-answer-description"
-              >
+              <div v-if="source.descriptive_answer"
+                   class="question-answer-description">
                 <vue-katex :input="source.descriptive_answer? source.descriptive_answer :'پاسخ تشریحی ندارد.'" />
               </div>
             </div>
 
-            <div class="description-answer-video"
-            >
-              <div class="answer-video flex items-center justify-center"
-              >
+            <div class="description-answer-video">
+              <div class="answer-video flex items-center justify-center">
                 <content-video-player v-if="content.hasVideoSource()"
                                       :content="content"
                                       :timePoint="questionTimePoint"
@@ -193,13 +150,13 @@
 </template>
 
 <script>
-import VueKatex from 'src/components/VueKatex'
 import 'src/assets/scss/markdownKatex.scss'
-import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
+import API_ADDRESS from 'src/api/Addresses.js'
 import { Content } from 'src/models/Content.js'
+import VueKatex from 'src/components/VueKatex.vue'
 import { ContentTimePoint } from 'src/models/ContentTimePoint.js'
 import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
-import API_ADDRESS from 'src/api/Addresses'
+import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'questionField',
@@ -246,8 +203,6 @@ export default {
         3: '4) '
       }
     }
-  },
-  created () {
   },
   computed: {
     isLtrQuestion () {

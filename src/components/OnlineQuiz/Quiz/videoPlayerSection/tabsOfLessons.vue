@@ -2,57 +2,44 @@
   <div class="tabs-of-lessons">
     <div class="q-pa-md">
       <q-card>
-        <q-tabs
-          v-if="report.length"
-          v-model="tab"
-          dense
-          class="text-grey"
-          active-color="primary"
-          indicator-color="primary"
-          align="justify"
-        >
-        </q-tabs>
+        <q-tabs v-if="report.length"
+                v-model="tab"
+                dense
+                class="text-grey"
+                active-color="primary"
+                indicator-color="primary"
+                align="justify" />
         <q-tab-panels v-model="tab"
                       animated>
           <q-tab-panel name="Lessons"
                        class="q-pa-none">
 
-            <q-splitter
-              v-model="splitterModel"
-            >
+            <q-splitter v-model="splitterModel">
 
               <template v-slot:before>
-                <q-tabs
-                  v-model="innerTab"
-                  :vertical="canBeVertical"
-                  class="text-primary"
-                >
+                <q-tabs v-model="innerTab"
+                        :vertical="canBeVertical"
+                        class="text-primary">
                   <!--        TODO :  window.innerWidth MUST BE REPLACED   -->
-                  <q-tab
-                    v-for="(item, index) in report.sub_category"
-                    :id="'lessonTab' + index"
-                    :key="index"
-                    :name="item.sub_category_id"
-                    :label="item.sub_category"
-                    :disable="tabPanelDisabled"
-                    @click="onVideoTabChange(index)"
-                  ></q-tab>
+                  <q-tab v-for="(item, index) in report.sub_category"
+                         :id="'lessonTab' + index"
+                         :key="index"
+                         :name="item.sub_category_id"
+                         :label="item.sub_category"
+                         :disable="tabPanelDisabled"
+                         @click="onVideoTabChange(index)" />
                 </q-tabs>
               </template>
 
               <template v-slot:after>
-                <q-tab-panels
-                  v-model="innerTab"
-                  animated
-                  :vertical="canBeVertical"
-                  transition-prev="slide-down"
-                  transition-next="slide-up"
-                >
-                  <q-tab-panel
-                    v-for="(item, index) in report.sub_category"
-                    :key="index"
-                    :name="item.sub_category_id"
-                  >
+                <q-tab-panels v-model="innerTab"
+                              animated
+                              :vertical="canBeVertical"
+                              transition-prev="slide-down"
+                              transition-next="slide-up">
+                  <q-tab-panel v-for="(item, index) in report.sub_category"
+                               :key="index"
+                               :name="item.sub_category_id">
                     <div v-if="currentVideoContent">
                       <div class="current-panel-title q-mb-md">{{ currentVideoContent.title }}</div>
                       <div class="answers-video-group">
@@ -70,30 +57,24 @@
                     <div v-if="currentVideoContent"
                          class="row videoPlayer-pages-box">
                       <div class="col">
-                        <div
-                          class="flex flex-center"
-                          dir="ltr"
-                        >
-                          <q-btn
-                            v-for="(video, alaaVideoIndex) in alaaVideos"
-                            :key="alaaVideoIndex"
-                            outline
-                            rounded
-                            class="videoPlayer-pages-btn"
-                            @click="getContent(video.id)"
-                          >
+                        <div class="flex flex-center"
+                             dir="ltr">
+                          <q-btn v-for="(video, alaaVideoIndex) in alaaVideos"
+                                 :key="alaaVideoIndex"
+                                 outline
+                                 rounded
+                                 class="videoPlayer-pages-btn"
+                                 @click="getContent(video.id)">
                             {{ alaaVideoIndex + 1 }}
                           </q-btn>
                         </div>
                       </div>
                     </div>
-                    <q-inner-loading
-                      :showing="loadingVisibility"
-                      label="لطفا کمی صبر کنید..."
-                      color="primary"
-                      class="tabLessons-inner-loading"
-                      label-style="font-size: 1.1em"
-                    />
+                    <q-inner-loading :showing="loadingVisibility"
+                                     label="لطفا کمی صبر کنید..."
+                                     color="primary"
+                                     class="tabLessons-inner-loading"
+                                     label-style="font-size: 1.1em" />
                   </q-tab-panel>
                 </q-tab-panels>
               </template>
@@ -106,12 +87,11 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { AlaaSet } from 'src/models/AlaaSet.js'
 import Assistant from 'src/plugins/assistant.js'
 import { Content } from 'src/models/Content.js'
-import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 import { PlayerSourceList } from 'src/models/PlayerSource.js'
+import ContentVideoPlayer from 'src/components/ContentVideoPlayer.vue'
 
 export default {
   name: 'tabsOfLessons',
@@ -140,6 +120,11 @@ export default {
       contentPoster: null
     }
   },
+  computed: {
+    canBeVertical () {
+      return window.innerWidth > 670
+    }
+  },
   created () {},
   mounted () {
     this.$nextTick(() => {
@@ -148,9 +133,9 @@ export default {
   },
   methods: {
     getContent (contentId, subCategoryIndex) {
-      this.$axios.get(API_ADDRESS.content.base + '/' + contentId)
-        .then((response) => {
-          this.currentVideoContent = response.data.data
+      this.$apiGateway.content.show(contentId)
+        .then((content) => {
+          this.currentVideoContent = content
           this.content = new Content(this.currentVideoContent)
           // this.initVideoJs(this.currentVideoContent.file.video, this.currentVideoContent.photo, subCategoryIndex)
         })
@@ -203,11 +188,6 @@ export default {
       } else {
         this.currentVideoContent = null
       }
-    }
-  },
-  computed: {
-    canBeVertical () {
-      return window.innerWidth > 670
     }
   }
 }

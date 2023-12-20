@@ -21,14 +21,12 @@
         </div>
         <div>
           <q-card-actions class="filter-container q-pa-none">
-            <q-chip
-              v-for="(filter, index) in selectedFilters"
-              :key="index"
-              v-model="selectedFilters[index]"
-              class="filter-items"
-              removable
-              @remove="deleteFilterObject(filter)"
-            >
+            <q-chip v-for="(filter, index) in selectedFilters"
+                    :key="index"
+                    v-model="selectedFilters[index]"
+                    class="filter-items"
+                    removable
+                    @remove="deleteFilterObject(filter)">
               {{ getFilterTitle(filter.value) }}
             </q-chip>
           </q-card-actions>
@@ -37,160 +35,122 @@
     </q-card>
     <div class="filter-options-section"
          :class="{'filter-options-desktop': !mobileMode}">
-      <question-filter-expansion
-        header-title="درس و مبحث"
-      >
-        <q-checkbox
-          v-if="availableSearchSingleNode"
-          v-model="searchSingleNode"
-          class="q-ml-md"
-          right-label
-          label="جستجوی تک گره"
-          @update:model-value="onSearchSingleNode"
-        />
-        <tree-component
-          ref="tree"
-          :key="treeKey"
-          tick-strategy="strict"
-          :get-node-by-id="getNodeById"
-          @ticked="tickedData"
-          @lazy-loaded="getExpandedTree"
-        />
+      <question-filter-expansion header-title="درس و مبحث">
+        <q-checkbox v-if="availableSearchSingleNode"
+                    v-model="searchSingleNode"
+                    class="q-ml-md"
+                    right-label
+                    label="جستجوی تک گره"
+                    @update:model-value="onSearchSingleNode" />
+        <tree-component ref="tree"
+                        :key="treeKey"
+                        tick-strategy="strict"
+                        :get-node-by-id="getNodeById"
+                        @ticked="tickedData"
+                        @lazy-loaded="getExpandedTree" />
       </question-filter-expansion>
       <!--      header-title="مرجع"-->
-      <question-filter-expansion
-        header-title="مرجع سوال"
-        :loading="localLoadings.optionsLoading"
-      >
-        <q-option-group
-          v-model="selectedReference"
-          type="checkbox"
-          :options="filterQuestions.reference_type.map(option => {
-            return {
-              label: option.value,
-              value: option
-            }
-          })"
-          @update:model-value="onChangeReference"
-        />
+      <question-filter-expansion header-title="مرجع سوال"
+                                 :loading="localLoadings.optionsLoading">
+        <q-option-group v-model="selectedReference"
+                        type="checkbox"
+                        :options="filterQuestions.reference_type.map(option => {
+                          return {
+                            label: option.value,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeReference" />
         <div v-if="filterQuestions.reference_type.length === 0"> هیچ مرجعی ایجاد نشده است</div>
       </question-filter-expansion>
 
-      <question-filter-expansion
-        header-title="سال انتشار"
-        :loading="localLoadings.optionsLoading"
-      >
-        <q-option-group
-          v-model="selectedYears"
-          type="checkbox"
-          :options="filterQuestions.year_type.map(option => {
-            return {
-              label: option.value,
-              value: option
-            }
-          })"
-          @update:model-value="onChangeYears"
-        />
+      <question-filter-expansion header-title="سال انتشار"
+                                 :loading="localLoadings.optionsLoading">
+        <q-option-group v-model="selectedYears"
+                        type="checkbox"
+                        :options="filterQuestions.year_type.map(option => {
+                          return {
+                            label: option.value,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeYears" />
         <div v-if="filterQuestions.year_type.length === 0"> هیچ سال انتشاری ایجاد نشده است</div>
       </question-filter-expansion>
 
-      <question-filter-expansion
-        v-if="showMajorList"
-        header-title="رشته تحصیلی"
-        :loading="localLoadings.optionsLoading"
-      >
-        <q-option-group
-          v-model="selectedMajors"
-          type="checkbox"
-          :options="filterQuestions.major_type.map(option => {
-            return {
-              label: option.value,
-              value: option
-            }
-          })"
-          @update:model-value="onChangeMajors"
-        />
+      <question-filter-expansion v-if="showMajorList"
+                                 header-title="رشته تحصیلی"
+                                 :loading="localLoadings.optionsLoading">
+        <q-option-group v-model="selectedMajors"
+                        type="checkbox"
+                        :options="filterQuestions.major_type.map(option => {
+                          return {
+                            label: option.value,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeMajors" />
         <div v-if="filterQuestions.major_type.length === 0"> هیچ رشته تحصیلی ایجاد نشده است</div>
 
       </question-filter-expansion>
 
-      <question-filter-expansion
-        header-title="درجه سختی"
-        :loading="localLoadings.levelTypeLoading"
-      >
-        <q-option-group
-          v-model="selectedLevels"
-          type="checkbox"
-          :options="filterQuestions.level_type.map(option => {
-            return {
-              label: option.trans,
-              value: option
-            }
-          })"
-          @update:model-value="onChangeLevels"
-        />
+      <question-filter-expansion header-title="درجه سختی"
+                                 :loading="localLoadings.levelTypeLoading">
+        <q-option-group v-model="selectedLevels"
+                        type="checkbox"
+                        :options="filterQuestions.level_type.map(option => {
+                          return {
+                            label: option.trans,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeLevels" />
         <div v-if="filterQuestions.level_type.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
 
       </question-filter-expansion>
 
-      <question-filter-expansion
-        v-if="filterQuestions.statuses"
-        header-title="وضعیت سوال"
-        :loading="localLoadings.statusLoading"
-      >
-        <q-option-group
-          v-model="selectedStatuses"
-          type="checkbox"
-          :options="filterQuestions.statuses.map(option => {
-            return {
-              label: option.display_title,
-              value: option
-            }
-          })"
-          @update:model-value="onChangeStatuses"
-        />
+      <question-filter-expansion v-if="filterQuestions.statuses"
+                                 header-title="وضعیت سوال"
+                                 :loading="localLoadings.statusLoading">
+        <q-option-group v-model="selectedStatuses"
+                        type="checkbox"
+                        :options="filterQuestions.statuses.map(option => {
+                          return {
+                            label: option.display_title,
+                            value: option
+                          }
+                        })"
+                        @update:model-value="onChangeStatuses" />
         <div v-if="filterQuestions.statuses.length === 0"> هیچ درجه سختی ایجاد نشده است</div>
 
       </question-filter-expansion>
 
-      <question-filter-expansion
-        v-if="filterQuestions.types"
-        header-title="نوع سوال"
-        :loading="localLoadings.optionsLoading"
-      >
-        <q-option-group
-          v-model="type_id"
-          :options="singleModeFilterOptions('types', 'value')"
-          @update:model-value="onChangeTypes"
-        />
+      <question-filter-expansion v-if="filterQuestions.types"
+                                 header-title="نوع سوال"
+                                 :loading="localLoadings.optionsLoading">
+        <q-option-group v-model="type_id"
+                        :options="singleModeFilterOptions('types', 'value')"
+                        @update:model-value="onChangeTypes" />
         <div v-if="filterQuestions.types.length === 0"> هیچ نوع سوالی ایجاد نشده است</div>
 
       </question-filter-expansion>
 
-      <question-filter-expansion
-        v-if="filterQuestions.report_type"
-        header-title="نوع خطا"
-        :loading="localLoadings.optionsLoading"
-      >
-        <q-option-group
-          v-model="selectedReportType"
-          :options="singleModeFilterOptions('report_type', 'value')"
-          @update:model-value="onChangeReportTypes"
-        />
+      <question-filter-expansion v-if="filterQuestions.report_type"
+                                 header-title="نوع خطا"
+                                 :loading="localLoadings.optionsLoading">
+        <q-option-group v-model="selectedReportType"
+                        :options="singleModeFilterOptions('report_type', 'value')"
+                        @update:model-value="onChangeReportTypes" />
         <div v-if="filterQuestions.report_type.length === 0"> هیچ نوع خطایی ایجاد نشده است</div>
 
       </question-filter-expansion>
 
-      <question-filter-expansion
-        v-if="filterQuestions.report_status"
-        header-title="وضعیت خطا"
-        :loading="localLoadings.reportStatusLoading"
-      >
-        <q-option-group
-          v-model="report_status"
-          :options="singleModeFilterOptions('report_status', 'description')"
-          @update:model-value="onChangeErrorStatus"
-        />
+      <question-filter-expansion v-if="filterQuestions.report_status"
+                                 header-title="وضعیت خطا"
+                                 :loading="localLoadings.reportStatusLoading">
+        <q-option-group v-model="report_status"
+                        :options="singleModeFilterOptions('report_status', 'description')"
+                        @update:model-value="onChangeErrorStatus" />
         <div v-if="filterQuestions.report_status.length === 0"> هیچ نوع وضعیت خطایی ایجاد نشده است</div>
 
       </question-filter-expansion>
@@ -200,9 +160,9 @@
 </template>
 
 <script>
-import { mixinTree } from 'src/mixin/Mixins'
-import TreeComponent from 'components/Tree/Tree'
-import QuestionFilterExpansion from 'components/Question/QuestionBank/QuestionFilterExpansion'
+import { mixinTree } from 'src/mixin/Mixins.js'
+import TreeComponent from 'src/components/Tree/Tree.vue'
+import QuestionFilterExpansion from 'src/components/Question/QuestionBank/QuestionFilterExpansion.vue'
 
 export default {
   name: 'QuestionBankFilter',
@@ -297,9 +257,33 @@ export default {
         report_type: '',
         statuses: [],
         question_report_type: '',
+        code: null,
         report_status: '',
         tags_with_childrens: 1
       }
+    }
+  },
+  computed: {
+    localLoadings() {
+      return Object.assign(this.defaultLoadings, this.loadings)
+    },
+    selectedFiltersObject () {
+      const filtersDataKey = Object.keys(this.filtersData)
+      const filters = []
+      filtersDataKey.forEach(key => {
+        const filterGroup = this.filtersData[key]
+        if (Array.isArray(filterGroup)) {
+          filterGroup.forEach(filterItem => {
+            filters.push(filterItem)
+          })
+        } else if (typeof filterGroup === 'object') {
+          filters.push(filterGroup)
+        } else if (typeof filterGroup === 'number' && !filterGroup) {
+          filters.push(filterGroup)
+        }
+      })
+
+      return filters
     }
   },
   watch: {
@@ -315,11 +299,6 @@ export default {
       handler(newVal) {
         this.showTreeModalNode(newVal)
       }
-    }
-  },
-  computed: {
-    localLoadings() {
-      return Object.assign(this.defaultLoadings, this.loadings)
     }
   },
   created () {
@@ -339,7 +318,7 @@ export default {
           })
         } else if (typeof filterGroup === 'object') {
           filters.push({ value: filterGroup, type: filterType })
-        } else if (typeof filterGroup === 'number' && !filterGroup) {
+        } else if (typeof filterGroup === 'number') {
           filters.push({ value: filterGroup, type: filterType })
         }
       })
@@ -383,9 +362,9 @@ export default {
       }
     },
     showTreeModalNode (NodeId) {
-      const nodeToLoadTreeFrom = NodeId ? this.getNode(NodeId) : this.getRootNode('test')
+      // const nodeToLoadTreeFrom = NodeId ? this.getNode(NodeId) : this.getRootNode('test')
       this.treeKey += 1
-      this.showTree('tree', nodeToLoadTreeFrom)
+      this.showTree('tree', this.getRootNode('test'))
         .then(() => {
         })
     },

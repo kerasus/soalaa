@@ -1,24 +1,16 @@
 <template>
-  <div
-    v-if="initialData"
-    class="question-bank"
-  >
-    <q-infinite-scroll
-      v-if="filteredQuestions"
-      :offset="250"
-      :disable="disableScroll"
-      @load="onload"
-    >
-      <div
-        v-for="item in filteredQuestions"
-        :key="item.id"
-      >
+  <div v-if="initialData"
+       class="question-bank">
+    <q-infinite-scroll v-if="filteredQuestions"
+                       :offset="250"
+                       :disable="disableScroll"
+                       @load="onload">
+      <div v-for="item in filteredQuestions"
+           :key="item.id">
         <question-card :questionData="item" />
       </div>
-      <template
-        v-if="nextPage"
-        v-slot:loading
-      >
+      <template v-if="nextPage"
+                v-slot:loading>
         <div class="row justify-center q-my-md">
           <q-spinner-dots color="primary"
                           size="40px" />
@@ -30,23 +22,21 @@
       <q-toolbar class="text-white shadow-3 question-bank-toolbar">
         <div class="row toolbar-selections">
           <div class="col">
-            <q-select
-              v-model="filterQuestions.majorId"
-              filled
-              clearable
-              use-input
-              hide-selected
-              fill-input
-              input-debounce="0"
-              placeholder="رشته"
-              bg-color="white"
-              rounded
-              :options="initialData.major"
-              option-label="name"
-              option-value="id"
-              emit-value
-              map-options
-            >
+            <q-select v-model="filterQuestions.majorId"
+                      filled
+                      clearable
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      placeholder="رشته"
+                      bg-color="white"
+                      rounded
+                      :options="initialData.major"
+                      option-label="name"
+                      option-value="id"
+                      emit-value
+                      map-options>
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -57,23 +47,21 @@
             </q-select>
           </div>
           <div class="col">
-            <q-select
-              v-model="filterQuestions.levelId"
-              filled
-              clearable
-              use-input
-              hide-selected
-              fill-input
-              input-debounce="0"
-              placeholder="مقطع"
-              bg-color="white"
-              rounded
-              :options="initialData.level"
-              option-label="name"
-              option-value="id"
-              emit-value
-              map-options
-            >
+            <q-select v-model="filterQuestions.levelId"
+                      filled
+                      clearable
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      placeholder="مقطع"
+                      bg-color="white"
+                      rounded
+                      :options="initialData.level"
+                      option-label="name"
+                      option-value="id"
+                      emit-value
+                      map-options>
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -84,23 +72,21 @@
             </q-select>
           </div>
           <div class="col">
-            <q-select
-              v-model="filterQuestions.gradeId"
-              filled
-              clearable
-              use-input
-              hide-selected
-              fill-input
-              input-debounce="0"
-              placeholder="پایه"
-              bg-color="white"
-              rounded
-              :options="initialData.grade"
-              option-label="name"
-              option-value="id"
-              emit-value
-              map-options
-            >
+            <q-select v-model="filterQuestions.gradeId"
+                      filled
+                      clearable
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      placeholder="پایه"
+                      bg-color="white"
+                      rounded
+                      :options="initialData.grade"
+                      option-label="name"
+                      option-value="id"
+                      emit-value
+                      map-options>
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -111,23 +97,21 @@
             </q-select>
           </div>
           <div class="col">
-            <q-select
-              v-model="filterQuestions.majorGroupId"
-              filled
-              clearable
-              use-input
-              hide-selected
-              fill-input
-              input-debounce="0"
-              placeholder="گروه آموزشی"
-              bg-color="white"
-              rounded
-              :options="initialData.major"
-              option-label="name"
-              option-value="id"
-              emit-value
-              map-options
-            >
+            <q-select v-model="filterQuestions.majorGroupId"
+                      filled
+                      clearable
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      placeholder="گروه آموزشی"
+                      bg-color="white"
+                      rounded
+                      :options="initialData.major"
+                      option-label="name"
+                      option-value="id"
+                      emit-value
+                      map-options>
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -138,23 +122,21 @@
             </q-select>
           </div>
           <div class="col">
-            <q-select
-              v-model="filterQuestions.moduleGroupId"
-              filled
-              clearable
-              use-input
-              hide-selected
-              fill-input
-              input-debounce="0"
-              placeholder="گروه درسی"
-              bg-color="white"
-              rounded
-              :options="initialData.moduleGroup"
-              option-label="name"
-              option-value="id"
-              emit-value
-              map-options
-            >
+            <q-select v-model="filterQuestions.moduleGroupId"
+                      filled
+                      clearable
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      placeholder="گروه درسی"
+                      bg-color="white"
+                      rounded
+                      :options="initialData.moduleGroup"
+                      option-label="name"
+                      option-value="id"
+                      emit-value
+                      map-options>
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -165,23 +147,21 @@
             </q-select>
           </div>
           <div class="col">
-            <q-select
-              v-model="filterQuestions.moduleId"
-              filled
-              clearable
-              use-input
-              hide-selected
-              fill-input
-              input-debounce="0"
-              placeholder="درس"
-              bg-color="white"
-              rounded
-              :options="initialData.module"
-              option-label="name"
-              option-value="id"
-              emit-value
-              map-options
-            >
+            <q-select v-model="filterQuestions.moduleId"
+                      filled
+                      clearable
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      placeholder="درس"
+                      bg-color="white"
+                      rounded
+                      :options="initialData.module"
+                      option-label="name"
+                      option-value="id"
+                      emit-value
+                      map-options>
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -192,23 +172,21 @@
             </q-select>
           </div>
           <div class="col">
-            <q-select
-              v-model="filterQuestions.difficultyLevelId"
-              filled
-              clearable
-              use-input
-              hide-selected
-              fill-input
-              input-debounce="0"
-              placeholder="سختی"
-              bg-color="white"
-              rounded
-              :options="initialData.difficultyLevels"
-              option-label="name"
-              option-value="id"
-              emit-value
-              map-options
-            >
+            <q-select v-model="filterQuestions.difficultyLevelId"
+                      filled
+                      clearable
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      placeholder="سختی"
+                      bg-color="white"
+                      rounded
+                      :options="initialData.difficultyLevels"
+                      option-label="name"
+                      option-value="id"
+                      emit-value
+                      map-options>
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -219,23 +197,21 @@
             </q-select>
           </div>
           <div class="col">
-            <q-select
-              v-model="filterQuestions.originId"
-              filled
-              clearable
-              use-input
-              hide-selected
-              fill-input
-              input-debounce="0"
-              placeholder="منبع"
-              bg-color="white"
-              rounded
-              :options="initialData.origins"
-              option-label="name"
-              option-value="id"
-              emit-value
-              map-options
-            >
+            <q-select v-model="filterQuestions.originId"
+                      filled
+                      clearable
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      placeholder="منبع"
+                      bg-color="white"
+                      rounded
+                      :options="initialData.origins"
+                      option-label="name"
+                      option-value="id"
+                      emit-value
+                      map-options>
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -246,23 +222,21 @@
             </q-select>
           </div>
           <div class="col">
-            <q-select
-              v-model="filterQuestions.publishYearId"
-              filled
-              clearable
-              use-input
-              hide-selected
-              fill-input
-              input-debounce="0"
-              placeholder="سال انتشار"
-              bg-color="white"
-              rounded
-              :options="initialData.publishYears"
-              option-label="name"
-              option-value="id"
-              emit-value
-              map-options
-            >
+            <q-select v-model="filterQuestions.publishYearId"
+                      filled
+                      clearable
+                      use-input
+                      hide-selected
+                      fill-input
+                      input-debounce="0"
+                      placeholder="سال انتشار"
+                      bg-color="white"
+                      rounded
+                      :options="initialData.publishYears"
+                      option-label="name"
+                      option-value="id"
+                      emit-value
+                      map-options>
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -278,31 +252,25 @@
             <div class="row toolbar-card-child"
                  no-gutters>
               <div class="col">
-                <q-chip
-                  dark
-                  class="ma-2"
-                  color="deep-purple-14 toolbar-button"
-                >
+                <q-chip dark
+                        class="ma-2"
+                        color="deep-purple-14 toolbar-button">
                   {{ totalFilteredQuestions }}
                 </q-chip>
               </div>
               <div class="col">
-                <q-btn
-                  class="toolbar-button"
-                  color="light-blue"
-                  fab-mini
-                  icon="mdi-sort-ascending"
-                  @click="sortQuestions"
-                />
+                <q-btn class="toolbar-button"
+                       color="light-blue"
+                       fab-mini
+                       icon="mdi-sort-ascending"
+                       @click="sortQuestions" />
               </div>
               <div class="col">
-                <q-btn
-                  class="toolbar-button"
-                  color="light-blue"
-                  fab-mini
-                  icon="mdi-database-search"
-                  @click="getQuestions(true)"
-                />
+                <q-btn class="toolbar-button"
+                       color="light-blue"
+                       fab-mini
+                       icon="mdi-database-search"
+                       @click="getQuestions(true)" />
               </div>
             </div>
           </q-card>
@@ -313,8 +281,7 @@
 </template>
 
 <script>
-import QuestionCard from 'src/components/Question/OldQuestionBank/QuestionCard'
-import API_ADDRESS from 'src/api/Addresses'
+import QuestionCard from 'src/components/Question/OldQuestionBank/QuestionCard.vue'
 
 export default {
   name: 'QuestionBank',
@@ -345,9 +312,6 @@ export default {
       disableScroll: false
     }
   },
-  created () {
-    this.getData()
-  },
   watch: {
     loading () {
       if (this.loading) {
@@ -356,6 +320,9 @@ export default {
         this.$store.dispatch('loading/overlayLoading', false)
       }
     }
+  },
+  created () {
+    this.getData()
   },
   methods: {
     getData () {
@@ -433,23 +400,24 @@ export default {
         this.nextPage = ''
         this.totalFilteredQuestions = '...'
       }
-      this.$axios.get(API_ADDRESS.question.indexMonta + this.nextPage, {
-        params: this.filterQuestions
+      this.$apiGateway.question.getIndexMonta({
+        page: this.nextPage,
+        ...this.filterQuestions
       })
-        .then(response => {
+        .then(questionsWithMeta => {
           this.loading = false
           if (clear) {
-            this.filteredQuestions = response.data.data
+            this.filteredQuestions = questionsWithMeta.questionList.list
           } else {
-            this.filteredQuestions = this.filteredQuestions.concat(response.data.data)
+            this.filteredQuestions = this.filteredQuestions.concat(questionsWithMeta.questionList.list)
           }
-          this.totalFilteredQuestions = response.data.meta.total
-          this.lastPage = response.data.meta.last_page
-          if (typeof response.data.links === 'undefined' || response.data.links.next === null) {
+          this.totalFilteredQuestions = questionsWithMeta.meta.total
+          this.lastPage = questionsWithMeta.meta.last_page
+          if (typeof questionsWithMeta.links === 'undefined' || questionsWithMeta.links.next === null) {
             this.nextPage = ''
             return
           }
-          this.nextPage = response.data.links.next.replace(response.data.meta.path, '')
+          this.nextPage = questionsWithMeta.links.next.replace(questionsWithMeta.meta.path, '')
         })
         .catch(() => {
           this.loading = false

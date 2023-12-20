@@ -1,14 +1,14 @@
 <template>
   <div class="row user-panel-bare-layout">
     <div class="col-12">
-      <Router :include="keepAliveComponents" />
+      <router :include="keepAliveComponents" />
     </div>
   </div>
 </template>
 
 <script>
-import Router from 'src/router/Router'
-import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import Router from 'src/router/Router.vue'
+import KeepAliveComponents from 'src/assets/js/KeepAliveComponents.js'
 
 export default {
   name: 'UserPanelBareLayout',

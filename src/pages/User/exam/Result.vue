@@ -8,58 +8,44 @@
     </div>
     <div class="row wrap justify-center">
       <div class="col default-col-padding">
-        <q-card
-          flat
-          class="infoCard content-center"
-        >
-          <div
-            class="row main-tabs"
-          >
-            <div
-              class="col col-12 col-xl-3 col-sm-6 exam-title default-result-padding"
-            >
+        <q-card flat
+                class="infoCard content-center">
+          <div class="row main-tabs">
+            <div class="col col-12 col-xl-3 col-sm-6 exam-title default-result-padding">
               نتیجه
               {{ quiz.title }}
               سه آ
             </div>
-            <div
-              v-if="report"
-              class="col col-6 col-xl-1 col-sm-3 default-result-padding"
-            >
+            <div v-if="report"
+                 class="col col-6 col-xl-1 col-sm-3 default-result-padding">
               شهر:
               {{ report.location.city }}
             </div>
-            <div
-              v-if="report"
-              class="col col-6 col-xl-1 col-sm-3 default-result-padding"
-            >
+            <div v-if="report"
+                 class="col col-6 col-xl-1 col-sm-3 default-result-padding">
               استان:
               {{ report.location.province }}
             </div>
-            <div
-              class="col col-12 col-xl-7 default-result-tabs-title"
-              :style="{ padding: '0 12px' }"
-            >
-              <q-tabs
-                v-model="tab"
-                dense
-                active-color="primary"
-                indicator-color="primary"
-                align="justify"
-                class="result-tabs"
-              >
+            <div class="col col-12 col-xl-7 default-result-tabs-title"
+                 :style="{ padding: '0 12px' }">
+              <q-tabs v-model="tab"
+                      dense
+                      active-color="primary"
+                      indicator-color="primary"
+                      align="justify"
+                      class="result-tabs">
                 <q-tab name="result"
-                       label="کارنامه"></q-tab>
+                       label="کارنامه" />
                 <q-tab name="rank"
-                       label="تخمین رتبه"></q-tab>
+                       label="تخمین رتبه" />
                 <q-tab name="newRank"
-                       label="تخمین رتبه بر اساس کنکور"></q-tab>
+                       label="تخمین رتبه بر اساس کنکور" />
                 <q-tab name="lessons"
-                       label="ریزدرس ها"></q-tab>
+                       label="ریزدرس ها" />
                 <q-tab name="KeyAnswers"
-                       label="پاسخبرگ کلیدی"></q-tab>
+                       label="پاسخبرگ کلیدی" />
                 <q-tab name="descriptiveAnswers"
-                       label="پاسخ تشریحی و ویدویی"></q-tab>
+                       label="پاسخ تشریحی و ویدویی" />
               </q-tabs>
             </div>
           </div>
@@ -72,7 +58,7 @@
                       animated
                       swipeable>
           <q-tab-panel name="result">
-            <PersonalResult :report="report" />
+            <personal-result :report="report" />
           </q-tab-panel>
           <q-tab-panel name="newRank">
             <new-takhmin-rotbe :report="report" />
@@ -81,13 +67,11 @@
             <takhmin-rotbe :report="report" />
           </q-tab-panel>
           <q-tab-panel name="lessons">
-            <StatisticResult :report="report" />
+            <statistic-result :report="report" />
           </q-tab-panel>
           <q-tab-panel name="KeyAnswers">
-            <BubbleSheet
-              :info="{ type: 'pasokh-nameh' }"
-              delay-time="0"
-            />
+            <bubble-sheet :info="{ type: 'pasokh-nameh' }"
+                          delay-time="0" />
           </q-tab-panel>
           <q-tab-panel name="descriptiveAnswers"
                        class="descriptiveAnswers-tab-panel">
@@ -98,48 +82,34 @@
                   دانلود پاسخنامه تشریحی
                 </p>
                 <div v-if="report">
-                  <div
-                    v-for="(item, index) in report.exams_booklet"
-                    :key="index"
-                    class="row download-row"
-                  >
-                    <div
-                      class="col col-12 col-sm-6"
-                    >
-                      <div
-                        v-if="item.descriptive_answers_url"
-                        class="download-box"
-                      >
+                  <div v-for="(item, index) in report.exams_booklet"
+                       :key="index"
+                       class="row download-row">
+                    <div class="col col-12 col-sm-6">
+                      <div v-if="item.descriptive_answers_url"
+                           class="download-box">
                         <p class="download-title">
                           دانلود پاسخنامه تشریحی {{
                             item.title
                           }}
                         </p>
-                        <q-btn
-                          outline
-                          :href="item.descriptive_answers_url"
-                          target="_blank"
-                        >
+                        <q-btn outline
+                               :href="item.descriptive_answers_url"
+                               target="_blank">
                           دانلود فایل PDF
                           <q-icon name="mdi-download" />
                         </q-btn>
                       </div>
                     </div>
-                    <div
-                      class="col col-12 col-sm-6"
-                    >
-                      <div
-                        v-if="item.questions_url"
-                        class="download-box"
-                      >
+                    <div class="col col-12 col-sm-6">
+                      <div v-if="item.questions_url"
+                           class="download-box">
                         <p class="download-title">
                           دانلود سوالات {{ item.title }}
                         </p>
-                        <q-btn
-                          outline
-                          :href="item.questions_url"
-                          target="_blank"
-                        >
+                        <q-btn outline
+                               :href="item.questions_url"
+                               target="_blank">
                           دانلود فایل PDF
                           <q-icon name="mdi-download" />
                         </q-btn>
@@ -150,22 +120,19 @@
               </q-card-section>
             </q-card>
             <div class="questionsList">
-              <q-virtual-scroll
-                ref="scroller"
-                class="konkoor-view-scroll"
-                :items="questions"
-                :virtual-scroll-item-size="450"
-                :virtual-scroll-slice-size="5"
-              >
+              <q-virtual-scroll ref="scroller"
+                                class="konkoor-view-scroll"
+                                :items="questions"
+                                :virtual-scroll-item-size="450"
+                                :virtual-scroll-slice-size="5">
                 <template v-slot="{ item }">
 
-                  <question-item
-                    :key="item.id"
-                    :question="item"
-                    :page-strategy="'lesson-detail'"
-                    :show-question-number="true"
-                    :report-options="reportTypeList"
-                    class="question-field" />
+                  <question-item :key="item.id"
+                                 :question="item"
+                                 :page-strategy="'lesson-detail'"
+                                 :show-question-number="true"
+                                 :report-options="reportTypeList"
+                                 class="question-field" />
 
                 </template>
               </q-virtual-scroll>
@@ -178,23 +145,30 @@
 </template>
 
 <script>
+import API_ADDRESS from 'src/api/Addresses.js'
+import { AlaaSet } from 'src/models/AlaaSet.js'
+import Assistant from 'src/plugins/assistant.js'
+import ExamData from 'src/assets/js/ExamData.js'
+import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins.js'
+import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info.vue'
+import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe.vue'
+import NewTakhminRotbe from 'src/components/OnlineQuiz/Quiz/NewTakhminRotbe.vue'
 import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
-import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info'
-import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult'
-import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
-import Assistant from 'src/plugins/assistant'
-import { AlaaSet } from 'src/models/AlaaSet'
-import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
-import { AlaaContent } from 'src/models/AlaaContent'
-import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult'
-import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe'
-import ExamData from 'src/assets/js/ExamData'
-import API_ADDRESS from 'src/api/Addresses'
-import NewTakhminRotbe from 'components/OnlineQuiz/Quiz/NewTakhminRotbe'
+import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet.vue'
+import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult.vue'
+import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult.vue'
 
 export default {
   name: 'Result',
-  components: { NewTakhminRotbe, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult, QuestionItem },
+  components: {
+    Info,
+    BubbleSheet,
+    TakhminRotbe,
+    QuestionItem,
+    PersonalResult,
+    NewTakhminRotbe,
+    StatisticResult
+  },
   mixins: [
     mixinAuth,
     mixinQuiz
@@ -204,8 +178,6 @@ export default {
     selectedTimepoint: null,
     timepointsHeights: 0,
     videoLesson: null,
-    alaaSet: new AlaaSet(),
-    alaaContent: new AlaaContent(),
     alaaVideos: null,
     report: null,
     tab2: null,
@@ -214,8 +186,7 @@ export default {
     splitterModel: 20,
     reportTypeList: []
   }),
-  created () {
-    // console.log('report.exams_booklet', this.report.exams_booklet)
+  mounted () {
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
     this.getReportOptions()
@@ -228,7 +199,7 @@ export default {
       const that = this
       const userExamId = this.$route.params.user_exam_id
       const examId = this.$route.params.exam_id
-      const examData = new ExamData(this.$axios)
+      const examData = new ExamData(this.$alaaApiInstance)
       examData.getUserExamWithCorrectAnswers(userExamId, examId)
         .loadQuestionsFromFile()
         .getUserExamData(userExamId)

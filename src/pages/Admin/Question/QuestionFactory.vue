@@ -1,68 +1,56 @@
 <template>
   <div class="row">
     <div class="col">
-      <p
-        class="page-title q-mx-xl"
-      >
+      <p class="page-title q-mx-xl">
         کارخانه سوال
       </p>
       <!--  -------------------- nav bar ----------------------------------------------------------------- -->
       <div class="row justify-center q-mx-xl"
            style="margin-bottom: 50px">
         <div class="col">
-          <q-btn
-            unelevated
-            icon-right="expand_more"
-            color="white"
-            padding="10px 20px"
-            text-color="black"
-            class="custom-btn-radius"
-          >
+          <q-btn unelevated
+                 icon-right="expand_more"
+                 color="white"
+                 padding="10px 20px"
+                 text-color="black"
+                 class="custom-btn-radius">
             جدید ترین
           </q-btn>
         </div>
         <div class="col-6 text-center">
           <div class="q-gutter-y-md tabs-style text-center">
-            <q-tabs
-              v-model="tab"
-              dir="ltr"
-              inline-label
-              indicator-color="transparent"
-              active-color="primary"
-            >
-              <q-tab
-                v-for="(item, index) in questionStatusList.list"
-                :key="index"
-                :label="item.display_title"
-                @click="filter(item.id, page)"
-              />
+            <q-tabs v-model="tab"
+                    dir="ltr"
+                    inline-label
+                    indicator-color="transparent"
+                    active-color="primary">
+              <q-tab v-for="(item, index) in questionStatusList.list"
+                     :key="index"
+                     :label="item.display_title"
+                     @click="filter(item.id, page)" />
             </q-tabs>
           </div>
         </div>
         <div class="col text-right">
-          <q-btn
-            unelevated
-            color="white"
-            padding="10px 20px"
-            text-color="black"
-            class="custom-btn-radius"
-            icon="add"
-          >
+          <q-btn unelevated
+                 color="white"
+                 padding="10px 20px"
+                 text-color="black"
+                 class="custom-btn-radius"
+                 icon="add">
             سوال جدید
           </q-btn>
         </div>
       </div>
       <!--  -------------------- pagination ------------------------------------------------------------ -->
       <div class="row justify-center q-mb-lg q-mx-xl">
-        <q-pagination
-          v-model="page"
-          :max="pageCount"
-          color="blue"
-          :max-pages="8"
-          size="16px"
-          direction-links
-          @click="filter(selectedStatusId, page)"
-        />
+        <q-pagination v-model="page"
+                      :max="pageCount"
+                      color="blue"
+                      :max-pages="8"
+                      size="16px"
+                      direction-links
+                      @click="filter(selectedStatusId, page)" />
       </div>
       <!--  -------------------- table title ------------------------------------------------------------ -->
       <div class="row q-mx-xl q-mb-lg">
@@ -94,12 +82,10 @@
       </div>
       <!--  -------------------- table content ------------------------------------------------------------ -->
       <div class="row q-mx-xl">
-        <q-card
-          v-for="(item, index) in questions.list"
-          :key="index"
-          flat
-          class="col-12 card-style items-center"
-        >
+        <q-card v-for="(item, index) in questions.list"
+                :key="index"
+                flat
+                class="col-12 card-style items-center">
           <div class="row items-center card-content">
             <div class="col-2">
               <div class="q-mx-lg table-title-style column-statement-text">
@@ -108,9 +94,7 @@
             </div>
             <div class="col-3">
               <span class="column-statement-text table-title-style">
-                <span
-                  v-html="item.statement"
-                />
+                <span v-html="item.statement" />
               </span>
             </div>
             <div class="col-2">
@@ -119,59 +103,48 @@
               </span>
             </div>
             <div class="col-3">
-              <q-btn
-                color="red-6"
-                unelevated
-                rounded
-              >
+              <q-btn color="red-6"
+                     unelevated
+                     rounded>
                 {{ item.status.display_title }}
               </q-btn>
             </div>
             <div class="col-2">
-              <q-btn
-                color="grey-8"
-                flat
-                :to="{ name:'Admin.Question.Show', params: { question_id: item.id }}"
-                icon="mdi-eye-outline"
-                class="btn-style"
-              />
-              <q-btn
-                color="grey-8"
-                flat
-                :to="{ name:'Admin.Question.Edit', params: { question_id: item.id }}"
-                icon="mdi-pencil-outline"
-                class="btn-style"
-              />
-              <q-btn
-                color="grey-8"
-                flat
-                icon="mdi-dots-horizontal"
-                class="btn-style"
-              />
+              <q-btn color="grey-8"
+                     flat
+                     :to="{ name:'Admin.Question.Show', params: { question_id: item.id }}"
+                     icon="mdi-eye-outline"
+                     class="btn-style" />
+              <q-btn color="grey-8"
+                     flat
+                     :to="{ name:'Admin.Question.Edit', params: { question_id: item.id }}"
+                     icon="mdi-pencil-outline"
+                     class="btn-style" />
+              <q-btn color="grey-8"
+                     flat
+                     icon="mdi-dots-horizontal"
+                     class="btn-style" />
             </div>
           </div>
         </q-card>
       </div>
       <!--  -------------------- pagination ------------------------------------------------------------ -->
       <div class="row justify-center q-mb-lg q-mx-xl">
-        <q-pagination
-          v-model="page"
-          :max="pageCount"
-          color="blue"
-          :max-pages="8"
-          size="16px"
-          direction-links
-          @click="filter(selectedStatusId, page)"
-        />
+        <q-pagination v-model="page"
+                      :max="pageCount"
+                      color="blue"
+                      :max-pages="8"
+                      size="16px"
+                      direction-links
+                      @click="filter(selectedStatusId, page)" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
-import { QuestionList } from 'src/models/Question'
+import { QuestionList } from 'src/models/Question.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
 
 export default {
   name: 'QuestionFactory',
@@ -191,10 +164,11 @@ export default {
   methods: {
     getNavBarItems () {
       const that = this
-      this.$axios.get(API_ADDRESS.question.status.base).then(response => {
-        that.questionStatusList = new QuestionStatusList(response.data.data)
-        that.filter()
-      })
+      this.$apiGateway.question.getQuestionStatuses()
+        .then(questionStatusList => {
+          that.questionStatusList = new QuestionStatusList(questionStatusList)
+          that.filter()
+        })
     },
     filter (itemId, page) {
       if (itemId) {
@@ -204,11 +178,11 @@ export default {
       // that.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: 'کمی صبر کنید...' })
       that.$store.dispatch('loading/overlayLoading', true)
       const statusesId = (!itemId) ? [] : [itemId]
-      this.$axios.get(API_ADDRESS.question.index(statusesId, page))
-        .then(response => {
-          that.questions = new QuestionList(response.data.data)
-          that.page = response.data.meta.current_page
-          that.pageCount = Math.ceil(response.data.meta.total / response.data.meta.per_page)
+      this.$apiGateway.question.getIndex(statusesId, page)
+        .then(questionListAndMeta => {
+          that.questions = new QuestionList(questionListAndMeta.QuestionList)
+          that.page = questionListAndMeta.meta.current_page
+          that.pageCount = Math.ceil(questionListAndMeta.meta.total / questionListAndMeta.meta.per_page)
           that.$store.dispatch('loading/overlayLoading', false)
           // that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
         }).catch(e => {

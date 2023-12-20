@@ -1,47 +1,42 @@
 <template>
   <div>
     <div class="q-mb-lg">
-      <entity-edit :key="entityEdit"
+      <entity-edit v-if="mounted"
+                   :key="entityEdit"
                    v-model:value="inputs"
                    title="ویرایش اطلاعات آزمون"
                    :api="api"
                    :entity-id-key="entityIdKey"
                    :entity-param-key="entityParamKey"
                    :show-route-name="showRouteName"
-                   :before-load-input-data="beforeLoadInputData"
-      />
+                   :before-load-input-data="beforeLoadInputData" />
     </div>
-    <q-card class="category-card">
+    <q-card v-if="mounted"
+            class="category-card">
       <q-card-section>
         <h6 class="category-header q-ma-md">لیست دفترچه ها</h6>
       </q-card-section>
       <q-separator />
       <q-card-section class="flex">
         <div class="row bg-grey-3 add-category-box">
-          <q-select
-            v-model="category.title"
-            class="q-pa-md col-md-4"
-            :value="category"
-            label="دفترچه"
-            :options="categoryOptions"
-            option-value="categoryOptions"
-            option-label="title"
-            emit-value
-            map-options
-            :disable="totalCategory"
-          />
-          <q-input
-            v-model="category.order"
-            class="q-pa-md col-md-3"
-            label="ترتیب"
-            :disable="totalCategory"
-          />
-          <q-input
-            v-model="category.time"
-            class="q-pa-md col-md-3"
-            label="زمان"
-            :disable="totalCategory"
-          />
+          <q-select v-model="category.id"
+                    class="q-pa-md col-md-4"
+                    :value="category"
+                    label="دفترچه"
+                    :options="categoryOptions"
+                    option-value="id"
+                    option-label="title"
+                    emit-value
+                    map-options
+                    :disable="totalCategory" />
+          <q-input v-model="category.order"
+                   class="q-pa-md col-md-3"
+                   label="ترتیب"
+                   :disable="totalCategory" />
+          <q-input v-model="category.time"
+                   class="q-pa-md col-md-3"
+                   label="زمان"
+                   :disable="totalCategory" />
           <div class="q-pa-md col-md-2 flex">
             <q-btn class="q-ma-md"
                    icon="add"
@@ -50,8 +45,7 @@
                    dense
                    fab-mini
                    :disable="totalCategory"
-                   @click="addCategory"
-            />
+                   @click="addCategory" />
           </div>
         </div>
       </q-card-section>
@@ -61,12 +55,10 @@
           <p class="bg-red-2 alert">در حال حاضر دفترچه ای به آزمون اضافه نشده است !</p>
         </div>
         <div v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length > 0"
-             class="row"
-        >
+             class="row">
           <div v-for="(category , index) in inputs[examCategoriesIndex].value"
                :key="index"
-               class="row col-md-12 category-list-row"
-          >
+               class="row col-md-12 category-list-row">
             <q-select v-model="category.title"
                       class="q-pa-md col-md-4"
                       :value="category.id"
@@ -75,16 +67,13 @@
                       option-value="id"
                       option-label="title"
                       emit-value
-                      map-options
-            />
+                      map-options />
             <q-input v-model="category.order"
                      class="q-pa-md col-md-3"
-                     label="ترتیب"
-            />
+                     label="ترتیب" />
             <q-input v-model="category.time"
                      class="q-pa-md col-md-3"
-                     label="زمان"
-            />
+                     label="زمان" />
             <div class="q-pa-md col-md-2 flex">
               <q-btn class="q-ma-md"
                      icon="close"
@@ -92,8 +81,7 @@
                      flat
                      dense
                      fab-mini
-                     @click="deleteCategory(category.id)"
-              />
+                     @click="deleteCategory(category.id)" />
             </div>
           </div>
         </div>
@@ -108,25 +96,18 @@
 
 <script>
 import { EntityEdit } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
+import { APIGateway } from 'src/api/APIGateway.js'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 
 export default {
   name: 'Edit',
   components: { EntityEdit },
-  computed: {
-    examCategoriesIndex () {
-      return this.inputs.findIndex(item => item.name === 'categories')
-    },
-    totalCategory () {
-      return false
-      // return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 3
-    }
-  },
   data () {
     return {
+      mounted: false,
       entityEdit: Date.now(),
       detachCategoryLoading: false,
-      api: API_ADDRESS.exam.base(),
+      api: APIGateway.exam.APIAdresses.base(),
       entityIdKey: 'data.id',
       entityParamKey: 'data.id',
       showRouteName: 'Admin.Exam.Show',
@@ -180,13 +161,23 @@ export default {
       categoryOptions: []
     }
   },
-  created () {
+  computed: {
+    examCategoriesIndex () {
+      return this.inputs.findIndex(item => item.name === 'categories')
+    },
+    totalCategory () {
+      return false
+      // return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 3
+    }
+  },
+  mounted () {
     this.$store.commit('AppLayout/updateLastBreadcrumb', {
       loading: true
     })
     this.api += '/' + this.$route.params.id
     this.getOptions()
     this.getCategoryList()
+    this.mounted = true
   },
   methods: {
     beforeLoadInputData (response) {
@@ -202,10 +193,10 @@ export default {
     },
     getCategoryList() {
       this.detachCategoryLoading = true
-      this.$axios.get(API_ADDRESS.questionCategory.base)
-        .then((response) => {
+      APIGateway.questionCategory.get()
+        .then((questCategoryList) => {
           this.detachCategoryLoading = false
-          this.categoryOptions = response.data.data
+          this.categoryOptions = (new QuestCategoryList(questCategoryList)).list
         })
         .catch(() => {
           this.detachCategoryLoading = false
@@ -220,10 +211,10 @@ export default {
     },
     getOptions () {
       this.detachCategoryLoading = true
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
-          const options = response.data.data.filter(data => data.type === 'exam_type')
-          this.setExamTypeOptions(options)
+      this.$apiGateway.option.getFilterOptions()
+        .then((options) => {
+          const optionsList = options.filter(data => data.type === 'exam_type')
+          this.setExamTypeOptions(optionsList)
           this.addBreadcrumb()
           this.detachCategoryLoading = false
         })
@@ -233,7 +224,10 @@ export default {
     },
     deleteCategory (id) {
       this.detachCategoryLoading = true
-      this.$axios.delete(API_ADDRESS.exam.detachCategory(this.$route.params.id, id))
+      this.$apiGateway.exam.detachCategory({
+        examId: this.$route.params.id,
+        categoryId: id
+      })
         .then(() => {
           this.entityEdit = Date.now()
           this.getCategoryList()
@@ -247,14 +241,18 @@ export default {
       if (this.totalCategory) {
         return
       }
-
       if (this.category.title.id) {
         this.category.id = this.category.title.id
         this.category.title = this.category.title.title
       }
 
       this.detachCategoryLoading = true
-      this.$axios.post(API_ADDRESS.exam.attachCategories(this.$route.params.id), { categories: [this.category] })
+      this.$apiGateway.exam.attachCategories({
+        examId: this.$route.params.id,
+        data: {
+          categories: [this.category]
+        }
+      })
         .then(() => {
           this.inputs[this.examCategoriesIndex].value = this.inputs[this.examCategoriesIndex].value.concat(this.category)
           this.category = { title: '', id: '', order: 0, time: 0 }

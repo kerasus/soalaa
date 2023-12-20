@@ -1,6 +1,6 @@
-import Time from 'src/plugins/time'
-import API_ADDRESS from 'src/api/Addresses'
-import Assistant from 'src/plugins/assistant'
+import Time from 'src/plugins/time.js'
+import Assistant from 'src/plugins/assistant.js'
+
 const mixinUserActionOnQuestion = {
   methods: {
     userActionOnQuestion (questionId, actionType, data, socket, sendData) {
@@ -334,7 +334,7 @@ const mixinUserActionOnQuestion = {
       if (failedPayload.questions.length === 0) {
         return
       }
-      this.$axios.post(API_ADDRESS.exam.sendAnswers, failedPayload)
+      this.$apiGateway.exam.sendAnswers(failedPayload)
         .then(() => {
           this.$store.commit('Exam/resetAnswerFailedList')
         })
@@ -358,7 +358,7 @@ const mixinUserActionOnQuestion = {
       })
     },
     sendBookmarkFailedByHttpRequest (failedPayload) {
-      this.$axios.post(API_ADDRESS.exam.sendBookmark, failedPayload)
+      this.$apiGateway.exam.sendBookmark(failedPayload)
         .then(() => {
           this.$store.commit('Exam/removeFromBookmarkFailedList', failedPayload.question_id)
         })
@@ -381,7 +381,7 @@ const mixinUserActionOnQuestion = {
       })
     },
     sendUnBookmarkFailedByHttpRequest (failedPayload) {
-      this.$axios.post(API_ADDRESS.exam.sendUnBookmark, failedPayload)
+      this.$apiGateway.exam.sendUnBookmark(failedPayload)
         .then(() => {
           this.$store.commit('Exam/removeFromBookmarkFailedList', failedPayload.question_id)
         })
@@ -404,7 +404,7 @@ const mixinUserActionOnQuestion = {
       })
     },
     sendStatusFailedByHttpRequest (failedPayload) {
-      this.$axios.post(API_ADDRESS.exam.sendStatus, failedPayload)
+      this.$apiGateway.exam.sendStatus(failedPayload)
         .then(() => {
           this.$store.commit('Exam/removeFromStatusFailedList', failedPayload.question_id)
         })
@@ -516,16 +516,16 @@ const mixinUserActionOnQuestion = {
       let address = null
       let channel = null
       if (type === 'answer') {
-        address = API_ADDRESS.exam.sendAnswers
+        address = this.$apiGateway.exam.APIAdresses.sendAnswers
         channel = 'question.answer:save'
       } else if (type === 'bookmark') {
-        address = API_ADDRESS.exam.sendBookmark
+        address = this.$apiGateway.exam.APIAdresses.sendBookmark
         channel = 'question.bookmark:save'
       } else if (type === 'unBookmark') {
-        address = API_ADDRESS.exam.sendUnBookmark
+        address = this.$apiGateway.exam.APIAdresses.sendUnBookmark
         channel = 'question.bookmark:remove'
       } else if (type === 'status') {
-        address = API_ADDRESS.exam.sendStatus
+        address = this.$apiGateway.exam.APIAdresses.sendStatus
         channel = 'question.status:save'
       } else {
         return false

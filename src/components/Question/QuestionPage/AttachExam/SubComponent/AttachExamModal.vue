@@ -5,38 +5,32 @@
       <div class="detail-box detail-box-first"
            :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">نام آزمون</div>
-        <q-select
-          v-model="selectedExam"
-          borderless
-          :options="exams.list"
-          option-value="exam_id"
-          option-label="title"
-          :rules="selectorRules"
-          :loading="exams.loading"
-        />
+        <q-select v-model="selectedExam"
+                  borderless
+                  :options="exams.list"
+                  option-value="exam_id"
+                  option-label="title"
+                  :rules="selectorRules"
+                  :loading="exams.loading" />
       </div>
       <div class="detail-box"
            :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">درس</div>
-        <q-select
-          v-model="selectedLesson"
-          borderless
-          :options="lessons.list"
-          option-value="id"
-          option-label="title"
-          :rules="selectorRules"
-          :loading="lessons.loading"
-        />
+        <q-select v-model="selectedLesson"
+                  borderless
+                  :options="lessons.list"
+                  option-value="id"
+                  option-label="title"
+                  :rules="selectorRules"
+                  :loading="lessons.loading" />
       </div>
       <div class="detail-box"
            :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">ترتیب</div>
-        <q-input
-          v-model="order"
-          borderless
-          type="number"
-          :rules="numberRules"
-        />
+        <q-input v-model="order"
+                 borderless
+                 type="number"
+                 :rules="numberRules" />
       </div>
       <!--      <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
       <!--        <div class="detail-box-title">درجه سختی</div>-->
@@ -44,13 +38,11 @@
       <!--      </div>-->
       <div class="detail-box detail-box-last-of-row-1"
            :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <q-btn
-          unelevated
-          :loading="draftBtnLoading"
-          icon="mdi-plus"
-          class="draft-btn default-detail-btn"
-          @click="attach"
-        />
+        <q-btn unelevated
+               :loading="draftBtnLoading"
+               icon="mdi-plus"
+               class="draft-btn default-detail-btn"
+               @click="attach" />
       </div>
     </div>
     <div v-if="exams && lessons.list.length"
@@ -84,12 +76,18 @@
 </template>
 
 <script>
-import { Question } from 'src/models/Question'
-import { ExamList } from 'src/models/Exam'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { ExamList } from 'src/models/Exam.js'
+import { Question } from 'src/models/Question.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 
 export default {
   name: 'AttachExamModal',
+  inject: {
+    question: {
+      from: 'providedQuestion', // this is optional if using the same key for injection
+      default: new Question()
+    }
+  },
   props: {
     imgPanelVisibility: {
       type: Boolean,
@@ -110,12 +108,6 @@ export default {
     lessons: { // possible removal for attach exam
       type: QuestSubcategoryList,
       default: new QuestSubcategoryList()
-    }
-  },
-  inject: {
-    question: {
-      from: 'providedQuestion', // this is optional if using the same key for injection
-      default: new Question()
     }
   },
   data () {

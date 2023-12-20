@@ -45,8 +45,8 @@
                     transition-next="scale"
                     class="bg-white text-black text-center tab-panels">
         <q-tab-panel name="videos">
+          <!--          v-dragscroll-->
           <div v-if="videos.length > 0"
-               v-dragscroll
                class="contents-block">
             <block-component class="block"
                              :options="getBlockOptions" />
@@ -58,8 +58,8 @@
         </q-tab-panel>
 
         <q-tab-panel name="pamphlets">
+          <!--          v-dragscroll-->
           <div v-if="pamphlets.length > 0"
-               v-dragscroll
                class="pamphlet-list">
             <div v-for="pamphlet in pamphlets"
                  :key="pamphlet.id"
@@ -123,14 +123,13 @@
 
 <script>
 import { Set } from 'src/models/Set.js'
-import { dragscroll } from 'vue-dragscroll'
+// import { dragscroll } from 'vue-dragscroll'
 import { Product } from 'src/models/Product.js'
 import { mixinPrefetchServerData, mixinWidget } from 'src/mixin/Mixins.js'
-import { Content, ContentList } from 'src/models/Content'
+import { ContentList } from 'src/models/Content'
 import { Block } from 'src/models/Block.js'
-import BlockComponent from 'src/components/Widgets/Block/Block.vue'
+import BlockComponent from 'components/Widgets/Block/Block.vue'
 import { openURL } from 'quasar'
-import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'ProductContents',
@@ -138,7 +137,7 @@ export default {
     BlockComponent
   },
   directives: {
-    dragscroll
+    // dragscroll
   },
   mixins: [
     mixinPrefetchServerData,
@@ -165,7 +164,11 @@ export default {
           title: '',
           contents: this.contents
         }),
-        gridView: this.options.contentGridView
+        gridView: this.localOptions.contentGridView,
+        contentMinWidth: {
+          inGridView: '240px',
+          inScrollView: '318px'
+        }
       }
     },
     productId () {
@@ -229,12 +232,11 @@ export default {
         this.product.loading = false
         return
       }
-      this.getProduct()
-        .then((response) => {
-          this.product = new Product(response.data.data)
-          this.setProductSets(this.product)
-          this.product.loading = false
-        })
+      this.getProduct().then((data) => {
+        this.product = data
+        this.setProductSets(this.product)
+        this.product.loading = false
+      })
         .catch(() => {
           this.product.loading = false
         })
@@ -242,8 +244,8 @@ export default {
     prefetchServerDataPromise () {
       return this.getProduct()
     },
-    prefetchServerDataPromiseThen (response) {
-      this.product = new Product(response.data.data)
+    prefetchServerDataPromiseThen (data) {
+      this.product = data
       this.setProductSets(this.product)
       this.product.loading = false
     },
@@ -257,15 +259,12 @@ export default {
         })
       }
       this.product.loading = true
-      return this.$axios.get(API_ADDRESS.product.show.base + '/' + this.productId)
-      // return this.$apiGateway.product.show(this.productId)
+      return this.$apiGateway.product.show(this.productId)
     },
     getSet(id) {
       this.set.loading = true
-      this.$axios.get(API_ADDRESS.set.base + '/' + id)
-      // this.$apiGateway.set.show(id)
-        .then(response => {
-          const set = new Set(response.data.data)
+      this.$apiGateway.set.show(id)
+        .then(set => {
           this.videos = []
           this.pamphlets = []
           this.contents = set.contents
@@ -283,10 +282,8 @@ export default {
         })
     },
     downloadPamphlet(pamphlet) {
-      this.$axios.get(API_ADDRESS.content.base + '/' + pamphlet.id)
-      // this.$apiGateway.content.show(pamphlet.id)
-        .then(response => {
-          const content = new Content(response.data.data)
+      this.$apiGateway.content.show(pamphlet.id)
+        .then(content => {
           if (content.file && content.file.pamphlet && content.file.pamphlet[0]) {
             openURL(content.file.pamphlet[0].link)
           } else {

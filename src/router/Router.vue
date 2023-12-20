@@ -1,6 +1,6 @@
 <template>
   <router-view v-slot="{ Component }">
-    <keep-alive include="Admin.Exam.Index">
+    <keep-alive :include="include">
       <component :is="Component" />
     </keep-alive>
   </router-view>

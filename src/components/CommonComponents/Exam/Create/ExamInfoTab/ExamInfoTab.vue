@@ -10,57 +10,49 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-12 col-md-3 q-pa-sm">
+      <div class="col-12 col-md-4 q-pa-sm">
         <q-skeleton type="QInput"
                     animation="wave" />
       </div>
-      <div class="col-12 col-md-3 q-pa-sm">
+      <div class="col-12 col-md-4 q-pa-sm">
         <q-skeleton type="QInput"
                     animation="wave" />
       </div>
-      <div class="col-12 col-md-3 q-pa-sm">
+      <div class="col-12 col-md-4 q-pa-sm">
         <q-skeleton type="QInput"
                     animation="wave" />
       </div>
-      <div class="col-12 col-md-3 q-pa-sm">
+      <!-- <div class="col-12 col-md-3 q-pa-sm">
         <q-skeleton type="QInput"
                     animation="wave" />
-      </div>
+      </div> -->
     </div>
   </div>
   <div v-else
        class="exam-info-component">
     <div class="exam-info-form">
-      <entity-crud-form-builder
-        ref="EntityCrudFormBuilder"
-        :key="formBuilderCrud"
-        v-model:value="inputList"
-      />
+      <entity-crud-form-builder ref="EntityCrudFormBuilder"
+                                :key="formBuilderCrud"
+                                v-model:value="inputList" />
     </div>
     <div class="exam-info-buttons">
-      <div
-        class="exam-info-button back-button"
-        @click="cancelExam"
-      >
+      <div class="exam-info-button back-button"
+           @click="cancelExam">
         لغو
       </div>
-      <div
-        class="exam-info-button next-button"
-        @click="goToNextStep"
-      >
+      <div class="exam-info-button next-button"
+           @click="goToNextStep">
         مرحله بعد
-        <q-icon
-          class="next-button-icon"
-          name="isax:arrow-left"
-        />
+        <q-icon class="next-button-icon"
+                name="isax:arrow-left" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { Exam } from 'src/models/Exam.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
-import { Exam } from 'src/models/Exam'
 
 export default {
   name: 'ExamInfoTab',
@@ -109,7 +101,7 @@ export default {
           responseKey: 'data.title',
           label: 'عنوان آزمون',
           placeholder: 'وارد کنید',
-          col: 'col-12 col-md-3 col-sm-6'
+          col: 'col-12 col-md-4 col-sm-6'
         },
         {
           type: 'select',
@@ -121,7 +113,7 @@ export default {
           options: [],
           behavior: 'menu',
           disable: true,
-          col: 'col-12 col-md-3 col-sm-6',
+          col: 'col-12 col-md-4 col-sm-6',
           icon: 'isax:arrow-right-3',
           dropdownIcon: 'isax:arrow-down-1'
         },
@@ -132,21 +124,21 @@ export default {
           label: 'رشته تحصیلی',
           placeholder: 'انتخاب کنید',
           behavior: 'menu',
-          col: 'col-12 col-md-3 col-sm-6',
-          dropdownIcon: 'isax:arrow-down-1',
-          options: []
-        },
-        {
-          type: 'select',
-          name: 'temp.grade',
-          responseKey: 'data.temp.grade',
-          label: 'پایه تحصیلی',
-          placeholder: 'انتخاب کنید',
-          behavior: 'menu',
-          col: 'col-12 col-md-3 col-sm-6',
+          col: 'col-12 col-md-4 col-sm-6',
           dropdownIcon: 'isax:arrow-down-1',
           options: []
         }
+        // {
+        //   type: 'select',
+        //   name: 'temp.grade',
+        //   responseKey: 'data.temp.grade',
+        //   label: 'پایه تحصیلی',
+        //   placeholder: 'انتخاب کنید',
+        //   behavior: 'menu',
+        //   col: 'col-12 col-md-3 col-sm-6',
+        //   dropdownIcon: 'isax:arrow-down-1',
+        //   options: []
+        // }
       ],
       localExam: new Exam(),
       formBuilderCrud: 0,
@@ -245,6 +237,12 @@ export default {
       this.loadExamData()
     }
   },
+  mounted() {
+    if (this.exam.id) {
+      this.loadExamData(true)
+    }
+    this.forceRender()
+  },
   methods: {
     loadSelectInputOptions (inputName, options) {
       const inputIndex = this.inputList.findIndex(input => input.name === inputName)
@@ -276,10 +274,10 @@ export default {
         error = true
         messages.push('رشته آزمون مشخص نشده است.')
       }
-      if (!this.exam.temp.grade) {
-        error = true
-        messages.push('پایه آزمون مشخص نشده است.')
-      }
+      // if (!this.exam.temp.grade) {
+      //   error = true
+      //   messages.push('پایه آزمون مشخص نشده است.')
+      // }
 
       return { error, messages }
     },
@@ -325,12 +323,6 @@ export default {
     forceRender() {
       this.formBuilderCrud += 1
     }
-  },
-  mounted() {
-    if (this.exam.id) {
-      this.loadExamData(true)
-    }
-    this.forceRender()
   }
 }
 </script>

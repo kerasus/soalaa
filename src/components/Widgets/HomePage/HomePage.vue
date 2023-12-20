@@ -2,21 +2,19 @@
   <q-skeleton v-if="loading"
               class="full-width slider-loading"
               height="520px" />
-  <q-carousel
-    v-else
-    v-model="slide"
-    animated
-    navigation
-    infinite
-    prev-icon=""
-    :autoplay="autoplay"
-    arrows
-    transition-prev="slide-right"
-    transition-next="slide-left"
-    class="slider"
-    @mouseenter="autoplay = false"
-    @mouseleave="autoplay = false"
-  >
+  <q-carousel v-else
+              v-model="slide"
+              animated
+              navigation
+              infinite
+              prev-icon=""
+              :autoplay="autoplay"
+              arrows
+              transition-prev="slide-right"
+              transition-next="slide-left"
+              class="slider"
+              @mouseenter="autoplay = false"
+              @mouseleave="autoplay = false">
     <q-carousel-slide v-for="(pic, index) in pageData.slider"
                       :key="index"
                       :name="index"
@@ -29,22 +27,19 @@
     متفاوت‌ترین پلتفرم آزمون آنلاین و بانک سوال ایران
   </div>
   <div class="tab-container">
-    <q-tabs
-      v-model="activeTab"
-      inline-label
-      outside-arrows
-      mobile-arrows
-      indicator-color="transparent"
-      active-class="active-tab"
-      class=""
-    >
+    <q-tabs v-model="activeTab"
+            inline-label
+            outside-arrows
+            mobile-arrows
+            indicator-color="transparent"
+            active-class="active-tab"
+            class="">
       <q-tab v-for="(tab, index) in pageData.tabs"
              :key="index"
              :name="index"
              icon="img:https://nodes.alaatv.com/aaa/landing/Soalaa/HomePage/attr/2_on.png"
              class="tab-style"
-             :label="tab.key"
-      />
+             :label="tab.key" />
     </q-tabs>
     <q-tab-panels v-model="activeTab"
                   animated
@@ -58,14 +53,13 @@
           <div class="description">{{tabData.value}}</div>
           <div v-if="tabData.link"
                class="more-detail text-right">
-            <q-btn
-              flat
-              :to="tabData.link"
-              style="color: #8075DC"
-              class="btn"
-              padding="9px 17px"
-              icon-right="west"
-              label="اطلاعات بیشتر" />
+            <q-btn flat
+                   :to="tabData.link"
+                   style="color: #8075DC"
+                   class="btn"
+                   padding="9px 17px"
+                   icon-right="west"
+                   label="اطلاعات بیشتر" />
           </div>
         </div>
         <div class="img-box">
@@ -97,34 +91,31 @@
       </div>
       <div v-if="pageData.bank_soala.link"
            class="more-details text-right">
-        <q-btn
-          unelevated
-          color="primary"
-          :to="pageData['3a_azmon'].link"
-          style="color: #8075DC"
-          class="btn q-ma-none"
-          padding="9px 17px 9px 19px"
-          icon-right="west"
-          label="اطلاعات بیشتر" />
+        <q-btn unelevated
+               color="primary"
+               :to="pageData['3a_azmon'].link"
+               style="color: #8075DC"
+               class="btn q-ma-none"
+               padding="9px 17px 9px 19px"
+               icon-right="west"
+               label="اطلاعات بیشتر" />
       </div>
     </div>
     <div class="img-box">
-      <q-img
-        class="img"
-        :srs="pageData.bank_soala.image" />
+      <q-img class="img"
+             :srs="pageData.bank_soala.image" />
     </div>
   </div>
   <div class="sub-mit-box flex justify-between items-center">
     <div class="info">با ورود و یا ثبت نام در سوالا میتوانید محتوای شخصی سازی شده و مربوط به خود را دنبال کنید</div>
     <div class="action-box">
-      <q-btn
-        unelevated
-        class="btn-style"
-        label="ورود"></q-btn>
+      <q-btn unelevated
+             class="btn-style"
+             label="ورود" />
       <q-btn unelevated
              color="primary"
              class="btn-style"
-             label="ثبت نام"></q-btn>
+             label="ثبت نام" />
     </div>
   </div>
   <q-skeleton v-if="loading"
@@ -144,21 +135,19 @@
       </div>
       <div v-if="pageData['3a_azmon'].link"
            class="more-details text-right">
-        <q-btn
-          unelevated
-          color="primary"
-          :to="pageData['3a_azmon'].link"
-          style="color: #8075DC"
-          class="btn q-ma-none"
-          padding="9px 17px 9px 19px"
-          icon-right="west"
-          label="اطلاعات بیشتر" />
+        <q-btn unelevated
+               color="primary"
+               :to="pageData['3a_azmon'].link"
+               style="color: #8075DC"
+               class="btn q-ma-none"
+               padding="9px 17px 9px 19px"
+               icon-right="west"
+               label="اطلاعات بیشتر" />
       </div>
     </div>
     <div class="img-box">
-      <q-img
-        class="img"
-        :srs="pageData['3a_azmon'].image" />
+      <q-img class="img"
+             :srs="pageData['3a_azmon'].image" />
     </div>
 
   </div>
@@ -166,10 +155,15 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
 // import { axios } from 'src/boot/axios'
 export default {
   name: 'home-page',
+  props: {
+    getData: {
+      type: Function,
+      default: () => {}
+    }
+  },
   data: () => ({
     pageData: [],
     slide: 1,
@@ -177,12 +171,6 @@ export default {
     loading: true,
     activeTab: 0
   }),
-  props: {
-    getData: {
-      type: Function,
-      default: () => {}
-    }
-  },
   created() {
     // this.initPageData()
   },
@@ -197,9 +185,8 @@ export default {
     async initPageData() {
       this.loading = true
       try {
-        const response = await this.getData(API_ADDRESS.homePage.base)
-        this.pageData = response.data.data
-        // this.pageData = await this.call(API_ADDRESS.homePage.base)
+        const pageData = await this.$apiGateway.pages.getHomepageData()
+        this.pageData = pageData
         this.loading = false
       } catch (e) {
         this.loading = false

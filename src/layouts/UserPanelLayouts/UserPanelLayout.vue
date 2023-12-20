@@ -1,23 +1,22 @@
 <template>
   <div class="row user-panel-layout">
     <div v-if="getTemplateLeftSideBarType === 'default'"
-         class="user-side-bar col-xl-3 col-lg-3 col-md-3"
-    >
+         class="user-side-bar col-xl-3 col-lg-3 col-md-3">
       <sticky-both-sides>
         <user-side-bar />
       </sticky-both-sides>
     </div>
     <div class="col-xl-9 col-lg-9 col-md-9 col-12 user-panel-content">
-      <Router :include="keepAliveComponents" />
+      <router :include="keepAliveComponents" />
     </div>
   </div>
 </template>
 
 <script>
-import UserSideBar from 'layouts/UserPanelLayouts/UserSideBar'
-import KeepAliveComponents from 'assets/js/KeepAliveComponents'
-import Router from 'src/router/Router'
-import StickyBothSides from 'components/Utils/StickyBothSides'
+import Router from 'src/router/Router.vue'
+import UserSideBar from 'src/layouts/UserPanelLayouts/UserSideBar.vue'
+import StickyBothSides from 'src/components/Utils/StickyBothSides.vue'
+import KeepAliveComponents from 'src/assets/js/KeepAliveComponents.js'
 
 export default {
   name: 'UserPanelLayout',
@@ -46,12 +45,12 @@ export default {
     }
   },
   created () {
-    if (this.windowSize.x < 1024) {
-      this.$store.dispatch('AppLayout/updateTemplateLayout', {
-        layoutLeftDrawerVisible: false,
-        layoutLeftDrawer: true
-      })
-    }
+    // if (this.windowSize.x < 1024) {
+    //   this.$store.dispatch('AppLayout/updateTemplateLayout', {
+    //     layoutLeftDrawerVisible: false,
+    //     layoutLeftDrawer: true
+    //   })
+    // }
   },
   methods: {
   }
@@ -68,7 +67,7 @@ export default {
   justify-content: space-between;
   .user-side-bar {
     width: 277px;
-    @media screen and(max-width: 1439px) {
+    @media screen and (max-width: 1439px) {
       width: 220px;
     }
   }

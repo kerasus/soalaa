@@ -10,7 +10,7 @@
         <q-skeleton v-if="product.loading"
                     class="description-text custom-card"
                     min-width="100%"
-                    type="text" />
+                    type="article" />
 
         <q-card v-else-if="description"
                 class="description-text custom-card">
@@ -30,7 +30,7 @@
 <script>
 import { Product } from 'src/models/Product.js'
 import { mixinWidget, mixinPrefetchServerData } from 'src/mixin/Mixins.js'
-import API_ADDRESS from 'src/api/Addresses'
+import { APIGateway } from 'src/api/APIGateway.js'
 
 export default {
   name: 'ProductReview',
@@ -86,9 +86,9 @@ export default {
       this.product.loading = true
       return this.getProduct()
     },
-    prefetchServerDataPromiseThen (response) {
-      this.product = new Product(response.data.data)
-      this.isFavored = this.product.is_favored_2
+    prefetchServerDataPromiseThen (data) {
+      this.product = data
+      this.isFavored = data.is_favored_2
       this.product.loading = false
     },
     prefetchServerDataPromiseCatch () {
@@ -96,8 +96,7 @@ export default {
     },
     getProduct() {
       this.product.loading = true
-      return this.$axios.get(API_ADDRESS.product.show.base + '/' + this.productId)
-      // return APIGateway.product.show(this.productId)
+      return APIGateway.product.show(this.productId)
     }
   }
 }

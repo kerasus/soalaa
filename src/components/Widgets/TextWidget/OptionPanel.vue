@@ -2,8 +2,7 @@
   <option-panel-tabs v-model:options="localOptions">
     <template #main-tab>
       <div class="option-panel-container">
-        <div
-          class="row">
+        <div class="row">
           <div class="col-md-12">
             <q-editor v-model="localOptions.text"
                       min-height="10rem"
@@ -19,8 +18,7 @@
                         ['bold', 'italic', 'strike', 'underline'],
                         ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
                         ['viewsource']
-                      ]">
-            </q-editor>
+                      ]" />
           </div>
           <div class="col-md-3">
             <q-select v-model="responsive"
@@ -51,7 +49,7 @@
 </template>
 <script>
 import { defineComponent } from 'vue'
-import mixinOptionPanel from 'quasar-ui-q-page-builder/src/mixin/OptionPanel.js'
+import { mixinOptionPanel } from 'quasar-ui-q-page-builder'
 import OptionPanelTabs from 'quasar-ui-q-page-builder/src/components/OptionPanelComponents/OptionPanelTabs.vue'
 
 export default defineComponent({

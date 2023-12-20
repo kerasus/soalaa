@@ -2,31 +2,24 @@
   <q-card class="filter-card custom-card"
           flat>
     <q-card-section class="search-section">
-      <q-input
-        v-model="searchInput"
-        filled
-        class="backGround-gray-input search-input"
-        placeholder="جستجو در سوال ها..."
-      >
+      <q-input v-model="searchInput"
+               filled
+               class="backGround-gray-input search-input"
+               placeholder="جستجو در سوال ها...">
         <template v-slot:append>
-          <q-btn
-            flat
-            rounded
-            icon="isax:search-normal"
-          />
+          <q-btn flat
+                 rounded
+                 icon="isax:search-normal" />
         </template>
       </q-input>
     </q-card-section>
 
     <q-card-section class="filter-section">
-      <q-select
-        v-model="searchInput"
-        filled
-        dropdown-icon="isax:arrow-down-1"
-        label="جدیدترین"
-        class="backGround-gray-input filter-input"
-      >
-      </q-select>
+      <q-select v-model="searchInput"
+                filled
+                dropdown-icon="isax:arrow-down-1"
+                label="جدیدترین"
+                class="backGround-gray-input filter-input" />
       <!--      <q-btn-->
       <!--        @click="this.FilterOptionDialog = !this.FilterOptionDialog"-->
       <!--        class="filter-btn"-->
@@ -35,55 +28,43 @@
       <!--      />-->
     </q-card-section>
   </q-card>
-  <q-dialog
-    v-model="FilterOptionDialog"
-    class="dialog-filter-card"
-    persistent
-    maximized
-    transition-show="slide-right"
-    transition-hide="slide-left"
-  >
+  <q-dialog v-model="FilterOptionDialog"
+            class="dialog-filter-card"
+            persistent
+            maximized
+            transition-show="slide-right"
+            transition-hide="slide-left">
     <q-card class="dialog-filter-card-container">
       <div class="questions-filter">
         <div class="filter-headerOption-container">
           <div class="filter-header">
             <div class="filter-header-title"> فیلتر سوالات</div>
             <div class="close-filter-section">
-              <q-btn
-                flat
-                label="بازگشت"
-                icon-right="isax:arrow-left-2"
-                @click="this.FilterOptionDialog = !this.FilterOptionDialog"
-              />
+              <q-btn flat
+                     label="بازگشت"
+                     icon-right="isax:arrow-left-2"
+                     @click="this.FilterOptionDialog = !this.FilterOptionDialog" />
             </div>
           </div>
           <div class="filter-options">
-            <question-filter-expansion
-              header-title="درس و مبحث"
-            >
+            <question-filter-expansion header-title="درس و مبحث">
               salam
             </question-filter-expansion>
-            <question-filter-expansion
-              header-title="نوع سوال"
-            >
+            <question-filter-expansion header-title="نوع سوال">
               <!--              <tree-->
               <!--                ref="tree"-->
               <!--                tick-strategy="strict"-->
               <!--                :get-node-by-id="getNodeById"-->
               <!--              />-->
             </question-filter-expansion>
-            <question-filter-expansion
-              header-title="سختی سوال"
-            >
+            <question-filter-expansion header-title="سختی سوال">
               <!--              <tree-->
               <!--                ref="tree1"-->
               <!--                tick-strategy="strict"-->
               <!--                :get-node-by-id="getNodeById"-->
               <!--              />-->
             </question-filter-expansion>
-            <question-filter-expansion
-              header-title="تاریخ تالیف"
-            >
+            <question-filter-expansion header-title="تاریخ تالیف">
               <div>
                 salam
               </div>
@@ -92,16 +73,12 @@
         </div>
         <div class="filter-actions">
           <div class="delete-all-filters-container">
-            <q-btn
-              class="delete-all-filters"
-              label="حذف همه"
-            />
+            <q-btn class="delete-all-filters"
+                   label="حذف همه" />
           </div>
           <div class="set-filters-container">
-            <q-btn
-              label="اعمال فیلتر"
-              class="set-filters"
-            />
+            <q-btn label="اعمال فیلتر"
+                   class="set-filters" />
           </div>
         </div>
       </div>
@@ -110,7 +87,8 @@
 </template>
 
 <script>
-import QuestionFilterExpansion from 'components/Question/QuestionBank/QuestionFilterExpansion'
+import QuestionFilterExpansion from 'src/components/Question/QuestionBank/QuestionFilterExpansion.vue'
+
 export default {
   name: 'QuestionBankHeader',
   components: { QuestionFilterExpansion },

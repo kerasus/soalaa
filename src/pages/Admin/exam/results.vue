@@ -2,54 +2,46 @@
   <div class="row justify-center">
     <div class="col-9">
       <div class="back-btn-container">
-        <q-btn
-          class="q-mx-sm float-right"
-          round
-          dark-percentage
-          color="primary"
-          icon="isax:arrow-left-2"
-          @click= this.$router.go(-1)
-        />
+        <q-btn class="q-mx-sm float-right"
+               round
+               dark-percentage
+               color="primary"
+               icon="isax:arrow-left-2"
+               @click="this.$router.go(-1)" />
       </div>
     </div>
     <div class="col-9 ">
       <div class="row q-mb-xl justify-center ">
         <div class="col-12 col-md-3 col-sm-3  q-pr-md">
           <div class=" ">
-            <q-select
-              v-model="selectedGender"
-              :options="genders"
-              label="جنسیت"
-              color="blue-8"
-              option-label="title"
-              emit-value
-              option-value="title"
-            />
+            <q-select v-model="selectedGender"
+                      :options="genders"
+                      label="جنسیت"
+                      color="blue-8"
+                      option-label="title"
+                      emit-value
+                      option-value="title" />
           </div>
         </div>
         <div class="col-12 col-md-3 col-sm-3  q-px-md">
-          <q-select
-            v-model="selectedProvince"
-            label="استان"
-            color="blue-8"
-            :options="provinces"
-            option-label="title"
-            emit-value
-            option-value="title"
-            no-data-text="داده ای یافت نشد"
-          />
+          <q-select v-model="selectedProvince"
+                    label="استان"
+                    color="blue-8"
+                    :options="provinces"
+                    option-label="title"
+                    emit-value
+                    option-value="title"
+                    no-data-text="داده ای یافت نشد" />
         </div>
         <div class="col-12 col-md-3 col-sm-3  q-px-md">
-          <q-select
-            v-model="selectedCity"
-            label="شهر"
-            color="blue-8"
-            :options="citiesForSelectedProvince"
-            option-label="title"
-            emit-value
-            option-value="title"
-            no-data-text="داده ای یافت نشد"
-          >
+          <q-select v-model="selectedCity"
+                    label="شهر"
+                    color="blue-8"
+                    :options="citiesForSelectedProvince"
+                    option-label="title"
+                    emit-value
+                    option-value="title"
+                    no-data-text="داده ای یافت نشد">
             <template v-slot:no-option>
               <q-item>
                 <q-item-section class="text-grey">
@@ -62,36 +54,30 @@
       </div>
       <div class="row q-mb-lg">
         <div class="col-12 col-md-3 col-sm-3 filter-btn  q-px-md">
-          <q-btn
-            rounded
-            color="indigo-11"
-            style="width: 150px"
-            @click="DoFilter"
-          >
+          <q-btn rounded
+                 color="indigo-11"
+                 style="width: 150px"
+                 @click="DoFilter">
             اعمال فیلتر
           </q-btn>
         </div>
         <div class="col-12 col-md-3 col-sm-3 filter-btn  q-px-md">
-          <q-btn
-            rounded
-            color="amber-6"
-            :loading="fileLoading"
-            style="width: 150px"
-            @click="getExcel"
-          >
+          <q-btn rounded
+                 color="amber-6"
+                 :loading="fileLoading"
+                 style="width: 150px"
+                 @click="getExcel">
             تولید Excel
           </q-btn>
         </div>
         <div class="col-12 col-md-3 col-sm-3 filter-btn q-px-md">
-          <q-btn
-            rounded
-            :color="file_url ? 'light-green-6':'grey'"
-            :text-color="file_url ? 'grey-14':'white'"
-            type="a"
-            :href="file_url"
-            :disable="!file_url"
-            style="width: 150px"
-          >
+          <q-btn rounded
+                 :color="file_url ? 'light-green-6':'grey'"
+                 :text-color="file_url ? 'grey-14':'white'"
+                 type="a"
+                 :href="file_url"
+                 :disable="!file_url"
+                 style="width: 150px">
             دانلود Excel
           </q-btn>
         </div>
@@ -101,14 +87,10 @@
   <!--   -------------------------------------- -------------------------------------------------------------->
   <div class="row justify-center">
     <div class="col-9">
-      <q-card
-        flat
-      >
-        <q-tabs
-          v-model="tabs"
-          class="bg-primary text-white shadow-2"
-          content-class="tabs-content"
-        >
+      <q-card flat>
+        <q-tabs v-model="tabs"
+                class="bg-primary text-white shadow-2"
+                content-class="tabs-content">
           <q-tab name="rank">
             کارنامه رتبه محور
           </q-tab>
@@ -116,31 +98,22 @@
             کارنامه درس محور
           </q-tab>
         </q-tabs>
-        <q-separator></q-separator>
+        <q-separator />
         <q-tab-panels v-model="tabs">
           <q-tab-panel name="rank">
-            <q-markup-table
-              id="scroll-target-id"
-              class="my-sticky-header-table tabs-content"
-              dense
-            >
-              <q-infinite-scroll
-                :offset="250"
-                scroll-target="#scroll-target-id"
-                @load="loadRankData"
-              >
-                <thead
-                  v-if="results[0]"
-                  class="mitra"
-                >
+            <q-markup-table id="scroll-target-id"
+                            class="my-sticky-header-table tabs-content"
+                            dense>
+              <q-infinite-scroll :offset="250"
+                                 scroll-target="#scroll-target-id"
+                                 @load="loadRankData">
+                <thead v-if="results[0]"
+                       class="mitra">
                   <tr>
-                    <th colspan="5">
-                    </th>
-                    <th
-                      v-for="(item, index) in results[0].sub_category"
-                      :key="'headTitle_'+item.sub_category_order+'_'+index"
-                      colspan="3"
-                    >
+                    <th colspan="5" />
+                    <th v-for="(item, index) in results[0].sub_category"
+                        :key="'headTitle_'+item.sub_category_order+'_'+index"
+                        colspan="3">
                       {{ item.sub_category }}
                     </th>
                   </tr>
@@ -160,31 +133,24 @@
                     <th>
                       مشاهده کارنامه
                     </th>
-                    <template
-                      v-for="(item, index) in results[0].sub_category"
-                      :key="'headColumns_percent_'+item.sub_category_order + '-' + index"
-                    >
-                      <th
-                        class="bordered-left"
-                      >
+                    <template v-for="(item, index) in results[0].sub_category"
+                              :key="'headColumns_percent_'+item.sub_category_order + '-' + index">
+                      <th class="bordered-left">
                         درصد
                       </th>
                       <th>
                         تراز
                       </th>
-                      <th
-                      >
+                      <th>
                         رتبه
                       </th>
                     </template>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr
-                    v-for="item in results"
-                    :key="item.name"
-                    class="text-center"
-                  >
+                  <tr v-for="item in results"
+                      :key="item.name"
+                      class="text-center">
                     <td>{{ item.main.rank_country }}</td>
                     <td>
                       <span v-if="item.user">
@@ -195,54 +161,43 @@
                     <td>{{ item.location.province }}</td>
                     <td>{{ item.location.city }}</td>
                     <td>
-                      <q-btn
-                        icon="mdi-eye-circle-outline"
-                        color="cyan"
-                        flat
-                        :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"
-                        round
-                      />
+                      <q-btn icon="mdi-eye-circle-outline"
+                             color="cyan"
+                             flat
+                             :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"
+                             round />
                       <q-tooltip top>
                         <span>مشاهده کارنامه</span>
                       </q-tooltip>
                     </td>
-                    <template
-                      v-for="(sub_categoryItem, sub_categoryIndex) in item.sub_category"
-                      :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"
-                    >
-                      <td
-                        class="bordered-left"
-                      >
+                    <template v-for="(sub_categoryItem, sub_categoryIndex) in item.sub_category"
+                              :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
+                      <td class="bordered-left">
                         {{ sub_categoryItem.percent }}
                       </td>
                       <td>
                         {{ sub_categoryItem.taraaz }}
                       </td>
-                      <td
-                      >
+                      <td>
                         {{ sub_categoryItem.rank_country }}
                       </td>
                     </template>
                   </tr>
                 </tbody>
                 <div v-if="noData"
-                     class="text-subtitle1 text-weight-medium text-center full-width"
-                >
+                     class="text-subtitle1 text-weight-medium text-center full-width">
                   no more data
                 </div>
               </q-infinite-scroll>
             </q-markup-table>
           </q-tab-panel>
           <q-tab-panel name="lesson">
-            <q-table
-              :rows="lessonsResults"
-              :columns="lessonsResultsHeaders"
-              row-key="value"
-              class="lesson-table"
-              hide-bottom
-              :rows-per-page-options="[0]"
-            >
-            </q-table>
+            <q-table :rows="lessonsResults"
+                     :columns="lessonsResultsHeaders"
+                     row-key="value"
+                     class="lesson-table"
+                     hide-bottom
+                     :rows-per-page-options="[0]" />
           </q-tab-panel>
         </q-tab-panels>
       </q-card>
@@ -252,8 +207,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-
 export default {
   name: 'results',
   components: {
@@ -299,12 +252,11 @@ export default {
   methods: {
     getUserFormData () {
       this.showLoading()
-      this.$axios.get(API_ADDRESS.user.formData)
-        .then((resp) => {
-          // console.log('getUserFormData res :', resp)
-          this.genders = resp.data.data.genders
-          this.provinces = resp.data.data.provinces
-          this.cities = resp.data.data.cities
+      this.$apiGateway.user.formData()
+        .then((formData) => {
+          this.genders = formData.genders
+          this.provinces = formData.provinces
+          this.cities = formData.cities
           this.hideLoading()
         })
         .catch(() => {
@@ -320,19 +272,18 @@ export default {
     async loadRankData (index, done) {
       this.showLoading()
       try {
-        const response = await this.getRankData()
-        // console.log('response :', response)
+        const examReportWithMetaLink = await this.getRankData()
         this.hideLoading()
-        if (response.data.data) {
-          this.results = this.results.concat(response.data.data)
+        if (examReportWithMetaLink.examReport) {
+          this.results = this.results.concat(examReportWithMetaLink.examReport)
         }
-        if (typeof response.data.links === 'undefined' || response.data.links.next === null) {
+        if (typeof examReportWithMetaLink.links === 'undefined' || examReportWithMetaLink.links.next === null) {
           this.nextPage = ''
           done(true)
           this.noData = true
           return
         }
-        this.nextPage = response.data.links.next.replace(response.data.meta.path, '')
+        this.nextPage = examReportWithMetaLink.links.next.replace(examReportWithMetaLink.meta.path, '')
         done()
       } catch (error) {
         this.hideLoading()
@@ -341,19 +292,25 @@ export default {
 
     getRankData () {
       const params = this.getParams()
-      return this.$axios.get(API_ADDRESS.exam.examReportIndex('participants') + this.nextPage, { params })
+      return this.$apiGateway.exam.examReportIndex({
+        type: 'participants',
+        next: this.nextPage,
+        params
+      })
     },
 
     getLessonResultData () {
       if (!this.lessonsResults.length) {
-        this.$axios.get(API_ADDRESS.exam.examReportIndex('lessons'), {
+        this.$apiGateway.exam.examReportIndex({
+          type: 'lessons',
+          next: '',
           params: {
             exam_id: this.$route.params.id
           }
         })
-          .then((response) => {
-            if (response.data.data) {
-              this.lessonsResults = response.data.data
+          .then((examReportWithMetaLink) => {
+            if (examReportWithMetaLink) {
+              this.lessonsResults = examReportWithMetaLink
             }
           })
       }
@@ -383,11 +340,13 @@ export default {
         message: 'فایل Excel در حال تولید است.',
         position: 'center'
       })
-      this.$axios.get(API_ADDRESS.exam.examReportIndex('participants'), {
+      this.$apiGateway.exam.examReportIndex({
+        type: 'participants',
+        next: '',
         params
       })
-        .then(response => {
-          that.file_url = response.data.data.export_file_url
+        .then(examReportWithMetaLink => {
+          that.file_url = examReportWithMetaLink.examReport.export_file_url
           that.fileLoading = false
         })
     },

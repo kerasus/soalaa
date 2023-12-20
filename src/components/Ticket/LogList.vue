@@ -11,8 +11,7 @@
         <div class="log-text">
           {{item.action}}
           <span v-if="item.before"
-                class="flex q-my-xs"
-          >
+                class="flex q-my-xs">
             <br>
             از
             {{item.before}}
@@ -33,7 +32,7 @@
 </template>
 
 <script>
-import { mixinDateOptions } from 'src/mixin/Mixins'
+import { mixinDateOptions } from 'src/mixin/Mixins.js'
 
 export default {
   name: 'logList',
@@ -48,6 +47,9 @@ export default {
     return {
       departmentStatus: []
     }
+  },
+  created() {
+    this.initStatusData()
   },
   methods: {
     initStatusData() {
@@ -81,9 +83,6 @@ export default {
 
       return status.color
     }
-  },
-  created() {
-    this.initStatusData()
   }
 }
 </script>

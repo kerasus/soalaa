@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses.js'
 import { Product } from 'src/models/Product.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import VideoPlayer from 'src/components/VideoPlayer.vue'
 import { PlayerSourceList } from 'src/models/PlayerSource.js'
 import { mixinPrefetchServerData } from 'src/mixin/Mixins.js'
@@ -98,8 +98,8 @@ export default {
       this.product.loading = true
       return this.getProduct()
     },
-    prefetchServerDataPromiseThen (response) {
-      this.product = new Product(response.data.data)
+    prefetchServerDataPromiseThen (data) {
+      this.product = new Product(data)
       this.product.loading = false
     },
     prefetchServerDataPromiseCatch () {
@@ -116,8 +116,7 @@ export default {
       }])
     },
     getProduct() {
-      return this.$axios.get(API_ADDRESS.product.show.base + '/' + this.productId)
-      // return APIGateway.product.show(this.productId)
+      return APIGateway.product.show(this.productId)
     }
   }
 }

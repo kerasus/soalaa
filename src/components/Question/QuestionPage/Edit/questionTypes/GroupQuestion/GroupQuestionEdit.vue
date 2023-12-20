@@ -6,30 +6,22 @@
           <span>صورت سوال</span>
         </div>
         <div class="question-box">
-          <QuestionField
-            ref="tiptapQuestionStatement"
-            :key="'statement' + domKey"
-            :editorValue="question.statement"
-          />
+          <question-field ref="tiptapQuestionStatement"
+                          :key="'statement' + domKey"
+                          :editorValue="question.statement" />
         </div>
       </q-card-section>
-      <q-card-section
-        class="row main-card-section multiple-answer"
-      >
-        <div
-          v-for="(item, index) in question.group"
-          :key="index"
-          class="col-lg-6 col-12"
-        >
+      <q-card-section class="row main-card-section multiple-answer">
+        <div v-for="(item, index) in question.group"
+             :key="index"
+             class="col-lg-6 col-12">
           <div class="card-section-header">
-            <q-btn
-              v-if="isQuestionGroupInEditMode"
-              class="icon-type"
-              icon="isax:close-square5"
-              color="negative"
-              flat
-              @click="removeSelectedQuestionIDs(item)"
-            />
+            <q-btn v-if="isQuestionGroupInEditMode"
+                   class="icon-type"
+                   icon="isax:close-square5"
+                   color="negative"
+                   flat
+                   @click="removeSelectedQuestionIDs(item)" />
             <div>سوال {{index+ 1}} با شناسه {{item.id}}</div>
           </div>
         </div>
@@ -37,75 +29,61 @@
       <q-card-section class="row main-card-section">
         <div class="col-12">
           <div class="card-section-header">
-            <q-input
-              v-if="isQuestionGroupInEditMode"
-              v-model="currentQuestionIdToAdd"
-              filled
-              placeholder="شناسه سوال"
-            />
-            <q-btn
-              v-if="isQuestionGroupInEditMode"
-              class="icon-type q-mr-lg"
-              icon="isax:add-square5"
-              color="positive"
-              flat
-              @click="addQuestionId"
-            />
-            <q-btn
-              unelevated
-              class="icon-type q-mr-lg"
-              color="positive"
-              :loading="groupAttachLoading"
-              label="ثبت نهایی شناسه سوالات"
-              @click="attachQuestionGroup"
-            />
-            <q-btn
-              v-if="!isQuestionGroupInEditMode"
-              unelevated
-              class="icon-type"
-              color="primary"
-              label="ویرایش سوالات گروهی"
-              @click="isQuestionGroupInEditMode = true"
-            />
+            <q-input v-if="isQuestionGroupInEditMode"
+                     v-model="currentQuestionIdToAdd"
+                     filled
+                     placeholder="شناسه سوال" />
+            <q-btn v-if="isQuestionGroupInEditMode"
+                   class="icon-type q-mr-lg"
+                   icon="isax:add-square5"
+                   color="positive"
+                   flat
+                   @click="addQuestionId" />
+            <q-btn unelevated
+                   class="icon-type q-mr-lg"
+                   color="positive"
+                   :loading="groupAttachLoading"
+                   label="ثبت نهایی شناسه سوالات"
+                   @click="attachQuestionGroup" />
+            <q-btn v-if="!isQuestionGroupInEditMode"
+                   unelevated
+                   class="icon-type"
+                   color="primary"
+                   label="ویرایش سوالات گروهی"
+                   @click="isQuestionGroupInEditMode = true" />
           </div>
         </div>
       </q-card-section>
       <q-card-section class="main-card-section long-answer">
         <div class="card-section-header">پاسخ تشریحی</div>
         <div class="answer-box">
-          <QuestionField
-            ref="tiptapDescriptiveAnswer"
-            :key="'descriptive_answer' + domKey"
-            :editor-value="question.descriptive_answer"
-          />
+          <question-field ref="tiptapDescriptiveAnswer"
+                          :key="'descriptive_answer' + domKey"
+                          :editor-value="question.descriptive_answer" />
         </div>
       </q-card-section>
     </q-card>
-    <div
-      class="q-pt-lg"
-    >
-      <div  class="q-pb-md"> سوالات گروهی این سوال </div>
-      <question-item
-        v-for="(question, index) in question.group"
-        :key="index"
-        :question="question"
-        pageStrategy="question-bank"
-        :listOptions="questionsItemOptions"
-      />
+    <div class="q-pt-lg">
+      <div class="q-pb-md"> سوالات گروهی این سوال </div>
+      <question-item v-for="(question, index) in question.group"
+                     :key="index"
+                     :question="question"
+                     pageStrategy="question-bank"
+                     :listOptions="questionsItemOptions" />
     </div>
   </div>
 </template>
 
 <script>
+import { ExamList } from 'src/models/Exam.js'
+import { Question } from 'src/models/Question.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion.js'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
-import { Question } from 'src/models/Question'
-import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { ExamList } from 'src/models/Exam'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import API_ADDRESS from 'src/api/Addresses'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
+import QuestionItem from 'src/components/Question/QuestionItem/QuestionItem.vue'
+
 export default {
   name: 'GroupQuestionEdit',
   components: {
@@ -115,6 +93,12 @@ export default {
   mixins: [
     AdminActionOnQuestion
   ],
+  inject: {
+    question: {
+      from: 'providedQuestion', // this is optional if using the same key for injection
+      default: new Question()
+    }
+  },
   props: {
     loading: {
       default: false,
@@ -147,12 +131,6 @@ export default {
       isQuestionGroupInEditMode: true
     }
   },
-  inject: {
-    question: {
-      from: 'providedQuestion', // this is optional if using the same key for injection
-      default: new Question()
-    }
-  },
   created () {
     const that = this
     setTimeout(() => {
@@ -163,12 +141,12 @@ export default {
   methods: {
     attachQuestionGroup () {
       this.groupAttachLoading = true
-      this.$axios.post(API_ADDRESS.question.groupAttach, {
+      this.$apiGateway.question.groupAttach({
         group_question_id: this.question.id,
         questions: this.question.group.map(item => item.id)
       })
-        .then((response) => {
-          const question = new Question(response.data.data)
+        .then((resQuestion) => {
+          const question = new Question(resQuestion)
           this.question.group = question.group
           this.$q.notify({
             message: 'ثبت با موفقیت انجام شد',

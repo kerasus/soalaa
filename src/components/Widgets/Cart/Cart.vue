@@ -5,37 +5,28 @@
   <!--      @click="add"-->
   <!--    />-->
   <!--  </div>-->
-  <div
-    v-if="cart.count > 0"
-    class="cart-count">
+  <div v-if="cart.count > 0"
+       class="cart-count">
     سبدخرید شما ({{cart.count}} محصول)
   </div>
-  <div
-    v-else
-    class="cart-count"
-  >
+  <div v-else
+       class="cart-count">
     سبدخرید شما ({{cart.count}})
   </div>
   <div class="cart-template row">
-    <div
-      v-if="cart.count !== 0"
-      class="cart-item col-md-8 col-12"
-    >
+    <div v-if="cart.count !== 0"
+         class="cart-item col-md-8 col-12">
       <cart-view :cart="cart"
                  @cartReview="cartReview" />
     </div>
 
-    <div
-      v-if="cart.count"
-      class="side-invoice col-md-4 col-12"
-    >
+    <div v-if="cart.count"
+         class="side-invoice col-md-4 col-12">
       <cart-invoice :cart="cart" />
     </div>
 
-    <div
-      v-if="cart.count === 0"
-      class="empty-cart col-12"
-    >
+    <div v-if="cart.count === 0"
+         class="empty-cart col-12">
       <cart-empty />
     </div>
 
@@ -43,11 +34,10 @@
 </template>
 
 <script>
-// import API_ADDRESS from 'src/api/Addresses'
-import cartInvoice from 'components/Widgets/Cart/CartInvoice/CartInvoice'
-import cartView from 'components/Widgets/Cart/CartView/CartView'
-import cartEmpty from 'components/Widgets/Cart/CartEmpty/CartEmpty'
-import { Cart } from 'src/models/Cart'
+import { Cart } from 'src/models/Cart.js'
+import cartView from 'src/components/Widgets/Cart/CartView/CartView.vue'
+import cartEmpty from 'src/components/Widgets/Cart/CartEmpty/CartEmpty.vue'
+import cartInvoice from 'src/components/Widgets/Cart/CartInvoice/CartInvoice.vue'
 
 export default {
   name: 'Cart',
@@ -63,14 +53,14 @@ export default {
     }
   },
 
-  created () {
-    this.cartReview()
-  },
-
   computed: {
     isUserLogin() {
       return this.$store.getters['Auth/isUserLogin']
     }
+  },
+
+  created () {
+    this.cartReview()
   },
 
   methods: {
@@ -86,13 +76,13 @@ export default {
     cartReview() {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('Cart/reviewCart')
-        .then((response) => {
-          const invoice = response.data.data
+        .then((cartData) => {
+          const invoice = cartData
 
           const cart = new Cart(invoice)
 
           if (invoice.count > 0) {
-            invoice.items[0].order_product.forEach((order) => {
+            invoice.items.list[0].order_product.list.forEach((order) => {
               cart.items.list.push(order)
             })
           }

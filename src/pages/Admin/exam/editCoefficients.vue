@@ -1,32 +1,26 @@
 <template>
   <div class="row justify-end">
     <div class="col-md-12 q-pa-sm">
-      <q-input
-        v-model="sourceExamInfoForCopyCoefficient.id"
-        :loading="sourceExamInfoForCopyCoefficient.loading"
-        :disabled="sourceExamInfoForCopyCoefficient.loading"
-        label="شناسه آزمون جهت کپی کردن ضرایب"
-        class="q-mb-md"
-      >
-        <q-btn
-          color="green"
-          icon="mdi-eye"
-          size="md"
-          flat
-          rounded
-          fab-mini
-          @click="getExamInfo"
-        />
+      <q-input v-model="sourceExamInfoForCopyCoefficient.id"
+               :loading="sourceExamInfoForCopyCoefficient.loading"
+               :disabled="sourceExamInfoForCopyCoefficient.loading"
+               label="شناسه آزمون جهت کپی کردن ضرایب"
+               class="q-mb-md">
+        <q-btn color="green"
+               icon="mdi-eye"
+               size="md"
+               flat
+               rounded
+               fab-mini
+               @click="getExamInfo" />
       </q-input>
       <br>
-      <q-btn
-        v-if="sourceExamInfoForCopyCoefficient.title"
-        class="copy-coefficient"
-        block
-        color="cyan"
-        dark
-        @click="copyCoefficient"
-      >
+      <q-btn v-if="sourceExamInfoForCopyCoefficient.title"
+             class="copy-coefficient"
+             block
+             color="cyan"
+             dark
+             @click="copyCoefficient">
         کپی کردن ضرایب آزمون {
         {{ sourceExamInfoForCopyCoefficient.title }}
         }
@@ -53,17 +47,15 @@
       </p>
     </div>
     <div class="col-md-6 q-pa-sm">
-      <q-select
-        v-model="selectedSubgroup"
-        outlined
-        dense
-        :options="notExistingSubGroups"
-        option-label="value"
-        option-value="id"
-        label="زیرگروه"
-        emit-value
-        map-options
-      >
+      <q-select v-model="selectedSubgroup"
+                outlined
+                dense
+                :options="notExistingSubGroups"
+                option-label="value"
+                option-value="id"
+                label="زیرگروه"
+                emit-value
+                map-options>
         <template v-slot:no-option>
           <p class="no-data">
             متاسفانه گزینه ای برای انتخاب وجود ندارد!
@@ -72,101 +64,81 @@
       </q-select>
     </div>
     <div class="col-md-6 q-pa-sm">
-      <q-btn
-        class="full-width"
-        block
-        color="blue"
-        @click="addSubgroup"
-      >
+      <q-btn class="full-width"
+             block
+             color="blue"
+             @click="addSubgroup">
         افزودن زیرگروه
       </q-btn>
     </div>
     <div class="col-md-12 q-pa-sm">
-      <q-expansion-item
-        v-for="(subGroup, index) in subGroups"
-        :key="index"
-        class="bg-white rounded-borders q-mb-md"
-        :label='subGroup.title'
-      >
+      <q-expansion-item v-for="(subGroup, index) in subGroups"
+                        :key="index"
+                        class="bg-white rounded-borders q-mb-md"
+                        :label='subGroup.title'>
         <q-card>
           <q-card-section>
             <div class="row">
               <div class="col-md-4 q-pa-sm">
-                <q-select
-                  v-model="selectedCategory"
-                  label="دفترچه"
-                  outlined
-                  dense
-                  :options="categoryList.list"
-                  option-label="title"
-                  option-value="title"
-                  emit-value
-                  map-options
-                />
+                <q-select v-model="selectedCategory"
+                          label="دفترچه"
+                          outlined
+                          dense
+                          :options="categoryList.list"
+                          option-label="title"
+                          option-value="title"
+                          emit-value
+                          map-options />
               </div>
               <div class="col-md-4 q-pa-sm">
-                <q-select
-                  v-model="selectedSubcategory"
-                  label="درس"
-                  outlined
-                  dense
-                  :options="notExistingSubcategories(subGroup)"
-                  option-label="title"
-                  option-value="id"
-                  emit-value
-                  map-options
-                />
+                <q-select v-model="selectedSubcategory"
+                          label="درس"
+                          outlined
+                          dense
+                          :options="notExistingSubcategories(subGroup)"
+                          option-label="title"
+                          option-value="id"
+                          emit-value
+                          map-options />
               </div>
               <div class="col-md-4 q-pa-sm">
-                <q-btn
-                  class="full-width"
-                  dense
-                  color="blue"
-                  block
-                  @click="addSubcategory(subGroup)"
-                >
+                <q-btn class="full-width"
+                       dense
+                       color="blue"
+                       block
+                       @click="addSubcategory(subGroup)">
                   اضافه کردن درس
                 </q-btn>
               </div>
               <div class="col-md-12 q-pa-sm">
-                <q-markup-table
-                  flat
-                  dense
-                >
+                <q-markup-table flat
+                                dense>
                   <template v-slot:default>
                     <thead class="text-left">
                       <tr>
                         <th>اسم درس</th>
-                        <th
-                          v-for="(subCategory,sIindex) in subGroup.sub_category"
-                          :key="sIindex"
-                        >
+                        <th v-for="(subCategory,sIindex) in subGroup.sub_category"
+                            :key="sIindex">
                           <div class="th-inline-style">
                             <div class="category-title-size">
-                              <q-tooltip
-                                anchor="top middle"
-                                self="top middle"
-                                :offset="[10, 35]"
-                              >
+                              <q-tooltip anchor="top middle"
+                                         self="top middle"
+                                         :offset="[10, 35]">
                                 <span>{{ subCategory.category_title }}</span>
                               </q-tooltip>
                               <p class="small-fontsize">
                                 {{ subCategory.sub_category_title }}
                               </p>
                             </div>
-                            <q-btn
-                              size="12px"
-                              flat
-                              round
-                              icon="mdi-close"
-                              color="red"
-                              @click="deleteSubcategory(subGroup, subCategory.sub_category_title)"
-                            >
-                              <q-tooltip
-                                anchor="top middle"
-                                self="bottom middle"
-                                :offset="[10, 10]"
-                              >
+                            <q-btn size="12px"
+                                   flat
+                                   round
+                                   icon="mdi-close"
+                                   color="red"
+                                   @click="deleteSubcategory(subGroup, subCategory.sub_category_title)">
+                              <q-tooltip anchor="top middle"
+                                         self="bottom middle"
+                                         :offset="[10, 10]">
                                 <span>حذف درس</span>
                               </q-tooltip>
                             </q-btn>
@@ -179,30 +151,22 @@
                         <td width="130px">
                           ضریب درس
                         </td>
-                        <td
-                          v-for="(subCategory,sIindex) in subGroup.sub_category"
-                          :key="sIindex"
-                        >
-                          <q-input
-                            v-model="subCategory.sub_category_zarib"
-                            dense
-                            type="number"
-                          />
+                        <td v-for="(subCategory,sIindex) in subGroup.sub_category"
+                            :key="sIindex">
+                          <q-input v-model="subCategory.sub_category_zarib"
+                                   dense
+                                   type="number" />
                         </td>
                       </tr>
                       <tr>
                         <td width="130px">
                           ضریب دفترچه
                         </td>
-                        <td
-                          v-for="(subCategory,sIindex) in subGroup.sub_category"
-                          :key="sIindex"
-                        >
-                          <q-input
-                            v-model="subCategory.category_zarib"
-                            dense
-                            type="number"
-                          />
+                        <td v-for="(subCategory,sIindex) in subGroup.sub_category"
+                            :key="sIindex">
+                          <q-input v-model="subCategory.category_zarib"
+                                   dense
+                                   type="number" />
                         </td>
                       </tr>
                     </tbody>
@@ -217,14 +181,12 @@
   </div>
   <div class="row">
     <div class="col-md-12 q-pa-sm">
-      <q-btn
-        class="confirm-btn"
-        color="green"
-        dark
-        block
-        x-large
-        @click="save"
-      >
+      <q-btn class="confirm-btn"
+             color="green"
+             dark
+             block
+             x-large
+             @click="save">
         ثبت
       </q-btn>
     </div>
@@ -232,10 +194,9 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { Exam, ExamList } from 'src/models/Exam'
+import { Exam, ExamList } from 'src/models/Exam.js'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
 
 export default {
   name: 'EditCoefficients',
@@ -275,10 +236,6 @@ export default {
       }
     }
   },
-  created () {
-    this.examId = this.$route.params.id
-    this.getData()
-  },
   watch: {
     loading () {
       const that = this
@@ -288,6 +245,10 @@ export default {
         that.$store.dispatch('loading/linearLoading', false)
       }
     }
+  },
+  mounted () {
+    this.examId = this.$route.params.id
+    this.getData()
   },
   methods: {
     getData () {
@@ -303,9 +264,11 @@ export default {
         return
       }
       this.sourceExamInfoForCopyCoefficient.loading = true
-      this.$axios.get(API_ADDRESS.exam.showExam(this.sourceExamInfoForCopyCoefficient.id))
-        .then((response) => {
-          this.sourceExamInfoForCopyCoefficient = new Exam(response.data.data)
+      this.$apiGateway.exam.showExam({
+        examId: this.sourceExamInfoForCopyCoefficient.id
+      })
+        .then((exam) => {
+          this.sourceExamInfoForCopyCoefficient = new Exam(exam)
           this.sourceExamInfoForCopyCoefficient.loading = false
         })
         .catch(() => {
@@ -314,9 +277,9 @@ export default {
     },
     getExamDateTime () {
       this.loading = true
-      this.$axios.get(API_ADDRESS.exam.base())
-        .then((response) => {
-          const examList = new ExamList(response.data.data)
+      this.$apiGateway.exam.getBase()
+        .then((resExamList) => {
+          const examList = new ExamList(resExamList)
           const examInfo = new Exam(examList.list.find(exam => exam.id === this.examId))
           this.examTitle = examInfo.title
           this.startDate = examInfo.shamsiDate('start_at').dateTime
@@ -328,7 +291,7 @@ export default {
         return
       }
       this.sourceExamInfoForCopyCoefficient.loading = true
-      this.$axios.put(API_ADDRESS.exam.copyCoefficient, {
+      this.$apiGateway.exam.copyCoefficient({
         source_exam_id: this.sourceExamInfoForCopyCoefficient.id,
         destination_exam_id: this.$route.params.exam_id
       })
@@ -342,29 +305,31 @@ export default {
         })
     },
     getCategories () {
-      this.$axios.get(API_ADDRESS.questionCategory.base)
-        .then((response) => {
-          this.categoryList = new QuestCategoryList(response.data.data)
+      this.$apiGateway.questionCategory.get()
+        .then((questionCategoryList) => {
+          this.categoryList = new QuestCategoryList(questionCategoryList)
         })
     },
     getSubCategoryList () {
-      this.$axios.get(this.subCategoriesList.baseRoute)
-        .then((response) => {
-          this.subCategoriesList = new QuestSubcategoryList(response.data.data)
+      this.$apiGateway.questionSubcategory.get()
+        .then((questSubcategoryList) => {
+          this.subCategoriesList = new QuestSubcategoryList(questSubcategoryList)
         })
     },
     existedSubGroup () {
-      this.$axios.get(API_ADDRESS.subGroups.base(this.examId))
-        .then((response) => {
-          this.subGroups = response.data.data
+      this.$apiGateway.exam.getSubGroup(this.examId)
+        .then((subGroups) => {
+          this.subGroups = subGroups
         })
+        .catch(() => {})
     },
     getAllSubGroup () {
-      this.$axios.get(API_ADDRESS.subGroups.all())
-        .then((response) => {
-          this.allSubGroups = response.data.data
+      this.$apiGateway.exam.getAllSubGroup()
+        .then((allSubGroups) => {
+          this.allSubGroups = allSubGroups
           this.loading = false
         })
+        .catch(() => {})
     },
     addSubgroup () {
       this.selectedSubGroup = this.allSubGroups.find(item => item.id === this.selectedSubgroup)
@@ -398,17 +363,21 @@ export default {
           subCategory.subcategory_id = subCategory.sub_category_id
         })
       })
-      this.$axios.post(API_ADDRESS.subGroups.base(that.examId), {
-        zirgorooh: this.subGroups
+      this.$apiGateway.exam.createSubGroup({
+        examId: that.examId,
+        data: {
+          zirgorooh: this.subGroups
+        }
       })
-        .then((response) => {
-          that.subGroups = response.data.data
+        .then((subGroups) => {
+          that.subGroups = subGroups
           this.$q.notify({
             message: 'اطلاعات ثبت شد.',
             group: 'notifs',
             type: 'positive'
           })
         })
+        .catch(() => {})
     }
   }
 }

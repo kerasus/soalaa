@@ -1,12 +1,10 @@
 <template>
   <!--  v-model:index-inputs="indexInputs"-->
-  <entity-crud
-    v-model:default-inputs="defaultInputs"
-    v-model:index-inputs="indexInputs"
-    v-model:create-inputs="createInputs"
-    v-model:edit-inputs="editInputs"
-    v-bind="allProps"
-  >
+  <entity-crud v-model:default-inputs="defaultInputs"
+               v-model:index-inputs="indexInputs"
+               v-model:create-inputs="createInputs"
+               v-model:edit-inputs="editInputs"
+               v-bind="allProps">
     <!--    {inputData, showConfirmRemoveDialog}-->
     <template v-slot:entity-crud-table-cell="{inputData,showConfirmRemoveDialog}">
       <template v-if="inputData.col.name === 'actions'">
@@ -45,8 +43,8 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
 import { EntityCrud } from 'quasar-crud'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'QuestionTarget',
@@ -61,10 +59,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: API_ADDRESS.entityCrud.questionTarget.show,
-            edit: API_ADDRESS.entityCrud.questionTarget.edit,
-            create: API_ADDRESS.entityCrud.questionTarget.create,
-            index: API_ADDRESS.entityCrud.questionTarget.index
+            show: APIGateway.option.APIAdresses.base,
+            edit: APIGateway.option.APIAdresses.base,
+            create: APIGateway.option.APIAdresses.base,
+            index: APIGateway.option.APIAdresses.base
           },
           title: {
             show: 'اطلاعات هدف',
@@ -144,7 +142,7 @@ export default {
         // { type: 'photo', name: 'photo', label: 'تصویر', col: 'col-md-3', placeholder: ' ', filled: true },
         { type: 'hidden', name: 'type', value: 'targets_type', label: '', col: 'col-12' },
         { type: 'input', name: 'value', label: 'عنوان', col: 'col-md-3', placeholder: ' ', filled: true },
-        { type: 'input', name: 'order', label: 'ترتیب نمایش', col: 'col-md-2', placeholder: ' ', filled: true }
+        { type: 'input', name: 'order', label: 'ترتیب نمایش', responseKey: 'data.order', col: 'col-md-2', placeholder: ' ', filled: true }
       ],
       editInputs: [
         { type: 'hidden', name: 'id', label: 'شناسه', responseKey: 'data.id', col: 'col-md-1', placeholder: ' ' },
@@ -157,6 +155,15 @@ export default {
       ]
     }
   },
+  watch: {
+    // editInputs: {
+    //   handler (newValue, oldValue) {
+    //     console.log('inputs', newValue)
+    //   },
+    //   deep: true
+    // }
+  },
+  created () {},
   methods: {
     // for index.vue
     getRemoveMessage (row) {
@@ -184,16 +191,7 @@ export default {
         done(val, 'toggle')
       }
     }
-  },
-  watch: {
-    // editInputs: {
-    //   handler (newValue, oldValue) {
-    //     console.log('inputs', newValue)
-    //   },
-    //   deep: true
-    // }
-  },
-  created () {}
+  }
 }
 </script>
 

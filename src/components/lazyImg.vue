@@ -9,11 +9,9 @@
            :ratio="ratio"
            fit="contain"
            class="full-width"
-           position="0 0"
-    />
+           position="0 0" />
     <q-img v-else
-           :src="src"
-    />
+           :src="src" />
   </div>
 </template>
 
@@ -73,13 +71,13 @@ export default {
       return this.normalizedSizeInNumber.w + '/' + this.normalizedSizeInNumber.h
     }
   },
-  mounted() {
-    this.updateLazyImageSrc()
-  },
   watch: {
     src () {
       this.updateLazyImageSrc()
     }
+  },
+  mounted() {
+    this.updateLazyImageSrc()
   },
   methods: {
     onresize () {

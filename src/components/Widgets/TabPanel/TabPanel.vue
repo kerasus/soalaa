@@ -2,24 +2,21 @@
   <div class="page-width"
        :style="options.style">
     <div class="tab-panel-container">
-      <q-tabs
-        v-model="activeTabIndex"
-        inline-label
-        outside-arrows
-        mobile-arrows
-        :left-icon="tabPanelLeftIcon"
-        :right-icon="tabPanelRightIcon"
-        indicator-color="transparent"
-        active-class="active-tab"
-        class="tab-box"
-      >
+      <q-tabs v-model="activeTabIndex"
+              inline-label
+              outside-arrows
+              mobile-arrows
+              :left-icon="tabPanelLeftIcon"
+              :right-icon="tabPanelRightIcon"
+              indicator-color="transparent"
+              active-class="active-tab"
+              class="tab-box">
         <q-tab v-for="(tab, index) in options.tabs"
                :key="index"
                :name="index"
                :icon="tabIcon(index, tab.icon, tab.icon2)"
                class="tab-style"
-               :label="tab.title"
-        />
+               :label="tab.title" />
       </q-tabs>
       <q-tab-panels v-model="activeTabIndex"
                     animated
@@ -33,26 +30,25 @@
           <div class="tab-panels">
             <div v-if="isMobile"
                  class="arrow-btn right-arrow">
-              <q-btn  v-if="doesHavePrevTab"
-                      icon="isax:arrow-right-3"
-                      flat
-                      @click="selectPrevTab" />
+              <q-btn v-if="doesHavePrevTab"
+                     icon="isax:arrow-right-3"
+                     flat
+                     @click="selectPrevTab" />
             </div>
             <div class="tab-panel-box">
               <div class="content">
                 <div class="title"> {{ tabData.title }}</div>
                 <span class="description"
-                      v-html="tabData.editor"></span>
+                      v-html="tabData.editor" />
                 <div v-if="tabData.button.url"
                      class="more-detail text-right">
-                  <q-btn
-                    flat
-                    :href="tabData.button.url"
-                    :style="{background: tabData.button.bgColor, color: tabData.button.color}"
-                    class="btn"
-                    padding="9px 17px"
-                    icon-right="west"
-                    :label="tabData.button.text" />
+                  <q-btn flat
+                         :href="tabData.button.url"
+                         :style="{background: tabData.button.bgColor, color: tabData.button.color}"
+                         class="btn"
+                         padding="9px 17px"
+                         icon-right="west"
+                         :label="tabData.button.text" />
                 </div>
               </div>
               <div class="img-box">
@@ -77,14 +73,8 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-
 export default {
   name: 'TabPanel',
-  data: () => ({
-    tabs: [],
-    activeTabIndex: 0
-  }),
   props: {
     options: {
       type: Object,
@@ -93,12 +83,19 @@ export default {
       }
     }
   },
-  created() {
-    // this.initPageData()
+  data: () => {
+    return {
+      tabs: [],
+      activeTab: 0,
+      activeTabIndex: 0
+    }
   },
   computed: {
     isMobile () {
-      return this.$q.screen.lt.md
+      if (typeof window !== 'undefined') {
+        return this.$q.screen.lt.md
+      }
+      return false
     },
     tabPanelRightIcon () {
       if (this.isMobile) {
@@ -119,6 +116,9 @@ export default {
       return !!this.options.tabs[this.activeTabIndex - 1]
     }
   },
+  created() {
+    // this.initPageData()
+  },
   methods: {
     selectNextTab () {
       this.activeTabIndex++
@@ -133,8 +133,8 @@ export default {
     async initPageData() {
       this.loading = true
       try {
-        const response = await this.$axios.get(API_ADDRESS.homePage.base)
-        this.tabs = response.data.data.tabs
+        const response = await this.$apiGateway.pages.getHomepageData()
+        this.tabs = response.tabs
         this.loading = false
       } catch (e) {
         this.loading = false

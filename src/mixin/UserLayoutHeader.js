@@ -1,8 +1,9 @@
-import { User } from 'src/models/User'
+import { User } from 'src/models/User.js'
 
 const UserLayoutHeader = {
   data () {
     return {
+      user: new User(),
       headerItems: [
         {
           selected: 'exams',
@@ -41,12 +42,6 @@ const UserLayoutHeader = {
     }
   },
   computed: {
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    },
     showMenuItem () {
       return (item) => {
         return (item.permission === 'all' || this.user.hasPermission(item.permission))
@@ -56,6 +51,14 @@ const UserLayoutHeader = {
       return (itemName) => {
         return (this.$route.name === itemName)
       }
+    }
+  },
+  mounted () {
+    this.loadUserData()
+  },
+  methods: {
+    loadUserData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
     }
   }
 }

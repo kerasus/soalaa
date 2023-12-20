@@ -1,17 +1,15 @@
 <template>
   <div class="exam-card">
-    <entity-crud-form-builder
-      ref="EntityCrudFormBuilder"
-      v-model:value="inputs"
-    />
+    <entity-crud-form-builder ref="EntityCrudFormBuilder"
+                              v-model:value="inputs" />
   </div>
 </template>
 
 <script>
+import mixinTree from 'src/mixin/Tree.js'
+import { Exam } from 'src/models/Exam.js'
+import { APIGateway } from 'src/api/APIGateway.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
-import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from 'src/models/Exam'
-import mixinTree from 'src/mixin/Tree'
 
 export default {
   name: 'CreateExamPage',
@@ -19,11 +17,17 @@ export default {
   mixins: [
     mixinTree
   ],
+  inject: {
+    exam: {
+      from: 'providedExam', // this is optional if using the same key for injection
+      default: new Exam()
+    }
+  },
   data () {
     return {
       model: 'one',
       expanded: true,
-      api: API_ADDRESS.exam.base(),
+      api: APIGateway.exam.APIAdresses.base(),
       entityIdKeyInResponse: 'data.id',
       showRouteParamKey: 'id',
       showRouteName: 'Admin.Exam.Show',
@@ -251,10 +255,12 @@ export default {
       category: { title: '', id: '', order: 0, time: 0 }
     }
   },
-  inject: {
-    exam: {
-      from: 'providedExam', // this is optional if using the same key for injection
-      default: new Exam()
+  computed: {
+    examCategoriesIndex () {
+      return this.inputs.findIndex(item => item.name === 'categories')
+    },
+    totalCategory () {
+      return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 2
     }
   },
   created () {
@@ -265,14 +271,6 @@ export default {
     // console.log(element)
     // element.classList.remove('.col')
   },
-  computed: {
-    examCategoriesIndex () {
-      return this.inputs.findIndex(item => item.name === 'categories')
-    },
-    totalCategory () {
-      return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 2
-    }
-  },
   methods: {
     getPageReady () {
       this.getExamTypeList()
@@ -280,9 +278,9 @@ export default {
       this.loadMajorList()
     },
     getExamTypeList () {
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
-          this.typeOptions = response.data.data.filter(data => data.type === 'exam_type')
+      this.$apiGateway.option.getFilterOptions()
+        .then((options) => {
+          this.typeOptions = options.filter(data => data.type === 'exam_type')
           this.inputs.forEach(input => {
             if (input.type === 'formBuilder') {
               input.value.forEach(item => {
@@ -316,7 +314,9 @@ export default {
       })
     },
     loadMajorList () {
-      this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
+      this.$apiGateway.option.getOptions({
+        type: 'major_type'
+      })
         .then((response) => {
           this.majorList = response.data.data
           this.inputs.forEach(input => {

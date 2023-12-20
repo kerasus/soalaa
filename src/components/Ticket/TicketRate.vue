@@ -21,8 +21,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-
 export default {
   name: 'TicketRate',
   props: {
@@ -40,6 +38,27 @@ export default {
       selectedId: 0,
       imgData: []
     }
+  },
+  computed: {
+    getImg () {
+      return (id, mode) => {
+        return 'https://nodes.alaatv.com/upload/ticket-rate-' + id + '-' + mode + '.png'
+      }
+    }
+  },
+  watch: {
+    rate (newVal, oldVal) {
+      setTimeout(() => {
+        this.imgData.forEach(item => {
+          if (this.rate === item.id) {
+            item.url = this.getImg(item.id, 'on')
+          }
+        })
+      }, 50)
+    }
+  },
+  created() {
+    this.initImgData()
   },
   methods: {
     isImgActive(url, id) {
@@ -64,14 +83,17 @@ export default {
       if (!this.isSelected(this.selectedId, rateId)) {
         return false
       }
-      this.$axios.post(API_ADDRESS.ticket.ticketRate(this.ticketId), {
-        rate: rateId
+      this.$apiGateway.ticket.ticketRate({
+        ticketId: this.ticketId,
+        data: {
+          rate: rateId
+        }
       })
-        .then((res) => {
+        .then((message) => {
           this.ActiveAndCheckImages(rateId)
           this.selectedId = rateId
           this.$q.notify({
-            message: res.data.message,
+            message,
             type: 'positive'
           })
         })
@@ -98,27 +120,6 @@ export default {
         }
       ]
     }
-  },
-  computed: {
-    getImg () {
-      return (id, mode) => {
-        return 'https://nodes.alaatv.com/upload/ticket-rate-' + id + '-' + mode + '.png'
-      }
-    }
-  },
-  watch: {
-    rate (newVal, oldVal) {
-      setTimeout(() => {
-        this.imgData.forEach(item => {
-          if (this.rate === item.id) {
-            item.url = this.getImg(item.id, 'on')
-          }
-        })
-      }, 50)
-    }
-  },
-  created() {
-    this.initImgData()
   }
 }
 </script>

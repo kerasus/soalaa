@@ -18,33 +18,17 @@
       <q-resize-observer @resize="setHeaderDimension" />
     </template>
     <template #left-drawer>
-      <q-scroll-area class="scroll">
-        <div v-if="getTemplateLeftSideBarType === 'quiz'"
-             class="drawer-inside-of-MapOfQuestions">
-          <sideMenuMapOfQuestions />
-        </div>
-        <div v-else-if="getTemplateLeftSideBarType === 'panel'"
-             class="drawer-inside">
-          <side-menu-dashboard />
-        </div>
-        <div v-else-if="getTemplateLeftSideBarType === 'default'"
-             class="drawer-inside">
-          <user-side-bar />
-        </div>
-      </q-scroll-area>
+      <template-side-bar :type="getTemplateLeftSideBarType" />
     </template>
     <template #content>
-      <q-linear-progress
-        v-if="linearLoading"
-        color="primary"
-        reverse
-        class="q-mt-sm"
-        indeterminate
-      />
+      <q-linear-progress v-if="linearLoading"
+                         color="primary"
+                         reverse
+                         class="q-mt-sm"
+                         indeterminate />
       <div ref="contentInside"
            class="content-inside"
-           :class="{ 'user-panel' : getTemplateLeftSideBarType === 'default' }"
-      >
+           :class="{ 'user-panel' : getTemplateLeftSideBarType === 'default' }">
         <q-dialog v-model="confirmDialogData.show"
                   persistent>
           <q-card class="q-pa-md q-pb-none">
@@ -71,7 +55,7 @@
         <q-dialog v-model="loginDialog">
           <auth />
         </q-dialog>
-        <Router :include="keepAliveComponents" />
+        <router :include="keepAliveComponents" />
         <floating-action-button v-if="user.hasPermission('editeSoalaSiteSetting') && ($route.name === 'HomePage' || $route.name === 'Landing.3aComprehensiveExams' || $route.name === 'Public.Product.Show')" />
       </div>
     </template>
@@ -82,13 +66,14 @@
 </template>
 
 <script>
-
 import { User } from 'src/models/User.js'
 import { defineAsyncComponent } from 'vue'
-import MainFooter from 'components/Layout/Footer/main.vue'
-import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import Router from 'src/router/Router.vue'
+import MainFooter from 'src/components/Layout/Footer/main.vue'
+import KeepAliveComponents from 'src/assets/js/KeepAliveComponents.js'
+import TemplateSideBar from 'src/components/Template/SideBard/TemplateSideBar.vue'
 import QuasarTemplateBuilder from 'quasar-template-builder/src/quasar-template-builder.vue'
-import FloatingActionButton from 'components/Template/FloatingActionButton/FloatingActionButton.vue'
+import FloatingActionButton from 'src/components/Template/FloatingActionButton/FloatingActionButton.vue'
 
 // import templateHeader from 'components/Headers/templateHeader'
 // import onlineQuizTemplateHeader from 'components/Headers/onlineQuizTemplateHeader'
@@ -102,38 +87,24 @@ import FloatingActionButton from 'components/Template/FloatingActionButton/Float
 export default {
   components: {
     MainFooter,
+    TemplateSideBar,
     FloatingActionButton,
     QuasarTemplateBuilder,
-    UserSideBar: defineAsyncComponent(() => import('layouts/UserPanelLayouts/UserSideBar')),
-    sideMenuMapOfQuestions: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu_MapOfQuestions')),
-    SideMenuDashboard: defineAsyncComponent(() => import('components/Menu/SideMenu/SideMenu-dashboard')),
-    Router: defineAsyncComponent(() => import('src/router/Router')),
-    templateHeader: defineAsyncComponent(() => import('components/Headers/templateHeader')),
-    onlineQuizTemplateHeader: defineAsyncComponent(() => import('components/Headers/onlineQuizTemplateHeader')),
-    UserTemplateHeader: defineAsyncComponent(() => import('components/Headers/userTemplateHeader')),
-    Auth: defineAsyncComponent(() => import('components/Auth'))
-
-    // UserSideBar,
-    // Router,
-    // SideMenuDashboard,
-    // sideMenuMapOfQuestions,
-    // templateHeader,
-    // onlineQuizTemplateHeader,
-    // UserTemplateHeader,
-    // Auth
+    Router,
+    Auth: defineAsyncComponent(() => import('src/components/Auth.vue')),
+    templateHeader: defineAsyncComponent(() => import('src/components/Headers/templateHeader.vue')),
+    UserTemplateHeader: defineAsyncComponent(() => import('src/components/Headers/userTemplateHeader.vue')),
+    onlineQuizTemplateHeader: defineAsyncComponent(() => import('src/components/Headers/onlineQuizTemplateHeader.vue'))
   },
   data () {
     return {
+      user: new User(),
+      isAdmin: true,
+      isUserLogin: false,
       keepAliveComponents: KeepAliveComponents
     }
   },
   computed: {
-    user () {
-      if (this.$store.getters['Auth/user']) {
-        return this.$store.getters['Auth/user']
-      }
-      return new User()
-    },
     loginDialog: {
       get () {
         return this.$store.getters['AppLayout/loginDialog']
@@ -159,13 +130,15 @@ export default {
       return this.$store.getters['AppLayout/layoutLeftSideBarType']
     }
   },
-  watch: {
-  },
   mounted () {
-  },
-  created () {
+    this.loadAuthData()
   },
   methods: {
+    loadAuthData () { // prevent Hydration node mismatch
+      this.user = this.$store.getters['Auth/user']
+      this.isAdmin = this.$store.getters['Auth/isAdmin']
+      this.isUserLogin = this.$store.getters['Auth/isUserLogin']
+    },
     confirmDialogAction (data) {
       if (this.confirmDialogData) this.confirmDialogData.callback(data)
       else {
@@ -195,10 +168,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.scroll {
-  height: 100%;
-}
-
 .main-layout-header {
   .header-inside{
     width: 100%;
@@ -206,7 +175,7 @@ export default {
 }
 
 .drawer-inside{
-  @media screen and(max-width: 599px) {
+  @media screen and (max-width: 599px) {
     width: 250px
   }
 }

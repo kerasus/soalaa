@@ -11,12 +11,10 @@
                        disable />
             </div>
             <div class="icon-box">
-              <q-btn
-                unelevated
-                icon="isax:add-square"
-                class="open-modal-btn default-detail-btn"
-                @click="modal = true"
-              />
+              <q-btn unelevated
+                     icon="isax:add-square"
+                     class="open-modal-btn default-detail-btn"
+                     @click="modal = true" />
             </div>
           </div>
         </div>
@@ -30,9 +28,7 @@
             <div class="details-container-1 default-details-container row">
               <div class="col-12 detail-box detail-box-first">
                 <!--                <div class="detail-box-title">آزمون</div>-->
-                <entity-crud-form-builder
-                  v-model:value="examListInputConfig"
-                />
+                <entity-crud-form-builder v-model:value="examListInputConfig" />
                 <!--                <q-select-->
                 <!--                  v-model="selectedExam"-->
                 <!--                  borderless-->
@@ -45,47 +41,39 @@
               </div>
               <div class="col-4 detail-box detail-box-first">
                 <div class="detail-box-title ">دفترچه</div>
-                <q-select
-                  v-model="selectedCategory"
-                  borderless
-                  :options="categories.list"
-                  option-value="id"
-                  option-label="title"
-                  :rules="selectorRules"
-                  :loading="categories.loading"
-                />
+                <q-select v-model="selectedCategory"
+                          borderless
+                          :options="categories.list"
+                          option-value="id"
+                          option-label="title"
+                          :rules="selectorRules"
+                          :loading="categories.loading" />
               </div>
               <div class="col-3 detail-box">
                 <div class="detail-box-title">درس</div>
-                <q-select
-                  v-model="selectedLesson"
-                  borderless
-                  :options="subCategoriesFilteredList"
-                  option-value="id"
-                  option-label="title"
-                  :rules="selectorRules"
-                  :loading="lessons.loading"
-                />
+                <q-select v-model="selectedLesson"
+                          borderless
+                          :options="subCategoriesFilteredList"
+                          option-value="id"
+                          option-label="title"
+                          :rules="selectorRules"
+                          :loading="lessons.loading" />
               </div>
               <div class="col-3">
                 <div class="detail-box box-order">
                   <div class="detail-box-title">ترتیب در درس</div>
-                  <q-input
-                    v-model="order"
-                    borderless
-                    type="number"
-                    :rules="numberRules"
-                  />
+                  <q-input v-model="order"
+                           borderless
+                           type="number"
+                           :rules="numberRules" />
                 </div>
               </div>
               <div class="detail-box detail-box-last-of-row-1 col-2">
-                <q-btn
-                  unelevated
-                  :loading="draftBtnLoading"
-                  label="افزودن"
-                  class="attach-btn default-detail-btn"
-                  @click="attach"
-                />
+                <q-btn unelevated
+                       :loading="draftBtnLoading"
+                       label="افزودن"
+                       class="attach-btn default-detail-btn"
+                       @click="attach" />
               </div>
             </div>
             <div class="box-title title-show-exams">آزمون‌های تعریف شده</div>
@@ -116,26 +104,22 @@
                     {{ item.order }}
                   </div>
                   <div class="detail-box detach-box detail-box-last col-1">
-                    <q-btn
-                      unelevated
-                      icon="isax:trash"
-                      class="detach-btn
+                    <q-btn unelevated
+                           icon="isax:trash"
+                           class="detach-btn
                    default-detail-btn"
-                      @click="detach(item)"
-                    />
+                           @click="detach(item)" />
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="text-right close-btn-box">
-            <q-btn
-              unelevated
-              class="close-btn"
-              label="بستن"
-              color="primary"
-              @click="modal = false"
-            />
+            <q-btn unelevated
+                   class="close-btn"
+                   label="بستن"
+                   color="primary"
+                   @click="modal = false" />
           </div>
         </q-card-section>
       </q-card>
@@ -144,17 +128,23 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import { Question } from 'src/models/Question'
-import { ExamList, Exam } from 'src/models/Exam'
+import { Question } from 'src/models/Question.js'
+import { ExamList, Exam } from 'src/models/Exam.js'
 import { EntityCrudFormBuilder } from 'quasar-crud'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { QuestCategoryList } from 'src/models/QuestCategory.js'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory.js'
+import { APIGateway } from 'src/api/APIGateway'
 
 export default {
   name: 'AttachExam',
   components: {
     EntityCrudFormBuilder
+  },
+  inject: {
+    question: {
+      from: 'providedQuestion', // this is optional if using the same key for injection
+      default: new Question()
+    }
   },
   props: {
     imgPanelVisibility: {
@@ -184,13 +174,6 @@ export default {
       type: QuestCategoryList
     }
   },
-  inject: {
-    question: {
-      from: 'providedQuestion', // this is optional if using the same key for injection
-      default: new Question()
-    }
-  },
-  created () {},
   data () {
     return {
       text: '',
@@ -213,7 +196,7 @@ export default {
             label: 'ثبت آزمون'
           },
           indexConfig: {
-            apiAddress: API_ADDRESS.exam.base(),
+            apiAddress: APIGateway.exam.APIAdresses.base(),
             tableTitle: 'لیست آزمون ها',
             tableKeys: {
               data: 'data',
@@ -281,6 +264,21 @@ export default {
       categoryDisability: false
     }
   },
+  computed: {
+    definedExamsTitle () {
+      let number = this.question.exams.list.length
+      if (number.toString() === '0') {
+        number = '00'
+      }
+      return number + ' آزمون تعریف شده'
+    },
+    subCategoriesFilteredList () {
+      if (this.selectedCategory) {
+        return this.lessons.list.filter(item => item.category_id === this.selectedCategory.id)
+      }
+      return []
+    }
+  },
   watch: {
     selectedCategory: {
       handler () {
@@ -304,21 +302,7 @@ export default {
       deep: true
     }
   },
-  computed: {
-    definedExamsTitle () {
-      let number = this.question.exams.list.length
-      if (number.toString() === '0') {
-        number = '00'
-      }
-      return number + ' آزمون تعریف شده'
-    },
-    subCategoriesFilteredList () {
-      if (this.selectedCategory) {
-        return this.lessons.list.filter(item => item.category_id === this.selectedCategory.id)
-      }
-      return []
-    }
-  },
+  created () {},
   methods: {
     attach () {
       if (!this.selectedLesson || !this.selectedExam || !this.order) {

@@ -5,15 +5,13 @@
       <div class="detail-box detail-box-first"
            :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">تعییر وضعیت</div>
-        <q-select
-          v-model="newStatus.changeState"
-          borderless
-          :options="statuses.list"
-          option-value="id"
-          option-label="display_title"
-          :rules="selectorRules"
-          :loading="statuses.loading"
-        />
+        <q-select v-model="newStatus.changeState"
+                  borderless
+                  :options="statuses.list"
+                  option-value="id"
+                  option-label="display_title"
+                  :rules="selectorRules"
+                  :loading="statuses.loading" />
       </div>
       <div class="detail-box"
            :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
@@ -24,25 +22,29 @@
       </div>
       <div class="detail-box detail-box-last-of-row"
            :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <q-btn
-          unelevated
-          :loading="statuses.loading"
-          color="primary"
-          label="ذخیره"
-          class="save-btn default-detail-btn"
-          @click="sendStatus"
-        />
+        <q-btn unelevated
+               :loading="statuses.loading"
+               color="primary"
+               label="ذخیره"
+               class="save-btn default-detail-btn"
+               @click="sendStatus" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { Question } from 'src/models/Question'
-import { QuestionStatusList } from 'src/models/QuestionStatus'
+import { Question } from 'src/models/Question.js'
+import { QuestionStatusList } from 'src/models/QuestionStatus.js'
 
 export default {
   name: 'StatusChange',
+  inject: {
+    question: {
+      from: 'providedQuestion', // this is optional if using the same key for injection
+      default: new Question()
+    }
+  },
   props: {
     imgPanelVisibility: {
       type: Boolean,
@@ -53,12 +55,6 @@ export default {
     statuses: { // possible removal for attach exam
       type: QuestionStatusList,
       default: new QuestionStatusList()
-    }
-  },
-  inject: {
-    question: {
-      from: 'providedQuestion', // this is optional if using the same key for injection
-      default: new Question()
     }
   },
   data () {
@@ -79,16 +75,16 @@ export default {
       }
     }
   },
+  computed: {
+    getLessonById () {
+      return id => this.lessons.list.find(item => item.id === id)
+    }
+  },
   methods: {
     sendStatus () {
       this.$emit('update', this.newStatus)
       this.newStatus.changeState = ''
       this.newStatus.commentAdded = null
-    }
-  },
-  computed: {
-    getLessonById () {
-      return id => this.lessons.list.find(item => item.id === id)
     }
   }
 }
