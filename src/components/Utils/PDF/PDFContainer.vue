@@ -309,6 +309,9 @@ export default {
       question.height = event.event1
       if (this.mode === 'onlyDescriptiveAnswers') {
         question.descriptive_answer.match(/<p[^>]*>.*?<\/p>/gs).forEach((answer, index) => {
+          if (!question.chunk) {
+            question.chunk = []
+          }
           question.chunk.push({ answer, height: event.event2.getElementsByTagName('p')[index].dataset.elementHeight })
         })
       }

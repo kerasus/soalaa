@@ -373,7 +373,7 @@
               <pdf-page :title="examInfo.title"
                         :grade="examInfo.gradeTitle"
                         :major="examInfo.majorTitle"
-                        :page="1"
+                        page="1"
                         :is3a="$route.params.user_exam_id">
                 <template v-slot:body>
                   <paginate-bubble-sheet :questions="questions"
@@ -421,9 +421,9 @@ if (typeof window !== 'undefined') {
 export default {
   name: 'DownloadExam',
   components: {
-    PaginateBubbleSheet,
     PdfPage,
-    PDFContainer
+    PDFContainer,
+    PaginateBubbleSheet
     // VuePdfEmbed
   },
   data: () => ({
