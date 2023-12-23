@@ -77,7 +77,6 @@
                 :ref="'choice-item-id' + choice.id"
                 :key="'choice-item-id' + choice.id"
                 class="choices"
-                :class="choiceClass"
                 :style="{marginBottom: betweenChoices + 'mm'}">
           <q-item-section ref="choices"
                           class="choice"

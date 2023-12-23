@@ -270,7 +270,7 @@
               </div>
               <p-d-f-container v-else
                                v-model:pages="questionPages"
-                               :is3a="$route.params.user_exam_id"
+                               :is3a="!!$route.params.user_exam_id"
                                :exam="examInfo"
                                :questions="questions"
                                :pdfConfig="pdfConfig"
@@ -331,7 +331,7 @@
               </div>
               <p-d-f-container v-else
                                v-model:pages="descriptiveAnswerPages"
-                               :is3a="$route.params.user_exam_id"
+                               :is3a="!!$route.params.user_exam_id"
                                :exam="examInfo"
                                :questions="questions"
                                :pdfConfig="pdfConfig"

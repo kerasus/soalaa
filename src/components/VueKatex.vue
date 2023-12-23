@@ -15,11 +15,11 @@
 <script>
 import katex from 'katex'
 import 'katex/dist/katex.css'
+import * as VueTiptapKatexAssist from 'vue-tiptap-katex-core/assist.js'
 import 'src/Utils/katex-persian-renderer/katex-persian-fonts/index.css'
 import addPersianTo from 'src/Utils/katex-persian-renderer/src/index.mjs'
 import allMetrics from 'src/Utils/katex-persian-renderer/katex-persian-fonts/YekanBakhFontMetrics.json'
 
-import * as VueTiptapKatexAssist from 'vue-tiptap-katex-core/assist.js'
 // let VueTiptapKatexAssist
 // if (typeof window !== 'undefined') {
 //   import('vue-tiptap-katex-core')
@@ -124,7 +124,8 @@ export default {
     },
     renderKatexToHTML(input, katexConfig = {
       throwOnError: false,
-      strict: 'warn',
+      // strict: 'warn',
+      strict: false,
       safe: true,
       trust: true
     }) {
