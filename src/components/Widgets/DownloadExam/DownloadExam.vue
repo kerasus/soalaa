@@ -630,7 +630,7 @@ export default {
 
       const getPercentage = function (percentOfPages) {
         const lastStepPercent = 0.1
-        return percentOfPages - lastStepPercent
+        return (percentOfPages - lastStepPercent > 0) ? percentOfPages - lastStepPercent : percentOfPages
       }
 
       return new Promise((resolve, reject) => {
