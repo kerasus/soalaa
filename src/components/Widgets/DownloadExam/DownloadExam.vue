@@ -668,7 +668,7 @@ export default {
           }
           return chunkedPages
         }
-        const chunkedPages = chunkPages(1, pages.slice(13, 15))
+        const chunkedPages = chunkPages(1, pages)
         // The maximum size for each chunk must be 23. This is because the html2pdf package uses the html2canvas package to convert HTML to canvas,
         // and this package cannot convert HTML to canvas with a size greater than 23 page.
         const chunkedPagesWithError = []
@@ -686,8 +686,6 @@ export default {
               chunkedPageIndex: 0,
               message: 'DOMException: Failed to execute \'createPattern\' on \'CanvasRenderingContext2D\': The image argument is a canvas element with a width or height of 0.'
             })
-            console.log('first chunkedPage worker catch error: ', error)
-            console.log('first chunkedPage worker')
           })
 
         chunkedPages.slice(1)
@@ -717,18 +715,14 @@ export default {
                   message: 'DOMException: Failed to execute \'createPattern\' on \'CanvasRenderingContext2D\': The image argument is a canvas element with a width or height of 0.'
                 })
                 reject(error) // Properly catch any errors and reject the outer promise
-                console.log('forEach chunkedPage worker catch error: ', error)
-                console.log('forEach chunkedPage chunkedPageIndex worker: ', chunkedPageIndex)
               })
           })
         worker = worker.save()
           .then(() => {
             progressCallback(1)
-            console.log('worker.save() -> then')
             resolve() // Resolve the outer promise if saving was successful
           })
           .catch((error) => {
-            console.log('worker.save() -> catch')
             reject(error) // Properly catch any errors and reject the outer promise
           })
         // .thenExternal(() => {
