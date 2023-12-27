@@ -311,6 +311,26 @@ const routes = [
           {
             path: 'download_exam/:examId',
             name: 'User.Download',
+            layoutConfig: {
+              layoutBreadcrumbs: {
+                separator: 'isax:arrow-right-3'
+              },
+              layoutBreadcrumbsElements: [
+                {
+                  title: 'صفحه اصلی',
+                  route: {
+                    name: 'HomePage'
+                  }
+                },
+                {
+                  title: 'آزمون ها',
+                  route: {
+                    name: 'User.Exam.List'
+                  }
+                },
+                { title: 'دانلود آزمون' }
+              ]
+            },
             component: () => import('src/layouts/boxedLayout.vue'),
             children: [
               {

@@ -248,14 +248,15 @@
             </div>
             <div ref="questionPdf"
                  class="pdf-container">
-              <q-linear-progress v-if="downloadQuestionPagesLoading"
+              <q-linear-progress v-if="downloadPdfLoading"
                                  size="25px"
-                                 :value="downloadQuestionPagesProgress"
+                                 reverse
+                                 :value="downloadPdfProgressValue"
                                  color="primary">
                 <div class="absolute-full flex flex-center">
                   <q-badge color="white"
                            text-color="primary"
-                           :label="Math.floor(downloadQuestionPagesProgress * 100) + '%'" />
+                           :label="Math.floor(downloadPdfProgressValue * 100) + '%'" />
                 </div>
               </q-linear-progress>
               <div v-if="loading"
@@ -309,14 +310,15 @@
             </div>
             <div ref="descriptiveAnswerPdf"
                  class="pdf-container">
-              <q-linear-progress v-if="downloadDescriptiveAnswerLoading"
+              <q-linear-progress v-if="downloadPdfLoading"
                                  size="25px"
-                                 :value="downloadDescriptiveAnswerPagesProgress"
+                                 reverse
+                                 :value="downloadPdfProgressValue"
                                  color="primary">
                 <div class="absolute-full flex flex-center">
                   <q-badge color="white"
                            text-color="primary"
-                           :label="Math.floor(downloadDescriptiveAnswerPagesProgress * 100) + '%'" />
+                           :label="Math.floor(downloadPdfProgressValue * 100) + '%'" />
                 </div>
               </q-linear-progress>
               <div v-if="loading"
@@ -433,6 +435,8 @@ export default {
     downloadQuestionPagesProgress: 0,
     downloadQuestionPagesLoading: false,
     descriptiveAnswerPages: [],
+    downloadPdfLoading: false,
+    downloadPdfProgressValue: 0,
     downloadDescriptiveAnswerLoading: false,
     downloadDescriptiveAnswerPagesProgress: 0,
     questionPagesCount: 0,
@@ -593,43 +597,42 @@ export default {
     },
     downloadKeyAnswerPdf() {
       this.download([this.$refs.keyAnswerPdf], this.downloadKeyAnswerPdfLoading)
-      this.downloadKeyAnswerPdfLoading = true
-      this.downloadPdfPages([this.$refs.keyAnswerPdf], () => {
-      })
-        .then(() => {
-          this.downloadKeyAnswerPdfLoading = false
-        })
-        .catch(() => {
-          this.downloadKeyAnswerPdfLoading = false
-        })
+      this.downloadPages([this.$refs.keyAnswerPdf])
     },
     downloadQuestionPages() {
-      this.downloadQuestionPagesLoading = true
-      const totalPages = this.questionPages.length
-      this.downloadPdfPages(this.questionPages, (page, pageIndex) => {
-        this.downloadQuestionPagesProgress = ((pageIndex + 1) / totalPages)
-      })
-        .then(() => {
-          this.downloadQuestionPagesLoading = false
-        })
-        .catch(() => {
-          this.downloadQuestionPagesLoading = false
-        })
+      this.downloadPages(this.questionPages)
     },
     downloadDescriptiveAnswerPages () {
-      this.downloadDescriptiveAnswerLoading = true
-      const totalPages = this.descriptiveAnswerPages.length
-      this.downloadPdfPages(this.descriptiveAnswerPages, (page, pageIndex) => {
-        this.downloadDescriptiveAnswerPagesProgress = ((pageIndex + 1) / totalPages)
+      this.downloadPages(this.descriptiveAnswerPages)
+    },
+    downloadPages (pages) {
+      this.downloadPdfLoading = true
+      this.chunkePageAndDownloadPdf(pages, (progress) => {
+        this.downloadPdfProgressValue = progress
       })
         .then(() => {
-          this.downloadDescriptiveAnswerLoading = false
+          this.downloadPdfLoading = false
         })
-        .catch(() => {
-          this.downloadDescriptiveAnswerLoading = false
+        .catch((error) => {
+          this.downloadPdfLoading = false
+          console.error(error)
+          this.$q.notify({
+            type: 'negative',
+            message: 'مشکلی در ساخت pdf رخ داده است.',
+            position: 'top'
+          })
         })
     },
-    downloadPdfPages (pages, progressCallback) {
+    chunkePageAndDownloadPdf (pages, progressCallback) {
+      const calcPercentFromPages = function (pageIndex, pagesLength) {
+        return ((pageIndex + 1) / pagesLength)
+      }
+
+      const getPercentage = function (percentOfPages) {
+        const lastStepPercent = 0.1
+        return percentOfPages - lastStepPercent
+      }
+
       return new Promise((resolve, reject) => {
         const html2pdfConfig = {
           margin: [0, 0, 0, 0],
@@ -646,13 +649,15 @@ export default {
           },
           jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         }
-        function chunkPages(size) {
+        function chunkPages(size, pages) {
           const chunkedPages = []
-          for (let i = 0; i < pages.length; i += size) {
+          const pagesLength = pages.length
+          for (let i = 0; i < pagesLength; i += size) {
             let chunkedArr = []
             const newDiv = document.createElement('div')
-            if (i + size <= pages.length) {
-              chunkedArr = pages.slice(i, i + size)
+            const nextIndex = i + size
+            if (nextIndex <= pagesLength) {
+              chunkedArr = pages.slice(i, nextIndex)
             } else {
               chunkedArr = pages.slice(i)
             }
@@ -663,38 +668,81 @@ export default {
           }
           return chunkedPages
         }
-        const chunkedPages = chunkPages(23)
+        const chunkedPages = chunkPages(1, pages.slice(13, 15))
         // The maximum size for each chunk must be 23. This is because the html2pdf package uses the html2canvas package to convert HTML to canvas,
         // and this package cannot convert HTML to canvas with a size greater than 23 page.
+        const chunkedPagesWithError = []
         let worker = html2pdf()
           .set(html2pdfConfig)
           .from(chunkedPages[0])
           .toPdf()
+          .then(() => {
+            progressCallback(getPercentage(calcPercentFromPages(0, chunkedPages.length)))
+          })
+          .catch((error) => {
+            reject(error) // Properly catch any errors and reject the outer promise
+            chunkedPagesWithError.push({
+              chunkedPage: chunkedPages[0],
+              chunkedPageIndex: 0,
+              message: 'DOMException: Failed to execute \'createPattern\' on \'CanvasRenderingContext2D\': The image argument is a canvas element with a width or height of 0.'
+            })
+            console.log('first chunkedPage worker catch error: ', error)
+            console.log('first chunkedPage worker')
+          })
+
         chunkedPages.slice(1)
-          .forEach(function (page, pageIndex) {
+          .forEach(function (chunkedPage, chunkedPageIndex) {
             worker = worker.get('pdf')
               .then(function (pdf) {
-                pdf.addPage()
-                progressCallback(page, pageIndex)
+                if (!pdf) {
+                  chunkedPagesWithError.push({
+                    chunkedPage,
+                    chunkedPageIndex,
+                    message: 'DOMException: Failed to execute \'createPattern\' on \'CanvasRenderingContext2D\': The image argument is a canvas element with a width or height of 0.'
+                  })
+                  reject(chunkedPagesWithError) // Properly catch any errors and reject the outer promise
+                } else {
+                  pdf.addPage()
+                  progressCallback(getPercentage(calcPercentFromPages(chunkedPageIndex + 1, chunkedPages.length)))
+                }
               })
-              .from(page)
+              .from(chunkedPage)
               .toContainer()
               .toCanvas()
               .toPdf()
+              .catch((error) => {
+                chunkedPagesWithError.push({
+                  chunkedPage,
+                  chunkedPageIndex,
+                  message: 'DOMException: Failed to execute \'createPattern\' on \'CanvasRenderingContext2D\': The image argument is a canvas element with a width or height of 0.'
+                })
+                reject(error) // Properly catch any errors and reject the outer promise
+                console.log('forEach chunkedPage worker catch error: ', error)
+                console.log('forEach chunkedPage chunkedPageIndex worker: ', chunkedPageIndex)
+              })
           })
         worker = worker.save()
-          .thenExternal(() => {
-            resolve()
+          .then(() => {
+            progressCallback(1)
+            console.log('worker.save() -> then')
+            resolve() // Resolve the outer promise if saving was successful
           })
-          .catchExternal((error) => {
-            reject(error)
+          .catch((error) => {
+            console.log('worker.save() -> catch')
+            reject(error) // Properly catch any errors and reject the outer promise
           })
-          .error((error) => {
-            reject(error)
-          })
-          .thenCore((error) => {
-            reject(error)
-          })
+        // .thenExternal(() => {
+        //   resolve()
+        // })
+        // .catchExternal((error) => {
+        //   reject(error)
+        // })
+        // .error((error) => {
+        //   reject(error)
+        // })
+        // .thenCore((error) => {
+        //   reject(error)
+        // })
       })
     }
   }

@@ -7,9 +7,8 @@
 
 <script>
 import Router from 'src/router/Router.vue'
-// import { Breadcrumbs } from 'quasar-template-builder'
-import Breadcrumbs from 'quasar-template-builder/src/components/breadcrumbs.vue'
 import KeepAliveComponents from 'src/assets/js/KeepAliveComponents.js'
+import Breadcrumbs from 'quasar-template-builder/src/components/breadcrumbs.vue'
 
 export default {
   name: 'userPanelNoNavigationLayout',
