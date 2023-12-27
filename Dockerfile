@@ -55,8 +55,6 @@ COPY --from=prebuild /var/www/app/node_modules /var/www/app/dist/ssr/node_module
 
 WORKDIR /var/www/app/dist/ssr
 
-RUN yarn install
-
 # Expose the listening port
 EXPOSE 13100
 
